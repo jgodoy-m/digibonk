@@ -169,6 +169,14 @@ canvas{display:block}
 .pz-keys{display:flex;flex-wrap:wrap;gap:6px 12px;justify-content:center;margin-top:12px;font-size:11px;color:#cfe8ff}
 .pz-keys span{white-space:nowrap}
 .pz-keys .kbd{display:inline-block;min-width:20px;padding:1px 6px;border-radius:6px;background:linear-gradient(180deg,#f4f7fb,#b8c4d6);color:#1a2236;font:bold 10px ui-monospace,Menlo,monospace;border:1px solid #fff;box-shadow:0 2px 0 #55607a;text-align:center}
+/* Minimapa y mapa completo */
+#minimap{position:fixed;right:18px;bottom:18px;width:170px;height:170px;border-radius:50%;border:3px solid #4fc3f7;
+  box-shadow:0 0 14px rgba(79,195,247,.4);pointer-events:none;background:#16321f}
+#mapview{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  background:rgba(4,8,18,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:15;cursor:pointer}
+#mapview.open{display:flex}
+#bigmap{width:min(72vh,600px);height:min(72vh,600px);border-radius:50%;border:3px solid #4fc3f7;box-shadow:0 0 30px rgba(79,195,247,.4)}
+.mapleg{font-size:13px;color:#cfe8ff;text-align:center;background:rgba(6,14,26,.85);padding:6px 14px;border-radius:10px;border:1px solid #2d5f78}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -185,6 +193,11 @@ canvas{display:block}
 <div id="hurt"></div>
 <div id="banner"></div>
 <div id="prompt"></div>
+<canvas id="minimap" width="170" height="170"></canvas>
+<div id="mapview">
+  <canvas id="bigmap" width="600" height="600"></canvas>
+  <div class="mapleg">Tú (flecha) · ◆ cofres · puntos rojos: enemigos · morado: jefe · centro: Pueblo<br>M o Esc para cerrar</div>
+</div>
 <div id="pause" class="hidden"></div>
 
 <script type="module">
@@ -546,6 +559,10 @@ const overlay = document.getElementById('overlay');
 
 addEventListener('keydown', e => {
   const k = e.key.toLowerCase();
+  audioInit();
+  if (k === 'n'){ toggleMute(); return; }
+  if (k === 'm'){ if (state === 'play') openMap(); else if (state === 'map') closeMap(); return; }
+  if (state === 'map'){ if (k === 'escape') closeMap(); return; }
   // Esc o P pausan y reanudan. Con el ratón bloqueado el navegador puede no entregar Esc:
   // en ese caso la pausa la dispara pointerlockchange (ver más abajo). P sirve en pantalla completa.
   if (k === 'escape' || k === 'p'){
@@ -657,6 +674,8 @@ function showPause(askQuit = false){
           <span><i class="kbd">Espacio</i> saltar</span>
           <span><i class="kbd">Shift</i> dash</span>
           <span><i class="kbd">E</i> cofres</span>
+          <span><i class="kbd">M</i> mapa</span>
+          <span><i class="kbd">N</i> sonido</span>
           <span><i class="kbd">Ratón</i> cámara</span>
         </div>
       </div></div>
@@ -699,7 +718,7 @@ let menuRefresh = null;   // refresca la selección y la vista previa del menú 
 // Oculta/muestra el HUD de partida (el menú no debe mostrar barras ni temporizador)
 function setHud(v){
   const d = v ? '' : 'none';
-  for (const id of ['hud', 'timer', 'xp', 'combo', 'bossbar', 'prompt']) document.getElementById(id).style.display = d;
+  for (const id of ['hud', 'timer', 'xp', 'combo', 'bossbar', 'prompt', 'minimap']) document.getElementById(id).style.display = d;
   if (!v) document.getElementById('hurt').style.opacity = 0;
 }
 // Barra de estadística (0-100%)
@@ -748,6 +767,8 @@ function showSelect(){
           <span><i class="kbd">Shift</i> dash</span>
           <span><i class="kbd">E</i> cofres</span>
           <span><i class="kbd">Esc</i> pausa</span>
+          <span><i class="kbd">M</i> mapa</span>
+          <span><i class="kbd">N</i> sonido</span>
         </div>
         <p class="legal">Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon. Sprites de King (uso no comercial, ver sprites/CREDITS.txt).</p>
       </section>
@@ -946,6 +967,7 @@ function digivolve(){
   g.p.count += 1;
   g.evoAnim = {t: 0, dur: 2.6, swapped: false, sprite: evo.sprite, name: evo.name};
   shake = Math.max(shake, 0.5);
+  sfx('evolve');
   announce(evo.name + '!', 'Digievolución completa · +50% daño', '#ffd54f');
 }
 
@@ -1081,6 +1103,7 @@ function hurt(e, dmg){
   e.hp -= dmg;
   popText(e.x, e.z, Math.round(dmg));
   burst(e.x, e.z, hitColors[e.kind] || '#ffe082');
+  sfx('hit');
 }
 
 function openChest(c){
@@ -1090,6 +1113,7 @@ function openChest(c){
   const up = UPGRADES[Math.floor(Math.random()*UPGRADES.length)];
   up.f(g.p);
   g.p.hp = Math.min(g.p.maxHp, g.p.hp + 15);
+  sfx('chest');
   announce('Cofre abierto', `${up.t} · +15 vida`, '#7cf29c');
 }
 function tryDash(){
@@ -1122,6 +1146,7 @@ function fireProjectile(x, z, vx, vz, dmg, life, color){
   mesh.position.set(x, 0.9 + terrainH(x, z), z);
   world.add(mesh);
   g.shots.push({x, z, vx, vz, dmg, life, mesh, r: 0.3});
+  sfx('shoot');
 }
 
 function update(dt){
@@ -1250,6 +1275,7 @@ function update(dt){
     world.remove(e.mesh);
     world.remove(e.shadow);
   }
+  if (dead.length) sfx('kill');
   g.kills += dead.length;
   if (dead.length){ g.combo += dead.length; g.comboT = 3; }
   g.comboT -= dt;
@@ -1320,6 +1346,7 @@ function update(dt){
               spd: 2.2, r: 2.4, xp: 40, dmg: 15, cd: 0};
     g.enemies.push(g.boss);
     g.bossShotT = 2;
+    sfx('boss');
     announce('¡JEFE FINAL!', 'Devimon ha llegado', '#ce93d8');
   }
   if (g.boss && g.enemies.includes(g.boss)){
@@ -1372,6 +1399,7 @@ function update(dt){
 
 function openUpgrades(){
   state = 'levelup';
+  sfx('levelup');
   unlockMouse();   // hay que poder hacer clic en las mejoras
   const cat = {ofensiva:'Ofensiva', defensiva:'Defensiva', utilidad:'Utilidad'};
   showOverlay(`<h2>¡Nivel ${g.p.lvl}! Elige una mejora</h2>
@@ -1396,6 +1424,7 @@ function pickUpgrade(i){
 
 function endGame(win){
   state = 'end';
+  sfx(win ? 'victory' : 'defeat');
   unlockMouse();
   saveRecord(win);
   showOverlay(`<h1>${win ? '¡Sobreviviste!' : 'Has caído'}</h1>
@@ -1486,7 +1515,7 @@ function updateHUD(){
   document.getElementById('info').textContent =
     `Pueblo Primario · ${g.ch.evolved ? EVO[g.ch.id].name : g.ch.name} · Nivel ${p.lvl} · Bajas ${g.kills} · Dash ${dashTxt}`;
   // Daño recibido: activa la viñeta roja (se desvanece en frame)
-  if (g.lastHp !== undefined && p.hp < g.lastHp - 0.01) hurtT = 0.45;
+  if (g.lastHp !== undefined && p.hp < g.lastHp - 0.01){ hurtT = 0.45; sfx('hurt'); }
   g.lastHp = p.hp;
   updatePrompt();
   const pimg = document.getElementById('pimg');
@@ -1499,6 +1528,123 @@ function updateHUD(){
     document.getElementById('bosshp').style.width = (100*Math.max(0, g.boss.hp)/g.boss.max) + '%';
   } else bb.style.display = 'none';
 }
+
+/* ---------- Sonido: efectos sintetizados con Web Audio (sin archivos) ---------- */
+const Sfx = {ctx:null, master:null, muted:false, last:{}, noiseBuf:null};
+function audioInit(){
+  if (Sfx.ctx){ if (Sfx.ctx.state === 'suspended') Sfx.ctx.resume(); return; }
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return;
+  Sfx.ctx = new AC();
+  Sfx.master = Sfx.ctx.createGain();
+  Sfx.master.gain.value = Sfx.muted ? 0 : 0.5;
+  Sfx.master.connect(Sfx.ctx.destination);
+  const len = Math.floor(Sfx.ctx.sampleRate * 0.5);
+  Sfx.noiseBuf = Sfx.ctx.createBuffer(1, len, Sfx.ctx.sampleRate);
+  const d = Sfx.noiseBuf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = Math.random()*2 - 1;
+}
+function tone(freq, dur, type, vol, slideTo, delay){
+  const c = Sfx.ctx, t0 = c.currentTime + (delay || 0);
+  const o = c.createOscillator(), gn = c.createGain();
+  o.type = type; o.frequency.setValueAtTime(freq, t0);
+  if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t0 + dur);
+  gn.gain.setValueAtTime(0.0001, t0);
+  gn.gain.exponentialRampToValueAtTime(vol, t0 + 0.01);
+  gn.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  o.connect(gn); gn.connect(Sfx.master);
+  o.start(t0); o.stop(t0 + dur + 0.05);
+}
+function noise(dur, vol, delay, hp){
+  const c = Sfx.ctx, t0 = c.currentTime + (delay || 0);
+  const src = c.createBufferSource(); src.buffer = Sfx.noiseBuf;
+  const f = c.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = hp || 800;
+  const gn = c.createGain();
+  gn.gain.setValueAtTime(vol, t0);
+  gn.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  src.connect(f); f.connect(gn); gn.connect(Sfx.master);
+  src.start(t0, Math.random() * 0.3); src.stop(t0 + dur + 0.05);
+}
+// Intervalo mínimo entre repeticiones para que los efectos frecuentes no saturen
+const SFX_GAP = {shoot:70, hit:60, kill:40, hurt:250};
+function sfx(name){
+  const c = Sfx.ctx;
+  if (!c || Sfx.muted || c.state !== 'running') return;
+  if (SFX_GAP[name]){
+    const now = performance.now();
+    if (now - (Sfx.last[name] || 0) < SFX_GAP[name]) return;
+    Sfx.last[name] = now;
+  }
+  switch (name){
+    case 'shoot':   tone(880, .08, 'triangle', .07, 440); break;
+    case 'hit':     noise(.05, .10, 0, 1500); break;
+    case 'kill':    tone(520, .10, 'square', .06, 260); break;
+    case 'hurt':    tone(170, .28, 'sawtooth', .16, 70); noise(.15, .06, 0, 300); break;
+    case 'chest':   [523,659,784,1046].forEach((f,i) => tone(f, .16, 'triangle', .18, null, i*.07)); break;
+    case 'levelup': [440,554,660,880].forEach((f,i) => tone(f, .18, 'square', .07, null, i*.08)); break;
+    case 'evolve':  tone(220, 1.0, 'sawtooth', .10, 880); [523,659,784].forEach((f,i) => tone(f, .5, 'triangle', .14, null, .6 + i*.1)); break;
+    case 'boss':    tone(65, 1.6, 'sawtooth', .16, 40); noise(1.2, .07, 0, 200); break;
+    case 'victory': [523,659,784,1046,784,1046].forEach((f,i) => tone(f, .22, 'triangle', .18, null, i*.12)); break;
+    case 'defeat':  tone(330, .6, 'triangle', .18, 110); tone(220, .9, 'triangle', .16, 55, .3); break;
+  }
+}
+function toggleMute(){
+  Sfx.muted = !Sfx.muted;
+  if (Sfx.master) Sfx.master.gain.value = Sfx.muted ? 0 : 0.5;
+  announce(Sfx.muted ? 'Sonido desactivado' : 'Sonido activado', 'N para cambiarlo', '#7fd0ff');
+}
+addEventListener('pointerdown', audioInit);
+
+/* ---------- Mapa 2D: minimapa en la esquina y mapa completo (tecla M) ---------- */
+const VILLAGE_R = 14;   // radio aproximado del Pueblo Primario, en unidades del escenario
+function drawWorldMap(cv, size){
+  if (!cv) return;
+  const c = cv.getContext('2d');
+  const R = size / 2, k = (R - 6) / ARENA_R;
+  const X = x => R + x*k, Y = z => R + z*k;
+  c.clearRect(0, 0, size, size);
+  c.fillStyle = '#4b5d72'; c.beginPath(); c.arc(R, R, R - 1, 0, Math.PI*2); c.fill();      // montañas
+  c.fillStyle = '#3f7d3f'; c.beginPath(); c.arc(R, R, ARENA_R*k, 0, Math.PI*2); c.fill();  // prado
+  c.fillStyle = 'rgba(215,168,110,.6)'; c.beginPath(); c.arc(X(0), Y(0), VILLAGE_R*k, 0, Math.PI*2); c.fill();
+  c.fillStyle = '#fff3d6'; c.font = `${Math.max(9, size/28)}px system-ui`; c.textAlign = 'center';
+  c.fillText('Pueblo', X(0), Y(0) + 3);
+  if (!g) return;
+  c.fillStyle = '#ffd54f';
+  for (const ch of g.chests){
+    if (ch.open) continue;
+    const x = X(ch.x), y = Y(ch.z);
+    c.beginPath(); c.moveTo(x, y-4); c.lineTo(x+4, y); c.lineTo(x, y+4); c.lineTo(x-4, y); c.closePath(); c.fill();
+  }
+  c.fillStyle = '#ef5350';
+  for (const e of g.enemies){
+    if (e.boss) continue;
+    c.fillRect(X(e.x) - 1.5, Y(e.z) - 1.5, 3, 3);
+  }
+  if (g.boss && g.enemies.includes(g.boss)){
+    c.fillStyle = '#ce93d8'; c.beginPath(); c.arc(X(g.boss.x), Y(g.boss.z), Math.max(4, size/30), 0, Math.PI*2); c.fill();
+  }
+  // Jugador: flecha que apunta hacia donde mira
+  const a = Math.atan2(g.dir.z, g.dir.x);
+  c.save(); c.translate(X(g.p.x), Y(g.p.z)); c.rotate(a);
+  const s = Math.max(1, size/120);
+  c.fillStyle = '#fff'; c.strokeStyle = '#000'; c.lineWidth = 1.2;
+  c.beginPath(); c.moveTo(7*s, 0); c.lineTo(-5*s, 4.5*s); c.lineTo(-3*s, 0); c.lineTo(-5*s, -4.5*s); c.closePath(); c.fill(); c.stroke();
+  c.restore();
+}
+function openMap(){
+  if (state !== 'play' || !g) return;
+  state = 'map';
+  for (const k in keys) keys[k] = false;
+  unlockMouse();
+  document.getElementById('mapview').classList.add('open');
+}
+function closeMap(){
+  if (state !== 'map') return;
+  state = 'play';
+  document.getElementById('mapview').classList.remove('open');
+  lockMouse();
+}
+document.getElementById('mapview').onclick = closeMap;
 
 // ---------- Bucle ----------
 let last = performance.now();
@@ -1514,6 +1660,8 @@ function frame(now){
   hurtT = Math.max(0, hurtT - dt);
   document.getElementById('hurt').style.opacity = (hurtT / 0.45) * 0.85;
   for (const n of npcs) n.sprite.position.y = n.base + Math.sin(now*0.003 + n.ph)*0.08;   // habitantes respiran
+  if (state === 'play' && g) drawWorldMap(document.getElementById('minimap'), 170);
+  if (state === 'map' && g) drawWorldMap(document.getElementById('bigmap'), 600);
   renderer.render(scene, camera);
   requestAnimationFrame(frame);
 }
