@@ -813,6 +813,88 @@ canvas{display:block}
 @keyframes pcEpic{from{box-shadow:0 0 22px var(--pc)}to{box-shadow:0 0 60px var(--pc),0 0 110px var(--pc)}}
 .pr3-act{display:flex;gap:14px;align-items:center}
 .pr3-act .mini-btn{padding:10px 18px;cursor:pointer}
+/* ===== v4: barra superior, menú en lista, login partido, banners y tickets ===== */
+.picker-screen,.gacha,.help-box,.m3-board,.set-box,.sc-box{background:linear-gradient(180deg,#143488,#081640) padding-box,linear-gradient(135deg,var(--dv-cyan),#1b4fd6 45%,var(--dv-org)) border-box !important}
+#topbar{position:fixed;left:0;right:0;top:0;height:52px;z-index:3;display:none;align-items:center;gap:8px;padding:0 14px;box-sizing:border-box;
+  background:linear-gradient(180deg,rgba(8,22,64,.96),rgba(6,16,43,.82));border-bottom:2px solid var(--dv-cyan);font-family:'Orbitron',system-ui,sans-serif}
+.tb-id{display:flex;align-items:center;gap:10px;padding:3px 14px 3px 4px;border:0;background:none;color:#fff;cursor:pointer;text-align:left}
+.tb-id b{display:block;font-size:14px;color:var(--dv-yel)}
+.tb-id small{font:11px system-ui,sans-serif;color:#9fd4ff}
+.tb-id:hover b{text-decoration:underline}
+.tb-sp{flex:1}
+.tb-chip{padding:6px 12px;background:#06102b;border:2px solid var(--dv-yel);color:var(--dv-yel);font-weight:900;font-size:13px}
+.tb-chip.tix{border-color:var(--dv-cyan);color:#dff8ff}
+.tb-btn{width:38px;height:36px;border:2px solid var(--dv-cyan);background:#06102b;color:#dff8ff;font:900 13px 'Orbitron',system-ui,sans-serif;cursor:pointer;transition:background .15s}
+.tb-btn:hover{background:#12357a}
+#overlay.has-top:not(.menu-mode){padding-top:56px;box-sizing:border-box}
+#overlay.has-top .picker-screen{height:min(640px,calc(100vh - 78px))}
+#overlay.has-top .gacha{max-height:calc(100vh - 78px) !important}
+#overlay.menu-mode{backdrop-filter:blur(2px);background:
+  radial-gradient(ellipse 36% 46% at 50% 50%,rgba(10,26,74,.98) 60%,rgba(10,26,74,0) 100%),
+  linear-gradient(90deg,rgba(6,14,40,.7) 0%,rgba(6,14,40,.15) 50%,rgba(6,14,40,.6) 100%) !important}
+.menu4{position:absolute;inset:0;font-family:'Orbitron',system-ui,sans-serif;color:#e6f4ff}
+.m4-news{position:absolute;left:24px;top:68px;width:320px;padding:10px 14px 12px;background:linear-gradient(180deg,#143488,#081640);border-left:5px solid var(--dv-org);display:flex;flex-direction:column;gap:3px;min-height:74px;box-sizing:border-box}
+.m4-nk{font-size:10px;letter-spacing:2px;color:var(--dv-org);font-weight:900}
+.m4-news b{font-size:14px}
+.m4-news small{font:12px system-ui,sans-serif;color:#9fd4ff}
+.m4-dots{display:flex;gap:6px;margin-top:4px}
+.m4-dots i{width:8px;height:8px;background:#2a4a8a;cursor:pointer}
+.m4-dots i.on{background:var(--dv-yel)}
+.m4-brand{position:absolute;left:36px;top:190px}
+.menu4 .m3-logo{font-size:84px}
+.m4-stats{position:absolute;left:24px;bottom:52px;width:380px;padding:12px 14px;background:linear-gradient(180deg,rgba(20,52,136,.94),rgba(8,22,64,.94));border-top:4px solid var(--dv-cyan);box-sizing:border-box}
+.m4-stats header{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--dv-cyan);margin-bottom:8px}
+.m4-cells{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.m4-cells span{display:flex;flex-direction:column;align-items:center;font:10px system-ui,sans-serif;color:#9fd4ff;background:rgba(0,0,0,.3);padding:6px 2px}
+.m4-cells b{font:900 17px 'Orbitron',system-ui,sans-serif;color:#fff}
+.m4-hero{position:absolute;left:50%;bottom:92px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none}
+.m4-hero img{position:relative;width:250px;height:250px;object-fit:contain;image-rendering:pixelated;animation:pvBob 2.4s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(61,224,255,.8))}
+.m4-pad{position:absolute;bottom:34px;width:300px;height:70px;border-radius:50%;background:radial-gradient(ellipse,rgba(61,224,255,.55),rgba(61,224,255,0) 70%);box-shadow:0 0 0 2px rgba(61,224,255,.5) inset}
+.m4-hero small{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dv-cyan)}
+.m4-hero b{font-size:22px;color:#fff;text-shadow:0 3px 0 #0a2a8a}
+.m4-list{position:absolute;right:26px;top:72px;bottom:56px;width:350px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.m4-item{display:flex;align-items:center;gap:14px;padding:0 18px;height:78px;border:2px solid transparent;cursor:pointer;color:#fff;text-align:left;
+  background:linear-gradient(180deg,#17409e,#0a1d55) padding-box,linear-gradient(135deg,var(--dv-cyan),#1b4fd6) border-box;
+  clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);transition:transform .15s,filter .15s}
+.m4-item:hover{transform:translateX(-8px);filter:brightness(1.3)}
+.m4-item.main{height:112px;background:linear-gradient(180deg,#ffc061,#ff8a1e 45%,#e85d00);text-shadow:0 2px 0 #7a2c00}
+.m4-ic{width:44px;font-size:26px;text-align:center}
+.m4-tx b{display:block;font-size:19px;letter-spacing:2px;font-style:italic}
+.m4-item.main .m4-tx b{font-size:34px}
+.m4-tx small{font:12px system-ui,sans-serif;opacity:.9}
+/* Login partido: escena a la izquierda, Digivice a la derecha */
+#overlay:has(.dvl2){background:radial-gradient(ellipse 50% 60% at 28% 55%,rgba(27,79,214,.5),transparent 70%),radial-gradient(ellipse 40% 50% at 78% 45%,rgba(255,138,30,.22),transparent 70%),rgba(6,13,38,.96) !important}
+.dvl2{position:relative;width:100vw;height:100vh;display:grid;grid-template-columns:1.15fr 1fr;align-items:center;font-family:'Orbitron',system-ui,sans-serif}
+.dvl-lang{position:absolute;left:18px;top:16px;z-index:2}
+.dvl-scene{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;border-right:4px solid var(--dv-org)}
+.dvl-scene .dvl-logo{font-size:104px}
+.dvl-pitch{margin:4px 0 0;font-size:15px;color:#dff8ff;letter-spacing:1px}
+.dvl-duo{position:relative;display:flex;align-items:flex-end;justify-content:center;gap:40px;margin-top:26px;height:200px}
+.dvl-duo img{position:relative;width:180px;height:180px;object-fit:contain;image-rendering:pixelated;animation:pvBob 1.8s ease-in-out infinite;filter:drop-shadow(0 0 16px rgba(255,138,30,.8))}
+.dvl-duo img.flip{transform:scaleX(-1);animation-name:dvlBobF;animation-delay:.5s;filter:drop-shadow(0 0 16px rgba(61,224,255,.8))}
+@keyframes dvlBobF{0%,100%{transform:scaleX(-1) translateY(0)}50%{transform:scaleX(-1) translateY(-9px)}}
+.dvl-duo .m4-pad{bottom:-18px;width:460px}
+.dvl-bits{position:absolute;inset:0;pointer-events:none}
+.dvl-bits i{position:absolute;bottom:-12px;width:8px;height:8px;background:var(--dv-cyan);opacity:.7;animation:dvlRise linear infinite}
+.dvl-bits i:nth-child(3n){background:var(--dv-org)}
+@keyframes dvlRise{to{transform:translateY(-105vh) rotate(180deg);opacity:0}}
+.dvl2 .dvl-device{width:min(470px,92%);padding:30px 66px 34px}
+.dvl2 .dvl-btn{width:34px;height:34px}
+.dvl2 .dvl-btn.b1{left:16px;margin-top:-17px}.dvl2 .dvl-btn.b2,.dvl2 .dvl-btn.b3{right:16px;margin-top:-17px}
+.dvl2 .dvl-screen h2{font-size:16px}
+.dvl2 .dvl-go{font-size:14px}
+/* Gacha: pestañas de banner, destacados y tickets */
+.gx-tabs{display:flex;gap:8px;margin-top:10px}
+.gx-tab{padding:8px 16px;border:2px solid var(--dv-cyan);background:#06102b;color:#dff8ff;font:900 12px 'Orbitron',system-ui,sans-serif;letter-spacing:1px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start}
+.gx-tab small{font:10px system-ui,sans-serif;opacity:.8}
+.gx-tab.on{background:linear-gradient(180deg,#fff3c4,var(--dv-yel));color:#1a0d00;border-color:#fff}
+.gx-feat{display:flex;justify-content:center;gap:6px;height:54px}
+.gx-feat img{width:54px;height:54px;object-fit:contain;image-rendering:pixelated;animation:pvBob 1.6s ease-in-out infinite}
+.gx-feat img:nth-child(2){animation-delay:.3s}.gx-feat img:nth-child(3){animation-delay:.6s}
+.gx-pulls{grid-template-columns:1fr 1.3fr 1fr 1.3fr !important;gap:8px !important}
+.gx-pull span{font-size:16px !important}
+.gx-pull.tix{background:linear-gradient(180deg,#b8ffd0,#2fbf6a 45%,#0f7a3c) !important;text-shadow:0 2px 0 #063d1c}
+.gx-stage{min-height:200px !important}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -838,6 +920,7 @@ canvas{display:block}
 <div id="bonkBar" style="display:none"><div id="bonkFill"></div><span id="bonkTxt">BONK 0%</span></div>
 <div id="xpTxt"></div>
 <div id="overlay"></div>
+<div id="topbar"></div>
 <div id="bossbar" style="position:fixed;top:56px;left:50%;transform:translateX(-50%);width:420px;height:14px;background:#000;border:1px solid #888;display:none;pointer-events:none"><div id="bosshp" style="height:100%;background:#ab47bc;width:100%"></div></div>
 <div id="combo"style="position:fixed;right:24px;top:200px;font-size:34px;font-weight:bold;color:#ffd54f;text-shadow:0 2px 4px #000;pointer-events:none"></div>
 <div id="flash"style="position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none"></div>
@@ -1493,8 +1576,9 @@ function showOverlay(html){
   overlay.classList.remove('menu-mode');
   overlay.innerHTML = html;
   overlay.classList.remove('hidden');
+  refreshTopbar();
 }
-function hideOverlay(){ overlay.classList.add('hidden'); }
+function hideOverlay(){ overlay.classList.add('hidden'); refreshTopbar(); }
 
 // Récords locales (las 10 mejores partidas, guardadas en este navegador)
 function getRecords(){
@@ -1523,59 +1607,116 @@ const statBar = (label, pct, warm) =>
   `<div class="stat"><span>${label}</span><i><b class="${warm ? 'warm' : ''}" style="width:${Math.max(4, Math.min(100, pct))}%"></b></i></div>`;
 const ATTACK_NAME = {shot:'Disparo dirigido', ring:'Onda circular', orbit:'Órbita defensiva'};
 
+// ---------- Idioma (ES/EN) de login, menú principal y barra superior; el resto del juego sigue en español ----------
+let LANG = localStorage.getItem('digibonk3d-lang') === 'en' ? 'en' : 'es';
+const TXT = {
+  es: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'Survivor 3D de Digimon, gratis en el navegador', boot:'DIGIVICE · ACCESO AL DIGIMUNDO', who:'Niño elegido, identifícate',
+       saved:'Tu nombre se guarda en este navegador.', ph:'TU NOMBRE', enter:'ENTRAR AL DIGIMUNDO', guest:'Entrar como invitado (pruebas)', needName:'Escribe un nombre',
+       play:'JUGAR', playS:'Elige tu Digimon y sobrevive 10 minutos', gacha:'GACHA', gachaS:'Tiradas con Bits o tickets', player:'JUGADOR', playerS:'Tu tarjeta, marcos y títulos',
+       help:'CÓMO JUGAR', helpS:'Tutorial con vídeos', set:'AJUSTES', setS:'Calidad, sonido y guardado', recs:'Tus récords', runs:'Partidas', best:'Mejor tiempo', lvl:'Mejor nivel',
+       kills:'Bajas', none:'Todavía no hay partidas. ¡Empieza una!', partner:'Tu compañero', noTitle:'Sin título', guestTag:'invitado · pruebas',
+       evEnds:'Termina en', evSkin:'Skin Festival como legendaria en el gacha', tipT:'Consejo', tip:'Los élites y el jefe sueltan tickets de tirada.', daily:'Misión diaria',
+       legal:'Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon.'},
+  en: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'A free 3D Digimon survivor in your browser', boot:'DIGIVICE · DIGITAL WORLD ACCESS', who:'DigiDestined, identify yourself',
+       saved:'Your name is saved in this browser.', ph:'YOUR NAME', enter:'ENTER THE DIGITAL WORLD', guest:'Enter as guest (testing)', needName:'Type a name',
+       play:'PLAY', playS:'Pick your Digimon and survive 10 minutes', gacha:'GACHA', gachaS:'Pulls with Bits or tickets', player:'PLAYER', playerS:'Your card, frames and titles',
+       help:'HOW TO PLAY', helpS:'Video tutorial', set:'SETTINGS', setS:'Quality, sound and save', recs:'Your records', runs:'Runs', best:'Best time', lvl:'Best level',
+       kills:'Kills', none:'No runs yet. Start one!', partner:'Your partner', noTitle:'No title', guestTag:'guest · testing',
+       evEnds:'Ends in', evSkin:'Festival skin as the legendary in the gacha', tipT:'Tip', tip:'Elites and the boss drop pull tickets.', daily:'Daily mission',
+       legal:'Unofficial, free, non-profit fan game. Not affiliated with Bandai, Toei Animation or the Digimon rights holders.'}
+};
+const t = k => TXT[LANG][k] || TXT.es[k] || k;
+function toggleLang(){
+  LANG = LANG === 'es' ? 'en' : 'es';
+  localStorage.setItem('digibonk3d-lang', LANG);
+  if (state === 'register') showRegister(); else if (state === 'select') showSelect(); else refreshTopbar();
+}
+// ---------- Barra superior fija en los menús: tarjeta, Bits, tickets, idioma, sonido, pantalla completa y ajustes ----------
+const TOP_STATES = ['select', 'gacha', 'pick', 'player', 'settings', 'help', 'savecode'];
+function refreshTopbar(){
+  const el = document.getElementById('topbar');
+  const show = TOP_STATES.includes(state) && !overlay.classList.contains('hidden') && !overlay.querySelector('.pa,.pr3,.dvl2');
+  el.style.display = show ? 'flex' : 'none';
+  overlay.classList.toggle('has-top', show);
+  if (!show) return;
+  const tt = extra.title ? TITLES.find(x => x.id === extra.title) : null;
+  el.innerHTML = `
+    <button class="tb-id" id="tbId"><span class="hud-portrait mini${extra.frame ? ' fr-' + extra.frame : ''}"><img src="${headUrl(spriteOf(avatarKey(), false))}" alt=""></span>
+      <span><b>${trainerName || 'Entrenador'}</b><small>${isGuest() ? t('guestTag') : (tt ? tt.name : t('noTitle'))}</small></span></button>
+    <span class="tb-sp"></span>
+    <span class="tb-chip" title="Bits">Ⓑ ${SAVE.bits}</span>
+    <span class="tb-chip tix" title="Tickets">🎟 ${SAVE.tickets}</span>
+    <button class="tb-btn" id="tbLang" title="Idioma / Language">${LANG.toUpperCase()}</button>
+    <button class="tb-btn" id="tbSnd" title="Sonido">${Sfx.muted ? '🔇' : '🔊'}</button>
+    <button class="tb-btn" id="tbFs" title="Pantalla completa">⛶</button>
+    <button class="tb-btn" id="tbSet" title="Ajustes">⚙</button>`;
+  document.getElementById('tbId').onclick = () => showPlayer();
+  document.getElementById('tbLang').onclick = toggleLang;
+  document.getElementById('tbSnd').onclick = () => { toggleMute(true); refreshTopbar(); };
+  document.getElementById('tbFs').onclick = () => {
+    const r = document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    if (r && r.catch) r.catch(() => {});
+  };
+  document.getElementById('tbSet').onclick = () => showSettings();
+}
+let newsTimer = null;
 function showSelect(){
   state = 'select';
   setHud(false);
   if (g){ scene.remove(world); world = new THREE.Group(); scene.add(world); g = null; }
   hidePause();
   const recs = getRecords();
-  const recRows = recs.length
-    ? recs.slice(0, 10).map((r, i) => `<div class="lb-row${i === 0 ? ' top' : ''}"><span class="lb-n">${i+1}</span><span class="lb-name">${r.name}${r.win ? ' ★' : ''}</span><span class="lb-val">${fmtTime(r.t)}<small>${r.kills} bajas</small></span></div>`).join('')
-    : '<p class="muted lb-empty">Todavía no hay partidas. ¡Empieza una!</p>';
-  const fr = extra.frame ? FRAMES.find(f => f.id === extra.frame) : null;
-  const tt = extra.title ? TITLES.find(t => t.id === extra.title) : null;
+  const st = loadJSON('digibonk3d-stats', {});
+  const plays = Object.values(st).reduce((a, x) => a + (x.plays || 0), 0);
+  const kills = Object.values(st).reduce((a, x) => a + (x.kills || 0), 0);
+  const bestT = recs.reduce((a, r) => Math.max(a, r.t), 0), bestL = recs.reduce((a, r) => Math.max(a, r.lvl || 0), 0);
+  const top3 = recs.slice(0, 3).map((r, i) => `<div class="lb-row${i === 0 ? ' top' : ''}"><span class="lb-n">${i + 1}</span><span class="lb-name">${r.name}${r.win ? ' ★' : ''}</span><span class="lb-val">${fmtTime(r.t)}<small>${r.kills} ${t('kills').toLowerCase()}</small></span></div>`).join('');
+  // Novedades: evento activo, misión diaria y un consejo
+  const news = [];
+  if (eventActive()){
+    const ms = EVENT.end - Date.now(), d = Math.floor(ms/864e5), h = Math.floor(ms%864e5/36e5);
+    news.push({k: 'EVENTO', tt: EVENT.name, s: `${t('evEnds')} ${d}d ${h}h · ${t('evSkin')}`});
+  }
+  news.push({k: t('daily').toUpperCase(), tt: dailyText().replace(/^Misión diaria:? ?/, ''), s: `+${DAILY.reward} Bits`});
+  news.push({k: t('tipT').toUpperCase(), tt: t('tip'), s: ''});
+  const item = (id, cls, ic, a, b) => `<button class="m4-item${cls}" id="${id}"><span class="m4-ic">${ic}</span><span class="m4-tx"><b>${a}</b><small>${b}</small></span></button>`;
   showOverlay(`
-    <div class="menu3">
-      <header class="m3-top">
-        <div class="m3-trainer">
-          <div class="hud-portrait mini${fr ? ' fr-' + fr.id : ''}"><img src="${headUrl(spriteOf(avatarKey(), false))}" alt=""></div>
-          <div><b>${trainerName || 'Entrenador'}</b><small>${isGuest() ? 'invitado · pruebas' : (tt ? tt.name : 'Sin título')}</small></div>
-        </div>
-        <div class="m3-cur">
-          <span class="bits-chip">Ⓑ ${SAVE.bits}</span>
-          <span class="daily-chip">${dailyText()}</span>
-        </div>
-      </header>
-      <section class="m3-main">
-        <div class="m3-logo"><span>DIGI</span>BONK</div>
-        <div class="m3-sub">Digimon Adventure</div>
-        <button class="m3-play" id="playBtn">
-          <span class="m3-play-text"><b>JUGAR</b><small>Modo clásico · elige tu Digimon</small></span>
-          <img class="m3-play-img" src="${spriteOf(selectedKey, false)}" alt="">
-        </button>
-        <nav class="m3-tiles">
-          <button class="m3-tile" id="btnPlayer"><span class="m3-ic">👤</span><b>Jugador</b><small>tu tarjeta</small></button>
-          <button class="m3-tile" id="btnGacha"><span class="m3-ic"><i class="dv-ico"></i></span><b>Gacha</b><small>tiradas</small></button>
-          <button class="m3-tile" id="btnSettings"><span class="m3-ic">⚙️</span><b>Ajustes</b><small>calidad · sonido</small></button>
-          <button class="m3-tile" id="btnHelp"><span class="m3-ic">?</span><b>Controles</b><small>teclas y ayuda</small></button>
-        </nav>
-      </section>
-      <aside class="m3-board">
-        <header><b>Mejores partidas</b><small>este navegador</small></header>
-        <div class="lb-list">${recRows}</div>
+    <div class="menu4">
+      <div class="m4-news" id="m4News"></div>
+      <div class="m4-brand"><div class="m3-logo"><span>DIGI</span>BONK</div><div class="m3-sub">${t('tag')}</div></div>
+      <aside class="m4-stats">
+        <header>${t('recs')}</header>
+        <div class="m4-cells"><span><b>${plays}</b>${t('runs')}</span><span><b>${fmtTime(bestT)}</b>${t('best')}</span><span><b>${bestL}</b>${t('lvl')}</span><span><b>${kills}</b>${t('kills')}</span></div>
+        ${top3 || `<p class="muted lb-empty">${t('none')}</p>`}
       </aside>
-      <footer class="m3-legal">
-        Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon.
-        <span class="m3-links">Créditos: sprites/CREDITS.txt · textures/CREDITOS.txt</span>
-      </footer>
+      <div class="m4-hero"><i class="m4-pad"></i><img src="${spriteOf(selectedKey, false)}" alt=""><small>${t('partner')}</small><b>${CHARS[selectedKey].name}</b></div>
+      <nav class="m4-list">
+        ${item('playBtn', ' main', '▶', t('play'), t('playS'))}
+        ${item('btnGacha', '', '<i class="dv-ico"></i>', t('gacha'), t('gachaS'))}
+        ${item('btnPlayer', '', '👤', t('player'), t('playerS'))}
+        ${item('btnHelp', '', '?', t('help'), t('helpS'))}
+        ${item('btnSettings', '', '⚙', t('set'), t('setS'))}
+      </nav>
+      <footer class="m3-legal">${t('legal')}<span class="m3-links">Créditos: sprites/CREDITS.txt · textures/CREDITOS.txt</span></footer>
     </div>`);
   overlay.classList.add('menu-mode');
   document.getElementById('playBtn').onclick = () => showPicker('personaje');
   document.getElementById('btnGacha').onclick = () => showGacha();
-  document.getElementById('btnPlayer').onclick = () => showPlayer('perfil');
+  document.getElementById('btnPlayer').onclick = () => showPlayer();
   document.getElementById('btnSettings').onclick = () => showSettings();
   document.getElementById('btnHelp').onclick = () => showHelp();
-  overlay.querySelector('.m3-trainer').onclick = () => showPlayer();
+  // Carrusel de novedades: cambia solo cada 4,5 s o al pulsar un punto
+  let ni = 0;
+  const paintNews = () => {
+    const el = document.getElementById('m4News');
+    if (!el || state !== 'select'){ clearInterval(newsTimer); return; }
+    const n = news[ni % news.length];
+    el.innerHTML = `<div class="m4-nk">${n.k}</div><b>${n.tt}</b><small>${n.s}</small><div class="m4-dots">${news.map((_, j) => `<i class="${j === ni % news.length ? 'on' : ''}" data-j="${j}"></i>`).join('')}</div>`;
+    el.querySelectorAll('.m4-dots i').forEach(d => d.onclick = () => { ni = +d.dataset.j; paintNews(); });
+  };
+  clearInterval(newsTimer);
+  paintNews();
+  newsTimer = setInterval(() => { ni++; paintNews(); }, 4500);
 }
 // Ventana de controles: se abre con el botón "?" desde el inicio
 // Tutorial en carrusel: cada pantalla muestra un vídeo corto grabado del propio juego (tutorial/*.webm)
@@ -1625,7 +1766,7 @@ function showHelp(){
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
-  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar'];
+  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets'];
 function makeSaveCode(){
   const data = {};
   for (const k of SAVE_KEYS){ const v = localStorage.getItem(k); if (v !== null) data[k] = v; }
@@ -1913,7 +2054,7 @@ function startGame(key){
     dash: 0, dashCd: 0, dir: {x:0, z:-1}, chests: [], chestT: 20, flash: '', flashT: 0,
     texts: [], nearChest: null, combo: 0, comboT: 0,
     boss: null, bossSpawned: false, bossDown: false, bossShotT: 0, eshots: [],
-    zone: 1, eliteT: 60, drops: [], bonk: 0, dashReady: true, sk: newSkillState(), skills: {}
+    zone: 1, eliteT: 60, drops: [], bonk: 0, dashReady: true, sk: newSkillState(), skills: {}, tix: 0
   };
   applyZoneVisuals(1);
   applyBalance(key);
@@ -2390,6 +2531,9 @@ function update(dt){
   for (const e of dead){
     g.gems.push({x:e.x, z:e.z, v:e.xp, heal: Math.random() < 0.06, mesh: null});
     if (Math.random() < 0.02) spawnMagnetDrop(e.x, e.z);   // 2%: imán total
+    // Tickets de tirada: 25% de cada élite y 3 seguros del jefe
+    if (e.kind === 'elite' && Math.random() < 0.25){ g.tix++; popText(e.x, e.z, '+1 ticket', '#3de0ff', 1); }
+    if (e.boss) g.tix += 3;
     world.remove(e.mesh);
     world.remove(e.shadow);
   }
@@ -2882,6 +3026,7 @@ function endGame(win){
   if (!daily.claimed && daily.runs >= DAILY.runsGoal){ daily.claimed = true; bonus = DAILY.reward; }
   saveDaily(daily);
   SAVE.bits = SAVE.bits + earned + bonus;
+  SAVE.tickets = SAVE.tickets + g.tix;
   g.earned = earned + bonus;
   g.bonus = bonus;
   g.unlocked = recordRun(g.ch.id, g.kills, g.t);
@@ -2890,7 +3035,7 @@ function endGame(win){
   saveRecord(win);
   showOverlay(`<h1>${win ? '¡Sobreviviste!' : 'Has caído'}</h1>
     <p>Nivel ${g.p.lvl} · Bajas ${g.kills} · Tiempo ${Math.floor(g.t)} s · ${ZONES[g.zone - 1].name}</p>
-    <p>+${g.earned} Bits</p>
+    <p>+${g.earned} Bits${g.tix ? ` · +${g.tix} tickets de tirada` : ''}</p>
     ${g.bonus ? `<p>¡Misión diaria completada! +${g.bonus} Bits</p>` : ''}
     ${g.unlocked.length ? `<p>¡Skin nueva: ${g.unlocked.join(', ')}!</p>` : ''}
     ${g.newTitles.length ? `<p>¡Título desbloqueado: ${g.newTitles.map(t => t.name).join(', ')}!</p>` : ''}
@@ -3279,7 +3424,9 @@ const SKIN_FX = {
 };
 const SAVE = {
   get bits(){ return +(localStorage.getItem('digibonk3d-bits') || 0); },
-  set bits(v){ localStorage.setItem('digibonk3d-bits', String(Math.max(0, Math.floor(v)))); }
+  set bits(v){ localStorage.setItem('digibonk3d-bits', String(Math.max(0, Math.floor(v)))); },
+  get tickets(){ return +(localStorage.getItem('digibonk3d-tickets') || 0); },
+  set tickets(v){ localStorage.setItem('digibonk3d-tickets', String(Math.max(0, Math.floor(v)))); }
 };
 const PULL_COST = 100, DUP_REFUND = 25;
 // Evento temporal: la skin Festival se consigue jugando durante estas fechas (cámbialas aquí)
@@ -3435,25 +3582,35 @@ function setTrainerName(v){
 function showRegister(){
   state = 'register';
   setHud(false);
+  const bits = Array.from({length: 14}, (_, i) => `<i style="left:${(i*37) % 100}%;animation-delay:${(i*0.53) % 5}s;animation-duration:${4 + i % 4}s"></i>`).join('');
   showOverlay(`
-    <div class="dvl">
-      <div class="dvl-logo"><span>DIGI</span>BONK</div>
-      <div class="dvl-tag">FAN GAME · DIGIMON ADVENTURE</div>
-      <div class="dvl-device">
-        <i class="dvl-ant"></i><i class="dvl-btn b1"></i><i class="dvl-btn b2"></i><i class="dvl-btn b3"></i>
-        <div class="dvl-bezel"><div class="dvl-screen">
-          <div class="dvl-boot">DIGIVICE · ACCESO AL DIGIMUNDO</div>
-          <h2>Niño elegido, identifícate</h2>
-          <p>Tu nombre se guarda en este navegador.</p>
-          <input id="regName" maxlength="16" placeholder="TU NOMBRE" autocomplete="off">
-          <button class="dvl-go" id="regGo">ENTRAR AL DIGIMUNDO</button>
-        </div></div>
-      </div>
-      <button class="dvl-guest" id="regGuest">Entrar como invitado (pruebas)</button>
+    <div class="dvl2">
+      <button class="tb-btn dvl-lang" id="regLang">${LANG.toUpperCase()}</button>
+      <section class="dvl-scene">
+        <div class="dvl-bits">${bits}</div>
+        <div class="dvl-logo"><span>DIGI</span>BONK</div>
+        <div class="dvl-tag">${t('tag')}</div>
+        <p class="dvl-pitch">${t('pitch')}</p>
+        <div class="dvl-duo"><i class="m4-pad"></i><img src="sprites/patamon.png" alt="Patamon"><img class="flip" src="sprites/gabumon.png" alt="Gabumon"></div>
+      </section>
+      <section class="dvl">
+        <div class="dvl-device">
+          <i class="dvl-ant"></i><i class="dvl-btn b1"></i><i class="dvl-btn b2"></i><i class="dvl-btn b3"></i>
+          <div class="dvl-bezel"><div class="dvl-screen">
+            <div class="dvl-boot">${t('boot')}</div>
+            <h2>${t('who')}</h2>
+            <p>${t('saved')}</p>
+            <input id="regName" maxlength="16" placeholder="${t('ph')}" autocomplete="off">
+            <button class="dvl-go" id="regGo">${t('enter')}</button>
+          </div></div>
+        </div>
+        <button class="dvl-guest" id="regGuest">${t('guest')}</button>
+      </section>
     </div>`);
+  document.getElementById('regLang').onclick = toggleLang;
   const go = () => {
     const v = document.getElementById('regName').value.trim();
-    if (!v){ announce('Escribe un nombre', '', '#ef5350'); return; }
+    if (!v){ announce(t('needName'), '', '#ef5350'); return; }
     setTrainerName(v);
     showSelect();
   };
@@ -3649,6 +3806,13 @@ function applyRunItem(){
 function frameClass(){ return extra.frame ? ' fr-' + extra.frame : ''; }
 
 // Pesos por tipo de recompensa y por rareza
+// Banners del gacha: cada uno tiene su skin legendaria. El de evento solo aparece mientras dura el evento
+const BANNERS = {
+  std:    {name: 'Digivice Estándar', sub: 'Skins Cristal', skin: 'cristal'},
+  evento: {name: EVENT.name, sub: 'Skins Festival · tiempo limitado', skin: 'festival'}
+};
+let gxBanner = 'std';
+function bannerSkin(){ if (gxBanner === 'evento' && !eventActive()) gxBanner = 'std'; return SKIN_BY_ID[BANNERS[gxBanner].skin]; }
 // La rareza se decide primero. Legendaria = skin Cristal; el resto reparte entre marco, título y objeto
 const TIER_ODDS = {c: 60, r: 28, e: 10, l: 2};
 const CAT_WEIGHTS = [['frame', 30], ['title', 25], ['item', 45]];
@@ -3677,8 +3841,9 @@ function pickOne(pool){ return pool[Math.floor(Math.random()*pool.length)]; }
 // Devuelve una recompensa: {type, ...}. Legendaria da una skin Cristal que no tengas (si ya las tienes todas, cae a épica)
 function rollReward(tier){
   if (tier === 'l'){
-    const keys = SEASONS.adventure.chars.filter(k => !ownedSkins(k).includes('cristal'));
-    if (keys.length) return {type:'skin', key: pickOne(keys), sk: SKIN_BY_ID.cristal, tier:'l'};
+    const sk = bannerSkin();
+    const keys = SEASONS.adventure.chars.filter(k => !ownedSkins(k).includes(sk.id));
+    if (keys.length) return {type:'skin', key: pickOne(keys), sk, tier:'l'};
     tier = 'e';
   }
   const cat = pickCategory();
@@ -3696,7 +3861,7 @@ function rollReward(tier){
 // Aplica la recompensa a la colección; los repetidos se convierten en Bits
 function grantReward(r){
   if (r.type === 'skin'){
-    grantSkin(r.key, 'cristal');
+    grantSkin(r.key, r.sk.id);
     return {...r, dup:false};
   }
   if (r.type === 'frame'){
@@ -3711,13 +3876,18 @@ function grantReward(r){
   return {...r, dup:false};
 }
 // Tirada: 1 o 10. Con 10 se garantiza al menos una recompensa rara o épica
-function doPulls(n){
-  const cost = n === 10 ? PULL_COST_10 : PULL_COST;
-  if (SAVE.bits < cost){
-    announce('Bits insuficientes', `Necesitas ${cost} Bits`, '#ef5350');
-    return;
+function doPulls(n, withTickets = false){
+  if (withTickets){
+    if (SAVE.tickets < n){ announce('Tickets insuficientes', `Necesitas ${n} · los sueltan élites y jefe`, '#ef5350'); return; }
+    SAVE.tickets = SAVE.tickets - n;
+  } else {
+    const cost = n === 10 ? PULL_COST_10 : PULL_COST;
+    if (SAVE.bits < cost){
+      announce('Bits insuficientes', `Necesitas ${cost} Bits`, '#ef5350');
+      return;
+    }
+    SAVE.bits = SAVE.bits - cost;
   }
-  SAVE.bits = SAVE.bits - cost;
   const tiers = Array.from({length: n}, () => rollTier());
   if (n === 10 && !tiers.some(t => t !== 'c')) tiers[9] = 'r';
   const results = [];
@@ -3753,13 +3923,13 @@ function playPullAnimation(results){
   setTimeout(() => { if (alive()) go(); }, 2950);
 }
 function rewardIcon(r){
-  if (r.type === 'skin') return `<img src="${spriteWith(r.key, false, 'cristal')}" alt="">`;
+  if (r.type === 'skin') return `<img src="${spriteWith(r.key, false, r.sk.id)}" alt="">`;
   if (r.type === 'frame') return `<div class="rw-frame fr-${r.f.id}"></div>`;
   if (r.type === 'title') return `<div class="rw-title">🏅</div>`;
   return `<div class="rw-item">${r.it.icon}</div>`;
 }
 function rewardName(r){
-  if (r.type === 'skin') return `Skin Cristal · ${CHARS[r.key].name}`;
+  if (r.type === 'skin') return `Skin ${r.sk.name} · ${CHARS[r.key].name}`;
   if (r.type === 'frame') return r.f.name;
   if (r.type === 'title') return `Título: ${r.t.name}`;
   return r.it.name;
@@ -3806,18 +3976,18 @@ function howTo(key, sk){
 }
 // Gacha: escaparate con carrusel de todo lo que puede salir, botones de tirada y probabilidades
 const GX_TIER_COL = {c: '#9e9e9e', r: '#4fc3f7', e: '#ce93d8', l: '#ffd23f'};
-const CAT_LABEL = {skin: 'Skin Cristal', frame: 'Marco', title: 'Título', item: 'Objeto'};
+const CAT_LABEL = {skin: 'Skin', frame: 'Marco', title: 'Título', item: 'Objeto'};
 let gxIdx = 0, gxTimer = null;
 // Todo lo que puede salir, en el orden del carrusel
 function gxShowcase(){
-  const list = SEASONS.adventure.chars.map(key => ({type:'skin', key, tier:'l'}));
+  const list = SEASONS.adventure.chars.map(key => ({type:'skin', key, sk: bannerSkin(), tier:'l'}));
   FRAMES.forEach(f => list.push({type:'frame', f, tier: f.tier}));
   TITLES.forEach(t => list.push({type:'title', t, tier: t.tier}));
   ITEMS.forEach(it => list.push({type:'item', it, tier: it.tier}));
   return list;
 }
 function gxOwned(s){
-  if (s.type === 'skin') return ownedSkins(s.key).includes('cristal');
+  if (s.type === 'skin') return ownedSkins(s.key).includes(s.sk.id);
   if (s.type === 'frame') return inv.frames.includes(s.f.id);
   if (s.type === 'title') return inv.titles.includes(s.t.id);
   return (inv.items[s.it.id] || 0) > 0;
@@ -3870,11 +4040,12 @@ function showGacha(){
       <header class="g-head">
         <button class="g-back" id="gBack">← Volver</button>
         <h2>Gacha</h2>
-        <span class="g-bits">Ⓑ ${SAVE.bits} Bits</span>
       </header>
+      <div class="gx-tabs">${Object.keys(BANNERS).filter(k => k === 'std' || eventActive()).map(k => `<button class="gx-tab${gxBanner === k ? ' on' : ''}" data-banner="${k}">${BANNERS[k].name}<small>${BANNERS[k].sub}</small></button>`).join('')}</div>
       <div class="gx-top">
         <section class="gx-show">
-          <div class="gx-show-head"><span>Lo que puede salir</span><span id="gxCount"></span></div>
+          <div class="gx-show-head"><span>${BANNERS[gxBanner].name} · legendaria: skin ${bannerSkin().name}</span><span id="gxCount"></span></div>
+          <div class="gx-feat">${SEASONS.adventure.chars.slice(0, 3).map(k => `<img src="${spriteWith(k, false, bannerSkin().id)}" alt="">`).join('')}</div>
           <div class="gx-stage-wrap">
             <button class="gx-arrow" id="gxPrev" aria-label="Anterior">‹</button>
             <div class="gx-stage" id="gxStage"></div>
@@ -3882,7 +4053,9 @@ function showGacha(){
           </div>
           <div class="gx-pulls">
             <button class="gx-pull" id="gPull1"><span>Tirar</span><small>Ⓑ ${PULL_COST}</small></button>
-            <button class="gx-pull gx-pull10" id="gPull10"><span>Tirar ×10</span><small>Ⓑ ${PULL_COST_10} · al menos una rara o épica</small></button>
+            <button class="gx-pull gx-pull10" id="gPull10"><span>Tirar ×10</span><small>Ⓑ ${PULL_COST_10} · rara o mejor</small></button>
+            <button class="gx-pull tix" id="gTix1"><span>Tirar</span><small>🎟 1 · tienes ${SAVE.tickets}</small></button>
+            <button class="gx-pull tix" id="gTix10"><span>Tirar ×10</span><small>🎟 10 · rara o mejor</small></button>
           </div>
         </section>
         <aside class="gx-odds">
@@ -3891,7 +4064,7 @@ function showGacha(){
           ${probTiers}
           <h4>Común, rara y épica reparten</h4>
           ${probCats}
-          <p class="gx-note">Legendaria = skin Cristal de un Digimon. Si ya tienes todo de una categoría o rareza, la tirada cae en la siguiente. Los repetidos dan Bits.</p>
+          <p class="gx-note">Legendaria = la skin del banner elegido para un Digimon. Si ya tienes todo de una categoría o rareza, la tirada cae en la siguiente. Los repetidos dan Bits.</p>
         </aside>
       </div>
       <div class="gx-coll">
@@ -3906,6 +4079,9 @@ function showGacha(){
   document.getElementById('gBack').onclick = () => showSelect();
   document.getElementById('gPull1').onclick = () => doPulls(1);
   document.getElementById('gPull10').onclick = () => doPulls(10);
+  document.getElementById('gTix1').onclick = () => doPulls(1, true);
+  document.getElementById('gTix10').onclick = () => doPulls(10, true);
+  overlay.querySelectorAll('.gx-tab').forEach(b => b.onclick = () => { gxBanner = b.dataset.banner; gxIdx = 0; showGacha(); });
   document.getElementById('gxPrev').onclick = () => gxShow(gxIdx - 1);
   document.getElementById('gxNext').onclick = () => gxShow(gxIdx + 1);
   gxShow(gxIdx);
