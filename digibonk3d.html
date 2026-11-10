@@ -1023,7 +1023,9 @@ canvas{display:block}
 .pk-skin.on{border-color:#7cf29c;box-shadow:0 0 0 1px #7cf29c inset}
 .pk-skin.locked{cursor:default;opacity:.6}
 .pk-skin:not(.locked):hover{filter:brightness(1.15)}
-.pl3-avs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;overflow:visible}
+.pl3-avs{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:5px;overflow:visible}
+.pl3-avs .tc-avb{width:100%;aspect-ratio:1;padding:2px;display:grid;place-items:center}
+.pl3-avs .tc-avb img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated}
 .rw-anim{background-size:500% 100%;background-position:0 50%}
 
 /* ---------- Selección de Digimon (maquetación tipo "liga") ---------- */
@@ -1079,6 +1081,44 @@ canvas{display:block}
 .pk2-foot{display:flex;align-items:center;gap:14px;padding-top:10px}
 .pk2-foot .pk-start{min-width:260px}
 .pk2 .pk-skins-row{grid-template-columns:repeat(auto-fill,minmax(78px,1fr))}
+.spr{width:var(--s,56px);height:var(--s,56px);flex:none;image-rendering:pixelated;object-fit:contain}
+.anim.spr{background-size:500% 100%;background-position:0 50%}
+.cl4-tabs{display:flex;gap:8px;margin:12px 0 10px}
+.cl4-tab{padding:7px 14px;border-radius:10px;border:1px solid #2d5f78;background:#071a22;color:#cfeaff;font:inherit;font-weight:700;cursor:pointer}
+.cl4-tab.on{background:linear-gradient(180deg,#ffb74d,#ff8f00);color:#06101e;border-color:#ffd54f}
+.cl4-body{flex:1;min-height:0;display:grid;grid-template-columns:260px minmax(0,1fr);gap:14px}
+.cl4-list{min-height:0;overflow:auto;display:flex;flex-direction:column;gap:6px;padding-right:4px}
+.cl4-item{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:12px;border:1px solid #2d5f78;background:#0b1a33;color:#e6f4ff;cursor:pointer;font:inherit;text-align:left}
+.cl4-item.sel{border-color:#ffd54f;box-shadow:0 0 12px rgba(255,213,79,.35)}
+.cl4-item.lock{opacity:.5;cursor:default}
+.cl4-item.lock .spr{filter:grayscale(1) brightness(.25)}
+.cl4-item small{display:block;font-size:10px;color:#9ad3e8;line-height:1.2}
+.cl4-detail{min-height:0;overflow:auto;padding:14px;border-radius:16px;border:1px solid #2d5f78;background:rgba(8,20,40,.85)}
+.cl4-hero{display:grid;grid-template-columns:170px minmax(0,1fr);gap:14px;align-items:center}
+.cl4-hero h3{margin:0 0 4px;font-size:24px;color:#ffd54f}
+.cl4-hero p{margin:0 0 10px;font-size:13px;color:#bfe9ff}
+.cl4-evo{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.cl4-evo>span{color:#ffd54f;font-weight:700}
+.cl4-st{display:flex;flex-direction:column;align-items:center;gap:2px}
+.cl4-st img{width:48px;height:48px;object-fit:contain;image-rendering:pixelated}
+.cl4-st small{font-size:10px;color:#cfeaff}
+.cl4-st.off img{filter:grayscale(1) brightness(.25)}
+.cl4-detail h4{margin:14px 0 8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#7fd0ff}
+.cl4-skins{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.cl4-skin{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 6px;border-radius:12px;border:1px solid #2d5f78;background:#071a22;color:#fff;font:inherit;cursor:default;text-align:center}
+.cl4-skin.owned{cursor:pointer}
+.cl4-skin.owned:hover{border-color:#4fc3f7}
+.cl4-skin.eq{border-color:#7cf29c;box-shadow:0 0 10px rgba(124,242,156,.4)}
+.cl4-skin.locked{opacity:.55}
+.cl4-skin.locked .spr{filter:grayscale(1) brightness(.3)}
+.cl4-skin small{font-size:10px;color:#9ad3e8;line-height:1.2}
+.cl4-empty{padding:30px;text-align:center;color:#bfe9ff}
+.cl4-other h3{margin:12px 0 8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#7fd0ff}
+.cl4-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.cl4-card{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border-radius:12px;border:1px solid #2d5f78;background:#071a22;text-align:center}
+.cl4-card.ok{border-color:#4fc3f7}
+.cl4-card.locked{opacity:.5}
+.cl4-card small{font-size:10px;color:#9ad3e8}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -1427,6 +1467,8 @@ function animTex(url, own = false){
   if (!own){ texCache['a:' + sh] = t; animTexs.push(t); }
   return t;
 }
+// Sprite de tamaño fijo para cualquier vista: animado si es hoja de fotogramas, fijo si no
+function sprEl(url, size = 56, cls = ''){ return animEl(url, 'spr ' + cls, `--s:${size}px`); }
 // Elemento animado para los menús (dos fotogramas de reposo) o imagen fija si no hay hoja
 function animEl(url, cls = '', style = ''){
   const sh = sheetOf(url);
@@ -1849,30 +1891,77 @@ function toggleLang(){
   if (state === 'register') showRegister(); else if (state === 'select') showSelect(); else refreshTopbar();
 }
 // Colección: todo lo que se puede conseguir, con porcentaje de completado (solo consulta)
+// Colección: lista de Digimon a la izquierda, sus skins y etapas a la derecha; marcos y títulos en otra pestaña
+let colKey = null, colTab = 'digimon';
 function showCollection(){
   state = 'collection';
   setHud(false);
   const chars = SEASONS.adventure.chars;
+  if (!colKey || !chars.includes(colKey)) colKey = selectedKey;
+  // Progreso global: skins visibles, una evolución por Digimon, marcos y títulos
   let have = 0, total = 0;
-  const cell = (ok, inner, label, sub = '') => { total++; if (ok) have++; return `<div class="cl-cell${ok ? ' ok' : ''}">${inner}<b>${ok ? label : '???'}</b><small>${sub}</small></div>`; };
-  const skinRows = chars.map(k => `<div class="cl-row"><span class="cl-name">${CHARS[k].name}</span>${visibleSkins(k).map(sk =>
-    cell(ownedSkins(k).includes(sk.id), `<img src="${spriteWith(k, false, sk.id)}" alt="">`, sk.name, ownedSkins(k).includes(sk.id) ? SKIN_TIER_NAME[sk.tier] : howTo(k, sk))).join('')}</div>`).join('');
-  const evos = chars.map(k => cell(evolvedUnlocked(k), `<img src="${EVO[k].sprite}" alt="">`, EVO[k].name, `${CHARS[k].name} · nivel ${EVO_LEVELS[0]}`)).join('');
-  const frames = FRAMES.map(f => cell(inv.frames.includes(f.id), `<div class="rw-frame fr-${f.id}"></div>`, f.name, TIER_NAME[f.tier])).join('');
-  const titles = TITLES.map(tl => cell(inv.titles.includes(tl.id), `<span class="cl-medal">${svgIcon('utilidad')}</span>`, tl.name, inv.titles.includes(tl.id) ? TIER_NAME[tl.tier] : tl.how)).join('');
+  for (const k of chars){
+    for (const sk of visibleSkins(k)){ total++; if (ownedSkins(k).includes(sk.id)) have++; }
+    total++; if (evolvedUnlocked(k)) have++;
+  }
+  total += FRAMES.length + TITLES.length;
+  have += FRAMES.filter(f => inv.frames.includes(f.id)).length + TITLES.filter(t => inv.titles.includes(t.id)).length;
   const pct = Math.round(have / total * 100);
+  const tabs = `<div class="cl4-tabs">
+    <button class="cl4-tab${colTab === 'digimon' ? ' on' : ''}" data-t="digimon">Digimon y skins</button>
+    <button class="cl4-tab${colTab === 'otros' ? ' on' : ''}" data-t="otros">Marcos y títulos</button></div>`;
+  let body;
+  if (colTab === 'otros'){
+    const frames = FRAMES.map(f => { const ok = inv.frames.includes(f.id);
+      return `<div class="cl4-card${ok ? ' ok' : ' locked'}"><div class="rw-frame${f.id ? ' fr-' + f.id : ''}"></div><b>${ok ? f.name : '???'}</b><small>${ok ? TIER_NAME[f.tier] : 'Gacha'}</small></div>`; }).join('');
+    const titles = TITLES.map(tl => { const ok = inv.titles.includes(tl.id);
+      return `<div class="cl4-card${ok ? ' ok' : ' locked'}"><span class="cl-medal">${svgIcon('utilidad')}</span><b>${ok ? tl.name : '???'}</b><small>${ok ? TIER_NAME[tl.tier] : tl.how}</small></div>`; }).join('');
+    body = `<div class="cl4-other"><h3>Marcos</h3><div class="cl4-cards">${frames}</div><h3>Títulos</h3><div class="cl4-cards">${titles}</div></div>`;
+  } else {
+    const list = chars.map(k => {
+      const open = isUnlocked(k), own = visibleSkins(k).filter(sk => ownedSkins(k).includes(sk.id)).length;
+      return `<button class="cl4-item${k === colKey ? ' sel' : ''}${open ? '' : ' lock'}" data-k="${k}" ${open ? '' : 'disabled'}>
+        ${sprEl(spriteOf(k, false), 48)}
+        <span><b>${open ? CHARS[k].name : '???'}</b><small>${open ? own + '/' + visibleSkins(k).length + ' skins' : unlockHow(k)}</small></span></button>`;
+    }).join('');
+    const k = colKey, open = isUnlocked(k);
+    let detail;
+    if (!open){
+      detail = `<div class="cl4-empty"><b>???</b><p>${unlockHow(k)}</p></div>`;
+    } else {
+      const eq = skinEquipped[k] || 'clasico';
+      const stages = [{name: CHARS[k].name, sprite: CHARS[k].sprite, on: true}, ...EVO_LINE[k].map(e => ({name: e.name, sprite: e.sprite, on: evolvedUnlocked(k)}))];
+      const cards = visibleSkins(k).map(sk => {
+        const has = ownedSkins(k).includes(sk.id), on = eq === sk.id;
+        return `<button class="cl4-skin${has ? ' owned' : ' locked'}${on ? ' eq' : ''}" data-skin="${sk.id}" ${has ? '' : 'disabled'}>
+          ${sprEl(spriteWith(k, false, sk.id), 72)}
+          <b>${has ? sk.name : '???'}</b><small>${has ? (on ? 'Equipada' : 'Pulsa para equipar') : howTo(k, sk)}</small></button>`;
+      }).join('');
+      detail = `
+        <div class="cl4-hero">
+          ${sprEl(spriteOf(k, false), 150)}
+          <div>
+            <h3>${CHARS[k].name}</h3>
+            <p>${BALANCE[k].why}</p>
+            <div class="cl4-evo">${stages.map((st, i) => `${i ? '<span>➜</span>' : ''}<div class="cl4-st${st.on ? '' : ' off'}"><img src="${st.sprite}" alt=""><small>${st.on ? st.name : '???'}</small></div>`).join('')}</div>
+          </div>
+        </div>
+        <h4>Skins</h4>
+        <div class="cl4-skins">${cards}</div>`;
+    }
+    body = `<div class="cl4-body"><aside class="cl4-list">${list}</aside><section class="cl4-detail">${detail}</section></div>`;
+  }
   showOverlay(`
-    <div class="picker-screen cl3">
+    <div class="picker-screen cl4">
       <header class="pk-head"><button class="g-back" id="clBack">← Volver</button><h2>Colección</h2><span class="cl-pct">${have} / ${total} · ${pct}%</span></header>
       <div class="cl-prog"><i style="width:${pct}%"></i></div>
-      <div class="cl-body">
-        <h3>Skins</h3>${skinRows}
-        <h3>Digievoluciones vistas</h3><div class="cl-grid">${evos}</div>
-        <h3>Marcos</h3><div class="cl-grid">${frames}</div>
-        <h3>Títulos</h3><div class="cl-grid">${titles}</div>
-      </div>
+      ${tabs}
+      ${body}
     </div>`);
   document.getElementById('clBack').onclick = () => showSelect();
+  overlay.querySelectorAll('.cl4-tab').forEach(b => b.onclick = () => { colTab = b.dataset.t; showCollection(); });
+  overlay.querySelectorAll('.cl4-item:not(.lock)').forEach(b => b.onclick = () => { colKey = b.dataset.k; showCollection(); });
+  overlay.querySelectorAll('.cl4-skin.owned').forEach(b => b.onclick = () => { equipSkin(colKey, b.dataset.skin); showCollection(); });
 }
 // ---------- Barra superior fija en los menús: tarjeta, Bits, tickets, idioma, sonido, pantalla completa y ajustes ----------
 const TOP_STATES = ['select', 'gacha', 'pick', 'player', 'settings', 'help', 'savecode', 'collection'];
@@ -2309,8 +2398,8 @@ function renderPickPreview(){
       <div class="pk2-sec">
         <h3>Evolución</h3>
         <div class="pv-evo">
-          <div class="pv-node"><img src="${spriteOf(k, false)}" alt=""><small>${c.name}</small></div>
-          ${EVO_LINE[k].map((e, i) => `<div class="pv-arrow">Nv ${EVO_LEVELS[i]} ➜</div><div class="pv-node"><img src="${e.sprite}" alt=""><small>${e.name}</small></div>`).join('')}
+          <div class="pv-node">${sprEl(spriteOf(k, false), 64)}<small>${c.name}</small></div>
+          ${EVO_LINE[k].map((e, i) => `<div class="pv-arrow">Nv ${EVO_LEVELS[i]} ➜</div><div class="pv-node">${sprEl(e.sprite, 64)}<small>${e.name}</small></div>`).join('')}
         </div>
         <p class="pk2-note">Cada etapa: +20% daño, +5% área y +20 PS · solo durante la partida</p>
       </div>
@@ -4043,8 +4132,13 @@ function headUrl(src){
     if (x1 < 0){ x0 = 0; y0 = 0; x1 = fw - 1; y1 = h - 1; }
     // Cabeza: la mitad superior de la caja, cuadrada y centrada
     const bw = x1 - x0 + 1, bh = y1 - y0 + 1;
-    const hh = bh * 0.5, side = hh * 1.45;
-    const cx = x0 + bw/2, cy = y0 + hh/2;
+    // Centro de la cabeza: centro de masa de los píxeles de la mitad superior
+    const hh = bh * 0.5, side = hh * 1.65;
+    let mx = 0, my = 0, mn = 0;
+    for (let y = y0; y < y0 + hh; y++) for (let x = x0; x <= x1; x++){
+      if (d[(y*fw + x)*4 + 3] > 40){ mx += x; my += y; mn++; }
+    }
+    const cx = mn ? mx/mn : x0 + bw/2, cy = mn ? my/mn : y0 + hh/2;
     const c = document.createElement('canvas'); c.width = 96; c.height = 96;
     const x = c.getContext('2d'); x.imageSmoothingEnabled = false;
     x.drawImage(im, cx - side/2, cy - side/2, side, side, 0, 0, 96, 96);
@@ -4549,7 +4643,7 @@ function showGacha(){
       const eq = (skinEquipped[key] || 'clasico') === sk.id;
       return `<button class="g-skin r-${sk.tier}${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}"
         data-key="${key}" data-skin="${sk.id}" ${has ? '' : 'disabled'} title="${sk.desc || sk.name}">
-        <img src="${spriteWith(key, false, sk.id)}" alt=""><small>${has ? sk.name : '???'}</small>
+        ${sprEl(spriteWith(key, false, sk.id), 64)}<small>${has ? sk.name : '???'}</small>
         ${has ? '' : `<em>${howTo(key, sk)}</em>`}</button>`;
     }).join('');
     return `<div class="g-row"><div class="g-name">${CHARS[key].name}</div><div class="g-tiles">${tiles}</div></div>`;
@@ -4571,7 +4665,7 @@ function showGacha(){
       <div class="gx-top">
         <section class="gx-show">
           <div class="gx-show-head"><span>${BANNERS[gxBanner].name} · legendaria: ${gxBanner === 'std' ? 'skin Corona' : 'Papá Noel o Reno (50%) · Corona (50%)'}</span><span id="gxCount"></span></div>
-          <div class="gx-feat">${SEASONS.adventure.chars.slice(0, 3).map(k => `<img src="${spriteWith(k, false, bannerSkin().id)}" alt="">`).join('')}</div>
+          <div class="gx-feat">${SEASONS.adventure.chars.slice(0, 3).map(k => sprEl(spriteWith(k, false, bannerSkin().id), 40)).join('')}</div>
           <div class="gx-stage-wrap">
             <button class="gx-arrow" id="gxPrev" aria-label="Anterior">‹</button>
             <div class="gx-stage" id="gxStage"></div>
