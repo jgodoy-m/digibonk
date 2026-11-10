@@ -493,6 +493,9 @@ canvas{display:block}
 .reg-box input:focus{border-color:#7ff9ee;box-shadow:0 0 18px rgba(46,230,214,.6)}
 .reg-logo{text-align:center}
 #overlay:has(.reg-box){background:rgba(0,0,0,.12)}
+/* Registro: panel opaco (no deja ver el panel de la ilustración) y campo dentro del marco */
+.reg-box{background:#06121d;background-image:linear-gradient(180deg,rgba(46,230,214,.07),rgba(0,0,0,0))}
+.reg-box input{box-sizing:border-box;max-width:100%}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
