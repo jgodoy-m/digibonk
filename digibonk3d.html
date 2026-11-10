@@ -3952,7 +3952,25 @@ const TUNE_LEAD = [
 // Raíz del acorde de cada compás (Am F C G Am F G C) y el bajo sube raíz, quinta, octava, quinta
 const TUNE_ROOT = [45, 41, 48, 43, 45, 41, 43, 48];
 function midiHz(m){ return 440 * Math.pow(2, (m - 69) / 12); }
+// Música de fondo: pista MP3 en bucle (audio/). Si el archivo no carga, se usa el bucle sintetizado
+const MUSIC_FILE = 'audio/together-we-are-strong.mp3';
 function musicStart(){
+  if (!Music.file){
+    Music.file = new Audio(MUSIC_FILE);
+    Music.file.loop = true;
+    Music.file.volume = 0.5;
+    Music.file.onerror = () => { Music.file = null; if (Music.on && !Music.nodes) musicSynth(); };
+  }
+  Music.file.muted = Sfx.muted;
+  const p = Music.file.play();
+  if (p && p.catch) p.catch(() => {});
+}
+function musicStop(){
+  if (Music.file) Music.file.pause();
+  musicSynth(true);
+}
+function musicSynth(stopOnly){
+  if (stopOnly) return musicSynthStop();
   if (!Sfx.ctx || Music.nodes) return;
   const c = Sfx.ctx;
   const out = c.createGain(); out.gain.value = 0;
@@ -4002,7 +4020,7 @@ function musicStart(){
   nodes.timer = setInterval(schedule, 60);
   Music.nodes = nodes;
 }
-function musicStop(){
+function musicSynthStop(){
   if (!Music.nodes) return;
   const {out, timer} = Music.nodes;
   Music.nodes.stopped = true;
@@ -4079,6 +4097,7 @@ function toggleMute(silent){
   Sfx.muted = !Sfx.muted;
   localStorage.setItem('digibonk3d-sfx', Sfx.muted ? '0' : '1');
   if (Sfx.master) Sfx.master.gain.value = Sfx.muted ? 0 : 0.5;
+  if (Music.file) Music.file.muted = Sfx.muted;
   if (!silent) announce(Sfx.muted ? 'Sonido desactivado' : 'Sonido activado', 'N para cambiarlo', '#7fd0ff');
 }
 addEventListener('pointerdown', audioInit);
@@ -5193,6 +5212,7 @@ if (new URLSearchParams(location.search).has('demo')){
     SKINS, EVO_LINE, CHARS, SEASONS, glitchPixels,
     headUrl, spriteWith,
     checkUnlocks, isUnlocked,
+    get music(){ return Music.file; },
     specialPool, spawnSpecial,
     nearChest(){
       const p = g.p, a = p.dir ? Math.atan2(p.dir.z, p.dir.x) : 0;

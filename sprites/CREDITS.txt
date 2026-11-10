@@ -4,3 +4,5 @@ Sprites de Digimon (agumon, greymon, gabumon, garurumon, palmon, togemon, gatomo
 sprites/adventure/: 120 Digimon de Digimon Adventure de la misma base (https://dmc-sprite-database.vercel.app). Autor y estilo de cada uno en sprites/adventure/indice.json (89 de tero0x en alta resolución; el resto, sprites de baja resolución de Bandai, tortoisehel, Ray y phrogmentado). Sin licencia publicada; diseños de Bandai. Uso no comercial.
 
 sprites/anim/: hojas de animación (reposo, ataque y daño) montadas con los fotogramas de la misma base DMC. Las skins <digimon>_<etapa>_<skin>.png son recoloreados de esas hojas, generados con sprites/anim/recolor.js.
+
+Música: "Together we are strong (178 BPM)" de ThisIsBeatKitchen (BeatKitchen), en Pixabay, bajo la Pixabay Content License. Archivo: audio/together-we-are-strong.mp3
