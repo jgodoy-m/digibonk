@@ -1025,6 +1025,59 @@ canvas{display:block}
 .pk-skin:not(.locked):hover{filter:brightness(1.15)}
 .pl3-avs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;overflow:visible}
 .rw-anim{background-size:500% 100%;background-position:0 50%}
+
+/* ---------- Selección de Digimon (maquetación tipo "liga") ---------- */
+.picker-screen.pk2{display:flex;flex-direction:column;height:100%;min-height:0}
+.pk2-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:8px 4px}
+.pk2-top h2{margin:0;font-size:24px}
+.pk2-sub{font-size:12px;color:#9ad3e8;letter-spacing:.5px}
+.pk2-top .pk-tabs{margin-left:auto}
+.pk2-body{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px}
+.pk2-left{min-height:0;overflow:auto;padding-right:6px}
+.pk2-left-in{display:flex;flex-direction:column;gap:12px}
+.pk2-hero{display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;align-items:center;padding:14px;border-radius:18px;border:2px solid #2a5a8f;background:radial-gradient(60% 70% at 25% 45%,rgba(79,195,247,.28),transparent 70%),linear-gradient(180deg,#10244a,#071024)}
+.pk2-stage{height:180px;display:grid;place-items:center;border-radius:14px;background:rgba(0,0,0,.2)}
+.anim.pk2-hero-img{width:150px;height:150px;background-size:500% 100%;background-position:0 50%;filter:drop-shadow(0 0 14px rgba(79,195,247,.7))}
+.pk2-id small{font-size:11px;letter-spacing:1px;color:#9ad3e8;text-transform:uppercase}
+.pk2-id h2{margin:2px 0 8px;font-size:30px;color:#ffd54f}
+.pk2-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.pk2-tags span{font-size:11px;padding:3px 9px;border-radius:99px;background:rgba(8,26,34,.9);border:1px solid #2d5f78;color:#cfeaff}
+.pk2-id p{margin:0;font-size:13px;color:#bfe9ff;line-height:1.35}
+.pk2-grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pk2-sec{padding:12px;border-radius:14px;background:rgba(8,20,40,.8);border:1px solid #2d5f78}
+.pk2-sec h3{margin:0 0 8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#7fd0ff;font-weight:800}
+.pk2-sec h3 small{font-size:10px;color:#9ad3e8;text-transform:none;letter-spacing:0;font-weight:600;margin-left:6px}
+.pk2-stat{display:grid;grid-template-columns:70px 1fr 56px;gap:8px;align-items:center;font-size:12px;margin:5px 0;color:#cfeaff}
+.pk2-stat b{text-align:right;font-variant-numeric:tabular-nums}
+.pk2-bar{height:9px;border-radius:5px;background:#06141a;border:1px solid #2d5f78;overflow:hidden}
+.pk2-bar i{display:block;height:100%;background:linear-gradient(90deg,#29b6f6,#80deea)}
+.pk2-note{font-size:11px;color:#9ad3e8;margin:8px 0 0}
+.pk2-kit{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.pk2-atk{padding:9px 10px;border-radius:12px;background:rgba(6,18,30,.9);border:1px solid #2d5f78;margin-top:8px}
+.pk2-kit .pk2-atk{margin-top:0}
+.pk2-atk-h{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.pk2-atk-h b{font-size:13px;color:#fff}
+.pk2-atk-h em{font-size:10px;font-style:normal;color:#06101e;background:#7fd0ff;border-radius:99px;padding:1px 8px}
+.pk2-atk p{margin:4px 0 0;font-size:12px;color:#bfe9ff;line-height:1.3}
+.pk2-right{min-height:0;display:flex;flex-direction:column;gap:8px}
+.pk2-filters{display:flex;gap:6px}
+.pk2-f{flex:1;padding:7px 6px;border-radius:10px;border:1px solid #2d5f78;background:#071a22;color:#cfeaff;font:700 12px inherit;cursor:pointer}
+.pk2-f.on{background:linear-gradient(180deg,#ffb74d,#ff8f00);color:#06101e;border-color:#ffd54f}
+.pk2-search{width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;border:1px solid #2d5f78;background:#071a22;color:#fff;font:inherit;font-size:13px}
+.pk2-grid{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-content:start;padding-right:4px}
+.pk2-tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:12px;border:2px solid #1f3d63;background:#0b1a33;color:#e6f4ff;cursor:pointer;font:inherit}
+.pk2-tile:hover{border-color:#4fc3f7}
+.pk2-tile.sel{border-color:#ffd54f;box-shadow:0 0 14px rgba(255,213,79,.45);background:linear-gradient(180deg,rgba(255,213,79,.18),#0b1a33)}
+.pk2-tile.hide,.pk2-tile.miss{display:none}
+.pk2-tile b{font-size:12px}
+.pk2-tile small{font-size:10px;color:#9ad3e8}
+.anim.pk2-face{width:58px;height:58px;background-size:500% 100%;background-position:0 50%}
+.pk2-num{position:absolute;top:4px;left:6px;font-size:10px;color:#9ad3e8}
+.pk2-evo{position:absolute;top:4px;right:6px;font-size:9px;background:#7cf29c;color:#06101e;border-radius:99px;padding:0 6px}
+.pk2-prog{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;font-size:12px;color:#cfeaff}
+.pk2-foot{display:flex;align-items:center;gap:14px;padding-top:10px}
+.pk2-foot .pk-start{min-width:260px}
+.pk2 .pk-skins-row{grid-template-columns:repeat(6,minmax(0,1fr))}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2070,101 +2123,141 @@ let pickTab = 'personaje';
 // Colores de rareza de las skins (tc-n base, tc-c común, tc-r rara, tc-e épica)
 const SKIN_TIER_NAME = {n: 'Base', c: 'Común', r: 'Rara', e: 'Épica', l: 'Legendaria'};
 const SKIN_SRC_NAME = {base: 'Original', logro: 'Logro', gacha: 'Gacha', evento: 'Evento'};
+// Filtro y búsqueda de la pantalla de selección
+let pickFilter = 'todos', pickQuery = '';
+function pickIsEvolved(k){ return !!loadJSON('digibonk3d-evo', {})[k]; }
+function pickProgress(){
+  const chars = SEASONS.adventure.chars;
+  const done = chars.filter(k => statsOf(k).plays > 0).length;
+  return {done, total: chars.length};
+}
 function showPicker(tab){
   if (tab) pickTab = tab === 'skins' ? 'personaje' : tab;
   state = 'pick';
   setHud(false);
   const chars = SEASONS.adventure.chars;
-  // Parrilla de cabezas a la derecha; la preview y las skins van a la izquierda
-  const grid = chars.map((k, i) => `
-    <button class="pv-card${k === selectedKey ? ' sel' : ''}" data-pick="${k}" style="--c:#4fc3f7" title="${CHARS[k].name}">
-      <span class="pv-num">${i + 1}</span>
-      ${animEl(spriteOf(k, false), 'pk-face')}
-      <span class="pv-meta"><b>${CHARS[k].name}</b></span>
-    </button>`).join('');
-  const left = pickTab === 'objetos' ? itemsPanelHtml()
-    : skinStripHtml(selectedKey) + '<div class="pv-stage" id="pkPreview"></div>';
+  const pr = pickProgress();
+  const tiles = chars.map((k, i) => {
+    const st = statsOf(k), hidden = (pickFilter === 'jugados' && !st.plays) || (pickFilter === 'evo' && !pickIsEvolved(k));
+    return `<button class="pk2-tile${k === selectedKey ? ' sel' : ''}${hidden ? ' hide' : ''}" data-pick="${k}" data-name="${CHARS[k].name.toLowerCase()}" title="${CHARS[k].name}">
+      <span class="pk2-num">${i + 1}</span>
+      ${pickIsEvolved(k) ? '<span class="pk2-evo">Evo</span>' : ''}
+      ${animEl(spriteOf(k, false), 'pk2-face')}
+      <b>${CHARS[k].name}</b>
+      <small>${st.plays ? 'Partidas ' + st.plays : 'Sin jugar'}</small>
+    </button>`;
+  }).join('');
+  const left = pickTab === 'objetos' ? itemsPanelHtml() : '<div class="pk2-left-in" id="pkPreview"></div>';
+  const filt = [['todos', 'Todos'], ['jugados', 'Jugados'], ['evo', 'Evolucionados']]
+    .map(([id, t]) => `<button class="pk2-f${pickFilter === id ? ' on' : ''}" data-f="${id}">${t}</button>`).join('');
   showOverlay(`
-    <div class="picker-screen">
-      <header class="pk-head">
+    <div class="picker-screen pk2">
+      <header class="pk2-top">
         <button class="g-back" id="pkBack">← Volver</button>
         <h2>Elige tu Digimon</h2>
+        <span class="pk2-sub">Temporada 1 · ${chars.length} Digimon</span>
         <div class="pk-tabs">
           <button class="pk-tab${pickTab === 'personaje' ? ' on' : ''}" data-tab="personaje">Personaje</button>
           <button class="pk-tab${pickTab === 'objetos' ? ' on' : ''}" data-tab="objetos">Objetos</button>
         </div>
       </header>
-      <div class="pk-body pk-split">
-        <div class="pk-right-main">${left}</div>
-        <aside class="pk-grid">${grid}</aside>
+      <div class="pk2-body">
+        <section class="pk2-left">${left}</section>
+        <aside class="pk2-right">
+          <div class="pk2-filters">${filt}</div>
+          <input class="pk2-search" id="pkSearch" placeholder="Buscar por nombre..." value="${pickQuery}" maxlength="20">
+          <div class="pk2-grid" id="pkGrid">${tiles}</div>
+          <div class="pk2-prog"><span>Progreso</span><div class="pk2-bar"><i style="width:${Math.round(pr.done / pr.total * 100)}%"></i></div><b>${pr.done}/${pr.total}</b></div>
+        </aside>
       </div>
-      <footer class="pk-foot">
+      <footer class="pk2-foot">
         <button class="btn btn-primary pk-start" id="pkStart">¡Empezar! <small>(Enter)</small></button>
         <span class="pk-hint">1-8 elegir · ←→ cambiar · Enter empezar · Esc volver</span>
       </footer>
     </div>`);
-  overlay.querySelectorAll('.pv-card').forEach(b => {
+  overlay.querySelectorAll('.pk2-tile').forEach(b => {
     b.onclick = () => { selectedKey = b.dataset.pick; showPicker(); };
     b.ondblclick = () => startGame(b.dataset.pick);
   });
+  overlay.querySelectorAll('.pk2-f').forEach(b => b.onclick = () => { pickFilter = b.dataset.f; showPicker(); });
+  // La búsqueda filtra en el DOM sin redibujar; sus teclas no llegan al manejador global
+  const search = document.getElementById('pkSearch');
+  search.addEventListener('keydown', e => e.stopPropagation());
+  search.addEventListener('input', () => {
+    pickQuery = search.value.trim().toLowerCase();
+    overlay.querySelectorAll('.pk2-tile').forEach(t => t.classList.toggle('miss', !!pickQuery && !t.dataset.name.includes(pickQuery)));
+  });
   overlay.querySelectorAll('.pk-tab').forEach(b => b.onclick = () => showPicker(b.dataset.tab));
+  document.getElementById('pkBack').onclick = () => showSelect();
+  document.getElementById('pkStart').onclick = () => startGame(selectedKey);
+  if (pickTab === 'personaje'){ renderPickPreview(); bindSkinStrip(); } else bindItemTiles();
+}
+// Selector de skin dentro de la columna izquierda: solo las desbloqueadas se pueden equipar
+function bindSkinStrip(){
   overlay.querySelectorAll('.pk-skin:not(.locked)').forEach(b => b.onclick = () => {
     equipSkin(selectedKey, b.dataset.skin);
     showPicker();
   });
-  document.getElementById('pkBack').onclick = () => showSelect();
-  document.getElementById('pkStart').onclick = () => startGame(selectedKey);
-  if (pickTab === 'personaje') renderPickPreview(); else bindItemTiles();
 }
-// Selector de skin debajo de la preview: solo las desbloqueadas se pueden equipar
 function skinStripHtml(k){
   const owned = ownedSkins(k), eq = skinEquipped[k] || 'clasico';
-  return `<div class="pk-skins">
-    <span class="pk-skins-t">Skin de ${CHARS[k].name}</span>
-    <div class="pk-skins-row">${SKINS.map(sk => {
-      const h = owned.includes(sk.id), e = eq === sk.id;
-      return `<button class="pk-skin${h ? '' : ' locked'}${e ? ' on' : ''}" data-skin="${sk.id}" title="${h ? sk.name : howTo(k, sk)}">
-        ${animEl(spriteWith(k, false, sk.id), 'pk-skin-face')}
-        <small>${h ? sk.name : '???'}</small>${e ? '<em>Equipada</em>' : ''}</button>`;
-    }).join('')}</div>
-  </div>`;
+  return `<div class="pk2-sec"><h3>Vestidor</h3><div class="pk-skins-row">${SKINS.map(sk => {
+    const h = owned.includes(sk.id), e = eq === sk.id;
+    return `<button class="pk-skin${h ? '' : ' locked'}${e ? ' on' : ''}" data-skin="${sk.id}" title="${h ? sk.name : howTo(k, sk)}">
+      ${animEl(spriteWith(k, false, sk.id), 'pk-skin-face')}
+      <small>${h ? sk.name : '???'}</small>${e ? '<em>Equipada</em>' : ''}</button>`;
+  }).join('')}</div></div>`;
 }
 // Escaparate del Digimon elegido: héroe animado, estadísticas y línea de evolución
 function renderPickPreview(){
-  const k = selectedKey, c = CHARS[k], evo = EVO[k], b = BALANCE[k];
+  const k = selectedKey, c = CHARS[k], b = BALANCE[k], st = statsOf(k);
   const el = document.getElementById('pkPreview');
   if (!el) return;
-  const st = statsOf(k);
-  const dmgPct = (c.dmg / 14) * 100;
-  const rate = (0.4 / Math.max(c.cd, 0.1)) * 100;
-  el.style.setProperty('--c', '#4fc3f7');
+  const idx = SEASONS.adventure.chars.indexOf(k) + 1;
+  const bar = (label, pct, val) => `<div class="pk2-stat"><span>${label}</span><div class="pk2-bar"><i style="width:${Math.max(4, Math.min(100, Math.round(pct)))}%"></i></div><b>${val}</b></div>`;
+  const rate = c.cd ? (1 / c.cd).toFixed(1) + '/s' : 'Continua';
+  const skillCards = (CHAR_SKILLS[k] || []).map(id => {
+    const sk = SKILLS[id];
+    return `<div class="pk2-atk"><div class="pk2-atk-h"><b>${sk.name}</b><em>${sk.k}</em></div><p>${sk.d}</p></div>`;
+  }).join('');
   el.innerHTML = `
-    <div class="pv-top">
-      <span class="pv-tag">Temporada 1</span>
-      <span class="pv-tag">${ATTACK_NAME[c.kind] || c.kind}</span>
-      <span class="pv-tag">Partidas ${st.plays} · Bajas ${st.kills}</span>
-    </div>
-    <div class="pv-main">
-      <div class="pv-spot">${animEl(spriteOf(k, false), 'pv-hero')}</div>
-      <div class="pv-info">
+    <div class="pk2-hero">
+      <div class="pk2-stage">${animEl(spriteOf(k, false), 'pk2-hero-img')}</div>
+      <div class="pk2-id">
+        <small>#${String(idx).padStart(3, '0')} · Digimon</small>
         <h2>${c.name}</h2>
-        <p class="pv-desc">${c.desc}</p>
-        <div class="pv-stats">
-          ${statBar('Daño', dmgPct, true)}
-          ${statBar('Cadencia', rate)}
-          ${statBar('Vida', (b.hp / 120) * 100)}
-          ${statBar('Velocidad', (b.speed / 7) * 100)}
+        <div class="pk2-tags">
+          <span>${ATTACK_NAME[c.kind] || c.kind}</span>
+          <span>Partidas ${st.plays}</span>
+          <span>Bajas ${st.kills}</span>
         </div>
-        <p class="pv-why">${b.why}</p>
-        <p class="pv-syn">Combina bien con: ${({shot: 'Disparo Espiral, Rayo Láser, crítico', ring: 'Aura de Datos, Onda de Pulso, área', orbit: 'Tornado Bit, Mina Digital, velocidad'})[c.kind]}</p>
+        <p>${b.why}</p>
       </div>
     </div>
-    <div class="pv-evo">
-      <div class="pv-node"><img src="${spriteOf(k, false)}" alt=""><small>${c.name}</small></div>
-      ${EVO_LINE[k].map((e, i) => `<div class="pv-arrow">Nv ${EVO_LEVELS[i]} ➜</div><div class="pv-node"><img src="${e.sprite}" alt=""><small>${e.name}</small></div>`).join('')}
-      <span class="pv-note">Cada etapa: +35% daño, +10% área y +20 vida · solo durante la partida</span>
+    <div class="pk2-grid2">
+      <div class="pk2-sec">
+        <h3>Estadísticas en partida</h3>
+        ${bar('PS', 100 / 120 * 100, '100')}
+        ${bar('Daño', c.dmg / 14 * 100, '×1,00')}
+        ${bar('Cadencia', (1 / Math.max(c.cd, 0.1)) * 50, rate)}
+        ${bar('Velocidad', 6 / 7 * 100, '6,0')}
+      </div>
+      <div class="pk2-sec">
+        <h3>Evolución</h3>
+        <div class="pv-evo">
+          <div class="pv-node"><img src="${spriteOf(k, false)}" alt=""><small>${c.name}</small></div>
+          ${EVO_LINE[k].map((e, i) => `<div class="pv-arrow">Nv ${EVO_LEVELS[i]} ➜</div><div class="pv-node"><img src="${e.sprite}" alt=""><small>${e.name}</small></div>`).join('')}
+        </div>
+        <p class="pk2-note">Cada etapa: +20% daño, +5% área y +20 PS · solo durante la partida</p>
+      </div>
     </div>
-`;
+    <div class="pk2-sec">
+      <h3>Kit de ataques <small>máx. 3 distintos por partida</small></h3>
+      <div class="pk2-atk"><div class="pk2-atk-h"><b>Ataque de ${c.name}</b><em>Inicial</em></div><p>${c.desc}</p></div>
+      <div class="pk2-kit">${skillCards}</div>
+    </div>
+    ${skinStripHtml(k)}
+  `;
 }
 // Progreso hacia una skin por logro (0-1); las demás no tienen progreso
 function skinProgress(key, sk){
