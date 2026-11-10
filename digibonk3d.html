@@ -395,6 +395,14 @@ canvas{display:block}
 .help-box{width:min(640px,94vw);padding:18px 22px;border-radius:22px;background:rgba(10,18,40,.95);border:3px solid #3a6fc4;color:#e6f4ff}
 .help-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin-top:10px}
 .help-grid span{font-size:14px}
+.tuto-screen{text-align:center;margin-top:10px}
+.tuto-screen canvas{display:block;margin:0 auto;width:100%;max-width:480px;height:auto;aspect-ratio:480/270;border-radius:12px;border:2px solid #3a6fc4;image-rendering:auto}
+.tuto-screen h3{margin:10px 0 4px;color:#ffd54f;font-size:18px}
+.tuto-screen p{margin:0 auto;max-width:460px;font-size:14px;min-height:40px}
+.tuto-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}
+.tuto-dots{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.tuto-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#2a4a7a;cursor:pointer}
+.tuto-dot.on{background:#ffd54f}
 
 /* ---- Menú de inicio v3: tarjeta de JUGAR, accesos en fila, tablero lateral ---- */
 .menu3{position:absolute;inset:0;font-family:'Orbitron',system-ui,sans-serif;color:#e6f4ff}
@@ -538,6 +546,7 @@ canvas{display:block}
   </div>
 </div></div>
 <div id="timer">5:00</div>
+<div id="zoneName" style="position:fixed;top:10px;left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e1f5fe;text-shadow:0 1px 3px #000;pointer-events:none"></div>
 <div id="xp"></div>
 <div id="xpTxt"></div>
 <div id="overlay"></div>
@@ -560,6 +569,12 @@ import * as THREE from 'three';
 // Prototipo 3D estilo Megabonk. Sprites 2D (pixel art de King) como billboards.
 const BOSS_AT = 240; // segundos hasta el jefe final; ganas al derrotarlo
 const ARENA_R = 70;  // radio del escenario: el mapa tiene límite circular con montañas
+// Dos zonas: el bosque inicial y el pantano de datos (a partir de 120 s). El jefe final está al final de la zona 2.
+const ZONES = [
+  {name:'Bosque Inicial',   at:0,   fog:0xbcd9e8, sky:['#4d86c9', '#a9d4ee', '#d8efff'], tint:0xffffff, color:'#ffd54f'},
+  {name:'Pantano de Datos', at:120, fog:0x8c7cb8, sky:['#241b4a', '#6a4f9e', '#c59ad6'], tint:0xd8c6ff, color:'#ce93d8'}
+];
+const ZONE2_AT = ZONES[1].at;
 // Recorta un punto al círculo de radio m (para aparecer y moverse dentro del escenario)
 function clampArena(x, z, m){
   const r = Math.hypot(x, z);
@@ -691,11 +706,11 @@ document.body.prepend(renderer.domElement);
 const scene = new THREE.Scene();
 scene.background = skyTexture();
 scene.fog = new THREE.Fog(0xbcd9e8, 110, 250);
-function skyTexture(){
+function skyTexture(stops = ZONES[0].sky){
   const c = document.createElement('canvas'); c.width = 4; c.height = 256;
   const x = c.getContext('2d');
   const gr = x.createLinearGradient(0, 0, 0, 256);
-  gr.addColorStop(0, '#4d86c9'); gr.addColorStop(.6, '#a9d4ee'); gr.addColorStop(1, '#d8efff');
+  gr.addColorStop(0, stops[0]); gr.addColorStop(.6, stops[1]); gr.addColorStop(1, stops[2]);
   x.fillStyle = gr; x.fillRect(0, 0, 4, 256);
   return new THREE.CanvasTexture(c);
 }
@@ -748,7 +763,8 @@ function loadTex(path, rx, ry, pixel = false){
   if (pixel) t.magFilter = THREE.NearestFilter;   // pixel art: bordes nítidos
   return t;
 }
-const floor = new THREE.Mesh(terrainGeo, new THREE.MeshStandardMaterial({map: loadTex('textures/hierba_pixel.png', 20, 20, true), roughness: 1, vertexColors: true}));
+const floorMat = new THREE.MeshStandardMaterial({map: loadTex('textures/hierba_pixel.png', 20, 20, true), roughness: 1, vertexColors: true});
+const floor = new THREE.Mesh(terrainGeo, floorMat);
 scene.add(floor);
 {
   const water = new THREE.Mesh(new THREE.CircleGeometry(POND.r + 0.6, 48),   // encaja con la orilla
@@ -1028,7 +1044,8 @@ addEventListener('keydown', e => {
   if (k === 'n'){ toggleMute(); return; }
   if (k === 'm'){ if (state === 'play') openMap(); else if (state === 'map') closeMap(); return; }
   if (state === 'map'){ if (k === 'escape') closeMap(); return; }
-  if (state === 'gacha' || state === 'settings' || state === 'player' || state === 'help'){ if (k === 'escape') showSelect(); return; }
+  if (state === 'help'){ if (k === 'escape') showSelect(); if (k === 'arrowright') tutoStep(1); if (k === 'arrowleft') tutoStep(-1); return; }
+  if (state === 'gacha' || state === 'settings' || state === 'player'){ if (k === 'escape') showSelect(); return; }
   // Esc o P pausan y reanudan. Con el ratón bloqueado el navegador puede no entregar Esc:
   // en ese caso la pausa la dispara pointerlockchange (ver más abajo). P sirve en pantalla completa.
   if (k === 'escape' || k === 'p'){
@@ -1248,30 +1265,146 @@ function showSelect(){
   document.getElementById('btnHelp').onclick = () => showHelp();
 }
 // Ventana de controles: se abre con el botón "?" desde el inicio
+// Tutorial en carrusel: cada pantalla tiene un mini vídeo (animación en canvas que se repite)
+const TUTO = [
+  {t:'Movimiento y cámara', d:'WASD para moverte. Mueve el ratón para girar la cámara y la rueda para acercarla.', draw:(c, k, W, H) => {
+    const cx = W/2, cy = H/2 + 10, a = k*Math.PI*2;
+    c.strokeStyle = '#ffffff55'; c.setLineDash([6, 6]); c.beginPath(); c.arc(cx, cy, 80, 0, 7); c.stroke(); c.setLineDash([]);
+    const x = cx + Math.cos(a)*80, y = cy + Math.sin(a)*80;
+    c.fillStyle = '#ffd54f'; c.beginPath(); c.arc(x, y, 12, 0, 7); c.fill();
+    const keys = ['W','A','S','D'], on = Math.floor(k*4) % 4;
+    keys.forEach((kk, i) => { c.fillStyle = i === on ? '#ffd54f' : '#1d3557'; c.fillRect(30 + i*46, H - 40, 36, 30); c.fillStyle = '#fff'; c.font = 'bold 16px system-ui'; c.textAlign = 'center'; c.fillText(kk, 48 + i*46, H - 19); });
+  }},
+  {t:'Ataque automático', d:'Tu Digimon ataca solo al enemigo más cercano. Tú te centras en esquivar y posicionarte.', draw:(c, k, W, H) => {
+    const cx = W/2, cy = H/2;
+    c.fillStyle = '#4fc3f7'; c.beginPath(); c.arc(cx, cy, 14, 0, 7); c.fill();
+    const foes = [[-150, -50], [150, -30], [120, 70]];
+    foes.forEach(([fx, fy], i) => {
+      const p = (k + i*0.33) % 1, sx = cx + fx*(1 - p), sy = cy + fy*(1 - p);
+      c.fillStyle = '#ef5350'; c.beginPath(); c.arc(cx + fx, cy + fy, 14, 0, 7); c.fill();
+      c.fillStyle = '#ffd54f'; c.beginPath(); c.arc(sx, sy, 5, 0, 7); c.fill();
+    });
+    c.fillStyle = '#fff'; c.font = 'bold 18px system-ui'; c.textAlign = 'center'; c.fillText('-12', cx - 150*0.5, cy - 50*0.5 - 14 - 20*k);
+  }},
+  {t:'Esquiva con el dash', d:'Shift te lanza hacia delante. Durante el dash no recibes daño de contacto.', draw:(c, k, W, H) => {
+    const p = (k*1.4) % 1, x = 60 + p*(W - 120), y = H/2;
+    for (let i = 0; i < 6; i++){ c.globalAlpha = (i+1)/12; c.fillStyle = '#80deea'; c.beginPath(); c.arc(x - i*14, y, 12 - i, 0, 7); c.fill(); }
+    c.globalAlpha = 1; c.fillStyle = '#4fc3f7'; c.beginPath(); c.arc(x, y, 14, 0, 7); c.fill();
+    c.fillStyle = '#ef5350'; c.beginPath(); c.arc(W/2 + 40, y, 22, 0, 7); c.fill();
+    c.fillStyle = '#fff'; c.font = 'bold 14px system-ui'; c.textAlign = 'center'; c.fillText(p < 0.5 ? 'DASH' : 'Dash listo', W/2, H - 22);
+  }},
+  {t:'Experiencia y subida de nivel', d:'Recoge los orbes de experiencia. Al subir de nivel eliges una mejora entre tres.', draw:(c, k, W, H) => {
+    const cx = W/2, cy = H/2 + 20;
+    c.fillStyle = '#ffd54f';
+    for (let i = 0; i < 5; i++){
+      const p = (k + i*0.2) % 1, sx = cx - 160 + i*70 + (1 - p)*0, sy = cy - 60*(1 - p) - 30*p;
+      c.beginPath(); c.arc(sx + (1-p)*0, sy, 6, 0, 7); c.fill();
+    }
+    c.fillStyle = '#4fc3f7'; c.beginPath(); c.arc(cx, cy, 14, 0, 7); c.fill();
+    const bar = Math.min(1, k*1.2);
+    c.fillStyle = '#1d3557'; c.fillRect(60, H - 30, W - 120, 12);
+    c.fillStyle = '#7e57c2'; c.fillRect(60, H - 30, (W - 120)*bar, 12);
+    c.fillStyle = '#fff'; c.font = '13px system-ui'; c.textAlign = 'center'; c.fillText('EXP', W/2, H - 36);
+  }},
+  {t:'Cofres y mejoras', d:'Pulsa E junto a un cofre para abrirlo. Dentro hay Bits y, a veces, objetos.', draw:(c, k, W, H) => {
+    const cx = W/2, cy = H/2 + 30, open = Math.min(1, Math.max(0, (k - 0.2)*3));
+    c.fillStyle = '#9a6432'; c.fillRect(cx - 45, cy - 26, 90, 40);
+    c.save(); c.translate(cx - 45, cy - 26); c.scale(1, 1 - open*0.9); c.fillStyle = '#7a4a22'; c.fillRect(0, -26, 90, 26); c.restore();
+    c.fillStyle = '#c9a227'; c.fillRect(cx - 45, cy - 6, 90, 6);
+    if (open > 0.5){
+      const up = (open - 0.5)*2;
+      [['Daño +20%', '#ef5350'], ['Cadencia +15%', '#ffb300'], ['Imán +30%', '#4fc3f7']].forEach(([label, col], i) => {
+        const x = cx - 150 + i*110, y = cy - 40 - up*40;
+        c.fillStyle = col; c.fillRect(x, y, 100, 44);
+        c.fillStyle = '#0a1228'; c.font = 'bold 11px system-ui'; c.textAlign = 'center'; c.fillText(label, x + 50, y + 26);
+      });
+    }
+  }},
+  {t:'Zonas', d:'El mapa tiene dos zonas. La segunda, el Pantano de Datos, empieza a los 2 minutos y trae enemigos más duros.', draw:(c, k, W, H) => {
+    const p = Math.min(1, Math.max(0, (k - 0.3)*2));
+    const left = {n:'Bosque Inicial', col:'#4f7a3a'}, right = {n:'Pantano de Datos', col:'#5b4a8a'};
+    c.fillStyle = left.col; c.fillRect(20, 50, 200, 150);
+    c.fillStyle = right.col; c.fillRect(W - 220, 50, 200, 150);
+    c.fillStyle = '#fff'; c.font = 'bold 13px system-ui'; c.textAlign = 'center';
+    c.fillText(left.n, 120, 120); c.fillText(right.n, W - 120, 120);
+    const x = 240 + p*(W - 480);
+    c.fillStyle = '#ffd54f'; c.beginPath(); c.arc(x, 125, 12, 0, 7); c.fill();
+    c.fillStyle = '#fff'; c.fillText('2:00', W/2, 40);
+  }},
+  {t:'Jefe final', d:'Al final de la zona 2 aparece Devimon. Esquiva el anillo rojo antes de cada disparo.', draw:(c, k, W, H) => {
+    const cx = W/2, cy = H/2 + 20, ph = k % 1;
+    const rr = 90 * (1 - ph) + 14;
+    c.strokeStyle = 'rgba(255,23,68,' + (0.3 + 0.6*ph) + ')'; c.lineWidth = 3; c.beginPath(); c.arc(cx, cy, rr, 0, 7); c.stroke(); c.lineWidth = 1;
+    c.fillStyle = '#ce93d8'; c.beginPath(); c.arc(cx, cy, 22, 0, 7); c.fill();
+    if (ph > 0.9){
+      for (let i = 0; i < 10; i++){ const an = i/10*Math.PI*2; c.fillStyle = '#ff1744'; c.beginPath(); c.arc(cx + Math.cos(an)*(ph-0.9)*900, cy + Math.sin(an)*(ph-0.9)*900, 5, 0, 7); c.fill(); }
+    }
+    c.fillStyle = '#fff'; c.font = 'bold 13px system-ui'; c.textAlign = 'center'; c.fillText('DEVIMON', cx, H - 14);
+  }},
+  {t:'Colección y gacha', d:'El Digivice del menú abre el gacha. Las tiradas dan skins, marcos, títulos y objetos. Las evoluciones se desbloquean en la colección.', draw:(c, k, W, H) => {
+    const cx = W/2, cy = H/2;
+    for (let i = 0; i < 3; i++){
+      const ang = (i - 1)*0.35 + Math.sin(k*Math.PI*2)*0.15;
+      c.save(); c.translate(cx + (i - 1)*90, cy); c.rotate(ang);
+      c.fillStyle = ['#607d8b', '#4fc3f7', '#ffd54f'][i]; c.fillRect(-35, -50, 70, 100);
+      c.fillStyle = '#0a1228'; c.fillRect(-28, -42, 56, 40);
+      c.restore();
+    }
+    c.fillStyle = '#fff'; c.font = 'bold 13px system-ui'; c.textAlign = 'center'; c.fillText('Común · Rara · Épica', cx, H - 14);
+  }}
+];
+let tutoIdx = 0, tutoT = 0, tutoRaf = 0, tutoLast = 0;
+function tutoShow(i){
+  tutoIdx = (i + TUTO.length) % TUTO.length;
+  tutoT = 0;
+  const s = TUTO[tutoIdx];
+  document.getElementById('tutoT').textContent = s.t;
+  document.getElementById('tutoD').textContent = s.d;
+  document.getElementById('tutoDots').innerHTML = TUTO.map((_, j) => `<i class="tuto-dot${j === tutoIdx ? ' on' : ''}" data-i="${j}"></i>`).join('');
+  document.querySelectorAll('#tutoDots .tuto-dot').forEach(d => d.onclick = () => tutoShow(+d.dataset.i));
+}
+function tutoStep(dir){ if (state === 'help') tutoShow(tutoIdx + dir); }
+function tutoLoop(now){
+  const cv = document.getElementById('tutoCv');
+  if (state !== 'help' || !cv) return;
+  const dt = Math.min(0.05, (now - tutoLast)/1000); tutoLast = now;
+  tutoT += dt;
+  const c = cv.getContext('2d'), W = cv.width, H = cv.height;
+  c.fillStyle = '#0b1e33'; c.fillRect(0, 0, W, H);
+  c.fillStyle = '#143d2a'; c.fillRect(0, H*0.6, W, H*0.4);   // suelo de hierba
+  const loopK = (tutoT / 4) % 1;                              // cada mini vídeo dura 4 s y se repite
+  TUTO[tutoIdx].draw(c, loopK, W, H);
+  c.textAlign = 'left';
+  tutoRaf = requestAnimationFrame(tutoLoop);
+}
 function showHelp(){
   state = 'help';
   showOverlay(`
-    <div class="help-box">
-      <header class="set-head"><button class="g-back" id="helpBack">← Volver</button><h2>Controles</h2></header>
-      <div class="help-grid">
-        <span><i class="kbd">WASD</i> mover</span>
-        <span><i class="kbd">Ratón</i> cámara</span>
-        <span><i class="kbd">Espacio</i> saltar</span>
-        <span><i class="kbd">Shift</i> dash</span>
-        <span><i class="kbd">E</i> cofres e interactuar</span>
-        <span><i class="kbd">Esc</i> / <i class="kbd">P</i> pausa</span>
-        <span><i class="kbd">M</i> mapa</span>
-        <span><i class="kbd">N</i> sonido</span>
-        <span><i class="kbd">Enter</i> jugar / empezar</span>
-        <span><i class="kbd">1</i>-<i class="kbd">6</i> elegir Digimon</span>
+    <div class="help-box tuto">
+      <header class="set-head"><button class="g-back" id="helpBack">← Volver</button><h2>Cómo jugar</h2></header>
+      <div class="tuto-screen">
+        <canvas id="tutoCv" width="480" height="270"></canvas>
+        <h3 id="tutoT"></h3><p id="tutoD"></p>
       </div>
+      <div class="tuto-nav">
+        <button class="g-back" id="tutoPrev">◀</button>
+        <div class="tuto-dots" id="tutoDots"></div>
+        <button class="g-back" id="tutoNext">▶</button>
+      </div>
+      <div class="muted">Flechas ← → cambian de pantalla · Esc vuelve</div>
     </div>`);
   document.getElementById('helpBack').onclick = () => showSelect();
+  document.getElementById('tutoPrev').onclick = () => tutoStep(-1);
+  document.getElementById('tutoNext').onclick = () => tutoStep(1);
+  tutoShow(0);
+  cancelAnimationFrame(tutoRaf);
+  tutoLast = performance.now();
+  tutoRaf = requestAnimationFrame(tutoLoop);
 }
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
-  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records'];
+  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach'];
 function makeSaveCode(){
   const data = {};
   for (const k of SAVE_KEYS){ const v = localStorage.getItem(k); if (v !== null) data[k] = v; }
@@ -1477,8 +1610,10 @@ function startGame(key){
     wCd: 0, spawnT: 0, orbitA: 0, choices: [],
     dash: 0, dashCd: 0, dir: {x:0, z:-1}, chests: [], chestT: 20, flash: '', flashT: 0,
     texts: [], nearChest: null, combo: 0, comboT: 0,
-    boss: null, bossSpawned: false, bossDown: false, bossShotT: 0, eshots: []
+    boss: null, bossSpawned: false, bossDown: false, bossShotT: 0, eshots: [],
+    zone: 1
   };
+  applyZoneVisuals(1);
   applyBalance(key);
   applySkinFx(key);
   applyRunItem();
@@ -1746,8 +1881,9 @@ function dist2(ax, az, bx, bz){ return Math.hypot(ax-bx, az-bz); }
 function spawnEnemy(){
   const t = g.t, r = Math.random(), a = Math.random()*Math.PI*2, R = 25;
   let kind = 'basic';
-  if (t > 120 && r < 0.2) kind = 'tank';
-  else if (t > 60 && r < 0.4) kind = 'fast';
+  const z2 = g.zone >= 2;   // la zona 2 trae más tanques y rápidos
+  if (t > 120 && r < (z2 ? 0.3 : 0.2)) kind = 'tank';
+  else if (t > 60 && r < (z2 ? 0.5 : 0.4)) kind = 'fast';
   const d = ENEMY[kind], k = 1 + t/120;
   const mesh = billboard(d.sprite, d.scale);
   mesh.position.y = d.scale/2;
@@ -1805,6 +1941,7 @@ function update(dt){
   resolveSolids(p, 0.5, p.y);   // casas, fuente, habitantes y vallas bloquean al jugador
 
   // Avisos de fase: hordas a los 45 s y aviso del jefe 15 s antes
+  if (g.zone < 2 && g.t >= ZONE2_AT) setZone(2);
   if (!g.hordeWarned && g.t >= 45){ g.hordeWarned = true; announce('¡HORDAS!', 'Más enemigos aparecen', '#ef5350'); }
   if (!g.bossWarned && g.t >= BOSS_AT - 15){ g.bossWarned = true; announce('Algo se acerca…', 'Devimon llega en 15 s', '#ce93d8'); }
 
@@ -2072,13 +2209,15 @@ function endGame(win){
   g.earned = earned + bonus;
   g.bonus = bonus;
   g.unlocked = recordRun(g.ch.id, g.kills, g.t);
+  g.newTitles = checkAchievements(win);
   unlockMouse();
   saveRecord(win);
   showOverlay(`<h1>${win ? '¡Sobreviviste!' : 'Has caído'}</h1>
-    <p>Nivel ${g.p.lvl} · Bajas ${g.kills} · Tiempo ${Math.floor(g.t)} s</p>
+    <p>Nivel ${g.p.lvl} · Bajas ${g.kills} · Tiempo ${Math.floor(g.t)} s · ${ZONES[g.zone - 1].name}</p>
     <p>+${g.earned} Bits</p>
     ${g.bonus ? `<p>¡Misión diaria completada! +${g.bonus} Bits</p>` : ''}
     ${g.unlocked.length ? `<p>¡Skin nueva: ${g.unlocked.join(', ')}!</p>` : ''}
+    ${g.newTitles.length ? `<p>¡Título desbloqueado: ${g.newTitles.map(t => t.name).join(', ')}!</p>` : ''}
     <p>Pulsa Enter o haz clic para volver a elegir</p>`);
   overlay.onclick = () => { if (state === 'end') showSelect(); };
 }
@@ -2144,6 +2283,26 @@ function announce(title, sub, color = '#ffd54f'){
   el.innerHTML = `<b>${title}</b><small>${sub || ''}</small>`;
   el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
 }
+// Colores de cada zona: niebla, cielo y tinte del suelo (sin reconstruir el mapa)
+function applyZoneVisuals(n){
+  const z = ZONES[n - 1];
+  scene.fog.color.set(z.fog);
+  const old = scene.background;
+  scene.background = skyTexture(z.sky);
+  if (old && old.dispose) old.dispose();
+  floorMat.color.set(z.tint);
+  document.getElementById('zoneName').textContent = z.name;
+}
+// Cambio de zona durante la partida: aviso, sacudida y colores nuevos
+function setZone(n){
+  if (!g || g.zone >= n) return;
+  g.zone = n;
+  applyZoneVisuals(n);
+  shake = Math.max(shake, 0.4);
+  sfx('evolve');
+  const z = ZONES[n - 1];
+  announce('Zona ' + n + ': ' + z.name, n === 2 ? 'Derrota al jefe final para ganar' : '', z.color);
+}
 // Aviso "E" flotando sobre el cofre cercano
 function updatePrompt(){
   const el = document.getElementById('prompt');
@@ -2168,6 +2327,8 @@ function updateHUD(){
   document.getElementById('hudName').textContent = g.ch.evolved ? EVO[g.ch.id].name : g.ch.name;
   const tt = TITLES.find(t => t.id === extra.title);
   document.getElementById('hudTitle').textContent = tt ? tt.name : '';
+  const zn = document.getElementById('zoneName');
+  if (zn.textContent !== ZONES[g.zone - 1].name) zn.textContent = ZONES[g.zone - 1].name;
   document.getElementById('hudPortrait').className = 'hud-portrait' + frameClass();
   document.getElementById('hudLvl').textContent = p.lvl;
   document.getElementById('hudKills').textContent = g.kills;
@@ -2189,37 +2350,74 @@ function updateHUD(){
   } else bb.style.display = 'none';
 }
 
-/* ---------- Música: pad ambiental sintetizado (Web Audio, sin archivos) ---------- */
-const Music = {on: localStorage.getItem('digibonk3d-music') !== '0', nodes: null, timer: null};
+/* ---------- Música: tema original de aventura (sintetizado, sin archivos ni melodías existentes) ---------- */
+const Music = {on: localStorage.getItem('digibonk3d-music') !== '0', nodes: null};
+// Melodía propia en la menor/do mayor: 8 compases de corcheas (MIDI, null = silencio)
+const TUNE_BPM = 150;
+const TUNE_LEAD = [
+  [69,69,72,69,76,74,72,null], [65,65,69,65,69,67,65,64], [67,67,72,67,64,62,60,null], [62,64,67,71,74,null,67,69],
+  [69,72,76,72,69,64,69,null], [65,69,72,69,65,69,72,null], [67,72,76,74,72,67,64,60], [62,67,71,74,67,71,74,null]
+];
+// Raíz del acorde de cada compás (Am F C G Am F G C) y el bajo sube raíz, quinta, octava, quinta
+const TUNE_ROOT = [45, 41, 48, 43, 45, 41, 43, 48];
+function midiHz(m){ return 440 * Math.pow(2, (m - 69) / 12); }
 function musicStart(){
   if (!Sfx.ctx || Music.nodes) return;
   const c = Sfx.ctx;
-  const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 900;
   const out = c.createGain(); out.gain.value = 0;
+  const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 3200;
   lp.connect(out); out.connect(c.destination);
-  const voices = [0, 1, 2].map(() => {
-    const o = c.createOscillator(); o.type = 'triangle';
-    const g = c.createGain(); g.gain.value = 0.05;
-    o.connect(g); g.connect(lp); o.start();
-    return o;
-  });
-  const chords = [[261.6, 329.6, 392], [220, 261.6, 329.6], [174.6, 220, 261.6], [196, 246.9, 293.7]];
-  let step = 0;
-  const setChord = () => {
-    const ch = chords[step++ % chords.length];
-    voices.forEach((o, i) => o.frequency.setTargetAtTime(ch[i], c.currentTime, 0.8));
+  out.gain.setTargetAtTime(0.32, c.currentTime, 0.6);
+  const eighth = 60 / TUNE_BPM / 2;
+  const nodes = {out, stopped: false, timer: null};
+  const tone = (m, t, dur, type, vol) => {
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.value = midiHz(m);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(vol, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(lp);
+    o.start(t); o.stop(t + dur + 0.05);
   };
-  setChord();
-  Music.timer = setInterval(setChord, 4000);
-  out.gain.setTargetAtTime(0.6, c.currentTime, 1.5);
-  Music.nodes = {voices, out};
+  const kick = t => {
+    const o = c.createOscillator(), g = c.createGain();
+    o.frequency.setValueAtTime(130, t); o.frequency.exponentialRampToValueAtTime(40, t + 0.12);
+    g.gain.setValueAtTime(0.5, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
+    o.connect(g); g.connect(out); o.start(t); o.stop(t + 0.16);
+  };
+  const hat = (t, vol) => {
+    if (!Sfx.noiseBuf) return;
+    const s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+    s.buffer = Sfx.noiseBuf; f.type = 'highpass'; f.frequency.value = 7000;
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+    s.connect(f); f.connect(g); g.connect(out); s.start(t, Math.random() * 0.3); s.stop(t + 0.06);
+  };
+  let step = 0, next = c.currentTime + 0.1;
+  const schedule = () => {
+    if (nodes.stopped) return;
+    while (next < c.currentTime + 0.3){
+      const bar = (step >> 3) & 7, pos = step & 7;
+      const r = TUNE_ROOT[bar];
+      const bassM = [r, r + 7, r + 12, r + 7][pos & 3];
+      tone(TUNE_LEAD[bar][pos], next, eighth * 0.85, 'square', 0.05);
+      tone(bassM, next, eighth * 0.9, 'triangle', 0.3);
+      if ((pos & 3) === 0) kick(next);
+      if (pos === 2 || pos === 6) hat(next, 0.05);
+      else if (pos & 1) hat(next, 0.02);
+      next += eighth; step++;
+    }
+  };
+  schedule();
+  nodes.timer = setInterval(schedule, 60);
+  Music.nodes = nodes;
 }
 function musicStop(){
   if (!Music.nodes) return;
-  const {voices, out} = Music.nodes;
-  out.gain.setTargetAtTime(0, Sfx.ctx.currentTime, 0.4);
-  setTimeout(() => voices.forEach(o => { try { o.stop(); } catch(e){} }), 1500);
-  clearInterval(Music.timer);
+  const {out, timer} = Music.nodes;
+  Music.nodes.stopped = true;
+  clearInterval(timer);
+  out.gain.setTargetAtTime(0, Sfx.ctx.currentTime, 0.3);
+  setTimeout(() => { try { out.disconnect(); } catch(e){} }, 1200);
   Music.nodes = null;
 }
 
@@ -2686,13 +2884,33 @@ const FRAMES = [
   {id:'neon',    name:'Digivice Burst',   tier:'r'},
   {id:'oro',     name:'Digivice Spirits', tier:'e'}
 ];
+// Títulos: solo cosmética (no dan bonus). Se consiguen con el gacha o con logros (ver checkAchievements)
 const TITLES = [
-  {id:'novato',    name:'Novato',            tier:'c'},
-  {id:'cazador',   name:'Cazador de bajas',  tier:'c'},
-  {id:'explorador', name:'Explorador',        tier:'r'},
-  {id:'maestro',   name:'Maestro Digimon',   tier:'r'},
-  {id:'leyenda',   name:'Leyenda digital',   tier:'e'}
+  {id:'novato',     name:'Novato',           tier:'c', how:'Termina tu primera partida'},
+  {id:'cazador',    name:'Cazador de bajas', tier:'c', how:'Acumula 300 bajas en total'},
+  {id:'explorador', name:'Explorador',       tier:'r', how:'Llega a la zona 2 (Pantano de Datos)'},
+  {id:'maestro',    name:'Maestro Digimon',  tier:'r', how:'Derrota al jefe final'},
+  {id:'leyenda',    name:'Leyenda digital',  tier:'e', how:'Solo del gacha (épico)'}
 ];
+// Progreso de logros guardado en 'digibonk3d-ach'
+function loadAch(){ return loadJSON('digibonk3d-ach', {runs: 0, zone2: false, boss: false}); }
+// Tras cada partida concede los títulos cuyo logro se ha cumplido (una sola vez). Devuelve los nuevos.
+function checkAchievements(win){
+  const ach = loadAch();
+  if (g.t >= 5) ach.runs += 1;
+  if (g.zone >= 2) ach.zone2 = true;
+  if (win && g.bossDown) ach.boss = true;
+  localStorage.setItem('digibonk3d-ach', JSON.stringify(ach));
+  const all = loadJSON('digibonk3d-stats', {});
+  const totalKills = Object.values(all).reduce((a, s) => a + (s.kills || 0), 0);
+  const met = {novato: ach.runs >= 1, cazador: totalKills >= 300, explorador: ach.zone2, maestro: ach.boss};
+  const won = [];
+  for (const t of TITLES){
+    if (met[t.id] && !inv.titles.includes(t.id)){ inv.titles.push(t.id); won.push(t); }
+  }
+  if (won.length) saveInv();
+  return won;
+}
 const ITEMS = [
   {id:'pocion',   name:'Poción digital',   icon:'🧪', tier:'c', desc:'Empiezas la partida con +20 PS'},
   {id:'iman',     name:'Imán de datos',    icon:'🧲', tier:'c', desc:'Empiezas con +30% de imán'},
@@ -2862,7 +3080,7 @@ function showGacha(){
   const titleTiles = TITLES.map(t => {
     const has = inv.titles.includes(t.id), eq = extra.title === t.id;
     return `<button class="col-tile${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}" data-kind="title" data-id="${t.id}" ${has ? '' : 'disabled'}>
-      <div class="rw-title">🏅</div><small>${has ? t.name : '???'}</small></button>`;
+      <div class="rw-title">🏅</div><small>${has ? t.name : '???'}</small><em>${has ? 'Cosmético' : t.how}</em></button>`;
   }).join('');
   const itemTiles = ITEMS.map(i => {
     const n = inv.items[i.id] || 0, eq = extra.item === i.id;
