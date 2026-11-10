@@ -2,3 +2,5 @@
 
 Sprites de Digimon (agumon, greymon, gabumon, garurumon, palmon, togemon, gatomon, angewomon, ikkakumon, patamon, angemon, biyomon, birdramon, numemon, meramon, tank=Ogremon, skullgreymon, devimon): 'Digimon / Pendulum Color Mod Sprite Database' (https://dmc-sprite-database.vercel.app), sprites estilo Vital Bracelet recopilados por tero0x. gomamon: tortoisehel, de la misma base. Recortados y ampliados x4. La base no publica licencia; los diseños son de Bandai. Uso no comercial en este fan-game.
 Siguen del pack de King: magnadramon, thunderbirdmon, tentomon, basic, fast.
+
+sprites/adventure/: 120 Digimon de Digimon Adventure de la misma base (https://dmc-sprite-database.vercel.app). Autor y estilo de cada uno en sprites/adventure/indice.json (89 de tero0x en alta resolución; el resto, sprites de baja resolución de Bandai, tortoisehel, Ray y phrogmentado). Sin licencia publicada; diseños de Bandai. Uso no comercial.
