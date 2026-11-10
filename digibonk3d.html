@@ -990,6 +990,9 @@ canvas{display:block}
   .pk-body,.gx-top,.sv-layout{grid-template-columns:1fr !important}
   .picker-screen{height:auto !important;max-height:calc(100vh - 70px);overflow:auto}
 }
+.gx-pity{margin-top:10px;font-size:13px;color:var(--dv-yel)}
+.gx-pity i{display:block;height:8px;background:#06102b;margin-top:5px}
+.gx-pity u{display:block;height:100%;background:linear-gradient(90deg,var(--dv-org),var(--dv-yel))}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -1900,7 +1903,7 @@ function showHelp(){
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
-  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets'];
+  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-pity'];
 function makeSaveCode(){
   const data = {};
   for (const k of SAVE_KEYS){ const v = localStorage.getItem(k); if (v !== null) data[k] = v; }
@@ -4039,6 +4042,9 @@ const BANNERS = {
   evento: {name: EVENT.name, sub: 'Skins Festival · tiempo limitado', skin: 'festival'}
 };
 let gxBanner = 'std';
+// Garantía: si pasan PITY_AT tiradas sin legendaria, la siguiente lo es. Una legendaria repetida devuelve Bits
+const PITY_AT = 80, LEG_DUP_REFUND = 200;
+const pityCount = () => +(localStorage.getItem('digibonk3d-pity') || 0);
 function bannerSkin(){ if (gxBanner === 'evento' && !eventActive()) gxBanner = 'std'; return SKIN_BY_ID[BANNERS[gxBanner].skin]; }
 // La rareza se decide primero. Legendaria = skin Cristal; el resto reparte entre marco, título y objeto
 const TIER_ODDS = {c: 60, r: 28, e: 10, l: 2};
@@ -4068,10 +4074,9 @@ function pickOne(pool){ return pool[Math.floor(Math.random()*pool.length)]; }
 // Devuelve una recompensa: {type, ...}. Legendaria da una skin Cristal que no tengas (si ya las tienes todas, cae a épica)
 function rollReward(tier){
   if (tier === 'l'){
-    const sk = bannerSkin();
-    const keys = SEASONS.adventure.chars.filter(k => !ownedSkins(k).includes(sk.id));
-    if (keys.length) return {type:'skin', key: pickOne(keys), sk, tier:'l'};
-    tier = 'e';
+    // En el banner de temporada: 50% su skin y 50% la del banner permanente. Puede salir repetida
+    const sk = bannerSkin().id !== 'cristal' && Math.random() < 0.5 ? SKIN_BY_ID.cristal : bannerSkin();
+    return {type:'skin', key: pickOne(SEASONS.adventure.chars), sk, tier:'l'};
   }
   const cat = pickCategory();
   if (cat === 'frame'){
@@ -4088,6 +4093,7 @@ function rollReward(tier){
 // Aplica la recompensa a la colección; los repetidos se convierten en Bits
 function grantReward(r){
   if (r.type === 'skin'){
+    if (ownedSkins(r.key).includes(r.sk.id)){ SAVE.bits = SAVE.bits + LEG_DUP_REFUND; return {...r, dup:true, refund: LEG_DUP_REFUND}; }
     grantSkin(r.key, r.sk.id);
     return {...r, dup:false};
   }
@@ -4117,6 +4123,14 @@ function doPulls(n, withTickets = false){
   }
   const tiers = Array.from({length: n}, () => rollTier());
   if (n === 10 && !tiers.some(t => t !== 'c')) tiers[9] = 'r';
+  // Contador de garantía: se reinicia con cada legendaria y fuerza una en la tirada número PITY_AT
+  let pity = pityCount();
+  for (let i = 0; i < tiers.length; i++){
+    pity++;
+    if (tiers[i] !== 'l' && pity >= PITY_AT) tiers[i] = 'l';
+    if (tiers[i] === 'l') pity = 0;
+  }
+  localStorage.setItem('digibonk3d-pity', String(pity));
   const results = [];
   for (const t of tiers){
     let r = rollReward(t);
@@ -4271,7 +4285,7 @@ function showGacha(){
       <div class="gx-tabs">${Object.keys(BANNERS).filter(k => k === 'std' || eventActive()).map(k => `<button class="gx-tab${gxBanner === k ? ' on' : ''}" data-banner="${k}">${BANNERS[k].name}<small>${BANNERS[k].sub}</small></button>`).join('')}</div>
       <div class="gx-top">
         <section class="gx-show">
-          <div class="gx-show-head"><span>${BANNERS[gxBanner].name} · legendaria: skin ${bannerSkin().name}</span><span id="gxCount"></span></div>
+          <div class="gx-show-head"><span>${BANNERS[gxBanner].name} · legendaria: skin ${bannerSkin().id === 'cristal' ? 'Cristal' : bannerSkin().name + ' (50%) o Cristal (50%)'}</span><span id="gxCount"></span></div>
           <div class="gx-feat">${SEASONS.adventure.chars.slice(0, 3).map(k => `<img src="${spriteWith(k, false, bannerSkin().id)}" alt="">`).join('')}</div>
           <div class="gx-stage-wrap">
             <button class="gx-arrow" id="gxPrev" aria-label="Anterior">‹</button>
@@ -4291,7 +4305,8 @@ function showGacha(){
           ${probTiers}
           <h4>Común, rara y épica reparten</h4>
           ${probCats}
-          <p class="gx-note">Legendaria = la skin del banner elegido para un Digimon. Si ya tienes todo de una categoría o rareza, la tirada cae en la siguiente. Los repetidos dan Bits.</p>
+          <div class="gx-pity"><b>Legendaria garantizada en ${PITY_AT - pityCount()} tiradas</b><i><u style="width:${Math.round(pityCount()/PITY_AT*100)}%"></u></i></div>
+          <p class="gx-note">Legendaria = skin de un Digimon al azar. En el banner de temporada, 50% su skin y 50% Cristal. Puede salir repetida: devuelve ${LEG_DUP_REFUND} Bits. Marcos y títulos repetidos dan 30 Bits.</p>
         </aside>
       </div>
     </div>`);
