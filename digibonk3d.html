@@ -439,6 +439,30 @@ canvas{display:block}
 /* Fondo animado de los menús: a pantalla completa, detrás de la interfaz */
 #menubg{position:fixed;inset:0;width:100%;height:100%;z-index:0;image-rendering:pixelated;display:block}
 #overlay{z-index:1}
+
+/* Marcos: cada uno es un modelo de Digivice distinto */
+.hud-portrait.fr-bronce,.rw-frame.fr-bronce{background:linear-gradient(160deg,#fff0bd,#d89a3e 55%,#8a5a1c);border:4px solid #5a3510;border-radius:20px;box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 0 12px rgba(216,154,62,.7)}
+.hud-portrait.fr-digivice,.rw-frame.fr-digivice{background:linear-gradient(160deg,#d9f3ff,#2a7fd0 60%,#0d3f7a);border:4px solid #0b3d78;border-radius:20px;box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 0 14px rgba(79,195,247,.8)}
+.hud-portrait.fr-dpower,.rw-frame.fr-dpower{background:linear-gradient(160deg,#e6ffc4,#4fb84a 60%,#1f5c22);border:4px solid #1f5c22;border-radius:14px 14px 22px 22px;box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 0 14px rgba(120,230,110,.8)}
+.hud-portrait.fr-neon,.rw-frame.fr-neon{background:linear-gradient(160deg,#2b0f3d,#14061f);border:4px solid #ff4fd8;border-radius:24px;box-shadow:0 0 16px #ff4fd8,inset 0 0 12px rgba(255,79,216,.5)}
+.hud-portrait.fr-oro,.rw-frame.fr-oro{background:linear-gradient(160deg,#fff8d6,#e8b42a 55%,#7a5410);border:4px solid #7a5410;border-radius:18px;box-shadow:0 0 18px #ffd54f,inset 0 0 0 2px #fff3c4}
+.hud-portrait[class*="fr-"]::after,.rw-frame[class*="fr-"]::after{content:"";position:absolute;right:-6px;top:-6px;width:10px;height:10px;border-radius:50%;background:#7cf29c;box-shadow:0 0 8px #7cf29c;border:2px solid #0a1428}
+.hud-portrait.fr-neon::after{background:#ff4fd8;box-shadow:0 0 8px #ff4fd8}
+.hud-portrait.fr-oro::after{background:#fff3c4;box-shadow:0 0 8px #ffd54f}
+.hud-portrait.fr-digivice::after{background:#bfeaff;box-shadow:0 0 8px #4fc3f7}
+.hud-portrait.fr-dpower::after{background:#e6ffc4}
+.hud-portrait.fr-bronce::after{background:#ffe9a8}
+.rw-frame{position:relative;border-radius:14px}
+/* Registro de entrenador */
+.reg-box{width:min(460px,92vw);padding:26px 28px;border-radius:24px;background:rgba(10,18,40,.96);border:3px solid #3a6fc4;text-align:center;color:#e6f4ff;font-family:'Orbitron',system-ui,sans-serif;box-shadow:0 14px 40px rgba(0,0,0,.6)}
+.reg-logo{font-size:40px;margin-bottom:8px}
+.reg-box h2{margin:6px 0;color:#ffd54f;font-size:20px}
+.reg-box p{font-family:system-ui,sans-serif;font-size:13px;color:#9fd4ff;margin:6px 0 16px}
+.reg-box input{width:100%;padding:12px 14px;border-radius:14px;border:2px solid #3a6fc4;background:#0a1428;color:#fff;font:700 18px 'Orbitron',system-ui,sans-serif;text-align:center;outline:none}
+.reg-box input:focus{border-color:#ffd54f}
+.reg-go{margin-top:16px;width:100%;font-size:22px;padding:14px}
+.name-edit{display:flex;gap:8px;margin-top:8px}
+.name-edit input{flex:1;padding:8px 10px;border-radius:10px;border:2px solid #3a6fc4;background:#0a1428;color:#fff;font:700 14px 'Orbitron',system-ui,sans-serif}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -927,6 +951,7 @@ const overlay = document.getElementById('overlay');
 addEventListener('keydown', e => {
   const k = e.key.toLowerCase();
   audioInit();
+  if (state === 'register') return;
   if (k === 'n'){ toggleMute(); return; }
   if (k === 'm'){ if (state === 'play') openMap(); else if (state === 'map') closeMap(); return; }
   if (state === 'map'){ if (k === 'escape') closeMap(); return; }
@@ -1110,8 +1135,8 @@ function showSelect(){
     <div class="menu3">
       <header class="m3-top">
         <div class="m3-trainer">
-          <div class="hud-portrait mini${fr ? ' fr-' + fr.id : ''}"><img src="${spriteOf(selectedKey, false)}" alt=""></div>
-          <div><b>Entrenador</b><small>${tt ? tt.name : 'Sin título'}</small></div>
+          <div class="hud-portrait mini${fr ? ' fr-' + fr.id : ''}"><img src="${headUrl(spriteOf(selectedKey, false))}" alt=""></div>
+          <div><b>${trainerName || 'Entrenador'}</b><small>${tt ? tt.name : 'Sin título'}</small></div>
         </div>
         <div class="m3-cur">
           <span class="bits-chip">Ⓑ ${SAVE.bits}</span>
@@ -2010,8 +2035,8 @@ function updateHUD(){
   g.lastHp = p.hp;
   updatePrompt();
   const pimg = document.getElementById('pimg');
-  const ps = spriteOf(g.ch.id, g.ch.evolved);
-  if (pimg.dataset.src !== ps){ pimg.dataset.src = ps; pimg.src = ps; }
+  const hd = headUrl(spriteOf(g.ch.id, g.ch.evolved));
+  if (pimg.src !== hd) pimg.src = hd;
   document.getElementById('combo').textContent = g.combo >= 2 ? `x${g.combo}` : '';
   const bb = document.getElementById('bossbar');
   if (g.boss && g.enemies.includes(g.boss)){
@@ -2332,6 +2357,52 @@ function spriteWith(key, evolved, skinId){
 }
 function spriteOf(key, evolved){ return spriteWith(key, evolved, skinEquipped[key]); }
 
+/* ---------- Icono del jugador: solo la cabeza del Digimon ---------- */
+const headCache = {};
+function headUrl(src){
+  if (headCache[src]) return headCache[src] === 'pending' ? src : headCache[src];
+  headCache[src] = 'pending';
+  const im = new Image();
+  im.onload = () => {
+    const w = im.naturalWidth, h = im.naturalHeight;
+    const c = document.createElement('canvas'); c.width = 96; c.height = 96;
+    const x = c.getContext('2d'); x.imageSmoothingEnabled = false;
+    // recorte de la parte superior centrada: la cabeza
+    x.drawImage(im, w*0.2, 0, w*0.6, h*0.58, 0, 0, 96, 96);
+    headCache[src] = c.toDataURL('image/png');
+  };
+  im.src = src;
+  return src;
+}
+
+/* ---------- Entrenador: nombre elegido al registrarse ---------- */
+let trainerName = localStorage.getItem('digibonk3d-name') || '';
+function setTrainerName(v){
+  trainerName = v.trim().slice(0, 16);
+  localStorage.setItem('digibonk3d-name', trainerName);
+}
+function showRegister(){
+  state = 'register';
+  setHud(false);
+  showOverlay(`
+    <div class="reg-box">
+      <div class="logo reg-logo"><span>DIGI</span>BONK</div>
+      <h2>Crea tu entrenador</h2>
+      <p>Ponte un nombre. Se guarda en este navegador.</p>
+      <input id="regName" maxlength="16" placeholder="Tu nombre" autocomplete="off">
+      <button class="play reg-go" id="regGo">EMPEZAR</button>
+    </div>`);
+  const go = () => {
+    const v = document.getElementById('regName').value.trim();
+    if (!v){ announce('Escribe un nombre', '', '#ef5350'); return; }
+    setTrainerName(v);
+    showSelect();
+  };
+  document.getElementById('regGo').onclick = go;
+  document.getElementById('regName').addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') go(); });
+  setTimeout(() => document.getElementById('regName').focus(), 50);
+}
+
 /* ---------- Menú Jugador: perfil, Digimon desbloqueados, skins, marcos y títulos ---------- */
 // Un Digimon queda desbloqueado en su forma evolucionada al digievolucionar una vez
 function recordEvolve(key){
@@ -2356,9 +2427,10 @@ function showPlayer(tab){
     const evos = Object.keys(loadJSON('digibonk3d-evo', {})).length;
     body = `
       <div class="pl-profile">
-        <div class="hud-portrait pl-av${fr ? ' fr-' + fr.id : ''}"><img src="${spriteOf(selectedKey, false)}" alt=""></div>
+        <div class="hud-portrait pl-av${fr ? ' fr-' + fr.id : ''}"><img src="${headUrl(spriteOf(selectedKey, false))}" alt=""></div>
         <div>
-          <div class="pl-name">Entrenador</div>
+          <div class="pl-name">${trainerName || 'Entrenador'}</div>
+          <div class="name-edit"><input id="nameIn" maxlength="16" value="${trainerName}" placeholder="Tu nombre"><button class="mini-btn" id="nameSave">Guardar nombre</button></div>
           <div class="pl-title">${tt ? tt.name : 'Sin título'}</div>
           <div class="pl-frame">${fr ? fr.name : 'Sin marco'}</div>
         </div>
@@ -2414,6 +2486,12 @@ function showPlayer(tab){
       <div class="pl-body">${body}</div>
     </div>`);
   overlay.querySelectorAll('.pk-tab').forEach(b => b.onclick = () => showPlayer(b.dataset.tab));
+  const ns = document.getElementById('nameSave');
+  if (ns) ns.onclick = () => {
+    const v = document.getElementById('nameIn').value.trim();
+    if (!v){ announce('Escribe un nombre', '', '#ef5350'); return; }
+    setTrainerName(v); showPlayer();
+  };
   document.getElementById('plBack').onclick = () => showSelect();
   overlay.querySelectorAll('.pl-tile.owned').forEach(b => b.onclick = () => {
     if (!b.dataset.id) unequipExtra(b.dataset.kind);
@@ -2429,10 +2507,11 @@ function showPlayer(tab){
 /* ---------- Gacha: skins, marcos, títulos y objetos ---------- */
 // Catálogo de recompensas (lo que sale en las tiradas, además de las skins)
 const FRAMES = [
-  {id:'bronce',  name:'Marco bronce',  tier:'c', css:'border:3px solid #cd7f32;box-shadow:0 0 8px #cd7f32'},
-  {id:'digivice', name:'Marco Digivice', tier:'c', css:'border:3px solid #4fc3f7;box-shadow:0 0 12px #4fc3f7'},
-  {id:'neon',    name:'Marco neón',    tier:'r', css:'border:3px solid #ff4fd8;box-shadow:0 0 14px #ff4fd8'},
-  {id:'oro',     name:'Marco oro',     tier:'e', css:'border:3px solid #ffd54f;box-shadow:0 0 16px #ffd54f,inset 0 0 0 2px #fff3c4'}
+  {id:'bronce',  name:'Digivice Original', tier:'c'},
+  {id:'digivice', name:'Digivice D-3',     tier:'c'},
+  {id:'dpower',  name:'Digivice D-Power', tier:'r'},
+  {id:'neon',    name:'Digivice Burst',   tier:'r'},
+  {id:'oro',     name:'Digivice Spirits', tier:'e'}
 ];
 const TITLES = [
   {id:'novato',    name:'Novato',            tier:'c'},
@@ -2921,7 +3000,7 @@ function frame(now){
   requestAnimationFrame(frame);
 }
 buildSkins();
-showSelect();
+if (trainerName) showSelect(); else showRegister();
 requestAnimationFrame(frame);
 </script>
 </body>
