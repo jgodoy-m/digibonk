@@ -398,8 +398,19 @@ function qualityLabel(){
   return c === 'auto' ? `Auto (${Q === QUALITY.alta ? 'alta' : 'baja'})` : (c === 'alta' ? 'Alta' : 'Baja');
 }
 const renderer = new THREE.WebGLRenderer({antialias: Q.aa});
-renderer.setPixelRatio(Math.min(devicePixelRatio, Q.dpr));
-renderer.setSize(innerWidth, innerHeight);
+// Estilo de época (PlayStation): se renderiza a baja resolución y se amplía sin suavizar
+const RETRO_SCALE = Q === QUALITY.alta ? 2 : 3;   // alta: mitad de resolución; baja: un tercio
+renderer.setPixelRatio(1);
+function applyRetroSize(){
+  const w = Math.max(160, Math.floor(innerWidth / RETRO_SCALE));
+  const h = Math.max(120, Math.floor(innerHeight / RETRO_SCALE));
+  renderer.setSize(w, h, false);
+  renderer.domElement.style.width = innerWidth + 'px';
+  renderer.domElement.style.height = innerHeight + 'px';
+  renderer.domElement.style.imageRendering = 'pixelated';
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
 document.body.prepend(renderer.domElement);
 
 const scene = new THREE.Scene();
@@ -419,6 +430,7 @@ sun.position.set(12, 25, 8);
 scene.add(sun);
 
 const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 200);
+applyRetroSize();
 camera.position.set(0, 16, 11);
 
 const TERRAIN_SIZE = ARENA_R*2 + 20, TERRAIN_SEG = 160;
@@ -448,18 +460,19 @@ function zoneTint(x, z){
 // Texturas de archivo (textures/*.png): se repiten sin costuras
 const loader = new THREE.TextureLoader();
 // Ajusta la repetición a la proporción real de la imagen para que no se deforme
-function loadTex(path, rx, ry){
+function loadTex(path, rx, ry, pixel = false){
   const t = loader.load(path, tex => tex.repeat.set(rx, ry * (tex.image.width / tex.image.height)));
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
   t.repeat.set(rx, ry);
   t.colorSpace = THREE.SRGBColorSpace;
+  if (pixel) t.magFilter = THREE.NearestFilter;   // pixel art: bordes nítidos
   return t;
 }
-const floor = new THREE.Mesh(terrainGeo, new THREE.MeshStandardMaterial({map: loadTex('textures/hierba_cc0.jpg', 20, 20), roughness: 1, vertexColors: true}));
+const floor = new THREE.Mesh(terrainGeo, new THREE.MeshStandardMaterial({map: loadTex('textures/hierba_pixel.png', 20, 20, true), roughness: 1, vertexColors: true}));
 scene.add(floor);
 {
   const water = new THREE.Mesh(new THREE.CircleGeometry(POND.r + 4, 48),   // más grande que el cuenco: la orilla la tapa el terreno
-    new THREE.MeshStandardMaterial({color: 0xffffff, map: loadTex('textures/agua.png', 3, 3), roughness: 0.15, metalness: 0.1, transparent: true, opacity: 0.92}));
+    new THREE.MeshStandardMaterial({color: 0xffffff, map: loadTex('textures/agua_pixel.png', 3, 3, true), roughness: 0.15, metalness: 0.1, transparent: true, opacity: 0.92}));
   water.rotation.x = -Math.PI/2;
   water.position.set(POND.x, POND.water, POND.z);
   scene.add(water);
@@ -501,9 +514,7 @@ rim.position.y = 0.03;
 scene.add(rim);
 
 addEventListener('resize', () => {
-  renderer.setSize(innerWidth, innerHeight);
-  camera.aspect = innerWidth/innerHeight;
-  camera.updateProjectionMatrix();
+  applyRetroSize();
 });
 
 // ---------- Recursos ----------
@@ -566,9 +577,9 @@ function propTex(kind){
 function buildEnvironment(){
   // Geometría y material compartidos por todos los árboles y rocas (menos llamadas de dibujado)
   const trunkGeo = new THREE.CylinderGeometry(0.16, 0.24, 1, 6); trunkGeo.translate(0, 0.5, 0);
-  const barkMat = new THREE.MeshStandardMaterial({map: loadTex('textures/corteza_cc0.jpg', 1, 2), roughness: 1});
+  const barkMat = new THREE.MeshStandardMaterial({map: loadTex('textures/corteza_pixel.png', 1, 2, true), roughness: 1});
   const canopyGeo = new THREE.IcosahedronGeometry(1, 1);
-  const leafMat = new THREE.MeshStandardMaterial({map: loadTex('textures/hojas.png', 2, 2), roughness: 0.9, flatShading: true});
+  const leafMat = new THREE.MeshStandardMaterial({map: loadTex('textures/hojas_pixel.png', 2, 2, true), roughness: 0.9, flatShading: true});
   const rockGeo = new THREE.IcosahedronGeometry(1, 1);
   { // irregularidad fija de la piedra
     const pos = rockGeo.attributes.position;
@@ -578,7 +589,7 @@ function buildEnvironment(){
     }
     rockGeo.computeVertexNormals();
   }
-  const rockMat = new THREE.MeshStandardMaterial({map: loadTex('textures/roca_cc0.jpg', 1, 1), roughness: 1, flatShading: true});
+  const rockMat = new THREE.MeshStandardMaterial({map: loadTex('textures/piedra_pixel.png', 1, 1, true), roughness: 1, flatShading: true});
   const flowerTex = propTex('flower');
   for (let i = 0; i < Q.decor; i++){
     const r = Math.random();
