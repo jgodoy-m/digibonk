@@ -651,8 +651,8 @@ function buildVillage(){
   water.position.y = 1.21;
   scene.add(water);
   // casas de madera alrededor de la plaza
-  const wood = new THREE.MeshStandardMaterial({map: loadTex('textures/madera_cc0.jpg', 1, 1), flatShading: true});
-  const roofMat = new THREE.MeshStandardMaterial({map: loadTex('textures/tejado.png', 2, 2), flatShading: true});
+  const wood = new THREE.MeshStandardMaterial({map: loadTex('textures/madera_pixel.png', 1, 1, true), flatShading: true});
+  const roofMat = new THREE.MeshStandardMaterial({map: loadTex('textures/tejado_pixel.png', 2, 2, true), flatShading: true});
   for (let i = 0; i < 7; i++){
     const a = i/7*Math.PI*2 + 0.3, R = 17;
     const x = Math.cos(a)*R, z = Math.sin(a)*R;
@@ -687,7 +687,7 @@ function buildAmbience(){
   const paths = 8;
   const pathAngles = Array.from({length: paths}, (_, i) => i/paths*Math.PI*2);
   // caminos de tierra desde la plaza hacia las montañas
-  const pathMat = new THREE.MeshBasicMaterial({color: 0xffffff, map: loadTex('textures/camino_cc0.jpg', 1, 5)});
+  const pathMat = new THREE.MeshBasicMaterial({color: 0xffffff, map: loadTex('textures/camino_pixel.png', 1, 5, true)});
   const L = 26 - 14;   // los caminos llegan hasta el borde llano del pueblo
   for (const a of pathAngles){
     const geo = new THREE.PlaneGeometry(2.6, L);
