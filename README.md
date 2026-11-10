@@ -5,8 +5,7 @@ Prototipo de juego de supervivencia estilo Digimon (fan-game no oficial y sin á
 ## Archivos
 
 - `digibonk3d.html`: versión 3D principal (Three.js 0.160 desde CDN). Es la que se sigue desarrollando.
-- `digibonk.html`: prototipo 2D original, sin uso actual.
-- `sprites/`: sprites de Digimon del pack de King (uso no comercial, ver `sprites/CREDITS.txt`).
+- `sprites/`: sprites de Digimon de la base DMC y de Digimon Adventure (uso no comercial, ver `sprites/CREDITS.txt`).
 
 ## Probar en local
 
