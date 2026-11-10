@@ -194,6 +194,7 @@ canvas{display:block}
 .mini-btn{padding:9px 16px;border-radius:12px;border:1px solid #7fd0ff;background:linear-gradient(180deg,#1e3a66,#0e1f3d);color:#fff;font-weight:bold;letter-spacing:1px;cursor:pointer;box-shadow:0 4px 0 #050b18}
 .mini-btn:hover{filter:brightness(1.15)}
 .bits-chip{padding:7px 12px;border-radius:10px;background:#1b2a14;border:1px solid #7cf29c;color:#b9f6ca;font-weight:bold}
+.daily-chip{font-size:12px;color:#cfe8ff;opacity:.9}
 /* Gacha de skins */
 .gacha{width:min(880px,96vw);max-height:92vh;overflow:auto;padding:18px 22px;border-radius:18px;color:#e6f4ff;text-align:left;
   background:linear-gradient(170deg,rgba(24,36,64,.97),rgba(8,12,26,.97));border:2px solid #4fc3f7;box-shadow:0 0 30px rgba(79,195,247,.35)}
@@ -806,7 +807,7 @@ function showSelect(){
           <div class="logo"><span>DIGI</span>BONK<em> 3D</em></div>
           <div class="sub">Temporada 1 · Digimon Adventure</div>
           <button class="play" id="playBtn">JUGAR</button>
-          <div class="menu-row"><button class="mini-btn" id="btnGacha">Skins · Gacha</button><span class="bits-chip">Ⓑ ${SAVE.bits}</span></div>
+          <div class="menu-row"><button class="mini-btn" id="btnGacha">Skins · Gacha</button><span class="bits-chip">Ⓑ ${SAVE.bits}</span><span class="daily-chip">${dailyText()}</span></div>
           <div class="tiles">
             <div class="tile"><b>Temporada 1</b><small>Digimon Adventure · activa</small></div>
             <div class="tile dis"><b>Temporada 2</b><small>Próximamente</small></div>
@@ -887,9 +888,11 @@ function startGame(key){
     texts: [], nearChest: null, combo: 0, comboT: 0,
     boss: null, bossSpawned: false, bossDown: false, bossShotT: 0, eshots: []
   };
+  applySkinFx(key);
   resolveSolids(g.p, 0.5);   // aparición aleatoria: fuera de casas y vallas
   g.playerMesh = billboard(spriteOf(key, false), 2.2);
   world.add(g.playerMesh);
+  g.aura = makeAura(skinEquipped[key], key);
   g.playerShadow = makeShadow(1.6);
   world.add(g.playerShadow);
   hideOverlay();
@@ -1504,15 +1507,24 @@ function pickUpgrade(i){
 function endGame(win){
   state = 'end';
   sfx(win ? 'victory' : 'defeat');
-  const earned = Math.floor(g.kills/2 + g.t/10);
-  SAVE.bits = SAVE.bits + earned;
-  g.earned = earned;
+  const daily = loadDaily();
+  const raw = Math.floor(g.kills/2 + g.t/10);
+  const earned = Math.min(raw, Math.max(0, DAILY.runCap - daily.runBits));
+  if (g.t >= 5) daily.runs += 1;
+  daily.runBits += earned;
+  let bonus = 0;
+  if (!daily.claimed && daily.runs >= DAILY.runsGoal){ daily.claimed = true; bonus = DAILY.reward; }
+  saveDaily(daily);
+  SAVE.bits = SAVE.bits + earned + bonus;
+  g.earned = earned + bonus;
+  g.bonus = bonus;
   g.unlocked = recordRun(g.ch.id, g.kills, g.t);
   unlockMouse();
   saveRecord(win);
   showOverlay(`<h1>${win ? '¡Sobreviviste!' : 'Has caído'}</h1>
     <p>Nivel ${g.p.lvl} · Bajas ${g.kills} · Tiempo ${Math.floor(g.t)} s</p>
     <p>+${g.earned} Bits</p>
+    ${g.bonus ? `<p>¡Misión diaria completada! +${g.bonus} Bits</p>` : ''}
     ${g.unlocked.length ? `<p>¡Skin nueva: ${g.unlocked.join(', ')}!</p>` : ''}
     <p>Pulsa Enter o haz clic para volver a elegir</p>`);
   overlay.onclick = () => { if (state === 'end') showSelect(); };
@@ -1748,6 +1760,26 @@ function clearBossRing(){
 }
 
 /* ---------- Monedas (Bits), skins y gacha ---------- */
+// Misión diaria: jugar 3 partidas (de al menos 5 s) da un bonus; las Bits por partida tienen tope diario
+const DAILY = {runsGoal: 3, reward: 150, runCap: 200};
+function dayKey(){ const d = new Date(); return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; }
+function loadDaily(){
+  const d = loadJSON('digibonk3d-daily', null);
+  if (!d || d.day !== dayKey()) return {day: dayKey(), runs: 0, runBits: 0, claimed: false};
+  return d;
+}
+function saveDaily(d){ localStorage.setItem('digibonk3d-daily', JSON.stringify(d)); }
+function dailyText(){
+  const d = loadDaily();
+  return d.claimed ? 'Misión diaria completada' : `Misión diaria: ${Math.min(d.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits`;
+}
+// Efectos de cada skin: bonus de estadísticas y aura visual
+const SKIN_FX = {
+  galactico: {bonus:{speed:1.06}, aura:'stars',   text:'+6% velocidad · estrellas'},
+  glitch:    {bonus:{dmg:1.08},   aura:'ghost',   text:'+8% daño · ecos glitch'},
+  cristal:   {bonus:{pickup:1.2}, aura:'shards',  text:'+20% imán · cristales'},
+  festival:  {bonus:{maxHp:15},   aura:'confetti',text:'+15 PS máx. · confeti'}
+};
 const SAVE = {
   get bits(){ return +(localStorage.getItem('digibonk3d-bits') || 0); },
   set bits(v){ localStorage.setItem('digibonk3d-bits', String(Math.max(0, Math.floor(v)))); }
@@ -1930,6 +1962,7 @@ function showGacha(){
       </div>
       <div class="g-list">${rows}</div>
       <p class="g-note">Galáctico: 3 partidas con el Digimon · Glitch: 150 bajas con el Digimon · Cristal: gacha de Bits · Festival: juega durante el evento "${EVENT.name}".</p>
+      <p class="g-note">Efectos: Galáctico ${SKIN_FX.galactico.text} · Glitch ${SKIN_FX.glitch.text} · Cristal ${SKIN_FX.cristal.text} · Festival ${SKIN_FX.festival.text}.</p>
     </div>`);
   document.getElementById('gBack').onclick = () => { lastPull = null; showSelect(); };
   document.getElementById('gPull').onclick = pull;
@@ -1939,6 +1972,75 @@ function showGacha(){
   });
 }
 
+/* ---------- Efectos de skin: bonus de estadísticas y aura alrededor del Digimon ---------- */
+const dotTexCache = {};
+function dotTex(kind, color){
+  const k = kind + color;
+  if (dotTexCache[k]) return dotTexCache[k];
+  const c = document.createElement('canvas'); c.width = c.height = 32;
+  const x = c.getContext('2d');
+  x.fillStyle = color;
+  if (kind === 'star'){
+    x.beginPath();
+    for (let i = 0; i < 10; i++){ const r = i % 2 ? 6 : 14, a = -Math.PI/2 + i*Math.PI/5; x.lineTo(16 + Math.cos(a)*r, 16 + Math.sin(a)*r); }
+    x.closePath(); x.fill();
+  } else if (kind === 'shard'){
+    x.beginPath(); x.moveTo(16, 2); x.lineTo(26, 16); x.lineTo(16, 30); x.lineTo(6, 16); x.closePath(); x.fill();
+  } else {
+    x.beginPath(); x.arc(16, 16, 9, 0, Math.PI*2); x.fill();
+  }
+  const t = new THREE.CanvasTexture(c);
+  dotTexCache[k] = t;
+  return t;
+}
+function applySkinFx(key){
+  const fx = SKIN_FX[skinEquipped[key]];
+  if (!fx) return;
+  const b = fx.bonus, p = g.p;
+  if (b.speed) p.speed *= b.speed;
+  if (b.dmg) p.dmg *= b.dmg;
+  if (b.pickup) p.pickup *= b.pickup;
+  if (b.maxHp){ p.maxHp += b.maxHp; p.hp = p.maxHp; }
+}
+function makeAura(skinId, key){
+  const fx = SKIN_FX[skinId];
+  if (!fx) return null;
+  const group = new THREE.Group();
+  world.add(group);
+  const sprite = (map, color, scale) => {
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({map, color: color || 0xffffff, transparent: true, depthWrite: false}));
+    sp.scale.set(scale, scale, 1);
+    group.add(sp);
+    return sp;
+  };
+  let update = () => {};
+  if (fx.aura === 'stars'){
+    const st = Array.from({length: 6}, () => sprite(dotTex('star', '#d1a3ff'), 0xffffff, .45));
+    update = t => st.forEach((s, i) => { const a = t*1.6 + i*Math.PI/3; s.position.set(Math.cos(a)*1.2, 2.2 + Math.sin(t*2 + i)*.15, Math.sin(a)*1.2); });
+  } else if (fx.aura === 'shards'){
+    const sh = Array.from({length: 6}, () => sprite(dotTex('shard', '#bff6ff'), 0xffffff, .4));
+    update = t => sh.forEach((s, i) => { const a = -t + i*Math.PI/3; s.position.set(Math.cos(a)*1.0, 1.6 + Math.sin(t*3 + i)*.2, Math.sin(a)*1.0); });
+  } else if (fx.aura === 'confetti'){
+    const cols = ['#ffd54f', '#ff7043', '#81d4fa', '#aed581'];
+    const cf = Array.from({length: 12}, (_, i) => sprite(dotTex('dot', cols[i % 4]), 0xffffff, .25));
+    update = t => cf.forEach((s, i) => {
+      const f = (t*0.5 + i/12) % 1;
+      s.position.set(Math.sin(i*2.3)*1.1, .3 + f*2.4, Math.cos(i*1.7)*1.1);
+      s.material.opacity = 1 - f;
+    });
+  } else if (fx.aura === 'ghost'){
+    const url = spriteOf(key, false);
+    const g1 = sprite(tex(url), 0xff4d6d, 2.2), g2 = sprite(tex(url), 0x4dd0ff, 2.2);
+    g1.material.opacity = g2.material.opacity = .45;
+    update = t => {
+      const j = Math.sin(t*23) > .8 ? .14 : 0;   // parpadeo: el eco se separa de vez en cuando
+      g1.position.set(-.12 - j, 1.1, 0);
+      g2.position.set(.12 + j, 1.1, 0);
+    };
+  }
+  return {group, update};
+}
+
 // ---------- Bucle ----------
 let last = performance.now();
 function frame(now){
@@ -1946,7 +2048,10 @@ function frame(now){
   last = now;
   if (state === 'play' && g){
     if (!g.evoAnim) update(dt);   // durante la digievolución el mundo se detiene y solo corre la animación
-    if (g){ syncMeshes(); updateCamera(dt); updateHUD(); }
+    if (g){
+      syncMeshes(); updateCamera(dt); updateHUD();
+      if (g.aura){ g.aura.group.position.set(g.p.x, terrainH(g.p.x, g.p.z) + g.p.y, g.p.z); g.aura.update(g.t); }
+    }
   }
   animateEvo(dt);
   updateFx(dt);
