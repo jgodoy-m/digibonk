@@ -22,6 +22,22 @@ canvas{display:block}
 #combo{position:fixed;right:24px;top:16px;padding:4px 14px;border-radius:10px;background:#ffd54f;color:#1a1200;
   font-weight:900;font-size:28px;box-shadow:0 0 14px rgba(255,213,79,.6);pointer-events:none}
 #combo:empty{display:none}
+/* Anuncios centrales (digievolución, cofres, hordas, jefe) */
+#banner{position:fixed;left:50%;top:26%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;opacity:0;white-space:nowrap}
+#banner b{display:block;font-size:46px;letter-spacing:3px;color:inherit;text-shadow:0 4px 0 #000,0 0 24px currentColor}
+#banner small{display:block;margin-top:4px;font-size:15px;letter-spacing:1px;color:#e6f4ff;text-shadow:0 2px 4px #000}
+#banner.show{animation:bannerIn 2.4s ease both}
+@keyframes bannerIn{0%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}12%{opacity:1;transform:translate(-50%,-50%) scale(1)}78%{opacity:1}100%{opacity:0;transform:translate(-50%,-62%) scale(.98)}}
+/* Viñeta roja al recibir daño */
+#hurt{position:fixed;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(198,40,40,.9) 100%)}
+/* Aviso flotante sobre el cofre cercano */
+#prompt{position:fixed;left:0;top:0;transform:translate(-50%,-100%);display:none;padding:5px 12px;border-radius:10px;
+  background:rgba(8,14,30,.92);border:2px solid #ffd54f;color:#ffd54f;font-weight:bold;font-size:14px;letter-spacing:.5px;
+  pointer-events:none;white-space:nowrap;box-shadow:0 0 12px rgba(255,213,79,.4)}
+#prompt kbd{display:inline-block;min-width:20px;padding:0 6px;margin-right:4px;border-radius:5px;background:#ffd54f;color:#1a1200;text-align:center}
+/* Pantalla de inicio: el Digimon de la vista previa flota suavemente */
+.preview img{animation:previewBob 2.6s ease-in-out infinite}
+@keyframes previewBob{50%{transform:translateY(-6px)}}
 #overlay{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
   background:radial-gradient(ellipse at center,rgba(10,16,34,.75),rgba(0,0,0,.9));text-align:center}
 #overlay.hidden{display:none}
@@ -90,6 +106,7 @@ canvas{display:block}
 .hints{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:#cfe8ff}
 .hints span{white-space:nowrap}
 .rec{align-items:center}
+.rec.best{color:#ffd54f;font-weight:bold;background:linear-gradient(90deg,rgba(255,213,79,.12),transparent)}
 .rec span:first-child{font-weight:bold}
 .m-right h3 small{display:block;font-size:12px;opacity:.6;letter-spacing:0;margin-top:4px;color:#90caf9}
 /* ---- Subida de nivel: tarjetas por categoría ---- */
@@ -158,6 +175,9 @@ canvas{display:block}
 <div id="bossbar" style="position:fixed;top:56px;left:50%;transform:translateX(-50%);width:420px;height:14px;background:#000;border:1px solid #888;display:none;pointer-events:none"><div id="bosshp" style="height:100%;background:#ab47bc;width:100%"></div></div>
 <div id="combo"style="position:fixed;right:24px;top:12px;font-size:34px;font-weight:bold;color:#ffd54f;text-shadow:0 2px 4px #000;pointer-events:none"></div>
 <div id="flash"style="position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none"></div>
+<div id="hurt"></div>
+<div id="banner"></div>
+<div id="prompt"></div>
 <div id="pause" class="hidden"></div>
 
 <script type="module">
@@ -663,7 +683,8 @@ let menuRefresh = null;   // refresca la selección y la vista previa del menú 
 // Oculta/muestra el HUD de partida (el menú no debe mostrar barras ni temporizador)
 function setHud(v){
   const d = v ? '' : 'none';
-  for (const id of ['hud', 'timer', 'xp', 'combo', 'bossbar']) document.getElementById(id).style.display = d;
+  for (const id of ['hud', 'timer', 'xp', 'combo', 'bossbar', 'prompt']) document.getElementById(id).style.display = d;
+  if (!v) document.getElementById('hurt').style.opacity = 0;
 }
 // Barra de estadística (0-100%)
 const statBar = (label, pct, warm) =>
@@ -677,7 +698,7 @@ function showSelect(){
   hidePause();
   const recs = getRecords();
   const recRows = recs.length
-    ? recs.map((r, i) => `<div class="rec"><span>${i+1}. ${r.name}${r.win ? ' ★' : ''}</span><span>${fmtTime(r.t)} · ${r.kills} bajas · Nv ${r.lvl}</span></div>`).join('')
+    ? recs.map((r, i) => `<div class="rec${i === 0 ? ' best' : ''}"><span>${i === 0 ? '👑 ' : ''}${i+1}. ${r.name}${r.win ? ' ★' : ''}</span><span>${fmtTime(r.t)} · ${r.kills} bajas · Nv ${r.lvl}</span></div>`).join('')
     : '<p class="muted">Todavía no hay partidas. ¡Empieza una!</p>';
   const chars = SEASONS.adventure.chars;
   showOverlay(`
@@ -909,7 +930,7 @@ function digivolve(){
   g.p.count += 1;
   g.evoAnim = {t: 0, dur: 2.6, swapped: false, sprite: evo.sprite, name: evo.name};
   shake = Math.max(shake, 0.5);
-  g.flash = `Digievolución: ${evo.name}`; g.flashT = 3;
+  announce(evo.name + '!', 'Digievolución completa · +50% daño', '#ffd54f');
 }
 
 // Animación de digievolución: 0-0.6 s brillo y temblor, cambio de sprite con destello y anillo, 0.6-1.6 s asentamiento
@@ -1053,7 +1074,7 @@ function openChest(c){
   const up = UPGRADES[Math.floor(Math.random()*UPGRADES.length)];
   up.f(g.p);
   g.p.hp = Math.min(g.p.maxHp, g.p.hp + 15);
-  g.flash = `Cofre: ${up.t} (+15 vida)`; g.flashT = 2.5;
+  announce('Cofre abierto', `${up.t} · +15 vida`, '#7cf29c');
 }
 function tryDash(){
   if (!g || g.dashCd > 0 || g.dash > 0) return;
@@ -1120,6 +1141,10 @@ function update(dt){
   // El jugador no puede salir del escenario (las montañas empiezan en ARENA_R - 1)
   [p.x, p.z] = clampArena(p.x, p.z, ARENA_R - 2);
   resolveSolids(p, 0.5, p.y);   // casas, fuente, habitantes y vallas bloquean al jugador
+
+  // Avisos de fase: hordas a los 45 s y aviso del jefe 15 s antes
+  if (!g.hordeWarned && g.t >= 45){ g.hordeWarned = true; announce('¡HORDAS!', 'Más enemigos aparecen', '#ef5350'); }
+  if (!g.bossWarned && g.t >= BOSS_AT - 15){ g.bossWarned = true; announce('Algo se acerca…', 'Devimon llega en 15 s', '#ce93d8'); }
 
   // Aparición
   g.spawnT -= dt;
@@ -1279,7 +1304,7 @@ function update(dt){
               spd: 2.2, r: 2.4, xp: 40, dmg: 15, cd: 0};
     g.enemies.push(g.boss);
     g.bossShotT = 2;
-    g.flash = '¡JEFE FINAL!'; g.flashT = 3;
+    announce('¡JEFE FINAL!', 'Devimon ha llegado', '#ce93d8');
   }
   if (g.boss && g.enemies.includes(g.boss)){
     g.bossShotT -= dt;
@@ -1416,6 +1441,25 @@ function updateCamera(dt){
     camBase.z + (Math.random()-0.5)*s);
   camera.lookAt(p.x, terrainH(p.x, p.z) + 1.2 + p.y*0.5, p.z);
 }
+// Anuncio central con animación: título grande y subtítulo
+let hurtT = 0;
+function announce(title, sub, color = '#ffd54f'){
+  const el = document.getElementById('banner');
+  el.style.color = color;
+  el.innerHTML = `<b>${title}</b><small>${sub || ''}</small>`;
+  el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+}
+// Aviso "E" flotando sobre el cofre cercano
+function updatePrompt(){
+  const el = document.getElementById('prompt');
+  const c = g.nearChest;
+  if (!c){ el.style.display = 'none'; return; }
+  const v = new THREE.Vector3(c.x, terrainH(c.x, c.z) + 3.4, c.z).project(camera);
+  el.style.display = 'block';
+  el.style.left = ((v.x + 1) / 2 * innerWidth) + 'px';
+  el.style.top = ((1 - v.y) / 2 * innerHeight) + 'px';
+  el.innerHTML = '<kbd>E</kbd>Abrir cofre';
+}
 function updateHUD(){
   const p = g.p;
   document.getElementById('hp').style.width = (100*Math.max(0,p.hp)/p.maxHp) + '%';
@@ -1423,10 +1467,12 @@ function updateHUD(){
   const left = Math.max(0, BOSS_AT - g.t);
   document.getElementById('timer').textContent = g.bossSpawned ? 'JEFE' : `${Math.floor(left/60)}:${String(Math.floor(left%60)).padStart(2,'0')}`;
   const dashTxt = g.dashCd > 0 ? `${g.dashCd.toFixed(1)} s` : 'listo';
-  let txt = `Pueblo Primario · ${g.ch.evolved ? EVO[g.ch.id].name : g.ch.name} · Nivel ${p.lvl} · Bajas ${g.kills} · Dash ${dashTxt}`;
-  if (g.flashT > 0) txt += ` · ${g.flash}`;
-  if (g.nearChest) txt += ' · E: abrir cofre';
-  document.getElementById('info').textContent = txt;
+  document.getElementById('info').textContent =
+    `Pueblo Primario · ${g.ch.evolved ? EVO[g.ch.id].name : g.ch.name} · Nivel ${p.lvl} · Bajas ${g.kills} · Dash ${dashTxt}`;
+  // Daño recibido: activa la viñeta roja (se desvanece en frame)
+  if (g.lastHp !== undefined && p.hp < g.lastHp - 0.01) hurtT = 0.45;
+  g.lastHp = p.hp;
+  updatePrompt();
   const pimg = document.getElementById('pimg');
   const ps = g.ch.evolved ? EVO[g.ch.id].sprite : g.ch.sprite;
   if (pimg.dataset.src !== ps){ pimg.dataset.src = ps; pimg.src = ps; }
@@ -1449,6 +1495,8 @@ function frame(now){
   }
   animateEvo(dt);
   updateFx(dt);
+  hurtT = Math.max(0, hurtT - dt);
+  document.getElementById('hurt').style.opacity = (hurtT / 0.45) * 0.85;
   for (const n of npcs) n.sprite.position.y = n.base + Math.sin(now*0.003 + n.ph)*0.08;   // habitantes respiran
   renderer.render(scene, camera);
   requestAnimationFrame(frame);
