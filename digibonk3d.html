@@ -497,6 +497,28 @@ canvas{display:block}
 .reg-box{background:#06121d;background-image:linear-gradient(180deg,rgba(46,230,214,.07),rgba(0,0,0,0))}
 .reg-box input{box-sizing:border-box;max-width:100%}
 .reg-guest{margin-top:12px;width:100%;padding:10px;font-size:12px;opacity:.85}
+
+/* Perfil rediseñado y paneles opacos */
+.picker-screen{background:linear-gradient(170deg,#14284a,#0a1224) !important}
+.pf-hero{display:flex;gap:22px;align-items:center;padding:18px;border-radius:18px;background:linear-gradient(135deg,rgba(30,60,100,.55),rgba(10,18,40,.8));border:2px solid #2d5f78}
+.pf-av{width:150px;height:150px;flex:0 0 auto;display:grid;place-items:center;border-radius:20px;border:3px solid #3a6fc4;background:radial-gradient(circle,rgba(127,208,255,.3),rgba(127,208,255,.04))}
+.pf-av img{width:120px;height:120px;image-rendering:pixelated}
+.pf-id{flex:1;min-width:0}
+.pf-label{font-size:11px;letter-spacing:3px;color:#9fd4ff;text-transform:uppercase}
+.pf-name{font-size:30px;font-weight:900;color:#ffd54f;text-shadow:0 2px 0 #7a4b00;margin:2px 0 8px;font-family:'Orbitron',system-ui,sans-serif}
+.pf-tags{margin-bottom:10px}
+.pf-tag{display:inline-block;padding:4px 12px;border-radius:20px;background:#ffd54f;color:#1a1200;font-weight:700;font-size:12px;margin:0 6px 6px 0;font-family:system-ui,sans-serif}
+.pf-tag.alt{background:#2d5f78;color:#e6f4ff}
+.pf-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+.pf-stat{padding:14px 8px;border-radius:16px;background:rgba(8,20,40,.92);border:1px solid #2d5f78;text-align:center}
+.pf-stat .ic{display:block;font-size:20px;margin-bottom:4px;color:#ffd54f}
+.pf-stat b{display:block;font-size:26px;color:#fff;font-family:system-ui,sans-serif;font-weight:800}
+.pf-stat small{font-size:10px;letter-spacing:1px;color:#9fd4ff;text-transform:uppercase}
+.pf-sec{margin:18px 0 8px;font-size:12px;letter-spacing:2px;color:#9fd4ff;text-transform:uppercase;font-family:'Orbitron',system-ui,sans-serif}
+.pf-mission{padding:14px 16px;border-radius:16px;background:rgba(8,20,40,.92);border:1px solid #2d5f78}
+.pf-bar{height:14px;border-radius:7px;background:#06141a;border:1px solid #3a6fc4;overflow:hidden;margin-bottom:8px}
+.pf-bar i{display:block;height:100%;background:repeating-linear-gradient(-45deg,#ffe082 0 10px,#ffb300 10px 20px)}
+.pf-mission small{color:#cfe8ff;font-family:system-ui,sans-serif;font-size:12px}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -557,8 +579,13 @@ function terrainH(x, z){
   const edge = 1 - smooth01((r - (ARENA_R - 18))/8);  // vuelve a 0 junto a las montañas
   const hills = 4.5*Math.sin(x*0.05 + 1.3)*Math.cos(z*0.043) + 3*Math.sin((x - z)*0.11 + 0.7) + 1.5*Math.cos(x*0.13 + z*0.09);
   const base = hills * flat * edge;
-  const w = pondWeight(x, z);
-  return base*(1 - w) + POND.bed*w;
+  // Cerca del estanque la orilla queda por encima del agua; el cuenco baja hasta POND.bed
+  const d = Math.hypot(x - POND.x, z - POND.z);
+  const near = 1 - smooth01((d - (POND.r + 6))/6);
+  const shore = Math.max(base, POND.water + 0.45);
+  const hn = base*(1 - near) + shore*near;
+  const t = smooth01((d - POND.r)/1.6);
+  return POND.bed*(1 - t) + hn*t;
 }
 // Hitboxes: círculos (casas, fuente, habitantes) y segmentos (vallas)
 const solids = {circles: [], segs: []};
@@ -663,7 +690,7 @@ document.body.prepend(renderer.domElement);
 
 const scene = new THREE.Scene();
 scene.background = skyTexture();
-scene.fog = new THREE.Fog(0xbcd9e8, 70, 210);
+scene.fog = new THREE.Fog(0xbcd9e8, 110, 250);
 function skyTexture(){
   const c = document.createElement('canvas'); c.width = 4; c.height = 256;
   const x = c.getContext('2d');
@@ -677,7 +704,7 @@ const sun = new THREE.DirectionalLight(0xffffff, 1.2);
 sun.position.set(12, 25, 8);
 scene.add(sun);
 
-const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 200);
+const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 280);
 applyRetroSize();
 camera.position.set(0, 16, 11);
 
@@ -724,17 +751,22 @@ function loadTex(path, rx, ry, pixel = false){
 const floor = new THREE.Mesh(terrainGeo, new THREE.MeshStandardMaterial({map: loadTex('textures/hierba_pixel.png', 20, 20, true), roughness: 1, vertexColors: true}));
 scene.add(floor);
 {
-  const water = new THREE.Mesh(new THREE.CircleGeometry(POND.r + 4, 48),   // más grande que el cuenco: la orilla la tapa el terreno
+  const water = new THREE.Mesh(new THREE.CircleGeometry(POND.r + 0.6, 48),   // encaja con la orilla
     new THREE.MeshStandardMaterial({color: 0xffffff, map: loadTex('textures/agua_pixel.png', 3, 3, true), roughness: 0.15, metalness: 0.1, transparent: true, opacity: 0.92}));
   water.rotation.x = -Math.PI/2;
   water.position.set(POND.x, POND.water, POND.z);
   scene.add(water);
+  const shoreRing = new THREE.Mesh(new THREE.RingGeometry(POND.r + 0.5, POND.r + 1.6, 48),
+    new THREE.MeshBasicMaterial({color: 0xcfe9d0, transparent: true, opacity: 0.55, depthWrite: false}));
+  shoreRing.rotation.x = -Math.PI/2;
+  shoreRing.position.set(POND.x, POND.water + 0.05, POND.z);
+  scene.add(shoreRing);
 }
 // Montañas altas que cierran el escenario (dos anillos, el exterior más alto)
 function buildMountains(){
   // Una sola malla continua de crestas: no hay conos que se crucen, así que no parpadea
   const SEG = 360, rBase = ARENA_R + 16, rPeak = ARENA_R + 5;
-  const H = a => 26 + 9*Math.sin(a*5 + 1.3) + 5*Math.sin(a*11 + 0.4) + 3*Math.sin(a*23);
+  const H = a => 40 + 12*Math.sin(a*5 + 1.3) + 6*Math.sin(a*11 + 0.4) + 3*Math.sin(a*23);
   const rock = new THREE.Color(0x4b5a73), snow = new THREE.Color(0xe8f1ff);
   const pos = [], col = [];
   const pt = (r, h, a) => [Math.cos(a)*r, h, Math.sin(a)*r];
@@ -765,7 +797,7 @@ const rim = new THREE.Mesh(new THREE.RingGeometry(ARENA_R - 0.25, ARENA_R + 0.25
   new THREE.MeshBasicMaterial({color: 0x4fc3f7, side: THREE.DoubleSide}));
 rim.rotation.x = -Math.PI/2;
 rim.position.y = 0.12;   // por encima del suelo: no compite con él
-scene.add(rim);
+// el anillo azul del borde se quitó: el límite lo marcan las montañas
 
 addEventListener('resize', () => {
   applyRetroSize();
@@ -2559,21 +2591,28 @@ function showPlayer(tab){
     const plays = Object.values(st).reduce((a, x) => a + (x.plays || 0), 0);
     const kills = Object.values(st).reduce((a, x) => a + (x.kills || 0), 0);
     const evos = Object.keys(loadJSON('digibonk3d-evo', {})).length;
+    const day = loadDaily();
+    const pct = day.claimed ? 100 : Math.min(100, Math.round(day.runs / DAILY.runsGoal * 100));
     body = `
-      <div class="pl-profile">
-        <div class="hud-portrait pl-av${fr ? ' fr-' + fr.id : ''}"><img src="${headUrl(spriteOf(selectedKey, false))}" alt=""></div>
-        <div>
-          <div class="pl-name">${trainerName || 'Entrenador'}</div>
+      <div class="pf-hero">
+        <div class="hud-portrait pf-av${fr ? ' fr-' + fr.id : ''}"><img src="${headUrl(spriteOf(selectedKey, false))}" alt=""></div>
+        <div class="pf-id">
+          <div class="pf-label">Entrenador</div>
+          <div class="pf-name">${trainerName || 'Entrenador'}</div>
+          <div class="pf-tags"><span class="pf-tag">${tt ? tt.name : 'Sin título'}</span><span class="pf-tag alt">${fr ? fr.name : 'Sin marco'}</span></div>
           <div class="name-edit"><input id="nameIn" maxlength="16" value="${trainerName}" placeholder="Tu nombre"><button class="mini-btn" id="nameSave">Guardar nombre</button></div>
-          <div class="pl-title">${tt ? tt.name : 'Sin título'}</div>
-          <div class="pl-frame">${fr ? fr.name : 'Sin marco'}</div>
         </div>
       </div>
-      <div class="pl-stats">
-        <div><b>${plays}</b><small>Partidas</small></div>
-        <div><b>${kills}</b><small>Bajas totales</small></div>
-        <div><b>${evos}</b><small>Evoluciones</small></div>
-        <div><b>${SAVE.bits}</b><small>Bits</small></div>
+      <div class="pf-stats">
+        <div class="pf-stat"><span class="ic">🎮</span><b>${plays}</b><small>Partidas</small></div>
+        <div class="pf-stat"><span class="ic">☠</span><b>${kills}</b><small>Bajas totales</small></div>
+        <div class="pf-stat"><span class="ic">✦</span><b>${evos}</b><small>Evoluciones</small></div>
+        <div class="pf-stat"><span class="ic">Ⓑ</span><b>${SAVE.bits}</b><small>Bits</small></div>
+      </div>
+      <div class="pf-sec">Misión diaria</div>
+      <div class="pf-mission">
+        <div class="pf-bar"><i style="width:${pct}%"></i></div>
+        <small>${day.claimed ? 'Completada hoy' : `${Math.min(day.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits`}</small>
       </div>
       <p class="g-note">El marco y el título que elijas se ven en el HUD durante la partida.</p>`;
   } else if (plTab === 'digimon'){
