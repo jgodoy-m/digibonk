@@ -665,12 +665,12 @@ canvas{display:block}
 import * as THREE from 'three';
 
 // Prototipo 3D estilo Megabonk. Sprites 2D (pixel art de King) como billboards.
-const BOSS_AT = 240; // segundos hasta el jefe final; ganas al derrotarlo
+const BOSS_AT = 600; // segundos hasta el jefe final; ganas al derrotarlo
 const ARENA_R = 110;  // radio del escenario: el mapa tiene límite circular con montañas
-// Dos zonas: el bosque inicial y el pantano de datos (a partir de 120 s). El jefe final está al final de la zona 2.
+// Dos zonas: el bosque inicial y el pantano de datos (a partir de 300 s). El jefe final está al final de la zona 2.
 const ZONES = [
   {name:'Bosque Inicial',   at:0,   fog:0xbcd9e8, sky:['#4d86c9', '#a9d4ee', '#d8efff'], tint:0xffffff, color:'#ffd54f'},
-  {name:'Pantano de Datos', at:120, fog:0x8c7cb8, sky:['#241b4a', '#6a4f9e', '#c59ad6'], tint:0xd8c6ff, color:'#ce93d8'}
+  {name:'Pantano de Datos', at:300, fog:0x8c7cb8, sky:['#241b4a', '#6a4f9e', '#c59ad6'], tint:0xd8c6ff, color:'#ce93d8'}
 ];
 const ZONE2_AT = ZONES[1].at;
 // Recorta un punto al círculo de radio m (para aparecer y moverse dentro del escenario)
@@ -738,7 +738,7 @@ const CHARS = {
   gatomon:  {name:'Gatomon',    desc:'Garras giratorias',                             sprite:'sprites/gatomon.png',   kind:'orbit', cd:0,   dmg:8}
 };
 // Digievolución (se activa al llegar a este nivel)
-const EVO_LEVEL = 10;
+const EVO_LEVEL = 15;
 // Temporada 1: Digimon Adventure (solo evoluciones con sprite disponible en el pack)
 const EVO = {
   gabumon:  {name:'Garurumon',  sprite:'sprites/garurumon.png'},
@@ -760,7 +760,8 @@ Object.assign(CHARS, {
 const ENEMY = {
   basic: {sprite:'sprites/numemon.png', hp:22, spd:3.2, r:0.9, scale:1.8, xp:2, dmg:5},
   fast:  {sprite:'sprites/meramon.png', hp:14, spd:6.0, r:0.6, scale:1.4, xp:3, dmg:4},
-  tank:  {sprite:'sprites/tank.png',  hp:90, spd:2.0, r:1.3, scale:2.6, xp:8, dmg:12}
+  tank:  {sprite:'sprites/tank.png',  hp:90, spd:2.0, r:1.3, scale:2.6, xp:8, dmg:12},
+  elite: {sprite:'sprites/skullgreymon.png', hp:180, spd:2.6, r:1.5, scale:3.0, xp:20, dmg:14}
 };
 // Mejoras al subir de nivel. k = categoría (color de la tarjeta), d = descripción
 const UPGRADES = [
@@ -1386,7 +1387,7 @@ const TUTO = [
   {t:'Esquiva con el dash', d:'Shift te lanza hacia delante. Durante el dash no recibes daño de contacto.', clip:'tutorial/dash.webm'},
   {t:'Experiencia y subida de nivel', d:'Recoge los orbes de experiencia. Al subir de nivel eliges una mejora entre tres.', clip:'tutorial/nivel.webm'},
   {t:'Cofres', d:'Pulsa E junto a un cofre para abrirlo y recibir una mejora.', clip:'tutorial/cofre.webm'},
-  {t:'Zonas', d:'El mapa tiene dos zonas. La segunda, el Pantano de Datos, empieza a los 2 minutos y trae enemigos más duros.', clip:'tutorial/zona.webm'},
+  {t:'Zonas', d:'El mapa tiene dos zonas. La segunda, el Pantano de Datos, empieza a los 5 minutos y trae enemigos más duros.', clip:'tutorial/zona.webm'},
   {t:'Jefe final', d:'Al final de la zona 2 aparece Devimon. Esquiva el anillo rojo antes de cada disparo.', clip:'tutorial/jefe.webm'},
   {t:'Colección y gacha', d:'El Digivice del menú abre el gacha: skins, marcos, títulos y objetos. Las evoluciones se guardan en la colección.', clip:'tutorial/coleccion.webm'}
 ];
@@ -1714,7 +1715,7 @@ function startGame(key){
     dash: 0, dashCd: 0, dir: {x:0, z:-1}, chests: [], chestT: 20, flash: '', flashT: 0,
     texts: [], nearChest: null, combo: 0, comboT: 0,
     boss: null, bossSpawned: false, bossDown: false, bossShotT: 0, eshots: [],
-    zone: 1
+    zone: 1, eliteT: 60, drops: []
   };
   applyZoneVisuals(1);
   applyBalance(key);
@@ -1981,13 +1982,14 @@ function tryDash(){
 }
 function dist2(ax, az, bx, bz){ return Math.hypot(ax-bx, az-bz); }
 
-function spawnEnemy(){
+function spawnEnemy(forced){
   const t = g.t, r = Math.random(), a = Math.random()*Math.PI*2, R = 25;
   let kind = 'basic';
   const z2 = g.zone >= 2;   // la zona 2 trae más tanques y rápidos
-  if (t > 120 && r < (z2 ? 0.3 : 0.2)) kind = 'tank';
+  if (forced) kind = forced;
+  else if (t > 120 && r < (z2 ? 0.3 : 0.2)) kind = 'tank';
   else if (t > 60 && r < (z2 ? 0.5 : 0.4)) kind = 'fast';
-  const d = ENEMY[kind], k = 1 + t/60;
+  const d = ENEMY[kind], k = 1 + t/90;
   const mesh = billboard(d.sprite, d.scale);
   mesh.position.y = d.scale/2;
   world.add(mesh);
@@ -1996,10 +1998,17 @@ function spawnEnemy(){
   world.add(shadow);
   g.enemies.push({
     kind, mesh, shadow, x: sp[0], z: sp[1],
-    hp: d.hp*k, max: d.hp*k, spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + t/200), cd: 0
+    hp: d.hp*k, max: d.hp*k, spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + t/300), cd: 0
   });
 }
 
+// Imán total: objeto que cae del 2% de los enemigos y se recoge pasando por encima
+function spawnMagnetDrop(x, z){
+  const mesh = new THREE.Mesh(new THREE.TorusGeometry(0.45, 0.14, 8, 18), new THREE.MeshBasicMaterial({color: 0xff4081}));
+  mesh.rotation.x = Math.PI/2;
+  world.add(mesh);
+  g.drops.push({x, z, mesh, taken: false});
+}
 function fireProjectile(x, z, vx, vz, dmg, life, color){
   const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.25, 8, 8), new THREE.MeshBasicMaterial({color}));
   mesh.position.set(x, 0.9 + terrainH(x, z), z);
@@ -2054,6 +2063,15 @@ function update(dt){
     spawnEnemy();
     if (g.t > 45 && g.enemies.length < Q.maxEnemies) spawnEnemy();   // hordas más densas tras 45 s
     g.spawnT = Math.max(0.12, 0.9 - g.t/120);
+  }
+
+  // Élites: cada 45 s desde el minuto 1; a partir del minuto 5 salen de dos en dos
+  g.eliteT -= dt;
+  if (g.eliteT <= 0){
+    g.eliteT = 45;
+    const n = g.t >= 300 ? 2 : 1;
+    for (let i = 0; i < n; i++) spawnEnemy('elite');
+    announce('¡Élite!', n > 1 ? 'Dos Digimon élite se acercan' : 'Un Digimon élite se acerca', '#ff7043');
   }
 
   // Enemigos: persiguen y dañan por contacto
@@ -2133,6 +2151,7 @@ function update(dt){
   const dead = g.enemies.filter(e => e.hp <= 0);
   for (const e of dead){
     g.gems.push({x:e.x, z:e.z, v:e.xp, heal: Math.random() < 0.06, mesh: null});
+    if (Math.random() < 0.02) spawnMagnetDrop(e.x, e.z);   // 2%: imán total
     world.remove(e.mesh);
     world.remove(e.shadow);
   }
@@ -2143,6 +2162,19 @@ function update(dt){
   if (g.comboT <= 0) g.combo = 0;
   g.enemies = g.enemies.filter(e => e.hp > 0);
 
+  // Imán total: al recogerlo, todas las gemas del mapa vuelan hacia el jugador
+  for (const dr of g.drops){
+    dr.mesh.rotation.y += dt*4;
+    dr.mesh.position.set(dr.x, 0.6 + terrainH(dr.x, dr.z) + Math.sin(g.t*4)*0.1, dr.z);
+    if (!dr.taken && dist2(dr.x, dr.z, p.x, p.z) < 1.4){
+      dr.taken = true; world.remove(dr.mesh);
+      for (const gm of g.gems) gm.attract = true;
+      announce('¡Imán total!', 'Toda la experiencia del mapa va hacia ti', '#ff4081');
+      sfx('chest');
+    }
+  }
+  g.drops = g.drops.filter(dr => !dr.taken);
+
   // Gemas de XP
   for (const gm of g.gems){
     if (!gm.mesh){
@@ -2150,9 +2182,10 @@ function update(dt){
       world.add(gm.mesh);
     }
     const d = dist2(gm.x, gm.z, p.x, p.z), dd = d || 1;
-    if (d < p.pickup){
-      gm.x += (p.x-gm.x)/dd * 12*dt;
-      gm.z += (p.z-gm.z)/dd * 12*dt;
+    if (d < p.pickup || gm.attract){
+      const sp = gm.attract ? Math.max(12, d*8) : 12;   // con el imán total se acercan en pocos segundos
+      gm.x += (p.x-gm.x)/dd * sp*dt;
+      gm.z += (p.z-gm.z)/dd * sp*dt;
     }
     gm.mesh.position.set(gm.x, 0.4 + terrainH(gm.x, gm.z), gm.z);
     gm.mesh.rotation.y += dt*3;
@@ -3558,7 +3591,7 @@ if (trainerName) showSelect(); else showRegister();
 if (new URLSearchParams(location.search).has('demo')){
   window.__dbk = {
     get g(){ return g; }, get state(){ return state; }, get scene(){ return scene; },
-    startGame, spawnEnemy, setZone, showGacha,
+    startGame, spawnEnemy, spawnMagnetDrop, setZone, showGacha,
     nearChest(){
       const p = g.p, a = p.dir ? Math.atan2(p.dir.z, p.dir.x) : 0;
       const [cx, cz] = clampArena(p.x + Math.cos(a)*3, p.z + Math.sin(a)*3, ARENA_R - 2);
