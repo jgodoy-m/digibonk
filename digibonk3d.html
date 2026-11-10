@@ -107,24 +107,44 @@ canvas{display:block}
 #overlay h2{margin:0;font-size:24px;color:#ffd54f;letter-spacing:1px;text-shadow:0 2px 8px rgba(0,0,0,.6)}
 .up-sub{margin:6px 0 0;font-size:13px;color:#90caf9}
 .card.sel-key{outline:2px dashed rgba(255,255,255,.25);outline-offset:4px}
-/* ---- Pausa ---- */
+/* ---- Pausa: pantalla de Digivice ---- */
 #pause{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
-  background:rgba(4,7,16,.72);backdrop-filter:blur(3px);z-index:20}
+  background:radial-gradient(ellipse at center,rgba(10,20,44,.55),rgba(3,6,14,.88));backdrop-filter:blur(4px);z-index:20}
 #pause.hidden{display:none}
-.pause-box{width:min(680px,92vw);padding:28px 32px;border-radius:18px;background:linear-gradient(170deg,rgba(24,36,64,.98),rgba(8,12,26,.98));
-  border:2px solid #4fc3f7;box-shadow:0 0 30px rgba(79,195,247,.35);text-align:center;color:#fff}
-.pause-box h1{margin:0;font-size:42px;letter-spacing:6px;color:#4fc3f7;text-shadow:0 0 18px rgba(79,195,247,.6)}
-.pause-box .who{margin:6px 0 18px;color:#90caf9;font-size:14px}
-.pause-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
-.pause-stats div{background:rgba(18,28,52,.9);border:1px solid #2a3a5c;border-radius:10px;padding:10px 6px}
+.pause-box{width:min(720px,94vw);border-radius:20px;overflow:hidden;color:#fff;text-align:left;
+  background:linear-gradient(170deg,#16244a,#0a1024 60%);border:2px solid #4fc3f7;
+  box-shadow:0 0 0 6px rgba(79,195,247,.12),0 0 40px rgba(79,195,247,.4)}
+.dv-head{display:flex;justify-content:space-between;align-items:center;padding:10px 18px;
+  background:repeating-linear-gradient(90deg,#1565c0 0 14px,#1976d2 14px 28px);font-size:12px;letter-spacing:2px;font-weight:bold;text-transform:uppercase}
+.dv-tag{color:#fff;text-shadow:0 1px 0 #0d47a1}
+.dv-zone{color:#e3f2fd;opacity:.9}
+.dv-partner{display:flex;gap:18px;align-items:center;padding:18px 22px}
+.dv-partner img{width:110px;height:110px;flex:0 0 auto;object-fit:contain;image-rendering:pixelated;border-radius:16px;
+  background:radial-gradient(circle,rgba(79,195,247,.35),rgba(79,195,247,.05));border:2px solid #4fc3f7}
+.dv-info{flex:1;min-width:0}
+.dv-info h1{margin:0;font-size:34px;letter-spacing:2px;color:#ffd54f;text-shadow:0 3px 0 #b27300}
+.dv-info q{display:block;margin:4px 0 6px;color:#90caf9;font-style:italic;font-size:14px}
+.dv-bar{position:relative;height:18px;border-radius:9px;background:#050a18;border:1px solid #2a3a5c;overflow:hidden;margin-top:6px}
+.dv-bar i{position:absolute;top:0;bottom:0;left:0;display:block}
+.dv-bar.hp i{background:linear-gradient(90deg,#43a047,#9ccc65)}
+.dv-bar.evo i{background:linear-gradient(90deg,#8e24aa,#ffd54f)}
+.dv-bar span{position:relative;display:block;text-align:center;font-size:11px;line-height:16px;font-weight:bold;letter-spacing:.5px;text-shadow:0 1px 2px #000}
+.pause-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 22px 16px}
+.pause-stats div{background:rgba(18,28,52,.9);border:1px solid #2a3a5c;border-radius:10px;padding:10px 6px;text-align:center}
 .pause-stats b{display:block;font-size:20px;color:#ffd54f}
-.pause-stats small{font-size:11px;letter-spacing:.5px;color:#90caf9;text-transform:uppercase}
-.pause-btns{display:flex;flex-direction:column;gap:10px;align-items:center}
-.pause-btns button{width:260px;padding:12px 0;border-radius:12px;border:0;cursor:pointer;font-size:16px;font-weight:bold;letter-spacing:1px;
-  color:#fff;background:linear-gradient(180deg,#1e3a66,#0e1f3d);box-shadow:0 4px 0 #050b18;border:1px solid #4fc3f7}
+.pause-stats small{font-size:10px;letter-spacing:.5px;color:#90caf9;text-transform:uppercase}
+.pause-btns{display:flex;gap:12px;justify-content:center;padding:0 22px 16px;flex-wrap:wrap}
+.pause-btns button{flex:1 1 180px;max-width:220px;padding:12px 10px;border-radius:12px;border:1px solid #4fc3f7;cursor:pointer;
+  font-size:15px;font-weight:bold;letter-spacing:1px;color:#fff;background:linear-gradient(180deg,#1e3a66,#0e1f3d);box-shadow:0 4px 0 #050b18}
 .pause-btns button.primary{color:#1a1200;background:linear-gradient(180deg,#ffe082,#ffb300);border-color:#ffd54f;box-shadow:0 4px 0 #b27300}
+.pause-btns button.danger{border-color:#ef5350;background:linear-gradient(180deg,#5c1a1a,#2a0b0b);box-shadow:0 4px 0 #1a0505}
 .pause-btns button:hover{filter:brightness(1.12)}
-.pause-help{margin-top:18px;font-size:13px;color:#cfe8ff;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;text-align:left;justify-content:center}
+.pause-confirm{padding:4px 22px 18px;text-align:center}
+.pause-confirm .warn{margin:6px 0 4px;font-size:20px;font-weight:bold;color:#ef9a9a;letter-spacing:.5px}
+.pause-confirm p{margin:4px 0 14px;color:#cfe8ff;font-size:14px}
+.pause-help{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;padding:12px 22px 16px;background:rgba(3,6,14,.6);
+  border-top:1px solid #1e2a44;font-size:12px;color:#cfe8ff}
+.pause-help span{white-space:nowrap}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -499,13 +519,17 @@ const overlay = document.getElementById('overlay');
 
 addEventListener('keydown', e => {
   const k = e.key.toLowerCase();
-  // Esc pausa y reanuda. Con el ratón bloqueado el navegador puede no entregar esta tecla:
-  // en ese caso la pausa la dispara el evento pointerlockchange (ver más abajo).
-  if (k === 'escape'){
+  // Esc o P pausan y reanudan. Con el ratón bloqueado el navegador puede no entregar Esc:
+  // en ese caso la pausa la dispara pointerlockchange (ver más abajo). P sirve en pantalla completa.
+  if (k === 'escape' || k === 'p'){
     if (state === 'play'){ pauseGame(); return; }
-    if (state === 'paused'){ resumeGame(); return; }
+    if (state === 'paused'){
+      if (pauseConfirm && k === 'escape') showPause(false);   // Esc en la confirmación vuelve al menú de pausa
+      else resumeGame();
+      return;
+    }
   }
-  if (state === 'paused'){ if (k === 'enter') resumeGame(); return; }
+  if (state === 'paused'){ if (k === 'enter' && !pauseConfirm) resumeGame(); return; }
   keys[k] = true;
   if (state === 'play' && k === 'shift') tryDash();
   if (state === 'play' && k === ' ' && g && g.p.y === 0) g.p.vy = 11;   // salto (altura ~2)
@@ -540,34 +564,75 @@ function resumeGame(){
   state = 'play';
   lockMouse();   // si el navegador rechaza el bloqueo, el juego sigue; un clic en pantalla lo vuelve a activar
 }
-function hidePause(){ pauseEl.classList.add('hidden'); }
-function showPause(){
-  const name = g.ch.evolved ? EVO[g.ch.id].name : g.ch.name;
+function hidePause(){ pauseConfirm = false; pauseEl.classList.add('hidden'); }
+// Frase de cada compañero al pausar: le da carácter a la pantalla
+const PAUSE_LINE = {
+  gabumon: '¡Aún no nos rendimos!',
+  palmon:  '¡Las cuchillas no descansan!',
+  gatomon: '¡Mis garras están listas!',
+  gomamon: '¡A por otra ola de burbujas!',
+  patamon: '¡A volar otra vez!',
+  biyomon: '¡Ráfaga de viento lista!'
+};
+let pauseConfirm = false;   // true mientras se muestra la confirmación de desconexión
+function showPause(askQuit = false){
+  pauseConfirm = askQuit;
+  const c = g.ch, evolved = c.evolved;
+  const name = evolved ? EVO[c.id].name : c.name;
+  const sprite = evolved ? EVO[c.id].sprite : c.sprite;
+  const hpPct = Math.max(0, 100 * g.p.hp / g.p.maxHp);
+  const lvl = g.p.lvl;
+  const evoPct = evolved ? 100 : Math.min(100, lvl / 5 * 100);
+  const evoTxt = evolved ? '¡DIGIEVOLUCIONADO!' : `DIGIEVOLUCIÓN · Nv ${lvl}/5`;
+  const actions = askQuit ? `
+      <div class="pause-confirm">
+        <div class="warn">¿Desconectar del Digital World?</div>
+        <p>La partida se perderá y no se guardará en los récords.</p>
+        <div class="pause-btns">
+          <button class="primary" id="pBack">VOLVER A LA BATALLA</button>
+          <button class="danger" id="pQuit">DESCONECTAR</button>
+        </div>
+      </div>` : `
+      <div class="pause-btns">
+        <button class="primary" id="pResume">▶ CONTINUAR</button>
+        <button id="pRestart">⟲ REBOOT</button>
+        <button class="danger" id="pQuitAsk">⏻ DESCONECTAR</button>
+      </div>`;
   pauseEl.innerHTML = `
     <div class="pause-box">
-      <h1>PAUSA</h1>
-      <div class="who">${name} · Pueblo Primario</div>
+      <div class="dv-head"><span class="dv-tag">Digivice · Pausa</span><span class="dv-zone">Pueblo Primario</span></div>
+      <div class="dv-partner">
+        <img src="${sprite}" alt="">
+        <div class="dv-info">
+          <h1>${name}</h1>
+          <q>${PAUSE_LINE[c.id] || ''}</q>
+          <div class="dv-bar hp"><i style="width:${hpPct}%"></i><span>PS ${Math.ceil(g.p.hp)} / ${g.p.maxHp}</span></div>
+          <div class="dv-bar evo"><i style="width:${evoPct}%"></i><span>${evoTxt}</span></div>
+        </div>
+      </div>
       <div class="pause-stats">
-        <div><b>${fmtTime(Math.floor(g.t))}</b><small>Tiempo</small></div>
+        <div><b>${fmtTime(Math.floor(g.t))}</b><small>Tiempo de viaje</small></div>
         <div><b>${g.kills}</b><small>Bajas</small></div>
-        <div><b>${g.p.lvl}</b><small>Nivel</small></div>
-        <div><b>x${g.p.dmg.toFixed(2)}</b><small>Daño</small></div>
+        <div><b>${lvl}</b><small>Nivel</small></div>
+        <div><b>x${g.p.dmg.toFixed(2)}</b><small>Ataque</small></div>
       </div>
-      <div class="pause-btns">
-        <button class="primary" id="pResume">CONTINUAR</button>
-        <button id="pRestart">REINICIAR PARTIDA</button>
-        <button id="pSelect">CAMBIAR DIGIMON</button>
-      </div>
+      ${actions}
       <div class="pause-help">
-        <span><i class="kbd">Esc</i></span><span>continuar</span>
-        <span><i class="kbd">W A S D</i></span><span>mover · <i class="kbd">Espacio</i> saltar · <i class="kbd">Shift</i> dash · <i class="kbd">E</i> cofres</span>
-        <span><i class="kbd">Ratón</i></span><span>mover la cámara · clic en la pantalla para volver a capturarlo</span>
+        <span><i class="kbd">Esc</i>/<i class="kbd">P</i> pausa</span>
+        <span><i class="kbd">W A S D</i> mover</span>
+        <span><i class="kbd">Espacio</i> saltar</span>
+        <span><i class="kbd">Shift</i> dash</span>
+        <span><i class="kbd">E</i> cofres</span>
+        <span><i class="kbd">Ratón</i> cámara</span>
       </div>
     </div>`;
   pauseEl.classList.remove('hidden');
-  document.getElementById('pResume').onclick = resumeGame;
-  document.getElementById('pRestart').onclick = () => startGame(g.ch.id);   // no guarda récord: se descarta la partida
-  document.getElementById('pSelect').onclick = () => showSelect();          // vuelve al menú sin guardar récord
+  const on = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = fn; };
+  on('pResume', resumeGame);
+  on('pRestart', () => startGame(c.id));              // reinicia con el mismo Digimon; no guarda récord
+  on('pQuitAsk', () => showPause(true));
+  on('pBack', () => showPause(false));
+  on('pQuit', () => showSelect());                    // vuelve al menú de inicio sin guardar récord
 }
 // Si el bloqueo de ratón se pierde durante la partida (p. ej. Esc del navegador), se pausa
 document.addEventListener('pointerlockchange', () => {
