@@ -610,6 +610,7 @@ canvas{display:block}
 .gx-badge{font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:var(--gc);color:#0a1020;font-weight:900}
 .gx-art{width:150px;height:150px;display:flex;align-items:center;justify-content:center;animation:gxFloat 2.6s ease-in-out infinite}
 .gx-art img{width:140px;height:140px;object-fit:contain;image-rendering:pixelated}
+.gx-art .rw-anim{width:140px;height:140px;background-size:500% 100%;background-position:0 50%}
 .gx-art .rw-frame,.gx-art .rw-title,.gx-art .rw-item{transform:scale(2.2)}
 @keyframes gxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .gx-card b{font-size:17px;text-align:center}
@@ -807,6 +808,7 @@ canvas{display:block}
   background:linear-gradient(180deg,color-mix(in srgb,var(--pc) 45%,#06102b),#06102b 70%);box-shadow:0 0 26px var(--pc)}
 .pc-front em{font:900 10px 'Orbitron',system-ui,sans-serif;font-style:normal;letter-spacing:2px;text-transform:uppercase;background:var(--pc);color:#06102b;padding:3px 10px;border-radius:99px}
 .pc-front img{width:58%;image-rendering:pixelated;object-fit:contain}
+.pc-front .rw-anim{width:58%;aspect-ratio:1;flex:0 0 auto}
 .pc-front b{font-size:13px}
 .pc-front small{font-size:11px;color:#dff8ff}
 .pc.open.t-e .pc-front,.pc.open.t-l .pc-front{animation:pcEpic 1s ease-in-out infinite alternate}
@@ -1024,6 +1026,7 @@ canvas{display:block}
 .pk-skin.locked{cursor:default;opacity:.6}
 .pk-skin:not(.locked):hover{filter:brightness(1.15)}
 .pl3-avs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;overflow:visible}
+.rw-anim{background-size:500% 100%;background-position:0 50%}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -3823,8 +3826,8 @@ function headUrl(src){
   headCache[src] = 'pending';
   const im = new Image();
   im.onload = () => {
-    // Las hojas animadas tienen ANIM_N fotogramas en horizontal: el icono usa solo el primero
-    const fr = sheetOf(src) ? ANIM_N : 1;
+    // Las hojas animadas son ANIM_N fotogramas en horizontal (ancho ≈ 5 × alto): el icono usa el primero
+    const fr = im.naturalWidth / im.naturalHeight > ANIM_N - 1 ? ANIM_N : 1;
     const fw = Math.floor(im.naturalWidth / fr), h = im.naturalHeight;
     // Caja real del Digimon dentro del fotograma (píxeles con alfa)
     const probe = document.createElement('canvas'); probe.width = fw; probe.height = h;
@@ -3836,7 +3839,7 @@ function headUrl(src){
       if (d[(y*fw + x)*4 + 3] > 40){ if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
     }
     if (x1 < 0){ x0 = 0; y0 = 0; x1 = fw - 1; y1 = h - 1; }
-    // Cabeza: la franja superior de la caja, cuadrada y centrada
+    // Cabeza: la mitad superior de la caja, cuadrada y centrada
     const bw = x1 - x0 + 1, bh = y1 - y0 + 1;
     const hh = bh * 0.5, side = hh * 1.45;
     const cx = x0 + bw/2, cy = y0 + hh/2;
@@ -3845,7 +3848,7 @@ function headUrl(src){
     x.drawImage(im, cx - side/2, cy - side/2, side, side, 0, 0, 96, 96);
     headCache[src] = c.toDataURL('image/png');
   };
-  im.src = src;
+  im.src = sheetOf(src) || src;
   return src;
 }
 
@@ -4246,7 +4249,7 @@ function playPullAnimation(results){
   setTimeout(() => { if (alive()) go(); }, 2950);
 }
 function rewardIcon(r){
-  if (r.type === 'skin') return `<img src="${spriteWith(r.key, false, r.sk.id)}" alt="">`;
+  if (r.type === 'skin') return animEl(spriteWith(r.key, false, r.sk.id), 'rw-anim');
   if (r.type === 'frame') return `<div class="rw-frame fr-${r.f.id}"></div>`;
   if (r.type === 'title') return `<div class="rw-title">🏅</div>`;
   return `<div class="rw-item">${r.it.icon}</div>`;
@@ -4303,11 +4306,8 @@ const CAT_LABEL = {skin: 'Skin', frame: 'Marco', title: 'Título', item: 'Objeto
 let gxIdx = 0, gxTimer = null;
 // Todo lo que puede salir, en el orden del carrusel
 function gxShowcase(){
-  const list = bannerSkins().flatMap(sk => SEASONS.adventure.chars.map(key => ({type:'skin', key, sk, tier:'l'})));
-  FRAMES.forEach(f => list.push({type:'frame', f, tier: f.tier}));
-  TITLES.forEach(t => list.push({type:'title', t, tier: t.tier}));
-  ITEMS.forEach(it => list.push({type:'item', it, tier: it.tier}));
-  return list;
+  // El carrusel solo muestra las skins del banner activo (marcos, títulos y objetos salen en la tirada)
+  return bannerSkins().flatMap(sk => SEASONS.adventure.chars.map(key => ({type:'skin', key, sk, tier:'l'})));
 }
 function gxOwned(s){
   if (s.type === 'skin') return ownedSkins(s.key).includes(s.sk.id);
@@ -4705,6 +4705,7 @@ if (new URLSearchParams(location.search).has('demo')){
     startGame, spawnEnemy, spawnMagnetDrop, setZone, showGacha, addSkill, upgradeChoices,
     // Datos y filtros que usa sprites/anim/recolor.js para generar las skins
     SKINS, EVO_LINE, CHARS, SEASONS, glitchPixels,
+    headUrl, spriteWith,
     nearChest(){
       const p = g.p, a = p.dir ? Math.atan2(p.dir.z, p.dir.x) : 0;
       const [cx, cz] = clampArena(p.x + Math.cos(a)*3, p.z + Math.sin(a)*3, ARENA_R - 2);
