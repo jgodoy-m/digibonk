@@ -274,6 +274,19 @@ canvas{display:block}
 .pk-tab.on{box-shadow:0 4px 0 #b27300}
 .pk-start{font-size:20px;padding:14px 40px;border-radius:18px;box-shadow:0 7px 0 #2e6b13,0 0 18px rgba(190,255,90,.45)}
 .hints span{background:rgba(10,18,40,.7);padding:3px 9px;border-radius:10px;border:1px solid #3a6fc4}
+
+/* Ajustes */
+.settings{width:min(640px,94vw);padding:18px 22px;border-radius:22px;background:rgba(10,18,40,.95);border:3px solid #3a6fc4;color:#e6f4ff;text-align:left;box-shadow:0 14px 40px rgba(0,0,0,.6)}
+.set-head{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+#overlay .set-head h2{margin:0;flex:1;font-size:24px;color:#ffd54f}
+.set-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 4px;border-bottom:1px solid #1e2a44}
+.set-row b{display:block;font-size:16px;color:#fff}
+.set-row small{font-size:12px;color:#9fd4ff}
+.set-seg-wrap{display:flex;gap:6px}
+.set-seg{padding:8px 14px;border-radius:12px;border:2px solid #3a6fc4;background:rgba(8,20,40,.9);color:#cfe8ff;font-weight:bold;cursor:pointer}
+.set-seg.on{background:repeating-linear-gradient(-45deg,#ffe082 0 10px,#ffc94d 10px 20px);color:#1a1200;border-color:#ffd54f}
+.set-toggle{padding:9px 16px;border-radius:12px;border:2px solid #7a7a7a;background:#2a2f3a;color:#bbb;font-weight:bold;cursor:pointer;min-width:130px}
+.set-toggle.on{border-color:#7cf29c;background:repeating-linear-gradient(-45deg,#3fb950 0 10px,#2e9a3e 10px 20px);color:#fff}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -501,32 +514,33 @@ scene.add(floor);
 }
 // Montañas altas que cierran el escenario (dos anillos, el exterior más alto)
 function buildMountains(){
-  const rockMat = new THREE.MeshStandardMaterial({color: 0x4b5a73, flatShading: true, roughness: 0.9});
-  const snowMat = new THREE.MeshStandardMaterial({color: 0xe8f1ff, flatShading: true, roughness: 0.6});
-  const coneGeo = new THREE.ConeGeometry(1, 1, 7);   // base 1, altura 1: se escala por montaña
-  const rows = [{R: ARENA_R + 9, n: 90, rad: 10, h: 26}, {R: ARENA_R + 22, n: 70, rad: 14, h: 36}];
-  for (const row of rows){
-    for (let i = 0; i < row.n; i++){
-      const a = i/row.n*Math.PI*2 + Math.random()*0.05;
-      const r = row.R + (Math.random()-0.5)*4;
-      const h = row.h * (0.8 + Math.random()*0.4);
-      const rad = row.rad * (0.85 + Math.random()*0.3);
-      const x = Math.cos(a)*r, z = Math.sin(a)*r;
-      const rot = Math.random()*Math.PI;
-      const m = new THREE.Mesh(coneGeo, rockMat);
-      m.scale.set(rad, h, rad);
-      m.position.set(x, h/2, z);
-      m.rotation.y = rot;
-      scene.add(m);
-      if (h > 22){   // cima nevada
-        const s = new THREE.Mesh(coneGeo, snowMat);
-        s.scale.set(rad*0.3, h*0.3, rad*0.3);
-        s.position.set(x, h*0.85, z);
-        s.rotation.y = rot;
-        scene.add(s);
+  // Una sola malla continua de crestas: no hay conos que se crucen, así que no parpadea
+  const SEG = 360, rBase = ARENA_R + 16, rPeak = ARENA_R + 5;
+  const H = a => 26 + 9*Math.sin(a*5 + 1.3) + 5*Math.sin(a*11 + 0.4) + 3*Math.sin(a*23);
+  const rock = new THREE.Color(0x4b5a73), snow = new THREE.Color(0xe8f1ff);
+  const pos = [], col = [];
+  const pt = (r, h, a) => [Math.cos(a)*r, h, Math.sin(a)*r];
+  const colorAt = h => rock.clone().lerp(snow, THREE.MathUtils.smoothstep(h, 30, 38));
+  for (let i = 0; i < SEG; i++){
+    const a0 = i/SEG*Math.PI*2, a1 = (i+1)/SEG*Math.PI*2;
+    const h0 = H(a0), h1 = H(a1), hm = H((a0+a1)/2) * 1.08;
+    const b0 = pt(rBase, 0, a0), b1 = pt(rBase, 0, a1);
+    const t0 = pt(rPeak, h0, a0), t1 = pt(rPeak, h1, a1), tm = pt(rPeak - 4, hm, (a0+a1)/2);
+    // dos caras por segmento: base exterior -> pico
+    const faces = [[b0, b1, tm], [b0, tm, t0], [b1, t1, tm], [b1, tm, t0]];
+    for (const f of faces){
+      for (const v of f){
+        pos.push(v[0], v[1], v[2]);
+        const c = colorAt(v[1]); col.push(c.r, c.g, c.b);
       }
     }
   }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  geo.computeVertexNormals();
+  const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({vertexColors: true, flatShading: true, roughness: 0.9, side: THREE.DoubleSide}));
+  scene.add(mesh);
 }
 buildMountains();
 const rim = new THREE.Mesh(new THREE.RingGeometry(ARENA_R - 0.25, ARENA_R + 0.25, 128),
@@ -762,7 +776,7 @@ addEventListener('keydown', e => {
   if (k === 'n'){ toggleMute(); return; }
   if (k === 'm'){ if (state === 'play') openMap(); else if (state === 'map') closeMap(); return; }
   if (state === 'map'){ if (k === 'escape') closeMap(); return; }
-  if (state === 'gacha'){ if (k === 'escape') showSelect(); return; }
+  if (state === 'gacha' || state === 'settings'){ if (k === 'escape') showSelect(); return; }
   // Esc o P pausan y reanudan. Con el ratón bloqueado el navegador puede no entregar Esc:
   // en ese caso la pausa la dispara pointerlockchange (ver más abajo). P sirve en pantalla completa.
   if (k === 'escape' || k === 'p'){
@@ -940,13 +954,9 @@ function showSelect(){
       <section class="m-left">
         <div class="brand">
           <div class="logo"><span>DIGI</span>BONK<em> 3D</em></div>
-          <div class="sub">Temporada 1 · Digimon Adventure</div>
+          <div class="sub">Digimon Adventure</div>
           <button class="play" id="playBtn">JUGAR</button>
-          <div class="menu-row"><button class="mini-btn" id="btnGacha">Skins · Gacha</button><span class="bits-chip">Ⓑ ${SAVE.bits}</span><span class="daily-chip">${dailyText()}</span><button class="mini-btn" id="btnQuality">Calidad: ${qualityLabel()}</button></div>
-          <div class="tiles">
-            <div class="tile"><b>Temporada 1</b><small>Digimon Adventure · activa</small></div>
-            <div class="tile dis"><b>Temporada 2</b><small>Próximamente</small></div>
-          </div>
+          <div class="menu-row"><button class="mini-btn" id="btnGacha">Skins · Gacha</button><span class="bits-chip">Ⓑ ${SAVE.bits}</span><span class="daily-chip">${dailyText()}</span><button class="mini-btn" id="btnSettings">Ajustes</button></div>
         </div>
       </section>
       <section class="m-right">
@@ -971,14 +981,48 @@ function showSelect(){
   overlay.classList.add('menu-mode');
   document.getElementById('playBtn').onclick = () => showPicker('personaje');
   document.getElementById('btnGacha').onclick = () => showGacha();
-  document.getElementById('btnQuality').onclick = () => {
-    const order = ['auto', 'alta', 'baja'];
-    const next = order[(order.indexOf(qualityChoice()) + 1) % order.length];
-    localStorage.setItem('digibonk3d-quality', next);
-    location.reload();
-  };
+  document.getElementById('btnSettings').onclick = () => showSettings();
 }
 
+// Ajustes: calidad gráfica, efectos de sonido y música
+function showSettings(){
+  state = 'settings';
+  setHud(false);
+  const q = qualityChoice();
+  const seg = (v, label) => `<button class="set-seg${q === v ? ' on' : ''}" data-q="${v}">${label}</button>`;
+  showOverlay(`
+    <div class="settings">
+      <header class="set-head">
+        <button class="g-back" id="setBack">← Volver</button>
+        <h2>Ajustes</h2>
+      </header>
+      <div class="set-row">
+        <div><b>Calidad gráfica</b><small>Alta: resolución completa. Baja: para equipos antiguos. Se aplica al recargar.</small></div>
+        <div class="set-seg-wrap">${seg('auto', 'Auto')}${seg('alta', 'Alta')}${seg('baja', 'Baja')}</div>
+      </div>
+      <div class="set-row">
+        <div><b>Efectos de sonido</b><small>Golpes, cofres, subidas de nivel. También con la tecla N.</small></div>
+        <button class="set-toggle${Sfx.muted ? '' : ' on'}" id="tSfx">${Sfx.muted ? 'Silenciado' : 'Activado'}</button>
+      </div>
+      <div class="set-row">
+        <div><b>Música</b><small>Ambiente suave en los menús y en la partida.</small></div>
+        <button class="set-toggle${Music.on ? ' on' : ''}" id="tMusic">${Music.on ? 'Activada' : 'Silenciada'}</button>
+      </div>
+    </div>`);
+  document.getElementById('setBack').onclick = () => showSelect();
+  overlay.querySelectorAll('.set-seg').forEach(b => b.onclick = () => {
+    if (b.dataset.q === qualityChoice()) return;
+    localStorage.setItem('digibonk3d-quality', b.dataset.q);
+    location.reload();
+  });
+  document.getElementById('tSfx').onclick = () => { toggleMute(true); showSettings(); };
+  document.getElementById('tMusic').onclick = () => {
+    Music.on = !Music.on;
+    localStorage.setItem('digibonk3d-music', Music.on ? '1' : '0');
+    Music.on ? musicStart() : musicStop();
+    showSettings();
+  };
+}
 // Pantalla "Elige tu Digimon": pestañas Personaje y Skins, y botón para empezar
 let pickTab = 'personaje';
 function showPicker(tab){
@@ -1785,8 +1829,42 @@ function updateHUD(){
   } else bb.style.display = 'none';
 }
 
+/* ---------- Música: pad ambiental sintetizado (Web Audio, sin archivos) ---------- */
+const Music = {on: localStorage.getItem('digibonk3d-music') !== '0', nodes: null, timer: null};
+function musicStart(){
+  if (!Sfx.ctx || Music.nodes) return;
+  const c = Sfx.ctx;
+  const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 900;
+  const out = c.createGain(); out.gain.value = 0;
+  lp.connect(out); out.connect(c.destination);
+  const voices = [0, 1, 2].map(() => {
+    const o = c.createOscillator(); o.type = 'triangle';
+    const g = c.createGain(); g.gain.value = 0.05;
+    o.connect(g); g.connect(lp); o.start();
+    return o;
+  });
+  const chords = [[261.6, 329.6, 392], [220, 261.6, 329.6], [174.6, 220, 261.6], [196, 246.9, 293.7]];
+  let step = 0;
+  const setChord = () => {
+    const ch = chords[step++ % chords.length];
+    voices.forEach((o, i) => o.frequency.setTargetAtTime(ch[i], c.currentTime, 0.8));
+  };
+  setChord();
+  Music.timer = setInterval(setChord, 4000);
+  out.gain.setTargetAtTime(0.6, c.currentTime, 1.5);
+  Music.nodes = {voices, out};
+}
+function musicStop(){
+  if (!Music.nodes) return;
+  const {voices, out} = Music.nodes;
+  out.gain.setTargetAtTime(0, Sfx.ctx.currentTime, 0.4);
+  setTimeout(() => voices.forEach(o => { try { o.stop(); } catch(e){} }), 1500);
+  clearInterval(Music.timer);
+  Music.nodes = null;
+}
+
 /* ---------- Sonido: efectos sintetizados con Web Audio (sin archivos) ---------- */
-const Sfx = {ctx:null, master:null, muted:false, last:{}, noiseBuf:null};
+const Sfx = {ctx:null, master:null, muted: localStorage.getItem('digibonk3d-sfx') === '0', last:{}, noiseBuf:null};
 function audioInit(){
   if (Sfx.ctx){ if (Sfx.ctx.state === 'suspended') Sfx.ctx.resume(); return; }
   const AC = window.AudioContext || window.webkitAudioContext;
@@ -1795,6 +1873,7 @@ function audioInit(){
   Sfx.master = Sfx.ctx.createGain();
   Sfx.master.gain.value = Sfx.muted ? 0 : 0.5;
   Sfx.master.connect(Sfx.ctx.destination);
+  if (Music.on) musicStart();
   const len = Math.floor(Sfx.ctx.sampleRate * 0.5);
   Sfx.noiseBuf = Sfx.ctx.createBuffer(1, len, Sfx.ctx.sampleRate);
   const d = Sfx.noiseBuf.getChannelData(0);
@@ -1844,10 +1923,11 @@ function sfx(name){
     case 'defeat':  tone(330, .6, 'triangle', .18, 110); tone(220, .9, 'triangle', .16, 55, .3); break;
   }
 }
-function toggleMute(){
+function toggleMute(silent){
   Sfx.muted = !Sfx.muted;
+  localStorage.setItem('digibonk3d-sfx', Sfx.muted ? '0' : '1');
   if (Sfx.master) Sfx.master.gain.value = Sfx.muted ? 0 : 0.5;
-  announce(Sfx.muted ? 'Sonido desactivado' : 'Sonido activado', 'N para cambiarlo', '#7fd0ff');
+  if (!silent) announce(Sfx.muted ? 'Sonido desactivado' : 'Sonido activado', 'N para cambiarlo', '#7fd0ff');
 }
 addEventListener('pointerdown', audioInit);
 
