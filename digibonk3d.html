@@ -435,6 +435,10 @@ canvas{display:block}
 .lb-empty{padding:18px;text-align:center}
 .m3-legal{position:absolute;left:0;right:0;bottom:12px;text-align:center;font-family:system-ui,sans-serif;font-size:10px;opacity:.6;padding:0 60px}
 .m3-links{display:block;margin-top:2px}
+
+/* Fondo animado de los menús: a pantalla completa, detrás de la interfaz */
+#menubg{position:fixed;inset:0;width:100%;height:100%;z-index:0;image-rendering:pixelated;display:block}
+#overlay{z-index:1}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -442,6 +446,7 @@ canvas{display:block}
 </head>
 <body>
 <div id="vignette"></div>
+<canvas id="menubg" width="320" height="180"></canvas>
 <div id="hud"><div class="hud-card">
   <div class="hud-portrait" id="hudPortrait"><img id="pimg" alt=""><span class="hud-lvl" id="hudLvl">1</span></div>
   <div class="hud-main">
@@ -1081,6 +1086,7 @@ let selectedKey = 'gabumon';
 // Oculta/muestra el HUD de partida (el menú no debe mostrar barras ni temporizador)
 function setHud(v){
   const d = v ? '' : 'none';
+  document.getElementById('menubg').style.display = v ? 'none' : 'block';
   for (const id of ['hud', 'timer', 'xp', 'combo', 'bossbar', 'prompt', 'minimap']) document.getElementById(id).style.display = d;
   if (!v) document.getElementById('hurt').style.opacity = 0;
 }
@@ -2791,6 +2797,104 @@ function updateWater(dt){
   g.inWater = inside;
   g.lastX = p.x; g.lastZ = p.z;
 }
+
+/* ---------- Fondo animado del menú: bosque en pixel art con movimiento ---------- */
+const menuBg = {cv: null, ctx: null, t: 0, trees: [], parts: [], dig: [], img: {}};
+function menuImg(src){
+  if (!menuBg.img[src]){ const im = new Image(); im.src = src; menuBg.img[src] = im; }
+  return menuBg.img[src];
+}
+function drawSprite(c, src, x, y, w, h, flip){
+  const im = menuImg(src);
+  if (!im.complete || !im.naturalWidth) return;
+  c.save();
+  if (flip){ c.translate(x + w, y); c.scale(-1, 1); c.drawImage(im, 0, 0, w, h); }
+  else c.drawImage(im, x, y, w, h);
+  c.restore();
+}
+function initMenuBg(){
+  menuBg.cv = document.getElementById('menubg');
+  menuBg.ctx = menuBg.cv.getContext('2d');
+  menuBg.ctx.imageSmoothingEnabled = false;
+  const kinds = ['deco/arbol.png', 'deco/arbol_otono.png', 'deco/arbusto.png'];
+  for (let layer = 0; layer < 3; layer++){
+    for (let i = 0; i < 9 + layer*3; i++){
+      menuBg.trees.push({layer, x: Math.random()*340 - 10, src: 'sprites/' + kinds[(Math.random()*3)|0], ph: Math.random()*6});
+    }
+  }
+  for (let i = 0; i < 46; i++){
+    menuBg.parts.push({x: Math.random()*320, y: Math.random()*180, v: 4 + Math.random()*8, ph: Math.random()*6,
+      c: ['#9ff8ff', '#ffb3ff', '#e8ffa0'][i % 3]});
+  }
+  const cast = SEASONS.adventure.chars;
+  cast.forEach((key, i) => menuBg.dig.push({key, x: i*58 - 20, sp: (i % 2 ? 1 : -1) * (7 + i*1.3), ph: i*1.1}));
+  const loop = (now) => { drawMenuBg(); requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+  let last = performance.now();
+  menuBg.lastT = last;
+}
+function drawMenuBg(){
+  const c = menuBg.ctx, W = 320, H = 180;
+  if (!c || menuBg.cv.style.display === 'none') return;
+  const now = performance.now();
+  const dt = Math.min(0.05, (now - (menuBg.lastT || now)) / 1000);
+  menuBg.lastT = now;
+  menuBg.t += dt;
+  const t = menuBg.t;
+  // Cielo: turquesa, verde y un resplandor violeta
+  const sky = c.createLinearGradient(0, 0, 0, H);
+  sky.addColorStop(0, '#0d6b6e'); sky.addColorStop(0.45, '#2fb08a'); sky.addColorStop(0.72, '#8fdc6a'); sky.addColorStop(1, '#4fae4a');
+  c.fillStyle = sky; c.fillRect(0, 0, W, H);
+  const glow = c.createRadialGradient(250, 30, 4, 250, 30, 150);
+  glow.addColorStop(0, 'rgba(230,150,255,.45)'); glow.addColorStop(1, 'rgba(230,150,255,0)');
+  c.fillStyle = glow; c.fillRect(0, 0, W, H);
+  // Haces de luz que se desplazan
+  c.fillStyle = 'rgba(255,255,220,.10)';
+  for (let i = 0; i < 4; i++){
+    const x = ((i*95 + t*14) % 420) - 60;
+    c.beginPath(); c.moveTo(x, 0); c.lineTo(x + 26, 0); c.lineTo(x - 40, H); c.lineTo(x - 66, H); c.closePath(); c.fill();
+  }
+  // Árboles en tres capas, con viento
+  for (const tr of menuBg.trees){
+    const depth = [0.5, 0.8, 1.15][tr.layer];
+    const w = 22*depth, h = 30*depth;
+    const y = [92, 116, 146][tr.layer] - h;
+    const sway = Math.sin(t*1.3 + tr.ph) * (0.6 + tr.layer*0.6);
+    drawSprite(c, tr.src, tr.x + sway - w/2, y, w, h, false);
+  }
+  // Suelo con franjas que se mueven
+  const ground = c.createLinearGradient(0, 140, 0, H);
+  ground.addColorStop(0, '#6fd45a'); ground.addColorStop(1, '#2e8f3a');
+  c.fillStyle = ground; c.fillRect(0, 140, W, H - 140);
+  c.fillStyle = 'rgba(20,80,30,.25)';
+  for (let x = -20; x < W + 20; x += 28){ c.fillRect(((x + t*18) % (W + 40)) - 20, 146, 12, 2); c.fillRect(((x + t*12 + 9) % (W + 40)) - 20, 162, 10, 2); }
+  // Caminos luminosos que parpadean
+  c.setLineDash([5, 7]); c.lineDashOffset = -t*22;
+  c.strokeStyle = 'rgba(126,247,255,.85)'; c.lineWidth = 2;
+  c.beginPath(); c.moveTo(-5, 178); c.quadraticCurveTo(120, 150, 170, 128); c.quadraticCurveTo(230, 110, 340, 118); c.stroke();
+  c.setLineDash([]);
+  // Partículas que suben
+  for (const p of menuBg.parts){
+    p.y -= p.v*dt; p.x += Math.sin(t + p.ph)*0.15;
+    if (p.y < -4){ p.y = H + 4; p.x = Math.random()*W; }
+    c.globalAlpha = 0.55 + 0.45*Math.sin(t*2 + p.ph);
+    c.fillStyle = p.c; c.fillRect(p.x|0, p.y|0, 2, 2);
+  }
+  c.globalAlpha = 1;
+  // Digimon caminando de un lado a otro, con las skins equipadas
+  for (const d of menuBg.dig){
+    d.x += d.sp*dt;
+    if (d.x > W + 30) d.x = -30;
+    if (d.x < -30) d.x = W + 30;
+    const bob = Math.abs(Math.sin(t*6 + d.ph)) * 3;
+    drawSprite(c, spriteOf(d.key, false), d.x, 142 - bob - 26, 26, 26, d.sp < 0);
+  }
+  // Viñeta para enfocar el centro
+  const v = c.createRadialGradient(W/2, H/2, 60, W/2, H/2, 220);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,20,30,.45)');
+  c.fillStyle = v; c.fillRect(0, 0, W, H);
+}
+initMenuBg();
 
 // ---------- Bucle ----------
 let last = performance.now();
