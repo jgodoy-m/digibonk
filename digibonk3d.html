@@ -1962,7 +1962,7 @@ function showGacha(){
       </div>
       <div class="g-list">${rows}</div>
       <p class="g-note">Galáctico: 3 partidas con el Digimon · Glitch: 150 bajas con el Digimon · Cristal: gacha de Bits · Festival: juega durante el evento "${EVENT.name}".</p>
-      <p class="g-note">Efectos: Galáctico ${SKIN_FX.galactico.text} · Glitch ${SKIN_FX.glitch.text} · Cristal ${SKIN_FX.cristal.text} · Festival ${SKIN_FX.festival.text}.</p>
+      <p class="g-note">Bonus permanente por Digimon al conseguir la skin: Galáctico ${SKIN_FX.galactico.text} · Glitch ${SKIN_FX.glitch.text} · Cristal ${SKIN_FX.cristal.text} · Festival ${SKIN_FX.festival.text}.</p>
     </div>`);
   document.getElementById('gBack').onclick = () => { lastPull = null; showSelect(); };
   document.getElementById('gPull').onclick = pull;
@@ -1993,14 +1993,19 @@ function dotTex(kind, color){
   dotTexCache[k] = t;
   return t;
 }
+// Bonus permanente: cada skin conseguida da su bonus a ese Digimon, equipada o no
 function applySkinFx(key){
-  const fx = SKIN_FX[skinEquipped[key]];
-  if (!fx) return;
-  const b = fx.bonus, p = g.p;
-  if (b.speed) p.speed *= b.speed;
-  if (b.dmg) p.dmg *= b.dmg;
-  if (b.pickup) p.pickup *= b.pickup;
-  if (b.maxHp){ p.maxHp += b.maxHp; p.hp = p.maxHp; }
+  const p = g.p;
+  for (const id of ownedSkins(key)){
+    const fx = SKIN_FX[id];
+    if (!fx) continue;
+    const b = fx.bonus;
+    if (b.speed) p.speed *= b.speed;
+    if (b.dmg) p.dmg *= b.dmg;
+    if (b.pickup) p.pickup *= b.pickup;
+    if (b.maxHp){ p.maxHp += b.maxHp; }
+  }
+  p.hp = p.maxHp;
 }
 function makeAura(skinId, key){
   const fx = SKIN_FX[skinId];
