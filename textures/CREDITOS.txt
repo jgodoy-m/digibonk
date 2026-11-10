@@ -1,0 +1,7 @@
+Texturas con licencia CC0 1.0 (dominio público), descargadas de ambientCG (https://ambientcg.com):
+- hierba_cc0.jpg  <- Grass001 (1K, mapa de color)
+- tierra_cc0.jpg  <- Ground001 (1K, mapa de color)
+- camino_cc0.jpg  <- PavingStones001 (1K, mapa de color)
+
+Las demás texturas de esta carpeta (hierba.png, tierra.png, camino_piedra.png, roca.png,
+corteza.png, agua.png) están generadas por código dentro del proyecto.

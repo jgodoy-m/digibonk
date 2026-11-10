@@ -420,14 +420,15 @@ function zoneTint(x, z){
 }
 // Texturas de archivo (textures/*.png): se repiten sin costuras
 const loader = new THREE.TextureLoader();
+// Ajusta la repetición a la proporción real de la imagen para que no se deforme
 function loadTex(path, rx, ry){
-  const t = loader.load(path);
+  const t = loader.load(path, tex => tex.repeat.set(rx, ry * (tex.image.width / tex.image.height)));
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
   t.repeat.set(rx, ry);
   t.colorSpace = THREE.SRGBColorSpace;
   return t;
 }
-const floor = new THREE.Mesh(terrainGeo, new THREE.MeshStandardMaterial({map: loadTex('textures/hierba.png', 20, 20), roughness: 1, vertexColors: true}));
+const floor = new THREE.Mesh(terrainGeo, new THREE.MeshStandardMaterial({map: loadTex('textures/hierba_cc0.jpg', 20, 20), roughness: 1, vertexColors: true}));
 scene.add(floor);
 {
   const water = new THREE.Mesh(new THREE.CircleGeometry(POND.r, 40),
@@ -612,7 +613,7 @@ function buildAmbience(){
   const paths = 8;
   const pathAngles = Array.from({length: paths}, (_, i) => i/paths*Math.PI*2);
   // caminos de tierra desde la plaza hacia las montañas
-  const pathMat = new THREE.MeshBasicMaterial({color: 0xffffff, map: loadTex('textures/camino_piedra.png', 1, 5)});
+  const pathMat = new THREE.MeshBasicMaterial({color: 0xffffff, map: loadTex('textures/camino_cc0.jpg', 1, 5)});
   const L = 26 - 14;   // los caminos llegan hasta el borde llano del pueblo
   for (const a of pathAngles){
     const geo = new THREE.PlaneGeometry(2.6, L);
@@ -1258,8 +1259,9 @@ function update(dt){
     const sy = Math.sin(camYaw), cy = Math.cos(camYaw);
     const wx = mx*cy + mz*sy, wz = -mx*sy + mz*cy;
     const L = Math.hypot(wx, wz);
-    p.x += wx/L * p.speed * dt;
-    p.z += wz/L * p.speed * dt;
+    const k = waterSlow(p.x, p.z);   // dentro del estanque se camina más despacio
+    p.x += wx/L * p.speed * k * dt;
+    p.z += wz/L * p.speed * k * dt;
     g.dir = {x: wx/L, z: wz/L};
   }
   // Salto: gravedad simple
@@ -2087,6 +2089,56 @@ function applyBalance(key){
 }
 
 let frameNo = 0;
+/* ---------- Agua: chapoteo, anillos y frenado dentro del estanque ---------- */
+const waterFx = [];   // gotas y anillos: {m, vx, vy, vz, life, t, kind, r0}
+const dropGeo = new THREE.SphereGeometry(0.07, 6, 6);
+const ringGeo = new THREE.RingGeometry(0.82, 1, 32);
+function waterSlow(x, z){ return 1 - 0.4*pondWeight(x, z); }
+function splashAt(x, z, n){
+  for (let i = 0; i < n; i++){
+    const m = new THREE.Mesh(dropGeo, new THREE.MeshBasicMaterial({color: 0xdff6ff, transparent: true}));
+    m.position.set(x, POND.water + 0.05, z);
+    scene.add(m);
+    const a = Math.random()*Math.PI*2, sp = 1.5 + Math.random()*2.2;
+    waterFx.push({m, kind: 'drop', vx: Math.cos(a)*sp, vy: 3.5 + Math.random()*2.5, vz: Math.sin(a)*sp, t: 0, life: 0.6});
+  }
+}
+function addRipple(x, z, r0){
+  const m = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({color: 0xeaf8ff, transparent: true, opacity: 0.8, depthWrite: false}));
+  m.rotation.x = -Math.PI/2;
+  m.position.set(x, POND.water + 0.04, z);
+  m.scale.setScalar(r0);
+  scene.add(m);
+  waterFx.push({m, kind: 'ring', r0, t: 0, life: 0.8});
+}
+function updateWater(dt){
+  for (let i = waterFx.length - 1; i >= 0; i--){
+    const f = waterFx[i];
+    f.t += dt;
+    if (f.kind === 'drop'){
+      f.vy -= 14*dt;
+      f.m.position.x += f.vx*dt; f.m.position.z += f.vz*dt; f.m.position.y += f.vy*dt;
+      f.m.material.opacity = Math.max(0, 1 - f.t/f.life);
+    } else {
+      const sc = f.r0 + f.t*1.9;
+      f.m.scale.setScalar(sc);
+      f.m.material.opacity = 0.8*Math.max(0, 1 - f.t/f.life);
+    }
+    if (f.t >= f.life){ scene.remove(f.m); waterFx.splice(i, 1); }
+  }
+  if (!g || state !== 'play') return;
+  const p = g.p;
+  const inside = pondWeight(p.x, p.z) > 0.6;
+  if (inside && !g.inWater) splashAt(p.x, p.z, 14);              // entrada: salpicadura
+  const moved = g.lastX !== undefined && Math.hypot(p.x - g.lastX, p.z - g.lastZ) > 0.01;
+  if (inside && moved){                                          // al andar: anillos y gotas
+    g.wakeT = (g.wakeT || 0) - dt;
+    if (g.wakeT <= 0){ addRipple(p.x, p.z, 0.6); splashAt(p.x, p.z, 2); g.wakeT = 0.3; }
+  }
+  g.inWater = inside;
+  g.lastX = p.x; g.lastZ = p.z;
+}
+
 // ---------- Bucle ----------
 let last = performance.now();
 function frame(now){
@@ -2101,6 +2153,7 @@ function frame(now){
   }
   animateEvo(dt);
   updateFx(dt);
+  updateWater(dt);
   hurtT = Math.max(0, hurtT - dt);
   document.getElementById('hurt').style.opacity = (hurtT / 0.45) * 0.85;
   for (const n of npcs) n.sprite.position.y = n.base + Math.sin(now*0.003 + n.ph)*0.08;   // habitantes respiran
