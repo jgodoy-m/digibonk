@@ -339,6 +339,36 @@ canvas{display:block}
 @keyframes rwIn{from{opacity:0;transform:translateY(24px) scale(.6) rotate(-6deg)}to{opacity:1;transform:none}}
 @keyframes rwPulse{50%{box-shadow:0 0 30px rgba(255,213,79,1)}}
 .pr-ok{padding:14px 40px;font-size:18px}
+
+/* Icono de Digivice en el botón de gacha */
+.dv-ico{display:inline-block;width:14px;height:18px;border-radius:5px;vertical-align:middle;margin-right:7px;
+  background:radial-gradient(circle at 40% 35%,#dff6ff,#4fc3f7 45%,#0b4f8a);border:2px solid #cfeaff;box-shadow:0 0 6px #4fc3f7}
+/* Menú Jugador */
+.pl-body{flex:1;overflow:auto;min-height:0}
+.pl-profile{display:flex;gap:16px;align-items:center;margin-bottom:12px}
+.pl-av{width:96px;height:96px;display:grid;place-items:center}
+.pl-av img{width:72px;height:72px;image-rendering:pixelated}
+.pl-name{font-size:22px;font-weight:900;color:#ffd54f}
+.pl-title{font-size:14px;color:#bfe9ff}
+.pl-frame{font-size:12px;color:#9fd4ff}
+.pl-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pl-stats div{text-align:center;padding:10px 4px;border-radius:12px;background:rgba(8,20,40,.9);border:1px solid #2d5f78}
+.pl-stats b{display:block;font-size:20px;color:#ffd54f}
+.pl-stats small{font-size:11px;color:#9fd4ff}
+.pl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.pl-tile{padding:10px 6px;border-radius:14px;border:2px solid #2d5f78;background:rgba(8,20,40,.9);color:#cfe8ff;cursor:pointer;text-align:center;font-size:12px}
+.pl-tile.locked{opacity:.4;cursor:default}
+.pl-tile.eq{border-color:#ffd54f;box-shadow:0 0 10px rgba(255,213,79,.5)}
+.dg-row{display:flex;align-items:center;gap:14px;padding:8px;margin-bottom:8px;border-radius:14px;background:rgba(8,20,40,.9);border:1px solid #2d5f78}
+.dg-chars{display:flex;gap:10px}
+.dg-cell{width:82px;text-align:center;font-size:11px;color:#cfe8ff}
+.dg-cell img{width:56px;height:56px;image-rendering:pixelated;display:block;margin:0 auto}
+.dg-cell.locked img{filter:brightness(0);opacity:.6}
+.dg-skins{display:flex;flex-wrap:wrap;gap:6px}
+.dg-skin{width:46px;height:46px;border-radius:10px;border:2px solid #2d5f78;background:rgba(8,20,40,.9);padding:2px;cursor:pointer}
+.dg-skin img{width:36px;height:36px;image-rendering:pixelated}
+.dg-skin.locked img{filter:brightness(0);opacity:.5}
+.dg-skin.eq{border-color:#ffd54f;box-shadow:0 0 8px rgba(255,213,79,.6)}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -829,7 +859,7 @@ addEventListener('keydown', e => {
   if (k === 'n'){ toggleMute(); return; }
   if (k === 'm'){ if (state === 'play') openMap(); else if (state === 'map') closeMap(); return; }
   if (state === 'map'){ if (k === 'escape') closeMap(); return; }
-  if (state === 'gacha' || state === 'settings'){ if (k === 'escape') showSelect(); return; }
+  if (state === 'gacha' || state === 'settings' || state === 'player'){ if (k === 'escape') showSelect(); return; }
   // Esc o P pausan y reanudan. Con el ratón bloqueado el navegador puede no entregar Esc:
   // en ese caso la pausa la dispara pointerlockchange (ver más abajo). P sirve en pantalla completa.
   if (k === 'escape' || k === 'p'){
@@ -1009,7 +1039,7 @@ function showSelect(){
           <div class="logo"><span>DIGI</span>BONK<em> 3D</em></div>
           <div class="sub">Digimon Adventure</div>
           <button class="play" id="playBtn">JUGAR</button>
-          <div class="menu-row"><button class="mini-btn" id="btnGacha">Skins · Gacha</button><span class="bits-chip">Ⓑ ${SAVE.bits}</span><span class="daily-chip">${dailyText()}</span><button class="mini-btn" id="btnSettings">Ajustes</button></div>
+          <div class="menu-row"><button class="mini-btn gacha-btn" id="btnGacha"><i class="dv-ico"></i>Gacha</button><button class="mini-btn" id="btnPlayer">Jugador</button><span class="bits-chip">Ⓑ ${SAVE.bits}</span><span class="daily-chip">${dailyText()}</span><button class="mini-btn" id="btnSettings">Ajustes</button></div>
         </div>
       </section>
       <section class="m-right">
@@ -1034,6 +1064,7 @@ function showSelect(){
   overlay.classList.add('menu-mode');
   document.getElementById('playBtn').onclick = () => showPicker('personaje');
   document.getElementById('btnGacha').onclick = () => showGacha();
+  document.getElementById('btnPlayer').onclick = () => showPlayer('perfil');
   document.getElementById('btnSettings').onclick = () => showSettings();
 }
 
@@ -1280,6 +1311,7 @@ function digivolve(){
   const evo = EVO[g.ch.id];
   if (!evo || g.ch.evolved) return;
   g.ch.evolved = true;
+  recordEvolve(g.ch.id);
   g.p.dmg *= 1.5;
   g.p.count += 1;
   g.evoAnim = {t: 0, dur: 2.6, swapped: false, sprite: spriteOf(g.ch.id, true), name: evo.name};
@@ -2198,6 +2230,100 @@ function spriteWith(key, evolved, skinId){
 }
 function spriteOf(key, evolved){ return spriteWith(key, evolved, skinEquipped[key]); }
 
+/* ---------- Menú Jugador: perfil, Digimon desbloqueados, skins, marcos y títulos ---------- */
+// Un Digimon queda desbloqueado en su forma evolucionada al digievolucionar una vez
+function recordEvolve(key){
+  const e = loadJSON('digibonk3d-evo', {});
+  if (!e[key]){ e[key] = true; localStorage.setItem('digibonk3d-evo', JSON.stringify(e)); }
+}
+function evolvedUnlocked(key){ return !!loadJSON('digibonk3d-evo', {})[key]; }
+let plTab = 'perfil';
+function showPlayer(tab){
+  if (tab) plTab = tab;
+  state = 'player';
+  setHud(false);
+  const tabs = [['perfil', 'Perfil'], ['digimon', 'Digimon'], ['marcos', 'Marcos'], ['titulos', 'Títulos']];
+  const tabHtml = tabs.map(([k, l]) => `<button class="pk-tab${plTab === k ? ' on' : ''}" data-tab="${k}">${l}</button>`).join('');
+  const fr = extra.frame ? FRAMES.find(f => f.id === extra.frame) : null;
+  const tt = extra.title ? TITLES.find(t => t.id === extra.title) : null;
+  let body = '';
+  if (plTab === 'perfil'){
+    const st = loadJSON('digibonk3d-stats', {});
+    const plays = Object.values(st).reduce((a, x) => a + (x.plays || 0), 0);
+    const kills = Object.values(st).reduce((a, x) => a + (x.kills || 0), 0);
+    const evos = Object.keys(loadJSON('digibonk3d-evo', {})).length;
+    body = `
+      <div class="pl-profile">
+        <div class="hud-portrait pl-av${fr ? ' fr-' + fr.id : ''}"><img src="${spriteOf(selectedKey, false)}" alt=""></div>
+        <div>
+          <div class="pl-name">Entrenador</div>
+          <div class="pl-title">${tt ? tt.name : 'Sin título'}</div>
+          <div class="pl-frame">${fr ? fr.name : 'Sin marco'}</div>
+        </div>
+      </div>
+      <div class="pl-stats">
+        <div><b>${plays}</b><small>Partidas</small></div>
+        <div><b>${kills}</b><small>Bajas totales</small></div>
+        <div><b>${evos}</b><small>Evoluciones</small></div>
+        <div><b>${SAVE.bits}</b><small>Bits</small></div>
+      </div>
+      <p class="g-note">El marco y el título que elijas se ven en el HUD durante la partida.</p>`;
+  } else if (plTab === 'digimon'){
+    body = SEASONS.adventure.chars.map(key => {
+      const evoOk = evolvedUnlocked(key);
+      const skins = SKINS.filter(sk => sk.id !== 'clasico').map(sk => {
+        const has = ownedSkins(key).includes(sk.id), eq = (skinEquipped[key] || 'clasico') === sk.id;
+        return `<button class="dg-skin${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}" data-key="${key}" data-skin="${sk.id}" ${has ? '' : 'disabled'} title="${has ? sk.name : sk.desc || '???'}">
+          <img src="${spriteWith(key, false, sk.id)}" alt=""></button>`;
+      }).join('');
+      return `<div class="dg-row">
+        <div class="dg-chars">
+          <div class="dg-cell owned"><img src="${CHARS[key].sprite}" alt=""><small>${CHARS[key].name}</small></div>
+          <div class="dg-cell${evoOk ? ' owned' : ' locked'}"><img src="${EVO[key].sprite}" alt=""><small>${evoOk ? EVO[key].name : '???'}</small></div>
+        </div>
+        <div class="dg-skins">${skins}</div>
+      </div>`;
+    }).join('');
+    body += '<p class="g-note">La forma evolucionada se desbloquea al digievolucionar una vez. Pulsa una skin para equiparla a ese Digimon.</p>';
+  } else if (plTab === 'marcos'){
+    body = `<div class="pl-grid">
+      <button class="pl-tile${!extra.frame ? ' eq' : ''} owned" data-kind="frame" data-id=""><small>Ninguno</small></button>
+      ${FRAMES.map(f => {
+        const has = inv.frames.includes(f.id), eq = extra.frame === f.id;
+        return `<button class="pl-tile${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}" data-kind="frame" data-id="${f.id}" ${has ? '' : 'disabled'}>
+          <div class="rw-frame fr-${f.id}"></div><small>${has ? f.name : '???'}</small></button>`;
+      }).join('')}</div>`;
+  } else {
+    body = `<div class="pl-grid">
+      <button class="pl-tile${!extra.title ? ' eq' : ''} owned" data-kind="title" data-id=""><small>Ninguno</small></button>
+      ${TITLES.map(t => {
+        const has = inv.titles.includes(t.id), eq = extra.title === t.id;
+        return `<button class="pl-tile${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}" data-kind="title" data-id="${t.id}" ${has ? '' : 'disabled'}>
+          <div class="rw-title">🏅</div><small>${has ? t.name : '???'}</small></button>`;
+      }).join('')}</div>`;
+  }
+  showOverlay(`
+    <div class="picker-screen player-screen">
+      <header class="pk-head">
+        <button class="g-back" id="plBack">← Volver</button>
+        <h2>Jugador</h2>
+        <div class="pk-tabs">${tabHtml}</div>
+      </header>
+      <div class="pl-body">${body}</div>
+    </div>`);
+  overlay.querySelectorAll('.pk-tab').forEach(b => b.onclick = () => showPlayer(b.dataset.tab));
+  document.getElementById('plBack').onclick = () => showSelect();
+  overlay.querySelectorAll('.pl-tile.owned').forEach(b => b.onclick = () => {
+    if (!b.dataset.id) unequipExtra(b.dataset.kind);
+    else equipExtra(b.dataset.kind, b.dataset.id);
+    showPlayer();
+  });
+  overlay.querySelectorAll('.dg-skin.owned').forEach(b => b.onclick = () => {
+    equipSkin(b.dataset.key, b.dataset.skin);
+    showPlayer();
+  });
+}
+
 /* ---------- Gacha: skins, marcos, títulos y objetos ---------- */
 // Catálogo de recompensas (lo que sale en las tiradas, además de las skins)
 const FRAMES = [
@@ -2402,12 +2528,9 @@ function showGacha(){
       </div>
       <p class="g-odds">Puede salir una skin, un marco, un título o un objeto. Los repetidos se convierten en Bits.</p>
       <h3 class="g-sec">Colección</h3>
-      <div class="col-sec"><div class="col-label">Marcos del icono</div><div class="col-grid">${frameTiles}</div></div>
-      <div class="col-sec"><div class="col-label">Títulos</div><div class="col-grid">${titleTiles}</div></div>
+      <p class="g-note">Marcos y títulos: en el menú Jugador.</p>
       <div class="col-sec"><div class="col-label">Objetos (se gastan al empezar la partida)</div><div class="col-grid">${itemTiles}</div></div>
       <div class="col-equip">
-        <span>Marco: <b>${extra.frame ? FRAMES.find(f => f.id === extra.frame).name : 'ninguno'}</b></span>
-        <span>Título: <b>${extra.title ? TITLES.find(t => t.id === extra.title).name : 'ninguno'}</b></span>
         <span>Objeto para la próxima partida: <b>${extra.item ? ITEMS.find(i => i.id === extra.item).name : 'ninguno'}</b></span>
       </div>
       <h3 class="g-sec">Skins</h3>
