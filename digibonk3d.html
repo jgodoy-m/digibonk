@@ -1391,13 +1391,13 @@ const CHARS = {
 const EVO_LEVELS = [8, 15, 22];
 const EVO_LEVEL = EVO_LEVELS[0];
 const EVO_LINE = {
-  agumon:   [{name:'Greymon',     sprite:'sprites/greymon.png'},   {name:'MetalGreymon',    sprite:'sprites/adventure/metalgreymon.png'},    {name:'WarGreymon',     sprite:'sprites/adventure/wargreymon.png'}],
-  gabumon:  [{name:'Garurumon',   sprite:'sprites/garurumon.png'}, {name:'WereGarurumon',   sprite:'sprites/adventure/weregarurumon.png'},   {name:'MetalGarurumon', sprite:'sprites/adventure/metalgarurumon.png'}],
-  palmon:   [{name:'Togemon',     sprite:'sprites/togemon.png'},   {name:'Lillymon',        sprite:'sprites/adventure/lillymon.png'}],
-  gatomon:  [{name:'Angewomon',   sprite:'sprites/angewomon.png'}],
-  gomamon:  [{name:'Ikkakumon',   sprite:'sprites/ikkakumon.png'}, {name:'Zudomon',         sprite:'sprites/adventure/zudomon.png'}],
-  patamon:  [{name:'Angemon',     sprite:'sprites/angemon.png'},   {name:'MagnaAngemon',    sprite:'sprites/adventure/magnaangemon.png'}],
-  biyomon:  [{name:'Birdramon',   sprite:'sprites/birdramon.png'}, {name:'Garudamon',       sprite:'sprites/adventure/garudamon.png'}],
+  agumon:   [{name:'Greymon',     sprite:'sprites/adventure/greymon.png'},   {name:'MetalGreymon',    sprite:'sprites/adventure/metalgreymon.png'},    {name:'WarGreymon',     sprite:'sprites/adventure/wargreymon.png'}],
+  gabumon:  [{name:'Garurumon',   sprite:'sprites/adventure/garurumon.png'}, {name:'WereGarurumon',   sprite:'sprites/adventure/weregarurumon.png'},   {name:'MetalGarurumon', sprite:'sprites/adventure/metalgarurumon.png'}],
+  palmon:   [{name:'Togemon',     sprite:'sprites/adventure/togemon.png'},   {name:'Lillymon',        sprite:'sprites/adventure/lillymon.png'}],
+  gatomon:  [{name:'Angewomon',   sprite:'sprites/adventure/angewomon.png'}],
+  gomamon:  [{name:'Ikkakumon',   sprite:'sprites/adventure/ikkakumon.png'}, {name:'Zudomon',         sprite:'sprites/adventure/zudomon.png'}],
+  patamon:  [{name:'Angemon',     sprite:'sprites/adventure/angemon.png'},   {name:'MagnaAngemon',    sprite:'sprites/adventure/magnaangemon.png'}],
+  biyomon:  [{name:'Birdramon',   sprite:'sprites/adventure/birdramon.png'}, {name:'Garudamon',       sprite:'sprites/adventure/garudamon.png'}],
   tentomon: [{name:'Kabuterimon', sprite:'sprites/adventure/kabuterimon.png'},    {name:'MegaKabuterimon', sprite:'sprites/adventure/megakabuterimon.png'}]
 };
 // Primera etapa de cada línea (colección y menús)
@@ -2587,7 +2587,7 @@ function renderPickPreview(){
         <h3>Evolución</h3>
         <div class="pv-evo">
           <div class="pv-node">${sprEl(spriteOf(k, false), 64)}<small>${c.name}</small></div>
-          ${EVO_LINE[k].map((e, i) => `<div class="pv-arrow">Nv ${EVO_LEVELS[i]} ➜</div><div class="pv-node">${sprEl(e.sprite, 64)}<small>${e.name}</small></div>`).join('')}
+          ${EVO_LINE[k].map((e, i) => `<div class="pv-arrow">Nv ${EVO_LEVELS[i]} ➜</div><div class="pv-node"><img class="spr" style="--s:64px" src="${e.sprite}" alt=""><small>${e.name}</small></div>`).join('')}
         </div>
         <p class="pk2-note">Cada etapa: +20% daño, +5% área y +20 PS · solo durante la partida</p>
       </div>
