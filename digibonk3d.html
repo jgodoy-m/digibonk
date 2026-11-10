@@ -1119,6 +1119,157 @@ canvas{display:block}
 .cl4-card.ok{border-color:#4fc3f7}
 .cl4-card.locked{opacity:.5}
 .cl4-card small{font-size:10px;color:#9ad3e8}
+
+/* DIGIBONK — Pixel World: hub totalmente reconstruido. No afecta al motor del juego. */
+body:has(#overlay.menu-mode) #menubg{opacity:0}
+#overlay.menu-mode{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.dw-hub{position:fixed;inset:0;isolation:isolate;overflow:hidden;color:#fff;font-family:system-ui,Arial,sans-serif;--dw-border:#9fefff;--dw-navy:#081b4a}
+.dw-landscape{position:absolute;inset:0;background:#217eb5 url('ui/digital_world_hub_hd.png') center center/100% 100% no-repeat;image-rendering:pixelated;z-index:-3;transform:scale(1.015);animation:dwScene 16s ease-in-out infinite alternate}
+@keyframes dwScene{to{transform:scale(1.055) translateY(-1%)}}
+.dw-clouds{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 53% 15%,#d2f8ff44,transparent 39%),linear-gradient(90deg,#0b276f20,transparent 36%,transparent 67%,#091b5d35);z-index:-2}
+.dw-sparkles{position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.68;background-image:radial-gradient(circle,#fff 1px,transparent 2px),radial-gradient(circle,#afffff 1px,transparent 2px);background-size:137px 109px,91px 163px;background-position:0 0,39px 71px;animation:dwShine 11s linear infinite}
+@keyframes dwShine{to{background-position:137px 109px,-52px -92px}}
+.dw-topnav{position:absolute;top:10px;left:2%;display:flex;gap:7px;z-index:5;max-width:51%;white-space:nowrap}
+.dw-top-pill{display:inline-flex;padding:5px 11px;border:2px solid #b8fbff;border-radius:8px;background:linear-gradient(#36aeb9,#074b7c);font:900 11px 'Orbitron',system-ui,sans-serif;text-shadow:0 2px #12366b;box-shadow:0 3px #09366b}
+.dw-top-pill.dw-green{background:linear-gradient(#69cc43,#1a7a53);border-color:#b9fdb1}.dw-top-pill.dw-orange{background:linear-gradient(#ffbe54,#dc632a);border-color:#ffec96}.dw-top-pill.dw-blue{background:linear-gradient(#4bacfc,#125eaa)}
+.dw-left{position:absolute;left:2%;top:10%;bottom:7%;width:30%;max-width:495px;display:flex;flex-direction:column;gap:11px;z-index:5}
+.dw-logo{display:block;flex:none;font:italic 900 clamp(42px,5.2vw,83px)/1 'Orbitron',system-ui,sans-serif;letter-spacing:-3px;white-space:nowrap;color:#fff;text-shadow:-2px -2px #83ebff,3px 4px #155cca,6px 8px #061d65,0 0 15px #03bcfa;filter:drop-shadow(1px 3px 1px #041336)}
+.dw-logo>span{color:#ffb41d;text-shadow:-2px -2px #ffe7a0,3px 4px #e45d21,6px 8px #09266d}
+.dw-logo>div{margin-top:8px;padding-left:10px;color:#d4faff;font:900 11px 'Orbitron',system-ui,sans-serif;letter-spacing:4px;text-shadow:1px 2px #0b2a60}
+.dw-enter{position:relative;display:flex;align-items:center;gap:12px;width:100%;min-height:110px;padding:12px 15px;border-radius:13px;border:4px solid #ffe7a1;color:#fff;text-align:left;cursor:pointer;background:linear-gradient(165deg,#ffe66e,#ffa52c 38%,#f54430 70%,#aa242c);box-shadow:0 6px 0 #8a1e29,0 0 0 2px #f73e2b,0 0 28px #ffb33599;transform:skewX(-3deg);transition:transform .15s,filter .15s}
+.dw-enter:hover{transform:skewX(-3deg) translateY(-5px);filter:brightness(1.15)}
+.dw-enter:active{transform:skewX(-3deg) translateY(3px)}
+.dw-enter .dw-playicon{display:grid;place-items:center;flex:none;width:58px;height:58px;border:4px solid #fff3e9;border-radius:50%;background:#9a2931;box-shadow:inset 0 0 0 4px #d53e37,0 3px #63222b;font-size:31px;color:#fff}
+.dw-enter b{display:block;font:italic 900 clamp(25px,2.75vw,44px) 'Orbitron',system-ui,sans-serif;letter-spacing:-1px;text-shadow:2px 3px #8c2725}
+.dw-enter small{display:block;font-size:12px;font-weight:800;color:#fff9ee;text-shadow:1px 2px #8c2829}
+.dw-enter-device{margin-left:auto;font-size:45px;color:#dafdff;filter:drop-shadow(2px 3px #0b5699)}
+.dw-event,.dw-news{display:flex;align-items:center;min-height:63px;gap:10px;box-sizing:border-box;border-radius:9px;color:#fff;box-shadow:0 4px #081f65,0 0 13px #3c79bd77}
+.dw-event{background:linear-gradient(95deg,#6422afef,#aa43b4ee,#3a3a8bed);border:3px solid #f8b7ff;padding:8px 11px;}
+.dw-event-ico{font-size:27px;color:#ffe66a}.dw-event strong{display:block;color:#ffdc6f;font-weight:900;font-size:15px;text-shadow:1px 2px #45134b}.dw-event small{display:block;color:#f4eaff;font-size:11px}.dw-gift{margin-left:auto;font-size:30px;color:#ffd157}
+.dw-news{display:block;background:linear-gradient(110deg,#184da6ed,#0989b3eb);border:2px solid #9cf3ff;padding:10px 14px;min-height:66px}
+.dw-news .m4-nk{font-size:10px;font-weight:900;color:#ffed7b;letter-spacing:2px}.dw-news>b{display:block;font-size:13px}.dw-news small{font-size:11px;color:#ddf8ff}.dw-news .m4-dots{margin-top:5px}
+.dw-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;grid-auto-rows:minmax(73px,1fr);flex:1;min-height:0;align-content:start}
+.dw-tiles .m4-item{height:auto!important;min-height:72px;width:100%;display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:center;text-align:center;padding:6px 3px;background:linear-gradient(155deg,#2eabde,#175ba7 42%,#0a2e79)!important;border:3px solid #a9edff!important;border-radius:10px!important;clip-path:none!important;box-shadow:inset 0 2px #e2ffff83,0 4px 0 #081e60,0 0 12px #2edfff44;transform:none!important;transition:transform .15s,filter .15s}
+.dw-tiles .m4-item:hover{transform:translateY(-4px)!important;filter:brightness(1.3)}
+.dw-tiles .m4-ic{width:auto;font-size:25px;line-height:1.0;color:#ffe991;text-shadow:1px 2px #0d316e}
+.dw-tiles .m4-tx b{font-size:clamp(10px,1.1vw,15px);letter-spacing:0;font-style:normal}.dw-tiles .m4-tx small{display:none}
+.dw-center{position:absolute;left:34%;right:26%;top:17%;bottom:8%;z-index:2;pointer-events:none}
+.dw-portal-aura{position:absolute;left:10%;right:10%;top:5%;bottom:19%;border-radius:45%;background:radial-gradient(ellipse at 50% 58%,#8efaff22,transparent 59%);animation:dwGlow 3s ease-in-out infinite alternate}
+@keyframes dwGlow{to{filter:brightness(1.4)}}
+.dw-portal-data{position:absolute;left:15%;right:15%;top:5%;bottom:13%;background:repeating-linear-gradient(180deg,transparent 0 20px,#78f8ff12 22px,transparent 25px);mix-blend-mode:screen}
+.dw-character{position:absolute;left:50%;bottom:8%;transform:translateX(-50%);display:flex;align-items:center;flex-direction:column;filter:drop-shadow(0 10px 3px #052157bb)}
+.dw-character .anim{width:clamp(165px,18vw,285px);height:clamp(165px,18vw,285px);animation:animIdle .8s steps(1) infinite,pvBob 2.4s ease-in-out infinite}
+.dw-char-label{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:-8px;text-shadow:1px 2px #052a66}
+.dw-char-label small{font-size:10px;letter-spacing:2px;font-weight:900;color:#b2faff;text-transform:uppercase}
+.dw-char-label strong{font:900 16px 'Orbitron',system-ui,sans-serif;color:#fff;background:#082e76dd;border:2px solid #94f7ff;border-radius:7px;padding:6px 18px;box-shadow:0 3px #09235d}
+.dw-companion{position:absolute;width:clamp(75px,8vw,135px);height:clamp(75px,8vw,135px);filter:drop-shadow(2px 5px 1px #0b265b);animation:dwPetBob 3s ease-in-out infinite alternate}
+.dw-companion .anim{width:100%;height:100%}.dw-friend-one{bottom:20%;left:-6%;animation-delay:.4s}.dw-friend-two{bottom:22%;right:-4%;animation-delay:.9s}.dw-friend-three{bottom:4%;right:3%;animation-delay:1.3s}
+@keyframes dwPetBob{to{transform:translateY(-8px)}}
+.dw-right{position:absolute;right:1.5%;top:12%;bottom:7%;width:24%;max-width:375px;display:flex;flex-direction:column;gap:10px;z-index:5}
+.dw-board,.dw-daily-panel,.dw-stats-panel{display:flex;flex-direction:column;overflow:hidden;min-height:0;background:linear-gradient(165deg,#174b99f5,#0b2b6bf7 60%,#071c51f7);border:3px solid #a7f8ff;border-radius:13px;box-shadow:0 5px #072054,0 0 17px #37d8fc99}
+.dw-board{flex:1.25}.dw-daily-panel{flex:.6}.dw-stats-panel{flex:.75}
+.dw-panel-title{display:flex;align-items:center;gap:8px;background:linear-gradient(180deg,#61eff7,#1f9bca 65%,#0961a7);border-bottom:2px solid #b6fcff;padding:10px 12px;color:#052451;text-shadow:0 1px #d7ffff;font:900 clamp(12px,1.15vw,17px) 'Orbitron',system-ui,sans-serif;text-transform:uppercase}
+.dw-panel-title span{font-size:20px}
+.dw-board-tabs{display:flex;justify-content:space-around;gap:5px;margin:10px 10px 2px;padding:5px 7px;border-radius:18px;background:#071a46;border:1px solid #6bbedf;color:#d3f9ff;font-size:11px;font-weight:900}
+.dw-board-tabs span:first-child{background:linear-gradient(#49d6f8,#137ebc);color:#fff;border-radius:15px;padding:3px 10px}
+.dw-board-list{flex:1;overflow:auto;padding:7px 9px}.dw-board-list .lb-row{grid-template-columns:23px 1fr auto;font-size:12px;background:linear-gradient(#1c5798,#113676);border:1px solid #4fa8d9;margin-bottom:6px;padding:8px 6px}.dw-board-list .lb-row.top{border-color:#ffcf64;background:linear-gradient(#715477,#1a4480)}.dw-board-list .lb-n{color:#ffde6e}.dw-board-list .lb-val small{font-size:9px}
+.dw-board-foot{margin:6px 11px 10px;padding:7px 12px;border:2px solid #9df5ff;border-radius:18px;background:linear-gradient(#248cdc,#1057b1);text-align:center;font-size:11px;font-weight:900}
+.dw-no-record{padding:18px 5px;font-size:13px;text-align:center;color:#d2faff}
+.dw-daily-body{padding:11px 12px;font-weight:800;font-size:12px;color:#e2ffff}.dw-daily-body small{display:block;text-align:right;color:#ffde77;margin-top:4px}
+.dw-progress{height:12px;overflow:hidden;border:2px solid #74dbeb;border-radius:12px;background:#0b1a4f;margin-top:10px}.dw-progress i{display:block;height:100%;background:linear-gradient(90deg,#ffc531,#ffeb71)}
+.dw-stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:9px}.dw-stats-grid div{padding:7px 5px;background:linear-gradient(#21549a,#0a316f);border:1px solid #448eb6;text-align:center}.dw-stats-grid b{display:block;font:900 clamp(12px,1.35vw,20px) 'Orbitron',system-ui,sans-serif;color:#ffea8c}.dw-stats-grid small{font-size:10px;color:#d9f7ff}
+.dw-footer{position:absolute;bottom:4px;left:2%;right:2%;font-size:9px;text-align:center;color:#e1ffff;text-shadow:1px 1px #09294c;z-index:5}
+#topbar:has(~ #overlay.menu-mode){height:49px;background:linear-gradient(180deg,#123d86ed,#0c367ecc);border-bottom:1px solid #a7f6ff;z-index:10}
+@media(max-width:1090px){.dw-left{width:31%}.dw-right{width:26%}.dw-center{left:34%;right:27%}.dw-enter b{font-size:25px}.dw-enter .dw-playicon{width:42px;height:42px}.dw-enter-device{display:none}.dw-topnav{display:none}.dw-logo{font-size:43px}}
+@media(max-width:760px){.dw-hub{overflow-y:auto}.dw-left{top:67px;left:4%;right:4%;bottom:auto;width:92%;max-width:none;gap:7px}.dw-logo{font-size:46px}.dw-enter{min-height:80px}.dw-event,.dw-news{display:none}.dw-tiles{grid-template-columns:repeat(5,1fr);grid-auto-rows:64px;flex:none}.dw-tiles .m4-item{min-height:60px}.dw-tiles .m4-ic{font-size:20px}.dw-tiles .m4-tx b{font-size:9px}.dw-center{top:38%;bottom:1%;left:14%;right:14%}.dw-character{bottom:7%}.dw-character .anim{height:160px;width:160px}.dw-companion{width:70px;height:70px}.dw-right{display:none}.dw-footer{display:none}.dw-landscape{background-size:auto 100%}}
+@media(prefers-reduced-motion:reduce){.dw-sparkles,.dw-landscape,.dw-companion{animation:none}}
+
+
+/* Coherencia visual: todas las ventanas del juego comparten ahora el lenguaje del hub. */
+#overlay:not(.menu-mode) .picker-screen,#overlay:not(.menu-mode) .gacha,#overlay:not(.menu-mode) .settings,#overlay:not(.menu-mode) .help-box,#overlay:not(.menu-mode) .player-screen{
+ border:3px solid #97f5ff!important;border-radius:15px!important;background:linear-gradient(160deg,#2264bbf7,#0d377ceF 42%,#071b4ef9)!important;box-shadow:0 9px 0 #071c50,0 0 45px #31c8ff80,inset 0 1px #ddffff8a!important;color:#f1ffff!important;
+}
+#overlay:not(.menu-mode) .pk-head,#overlay:not(.menu-mode) .g-head,#overlay:not(.menu-mode) .set-head,#overlay:not(.menu-mode) .m3-board header,#overlay:not(.menu-mode) .pl-head{
+ background:linear-gradient(180deg,#74eef7,#1cadd6 68%,#0965ae)!important;border:2px solid #c3fdff!important;border-radius:10px!important;color:#06234b!important;padding:11px 14px!important;box-shadow:0 3px #0b3976!important;
+}
+#overlay:not(.menu-mode) .pk-head h2,#overlay:not(.menu-mode) .g-head h2,#overlay:not(.menu-mode) .set-head h2{color:#07315c!important;text-shadow:0 1px #d5ffff!important}
+#overlay:not(.menu-mode) .pk-card,#overlay:not(.menu-mode) .g-skin,#overlay:not(.menu-mode) .col-tile,#overlay:not(.menu-mode) .pl-tile,#overlay:not(.menu-mode) .cl-cell,#overlay:not(.menu-mode) .dg-row{
+ background:linear-gradient(155deg,#2367ae,#0a275c)!important;border:2px solid #65c9ef!important;border-radius:9px!important;box-shadow:0 3px #081f55!important;transition:transform .13s,filter .13s;
+}
+#overlay:not(.menu-mode) .pk-card:hover,#overlay:not(.menu-mode) .g-skin:hover,#overlay:not(.menu-mode) .col-tile:not(.locked):hover,#overlay:not(.menu-mode) .pl-tile:not(.locked):hover{filter:brightness(1.24);transform:translateY(-3px)}
+#overlay:not(.menu-mode) .pk-card.sel,#overlay:not(.menu-mode) .g-skin.eq,#overlay:not(.menu-mode) .col-tile.eq,#overlay:not(.menu-mode) .pl-tile.eq{border-color:#ffe47b!important;box-shadow:0 0 17px #ffc7429c!important}
+#overlay:not(.menu-mode) .play,#overlay:not(.menu-mode) .pk-start,#overlay:not(.menu-mode) .g-btn,#overlay:not(.menu-mode) .pull-btn,#overlay:not(.menu-mode) .pr-ok{
+ background:linear-gradient(180deg,#ffe77d,#ffb22c 35%,#fa732d 85%,#cb3d29)!important;color:#fff!important;border:3px solid #fff0b2!important;border-radius:12px!important;text-shadow:1px 2px #963524!important;box-shadow:0 5px 0 #85312e!important;
+}
+#overlay:not(.menu-mode) .pk-tab.on,#overlay:not(.menu-mode) .set-seg.on{background:linear-gradient(#ffe784,#ffad37)!important;color:#372000!important;border-color:#fff0bd!important}
+#overlay:not(.menu-mode) .pk-right,#overlay:not(.menu-mode) .g-result,#overlay:not(.menu-mode) .g-pull{background:#071b4bcf!important;border:2px solid #4ccff2!important;border-radius:12px!important}
+
+
+/* DIGITAL WORLD HUB / ART PASS — no gameplay changes. */
+.dw-hub{--edge:#97faff;--blue:#09346f;--gold:#ffd052;font-family:system-ui,Arial,sans-serif;}
+.dw-landscape{background-size:cover;background-position:center;transform:none!important;animation:none!important;image-rendering:auto}
+.dw-clouds{background:linear-gradient(90deg,rgba(7,29,88,.16),transparent 30%,transparent 74%,rgba(5,25,72,.20))}
+.dw-topnav{top:9px;left:20px;z-index:7;gap:9px}
+.dw-top-pill{cursor:pointer;color:#fff;font-weight:900;font-family:system-ui,sans-serif;font-size:13px;letter-spacing:.1px;border-width:3px;border-radius:10px;padding:7px 17px;box-shadow:inset 0 2px #ffffff7c,0 4px #082854,0 0 10px #112c6677;transition:transform .15s,filter .15s}
+.dw-top-pill:hover{transform:translateY(-3px);filter:brightness(1.17)}
+.dw-left{left:1.5%;top:12%;bottom:6%;width:30%;gap:12px}
+.dw-logo{margin-bottom:8px;font-family:'Orbitron',system-ui,sans-serif;font-size:clamp(40px,4.8vw,76px);letter-spacing:-3px;font-style:italic;filter:drop-shadow(4px 7px 0 #0b1e6d)}
+.dw-logo>div{letter-spacing:2px;padding-left:7px;margin-top:9px}
+.dw-enter{min-height:118px;border-radius:13px;border:4px solid #fff6bf;background:linear-gradient(170deg,#ffe35b 0%,#ffb124 22%,#ff681a 50%,#eb2a2f 86%,#a31335 100%);box-shadow:0 7px #81132c,0 0 0 3px #ee5a16,0 0 18px #ffba23ae,inset 0 3px #fff7bdcc}
+.dw-enter b{font-style:italic;font-size:clamp(25px,2.6vw,44px);white-space:nowrap;letter-spacing:-2px}
+.dw-enter .dw-playicon{background:linear-gradient(#e62a20,#a40f27);border-color:#fff7b6;box-shadow:inset 0 1px 0 #ffc48b,0 3px #73142f;width:62px;height:62px}
+.dw-enter-device{display:none}
+.dw-event,.dw-news{border-width:3px;border-radius:9px;box-shadow:inset 0 2px #ffffff50,0 5px #182359,0 0 8px #0f3479}
+.dw-event{background:linear-gradient(105deg,#7c21b7,#d144b8 45%,#513cbc);border-color:#ffadf6}
+.dw-news{background:linear-gradient(105deg,#2354a9,#168bd7 75%,#1154a9);border-color:#96eeff}
+.dw-tiles{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:minmax(78px,1fr);gap:10px}
+.dw-tiles .m4-item{position:relative;border-radius:11px!important;border:3px solid #98ecff!important;box-shadow:inset 0 2px #d3ffff99,0 5px 0 #041c63,0 0 9px #27dbf977!important;background:linear-gradient(145deg,#2b9ade,#0d5ab1 45%,#072973)!important;}
+.dw-tiles .m4-item::after{content:"";position:absolute;pointer-events:none;inset:4px;border:1px solid #7cdfff50;border-radius:6px}
+.dw-tiles .m4-ic{font-size:29px;color:#ffe781;text-shadow:0 2px 2px #032154}
+.dw-tiles .m4-tx b{font-size:clamp(11px,1.1vw,15px);font-weight:900}
+.dw-center{left:30%;right:27%;top:17%;bottom:8%}
+.dw-portal-aura,.dw-portal-data{display:none}
+.dw-character{bottom:7%;z-index:4}
+.dw-character .anim{width:clamp(135px,15vw,245px);height:clamp(135px,15vw,245px);filter:drop-shadow(4px 7px 0 #061e63)}
+.dw-companion{z-index:3;filter:drop-shadow(3px 5px 0 #092969)}
+.dw-friend-one{left:-4%;bottom:22%}.dw-friend-two{right:-1%;bottom:24%}.dw-friend-three{right:11%;bottom:0}
+.dw-char-label strong{border:3px solid #7af8ff;background:linear-gradient(#2367ad,#0a2f73);box-shadow:0 5px #051d59,inset 0 2px #9ddfff80;font-size:14px;letter-spacing:1px}
+.dw-right{right:1%;top:12%;bottom:6%;width:24.5%;gap:12px}
+.dw-board,.dw-daily-panel,.dw-stats-panel{border:3px solid #8fefff;border-radius:12px;box-shadow:0 5px #04235f,0 0 13px #38ceff8c,inset 0 0 0 2px #2f70b3;background:linear-gradient(160deg,#155ca6ef,#092e74f8 60%,#071c50fa)}
+.dw-panel-title{padding:11px 13px;font-family:system-ui,sans-serif;font-size:clamp(12px,1.1vw,16px);color:white;text-shadow:1px 2px #073668;background:linear-gradient(180deg,#20b9ed,#0669b5);border-bottom:3px solid #77edff}
+.dw-board{flex:1.1}.dw-daily-panel{flex:.62}.dw-stats-panel{flex:.7}
+.dw-board-list .lb-row{border:1px solid #68c6ef;background:linear-gradient(#235593,#123776);box-shadow:inset 0 1px #ffffff26}
+.dw-board-list .lb-row.top{border-color:#ffdf64;background:linear-gradient(#745079,#19508a)}
+.dw-board-tabs{border:2px solid #65c6eb;background:#071b52}
+.dw-footer{text-shadow:0 2px 3px #000}
+/* Panels beyond the lobby: consistent bright arcade finish without changing components or handlers. */
+#overlay:not(.menu-mode) .picker-screen,#overlay:not(.menu-mode) .gacha,#overlay:not(.menu-mode) .settings,#overlay:not(.menu-mode) .help-box,#overlay:not(.menu-mode) .player-screen{border:4px solid #8ef5ff!important;border-radius:13px!important;box-shadow:inset 0 3px #ffffff61,0 9px 0 #06205c,0 0 40px #44ccffc2!important;background:linear-gradient(156deg,#236bcbf9,#0c3c87fa 48%,#071a4ffb)!important}
+#overlay:not(.menu-mode) .pk-card,#overlay:not(.menu-mode) .g-skin,#overlay:not(.menu-mode) .col-tile,#overlay:not(.menu-mode) .pl-tile{box-shadow:inset 0 2px #ffffff45,0 4px #031e58!important;border-width:3px!important}
+#overlay:not(.menu-mode) .pk-tab.on,#overlay:not(.menu-mode) .pk-start,#overlay:not(.menu-mode) .pull-btn{box-shadow:0 6px 0 #7e3a12,0 0 15px #ffd453aa!important}
+@media(max-width:1080px){.dw-left{width:32%}.dw-center{left:32%;right:26%}.dw-enter{min-height:90px}.dw-enter .dw-playicon{width:45px;height:45px}.dw-enter b{font-size:25px}.dw-tiles{gap:5px}.dw-right{width:25%}}
+@media(max-width:760px){.dw-left{top:62px;width:92%;left:4%;bottom:auto}.dw-logo{font-size:42px}.dw-enter{min-height:76px}.dw-center{top:43%;bottom:4%;left:8%;right:8%}.dw-character .anim{width:160px;height:160px}.dw-right{display:none}.dw-topnav{display:none}.dw-tiles{grid-template-columns:repeat(5,1fr);grid-auto-rows:64px}.dw-tiles .m4-ic{font-size:20px}}
+@media(prefers-reduced-motion:reduce){.dw-character .anim,.dw-companion,.dw-sparkles{animation:none!important}}
+
+
+@keyframes dwMissionFlash{0%,100%{filter:none}35%{filter:brightness(1.5) drop-shadow(0 0 15px #ffe054)}}
+.dw-daily-panel.dw-focus,.dw-board.dw-focus{animation:dwMissionFlash 1.8s ease-out 1}
+
+/* Compact real trainer bar: frees the left toolbar just as in the arcade hub reference. */
+#topbar{left:auto;right:18px;top:8px;height:44px;max-width:min(49vw,750px);padding:2px 7px;gap:5px;border-radius:12px;border:2px solid #84efff;background:linear-gradient(180deg,#174b91f5,#091b4ff5);box-shadow:0 4px 0 #05255b,0 0 12px #16b8f58a}
+#topbar .tb-sp{display:none}
+#topbar .tb-id{padding-right:12px}
+#topbar .tb-chip{font-size:12px;border-radius:8px;padding:5px 8px}
+#topbar .tb-btn{width:33px;height:32px;border-radius:7px}
+@media(max-width:900px){#topbar{max-width:62vw}#topbar .tb-id small{display:none}#topbar .tb-id b{font-size:11px}#topbar .tb-chip{font-size:10px;padding:3px 6px}}
+@media(max-width:760px){#topbar{right:6px;top:5px;max-width:95vw;height:38px}#topbar .tb-id{padding:0 4px}#topbar .tb-id b{font-size:10px}#topbar .tb-btn{width:29px;height:27px}#topbar .tb-chip{border-width:1px;padding:2px 4px}}
+
+/* Hand-drawn 32px pixel UI iconography. */
+.dw-tiles .m4-ic{height:48px;display:grid;place-items:center}
+.dw-tiles .m4-ic img{width:48px;height:48px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 3px 0 #071e56)}
+.dw-event-ico{width:42px;height:42px;object-fit:contain;image-rendering:pixelated;flex:none}
+.dw-enter-device{display:block;width:66px;height:66px;object-fit:contain;image-rendering:pixelated;margin-left:auto;filter:drop-shadow(2px 4px 0 #a2341d)}
+@media(max-width:1090px){.dw-enter-device{width:48px;height:48px}}
+@media(max-width:760px){.dw-enter-device{width:42px;height:42px}.dw-tiles .m4-ic{height:30px}.dw-tiles .m4-ic img{width:28px;height:28px}}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2013,32 +2164,69 @@ function showSelect(){
   news.push({k: t('tipT').toUpperCase(), tt: t('tip'), s: ''});
   const item = (id, cls, ic, a, b) => `<button class="m4-item${cls}" id="${id}"><span class="m4-ic">${ic}</span><span class="m4-tx"><b>${a}</b><small>${b}</small></span></button>`;
   showOverlay(`
-    <div class="menu4">
-      <div class="m4-news" id="m4News"></div>
-      <div class="m4-brand"><div class="m3-logo"><span>DIGI</span>BONK</div><div class="m3-sub">${t('tag')}</div></div>
-      <aside class="m4-stats">
-        <header>${t('recs')}</header>
-        <div class="m4-cells"><span><b>${plays}</b>${t('runs')}</span><span><b>${fmtTime(bestT)}</b>${t('best')}</span><span><b>${bestL}</b>${t('lvl')}</span><span><b>${kills}</b>${t('kills')}</span></div>
-        ${top3 || `<p class="muted lb-empty">${t('none')}</p>`}
+    <div class="dw-hub">
+      <div class="dw-landscape" aria-hidden="true"></div>
+      <div class="dw-clouds" aria-hidden="true"></div>
+      <div class="dw-sparkles" aria-hidden="true"></div>
+      <div class="dw-topnav" aria-label="Información de Digibonk">
+        <button class="dw-top-pill dw-green" id="dwMissionShortcut">◈ ${t('daily')}</button><button class="dw-top-pill dw-orange" id="dwGachaShortcut">◉ ${t('gacha')}</button><button class="dw-top-pill dw-blue" id="dwCollectionShortcut">✦ ${t('coll')}</button>
+      </div>
+      <section class="dw-left">
+        <div class="dw-logo" aria-label="DIGIBONK"><span>DIGI</span>BONK<div>✦ DIGITAL WORLD ✦</div></div>
+        <button class="dw-enter" id="playBtn"><span class="dw-playicon">▶</span><span><b>¡ENTRAR!</b><small>${t('playS')}</small></span><img class="dw-enter-device" src="ui/icons/digivice.png" alt=""></button>
+        <div class="dw-event"><img class="dw-event-ico" src="ui/icons/navidad.png" alt=""><div><strong>${EVENT.name}</strong><small>${eventActive() ? t('evSkin') : t('daily')}</small></div><span class="dw-gift">★</span></div>
+        <div class="dw-news" id="m4News"></div>
+        <nav class="dw-tiles" aria-label="Opciones del juego">
+          ${item('btnGacha', '', '<img src="ui/icons/gacha.png" alt="" />', t('gacha'), t('gachaS'))}
+          ${item('btnPlayer', '', '<img src="ui/icons/jugador.png" alt="" />', t('player'), t('playerS'))}
+          ${item('btnColl', '', '<img src="ui/icons/coleccion.png" alt="" />', t('coll'), t('collS'))}
+          ${item('btnHelp', '', '<img src="ui/icons/ayuda.png" alt="" />', t('help'), t('helpS'))}
+          ${item('btnSettings', '', '<img src="ui/icons/ajustes.png" alt="" />', t('set'), t('setS'))}
+          ${item('btnRecords', '', '<img src="ui/icons/records.png" alt="" />', t('recs'), t('recs'))}
+        </nav>
+      </section>
+      <section class="dw-center" aria-label="Digimon elegido">
+        <div class="dw-portal-aura"></div><div class="dw-portal-data"></div>
+        <div class="dw-companion dw-friend-one">${animEl(spriteOf('gabumon', false))}</div>
+        <div class="dw-companion dw-friend-two">${animEl(spriteOf('palmon', false))}</div>
+        <div class="dw-companion dw-friend-three">${animEl(spriteOf('patamon', false))}</div>
+        <div class="dw-character">${animEl(spriteOf(selectedKey, false))}<div class="dw-char-label"><small>${t('partner')}</small><strong>${CHARS[selectedKey].name}</strong></div></div>
+      </section>
+      <aside class="dw-right" aria-label="Progreso y récords">
+        <div class="dw-board">
+          <div class="dw-panel-title"><span>🏆</span><b>${t('recs')}</b></div>
+          <div class="dw-board-tabs"><span>${t('best')}</span><span>${t('runs')}</span></div>
+          <div class="dw-board-list">${top3 || `<div class="dw-no-record">${t('none')}</div>`}</div>
+          <div class="dw-board-foot">✦ ${t('recs')}</div>
+        </div>
+        <div class="dw-daily-panel"><div class="dw-panel-title"><span>▣</span><b>${t('daily')}</b></div><div class="dw-daily-body">${dailyText()}<div class="dw-progress"><i style="width:${Math.min(100, Math.round(loadDaily().runs / DAILY.runsGoal * 100))}%"></i></div><small>+${DAILY.reward} Bits</small></div></div>
+        <div class="dw-stats-panel"><div class="dw-panel-title"><span>◈</span><b>${t('player')}</b></div><div class="dw-stats-grid"><div><b>${plays}</b><small>${t('runs')}</small></div><div><b>${bestL}</b><small>${t('lvl')}</small></div><div><b>${fmtTime(bestT)}</b><small>${t('best')}</small></div><div><b>${kills}</b><small>${t('kills')}</small></div></div></div>
       </aside>
-      <div class="m4-hero"><i class="m4-pad"></i>${animEl(spriteOf(selectedKey, false))}<small>${t('partner')}</small><b>${CHARS[selectedKey].name}</b></div>
-      <nav class="m4-list">
-        ${item('playBtn', ' main', '▶', t('play'), t('playS'))}
-        ${item('btnGacha', '', '<i class="dv-ico"></i>', t('gacha'), t('gachaS'))}
-        ${item('btnPlayer', '', '👤', t('player'), t('playerS'))}
-        ${item('btnColl', '', svgIcon('utilidad'), t('coll'), t('collS'))}
-        ${item('btnHelp', '', '?', t('help'), t('helpS'))}
-        ${item('btnSettings', '', '⚙', t('set'), t('setS'))}
-      </nav>
-      <footer class="m3-legal">${t('legal')}<span class="m3-links">Créditos: sprites/CREDITS.txt · textures/CREDITOS.txt</span></footer>
+      <footer class="dw-footer">${t('legal')} · Créditos: sprites/CREDITS.txt · textures/CREDITOS.txt</footer>
     </div>`);
   overlay.classList.add('menu-mode');
+  document.getElementById('dwMissionShortcut').onclick = () => {
+    const panel = document.querySelector('.dw-daily-panel');
+    if (!panel) return;
+    panel.classList.remove('dw-focus');
+    void panel.offsetWidth;
+    panel.classList.add('dw-focus');
+    panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
+  document.getElementById('dwGachaShortcut').onclick = () => showGacha();
+  document.getElementById('dwCollectionShortcut').onclick = () => showCollection();
   document.getElementById('playBtn').onclick = () => showPicker('personaje');
   document.getElementById('btnGacha').onclick = () => showGacha();
   document.getElementById('btnPlayer').onclick = () => showPlayer();
   document.getElementById('btnSettings').onclick = () => showSettings();
   document.getElementById('btnHelp').onclick = () => showHelp();
   document.getElementById('btnColl').onclick = () => showCollection();
+  document.getElementById('btnRecords').onclick = () => {
+    const panel = document.querySelector('.dw-board');
+    if (!panel) return;
+    panel.classList.remove('dw-focus'); void panel.offsetWidth; panel.classList.add('dw-focus');
+    panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  };
   // Carrusel de novedades: cambia solo cada 4,5 s o al pulsar un punto
   let ni = 0;
   const paintNews = () => {
