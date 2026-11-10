@@ -1027,6 +1027,9 @@ canvas{display:block}
 .rw-anim{background-size:500% 100%;background-position:0 50%}
 
 /* ---------- Selección de Digimon (maquetación tipo "liga") ---------- */
+.pk2-tile.lock{opacity:.55;cursor:default}
+.pk2-tile.lock .anim{filter:grayscale(1) brightness(.25)}
+.pk2-tile.lock small{font-size:9px;line-height:1.2;text-align:center}
 .picker-screen.pk2{display:flex;flex-direction:column;height:100%;min-height:0}
 .pk2-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:8px 4px}
 .pk2-top h2{margin:0;font-size:24px}
@@ -1061,8 +1064,6 @@ canvas{display:block}
 .pk2-atk p{margin:4px 0 0;font-size:12px;color:#bfe9ff;line-height:1.3}
 .pk2-right{min-height:0;display:flex;flex-direction:column;gap:8px}
 .pk2-filters{display:flex;gap:6px}
-.pk2-f{flex:1;padding:7px 6px;border-radius:10px;border:1px solid #2d5f78;background:#071a22;color:#cfeaff;font:700 12px inherit;cursor:pointer}
-.pk2-f.on{background:linear-gradient(180deg,#ffb74d,#ff8f00);color:#06101e;border-color:#ffd54f}
 .pk2-search{width:100%;box-sizing:border-box;padding:8px 10px;border-radius:10px;border:1px solid #2d5f78;background:#071a22;color:#fff;font:inherit;font-size:13px}
 .pk2-grid{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-content:start;padding-right:4px}
 .pk2-tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:12px;border:2px solid #1f3d63;background:#0b1a33;color:#e6f4ff;cursor:pointer;font:inherit}
@@ -1077,7 +1078,7 @@ canvas{display:block}
 .pk2-prog{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;font-size:12px;color:#cfeaff}
 .pk2-foot{display:flex;align-items:center;gap:14px;padding-top:10px}
 .pk2-foot .pk-start{min-width:260px}
-.pk2 .pk-skins-row{grid-template-columns:repeat(6,minmax(0,1fr))}
+.pk2 .pk-skins-row{grid-template-columns:repeat(auto-fill,minmax(78px,1fr))}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -1674,7 +1675,7 @@ addEventListener('keydown', e => {
     if (k === 'enter') showPicker('personaje');
   }
   else if (state === 'pick'){
-    if (k.length === 1 && '123456789'.includes(k) && +k <= list.length){ selectedKey = list[+k-1]; showPicker(); }
+    if (k.length === 1 && '123456789'.includes(k) && +k <= list.length && isUnlocked(list[+k-1])){ selectedKey = list[+k-1]; showPicker(); }
     else if (k === 'arrowleft') pickMove(-1);
     else if (k === 'arrowright') pickMove(1);
     else if (k === 'enter') startGame(selectedKey);
@@ -2123,12 +2124,78 @@ let pickTab = 'personaje';
 // Colores de rareza de las skins (tc-n base, tc-c común, tc-r rara, tc-e épica)
 const SKIN_TIER_NAME = {n: 'Base', c: 'Común', r: 'Rara', e: 'Épica', l: 'Legendaria'};
 const SKIN_SRC_NAME = {base: 'Original', logro: 'Logro', gacha: 'Gacha', evento: 'Evento'};
+// ---------- Desbloqueo de Digimon: el inicial se elige al registrarse; el resto se consigue ----------
+// how: texto que se ve en la pantalla de selección. ok: logro cumplido. rnd: probabilidad por partida terminada
+const UNLOCK = {
+  gabumon:  {how: 'Logro: 300 bajas en total', ok: () => sumStats('kills') >= 300},
+  palmon:   {how: 'Logro: llegar a la zona 2', ok: () => !!loadAch().zone2},
+  gomamon:  {how: 'Logro: derrotar al jefe final', ok: () => !!loadAch().boss},
+  patamon:  {how: 'Logro: completar 10 partidas', ok: () => sumStats('plays') >= 10},
+  biyomon:  {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05},
+  tentomon: {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05},
+  gatomon:  {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05}
+};
+function sumStats(field){ return Object.values(loadJSON('digibonk3d-stats', {})).reduce((a, x) => a + (x[field] || 0), 0); }
+// Texto de cómo se consigue un Digimon bloqueado (los iniciales no tienen regla propia)
+function unlockHow(k){ return UNLOCK[k] ? UNLOCK[k].how : 'Compañero inicial: elígelo al registrarte'; }
+// Jugadores anteriores a este sistema (sin lista guardada): todo desbloqueado
+function unlockedSet(){
+  if (!localStorage.getItem('digibonk3d-unlocked')) return new Set(SEASONS.adventure.chars);
+  return new Set(loadJSON('digibonk3d-unlocked', []));
+}
+function isUnlocked(k){ return unlockedSet().has(k); }
+function unlockDigi(k){ localStorage.setItem('digibonk3d-unlocked', JSON.stringify([...new Set([...unlockedSet(), k])])); }
+// Tras cada partida: comprueba logros y apariciones aleatorias. Devuelve los Digimon nuevos
+function checkUnlocks(){
+  const won = [];
+  for (const k of SEASONS.adventure.chars){
+    const r = UNLOCK[k];
+    if (!r || isUnlocked(k)) continue;
+    if ((r.ok && r.ok()) || (r.rnd && Math.random() < r.rnd)){ unlockDigi(k); won.push(CHARS[k].name); }
+  }
+  return won;
+}
+// Pantalla de inicial: solo al registrarse
+function showStarter(){
+  state = 'starter';
+  setHud(false);
+  let pick = 'agumon';
+  const draw = () => {
+    const grid = SEASONS.adventure.chars.map(k => `
+      <button class="pk2-tile${k === pick ? ' sel' : ''}" data-st="${k}">
+        ${animEl(spriteOf(k, false), 'pk2-face')}
+        <b>${CHARS[k].name}</b><small>${ATTACK_NAME[CHARS[k].kind] || ''}</small>
+      </button>`).join('');
+    showOverlay(`
+      <div class="picker-screen pk2">
+        <header class="pk2-top"><h2>Elige a tu compañero inicial</h2><span class="pk2-sub">Los demás Digimon se desbloquean jugando</span></header>
+        <div class="pk2-body">
+          <section class="pk2-left">
+            <div class="pk2-hero">
+              <div class="pk2-stage">${animEl(spriteOf(pick, false), 'pk2-hero-img')}</div>
+              <div class="pk2-id"><small>Inicial</small><h2>${CHARS[pick].name}</h2><p>${BALANCE[pick].why}</p></div>
+            </div>
+          </section>
+          <aside class="pk2-right"><div class="pk2-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))">${grid}</div></aside>
+        </div>
+        <footer class="pk2-foot"><button class="btn btn-primary pk-start" id="stGo">Empezar con ${CHARS[pick].name}</button></footer>
+      </div>`);
+    overlay.querySelectorAll('[data-st]').forEach(b => b.onclick = () => { pick = b.dataset.st; draw(); });
+    document.getElementById('stGo').onclick = () => {
+      localStorage.setItem('digibonk3d-unlocked', JSON.stringify([pick]));
+      selectedKey = pick;
+      showSelect();
+    };
+  };
+  draw();
+}
+
 // Filtro y búsqueda de la pantalla de selección
-let pickFilter = 'todos', pickQuery = '';
+let pickQuery = '';
 function pickIsEvolved(k){ return !!loadJSON('digibonk3d-evo', {})[k]; }
 function pickProgress(){
   const chars = SEASONS.adventure.chars;
-  const done = chars.filter(k => statsOf(k).plays > 0).length;
+  const done = chars.filter(k => isUnlocked(k)).length;
   return {done, total: chars.length};
 }
 function showPicker(tab){
@@ -2137,19 +2204,18 @@ function showPicker(tab){
   setHud(false);
   const chars = SEASONS.adventure.chars;
   const pr = pickProgress();
+  if (!isUnlocked(selectedKey)) selectedKey = chars.find(k => isUnlocked(k)) || chars[0];
   const tiles = chars.map((k, i) => {
-    const st = statsOf(k), hidden = (pickFilter === 'jugados' && !st.plays) || (pickFilter === 'evo' && !pickIsEvolved(k));
-    return `<button class="pk2-tile${k === selectedKey ? ' sel' : ''}${hidden ? ' hide' : ''}" data-pick="${k}" data-name="${CHARS[k].name.toLowerCase()}" title="${CHARS[k].name}">
+    const st = statsOf(k), open = isUnlocked(k);
+    return `<button class="pk2-tile${k === selectedKey ? ' sel' : ''}${open ? '' : ' lock'}" ${open ? `data-pick="${k}"` : 'disabled'} data-name="${open ? CHARS[k].name.toLowerCase() : '???'}" title="${open ? CHARS[k].name : unlockHow(k)}">
       <span class="pk2-num">${i + 1}</span>
-      ${pickIsEvolved(k) ? '<span class="pk2-evo">Evo</span>' : ''}
+      ${open && pickIsEvolved(k) ? '<span class="pk2-evo">Evo</span>' : ''}
       ${animEl(spriteOf(k, false), 'pk2-face')}
-      <b>${CHARS[k].name}</b>
-      <small>${st.plays ? 'Partidas ' + st.plays : 'Sin jugar'}</small>
+      <b>${open ? CHARS[k].name : '???'}</b>
+      <small>${open ? (st.plays ? 'Partidas ' + st.plays : 'Sin jugar') : unlockHow(k)}</small>
     </button>`;
   }).join('');
   const left = pickTab === 'objetos' ? itemsPanelHtml() : '<div class="pk2-left-in" id="pkPreview"></div>';
-  const filt = [['todos', 'Todos'], ['jugados', 'Jugados'], ['evo', 'Evolucionados']]
-    .map(([id, t]) => `<button class="pk2-f${pickFilter === id ? ' on' : ''}" data-f="${id}">${t}</button>`).join('');
   showOverlay(`
     <div class="picker-screen pk2">
       <header class="pk2-top">
@@ -2164,10 +2230,9 @@ function showPicker(tab){
       <div class="pk2-body">
         <section class="pk2-left">${left}</section>
         <aside class="pk2-right">
-          <div class="pk2-filters">${filt}</div>
           <input class="pk2-search" id="pkSearch" placeholder="Buscar por nombre..." value="${pickQuery}" maxlength="20">
           <div class="pk2-grid" id="pkGrid">${tiles}</div>
-          <div class="pk2-prog"><span>Progreso</span><div class="pk2-bar"><i style="width:${Math.round(pr.done / pr.total * 100)}%"></i></div><b>${pr.done}/${pr.total}</b></div>
+          <div class="pk2-prog"><span>Desbloqueados</span><div class="pk2-bar"><i style="width:${Math.round(pr.done / pr.total * 100)}%"></i></div><b>${pr.done}/${pr.total}</b></div>
         </aside>
       </div>
       <footer class="pk2-foot">
@@ -2175,17 +2240,16 @@ function showPicker(tab){
         <span class="pk-hint">1-8 elegir · ←→ cambiar · Enter empezar · Esc volver</span>
       </footer>
     </div>`);
-  overlay.querySelectorAll('.pk2-tile').forEach(b => {
+  overlay.querySelectorAll('.pk2-tile:not(.lock)').forEach(b => {
     b.onclick = () => { selectedKey = b.dataset.pick; showPicker(); };
     b.ondblclick = () => startGame(b.dataset.pick);
   });
-  overlay.querySelectorAll('.pk2-f').forEach(b => b.onclick = () => { pickFilter = b.dataset.f; showPicker(); });
   // La búsqueda filtra en el DOM sin redibujar; sus teclas no llegan al manejador global
   const search = document.getElementById('pkSearch');
   search.addEventListener('keydown', e => e.stopPropagation());
   search.addEventListener('input', () => {
     pickQuery = search.value.trim().toLowerCase();
-    overlay.querySelectorAll('.pk2-tile').forEach(t => t.classList.toggle('miss', !!pickQuery && !t.dataset.name.includes(pickQuery)));
+    overlay.querySelectorAll('.pk2-tile:not(.lock)').forEach(t => t.classList.toggle('miss', !!pickQuery && !t.dataset.name.includes(pickQuery)));
   });
   overlay.querySelectorAll('.pk-tab').forEach(b => b.onclick = () => showPicker(b.dataset.tab));
   document.getElementById('pkBack').onclick = () => showSelect();
@@ -2287,8 +2351,12 @@ function bindItemTiles(){
 // Cambia de personaje en la pantalla de elección (flechas)
 function pickMove(delta){
   const list = SEASONS.adventure.chars;
-  const i = Math.max(0, list.indexOf(selectedKey));
-  selectedKey = list[(i + delta + list.length) % list.length];
+  let i = Math.max(0, list.indexOf(selectedKey));
+  for (let n = 0; n < list.length; n++){
+    i = (i + delta + list.length) % list.length;
+    if (isUnlocked(list[i])) break;
+  }
+  selectedKey = list[i];
   showPicker();
 }
 
@@ -2296,6 +2364,8 @@ function startGame(key){
   scene.remove(world); world = new THREE.Group(); scene.add(world);
   const c = CHARS[key];
   const sp = randomSpawn();   // aparición aleatoria en el mapa
+  // Versión variocolor: 1 entre 8192 al empezar una partida; queda guardada como skin del Digimon
+  if (Math.random() < 1 / 8192){ grantSkin(key, 'variocolor'); equipSkin(key, 'variocolor'); setTimeout(() => announce('¡Variocolor!', CHARS[key].name + ' brilla con otros colores', '#ffd54f'), 400); }
   g = {
     ch: {...c, id:key},
     p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:2.5, critChance:0.12, critMul:2},
@@ -3379,6 +3449,7 @@ function endGame(win){
   g.bonus = bonus;
   g.unlocked = recordRun(g.ch.id, g.kills, g.t);
   g.newTitles = checkAchievements(win);
+  g.newDigis = checkUnlocks();
   unlockMouse();
   saveRecord(win);
   // Resumen de la partida: cifras, daño por habilidad y recompensas
@@ -3390,6 +3461,7 @@ function endGame(win){
   if (g.tix) rewards.push(`<li><b>+${g.tix}</b> tickets de tirada</li>`);
   for (const u of g.unlocked) rewards.push(`<li>Skin nueva: <b>${u}</b></li>`);
   for (const tl of g.newTitles) rewards.push(`<li>Título desbloqueado: <b>${tl.name}</b></li>`);
+  for (const d of g.newDigis) rewards.push(`<li>Digimon desbloqueado: <b>${d}</b></li>`);
   const endKey = g.ch.id;
   showOverlay(`
     <div class="end3 ${win ? 'win' : 'lose'}">
@@ -3819,7 +3891,8 @@ const SKINS = [
   {id:'cristal',   name:'Cristal',    src:'gacha',  tier:'l', desc:'Gacha de Bits (banner permanente)',
    f:'hue-rotate(165deg) saturate(.6) brightness(1.3) contrast(.9)'},
   {id:'festival',  name:'Papá Noel',  src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)', px:'navidad'},
-  {id:'reno',      name:'Reno',       src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)', px:'navidad'}
+  {id:'reno',      name:'Reno',       src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)', px:'navidad'},
+  {id:'variocolor', name:'Variocolor', src:'shiny', tier:'l', desc:'Versión variocolor: 1 entre 8192 al empezar una partida', f:'hue-rotate(200deg) saturate(1.6) brightness(1.1)'}
 ];
 const SKIN_BY_ID = Object.fromEntries(SKINS.map(sk => [sk.id, sk]));
 function loadJSON(k, def){ try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e){ return def; } }
@@ -4000,7 +4073,7 @@ function showRegister(){
     const v = document.getElementById('regName').value.trim();
     if (!v){ announce(t('needName'), '', '#ef5350'); return; }
     setTrainerName(v);
-    showSelect();
+    if (localStorage.getItem('digibonk3d-unlocked')) showSelect(); else showStarter();
   };
   document.getElementById('regGo').onclick = go;
   document.getElementById('regGuest').onclick = () => {
@@ -4388,6 +4461,7 @@ function howTo(key, sk){
   if (sk.src === 'base') return '';
   if (sk.src === 'gacha') return 'Legendaria del gacha';
   if (sk.src === 'evento') return eventActive() ? 'Solo en el banner de evento' : 'Evento terminado';
+  if (sk.src === 'shiny') return '1 entre 8192 al empezar una partida';
   const st = statsOf(key);
   if (sk.req.plays) return `${Math.min(st.plays, sk.req.plays)}/${sk.req.plays} partidas`;
   return `${Math.min(st.kills, sk.req.kills)}/${sk.req.kills} bajas`;
@@ -4799,6 +4873,7 @@ if (new URLSearchParams(location.search).has('demo')){
     // Datos y filtros que usa sprites/anim/recolor.js para generar las skins
     SKINS, EVO_LINE, CHARS, SEASONS, glitchPixels,
     headUrl, spriteWith,
+    checkUnlocks, isUnlocked,
     nearChest(){
       const p = g.p, a = p.dir ? Math.atan2(p.dir.z, p.dir.x) : 0;
       const [cx, cz] = clampArena(p.x + Math.cos(a)*3, p.z + Math.sin(a)*3, ARENA_R - 2);
