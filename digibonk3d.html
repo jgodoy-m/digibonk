@@ -3443,8 +3443,8 @@ const SKINS = [
    desc:'Consigue 150 bajas con este Digimon', fx:'glitch'},
   {id:'cristal',  name:'Cristal',  src:'gacha',  tier:'l', f:'hue-rotate(165deg) saturate(.6) brightness(1.3) contrast(.9)',
    desc:'Gacha de Bits'},
-  {id:'festival', name:'Festival', src:'evento', tier:'c', f:'sepia(.7) hue-rotate(-45deg) saturate(2.4) brightness(1.06)',
-   desc:'Juega durante el evento'}
+  {id:'festival', name:'Festival', src:'evento', tier:'l', f:'sepia(.7) hue-rotate(-45deg) saturate(2.4) brightness(1.06)',
+   desc:'Exclusiva del banner de evento del gacha (legendaria)'}
 ];
 const SKIN_BY_ID = Object.fromEntries(SKINS.map(sk => [sk.id, sk]));
 function loadJSON(k, def){ try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e){ return def; } }
@@ -3478,9 +3478,6 @@ function recordRun(key, kills, t){
     if (sk.src === 'logro' && !ownedSkins(key).includes(sk.id) && meetsReq(sk, st)){
       grantSkin(key, sk.id); unlocked.push(`${sk.name} (${CHARS[key].name})`);
     }
-  }
-  if (t >= 5 && eventActive() && !ownedSkins(key).includes('festival')){
-    grantSkin(key, 'festival'); unlocked.push(`Festival (${CHARS[key].name})`);
   }
   return unlocked;
 }
@@ -3969,7 +3966,7 @@ function showPullResults(results){
 function howTo(key, sk){
   if (sk.src === 'base') return '';
   if (sk.src === 'gacha') return 'Gacha de Bits';
-  if (sk.src === 'evento') return eventActive() ? 'Evento: juega ahora' : 'Evento terminado';
+  if (sk.src === 'evento') return eventActive() ? 'Solo en el banner de evento' : 'Evento terminado';
   const st = statsOf(key);
   if (sk.req.plays) return `${Math.min(st.plays, sk.req.plays)}/${sk.req.plays} partidas`;
   return `${Math.min(st.kills, sk.req.kills)}/${sk.req.kills} bajas`;
@@ -4072,7 +4069,7 @@ function showGacha(){
         <div class="col-grid">${frameTiles}</div>
         <h3 class="g-sec">Skins</h3>
         <div class="g-list">${rows}</div>
-        <p class="g-note">Galáctico: 3 partidas con el Digimon · Glitch: 150 bajas con el Digimon · Cristal: gacha · Festival: juega durante el evento "${EVENT.name}".</p>
+        <p class="g-note">Galáctico: 3 partidas con el Digimon · Glitch: 150 bajas con el Digimon · Cristal: gacha · Festival: solo en el banner "${EVENT.name}" del gacha.</p>
         <p class="g-note">Bonus permanente por Digimon al conseguir la skin: Galáctico ${SKIN_FX.galactico.text} · Glitch ${SKIN_FX.glitch.text} · Cristal ${SKIN_FX.cristal.text} · Festival ${SKIN_FX.festival.text}.</p>
       </div>
     </div>`);
