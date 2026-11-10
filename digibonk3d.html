@@ -875,6 +875,21 @@ function buildMountains(){
   scene.add(mesh);
 }
 buildMountains();
+// Muro de piedra en el límite del escenario: el jugador no lo cruza y las montañas quedan detrás.
+// La cámara se mantiene dentro del escenario (ver updateCamera), así que el muro nunca tapa la vista.
+function buildStoneWall(){
+  const H = 4.5, R = ARENA_R - 0.6;
+  const tex = loadTex('textures/piedra_pixel.png', 48, 1, true);
+  const wall = new THREE.Mesh(new THREE.CylinderGeometry(R, R, H, 180, 1, true),
+    new THREE.MeshStandardMaterial({map: tex, roughness: 1, side: THREE.DoubleSide}));
+  wall.position.y = -0.8 + H/2;   // la base queda bajo el suelo: no hay bordes visibles
+  scene.add(wall);
+  const coping = new THREE.Mesh(new THREE.TorusGeometry(R, 0.6, 8, 180),
+    new THREE.MeshStandardMaterial({map: tex, roughness: 1}));
+  coping.rotation.x = Math.PI/2; coping.position.y = -0.8 + H;
+  scene.add(coping);
+}
+buildStoneWall();
 const rim = new THREE.Mesh(new THREE.RingGeometry(ARENA_R - 0.25, ARENA_R + 0.25, 128),
   new THREE.MeshBasicMaterial({color: 0x4fc3f7, side: THREE.DoubleSide}));
 rim.rotation.x = -Math.PI/2;
@@ -2297,10 +2312,9 @@ renderer.domElement.addEventListener('wheel', e => {
 function updateCamera(dt){
   const p = g.p;
   const cp = Math.cos(camPitch), sp = Math.sin(camPitch);
-  camBase.lerp(new THREE.Vector3(
-    p.x + Math.sin(camYaw)*cp*camDist,
-    terrainH(p.x, p.z) + 1.2 + sp*camDist,
-    p.z + Math.cos(camYaw)*cp*camDist), Math.min(1, dt*10));
+  // La cámara no sale del escenario: así el muro de piedra y las montañas nunca se interponen
+  const [camX, camZ] = clampArena(p.x + Math.sin(camYaw)*cp*camDist, p.z + Math.cos(camYaw)*cp*camDist, ARENA_R - 4);
+  camBase.lerp(new THREE.Vector3(camX, terrainH(p.x, p.z) + 1.2 + sp*camDist, camZ), Math.min(1, dt*10));
   shake = Math.max(0, shake - dt*2.5);
   const s = shake*shake*0.8;
   camera.position.set(
@@ -3429,7 +3443,7 @@ if (trainerName) showSelect(); else showRegister();
 // Modo demo (solo para grabar los vídeos del tutorial con ?demo=1): expone el estado y atajos de escena
 if (new URLSearchParams(location.search).has('demo')){
   window.__dbk = {
-    get g(){ return g; }, get state(){ return state; },
+    get g(){ return g; }, get state(){ return state; }, get scene(){ return scene; },
     startGame, spawnEnemy, setZone, showGacha,
     nearChest(){
       const p = g.p, a = p.dir ? Math.atan2(p.dir.z, p.dir.x) : 0;
