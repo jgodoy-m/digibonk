@@ -45,9 +45,14 @@ def gradient_map(src, stops):
             px[x, y] = (cr, cg, cb, a)
     return im
 
+# La línea de Agumon tiene skins de Navidad dibujadas a mano: no se regeneran aquí
+SKIP = {"agumon"}
+
 def main():
     n = 0
     for key, stages in BASES.items():
+        if key in SKIP:
+            continue
         for st, base in enumerate(stages):
             src = os.path.join(HERE, base + ".png")
             for skin, stops in PALETTES.items():
