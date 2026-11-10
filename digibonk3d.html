@@ -395,6 +395,46 @@ canvas{display:block}
 .help-box{width:min(640px,94vw);padding:18px 22px;border-radius:22px;background:rgba(10,18,40,.95);border:3px solid #3a6fc4;color:#e6f4ff}
 .help-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin-top:10px}
 .help-grid span{font-size:14px}
+
+/* ---- Menú de inicio v3: tarjeta de JUGAR, accesos en fila, tablero lateral ---- */
+.menu3{position:absolute;inset:0;font-family:'Orbitron',system-ui,sans-serif;color:#e6f4ff}
+.m3-top{position:absolute;top:14px;left:18px;right:18px;display:flex;justify-content:space-between;align-items:center}
+.m3-trainer{display:flex;align-items:center;gap:10px;padding:6px 14px 6px 6px;border-radius:16px;background:rgba(10,18,40,.9);border:2px solid #3a6fc4}
+.m3-trainer b{display:block;font-size:14px;color:#ffd54f}
+.m3-trainer small{font-size:10px;color:#9fd4ff;font-family:system-ui,sans-serif}
+.hud-portrait.mini{width:44px;height:44px;border-radius:12px}
+.hud-portrait.mini img{width:34px;height:34px}
+.m3-cur{display:flex;gap:10px;align-items:center}
+.m3-main{position:absolute;left:64px;top:90px;bottom:90px;width:520px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.m3-logo{font-size:56px;font-weight:900;letter-spacing:2px;line-height:1;color:#fff;text-shadow:0 5px 0 #1d4fa0,0 0 26px rgba(79,195,247,.6)}
+.m3-logo span{color:#ffd54f}
+.m3-sub{font-size:12px;letter-spacing:4px;color:#9fd4ff;margin:-4px 0 10px}
+.m3-play{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 0 0 26px;width:100%;height:150px;border-radius:24px;border:4px solid #fff;cursor:pointer;color:#fff;
+  background:repeating-linear-gradient(-45deg,#ff5a5a 0 18px,#ff3b3b 18px 36px);box-shadow:0 10px 0 #7a1010,0 0 0 4px #2a0c0c;text-align:left;transition:transform .12s}
+.m3-play:hover{transform:translateY(-3px)}
+.m3-play:active{transform:translateY(5px);box-shadow:0 4px 0 #7a1010}
+.m3-play-text b{display:block;font-size:42px;letter-spacing:4px;text-shadow:0 4px 0 #7a1010}
+.m3-play-text small{font-family:system-ui,sans-serif;font-size:13px;opacity:.95}
+.m3-play-img{width:150px;height:150px;object-fit:contain;image-rendering:pixelated;margin-right:6px;filter:drop-shadow(0 8px 10px rgba(0,0,0,.5));animation:companionBob 2.6s ease-in-out infinite}
+.m3-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.m3-tile{display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 6px;border-radius:18px;cursor:pointer;color:#e6f4ff;background:rgba(10,18,40,.9);border:2px solid #3a6fc4;transition:transform .12s,border-color .12s}
+.m3-tile:hover{transform:translateY(-4px);border-color:#ffd54f}
+.m3-ic{font-size:22px;height:30px;display:flex;align-items:center}
+.m3-tile b{font-size:13px;letter-spacing:1px}
+.m3-tile small{font-family:system-ui,sans-serif;font-size:10px;opacity:.7}
+.m3-board{position:absolute;right:22px;top:72px;bottom:70px;width:320px;display:flex;flex-direction:column;background:rgba(10,18,40,.94);border:3px solid #3a6fc4;border-radius:22px;overflow:hidden;box-shadow:0 14px 34px rgba(0,0,0,.5)}
+.m3-board header{padding:14px 16px;background:repeating-linear-gradient(90deg,#f59b28 0 16px,#f7b44e 16px 32px);color:#1a1200;display:flex;flex-direction:column}
+.m3-board header b{font-size:16px;letter-spacing:1px}
+.m3-board header small{font-family:system-ui,sans-serif;font-size:11px;opacity:.85}
+.lb-list{flex:1;overflow:auto;padding:8px}
+.lb-row{display:grid;grid-template-columns:30px 1fr auto;align-items:center;gap:8px;padding:9px 10px;border-radius:12px;margin-bottom:6px;background:rgba(8,20,40,.9);border:1px solid #2d5f78;font-family:system-ui,sans-serif;font-size:13px}
+.lb-row.top{border-color:#ffd54f;background:repeating-linear-gradient(-45deg,rgba(255,213,79,.14) 0 12px,rgba(255,213,79,.03) 12px 24px),rgba(8,20,40,.9)}
+.lb-n{font-family:'Orbitron',system-ui,sans-serif;font-weight:900;color:#ffd54f;text-align:center}
+.lb-val{text-align:right;font-weight:bold}
+.lb-val small{display:block;font-weight:400;font-size:10px;opacity:.7}
+.lb-empty{padding:18px;text-align:center}
+.m3-legal{position:absolute;left:0;right:0;bottom:12px;text-align:center;font-family:system-ui,sans-serif;font-size:10px;opacity:.6;padding:0 60px}
+.m3-links{display:block;margin-top:2px}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -1056,31 +1096,44 @@ function showSelect(){
   hidePause();
   const recs = getRecords();
   const recRows = recs.length
-    ? recs.map((r, i) => `<div class="rec${i === 0 ? ' best' : ''}"><span>${i === 0 ? '👑 ' : ''}${i+1}. ${r.name}${r.win ? ' ★' : ''}</span><span>${fmtTime(r.t)} · ${r.kills} bajas · Nv ${r.lvl}</span></div>`).join('')
-    : '<p class="muted">Todavía no hay partidas. ¡Empieza una!</p>';
+    ? recs.slice(0, 10).map((r, i) => `<div class="lb-row${i === 0 ? ' top' : ''}"><span class="lb-n">${i+1}</span><span class="lb-name">${r.name}${r.win ? ' ★' : ''}</span><span class="lb-val">${fmtTime(r.t)}<small>${r.kills} bajas</small></span></div>`).join('')
+    : '<p class="muted lb-empty">Todavía no hay partidas. ¡Empieza una!</p>';
+  const fr = extra.frame ? FRAMES.find(f => f.id === extra.frame) : null;
+  const tt = extra.title ? TITLES.find(t => t.id === extra.title) : null;
   showOverlay(`
-    <div class="menu2">
-      <div class="top-bar">
-        <span class="bits-chip">Ⓑ ${SAVE.bits}</span>
-        <span class="daily-chip">${dailyText()}</span>
-      </div>
-      <section class="m-left">
-        <div class="logo"><span>DIGI</span>BONK</div>
-        <div class="sub">Digimon Adventure</div>
-        <nav class="vmenu">
-          <button class="play" id="playBtn">JUGAR</button>
-          <button class="vbtn" id="btnGacha"><i class="dv-ico"></i>Gacha</button>
-          <button class="vbtn" id="btnPlayer">Jugador</button>
-          <button class="vbtn" id="btnSettings">Ajustes</button>
+    <div class="menu3">
+      <header class="m3-top">
+        <div class="m3-trainer">
+          <div class="hud-portrait mini${fr ? ' fr-' + fr.id : ''}"><img src="${spriteOf(selectedKey, false)}" alt=""></div>
+          <div><b>Entrenador</b><small>${tt ? tt.name : 'Sin título'}</small></div>
+        </div>
+        <div class="m3-cur">
+          <span class="bits-chip">Ⓑ ${SAVE.bits}</span>
+          <span class="daily-chip">${dailyText()}</span>
+        </div>
+      </header>
+      <section class="m3-main">
+        <div class="m3-logo"><span>DIGI</span>BONK</div>
+        <div class="m3-sub">Digimon Adventure</div>
+        <button class="m3-play" id="playBtn">
+          <span class="m3-play-text"><b>JUGAR</b><small>Modo clásico · elige tu Digimon</small></span>
+          <img class="m3-play-img" src="${spriteOf(selectedKey, false)}" alt="">
+        </button>
+        <nav class="m3-tiles">
+          <button class="m3-tile" id="btnPlayer"><span class="m3-ic">👤</span><b>Jugador</b><small>marcos · títulos</small></button>
+          <button class="m3-tile" id="btnGacha"><span class="m3-ic"><i class="dv-ico"></i></span><b>Gacha</b><small>skins · objetos</small></button>
+          <button class="m3-tile" id="btnSettings"><span class="m3-ic">⚙️</span><b>Ajustes</b><small>calidad · sonido</small></button>
+          <button class="m3-tile" id="btnHelp"><span class="m3-ic">?</span><b>Controles</b><small>teclas y ayuda</small></button>
         </nav>
       </section>
-      <img class="companion" src="${spriteOf(selectedKey, false)}" alt="">
-      <details class="rec-box">
-        <summary>Mejores partidas <span>▾</span></summary>
-        <div class="rec-list">${recRows}</div>
-      </details>
-      <button class="help-btn" id="btnHelp" aria-label="Controles y ayuda">?</button>
-      <p class="legal">Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon. Sprites de King (uso no comercial, ver sprites/CREDITS.txt).</p>
+      <aside class="m3-board">
+        <header><b>Mejores partidas</b><small>este navegador</small></header>
+        <div class="lb-list">${recRows}</div>
+      </aside>
+      <footer class="m3-legal">
+        Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon.
+        <span class="m3-links">Créditos: sprites/CREDITS.txt · textures/CREDITOS.txt</span>
+      </footer>
     </div>`);
   overlay.classList.add('menu-mode');
   document.getElementById('playBtn').onclick = () => showPicker('personaje');
