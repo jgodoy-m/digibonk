@@ -33,7 +33,7 @@ canvas{display:block}
 /* El temporizador avisa cuando falta menos de 30 s para el jefe */
 #timer.urgent{color:#ff5252;border-color:#ff5252;box-shadow:0 0 18px rgba(255,82,82,.6);animation:timerPulse .8s ease-in-out infinite}
 @keyframes timerPulse{50%{transform:translateX(-50%) scale(1.06)}}
-#combo{position:fixed;right:24px;top:16px;padding:4px 14px;border-radius:10px;background:#ffd54f;color:#1a1200;
+#combo{position:fixed;right:24px;top:200px;padding:4px 14px;border-radius:10px;background:#ffd54f;color:#1a1200;
   font-weight:900;font-size:28px;box-shadow:0 0 14px rgba(255,213,79,.6);pointer-events:none}
 #combo:empty{display:none}
 /* Anuncios centrales (digievolución, cofres, hordas, jefe) */
@@ -186,7 +186,7 @@ canvas{display:block}
 /* Viñeta suave del entorno */
 #vignette{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at center,transparent 58%,rgba(10,20,40,.45) 100%)}
 /* Minimapa y mapa completo */
-#minimap{position:fixed;left:16px;top:132px;width:170px;height:170px;border-radius:50%;border:3px solid #4fc3f7;
+#minimap{position:fixed;right:16px;top:16px;width:170px;height:170px;border-radius:50%;border:3px solid #4fc3f7;
   box-shadow:0 0 14px rgba(79,195,247,.4);pointer-events:none;background:#16321f}
 #mapview{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;
   background:rgba(4,8,18,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:15;cursor:pointer}
@@ -250,7 +250,7 @@ canvas{display:block}
 <div id="xpTxt"></div>
 <div id="overlay"></div>
 <div id="bossbar" style="position:fixed;top:56px;left:50%;transform:translateX(-50%);width:420px;height:14px;background:#000;border:1px solid #888;display:none;pointer-events:none"><div id="bosshp" style="height:100%;background:#ab47bc;width:100%"></div></div>
-<div id="combo"style="position:fixed;right:24px;top:12px;font-size:34px;font-weight:bold;color:#ffd54f;text-shadow:0 2px 4px #000;pointer-events:none"></div>
+<div id="combo"style="position:fixed;right:24px;top:200px;font-size:34px;font-weight:bold;color:#ffd54f;text-shadow:0 2px 4px #000;pointer-events:none"></div>
 <div id="flash"style="position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none"></div>
 <div id="hurt"></div>
 <div id="banner"></div>
