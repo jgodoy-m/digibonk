@@ -658,7 +658,12 @@ const terrainGeo = new THREE.PlaneGeometry(TERRAIN_SIZE, TERRAIN_SIZE, TERRAIN_S
 terrainGeo.rotateX(-Math.PI/2);
 {
   const pos = terrainGeo.attributes.position;
-  for (let i = 0; i < pos.count; i++) pos.setY(i, terrainH(pos.getX(i), pos.getZ(i)));
+  // Fuera del escenario el suelo baja con suavidad: así la línea donde nace la montaña queda limpia
+  for (let i = 0; i < pos.count; i++){
+    const x = pos.getX(i), z = pos.getZ(i);
+    const k = smooth01((Math.hypot(x, z) - ARENA_R) / 5);
+    pos.setY(i, terrainH(x, z)*(1 - k) + (-1.5)*k);
+  }
 }
 terrainGeo.computeVertexNormals();
 // Color por zona: tierra alrededor del pueblo, bosque más oscuro hacia las montañas y variación suave
@@ -709,7 +714,7 @@ function buildMountains(){
   for (let i = 0; i < SEG; i++){
     const a0 = i/SEG*Math.PI*2, a1 = (i+1)/SEG*Math.PI*2;
     const h0 = H(a0), h1 = H(a1), hm = H((a0+a1)/2) * 1.08;
-    const b0 = pt(rBase, 0, a0), b1 = pt(rBase, 0, a1);
+    const b0 = pt(rBase, -3, a0), b1 = pt(rBase, -3, a1);   // la base se hunde bajo el suelo: sin superficies coincidentes
     const t0 = pt(rPeak, h0, a0), t1 = pt(rPeak, h1, a1), tm = pt(rPeak - 4, hm, (a0+a1)/2);
     // dos caras por segmento: base exterior -> pico
     const faces = [[b0, b1, tm], [b0, tm, t0], [b1, t1, tm], [b1, tm, t0]];
@@ -731,7 +736,7 @@ buildMountains();
 const rim = new THREE.Mesh(new THREE.RingGeometry(ARENA_R - 0.25, ARENA_R + 0.25, 128),
   new THREE.MeshBasicMaterial({color: 0x4fc3f7, side: THREE.DoubleSide}));
 rim.rotation.x = -Math.PI/2;
-rim.position.y = 0.03;
+rim.position.y = 0.12;   // por encima del suelo: no compite con él
 scene.add(rim);
 
 addEventListener('resize', () => {
