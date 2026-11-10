@@ -203,8 +203,6 @@ canvas{display:block}
 .mini-btn:hover{filter:brightness(1.15)}
 .bits-chip{padding:7px 12px;border-radius:10px;background:#1b2a14;border:1px solid #7cf29c;color:#b9f6ca;font-weight:bold;white-space:nowrap}
 .daily-chip{font-size:12px;color:#cfe8ff;opacity:.9}
-.dif{padding:1px 7px;border-radius:7px;font-size:11px;color:#06101e}
-.dif-Fácil{background:#7cf29c}.dif-Media{background:#ffd54f}.dif-Difícil{background:#ef5350;color:#fff}
 /* Gacha de skins */
 .gacha{width:min(880px,96vw);max-height:92vh;overflow:auto;padding:18px 22px;border-radius:18px;color:#e6f4ff;text-align:left;
   background:linear-gradient(170deg,rgba(24,36,64,.97),rgba(8,12,26,.97));border:2px solid #4fc3f7;box-shadow:0 0 30px rgba(79,195,247,.35)}
@@ -2069,7 +2067,6 @@ function showSettings(){
 // Pantalla "Elige tu Digimon": pestañas Personaje y Skins, y botón para empezar
 let pickTab = 'personaje';
 // Colores de dificultad para la selección (tarjeta y chip)
-const DIF_COL = {'Fácil': '#66bb6a', 'Media': '#ffb300', 'Difícil': '#ef5350'};
 // Colores de rareza de las skins (tc-n base, tc-c común, tc-r rara, tc-e épica)
 const SKIN_TIER_NAME = {n: 'Base', c: 'Común', r: 'Rara', e: 'Épica', l: 'Legendaria'};
 const SKIN_SRC_NAME = {base: 'Original', logro: 'Logro', gacha: 'Gacha', evento: 'Evento'};
@@ -2080,10 +2077,10 @@ function showPicker(tab){
   const chars = SEASONS.adventure.chars;
   // Parrilla de cabezas a la derecha; la preview y las skins van a la izquierda
   const grid = chars.map((k, i) => `
-    <button class="pv-card${k === selectedKey ? ' sel' : ''}" data-pick="${k}" style="--c:${DIF_COL[BALANCE[k].dif]}" title="${CHARS[k].name}">
+    <button class="pv-card${k === selectedKey ? ' sel' : ''}" data-pick="${k}" style="--c:#4fc3f7" title="${CHARS[k].name}">
       <span class="pv-num">${i + 1}</span>
       ${animEl(spriteOf(k, false), 'pk-face')}
-      <span class="pv-meta"><b>${CHARS[k].name}</b><em>${BALANCE[k].dif}</em></span>
+      <span class="pv-meta"><b>${CHARS[k].name}</b></span>
     </button>`).join('');
   const left = pickTab === 'objetos' ? itemsPanelHtml()
     : skinStripHtml(selectedKey) + '<div class="pv-stage" id="pkPreview"></div>';
@@ -2140,10 +2137,10 @@ function renderPickPreview(){
   const st = statsOf(k);
   const dmgPct = (c.dmg / 14) * 100;
   const rate = (0.4 / Math.max(c.cd, 0.1)) * 100;
-  el.style.setProperty('--c', DIF_COL[b.dif]);
+  el.style.setProperty('--c', '#4fc3f7');
   el.innerHTML = `
     <div class="pv-top">
-      <span class="pv-tag">Temporada 1 · <b style="color:${DIF_COL[b.dif]}">${b.dif}</b></span>
+      <span class="pv-tag">Temporada 1</span>
       <span class="pv-tag">${ATTACK_NAME[c.kind] || c.kind}</span>
       <span class="pv-tag">Partidas ${st.plays} · Bajas ${st.kills}</span>
     </div>
@@ -4493,14 +4490,14 @@ function makeAura(skinId, key){
    Valores iniciales basados en el daño por segundo (daño / recarga × multiplicador)
    y en la facilidad de cada estilo. Hay que ajustarlos con pruebas reales. */
 const BALANCE = {
-  tentomon:{dif:'Media',    hp:100,  speed:6.0, dmgMul:1.00, why:'Descarga en círculo: cubre el área alrededor del Digimon'},
-  agumon:  {dif:'Media',    hp:100, speed:6.0, dmgMul:1.00, why:'Dispara al enemigo más cercano: apuntado, sin área'},
-  palmon:  {dif:'Media',    hp:100, speed:6.0, dmgMul:1.00, why:'Cuchillas que giran alrededor: cubren a su alrededor sin apuntar'},
-  gomamon: {dif:'Media',    hp:100, speed:6.0, dmgMul:1.00, why:'Ataques rápidos al enemigo más cercano'},
-  gabumon: {dif:'Media',    hp:100, speed:6.0, dmgMul:1.00, why:'Onda en círculo: hay que colocarse entre enemigos'},
-  gatomon: {dif:'Media',    hp:100,  speed:6.0, dmgMul:1.00, why:'Garras giratorias: hay que mantenerse en movimiento'},
-  biyomon: {dif:'Media',    hp:100,  speed:6.0, dmgMul:1.00, why:'Disparo dirigido de cadencia media'},
-  patamon: {dif:'Media',  hp:100,  speed:6.0, dmgMul:1.00, why:'Ataque dirigido: la clave es colocarse bien'}
+  tentomon:{hp:100,  speed:6.0, dmgMul:1.00, why:'Descarga en círculo: cubre el área alrededor del Digimon'},
+  agumon:  {hp:100, speed:6.0, dmgMul:1.00, why:'Dispara al enemigo más cercano: apuntado, sin área'},
+  palmon:  {hp:100, speed:6.0, dmgMul:1.00, why:'Cuchillas que giran alrededor: cubren a su alrededor sin apuntar'},
+  gomamon: {hp:100, speed:6.0, dmgMul:1.00, why:'Ataques rápidos al enemigo más cercano'},
+  gabumon: {hp:100, speed:6.0, dmgMul:1.00, why:'Onda en círculo: hay que colocarse entre enemigos'},
+  gatomon: {hp:100,  speed:6.0, dmgMul:1.00, why:'Garras giratorias: hay que mantenerse en movimiento'},
+  biyomon: {hp:100,  speed:6.0, dmgMul:1.00, why:'Disparo dirigido de cadencia media'},
+  patamon: {hp:100,  speed:6.0, dmgMul:1.00, why:'Ataque dirigido: la clave es colocarse bien'}
 };
 function applyBalance(key){
   const b = BALANCE[key];
