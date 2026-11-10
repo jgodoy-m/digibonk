@@ -527,6 +527,72 @@ canvas{display:block}
 .pf-bar{height:14px;border-radius:7px;background:#06141a;border:1px solid #3a6fc4;overflow:hidden;margin-bottom:8px}
 .pf-bar i{display:block;height:100%;background:repeating-linear-gradient(-45deg,#ffe082 0 10px,#ffb300 10px 20px)}
 .pf-mission small{color:#cfe8ff;font-family:system-ui,sans-serif;font-size:12px}
+/* ===== Selección de Digimon (v2) ===== */
+.picker-screen{background:radial-gradient(120% 90% at 75% 0%,#1d3a6e 0%,#0b1630 55%,#060d1d 100%) !important}
+.pk-body{grid-template-columns:250px 1fr}
+.pv-roster{gap:10px}
+.pv-card{position:relative;display:grid;grid-template-columns:52px 1fr;align-items:center;gap:12px;padding:8px 12px 8px 12px;border-radius:16px;border:2px solid #1f3d63;background:linear-gradient(90deg,rgba(255,255,255,.05),transparent),#0b1a33;color:#e6f4ff;cursor:pointer;text-align:left;transition:transform .15s,border-color .15s,box-shadow .15s;--c:#4fc3f7}
+.pv-card::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:4px;border-radius:2px;background:var(--c)}
+.pv-card img{width:52px;height:52px;object-fit:contain;image-rendering:pixelated;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.14),transparent 70%)}
+.pv-card:hover{transform:translateX(3px)}
+.pv-card.sel{border-color:var(--c);background:linear-gradient(90deg,color-mix(in srgb,var(--c) 26%,transparent),transparent 75%),#0b1a33;box-shadow:0 0 16px color-mix(in srgb,var(--c) 45%,transparent)}
+.pv-num{position:absolute;right:10px;top:7px;font-size:11px;color:#7fa6cc;font-weight:bold}
+.pv-meta{display:flex;flex-direction:column;gap:4px}
+.pv-meta b{font-size:15px}
+.pv-meta em{font-style:normal;font-size:11px;align-self:flex-start;padding:2px 9px;border-radius:99px;background:var(--c);color:#0b1a12;font-weight:bold}
+.pv-stage{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:8px;padding:14px 18px;border-radius:18px;border:2px solid #2a5a8f;overflow:hidden;background:radial-gradient(55% 60% at 30% 42%,color-mix(in srgb,var(--c,#4fc3f7) 30%,transparent),transparent 70%),linear-gradient(180deg,#10244a,#071024)}
+.pv-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pv-tag{font-size:12px;letter-spacing:.5px;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.07);color:#cfe9ff}
+.pv-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:18px;min-height:0;align-items:center}
+.pv-spot{display:flex;align-items:center;justify-content:center;position:relative;height:100%}
+.pv-spot::after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c,#ffd54f) 40%,transparent),transparent 65%)}
+.pv-hero{position:relative;z-index:1;width:150px;height:150px;object-fit:contain;image-rendering:pixelated;animation:pvBob 2.4s ease-in-out infinite}
+@keyframes pvBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.pv-info{display:flex;flex-direction:column;gap:8px}
+.pv-info h2{margin:0;font-size:30px;color:#ffd54f}
+.pv-desc{margin:0;color:#e6f4ff;font-size:14px}
+.pv-stats{display:grid;gap:6px}
+.pv-why{margin:0;font-size:12px;color:#9fd4ff;line-height:1.4}
+.pv-evo{display:flex;align-items:center;justify-content:center;gap:14px;padding-top:6px;border-top:1px solid #2a5a8f;flex-wrap:wrap}
+.pv-node{display:flex;flex-direction:column;align-items:center;gap:4px}
+.pv-node img{width:52px;height:52px;object-fit:contain;image-rendering:pixelated;background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%);border-radius:50%}
+.pv-node small{font-size:12px;color:#cfe9ff;font-weight:bold}
+.pv-arrow{font-size:12px;color:#ffd54f;font-weight:bold;letter-spacing:.5px}
+.pv-note{font-size:11px;color:#7fa6cc;width:100%;text-align:center}
+.pv-foot{font-size:11px;color:#7fa6cc;text-align:center}
+
+/* ===== Vestidor de skins (v2) ===== */
+.tc-n{--tc:#9e9e9e}
+.tc-c{--tc:#81c784}
+.tc-r{--tc:#4fc3f7}
+.tc-e{--tc:#ce93d8}
+.sv-room{display:flex;flex-direction:column;gap:10px;height:100%;min-height:0}
+.sv-title{font-size:20px;color:#ffd54f;font-weight:900;letter-spacing:1px}
+.sv-layout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:14px;flex:1;min-height:0}
+.sv-show{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px;border-radius:20px;border:3px solid var(--tc);background:radial-gradient(70% 45% at 50% 35%,color-mix(in srgb,var(--tc) 40%,transparent),transparent 72%),#081428;box-shadow:0 0 28px color-mix(in srgb,var(--tc) 35%,transparent);min-height:0}
+.sv-show-top{width:100%;display:flex;justify-content:space-between;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--tc);font-weight:bold}
+.sv-spot{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
+.sv-hero{width:170px;height:170px;object-fit:contain;image-rendering:pixelated;animation:pvBob 2.4s ease-in-out infinite}
+.sv-show h3{margin:0;font-size:22px}
+.sv-show p{margin:0;text-align:center;font-size:13px;color:#b9dcff;min-height:34px}
+.sv-req{font-size:11px;color:#8fb3d9}
+.sv-equip{margin-top:4px;padding:10px 22px;border-radius:14px;border:0;font-weight:900;letter-spacing:1px;cursor:pointer;color:#0f2a05;background:linear-gradient(180deg,#eaffb0,#8be04a);box-shadow:0 5px 0 #2e6b13}
+.sv-equip:disabled{background:#1a2c4a;color:#7fa6cc;box-shadow:none;cursor:default}
+.sv-equip:not(:disabled):active{transform:translateY(3px)}
+.sv-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-content:start;overflow:auto;padding:2px}
+.sv-card{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:24px 8px 10px;border-radius:16px;border:2px solid var(--tc);background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 60%),#0a1830;color:#e6f4ff;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.sv-card:hover{transform:translateY(-3px)}
+.sv-card.locked{border-style:dashed;opacity:.9}
+.sv-card.foc{box-shadow:0 0 0 2px #fff inset,0 0 18px var(--tc)}
+.sv-card.eq::after{content:"EN USO";position:absolute;right:6px;bottom:6px;font-size:9px;font-weight:900;letter-spacing:.8px;padding:2px 6px;border-radius:6px;background:var(--tc);color:#0a1020}
+.sv-tier{position:absolute;left:8px;top:7px;font-size:10px;color:var(--tc);font-weight:bold;letter-spacing:.6px;text-transform:uppercase}
+.sv-img{width:84px;height:84px;display:flex;align-items:center;justify-content:center}
+.sv-img img{width:80px;height:80px;object-fit:contain;image-rendering:pixelated}
+.sv-card b{font-size:13px}
+.sv-card small{font-size:11px;color:#8fb3d9;text-align:center}
+.sv-bar{display:block;width:100%;height:6px;border-radius:3px;background:#1a2c4a;overflow:hidden;margin-top:3px}
+.sv-bar u{display:block;height:100%;background:var(--tc)}
+.sv-bar.big{height:8px;width:80%}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -1513,16 +1579,23 @@ function showSettings(){
 }
 // Pantalla "Elige tu Digimon": pestañas Personaje y Skins, y botón para empezar
 let pickTab = 'personaje';
+// Colores de dificultad para la selección (tarjeta y chip)
+const DIF_COL = {'Fácil': '#66bb6a', 'Media': '#ffb300', 'Difícil': '#ef5350'};
+// Colores de rareza de las skins (tc-n base, tc-c común, tc-r rara, tc-e épica)
+const SKIN_TIER_NAME = {n: 'Base', c: 'Común', r: 'Rara', e: 'Épica'};
+const SKIN_SRC_NAME = {base: 'Original', logro: 'Logro', gacha: 'Gacha', evento: 'Evento'};
 function showPicker(tab){
   if (tab) pickTab = tab;
   state = 'pick';
   setHud(false);
   const chars = SEASONS.adventure.chars;
-  const list = chars.map((k, i) => `
-    <button class="pk-card${k === selectedKey ? ' sel' : ''}" data-pick="${k}">
-      <img src="${spriteOf(k, false)}" alt=""><b>${CHARS[k].name}</b><em class="dif dif-${BALANCE[k].dif}">${BALANCE[k].dif}</em>
+  const roster = chars.map((k, i) => `
+    <button class="pv-card${k === selectedKey ? ' sel' : ''}" data-pick="${k}" style="--c:${DIF_COL[BALANCE[k].dif]}">
+      <span class="pv-num">${i + 1}</span>
+      <img src="${spriteOf(k, false)}" alt="">
+      <span class="pv-meta"><b>${CHARS[k].name}</b><em>${BALANCE[k].dif}</em></span>
     </button>`).join('');
-  const right = pickTab === 'skins' ? skinsPanelHtml(selectedKey) : '<div class="preview" id="pkPreview"></div>';
+  const right = pickTab === 'skins' ? skinsPanelHtml(selectedKey) : '<div class="pv-stage" id="pkPreview"></div>';
   showOverlay(`
     <div class="picker-screen">
       <header class="pk-head">
@@ -1534,7 +1607,7 @@ function showPicker(tab){
         </div>
       </header>
       <div class="pk-body">
-        <div class="pk-list">${list}</div>
+        <div class="pk-list pv-roster">${roster}</div>
         <div class="pk-right">${right}</div>
       </div>
       <footer class="pk-foot">
@@ -1542,7 +1615,7 @@ function showPicker(tab){
         <span class="pk-hint">1-6 elegir · ←→ cambiar · Enter empezar · Esc volver</span>
       </footer>
     </div>`);
-  overlay.querySelectorAll('.pk-card').forEach(b => {
+  overlay.querySelectorAll('.pv-card').forEach(b => {
     b.onclick = () => { selectedKey = b.dataset.pick; showPicker(); };
     b.ondblclick = () => startGame(b.dataset.pick);
   });
@@ -1551,45 +1624,98 @@ function showPicker(tab){
   document.getElementById('pkStart').onclick = () => startGame(selectedKey);
   if (pickTab === 'personaje') renderPickPreview(); else bindSkinTiles();
 }
-// Vista previa del personaje elegido: sprite, estadísticas, dificultad y evolución
+// Escaparate del Digimon elegido: héroe animado, estadísticas y línea de evolución
 function renderPickPreview(){
-  const k = selectedKey, c = CHARS[k], evo = EVO[k];
-  const dmgPct = (c.dmg / 14) * 100;
-  const rate = (0.4 / Math.max(c.cd, 0.1)) * 100;
+  const k = selectedKey, c = CHARS[k], evo = EVO[k], b = BALANCE[k];
   const el = document.getElementById('pkPreview');
   if (!el) return;
+  const st = statsOf(k);
+  const dmgPct = (c.dmg / 14) * 100;
+  const rate = (0.4 / Math.max(c.cd, 0.1)) * 100;
+  el.style.setProperty('--c', DIF_COL[b.dif]);
   el.innerHTML = `
-    <img src="${spriteOf(k, false)}" alt="">
-    <h2>${c.name}</h2>
-    <div class="pdesc">${c.desc}</div>
-    ${statBar('Daño', dmgPct, true)}
-    ${statBar('Cadencia', rate)}
-    <div class="muted" style="margin-top:8px;text-align:left">Ataque: ${ATTACK_NAME[c.kind] || c.kind}</div>
-    <div class="muted" style="margin-top:4px;text-align:left">Nivel 5 → ${evo ? evo.name : '—'} (+50% daño)</div>
-    <div class="muted" style="margin-top:6px;text-align:left">Dificultad: <b class="dif dif-${BALANCE[k].dif}">${BALANCE[k].dif}</b> · Vida ${BALANCE[k].hp} · Velocidad ${BALANCE[k].speed}</div>
-    <div class="muted" style="margin-top:2px;text-align:left;font-size:11px">${BALANCE[k].why}</div>`;
+    <div class="pv-top">
+      <span class="pv-tag">Temporada 1 · <b style="color:${DIF_COL[b.dif]}">${b.dif}</b></span>
+      <span class="pv-tag">${ATTACK_NAME[c.kind] || c.kind}</span>
+      <span class="pv-tag">Partidas ${st.plays} · Bajas ${st.kills}</span>
+    </div>
+    <div class="pv-main">
+      <div class="pv-spot"><img class="pv-hero" src="${spriteOf(k, false)}" alt=""></div>
+      <div class="pv-info">
+        <h2>${c.name}</h2>
+        <p class="pv-desc">${c.desc}</p>
+        <div class="pv-stats">
+          ${statBar('Daño', dmgPct, true)}
+          ${statBar('Cadencia', rate)}
+          ${statBar('Vida', (b.hp / 120) * 100)}
+          ${statBar('Velocidad', (b.speed / 7) * 100)}
+        </div>
+        <p class="pv-why">${b.why}</p>
+      </div>
+    </div>
+    <div class="pv-evo">
+      <div class="pv-node"><img src="${spriteOf(k, false)}" alt=""><small>${c.name}</small></div>
+      <div class="pv-arrow">Nivel 5 ➜</div>
+      ${evo ? `<div class="pv-node"><img src="${evo.sprite}" alt=""><small>${evo.name}</small></div>` : '<div class="pv-node"><small>—</small></div>'}
+      <span class="pv-note">+50% daño · solo durante la partida</span>
+    </div>
+`;
 }
-// Skins del personaje elegido: equipar las que tienes y ver cómo se consiguen las demás
+// Progreso hacia una skin por logro (0-1); las demás no tienen progreso
+function skinProgress(key, sk){
+  if (sk.src !== 'logro') return null;
+  const st = statsOf(key);
+  return sk.req.plays ? Math.min(1, st.plays / sk.req.plays) : Math.min(1, st.kills / sk.req.kills);
+}
+// Vestidor: escaparate de la skin enfocada + parrilla de skins tipo póster
 function skinsPanelHtml(key){
-  const owned = ownedSkins(key);
-  const tiles = SKINS.map(sk => {
-    const has = owned.includes(sk.id);
-    const eq = (skinEquipped[key] || 'clasico') === sk.id;
-    return `<button class="g-skin r-${sk.tier}${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}"
-      data-skin="${sk.id}" ${has ? '' : 'disabled'} title="${sk.desc || sk.name}">
-      <img src="${spriteWith(key, false, sk.id)}" alt=""><small>${has ? sk.name : '???'}</small>
-      ${has ? '' : `<em>${howTo(key, sk)}</em>`}</button>`;
+  const owned = ownedSkins(key), eqId = skinEquipped[key] || 'clasico';
+  const fid = skinFocusId(), fs = SKIN_BY_ID[fid];
+  const has = owned.includes(fid), eq = eqId === fid;
+  const heroFilter = has ? (fs.f ? `filter:${fs.f}` : '') : 'filter:grayscale(1) brightness(.35)';
+  const prog = skinProgress(key, fs);
+  const cards = SKINS.map(sk => {
+    const h = owned.includes(sk.id), e = eqId === sk.id, f = fid === sk.id, p = skinProgress(key, sk);
+    return `<button class="sv-card tc-${sk.tier}${h ? ' owned' : ' locked'}${e ? ' eq' : ''}${f ? ' foc' : ''}" data-focus="${sk.id}">
+      <span class="sv-tier">${SKIN_TIER_NAME[sk.tier]}</span>
+      <span class="sv-img"><img src="${spriteWith(key, false, sk.id)}" alt="" style="${h ? (sk.f ? `filter:${sk.f}` : '') : 'filter:grayscale(1) brightness(.35)'}"></span>
+      <b>${h ? sk.name : '???'}</b>
+      <small>${h ? (e ? '✔ Equipada' : 'En tu colección') : howTo(key, sk)}</small>
+      ${!h && p !== null ? `<i class="sv-bar"><u style="width:${Math.round(p * 100)}%"></u></i>` : ''}
+    </button>`;
   }).join('');
+  const action = eq ? '✔ Equipada' : has ? 'Equipar' : 'Bloqueada';
   return `
-    <div class="pk-skins-title">Skins de ${CHARS[key].name}</div>
-    <div class="g-tiles">${tiles}</div>
-    <p class="g-note">Las skins que tienes dan su bonus a este Digimon aunque no las lleves equipadas. Equipar cambia solo el aspecto y el aura.</p>`;
+    <div class="sv-room">
+      <div class="sv-title">Vestidor · ${CHARS[key].name}</div>
+      <div class="sv-layout">
+        <section class="sv-show tc-${fs.tier}">
+          <div class="sv-show-top"><span>${SKIN_TIER_NAME[fs.tier]}</span><span>${SKIN_SRC_NAME[fs.src]}</span></div>
+          <div class="sv-spot"><img class="sv-hero" src="${spriteWith(key, false, fs.id)}" alt="" style="${heroFilter}"></div>
+          <h3>${has ? fs.name : '???'}</h3>
+          <p>${fs.desc || (fs.src === 'base' ? 'Aspecto original del Digimon' : '')}</p>
+          ${!has && prog !== null ? `<i class="sv-bar big"><u style="width:${Math.round(prog * 100)}%"></u></i><small class="sv-req">${howTo(key, fs)}</small>` : ''}
+          <button class="sv-equip" id="skEquip" ${has && !eq ? '' : 'disabled'}>${action}</button>
+        </section>
+        <div class="sv-grid">${cards}</div>
+      </div>
+      <p class="g-note">Las skins que tienes dan su bonus aunque no las lleves equipadas. Equipar cambia solo el aspecto y el aura.</p>
+    </div>`;
+}
+let skinFocus = null;   // {key, id}: skin que se muestra en el escaparate del vestidor
+function skinFocusId(){
+  return skinFocus && skinFocus.key === selectedKey ? skinFocus.id : (skinEquipped[selectedKey] || 'clasico');
 }
 function bindSkinTiles(){
-  overlay.querySelectorAll('.g-skin.owned').forEach(b => b.onclick = () => {
-    equipSkin(selectedKey, b.dataset.skin);
+  overlay.querySelectorAll('.sv-card').forEach(b => b.onclick = () => {
+    skinFocus = {key: selectedKey, id: b.dataset.focus};
     showPicker('skins');
   });
+  const eqBtn = document.getElementById('skEquip');
+  if (eqBtn && !eqBtn.disabled) eqBtn.onclick = () => {
+    equipSkin(selectedKey, skinFocusId());
+    showPicker('skins');
+  };
 }
 // Cambia de personaje en la pantalla de elección (flechas)
 function pickMove(delta){
