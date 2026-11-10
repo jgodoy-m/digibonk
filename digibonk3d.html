@@ -895,6 +895,100 @@ canvas{display:block}
 .gx-pull span{font-size:16px !important}
 .gx-pull.tix{background:linear-gradient(180deg,#b8ffd0,#2fbf6a 45%,#0f7a3c) !important;text-shadow:0 2px 0 #063d1c}
 .gx-stage{min-height:200px !important}
+/* ===== v5: tarjetas de nivel, fin de partida, HUD de habilidades, colección, transiciones ===== */
+.ico{width:1em;height:1em;vertical-align:-.12em}
+#overlay>*{animation:uiIn .22s ease-out}
+#overlay>.menu4,#overlay>.dvl2,#overlay>.pa{animation:none}
+@keyframes uiIn{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
+.lv3{display:flex;flex-direction:column;align-items:center;gap:20px;font-family:'Orbitron',system-ui,sans-serif}
+.lv3-head{text-align:center}
+.lv3-head small{font-size:14px;letter-spacing:6px;color:var(--dv-cyan)}
+.lv3-head h2{margin:4px 0;font-size:30px;color:#fff;font-style:italic;text-shadow:0 4px 0 #0a2a8a}
+.lv3-head p{margin:0;font:13px system-ui,sans-serif;color:#9fd4ff}
+.lv3-row{display:flex;gap:18px}
+.lv3-card{--cc:var(--dv-org);position:relative;width:250px;height:340px;padding:44px 18px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;color:#fff;text-align:center;border:3px solid transparent;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--cc) 30%,#0a1d55),#060f2a 62%) padding-box,linear-gradient(180deg,var(--cc),#1b4fd6) border-box;
+  clip-path:polygon(0 0,calc(100% - 34px) 0,100% 34px,100% 100%,0 100%);animation:lvIn .5s cubic-bezier(.2,1.4,.4,1) both;transition:transform .15s,filter .15s}
+.lv3-card.defensiva{--cc:var(--dv-cyan)}
+.lv3-card.utilidad{--cc:#5ee08a}
+@keyframes lvIn{from{transform:translateY(60px) rotateY(70deg);opacity:0}to{transform:none;opacity:1}}
+.lv3-card:hover{transform:translateY(-12px);filter:brightness(1.25)}
+.lv3-key{position:absolute;left:12px;top:10px;width:26px;height:26px;line-height:26px;background:var(--cc);color:#06102b;font-weight:900}
+.lv3-tag{position:absolute;left:48px;top:14px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cc)}
+.lv3-ic{font-size:74px;line-height:1;color:var(--cc);filter:drop-shadow(0 0 14px var(--cc))}
+.lv3-card b{font-size:18px;line-height:1.15}
+.lv3-card p{margin:0;font:13px/1.35 system-ui,sans-serif;color:#cfe9ff;flex:1}
+.lv3-pips{display:flex;gap:6px;font-size:11px;letter-spacing:2px;color:#9fd4ff;text-transform:uppercase}
+.lv3-pips i{width:26px;height:8px;background:#1a2c5a}
+.lv3-pips i.on{background:var(--cc)}
+.lv3-pips i.next{background:#fff;animation:dvlBlink .7s steps(2) infinite}
+.end3{width:min(860px,94vw);padding:22px 28px;font-family:'Orbitron',system-ui,sans-serif;color:#e6f4ff;border:3px solid transparent;
+  background:linear-gradient(180deg,#143488,#081640) padding-box,linear-gradient(135deg,var(--dv-cyan),#1b4fd6 45%,var(--dv-org)) border-box;
+  clip-path:polygon(var(--ch) 0,100% 0,100% calc(100% - var(--ch)),calc(100% - var(--ch)) 100%,0 100%,0 var(--ch))}
+.end3 h1{margin:0;font-size:54px;font-style:italic;letter-spacing:4px;text-align:center;color:var(--dv-yel);text-shadow:0 5px 0 #7a2c00}
+.end3.lose h1{color:#ff6b6b;text-shadow:0 5px 0 #5a0d0d}
+.end3-sub{text-align:center;margin:4px 0 14px;font:14px system-ui,sans-serif;color:#9fd4ff}
+.end3-cells{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.end3-cells span{display:flex;flex-direction:column;align-items:center;font:11px system-ui,sans-serif;color:#9fd4ff;background:rgba(0,0,0,.3);padding:10px 4px}
+.end3-cells b{font:900 26px 'Orbitron',system-ui,sans-serif;color:#fff}
+.end3-cols{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
+.end3 h3{margin:0 0 8px;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--dv-cyan)}
+.end3-bar{display:grid;grid-template-columns:170px 1fr 54px;align-items:center;gap:8px;font:12px system-ui,sans-serif;margin-bottom:6px;animation:uiIn .4s ease-out both}
+.end3-bar span{display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.end3-bar .ico{color:var(--dv-org);font-size:16px;flex:none}
+.end3-bar i{height:10px;background:#0a1d55}
+.end3-bar u{display:block;height:100%;background:linear-gradient(90deg,var(--dv-org),var(--dv-yel))}
+.end3-bar em{font-style:normal;text-align:right;color:#fff;font-weight:bold}
+.end3-rw{margin:0;padding:0;list-style:none;font:14px system-ui,sans-serif}
+.end3-rw li{padding:7px 10px;margin-bottom:6px;background:rgba(0,0,0,.3);border-left:4px solid var(--dv-yel);animation:uiIn .4s ease-out both}
+.end3-rw li:nth-child(2){animation-delay:.15s}.end3-rw li:nth-child(3){animation-delay:.3s}.end3-rw li:nth-child(n+4){animation-delay:.45s}
+.end3-rw b{color:var(--dv-yel)}
+.end3-act{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:16px}
+.end3-act .g-btn{font-size:18px;padding:14px 34px;cursor:pointer}
+.end3-act .mini-btn{padding:10px 18px;cursor:pointer}
+#skillBar{position:fixed;left:16px;bottom:36px;display:none;gap:6px;pointer-events:none;z-index:5}
+.sb-i{position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--dv-cyan);background:rgba(6,16,43,.85);border:2px solid var(--dv-cyan)}
+.sb-i.ofensiva{color:var(--dv-org);border-color:var(--dv-org)}
+.sb-i.utilidad{color:#5ee08a;border-color:#5ee08a}
+.sb-i em{position:absolute;right:-5px;bottom:-5px;min-width:16px;height:16px;line-height:16px;text-align:center;font:900 10px 'Orbitron',system-ui,sans-serif;font-style:normal;background:#fff;color:#06102b}
+#hudSkills{display:none}
+#bossbar{height:18px !important;border:2px solid #ce93d8 !important;box-shadow:0 0 14px rgba(206,147,216,.6)}
+#bossbar::before{content:"DEVIMON · JEFE FINAL";position:absolute;left:0;right:0;top:-20px;text-align:center;font:900 12px 'Orbitron',system-ui,sans-serif;letter-spacing:3px;color:#ce93d8;text-shadow:0 1px 3px #000}
+.cl3{width:min(1060px,96vw) !important}
+.cl-pct{font:900 14px 'Orbitron',system-ui,sans-serif;color:#1a0d00}
+.cl-prog{height:10px;background:#06102b;flex:none}
+.cl-prog i{display:block;height:100%;background:linear-gradient(90deg,var(--dv-cyan),var(--dv-yel))}
+.cl-body{flex:1;overflow:auto;padding-right:6px}
+.cl-body h3{margin:14px 0 8px;font:900 13px 'Orbitron',system-ui,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--dv-cyan)}
+.cl-row{display:grid;grid-template-columns:110px repeat(5,1fr);gap:8px;align-items:stretch;margin-bottom:8px}
+.cl-name{display:flex;align-items:center;font:700 13px 'Orbitron',system-ui,sans-serif}
+.cl-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.cl-cell{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;background:#081a4a;border:2px dashed #2a4a8a;text-align:center;min-height:104px}
+.cl-cell.ok{border-style:solid;border-color:var(--dv-cyan);background:linear-gradient(180deg,rgba(61,224,255,.16),#081a4a)}
+.cl-cell img{width:48px;height:48px;object-fit:contain;image-rendering:pixelated}
+.cl-cell:not(.ok) img,.cl-cell:not(.ok) .rw-frame,.cl-cell:not(.ok) .cl-medal{filter:grayscale(1) brightness(.35)}
+.cl-medal{font-size:36px;color:var(--dv-yel);height:48px;display:flex;align-items:center}
+.cl-cell b{font-size:12px}
+.cl-cell small{font-size:10px;color:#9fd4ff}
+.pv-syn{margin:0;font-size:12px;color:var(--dv-yel)}
+.m4-list{gap:8px}
+.m4-item{height:70px}
+/* Pantallas estrechas o bajas: el menú se apila y se ocultan los adornos */
+@media (max-width:1000px),(max-height:620px){
+  .m4-hero,.m4-stats,.m4-news{display:none}
+  .m4-brand{left:20px;top:64px}
+  .menu4 .m3-logo{font-size:46px}
+  .m4-list{right:16px;left:16px;width:auto;top:150px;bottom:40px;justify-content:flex-start;overflow:auto}
+  .m4-item{height:58px}.m4-item.main{height:76px}
+  .dvl2{grid-template-columns:1fr}
+  .dvl-scene{display:none}
+  .lv3-row{flex-direction:column;gap:10px}
+  .lv3-card{width:min(92vw,420px);height:auto;padding:36px 14px 12px}
+  .lv3-ic{font-size:40px}
+  .end3-cols,.pl3-body{grid-template-columns:1fr}
+  .pk-body,.gx-top,.sv-layout{grid-template-columns:1fr !important}
+  .picker-screen{height:auto !important;max-height:calc(100vh - 70px);overflow:auto}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -917,6 +1011,7 @@ canvas{display:block}
 <div id="zoneName" style="position:fixed;top:10px;left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e1f5fe;text-shadow:0 1px 3px #000;pointer-events:none"></div>
 <div id="xp"></div>
 <canvas id="edgeCv"></canvas>
+<div id="skillBar"></div>
 <div id="bonkBar" style="display:none"><div id="bonkFill"></div><span id="bonkTxt">BONK 0%</span></div>
 <div id="xpTxt"></div>
 <div id="overlay"></div>
@@ -1439,7 +1534,7 @@ addEventListener('keydown', e => {
   if (state === 'map'){ if (k === 'escape') closeMap(); return; }
   if (k === 'q' && state === 'play'){ bonkRelease(); return; }
   if (state === 'help'){ if (k === 'escape') showSelect(); if (k === 'arrowright') tutoStep(1); if (k === 'arrowleft') tutoStep(-1); return; }
-  if (state === 'gacha' || state === 'settings' || state === 'player'){ if (k === 'escape') showSelect(); return; }
+  if (state === 'gacha' || state === 'settings' || state === 'player' || state === 'collection'){ if (k === 'escape') showSelect(); return; }
   // Esc o P pausan y reanudan. Con el ratón bloqueado el navegador puede no entregar Esc:
   // en ese caso la pausa la dispara pointerlockchange (ver más abajo). P sirve en pantalla completa.
   if (k === 'escape' || k === 'p'){
@@ -1505,8 +1600,8 @@ function showPause(askQuit = false){
   const sprite = spriteOf(c.id, evolved);
   const hpPct = Math.max(0, 100 * g.p.hp / g.p.maxHp);
   const expPct = Math.min(100, 100 * g.p.xp / g.p.nextXp);
-  const evoPct = evolved ? 100 : Math.min(100, g.p.lvl / 5 * 100);
-  const evoTxt = evolved ? '¡Digievolucionado!' : `Digievolución · Nv ${g.p.lvl}/5`;
+  const evoPct = evolved ? 100 : Math.min(100, g.p.lvl / EVO_LEVEL * 100);
+  const evoTxt = evolved ? '¡Digievolucionado!' : `Digievolución · Nv ${g.p.lvl}/${EVO_LEVEL}`;
   const actions = askQuit ? `
     <div class="pz-confirm">
       <div class="pz-warn">¿Desconectar del Digital World?</div>
@@ -1595,6 +1690,7 @@ const fmtTime = s => `${Math.floor(s/60)}:${String(s%60).padStart(2, '0')}`;
 let selectedKey = 'gabumon';
 // Oculta/muestra el HUD de partida (el menú no debe mostrar barras ni temporizador)
 function setHud(v){
+  const sb0 = document.getElementById('skillBar'); if (sb0){ sb0.style.display = v ? 'flex' : 'none'; if (!v) sb0.innerHTML = ''; }
   const bb0 = document.getElementById('bonkBar'); if (bb0) bb0.style.display = v ? 'block' : 'none';
   const d = v ? '' : 'none';
   document.getElementById('menubg').style.display = 'none';
@@ -1613,14 +1709,14 @@ const TXT = {
   es: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'Survivor 3D de Digimon, gratis en el navegador', boot:'DIGIVICE · ACCESO AL DIGIMUNDO', who:'Niño elegido, identifícate',
        saved:'Tu nombre se guarda en este navegador.', ph:'TU NOMBRE', enter:'ENTRAR AL DIGIMUNDO', guest:'Entrar como invitado (pruebas)', needName:'Escribe un nombre',
        play:'JUGAR', playS:'Elige tu Digimon y sobrevive 10 minutos', gacha:'GACHA', gachaS:'Tiradas con Bits o tickets', player:'JUGADOR', playerS:'Tu tarjeta, marcos y títulos',
-       help:'CÓMO JUGAR', helpS:'Tutorial con vídeos', set:'AJUSTES', setS:'Calidad, sonido y guardado', recs:'Tus récords', runs:'Partidas', best:'Mejor tiempo', lvl:'Mejor nivel',
+       coll:'COLECCIÓN', collS:'Skins, marcos, títulos y evoluciones', help:'CÓMO JUGAR', helpS:'Tutorial con vídeos', set:'AJUSTES', setS:'Calidad, sonido y guardado', recs:'Tus récords', runs:'Partidas', best:'Mejor tiempo', lvl:'Mejor nivel',
        kills:'Bajas', none:'Todavía no hay partidas. ¡Empieza una!', partner:'Tu compañero', noTitle:'Sin título', guestTag:'invitado · pruebas',
        evEnds:'Termina en', evSkin:'Skin Festival como legendaria en el gacha', tipT:'Consejo', tip:'Los élites y el jefe sueltan tickets de tirada.', daily:'Misión diaria',
        legal:'Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon.'},
   en: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'A free 3D Digimon survivor in your browser', boot:'DIGIVICE · DIGITAL WORLD ACCESS', who:'DigiDestined, identify yourself',
        saved:'Your name is saved in this browser.', ph:'YOUR NAME', enter:'ENTER THE DIGITAL WORLD', guest:'Enter as guest (testing)', needName:'Type a name',
        play:'PLAY', playS:'Pick your Digimon and survive 10 minutes', gacha:'GACHA', gachaS:'Pulls with Bits or tickets', player:'PLAYER', playerS:'Your card, frames and titles',
-       help:'HOW TO PLAY', helpS:'Video tutorial', set:'SETTINGS', setS:'Quality, sound and save', recs:'Your records', runs:'Runs', best:'Best time', lvl:'Best level',
+       coll:'COLLECTION', collS:'Skins, frames, titles and evolutions', help:'HOW TO PLAY', helpS:'Video tutorial', set:'SETTINGS', setS:'Quality, sound and save', recs:'Your records', runs:'Runs', best:'Best time', lvl:'Best level',
        kills:'Kills', none:'No runs yet. Start one!', partner:'Your partner', noTitle:'No title', guestTag:'guest · testing',
        evEnds:'Ends in', evSkin:'Festival skin as the legendary in the gacha', tipT:'Tip', tip:'Elites and the boss drop pull tickets.', daily:'Daily mission',
        legal:'Unofficial, free, non-profit fan game. Not affiliated with Bandai, Toei Animation or the Digimon rights holders.'}
@@ -1631,8 +1727,34 @@ function toggleLang(){
   localStorage.setItem('digibonk3d-lang', LANG);
   if (state === 'register') showRegister(); else if (state === 'select') showSelect(); else refreshTopbar();
 }
+// Colección: todo lo que se puede conseguir, con porcentaje de completado (solo consulta)
+function showCollection(){
+  state = 'collection';
+  setHud(false);
+  const chars = SEASONS.adventure.chars;
+  let have = 0, total = 0;
+  const cell = (ok, inner, label, sub = '') => { total++; if (ok) have++; return `<div class="cl-cell${ok ? ' ok' : ''}">${inner}<b>${ok ? label : '???'}</b><small>${sub}</small></div>`; };
+  const skinRows = chars.map(k => `<div class="cl-row"><span class="cl-name">${CHARS[k].name}</span>${SKINS.map(sk =>
+    cell(ownedSkins(k).includes(sk.id), `<img src="${spriteWith(k, false, sk.id)}" alt="">`, sk.name, ownedSkins(k).includes(sk.id) ? SKIN_TIER_NAME[sk.tier] : howTo(k, sk))).join('')}</div>`).join('');
+  const evos = chars.map(k => cell(evolvedUnlocked(k), `<img src="${EVO[k].sprite}" alt="">`, EVO[k].name, `${CHARS[k].name} · nivel ${EVO_LEVEL}`)).join('');
+  const frames = FRAMES.map(f => cell(inv.frames.includes(f.id), `<div class="rw-frame fr-${f.id}"></div>`, f.name, TIER_NAME[f.tier])).join('');
+  const titles = TITLES.map(tl => cell(inv.titles.includes(tl.id), `<span class="cl-medal">${svgIcon('utilidad')}</span>`, tl.name, inv.titles.includes(tl.id) ? TIER_NAME[tl.tier] : tl.how)).join('');
+  const pct = Math.round(have / total * 100);
+  showOverlay(`
+    <div class="picker-screen cl3">
+      <header class="pk-head"><button class="g-back" id="clBack">← Volver</button><h2>Colección</h2><span class="cl-pct">${have} / ${total} · ${pct}%</span></header>
+      <div class="cl-prog"><i style="width:${pct}%"></i></div>
+      <div class="cl-body">
+        <h3>Skins</h3>${skinRows}
+        <h3>Digievoluciones vistas</h3><div class="cl-grid">${evos}</div>
+        <h3>Marcos</h3><div class="cl-grid">${frames}</div>
+        <h3>Títulos</h3><div class="cl-grid">${titles}</div>
+      </div>
+    </div>`);
+  document.getElementById('clBack').onclick = () => showSelect();
+}
 // ---------- Barra superior fija en los menús: tarjeta, Bits, tickets, idioma, sonido, pantalla completa y ajustes ----------
-const TOP_STATES = ['select', 'gacha', 'pick', 'player', 'settings', 'help', 'savecode'];
+const TOP_STATES = ['select', 'gacha', 'pick', 'player', 'settings', 'help', 'savecode', 'collection'];
 function refreshTopbar(){
   const el = document.getElementById('topbar');
   const show = TOP_STATES.includes(state) && !overlay.classList.contains('hidden') && !overlay.querySelector('.pa,.pr3,.dvl2');
@@ -1694,6 +1816,7 @@ function showSelect(){
         ${item('playBtn', ' main', '▶', t('play'), t('playS'))}
         ${item('btnGacha', '', '<i class="dv-ico"></i>', t('gacha'), t('gachaS'))}
         ${item('btnPlayer', '', '👤', t('player'), t('playerS'))}
+        ${item('btnColl', '', svgIcon('utilidad'), t('coll'), t('collS'))}
         ${item('btnHelp', '', '?', t('help'), t('helpS'))}
         ${item('btnSettings', '', '⚙', t('set'), t('setS'))}
       </nav>
@@ -1705,6 +1828,7 @@ function showSelect(){
   document.getElementById('btnPlayer').onclick = () => showPlayer();
   document.getElementById('btnSettings').onclick = () => showSettings();
   document.getElementById('btnHelp').onclick = () => showHelp();
+  document.getElementById('btnColl').onclick = () => showCollection();
   // Carrusel de novedades: cambia solo cada 4,5 s o al pulsar un punto
   let ni = 0;
   const paintNews = () => {
@@ -1948,6 +2072,7 @@ function renderPickPreview(){
           ${statBar('Velocidad', (b.speed / 7) * 100)}
         </div>
         <p class="pv-why">${b.why}</p>
+        <p class="pv-syn">Combina bien con: ${({shot: 'Disparo Espiral, Rayo Láser, crítico', ring: 'Aura de Datos, Onda de Pulso, área', orbit: 'Tornado Bit, Mina Digital, velocidad'})[c.kind]}</p>
       </div>
     </div>
     <div class="pv-evo">
@@ -2054,7 +2179,7 @@ function startGame(key){
     dash: 0, dashCd: 0, dir: {x:0, z:-1}, chests: [], chestT: 20, flash: '', flashT: 0,
     texts: [], nearChest: null, combo: 0, comboT: 0,
     boss: null, bossSpawned: false, bossDown: false, bossShotT: 0, eshots: [],
-    zone: 1, eliteT: 60, drops: [], bonk: 0, dashReady: true, sk: newSkillState(), skills: {}, tix: 0
+    zone: 1, eliteT: 60, drops: [], bonk: 0, dashReady: true, sk: newSkillState(), skills: {}, tix: 0, dmgBy: {}
   };
   applyZoneVisuals(1);
   applyBalance(key);
@@ -2330,11 +2455,13 @@ function bonkRelease(){
   sfx('evolve');
   announce('¡BONK!', 'Onda de choque', '#ffd54f');
 }
+let dmgSrc = 'base';   // qué ataque está golpeando (para el resumen de fin de partida)
 function hurt(e, dmg){
   // 12% de golpes críticos: doble daño, número naranja y sacudida ligera
   const crit = Math.random() < g.p.critChance;
   if (crit){ dmg *= g.p.critMul; shake = Math.max(shake, 0.2); }
   e.hp -= dmg;
+  g.dmgBy[dmgSrc] = (g.dmgBy[dmgSrc] || 0) + dmg;
   popText(e.x, e.z, Math.round(dmg), crit ? '#ffb300' : '#ffffff', crit ? 0.8 : 0.55);
   burst(e.x, e.z, hitColors[e.kind] || '#ffe082');
   sfx('hit');
@@ -2702,6 +2829,7 @@ function drawEdgeMarkers(){
   if (state !== 'play' || !g) return;
   const targets = g.chests.filter(ch => !ch.open && !ch.gone).map(ch => ({x: ch.x, z: ch.z, col: '#ffd54f'}));
   if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
+  for (const e of g.enemies) if (e.kind === 'elite') targets.push({x: e.x, z: e.z, col: '#ff7043'});
   const W = cv.width, H = cv.height, cx = W/2, cy = H/2;
   for (const t of targets){
     const v = new THREE.Vector3(t.x, terrainH(t.x, t.z) + 1.5, t.z).project(camera);
@@ -2741,7 +2869,7 @@ function upgradeChoices(){
     const lv = g.skills[id] || 0;
     if (lv >= SKILL_MAX) continue;
     const s = SKILLS[id];
-    pool.push({t: `${s.name} · ${lv ? 'Nivel ' + (lv + 1) : 'Nueva'}`, k: s.k, d: s.d, f: () => addSkill(id)});
+    pool.push({t: `${s.name} · ${lv ? 'Nivel ' + (lv + 1) : 'Nueva'}`, name: s.name, skill: id, lv, k: s.k, d: s.d, f: () => addSkill(id)});
   }
   return pool.sort(() => Math.random() - 0.5).slice(0, 3);
 }
@@ -2779,7 +2907,7 @@ function nearestIn(x, z, R){
 function spawnSProj(x, z, vx, vz, dmg, life, pierce, homing, color, target = null){
   const mesh = new THREE.Mesh(SPROJ_GEO, matFor(color));
   world.add(mesh);
-  g.sk.proj.push({x, z, vx, vz, dmg, life, pierce, homing, target, hit: new Set(), mesh});
+  g.sk.proj.push({x, z, vx, vz, dmg, life, pierce, homing, target, hit: new Set(), mesh, src: dmgSrc});
 }
 function dropMine(x, z, lv){
   const mesh = new THREE.Mesh(MINE_GEO, MINE_MAT);
@@ -2792,6 +2920,7 @@ function updateSkills(dt){
   const p = g.p, S = g.sk, L = g.skills, ar = p.area, dm = p.dmg, cm = p.cdMul;
   const lv = id => L[id] || 0;
 
+  dmgSrc = 'aura';
   // Aura de Datos: anillo que daña a los enemigos que entran
   if (lv('aura')){
     const R = (2.6 + 0.9*lv('aura')) * ar;
@@ -2810,6 +2939,7 @@ function updateSkills(dt){
     }
   }
 
+  dmgSrc = 'tornado';
   // Tornado Bit: bits que giran, empujan y frenan proyectiles del jefe
   const nT = lv('tornado') ? lv('tornado') + 1 : 0;
   while (S.bits.length < nT){ const m = new THREE.Mesh(BIT_GEO, BIT_MAT); world.add(m); S.bits.push(m); }
@@ -2836,6 +2966,7 @@ function updateSkills(dt){
     }
   }
 
+  dmgSrc = 'pulso';
   // Onda de Pulso: anillo de 360° que daña y empuja
   if (lv('pulso')){
     S.pulseT -= dt;
@@ -2856,6 +2987,7 @@ function updateSkills(dt){
     }
   }
 
+  dmgSrc = 'espiral';
   // Disparo Espiral: al enemigo más cercano; atraviesa varios
   if (lv('espiral')){
     S.spiralT -= dt;
@@ -2869,6 +3001,7 @@ function updateSkills(dt){
     }
   }
 
+  dmgSrc = 'cuchilla';
   // Cuchilla Persiguiente: hojas que se dirigen al enemigo más fuerte
   if (lv('cuchilla')){
     S.bladeT -= dt;
@@ -2883,6 +3016,7 @@ function updateSkills(dt){
     }
   }
 
+  dmgSrc = 'laser';
   // Rayo Láser: haz hacia el enemigo más cercano; daña a todos los que están en la línea
   if (lv('laser')){
     S.laserT -= dt;
@@ -2910,6 +3044,7 @@ function updateSkills(dt){
   for (const b of S.beams) b.t += dt;
   S.beams = S.beams.filter(b => { if (b.t < 0.18) return true; world.remove(b.m); return false; });
 
+  dmgSrc = 'mina';
   // Mina Digital: se deja una mina cada 2,2 m recorridos; explota al pisarla un enemigo
   if (lv('mina')){
     const L2 = lv('mina');
@@ -2932,6 +3067,7 @@ function updateSkills(dt){
     S.mines = S.mines.filter(m => { if (m.life > 0) return true; world.remove(m.mesh); return false; });
   }
 
+  dmgSrc = 'meteoro';
   // Lluvia de Meteoros: aviso en el suelo y después impacto en área
   if (lv('meteoro')){
     S.meteorT -= dt;
@@ -2980,29 +3116,50 @@ function updateSkills(dt){
     for (const e of g.enemies){
       if (e.hp <= 0 || pr.hit.has(e)) continue;
       if (dist2(pr.x, pr.z, e.x, e.z) < (e.r + 0.3)*(e.r + 0.3)){
-        hurt(e, pr.dmg);
+        dmgSrc = pr.src; hurt(e, pr.dmg);
         pr.hit.add(e);
         if (--pr.pierce <= 0){ pr.life = 0; break; }
       }
     }
   }
   S.proj = S.proj.filter(pr => { if (pr.life > 0) return true; world.remove(pr.mesh); return false; });
+  dmgSrc = 'base';
 }
+// Iconos propios (SVG) de habilidades y categorías: no dependen de los emojis del navegador
+const ICON = {
+  aura: '<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="12" cy="12" r="3" fill="currentColor"/>',
+  tornado: '<path d="M4 5h16M6 9h12M8 13h8M10 17h4M11 21h2" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>',
+  pulso: '<circle cx="12" cy="12" r="3" fill="currentColor"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="10.6" fill="none" stroke="currentColor" stroke-width="1.2"/>',
+  espiral: '<path d="M3 12h13M12 6l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>',
+  cuchilla: '<path d="M12 2c4 4 4 8 0 10-4-2-4-6 0-10zM5 14c4-1 6 1 7 5-4 1-6-1-7-5zM19 14c-4-1-6 1-7 5 4 1 6-1 7-5z" fill="currentColor"/>',
+  laser: '<path d="M3 12h18" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M3 7h10M3 17h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>',
+  mina: '<circle cx="12" cy="13" r="6" fill="currentColor"/><path d="M12 3v4M4 13H2M22 13h-2M6 7l1.5 1.5M18 7l-1.5 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  meteoro: '<circle cx="15" cy="15" r="5" fill="currentColor"/><path d="M4 3l7 8M9 2l5 7M2 8l7 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  ofensiva: '<path d="M5 19L18 6M12 5h7v7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>',
+  defensiva: '<path d="M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z" fill="currentColor"/>',
+  utilidad: '<path d="M12 2l3 7 7 1-5 5 1 7-6-4-6 4 1-7-5-5 7-1z" fill="currentColor"/>',
+  base: '<circle cx="12" cy="12" r="5" fill="currentColor"/>'
+};
+const svgIcon = id => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${ICON[id] || ICON.base}</svg>`;
 function openUpgrades(){
   state = 'levelup';
   sfx('levelup');
   document.getElementById('flash').animate([{opacity: .75}, {opacity: 0}], {duration: 520});
   unlockMouse();   // hay que poder hacer clic en las mejoras
-  const cat = {ofensiva:'Ofensiva', defensiva:'Defensiva', utilidad:'Utilidad'};
-  showOverlay(`<h2>¡Nivel ${g.p.lvl}! Elige una mejora</h2>
-    <p class="up-sub">Pulsa 1-3 o haz clic</p>
-    <div class="row">${g.choices.map((c,i)=>`
-      <div class="card ${c.k || 'utilidad'}" data-up="${i}">
-        <span class="num">${i+1}</span>
-        <span class="tag">${cat[c.k] || 'Mejora'}</span>
-        <b>${c.t}</b>
-        <p>${c.d || ''}</p>
-      </div>`).join('')}</div>`);
+  const cat = {ofensiva: 'Ataque', defensiva: 'Zona', utilidad: 'Utilidad'};
+  showOverlay(`
+    <div class="lv3">
+      <div class="lv3-head"><small>NIVEL ${g.p.lvl}</small><h2>Elige una tarjeta de datos</h2><p>Pulsa 1-3 o haz clic</p></div>
+      <div class="lv3-row">${g.choices.map((c, i) => `
+        <button class="lv3-card ${c.k || 'utilidad'}" data-up="${i}" style="animation-delay:${i*0.09}s">
+          <span class="lv3-key">${i + 1}</span>
+          <span class="lv3-tag">${c.skill ? (c.lv ? 'Mejora' : 'Nueva habilidad') : cat[c.k] || 'Mejora'}</span>
+          <span class="lv3-ic">${svgIcon(c.skill || c.k)}</span>
+          <b>${c.name || c.t}</b>
+          <p>${c.d || ''}</p>
+          ${c.skill ? `<span class="lv3-pips">${[1, 2, 3].map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : '<span class="lv3-pips pasiva">Pasiva</span>'}
+        </button>`).join('')}</div>
+    </div>`);
   overlay.querySelectorAll('[data-up]').forEach(el => el.onclick = () => pickUpgrade(+el.dataset.up));
 }
 
@@ -3033,14 +3190,35 @@ function endGame(win){
   g.newTitles = checkAchievements(win);
   unlockMouse();
   saveRecord(win);
-  showOverlay(`<h1>${win ? '¡Sobreviviste!' : 'Has caído'}</h1>
-    <p>Nivel ${g.p.lvl} · Bajas ${g.kills} · Tiempo ${Math.floor(g.t)} s · ${ZONES[g.zone - 1].name}</p>
-    <p>+${g.earned} Bits${g.tix ? ` · +${g.tix} tickets de tirada` : ''}</p>
-    ${g.bonus ? `<p>¡Misión diaria completada! +${g.bonus} Bits</p>` : ''}
-    ${g.unlocked.length ? `<p>¡Skin nueva: ${g.unlocked.join(', ')}!</p>` : ''}
-    ${g.newTitles.length ? `<p>¡Título desbloqueado: ${g.newTitles.map(t => t.name).join(', ')}!</p>` : ''}
-    <p>Pulsa Enter o haz clic para volver a elegir</p>`);
-  overlay.onclick = () => { if (state === 'end') showSelect(); };
+  // Resumen de la partida: cifras, daño por habilidad y recompensas
+  const dmgRows = Object.entries(g.dmgBy).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  const dmgMax = dmgRows.length ? dmgRows[0][1] : 1;
+  const dmgName = k => k === 'base' ? `Ataque de ${g.ch.name}` : (SKILLS[k] ? SKILLS[k].name : k);
+  const rewards = [`<li><b>+${g.earned - g.bonus}</b> Bits</li>`];
+  if (g.bonus) rewards.push(`<li><b>+${g.bonus}</b> Bits · misión diaria completada</li>`);
+  if (g.tix) rewards.push(`<li><b>+${g.tix}</b> tickets de tirada</li>`);
+  for (const u of g.unlocked) rewards.push(`<li>Skin nueva: <b>${u}</b></li>`);
+  for (const tl of g.newTitles) rewards.push(`<li>Título desbloqueado: <b>${tl.name}</b></li>`);
+  const endKey = g.ch.id;
+  showOverlay(`
+    <div class="end3 ${win ? 'win' : 'lose'}">
+      <h1>${win ? '¡VICTORIA!' : 'HAS CAÍDO'}</h1>
+      <p class="end3-sub">${win ? 'Devimon ha sido derrotado' : `${g.ch.evolved ? EVO[g.ch.id].name : g.ch.name} vuelve al Pueblo`} · ${ZONES[g.zone - 1].name}</p>
+      <div class="end3-cells">
+        <span><b>${fmtTime(Math.floor(g.t))}</b>Tiempo</span><span><b>${g.p.lvl}</b>Nivel</span><span><b>${g.kills}</b>Bajas</span><span><b>${Object.keys(g.skills).length}</b>Habilidades</span>
+      </div>
+      <div class="end3-cols">
+        <section><h3>Daño por ataque</h3>
+          ${dmgRows.map(([k, v], i) => `<div class="end3-bar" style="animation-delay:${.15 + i*.08}s"><span>${svgIcon(k)}${dmgName(k)}</span><i><u style="width:${Math.round(v/dmgMax*100)}%"></u></i><em>${Math.round(v)}</em></div>`).join('') || '<p class="muted">Sin daño registrado</p>'}
+        </section>
+        <section><h3>Recompensas</h3><ul class="end3-rw">${rewards.join('')}</ul></section>
+      </div>
+      <div class="end3-act"><button class="g-btn" id="endAgain">Otra partida</button><button class="mini-btn" id="endMenu">Menú (Enter)</button></div>
+    </div>`);
+  overlay.onclick = null;
+  document.getElementById('endAgain').onclick = () => startGame(endKey);
+  document.getElementById('endMenu').onclick = () => showSelect();
+
 }
 
 // ---------- Cámara y sincronización ----------
@@ -3162,9 +3340,11 @@ function updateHUD(){
     dash.classList.remove('flash'); void dash.offsetWidth; dash.classList.add('flash');
   }
   g.dashReady = dashReady;
-  const hs = Object.keys(g.skills).map(k => SKILLS[k].name.split(' ')[0] + ' ' + g.skills[k]).join(' · ');
-  const hsEl = document.getElementById('hudSkills');
-  if (hsEl.textContent !== hs) hsEl.textContent = hs;
+  const sbKey = Object.keys(g.skills).map(k => k + g.skills[k]).join(',');
+  if (g.sbKey !== sbKey){
+    g.sbKey = sbKey;
+    document.getElementById('skillBar').innerHTML = Object.keys(g.skills).map(k => `<span class="sb-i ${SKILLS[k].k}" title="${SKILLS[k].name}">${svgIcon(k)}<em>${g.skills[k]}</em></span>`).join('');
+  }
   const bf = document.getElementById('bonkFill'), bbar = document.getElementById('bonkBar');
   if (bf){
     bf.style.width = Math.min(100, g.bonk).toFixed(1) + '%';
@@ -3295,7 +3475,7 @@ function noise(dur, vol, delay, hp){
   src.start(t0, Math.random() * 0.3); src.stop(t0 + dur + 0.05);
 }
 // Intervalo mínimo entre repeticiones para que los efectos frecuentes no saturen
-const SFX_GAP = {shoot:70, hit:60, kill:40, hurt:250};
+const SFX_GAP = {shoot:70, hit:60, kill:40, hurt:250, uiHover:50};
 function sfx(name){
   const c = Sfx.ctx;
   if (!c || Sfx.muted || c.state !== 'running') return;
@@ -3310,6 +3490,8 @@ function sfx(name){
     case 'kill':    tone(520, .10, 'square', .06, 260); break;
     case 'hurt':    tone(170, .28, 'sawtooth', .16, 70); noise(.15, .06, 0, 300); break;
     case 'chest':   [523,659,784,1046].forEach((f,i) => tone(f, .16, 'triangle', .18, null, i*.07)); break;
+    case 'uiHover': tone(1320, .03, 'square', .018); break;
+    case 'uiClick': tone(880, .05, 'square', .04, 1320); break;
     case 'ready':   tone(1568, .10, 'square', .05); tone(2349, .16, 'triangle', .06, null, .07); break;
     case 'levelup': [440,554,660,880].forEach((f,i) => tone(f, .18, 'square', .07, null, i*.08)); break;
     case 'evolve':  tone(220, 1.0, 'sawtooth', .10, 880); [523,659,784].forEach((f,i) => tone(f, .5, 'triangle', .14, null, .6 + i*.1)); break;
@@ -3325,6 +3507,9 @@ function toggleMute(silent){
   if (!silent) announce(Sfx.muted ? 'Sonido desactivado' : 'Sonido activado', 'N para cambiarlo', '#7fd0ff');
 }
 addEventListener('pointerdown', audioInit);
+// Sonidos de interfaz en cualquier botón de los menús
+addEventListener('pointerover', e => { if (state !== 'play' && e.target.closest && e.target.closest('button') && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('button') === e.target.closest('button'))) sfx('uiHover'); });
+addEventListener('click', e => { if (state !== 'play' && e.target.closest && e.target.closest('button')) sfx('uiClick'); }, true);
 
 /* ---------- Mapa 2D: minimapa en la esquina y mapa completo (tecla M) ---------- */
 const VILLAGE_R = 14;   // radio aproximado del Pueblo Primario, en unidades del escenario
@@ -3965,7 +4150,7 @@ function showPullResults(results){
 // Texto que explica cómo se consigue una skin que aún no tienes
 function howTo(key, sk){
   if (sk.src === 'base') return '';
-  if (sk.src === 'gacha') return 'Gacha de Bits';
+  if (sk.src === 'gacha') return 'Legendaria del gacha';
   if (sk.src === 'evento') return eventActive() ? 'Solo en el banner de evento' : 'Evento terminado';
   const st = statsOf(key);
   if (sk.req.plays) return `${Math.min(st.plays, sk.req.plays)}/${sk.req.plays} partidas`;
@@ -4063,14 +4248,6 @@ function showGacha(){
           ${probCats}
           <p class="gx-note">Legendaria = la skin del banner elegido para un Digimon. Si ya tienes todo de una categoría o rareza, la tirada cae en la siguiente. Los repetidos dan Bits.</p>
         </aside>
-      </div>
-      <div class="gx-coll">
-        <h3 class="g-sec">Marcos del icono (se equipan en el menú Jugador)</h3>
-        <div class="col-grid">${frameTiles}</div>
-        <h3 class="g-sec">Skins</h3>
-        <div class="g-list">${rows}</div>
-        <p class="g-note">Galáctico: 3 partidas con el Digimon · Glitch: 150 bajas con el Digimon · Cristal: gacha · Festival: solo en el banner "${EVENT.name}" del gacha.</p>
-        <p class="g-note">Bonus permanente por Digimon al conseguir la skin: Galáctico ${SKIN_FX.galactico.text} · Glitch ${SKIN_FX.glitch.text} · Cristal ${SKIN_FX.cristal.text} · Festival ${SKIN_FX.festival.text}.</p>
       </div>
     </div>`);
   document.getElementById('gBack').onclick = () => showSelect();
