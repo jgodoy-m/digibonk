@@ -629,7 +629,7 @@ canvas{display:block}
 /* ===== Impacto en partida: BONK, radar de bordes, contorno y HUD tipo Digivice ===== */
 #edgeCv{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
 #bonkBar{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);width:280px;height:18px;border-radius:10px;background:rgba(0,0,0,.6);border:2px solid #37474f;overflow:hidden;pointer-events:none;box-shadow:inset 0 0 0 1px #b0bec5;z-index:6}
-#bonkFill{height:100%;width:0;background:linear-gradient(90deg,#ff8f00,#ffd54f)}
+#bonkFill{height:100%;width:0;background:linear-gradient(90deg,#ff8f00,#ffd54f);transition:width .3s ease-out}
 #bonkBar.ready{border-color:#ffd54f;box-shadow:0 0 14px #ffd54f}
 #bonkBar.ready #bonkFill{animation:bonkPulse .6s ease-in-out infinite alternate}
 #bonkTxt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;letter-spacing:1px;color:#fff;text-shadow:0 1px 2px #000}
@@ -653,7 +653,7 @@ canvas{display:block}
     <div class="hud-name" id="hudName">Gabumon</div>
     <div class="hud-title" id="hudTitle"></div>
     <div class="hud-hp"><div id="hp"></div><span id="hpTxt"></span></div>
-    <div class="hud-chips"><span class="chip">☠ <b id="hudKills">0</b></span><span class="chip" id="hudDash">Dash listo</span></div>
+    <div class="hud-chips"><span class="chip">☠ <b id="hudKills">0</b></span><span class="chip" id="hudDash">Dash listo</span><span class="chip" id="hudSkills"></span></div>
   </div>
 </div></div>
 <div id="timer">5:00</div>
@@ -786,7 +786,9 @@ const UPGRADES = [
   {t:'+25 vida máx. y cura',    k:'defensiva',d:'Sube tu vida máxima y te cura 25 puntos.',          f:p=>{p.maxHp+=25; p.hp+=25;}},
   {t:'Proyectil / cuchilla +1', k:'ofensiva', d:'Añade un proyectil o cuchilla más a tu ataque.',    f:p=>{p.count+=1;}},
   {t:'Área +20%',               k:'ofensiva', d:'Tus ataques cubren un 20% más de área.',            f:p=>{p.area*=1.2;}},
-  {t:'Imán +30%',               k:'utilidad', d:'Recoges los orbes de experiencia desde más lejos.', f:p=>{p.pickup*=1.3;}}
+  {t:'Imán +30%',               k:'utilidad', d:'Recoges los orbes de experiencia desde más lejos.', f:p=>{p.pickup*=1.3;}},
+  {t:'Probabilidad crítica +8%', k:'ofensiva', d:'Más golpes críticos (naranjas).', f:p=>{p.critChance+=0.08;}},
+  {t:'Daño crítico +25%',       k:'ofensiva', d:'Los críticos hacen un 25% más de daño.', f:p=>{p.critMul+=0.25;}}
 ];
 
 // ---------- Escena ----------
@@ -794,8 +796,8 @@ const UPGRADES = [
 function qualityChoice(){ return localStorage.getItem('digibonk3d-quality') || 'auto'; }
 function autoIsLow(){ return (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4; }
 const QUALITY = {
-  alta: {dpr: 2, aa: true,  maxEnemies: 150, shadows: true,  decor: 500, minimapEvery: 1},
-  baja: {dpr: 1, aa: false, maxEnemies: 70,  shadows: false, decor: 175, minimapEvery: 4}
+  alta: {dpr: 2, aa: true,  maxEnemies: 120, shadows: true,  decor: 500, minimapEvery: 2},
+  baja: {dpr: 1, aa: false, maxEnemies: 50,  shadows: false, decor: 175, minimapEvery: 4}
 };
 const Q = QUALITY[qualityChoice() === 'alta' || (qualityChoice() === 'auto' && !autoIsLow()) ? 'alta' : 'baja'];
 function qualityLabel(){
@@ -958,8 +960,11 @@ function tex(url){
   }
   return texCache[url];
 }
-function billboard(url, scale){
-  const s = new THREE.Sprite(new THREE.SpriteMaterial({map: tex(url), transparent: true}));
+const spriteMats = {};
+function billboard(url, scale, shared = true){
+  let mat = shared ? spriteMats[url] : null;
+  if (!mat){ mat = new THREE.SpriteMaterial({map: tex(url), transparent: true}); if (shared) spriteMats[url] = mat; }
+  const s = new THREE.Sprite(mat);
   s.scale.set(scale, scale, 1);
   return s;
 }
@@ -1726,20 +1731,20 @@ function startGame(key){
   const sp = randomSpawn();   // aparición aleatoria en el mapa
   g = {
     ch: {...c, id:key},
-    p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:2.5},
+    p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:2.5, critChance:0.12, critMul:2},
     t: 0, kills: 0, enemies: [], shots: [], gems: [], blades: [],
     wCd: 0, spawnT: 0, orbitA: 0, choices: [],
     dash: 0, dashCd: 0, dir: {x:0, z:-1}, chests: [], chestT: 20, flash: '', flashT: 0,
     texts: [], nearChest: null, combo: 0, comboT: 0,
     boss: null, bossSpawned: false, bossDown: false, bossShotT: 0, eshots: [],
-    zone: 1, eliteT: 60, drops: [], bonk: 0, dashReady: true
+    zone: 1, eliteT: 60, drops: [], bonk: 0, dashReady: true, sk: newSkillState(), skills: {}
   };
   applyZoneVisuals(1);
   applyBalance(key);
   applySkinFx(key);
   applyRunItem();
   resolveSolids(g.p, 0.5);   // aparición aleatoria: fuera de casas y vallas
-  g.playerMesh = billboard(spriteOf(key, false), 2.2);
+  g.playerMesh = billboard(spriteOf(key, false), 2.2, false);   // sprite propio: la digievolución cambia su textura
   world.add(g.playerMesh);
   g.aura = makeAura(skinEquipped[key], key);
   g.playerShadow = makeShadow(1.6);
@@ -1748,6 +1753,7 @@ function startGame(key){
   g.hiRing = new THREE.Mesh(new THREE.RingGeometry(0.95, 1.2, 40),
     new THREE.MeshBasicMaterial({color: 0xfff176, transparent: true, opacity: 0.75, depthWrite: false}));
   g.hiRing.rotation.x = -Math.PI/2;
+  g.sk.lastMine = {x: g.p.x, z: g.p.z};
   world.add(g.hiRing);
   hideOverlay();
   hidePause();
@@ -1823,6 +1829,7 @@ function updateFx(dt){
 
 // ---------- Daño flotante ----------
 function popText(x, z, n, color = '#ffeb3b', k = 0.6){
+  if (g && g.texts && g.texts.length > 45) return;   // límite de textos flotantes en pantalla
   const c = document.createElement('canvas'); c.width = 256; c.height = 96;
   const cx = c.getContext('2d');
   cx.font = 'bold 44px sans-serif'; cx.textAlign = 'center';
@@ -1856,13 +1863,15 @@ function digivolve(){
 let screenFlash = 0;
 let shake = 0;          // intensidad de la sacudida de cámara
 let rings = [];
-function spawnRing(x, z){
+// Anillo que se expande: radius = radio final en unidades del mundo; life = duración en segundos
+function spawnRing(x, z, color = 0xffd54f, radius = null, life = 0.7){
   const mesh = new THREE.Mesh(new THREE.RingGeometry(0.5, 0.7, 32),
-    new THREE.MeshBasicMaterial({color: 0xffd54f, transparent: true, depthWrite: false}));
+    new THREE.MeshBasicMaterial({color, transparent: true, depthWrite: false}));
   mesh.rotation.x = -Math.PI/2;
   mesh.position.set(x, 0.05 + terrainH(x, z), z);
   world.add(mesh);
-  rings.push({mesh, t: 0});
+  const grow = radius ? (radius/0.7 - 1)/life : 12;
+  rings.push({mesh, t: 0, life, grow});
 }
 // ---------- Digivice de la digievolución (dispositivo azul brillante generado con canvas) ----------
 let digiviceTex = null;
@@ -1925,11 +1934,11 @@ function removeDigivice(a){
 function animateEvo(dt){
   for (const r of rings){
     r.t += dt;
-    r.mesh.scale.setScalar(1 + r.t*12);
-    r.mesh.material.opacity = Math.max(0, 1 - r.t/0.7);
+    r.mesh.scale.setScalar(1 + r.t*r.grow);
+    r.mesh.material.opacity = Math.max(0, 1 - r.t/r.life);
   }
   rings = rings.filter(r => {
-    if (r.t < 0.7) return true;
+    if (r.t < r.life) return true;
     world.remove(r.mesh); return false;
   });
   screenFlash = Math.max(0, screenFlash - dt*1.5);
@@ -1981,6 +1990,11 @@ function animateEvo(dt){
 }
 
 // BONK: al estar cargado (100%), libera una onda que daña y empuja a los enemigos cercanos y borra los proyectiles del jefe
+function addBonk(v){
+  const was = g.bonk;
+  g.bonk = Math.min(100, g.bonk + v);
+  if (was < 100 && g.bonk >= 100) sfx('ready');
+}
 function bonkRelease(){
   if (!g || g.bonk < 100) return;
   g.bonk = 0;
@@ -1994,13 +2008,15 @@ function bonkRelease(){
   }
   for (const s of g.eshots) s.life = 0;   // el bucle de proyectiles retira las bolas del jefe
   shake = Math.max(shake, 0.8);
+  spawnRing(p.x, p.z, 0xffd54f, 14, 0.5);
+  screenFlash = 0.6;
   sfx('evolve');
   announce('¡BONK!', 'Onda de choque', '#ffd54f');
 }
 function hurt(e, dmg){
   // 12% de golpes críticos: doble daño, número naranja y sacudida ligera
-  const crit = Math.random() < 0.12;
-  if (crit){ dmg *= 2; shake = Math.max(shake, 0.2); }
+  const crit = Math.random() < g.p.critChance;
+  if (crit){ dmg *= g.p.critMul; shake = Math.max(shake, 0.2); }
   e.hp -= dmg;
   popText(e.x, e.z, Math.round(dmg), crit ? '#ffb300' : '#ffffff', crit ? 0.8 : 0.55);
   burst(e.x, e.z, hitColors[e.kind] || '#ffe082');
@@ -2052,7 +2068,7 @@ function spawnMagnetDrop(x, z){
   g.drops.push({x, z, mesh, taken: false});
 }
 function fireProjectile(x, z, vx, vz, dmg, life, color){
-  const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.25, 8, 8), new THREE.MeshBasicMaterial({color}));
+  const mesh = new THREE.Mesh(SPROJ_GEO, matFor(color));
   mesh.position.set(x, 0.9 + terrainH(x, z), z);
   world.add(mesh);
   g.shots.push({x, z, vx, vz, dmg, life, mesh, r: 0.3});
@@ -2189,6 +2205,8 @@ function update(dt){
     g.blades = [];
   }
 
+  updateSkills(dt);
+
   // Muertes
   const dead = g.enemies.filter(e => e.hp <= 0);
   for (const e of dead){
@@ -2201,7 +2219,7 @@ function update(dt){
   if (dead.length){
     shake = Math.max(shake, Math.min(0.5, 0.1*dead.length));
     if (dead.some(e => e.kind === 'elite' || e.boss)) shake = Math.max(shake, 0.7);
-    g.bonk = Math.min(100, g.bonk + 3*dead.length);
+    addBonk(0.35*dead.length);
   }
   g.kills += dead.length;
   if (dead.length){ g.combo += dead.length; g.comboT = 3; }
@@ -2225,7 +2243,7 @@ function update(dt){
   // Gemas de XP
   for (const gm of g.gems){
     if (!gm.mesh){
-      gm.mesh = new THREE.Mesh(new THREE.OctahedronGeometry(gm.heal ? 0.32 : 0.25), new THREE.MeshBasicMaterial({color: gm.heal ? 0x66bb6a : 0x29b6f6}));
+      gm.mesh = new THREE.Mesh(gm.heal ? GEM_HEAL_GEO : GEM_GEO, matFor(gm.heal ? 0x66bb6a : 0x29b6f6));
       world.add(gm.mesh);
     }
     const d = dist2(gm.x, gm.z, p.x, p.z), dd = d || 1;
@@ -2239,7 +2257,7 @@ function update(dt){
     if (d < 0.9){
       gm.taken = true; world.remove(gm.mesh);
       if (gm.heal){ p.hp = Math.min(p.maxHp, p.hp + 10); popText(gm.x, gm.z, '+10', '#7cf29c'); sfx('chest'); }
-      else { p.xp += gm.v; g.bonk = Math.min(100, g.bonk + 0.5); }
+      else { p.xp += gm.v; addBonk(0.02); }
     }
   }
   g.gems = g.gems.filter(gm => !gm.taken);
@@ -2310,7 +2328,7 @@ function update(dt){
       const b = g.boss;
       for (let i = 0; i < 10; i++){
         const an = i/10*Math.PI*2 + g.t;
-        const shot = new THREE.Mesh(new THREE.SphereGeometry(0.3, 8, 8), new THREE.MeshBasicMaterial({color: 0xff1744}));
+        const shot = new THREE.Mesh(SPROJ_GEO, matFor(0xff1744));
         shot.position.set(b.x, 1 + terrainH(b.x, b.z), b.z);
         world.add(shot);
         g.eshots.push({x: b.x, z: b.z, vx: Math.cos(an)*6, vz: Math.sin(an)*6, life: 4, mesh: shot, dmg: 8});
@@ -2337,7 +2355,7 @@ function update(dt){
     p.xp -= p.nextXp;
     p.lvl++;
     p.nextXp = Math.floor(10*Math.pow(1.35, p.lvl-1));
-    g.choices = [...UPGRADES].sort(() => Math.random()-0.5).slice(0,3);
+    g.choices = upgradeChoices();
     if (p.lvl >= EVO_LEVEL) digivolve();
     g.pendingUp = true;
   }
@@ -2380,6 +2398,273 @@ function drawEdgeMarkers(){
     const d = Math.round(Math.hypot(t.x - g.p.x, t.z - g.p.z));
     c.strokeText(d + ' m', px, py - 16); c.fillText(d + ' m', px, py - 16);
   }
+}
+// ---------- Habilidades de ataque: se eligen al subir de nivel (hasta nivel 3) ----------
+const SKILLS = {
+  aura:     {name:'Aura de Datos',         k:'defensiva', d:'Anillo digital alrededor del Digimon: daña cada 0,25 s a quien entra en él.'},
+  tornado:  {name:'Tornado Bit',           k:'defensiva', d:'Bits que giran a tu alrededor: empujan enemigos y frenan proyectiles del jefe.'},
+  pulso:    {name:'Onda de Pulso',         k:'defensiva', d:'Onda de 360° cada pocos segundos que empuja a toda la horda.'},
+  espiral:  {name:'Disparo Espiral',       k:'ofensiva',  d:'Proyectil rápido que atraviesa a los enemigos (2 al nivel 1).'},
+  cuchilla: {name:'Cuchilla Persiguiente', k:'ofensiva',  d:'Hojas de energía que buscan al enemigo más fuerte de la pantalla.'},
+  laser:    {name:'Rayo Láser',            k:'ofensiva',  d:'Haz neón hacia el enemigo más cercano; atraviesa a los que están en línea.'},
+  mina:     {name:'Mina Digital',          k:'utilidad',  d:'Dejas minas al moverte; explotan en área cuando un enemigo las pisa.'},
+  meteoro:  {name:'Lluvia de Meteoros',    k:'ofensiva',  d:'Impactos aleatorios cerca de ti, avisados con un círculo en el suelo.'}
+};
+const SKILL_MAX = 3;
+function addSkill(id){ g.skills[id] = Math.min(SKILL_MAX, (g.skills[id] || 0) + 1); }
+// Opciones del nivel: mejoras base + habilidades que aún no están al máximo
+function upgradeChoices(){
+  const pool = [...UPGRADES];
+  for (const id of Object.keys(SKILLS)){
+    const lv = g.skills[id] || 0;
+    if (lv >= SKILL_MAX) continue;
+    const s = SKILLS[id];
+    pool.push({t: `${s.name} · ${lv ? 'Nivel ' + (lv + 1) : 'Nueva'}`, k: s.k, d: s.d, f: () => addSkill(id)});
+  }
+  return pool.sort(() => Math.random() - 0.5).slice(0, 3);
+}
+// Materiales y geometrías compartidos (evitan crear objetos en cada disparo o impacto)
+const matCache = {};
+function matFor(color){ return matCache[color] || (matCache[color] = new THREE.MeshBasicMaterial({color})); }
+const RING_GEO = new THREE.RingGeometry(0.96, 1, 48);
+const GEM_GEO = new THREE.OctahedronGeometry(0.25), GEM_HEAL_GEO = new THREE.OctahedronGeometry(0.32);
+const BIT_GEO = new THREE.SphereGeometry(0.3, 10, 10), BIT_MAT = new THREE.MeshBasicMaterial({color: 0xe040fb});
+const SPROJ_GEO = new THREE.SphereGeometry(0.28, 8, 8);
+const BEAM_GEO = new THREE.BoxGeometry(0.22, 0.22, 1), BEAM_MAT = new THREE.MeshBasicMaterial({color: 0x40c4ff, transparent: true, opacity: 0.85, depthWrite: false});
+const MINE_GEO = new THREE.CylinderGeometry(0.42, 0.42, 0.12, 14), MINE_MAT = new THREE.MeshBasicMaterial({color: 0xff7043});
+function newSkillState(){
+  return {aura: null, auraT: 0, bits: [], spin: 0, pulseT: 1.5, spiralT: 0.3, bladeT: 1.0, laserT: 1.2,
+    lastMine: {x: 0, z: 0}, mines: [], meteorT: 1.5, meteors: [], beams: [], proj: []};
+}
+// Enemigo más fuerte (más vida máxima) dentro del radio
+function strongestIn(x, z, R){
+  let best = null, bm = -1;
+  for (const e of g.enemies){
+    if (e.hp <= 0 || e.max <= bm) continue;
+    if (dist2(x, z, e.x, e.z) <= R*R){ best = e; bm = e.max; }
+  }
+  return best;
+}
+function nearestIn(x, z, R){
+  let best = null, bd = R*R;
+  for (const e of g.enemies){
+    if (e.hp <= 0) continue;
+    const d = dist2(x, z, e.x, e.z);
+    if (d < bd){ bd = d; best = e; }
+  }
+  return best;
+}
+function spawnSProj(x, z, vx, vz, dmg, life, pierce, homing, color, target = null){
+  const mesh = new THREE.Mesh(SPROJ_GEO, matFor(color));
+  world.add(mesh);
+  g.sk.proj.push({x, z, vx, vz, dmg, life, pierce, homing, target, hit: new Set(), mesh});
+}
+function dropMine(x, z, lv){
+  const mesh = new THREE.Mesh(MINE_GEO, MINE_MAT);
+  mesh.position.set(x, 0.1 + terrainH(x, z), z);
+  world.add(mesh);
+  g.sk.mines.push({x, z, life: 14, mesh, lv});
+}
+// Aplica una habilidad activa cada frame: lo que cada una hace está en el bloque de abajo
+function updateSkills(dt){
+  const p = g.p, S = g.sk, L = g.skills, ar = p.area, dm = p.dmg, cm = p.cdMul;
+  const lv = id => L[id] || 0;
+
+  // Aura de Datos: anillo que daña a los enemigos que entran
+  if (lv('aura')){
+    const R = (2.6 + 0.9*lv('aura')) * ar;
+    if (!S.aura){
+      S.aura = new THREE.Mesh(RING_GEO, new THREE.MeshBasicMaterial({color: 0x4fc3f7, transparent: true, opacity: 0.4, depthWrite: false}));
+      S.aura.rotation.x = -Math.PI/2;
+      world.add(S.aura);
+    }
+    S.aura.scale.setScalar(R);
+    S.aura.position.set(p.x, terrainH(p.x, p.z) + 0.06, p.z);
+    S.auraT -= dt;
+    if (S.auraT <= 0){
+      S.auraT = 0.25;
+      const dmg = (6 + 3*lv('aura')) * dm;
+      for (const e of g.enemies) if (e.hp > 0 && dist2(p.x, p.z, e.x, e.z) < (R + e.r)*(R + e.r)) hurt(e, dmg);
+    }
+  }
+
+  // Tornado Bit: bits que giran, empujan y frenan proyectiles del jefe
+  const nT = lv('tornado') ? lv('tornado') + 1 : 0;
+  while (S.bits.length < nT){ const m = new THREE.Mesh(BIT_GEO, BIT_MAT); world.add(m); S.bits.push(m); }
+  while (S.bits.length > nT) world.remove(S.bits.pop());
+  if (nT){
+    S.spin += dt*3.2;
+    const R = 3.4*ar;
+    for (const e of g.enemies) if (e.tcd > 0) e.tcd -= dt;
+    for (let i = 0; i < nT; i++){
+      const an = S.spin + i*Math.PI*2/nT, bx = p.x + Math.cos(an)*R, bz = p.z + Math.sin(an)*R;
+      S.bits[i].position.set(bx, 0.9 + terrainH(bx, bz), bz);
+      for (const e of g.enemies){
+        if (e.hp <= 0) continue;
+        const dx = e.x - bx, dz = e.z - bz, d = Math.hypot(dx, dz);
+        if (d < e.r + 0.9){
+          if (!(e.tcd > 0)){ hurt(e, (7 + 3*lv('tornado')) * dm); e.tcd = 0.5; }
+          const push = 1.2/(d || 1); e.x += dx*push; e.z += dz*push;
+          [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5);
+        }
+      }
+    }
+    for (const s of g.eshots){
+      if (s.life > 0 && S.bits.some(m => dist2(s.x, s.z, m.position.x, m.position.z) < 1.6)) s.life = 0;
+    }
+  }
+
+  // Onda de Pulso: anillo de 360° que daña y empuja
+  if (lv('pulso')){
+    S.pulseT -= dt;
+    if (S.pulseT <= 0){
+      const L2 = lv('pulso');
+      S.pulseT = (3.2 - 0.4*L2) * cm;
+      const R = (6.5 + 1.5*L2) * ar;
+      spawnRing(p.x, p.z, 0x4fc3f7, R, 0.5);
+      for (const e of g.enemies){
+        if (e.hp <= 0) continue;
+        const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz);
+        if (d < R + e.r){
+          hurt(e, (14 + 6*L2) * dm);
+          const push = 5/(d || 1); e.x += dx*push; e.z += dz*push;
+          [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5);
+        }
+      }
+    }
+  }
+
+  // Disparo Espiral: al enemigo más cercano; atraviesa varios
+  if (lv('espiral')){
+    S.spiralT -= dt;
+    if (S.spiralT <= 0){
+      const t = nearestIn(p.x, p.z, 40);
+      if (t){
+        S.spiralT = 0.9 * cm;
+        const d = Math.hypot(t.x - p.x, t.z - p.z) || 1;
+        spawnSProj(p.x, p.z, (t.x - p.x)/d*24, (t.z - p.z)/d*24, (10 + 4*lv('espiral')) * dm, 1.8, 1 + lv('espiral'), false, 0xffe082);
+      } else S.spiralT = 0.2;
+    }
+  }
+
+  // Cuchilla Persiguiente: hojas que se dirigen al enemigo más fuerte
+  if (lv('cuchilla')){
+    S.bladeT -= dt;
+    if (S.bladeT <= 0){
+      S.bladeT = 1.6 * cm;
+      const n = 2*lv('cuchilla') + (p.count - 1);
+      const base = Math.random()*Math.PI*2;
+      for (let i = 0; i < n; i++){
+        const an = base + i*Math.PI*2/n;
+        spawnSProj(p.x, p.z, Math.cos(an)*10, Math.sin(an)*10, (8 + 3*lv('cuchilla')) * dm, 4, 1, true, 0xce93d8, strongestIn(p.x, p.z, 45));
+      }
+    }
+  }
+
+  // Rayo Láser: haz hacia el enemigo más cercano; daña a todos los que están en la línea
+  if (lv('laser')){
+    S.laserT -= dt;
+    if (S.laserT <= 0){
+      const t = nearestIn(p.x, p.z, 36);
+      if (t){
+        const L2 = lv('laser'), len = 18;
+        S.laserT = 2.2 * cm;
+        const dx = t.x - p.x, dz = t.z - p.z, d = Math.hypot(dx, dz) || 1, ux = dx/d, uz = dz/d;
+        for (const e of g.enemies){
+          if (e.hp <= 0) continue;
+          const ex = e.x - p.x, ez = e.z - p.z, along = ex*ux + ez*uz;
+          if (along < 0 || along > len) continue;
+          if (Math.abs(ex*uz - ez*ux) < e.r + 0.5) hurt(e, (20 + 8*L2) * dm);
+        }
+        const beam = new THREE.Mesh(BEAM_GEO, BEAM_MAT);
+        beam.position.set(p.x + ux*len/2, 0.9 + terrainH(p.x, p.z), p.z + uz*len/2);
+        beam.rotation.y = Math.atan2(ux, uz);
+        beam.scale.z = len;
+        world.add(beam);
+        S.beams.push({m: beam, t: 0});
+      } else S.laserT = 0.25;
+    }
+  }
+  for (const b of S.beams) b.t += dt;
+  S.beams = S.beams.filter(b => { if (b.t < 0.18) return true; world.remove(b.m); return false; });
+
+  // Mina Digital: se deja una mina cada 2,2 m recorridos; explota al pisarla un enemigo
+  if (lv('mina')){
+    const L2 = lv('mina');
+    if (dist2(p.x, p.z, S.lastMine.x, S.lastMine.z) > 2.2*2.2 && S.mines.length < 14 + 4*L2){
+      dropMine(p.x, p.z, L2);
+      S.lastMine = {x: p.x, z: p.z};
+    }
+    for (const m of S.mines){
+      if (m.life <= 0) continue;
+      m.life -= dt;
+      const trig = g.enemies.some(e => e.hp > 0 && dist2(m.x, m.z, e.x, e.z) < (e.r + 1.2)*(e.r + 1.2));
+      if (m.life <= 0 || trig){
+        const R = (2.6 + 0.6*m.lv) * ar;
+        m.life = 0;
+        spawnRing(m.x, m.z, 0xff7043, R, 0.45);
+        burst(m.x, m.z, 0xff7043);
+        for (const e of g.enemies) if (e.hp > 0 && dist2(m.x, m.z, e.x, e.z) < (R + e.r)*(R + e.r)) hurt(e, (30 + 10*m.lv) * dm);
+      }
+    }
+    S.mines = S.mines.filter(m => { if (m.life > 0) return true; world.remove(m.mesh); return false; });
+  }
+
+  // Lluvia de Meteoros: aviso en el suelo y después impacto en área
+  if (lv('meteoro')){
+    S.meteorT -= dt;
+    if (S.meteorT <= 0){
+      const L2 = lv('meteoro');
+      S.meteorT = 2.0 * cm;
+      for (let i = 0; i < L2 + 1; i++){
+        const an = Math.random()*Math.PI*2, rr = Math.sqrt(Math.random())*13;
+        const [mx, mz] = clampArena(p.x + Math.cos(an)*rr, p.z + Math.sin(an)*rr, ARENA_R - 2);
+        const R = 2.6 * ar;
+        const wm = new THREE.Mesh(RING_GEO, new THREE.MeshBasicMaterial({color: 0xff5252, transparent: true, opacity: 0.6, depthWrite: false}));
+        wm.rotation.x = -Math.PI/2;
+        wm.position.set(mx, terrainH(mx, mz) + 0.07, mz);
+        wm.scale.setScalar(R);
+        world.add(wm);
+        S.meteors.push({x: mx, z: mz, t: 0, R, mesh: wm, dmg: (26 + 10*L2) * dm});
+      }
+    }
+    for (const m of S.meteors){
+      m.t += dt;
+      m.mesh.material.opacity = 0.35 + 0.35*Math.sin(m.t*18);
+      if (m.t >= 0.7 && !m.done){
+        m.done = true;
+        for (const e of g.enemies) if (e.hp > 0 && dist2(m.x, m.z, e.x, e.z) < (m.R + e.r)*(m.R + e.r)) hurt(e, m.dmg);
+        spawnRing(m.x, m.z, 0xff5252, m.R, 0.4);
+        burst(m.x, m.z, 0xff5252);
+      }
+    }
+    S.meteors = S.meteors.filter(m => { if (!m.done) return true; world.remove(m.mesh); return false; });
+  }
+
+  // Proyectiles de Espiral y Cuchilla: avanzan, las cuchillas giran hacia su objetivo y atraviesan según su alcance
+  for (const pr of S.proj){
+    if (pr.homing){
+      if (!pr.target || pr.target.hp <= 0) pr.target = strongestIn(pr.x, pr.z, 60);
+      if (pr.target){
+        const dx = pr.target.x - pr.x, dz = pr.target.z - pr.z, d = Math.hypot(dx, dz) || 1;
+        const sp = Math.hypot(pr.vx, pr.vz) || 16, k = Math.min(1, dt*4);
+        pr.vx += ((dx/d)*sp - pr.vx)*k;
+        pr.vz += ((dz/d)*sp - pr.vz)*k;
+      }
+    }
+    pr.x += pr.vx*dt; pr.z += pr.vz*dt; pr.life -= dt;
+    pr.mesh.position.set(pr.x, 0.9 + terrainH(pr.x, pr.z), pr.z);
+    if (pr.life <= 0) continue;
+    for (const e of g.enemies){
+      if (e.hp <= 0 || pr.hit.has(e)) continue;
+      if (dist2(pr.x, pr.z, e.x, e.z) < (e.r + 0.3)*(e.r + 0.3)){
+        hurt(e, pr.dmg);
+        pr.hit.add(e);
+        if (--pr.pierce <= 0){ pr.life = 0; break; }
+      }
+    }
+  }
+  S.proj = S.proj.filter(pr => { if (pr.life > 0) return true; world.remove(pr.mesh); return false; });
 }
 function openUpgrades(){
   state = 'levelup';
@@ -2554,6 +2839,9 @@ function updateHUD(){
     dash.classList.remove('flash'); void dash.offsetWidth; dash.classList.add('flash');
   }
   g.dashReady = dashReady;
+  const hs = Object.keys(g.skills).map(k => SKILLS[k].name.split(' ')[0] + ' ' + g.skills[k]).join(' · ');
+  const hsEl = document.getElementById('hudSkills');
+  if (hsEl.textContent !== hs) hsEl.textContent = hs;
   const bf = document.getElementById('bonkFill'), bbar = document.getElementById('bonkBar');
   if (bf){
     bf.style.width = Math.min(100, g.bonk).toFixed(1) + '%';
@@ -3682,7 +3970,7 @@ if (trainerName) showSelect(); else showRegister();
 if (new URLSearchParams(location.search).has('demo')){
   window.__dbk = {
     get g(){ return g; }, get state(){ return state; }, get scene(){ return scene; },
-    startGame, spawnEnemy, spawnMagnetDrop, setZone, showGacha,
+    startGame, spawnEnemy, spawnMagnetDrop, setZone, showGacha, addSkill, upgradeChoices,
     nearChest(){
       const p = g.p, a = p.dir ? Math.atan2(p.dir.z, p.dir.x) : 0;
       const [cx, cz] = clampArena(p.x + Math.cos(a)*3, p.z + Math.sin(a)*3, ARENA_R - 2);
