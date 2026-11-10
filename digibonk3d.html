@@ -1413,7 +1413,7 @@ function tex(url){
 }
 // Hojas de animación (sprites/anim/<id>.png): 5 fotogramas en fila -> reposo 1, reposo 2, ataque 1, ataque 2, daño
 const ANIM_N = 5;
-const ANIM_IDS = new Set(["agumon","agumon_0_cristal","agumon_0_festival","agumon_0_galactico","agumon_0_glitch","agumon_0_reno","agumon_1_cristal","agumon_1_festival","agumon_1_galactico","agumon_1_glitch","agumon_1_reno","agumon_2_cristal","agumon_2_festival","agumon_2_galactico","agumon_2_glitch","agumon_2_reno","agumon_3_cristal","agumon_3_festival","agumon_3_galactico","agumon_3_glitch","agumon_3_reno","andromon","angemon","angewomon","bakemon","birdramon","biyomon","biyomon_0_cristal","biyomon_0_festival","biyomon_0_galactico","biyomon_0_glitch","biyomon_0_reno","biyomon_1_cristal","biyomon_1_festival","biyomon_1_galactico","biyomon_1_glitch","biyomon_1_reno","biyomon_2_cristal","biyomon_2_festival","biyomon_2_galactico","biyomon_2_glitch","biyomon_2_reno","darktyrannomon","devimon","etemon","gabumon","gabumon_0_cristal","gabumon_0_festival","gabumon_0_galactico","gabumon_0_glitch","gabumon_0_reno","gabumon_1_cristal","gabumon_1_festival","gabumon_1_galactico","gabumon_1_glitch","gabumon_1_reno","gabumon_2_cristal","gabumon_2_festival","gabumon_2_galactico","gabumon_2_glitch","gabumon_2_reno","gabumon_3_cristal","gabumon_3_festival","gabumon_3_galactico","gabumon_3_glitch","gabumon_3_reno","garudamon","garurumon","gatomon","gatomon_0_cristal","gatomon_0_festival","gatomon_0_galactico","gatomon_0_glitch","gatomon_0_reno","gatomon_1_cristal","gatomon_1_festival","gatomon_1_galactico","gatomon_1_glitch","gatomon_1_reno","gazimon","gigadramon","gizamon","gomamon","gomamon_0_cristal","gomamon_0_festival","gomamon_0_galactico","gomamon_0_glitch","gomamon_0_reno","gomamon_1_cristal","gomamon_1_festival","gomamon_1_galactico","gomamon_1_glitch","gomamon_1_reno","gomamon_2_cristal","gomamon_2_festival","gomamon_2_galactico","gomamon_2_glitch","gomamon_2_reno","greymon","ikkakumon","kabuterimon","kuwagamon","lillymon","machinedramon","magnaangemon","mammothmon","megadramon","megakabuterimon","meramon","metalgarurumon","metalgreymon","metalseadramon","monochromon","myotismon","numemon","palmon","palmon_0_cristal","palmon_0_festival","palmon_0_galactico","palmon_0_glitch","palmon_0_reno","palmon_1_cristal","palmon_1_festival","palmon_1_galactico","palmon_1_glitch","palmon_1_reno","palmon_2_cristal","palmon_2_festival","palmon_2_galactico","palmon_2_glitch","palmon_2_reno","patamon","patamon_0_cristal","patamon_0_festival","patamon_0_galactico","patamon_0_glitch","patamon_0_reno","patamon_1_cristal","patamon_1_festival","patamon_1_galactico","patamon_1_glitch","patamon_1_reno","patamon_2_cristal","patamon_2_festival","patamon_2_galactico","patamon_2_glitch","patamon_2_reno","phantomon","piedmon","puppetmon","raremon","skullgreymon","snimon","tank","tentomon","tentomon_0_cristal","tentomon_0_festival","tentomon_0_galactico","tentomon_0_glitch","tentomon_0_reno","tentomon_1_cristal","tentomon_1_festival","tentomon_1_galactico","tentomon_1_glitch","tentomon_1_reno","tentomon_2_cristal","tentomon_2_festival","tentomon_2_galactico","tentomon_2_glitch","tentomon_2_reno","togemon","tyrannomon","vegiemon","wargreymon","weregarurumon","zudomon"]);
+const ANIM_IDS = new Set(["agumon", "agumon_0_cristal", "agumon_0_festival", "agumon_0_galactico", "agumon_0_glitch", "agumon_0_reno", "agumon_1_cristal", "agumon_1_festival", "agumon_1_galactico", "agumon_1_glitch", "agumon_1_reno", "agumon_2_cristal", "agumon_2_festival", "agumon_2_galactico", "agumon_2_glitch", "agumon_2_reno", "agumon_3_cristal", "agumon_3_festival", "agumon_3_galactico", "agumon_3_glitch", "agumon_3_reno", "andromon", "angemon", "angewomon", "bakemon", "birdramon", "biyomon", "biyomon_0_cristal", "biyomon_0_festival", "biyomon_0_galactico", "biyomon_0_glitch", "biyomon_0_reno", "biyomon_1_cristal", "biyomon_1_festival", "biyomon_1_galactico", "biyomon_1_glitch", "biyomon_1_reno", "biyomon_2_cristal", "biyomon_2_festival", "biyomon_2_galactico", "biyomon_2_glitch", "biyomon_2_reno", "darktyrannomon", "devimon", "etemon", "gabumon", "gabumon_0_cristal", "gabumon_0_festival", "gabumon_0_galactico", "gabumon_0_glitch", "gabumon_0_reno", "gabumon_1_cristal", "gabumon_1_festival", "gabumon_1_galactico", "gabumon_1_glitch", "gabumon_1_reno", "gabumon_2_cristal", "gabumon_2_festival", "gabumon_2_galactico", "gabumon_2_glitch", "gabumon_2_reno", "gabumon_3_cristal", "gabumon_3_festival", "gabumon_3_galactico", "gabumon_3_glitch", "gabumon_3_reno", "garudamon", "garurumon", "gatomon", "gatomon_0_cristal", "gatomon_0_festival", "gatomon_0_galactico", "gatomon_0_glitch", "gatomon_0_reno", "gatomon_1_cristal", "gatomon_1_festival", "gatomon_1_galactico", "gatomon_1_glitch", "gatomon_1_reno", "gazimon", "gigadramon", "gizamon", "gomamon", "gomamon_0_cristal", "gomamon_0_festival", "gomamon_0_galactico", "gomamon_0_glitch", "gomamon_0_reno", "gomamon_1_cristal", "gomamon_1_festival", "gomamon_1_galactico", "gomamon_1_glitch", "gomamon_1_reno", "gomamon_2_cristal", "gomamon_2_festival", "gomamon_2_galactico", "gomamon_2_glitch", "gomamon_2_reno", "greymon", "ikkakumon", "kabuterimon", "kuwagamon", "lillymon", "machinedramon", "magnaangemon", "mammothmon", "megadramon", "megakabuterimon", "meramon", "metalgarurumon", "metalgreymon", "metalseadramon", "monochromon", "myotismon", "numemon", "palmon", "palmon_0_cristal", "palmon_0_festival", "palmon_0_galactico", "palmon_0_glitch", "palmon_0_reno", "palmon_1_cristal", "palmon_1_festival", "palmon_1_galactico", "palmon_1_glitch", "palmon_1_reno", "palmon_2_cristal", "palmon_2_festival", "palmon_2_galactico", "palmon_2_glitch", "palmon_2_reno", "patamon", "patamon_0_cristal", "patamon_0_festival", "patamon_0_galactico", "patamon_0_glitch", "patamon_0_reno", "patamon_1_cristal", "patamon_1_festival", "patamon_1_galactico", "patamon_1_glitch", "patamon_1_reno", "patamon_2_cristal", "patamon_2_festival", "patamon_2_galactico", "patamon_2_glitch", "patamon_2_reno", "phantomon", "piedmon", "puppetmon", "raremon", "skullgreymon", "snimon", "tank", "tentomon", "tentomon_0_cristal", "tentomon_0_festival", "tentomon_0_galactico", "tentomon_0_glitch", "tentomon_0_reno", "tentomon_1_cristal", "tentomon_1_festival", "tentomon_1_galactico", "tentomon_1_glitch", "tentomon_1_reno", "tentomon_2_cristal", "tentomon_2_festival", "tentomon_2_galactico", "tentomon_2_glitch", "tentomon_2_reno", "togemon", "tyrannomon", "vegiemon", "wargreymon", "weregarurumon", "zudomon", "agumon_0_variocolor", "agumon_1_variocolor", "agumon_2_variocolor", "agumon_3_variocolor", "gabumon_0_variocolor", "gabumon_1_variocolor", "gabumon_2_variocolor", "gabumon_3_variocolor", "biyomon_0_variocolor", "biyomon_1_variocolor", "biyomon_2_variocolor", "tentomon_0_variocolor", "tentomon_1_variocolor", "tentomon_2_variocolor", "palmon_0_variocolor", "palmon_1_variocolor", "palmon_2_variocolor", "gomamon_0_variocolor", "gomamon_1_variocolor", "gomamon_2_variocolor", "patamon_0_variocolor", "patamon_1_variocolor", "patamon_2_variocolor", "gatomon_0_variocolor", "gatomon_1_variocolor"]);
 function sheetOf(url){ const m = /([^\/]+)\.png$/.exec(url || ''); return m && ANIM_IDS.has(m[1]) ? `sprites/anim/${m[1]}.png` : null; }
 const animTexs = [];   // texturas compartidas (enemigos del mismo tipo marcan el paso a la vez)
 function animTex(url, own = false){
@@ -1855,7 +1855,7 @@ function showCollection(){
   const chars = SEASONS.adventure.chars;
   let have = 0, total = 0;
   const cell = (ok, inner, label, sub = '') => { total++; if (ok) have++; return `<div class="cl-cell${ok ? ' ok' : ''}">${inner}<b>${ok ? label : '???'}</b><small>${sub}</small></div>`; };
-  const skinRows = chars.map(k => `<div class="cl-row"><span class="cl-name">${CHARS[k].name}</span>${SKINS.map(sk =>
+  const skinRows = chars.map(k => `<div class="cl-row"><span class="cl-name">${CHARS[k].name}</span>${visibleSkins(k).map(sk =>
     cell(ownedSkins(k).includes(sk.id), `<img src="${spriteWith(k, false, sk.id)}" alt="">`, sk.name, ownedSkins(k).includes(sk.id) ? SKIN_TIER_NAME[sk.tier] : howTo(k, sk))).join('')}</div>`).join('');
   const evos = chars.map(k => cell(evolvedUnlocked(k), `<img src="${EVO[k].sprite}" alt="">`, EVO[k].name, `${CHARS[k].name} · nivel ${EVO_LEVELS[0]}`)).join('');
   const frames = FRAMES.map(f => cell(inv.frames.includes(f.id), `<div class="rw-frame fr-${f.id}"></div>`, f.name, TIER_NAME[f.tier])).join('');
@@ -2265,7 +2265,7 @@ function bindSkinStrip(){
 }
 function skinStripHtml(k){
   const owned = ownedSkins(k), eq = skinEquipped[k] || 'clasico';
-  return `<div class="pk2-sec"><h3>Vestidor</h3><div class="pk-skins-row">${SKINS.map(sk => {
+  return `<div class="pk2-sec"><h3>Vestidor</h3><div class="pk-skins-row">${visibleSkins(k).map(sk => {
     const h = owned.includes(sk.id), e = eq === sk.id;
     return `<button class="pk-skin${h ? '' : ' locked'}${e ? ' on' : ''}" data-skin="${sk.id}" title="${h ? sk.name : howTo(k, sk)}">
       ${animEl(spriteWith(k, false, sk.id), 'pk-skin-face')}
@@ -2365,7 +2365,7 @@ function startGame(key){
   const c = CHARS[key];
   const sp = randomSpawn();   // aparición aleatoria en el mapa
   // Versión variocolor: 1 entre 8192 al empezar una partida; queda guardada como skin del Digimon
-  if (Math.random() < 1 / 8192){ grantSkin(key, 'variocolor'); equipSkin(key, 'variocolor'); setTimeout(() => announce('¡Variocolor!', CHARS[key].name + ' brilla con otros colores', '#ffd54f'), 400); }
+  if (Math.random() < 1 / 8192){ grantSkin(key, 'variocolor'); equipSkin(key, 'variocolor'); }
   g = {
     ch: {...c, id:key},
     p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:2.5, critChance:0.12, critMul:2},
@@ -2454,7 +2454,7 @@ const MINIS = [
   {at: 560, name: 'Machinedramon',  sprite: 'sprites/adventure/machinedramon.png',  hp: 420}
 ];
 // Jefes especiales: los Digimon desbloqueados y sus variantes variocolor que tengas
-const SPECIAL_TIME = 180;
+const SPECIAL_CHANCE = 0.10;   // probabilidad de que aparezca un jefe especial tras el jefe final
 function specialPool(){
   const out = [];
   for (const k of SEASONS.adventure.chars){
@@ -2476,8 +2476,8 @@ function spawnSpecial(){
   world.add(shadow);
   const sp = clampArena(g.p.x + Math.cos(a)*24, g.p.z + Math.sin(a)*24, ARENA_R - 0.5);
   const hp = 900*(1 + (t - BOSS_AT)/120)*evoHp();
-  const name = CHARS[pick.key].name + (pick.skin === 'variocolor' ? ' Variocolor' : '');
-  g.enemies.push({kind: 'mini', name, sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 3.0, r: 1.9, xp: 120, dmg: 18*(1 + t/300), cd: 0});
+  const name = CHARS[pick.key].name;
+  g.enemies.push({kind: 'mini', special: true, name, sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 3.0, r: 1.9, xp: 120, dmg: 18*(1 + t/300), cd: 0});
   sfx('boss');
   announce('¡' + name.toUpperCase() + '!', 'Jefe especial', '#ffd54f');
 }
@@ -2843,7 +2843,7 @@ function update(dt){
   // Minijefes en sus minutos
   while (g.miniI < MINIS.length && g.t >= MINIS[g.miniI].at) spawnMini(MINIS[g.miniI++]);
   // Fase extra: un jefe especial cada 40 s
-  if (g.extraOn && g.t < g.extraEnd && g.t >= g.extraNext){ spawnSpecial(); g.extraNext = g.t + 40; }
+  if (g.extraOn && !g.extraSpawned && g.t >= g.extraNext){ spawnSpecial(); g.extraSpawned = true; }
 
   // Élites: cada 45 s desde el minuto 1; a partir del minuto 5 salen de dos en dos
   g.eliteT -= dt;
@@ -3061,10 +3061,10 @@ function update(dt){
   } else if (g.boss && !g.bossDown){
     g.bossDown = true;   // el jefe ha caído
     clearBossRing();
-    // Fase extra: si tienes Digimon desbloqueados (o variocolor), aparecen como jefes especiales 3 minutos más
-    if (specialPool().length){
-      g.extraOn = true; g.extraEnd = g.t + SPECIAL_TIME; g.extraNext = g.t + 4;
-      announce('¡Fase extra!', 'Jefes especiales de tus Digimon durante 3 minutos', '#ffd54f');
+    // Jefe especial: 10% de que aparezca uno más, de entre tus Digimon desbloqueados
+    if (specialPool().length && Math.random() < SPECIAL_CHANCE){
+      g.extraOn = true; g.extraNext = g.t + 4; g.extraSpawned = false;
+      announce('¡Algo se mueve!', 'Un jefe especial aparece', '#ffd54f');
     }
   }
   for (const s of g.eshots){
@@ -3097,7 +3097,7 @@ function update(dt){
 
   // Fin
   if (p.hp <= 0){ p.hp = 0; endGame(false); }
-  else if (g.bossDown && (!g.extraOn || g.t >= g.extraEnd)) endGame(true);
+  else if (g.bossDown && (!g.extraOn || (g.extraSpawned && !g.enemies.some(e => e.special && e.hp > 0)))) endGame(true);
 }
 
 // Radar de bordes: flechas en el borde de la pantalla hacia cofres y jefe que están fuera de vista
@@ -3927,9 +3927,11 @@ const SKINS = [
    f:'hue-rotate(165deg) saturate(.6) brightness(1.3) contrast(.9)'},
   {id:'festival',  name:'Papá Noel',  src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)', px:'navidad'},
   {id:'reno',      name:'Reno',       src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)', px:'navidad'},
-  {id:'variocolor', name:'Variocolor', src:'shiny', tier:'l', desc:'Versión variocolor: 1 entre 8192 al empezar una partida', f:'hue-rotate(200deg) saturate(1.6) brightness(1.1)'}
+  {id:'variocolor', name:'Variocolor', src:'shiny', tier:'l', hidden: true, desc:'Versión variocolor', px:'variocolor'}
 ];
 const SKIN_BY_ID = Object.fromEntries(SKINS.map(sk => [sk.id, sk]));
+// Skins que se muestran a un Digimon: las ocultas (variocolor) solo aparecen cuando las tienes
+function visibleSkins(key){ const own = ownedSkins(key); return SKINS.filter(sk => !sk.hidden || own.includes(sk.id)); }
 function loadJSON(k, def){ try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e){ return def; } }
 let skinsOwned = loadJSON('digibonk3d-skins', {});      // {personaje: [ids de skin]}
 let skinEquipped = loadJSON('digibonk3d-equip', {});    // {personaje: id de skin}
@@ -4542,7 +4544,7 @@ function showGacha(){
   gxTimer = setInterval(() => { if (state !== 'gacha') return clearInterval(gxTimer); gxShow(gxIdx + 1); }, 3500);
   const rows = SEASONS.adventure.chars.map(key => {
     const owned = ownedSkins(key);
-    const tiles = SKINS.map(sk => {
+    const tiles = visibleSkins(key).map(sk => {
       const has = owned.includes(sk.id);
       const eq = (skinEquipped[key] || 'clasico') === sk.id;
       return `<button class="g-skin r-${sk.tier}${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}"
