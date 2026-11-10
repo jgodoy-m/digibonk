@@ -993,6 +993,12 @@ canvas{display:block}
 .gx-pity{margin-top:10px;font-size:13px;color:var(--dv-yel)}
 .gx-pity i{display:block;height:8px;background:#06102b;margin-top:5px}
 .gx-pity u{display:block;height:100%;background:linear-gradient(90deg,var(--dv-org),var(--dv-yel))}
+.anim{display:block;background-size:500% 100%;background-repeat:no-repeat;image-rendering:pixelated;animation:animIdle .8s steps(1) infinite}
+@keyframes animIdle{0%{background-position:0 0}50%{background-position:25% 0}}
+.m4-hero .anim{position:relative;width:250px;height:250px;filter:drop-shadow(0 0 18px rgba(61,224,255,.8));animation:animIdle .8s steps(1) infinite,pvBob 2.4s ease-in-out infinite}
+.anim.pv-hero,.anim.sv-hero{animation:animIdle .8s steps(1) infinite,pvBob 2.4s ease-in-out infinite}
+.dvl-duo .anim{position:relative;width:180px;height:180px;filter:drop-shadow(0 0 16px rgba(61,224,255,.8));animation:animIdle .8s steps(1) infinite,pvBob 1.8s ease-in-out infinite}
+.dvl-duo .anim.flip{filter:drop-shadow(0 0 16px rgba(255,138,30,.8));animation:animIdle .8s steps(1) infinite,dvlBobF 1.8s ease-in-out .5s infinite}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -1325,10 +1331,31 @@ function tex(url){
   }
   return texCache[url];
 }
+// Hojas de animación (sprites/anim/<id>.png): 5 fotogramas en fila -> reposo 1, reposo 2, ataque 1, ataque 2, daño
+const ANIM_N = 5;
+const ANIM_IDS = new Set(["agumon","agumon_0_cristal","agumon_0_festival","agumon_0_galactico","agumon_0_glitch","agumon_0_reno","agumon_1_cristal","agumon_1_festival","agumon_1_galactico","agumon_1_glitch","agumon_1_reno","agumon_2_cristal","agumon_2_festival","agumon_2_galactico","agumon_2_glitch","agumon_2_reno","agumon_3_cristal","agumon_3_festival","agumon_3_galactico","agumon_3_glitch","agumon_3_reno","andromon","angemon","angewomon","bakemon","birdramon","biyomon","biyomon_0_cristal","biyomon_0_festival","biyomon_0_galactico","biyomon_0_glitch","biyomon_0_reno","biyomon_1_cristal","biyomon_1_festival","biyomon_1_galactico","biyomon_1_glitch","biyomon_1_reno","biyomon_2_cristal","biyomon_2_festival","biyomon_2_galactico","biyomon_2_glitch","biyomon_2_reno","darktyrannomon","devimon","etemon","gabumon","gabumon_0_cristal","gabumon_0_festival","gabumon_0_galactico","gabumon_0_glitch","gabumon_0_reno","gabumon_1_cristal","gabumon_1_festival","gabumon_1_galactico","gabumon_1_glitch","gabumon_1_reno","gabumon_2_cristal","gabumon_2_festival","gabumon_2_galactico","gabumon_2_glitch","gabumon_2_reno","gabumon_3_cristal","gabumon_3_festival","gabumon_3_galactico","gabumon_3_glitch","gabumon_3_reno","garudamon","garurumon","gatomon","gatomon_0_cristal","gatomon_0_festival","gatomon_0_galactico","gatomon_0_glitch","gatomon_0_reno","gatomon_1_cristal","gatomon_1_festival","gatomon_1_galactico","gatomon_1_glitch","gatomon_1_reno","gazimon","gigadramon","gizamon","gomamon","gomamon_0_cristal","gomamon_0_festival","gomamon_0_galactico","gomamon_0_glitch","gomamon_0_reno","gomamon_1_cristal","gomamon_1_festival","gomamon_1_galactico","gomamon_1_glitch","gomamon_1_reno","gomamon_2_cristal","gomamon_2_festival","gomamon_2_galactico","gomamon_2_glitch","gomamon_2_reno","greymon","ikkakumon","kabuterimon","kuwagamon","lillymon","machinedramon","magnaangemon","mammothmon","megadramon","megakabuterimon","meramon","metalgarurumon","metalgreymon","metalseadramon","monochromon","myotismon","numemon","palmon","palmon_0_cristal","palmon_0_festival","palmon_0_galactico","palmon_0_glitch","palmon_0_reno","palmon_1_cristal","palmon_1_festival","palmon_1_galactico","palmon_1_glitch","palmon_1_reno","palmon_2_cristal","palmon_2_festival","palmon_2_galactico","palmon_2_glitch","palmon_2_reno","patamon","patamon_0_cristal","patamon_0_festival","patamon_0_galactico","patamon_0_glitch","patamon_0_reno","patamon_1_cristal","patamon_1_festival","patamon_1_galactico","patamon_1_glitch","patamon_1_reno","patamon_2_cristal","patamon_2_festival","patamon_2_galactico","patamon_2_glitch","patamon_2_reno","phantomon","piedmon","puppetmon","raremon","skullgreymon","snimon","tank","tentomon","tentomon_0_cristal","tentomon_0_festival","tentomon_0_galactico","tentomon_0_glitch","tentomon_0_reno","tentomon_1_cristal","tentomon_1_festival","tentomon_1_galactico","tentomon_1_glitch","tentomon_1_reno","tentomon_2_cristal","tentomon_2_festival","tentomon_2_galactico","tentomon_2_glitch","tentomon_2_reno","togemon","tyrannomon","vegiemon","wargreymon","weregarurumon","zudomon"]);
+function sheetOf(url){ const m = /([^\/]+)\.png$/.exec(url || ''); return m && ANIM_IDS.has(m[1]) ? `sprites/anim/${m[1]}.png` : null; }
+const animTexs = [];   // texturas compartidas (enemigos del mismo tipo marcan el paso a la vez)
+function animTex(url, own = false){
+  const sh = sheetOf(url);
+  if (!sh) return tex(url);
+  if (!own && texCache['a:' + sh]) return texCache['a:' + sh];
+  const t = loader.load(sh);
+  t.magFilter = THREE.NearestFilter;
+  t.repeat.set(1/ANIM_N, 1);
+  t.isAnim = true;
+  if (!own){ texCache['a:' + sh] = t; animTexs.push(t); }
+  return t;
+}
+// Elemento animado para los menús (dos fotogramas de reposo) o imagen fija si no hay hoja
+function animEl(url, cls = '', style = ''){
+  const sh = sheetOf(url);
+  return sh ? `<i class="anim ${cls}" style="background-image:url('${sh}');${style}"></i>` : `<img class="${cls}" src="${url}" alt="" style="${style}">`;
+}
 const spriteMats = {};
 function billboard(url, scale, shared = true){
   let mat = shared ? spriteMats[url] : null;
-  if (!mat){ mat = new THREE.SpriteMaterial({map: tex(url), transparent: true}); if (shared) spriteMats[url] = mat; }
+  if (!mat){ mat = new THREE.SpriteMaterial({map: animTex(url, !shared), transparent: true}); if (shared) spriteMats[url] = mat; }
   const s = new THREE.Sprite(mat);
   s.scale.set(scale, scale, 1);
   return s;
@@ -1824,7 +1851,7 @@ function showSelect(){
         <div class="m4-cells"><span><b>${plays}</b>${t('runs')}</span><span><b>${fmtTime(bestT)}</b>${t('best')}</span><span><b>${bestL}</b>${t('lvl')}</span><span><b>${kills}</b>${t('kills')}</span></div>
         ${top3 || `<p class="muted lb-empty">${t('none')}</p>`}
       </aside>
-      <div class="m4-hero"><i class="m4-pad"></i><img src="${spriteOf(selectedKey, false)}" alt=""><small>${t('partner')}</small><b>${CHARS[selectedKey].name}</b></div>
+      <div class="m4-hero"><i class="m4-pad"></i>${animEl(spriteOf(selectedKey, false))}<small>${t('partner')}</small><b>${CHARS[selectedKey].name}</b></div>
       <nav class="m4-list">
         ${item('playBtn', ' main', '▶', t('play'), t('playS'))}
         ${item('btnGacha', '', '<i class="dv-ico"></i>', t('gacha'), t('gachaS'))}
@@ -2074,7 +2101,7 @@ function renderPickPreview(){
       <span class="pv-tag">Partidas ${st.plays} · Bajas ${st.kills}</span>
     </div>
     <div class="pv-main">
-      <div class="pv-spot"><img class="pv-hero" src="${spriteOf(k, false)}" alt=""></div>
+      <div class="pv-spot">${animEl(spriteOf(k, false), 'pv-hero')}</div>
       <div class="pv-info">
         <h2>${c.name}</h2>
         <p class="pv-desc">${c.desc}</p>
@@ -2125,7 +2152,7 @@ function skinsPanelHtml(key){
       <div class="sv-layout">
         <section class="sv-show tc-${fs.tier}">
           <div class="sv-show-top"><span>${SKIN_TIER_NAME[fs.tier]}</span><span>${SKIN_SRC_NAME[fs.src]}</span></div>
-          <div class="sv-spot"><img class="sv-hero" src="${spriteWith(key, false, fs.id)}" alt="" style="${heroFilter}"></div>
+          <div class="sv-spot">${animEl(spriteWith(key, false, fs.id), 'sv-hero', heroFilter)}</div>
           <h3>${has ? fs.name : '???'}</h3>
           <p>${fs.desc || (fs.src === 'base' ? 'Aspecto original del Digimon' : '')}</p>
           ${!has && prog !== null ? `<i class="sv-bar big"><u style="width:${Math.round(prog * 100)}%"></u></i><small class="sv-req">${howTo(key, fs)}</small>` : ''}
@@ -2198,7 +2225,7 @@ function startGame(key){
   applySkinFx(key);
   applyRunItem();
   resolveSolids(g.p, 0.5);   // aparición aleatoria: fuera de casas y vallas
-  g.playerMesh = billboard(spriteOf(key, false), 2.2, false);   // sprite propio: la digievolución cambia su textura
+  g.playerMesh = billboard(spriteOf(key, false), 2.6, false);   // sprite propio: la digievolución cambia su textura
   world.add(g.playerMesh);
   g.aura = makeAura(skinEquipped[key], key);
   g.playerShadow = makeShadow(1.6);
@@ -2451,7 +2478,7 @@ function animateEvo(dt){
     m.position.z = p.z + (Math.random()-0.5)*0.25;
   } else if (!a.swapped){
     a.swapped = true;
-    m.material.map = tex(a.sprite);
+    m.material.map = animTex(a.sprite, true);
     m.material.needsUpdate = true;
     spawnRing(p.x, p.z);
     popText(p.x, p.z, `¡${a.name}!`, '#ffd54f', 2.2);
@@ -2640,7 +2667,7 @@ function update(dt){
   // Armas
   g.wCd -= dt;
   if (ch.kind === 'shot' && g.wCd <= 0 && g.enemies.length){
-    g.wCd = ch.cd * p.cdMul;
+    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
     const sorted = [...g.enemies].sort((a,b) => dist2(a.x,a.z,p.x,p.z) - dist2(b.x,b.z,p.x,p.z));
     for (let i = 0; i < Math.min(p.count, sorted.length); i++){
       const e = sorted[i], d = dist2(e.x, e.z, p.x, p.z) || 1;
@@ -2648,7 +2675,7 @@ function update(dt){
     }
   }
   if (ch.kind === 'ring' && g.wCd <= 0){
-    g.wCd = ch.cd * p.cdMul;
+    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
     const n = 6*p.count, off = Math.random()*Math.PI*2;
     for (let i = 0; i < n; i++){
       const an = off + i/n*Math.PI*2;
@@ -3776,7 +3803,7 @@ function headUrl(src){
     const c = document.createElement('canvas'); c.width = 96; c.height = 96;
     const x = c.getContext('2d'); x.imageSmoothingEnabled = false;
     // recorte de la parte superior centrada: la cabeza
-    x.drawImage(im, w*0.2, 0, w*0.6, h*0.58, 0, 0, 96, 96);
+    x.drawImage(im, w*0.2, h*0.14, w*0.6, h*0.56, 0, 0, 96, 96);   // los sprites llevan margen arriba para los accesorios
     headCache[src] = c.toDataURL('image/png');
   };
   im.src = src;
@@ -3818,7 +3845,7 @@ function showRegister(){
         <div class="dvl-logo"><span>DIGI</span>BONK</div>
         <div class="dvl-tag">${t('tag')}</div>
         <p class="dvl-pitch">${t('pitch')}</p>
-        <div class="dvl-duo"><i class="m4-pad"></i><img class="flip" src="sprites/agumon.png" alt="Agumon"><img src="sprites/gabumon.png" alt="Gabumon"></div>
+        <div class="dvl-duo"><i class="m4-pad"></i>${animEl('sprites/agumon.png', 'flip')}${animEl('sprites/gabumon.png')}</div>
       </section>
       <section class="dvl">
         <div class="dvl-device">
@@ -4607,6 +4634,21 @@ function frame(now){
   updateWater(dt);
   hurtT = Math.max(0, hurtT - dt);
   document.getElementById('hurt').style.opacity = (hurtT / 0.45) * 0.85;
+  // Animación: los enemigos alternan sus dos fotogramas de reposo; el jugador además ataca y recibe daño
+  const idleF = Math.floor(now/380) % 2;
+  for (const tx of animTexs) tx.offset.x = idleF/ANIM_N;
+  if (g && g.playerMesh){
+    const pm = g.playerMesh.material.map;
+    if (pm && pm.isAnim){
+      if (state === 'play'){
+        g.atkT = Math.max(0, (g.atkT || 0) - dt);
+        const lp = g.lastPos || (g.lastPos = {x: g.p.x, z: g.p.z});
+        g.moving = Math.hypot(g.p.x - lp.x, g.p.z - lp.z) > 0.004; lp.x = g.p.x; lp.z = g.p.z;
+      }
+      const f = hurtT > 0.25 ? 4 : g.atkT > 0.13 ? 2 : g.atkT > 0 ? 3 : Math.floor(now/(g.moving ? 150 : 380)) % 2;
+      pm.offset.x = f/ANIM_N;
+    }
+  }
   for (const n of npcs) n.sprite.position.y = n.base + Math.sin(now*0.003 + n.ph)*0.08;   // habitantes respiran
   frameNo++;
   if (state === 'play' && g && frameNo % Q.minimapEvery === 0) drawWorldMap(document.getElementById('minimap'), 170);

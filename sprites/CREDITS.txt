@@ -4,3 +4,5 @@ Sprites de Digimon (agumon, greymon, gabumon, garurumon, palmon, togemon, gatomo
 Siguen del pack de King: magnadramon, thunderbirdmon, tentomon, basic, fast.
 
 sprites/adventure/: 120 Digimon de Digimon Adventure de la misma base (https://dmc-sprite-database.vercel.app). Autor y estilo de cada uno en sprites/adventure/indice.json (89 de tero0x en alta resolución; el resto, sprites de baja resolución de Bandai, tortoisehel, Ray y phrogmentado). Sin licencia publicada; diseños de Bandai. Uso no comercial.
+
+sprites/anim/: hojas de animación (reposo, ataque y daño) montadas con los fotogramas de la misma base DMC. sprites/skins/ y las hojas <digimon>_<etapa>_<skin>.png llevan accesorios dibujados para este juego (goggles, cinta, corona, gorro de Papá Noel, astas de reno) con sprites/anim/generar.py.
