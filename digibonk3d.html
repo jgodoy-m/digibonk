@@ -396,7 +396,7 @@ canvas{display:block}
 .help-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin-top:10px}
 .help-grid span{font-size:14px}
 .tuto-screen{text-align:center;margin-top:10px}
-.tuto-screen canvas{display:block;margin:0 auto;width:100%;max-width:480px;height:auto;aspect-ratio:480/270;border-radius:12px;border:2px solid #3a6fc4;image-rendering:auto}
+.tuto-video{display:block;margin:0 auto;width:100%;max-width:480px;height:auto;aspect-ratio:16/9;border-radius:12px;border:2px solid #3a6fc4;background:#000;object-fit:cover}
 .tuto-screen h3{margin:10px 0 4px;color:#ffd54f;font-size:18px}
 .tuto-screen p{margin:0 auto;max-width:460px;font-size:14px;min-height:40px}
 .tuto-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}
@@ -1331,125 +1331,36 @@ function showSelect(){
   document.getElementById('btnHelp').onclick = () => showHelp();
 }
 // Ventana de controles: se abre con el botón "?" desde el inicio
-// Tutorial en carrusel: cada pantalla tiene un mini vídeo (animación en canvas que se repite)
+// Tutorial en carrusel: cada pantalla muestra un vídeo corto grabado del propio juego (tutorial/*.webm)
 const TUTO = [
-  {t:'Movimiento y cámara', d:'WASD para moverte. Mueve el ratón para girar la cámara y la rueda para acercarla.', draw:(c, k, W, H) => {
-    const cx = W/2, cy = H/2 + 10, a = k*Math.PI*2;
-    c.strokeStyle = '#ffffff55'; c.setLineDash([6, 6]); c.beginPath(); c.arc(cx, cy, 80, 0, 7); c.stroke(); c.setLineDash([]);
-    const x = cx + Math.cos(a)*80, y = cy + Math.sin(a)*80;
-    c.fillStyle = '#ffd54f'; c.beginPath(); c.arc(x, y, 12, 0, 7); c.fill();
-    const keys = ['W','A','S','D'], on = Math.floor(k*4) % 4;
-    keys.forEach((kk, i) => { c.fillStyle = i === on ? '#ffd54f' : '#1d3557'; c.fillRect(30 + i*46, H - 40, 36, 30); c.fillStyle = '#fff'; c.font = 'bold 16px system-ui'; c.textAlign = 'center'; c.fillText(kk, 48 + i*46, H - 19); });
-  }},
-  {t:'Ataque automático', d:'Tu Digimon ataca solo al enemigo más cercano. Tú te centras en esquivar y posicionarte.', draw:(c, k, W, H) => {
-    const cx = W/2, cy = H/2;
-    c.fillStyle = '#4fc3f7'; c.beginPath(); c.arc(cx, cy, 14, 0, 7); c.fill();
-    const foes = [[-150, -50], [150, -30], [120, 70]];
-    foes.forEach(([fx, fy], i) => {
-      const p = (k + i*0.33) % 1, sx = cx + fx*(1 - p), sy = cy + fy*(1 - p);
-      c.fillStyle = '#ef5350'; c.beginPath(); c.arc(cx + fx, cy + fy, 14, 0, 7); c.fill();
-      c.fillStyle = '#ffd54f'; c.beginPath(); c.arc(sx, sy, 5, 0, 7); c.fill();
-    });
-    c.fillStyle = '#fff'; c.font = 'bold 18px system-ui'; c.textAlign = 'center'; c.fillText('-12', cx - 150*0.5, cy - 50*0.5 - 14 - 20*k);
-  }},
-  {t:'Esquiva con el dash', d:'Shift te lanza hacia delante. Durante el dash no recibes daño de contacto.', draw:(c, k, W, H) => {
-    const p = (k*1.4) % 1, x = 60 + p*(W - 120), y = H/2;
-    for (let i = 0; i < 6; i++){ c.globalAlpha = (i+1)/12; c.fillStyle = '#80deea'; c.beginPath(); c.arc(x - i*14, y, 12 - i, 0, 7); c.fill(); }
-    c.globalAlpha = 1; c.fillStyle = '#4fc3f7'; c.beginPath(); c.arc(x, y, 14, 0, 7); c.fill();
-    c.fillStyle = '#ef5350'; c.beginPath(); c.arc(W/2 + 40, y, 22, 0, 7); c.fill();
-    c.fillStyle = '#fff'; c.font = 'bold 14px system-ui'; c.textAlign = 'center'; c.fillText(p < 0.5 ? 'DASH' : 'Dash listo', W/2, H - 22);
-  }},
-  {t:'Experiencia y subida de nivel', d:'Recoge los orbes de experiencia. Al subir de nivel eliges una mejora entre tres.', draw:(c, k, W, H) => {
-    const cx = W/2, cy = H/2 + 20;
-    c.fillStyle = '#ffd54f';
-    for (let i = 0; i < 5; i++){
-      const p = (k + i*0.2) % 1, sx = cx - 160 + i*70 + (1 - p)*0, sy = cy - 60*(1 - p) - 30*p;
-      c.beginPath(); c.arc(sx + (1-p)*0, sy, 6, 0, 7); c.fill();
-    }
-    c.fillStyle = '#4fc3f7'; c.beginPath(); c.arc(cx, cy, 14, 0, 7); c.fill();
-    const bar = Math.min(1, k*1.2);
-    c.fillStyle = '#1d3557'; c.fillRect(60, H - 30, W - 120, 12);
-    c.fillStyle = '#7e57c2'; c.fillRect(60, H - 30, (W - 120)*bar, 12);
-    c.fillStyle = '#fff'; c.font = '13px system-ui'; c.textAlign = 'center'; c.fillText('EXP', W/2, H - 36);
-  }},
-  {t:'Cofres y mejoras', d:'Pulsa E junto a un cofre para abrirlo. Dentro hay Bits y, a veces, objetos.', draw:(c, k, W, H) => {
-    const cx = W/2, cy = H/2 + 30, open = Math.min(1, Math.max(0, (k - 0.2)*3));
-    c.fillStyle = '#9a6432'; c.fillRect(cx - 45, cy - 26, 90, 40);
-    c.save(); c.translate(cx - 45, cy - 26); c.scale(1, 1 - open*0.9); c.fillStyle = '#7a4a22'; c.fillRect(0, -26, 90, 26); c.restore();
-    c.fillStyle = '#c9a227'; c.fillRect(cx - 45, cy - 6, 90, 6);
-    if (open > 0.5){
-      const up = (open - 0.5)*2;
-      [['Daño +20%', '#ef5350'], ['Cadencia +15%', '#ffb300'], ['Imán +30%', '#4fc3f7']].forEach(([label, col], i) => {
-        const x = cx - 150 + i*110, y = cy - 40 - up*40;
-        c.fillStyle = col; c.fillRect(x, y, 100, 44);
-        c.fillStyle = '#0a1228'; c.font = 'bold 11px system-ui'; c.textAlign = 'center'; c.fillText(label, x + 50, y + 26);
-      });
-    }
-  }},
-  {t:'Zonas', d:'El mapa tiene dos zonas. La segunda, el Pantano de Datos, empieza a los 2 minutos y trae enemigos más duros.', draw:(c, k, W, H) => {
-    const p = Math.min(1, Math.max(0, (k - 0.3)*2));
-    const left = {n:'Bosque Inicial', col:'#4f7a3a'}, right = {n:'Pantano de Datos', col:'#5b4a8a'};
-    c.fillStyle = left.col; c.fillRect(20, 50, 200, 150);
-    c.fillStyle = right.col; c.fillRect(W - 220, 50, 200, 150);
-    c.fillStyle = '#fff'; c.font = 'bold 13px system-ui'; c.textAlign = 'center';
-    c.fillText(left.n, 120, 120); c.fillText(right.n, W - 120, 120);
-    const x = 240 + p*(W - 480);
-    c.fillStyle = '#ffd54f'; c.beginPath(); c.arc(x, 125, 12, 0, 7); c.fill();
-    c.fillStyle = '#fff'; c.fillText('2:00', W/2, 40);
-  }},
-  {t:'Jefe final', d:'Al final de la zona 2 aparece Devimon. Esquiva el anillo rojo antes de cada disparo.', draw:(c, k, W, H) => {
-    const cx = W/2, cy = H/2 + 20, ph = k % 1;
-    const rr = 90 * (1 - ph) + 14;
-    c.strokeStyle = 'rgba(255,23,68,' + (0.3 + 0.6*ph) + ')'; c.lineWidth = 3; c.beginPath(); c.arc(cx, cy, rr, 0, 7); c.stroke(); c.lineWidth = 1;
-    c.fillStyle = '#ce93d8'; c.beginPath(); c.arc(cx, cy, 22, 0, 7); c.fill();
-    if (ph > 0.9){
-      for (let i = 0; i < 10; i++){ const an = i/10*Math.PI*2; c.fillStyle = '#ff1744'; c.beginPath(); c.arc(cx + Math.cos(an)*(ph-0.9)*900, cy + Math.sin(an)*(ph-0.9)*900, 5, 0, 7); c.fill(); }
-    }
-    c.fillStyle = '#fff'; c.font = 'bold 13px system-ui'; c.textAlign = 'center'; c.fillText('DEVIMON', cx, H - 14);
-  }},
-  {t:'Colección y gacha', d:'El Digivice del menú abre el gacha. Las tiradas dan skins, marcos, títulos y objetos. Las evoluciones se desbloquean en la colección.', draw:(c, k, W, H) => {
-    const cx = W/2, cy = H/2;
-    for (let i = 0; i < 3; i++){
-      const ang = (i - 1)*0.35 + Math.sin(k*Math.PI*2)*0.15;
-      c.save(); c.translate(cx + (i - 1)*90, cy); c.rotate(ang);
-      c.fillStyle = ['#607d8b', '#4fc3f7', '#ffd54f'][i]; c.fillRect(-35, -50, 70, 100);
-      c.fillStyle = '#0a1228'; c.fillRect(-28, -42, 56, 40);
-      c.restore();
-    }
-    c.fillStyle = '#fff'; c.font = 'bold 13px system-ui'; c.textAlign = 'center'; c.fillText('Común · Rara · Épica', cx, H - 14);
-  }}
+  {t:'Movimiento y cámara', d:'WASD para moverte. Ratón para girar la cámara y la rueda para acercarla.', clip:'tutorial/mover.webm'},
+  {t:'Ataque automático', d:'Tu Digimon ataca solo al enemigo más cercano. Tú te concentras en moverte y posicionarte.', clip:'tutorial/ataque.webm'},
+  {t:'Esquiva con el dash', d:'Shift te lanza hacia delante. Durante el dash no recibes daño de contacto.', clip:'tutorial/dash.webm'},
+  {t:'Experiencia y subida de nivel', d:'Recoge los orbes de experiencia. Al subir de nivel eliges una mejora entre tres.', clip:'tutorial/nivel.webm'},
+  {t:'Cofres', d:'Pulsa E junto a un cofre para abrirlo y recibir una mejora.', clip:'tutorial/cofre.webm'},
+  {t:'Zonas', d:'El mapa tiene dos zonas. La segunda, el Pantano de Datos, empieza a los 2 minutos y trae enemigos más duros.', clip:'tutorial/zona.webm'},
+  {t:'Jefe final', d:'Al final de la zona 2 aparece Devimon. Esquiva el anillo rojo antes de cada disparo.', clip:'tutorial/jefe.webm'},
+  {t:'Colección y gacha', d:'El Digivice del menú abre el gacha: skins, marcos, títulos y objetos. Las evoluciones se guardan en la colección.', clip:'tutorial/coleccion.webm'}
 ];
-let tutoIdx = 0, tutoT = 0, tutoRaf = 0, tutoLast = 0;
+let tutoIdx = 0;
 function tutoShow(i){
   tutoIdx = (i + TUTO.length) % TUTO.length;
-  tutoT = 0;
   const s = TUTO[tutoIdx];
+  const v = document.getElementById('tutoV');
+  if (v){ v.src = s.clip; v.load(); v.play().catch(() => {}); }
   document.getElementById('tutoT').textContent = s.t;
   document.getElementById('tutoD').textContent = s.d;
   document.getElementById('tutoDots').innerHTML = TUTO.map((_, j) => `<i class="tuto-dot${j === tutoIdx ? ' on' : ''}" data-i="${j}"></i>`).join('');
   document.querySelectorAll('#tutoDots .tuto-dot').forEach(d => d.onclick = () => tutoShow(+d.dataset.i));
 }
 function tutoStep(dir){ if (state === 'help') tutoShow(tutoIdx + dir); }
-function tutoLoop(now){
-  const cv = document.getElementById('tutoCv');
-  if (state !== 'help' || !cv) return;
-  const dt = Math.min(0.05, (now - tutoLast)/1000); tutoLast = now;
-  tutoT += dt;
-  const c = cv.getContext('2d'), W = cv.width, H = cv.height;
-  c.fillStyle = '#0b1e33'; c.fillRect(0, 0, W, H);
-  c.fillStyle = '#143d2a'; c.fillRect(0, H*0.6, W, H*0.4);   // suelo de hierba
-  const loopK = (tutoT / 4) % 1;                              // cada mini vídeo dura 4 s y se repite
-  TUTO[tutoIdx].draw(c, loopK, W, H);
-  c.textAlign = 'left';
-  tutoRaf = requestAnimationFrame(tutoLoop);
-}
 function showHelp(){
   state = 'help';
   showOverlay(`
     <div class="help-box tuto">
       <header class="set-head"><button class="g-back" id="helpBack">← Volver</button><h2>Cómo jugar</h2></header>
       <div class="tuto-screen">
-        <canvas id="tutoCv" width="480" height="270"></canvas>
+        <video id="tutoV" class="tuto-video" muted loop playsinline autoplay></video>
         <h3 id="tutoT"></h3><p id="tutoD"></p>
       </div>
       <div class="tuto-nav">
@@ -1463,9 +1374,6 @@ function showHelp(){
   document.getElementById('tutoPrev').onclick = () => tutoStep(-1);
   document.getElementById('tutoNext').onclick = () => tutoStep(1);
   tutoShow(0);
-  cancelAnimationFrame(tutoRaf);
-  tutoLast = performance.now();
-  tutoRaf = requestAnimationFrame(tutoLoop);
 }
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
@@ -3518,6 +3426,21 @@ function frame(now){
 }
 buildSkins();
 if (trainerName) showSelect(); else showRegister();
+// Modo demo (solo para grabar los vídeos del tutorial con ?demo=1): expone el estado y atajos de escena
+if (new URLSearchParams(location.search).has('demo')){
+  window.__dbk = {
+    get g(){ return g; }, get state(){ return state; },
+    startGame, spawnEnemy, setZone, showGacha,
+    nearChest(){
+      const p = g.p, a = p.dir ? Math.atan2(p.dir.z, p.dir.x) : 0;
+      const [cx, cz] = clampArena(p.x + Math.cos(a)*3, p.z + Math.sin(a)*3, ARENA_R - 2);
+      const {group, pivot} = makeChest();
+      group.position.set(cx, terrainH(cx, cz), cz);
+      world.add(group);
+      g.chests.push({x: cx, z: cz, group, pivot, open: false, openT: 0, gone: false});
+    }
+  };
+}
 requestAnimationFrame(frame);
 </script>
 </body>
