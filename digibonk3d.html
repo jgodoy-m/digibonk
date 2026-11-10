@@ -195,6 +195,8 @@ canvas{display:block}
 .mini-btn:hover{filter:brightness(1.15)}
 .bits-chip{padding:7px 12px;border-radius:10px;background:#1b2a14;border:1px solid #7cf29c;color:#b9f6ca;font-weight:bold}
 .daily-chip{font-size:12px;color:#cfe8ff;opacity:.9}
+.dif{padding:1px 7px;border-radius:7px;font-size:11px;color:#06101e}
+.dif-Fácil{background:#7cf29c}.dif-Media{background:#ffd54f}.dif-Difícil{background:#ef5350;color:#fff}
 /* Gacha de skins */
 .gacha{width:min(880px,96vw);max-height:92vh;overflow:auto;padding:18px 22px;border-radius:18px;color:#e6f4ff;text-align:left;
   background:linear-gradient(170deg,rgba(24,36,64,.97),rgba(8,12,26,.97));border:2px solid #4fc3f7;box-shadow:0 0 30px rgba(79,195,247,.35)}
@@ -856,7 +858,9 @@ function showSelect(){
       ${statBar('Daño', dmgPct, true)}
       ${statBar('Cadencia', rate)}
       <div class="muted" style="margin-top:8px;text-align:left">Ataque: ${ATTACK_NAME[c.kind] || c.kind}</div>
-      <div class="muted" style="margin-top:4px;text-align:left">Nivel 5 → ${evo ? evo.name : '—'} (+50% daño)</div>`;
+      <div class="muted" style="margin-top:4px;text-align:left">Nivel 5 → ${evo ? evo.name : '—'} (+50% daño)</div>
+      <div class="muted" style="margin-top:6px;text-align:left">Dificultad: <b class="dif dif-${BALANCE[k].dif}">${BALANCE[k].dif}</b> · Vida ${BALANCE[k].hp} · Velocidad ${BALANCE[k].speed}</div>
+      <div class="muted" style="margin-top:2px;text-align:left;font-size:11px">${BALANCE[k].why}</div>`;
   }
   overlay.querySelectorAll('[data-pick]').forEach(el => {
     el.onclick = () => { selectedKey = el.dataset.pick; refreshSel(); };
@@ -888,6 +892,7 @@ function startGame(key){
     texts: [], nearChest: null, combo: 0, comboT: 0,
     boss: null, bossSpawned: false, bossDown: false, bossShotT: 0, eshots: []
   };
+  applyBalance(key);
   applySkinFx(key);
   resolveSolids(g.p, 0.5);   // aparición aleatoria: fuera de casas y vallas
   g.playerMesh = billboard(spriteOf(key, false), 2.2);
@@ -2044,6 +2049,24 @@ function makeAura(skinId, key){
     };
   }
   return {group, update};
+}
+
+/* ---------- Equilibrio: perfil de cada Digimon según la dificultad ----------
+   Valores iniciales basados en el daño por segundo (daño / recarga × multiplicador)
+   y en la facilidad de cada estilo. Hay que ajustarlos con pruebas reales. */
+const BALANCE = {
+  palmon:  {dif:'Fácil',    hp:115, speed:5.6, dmgMul:1.00, why:'Cuchillas que giran alrededor: cubren a su alrededor sin apuntar'},
+  gomamon: {dif:'Fácil',    hp:120, speed:5.4, dmgMul:0.80, why:'Mucha vida y ataques rápidos al más cercano: perdona errores'},
+  gabumon: {dif:'Media',    hp:100, speed:6.0, dmgMul:1.60, why:'Onda en círculo: equilibrado, pero hay que colocarse entre enemigos'},
+  gatomon: {dif:'Media',    hp:88,  speed:6.6, dmgMul:1.00, why:'Garras giratorias y velocidad alta: hay que mantenerse en movimiento'},
+  biyomon: {dif:'Media',    hp:92,  speed:6.2, dmgMul:0.85, why:'Mucho daño por disparo, pero aguanta menos golpes'},
+  patamon: {dif:'Difícil',  hp:84,  speed:7.0, dmgMul:0.75, why:'Muy rápido y de poco daño: exige buena posición y movimiento'}
+};
+function applyBalance(key){
+  const b = BALANCE[key];
+  if (!b) return;
+  const p = g.p;
+  p.maxHp = b.hp; p.hp = b.hp; p.speed = b.speed; p.dmg = b.dmgMul;
 }
 
 // ---------- Bucle ----------
