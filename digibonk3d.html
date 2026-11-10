@@ -8,13 +8,23 @@ html,body{margin:0;height:100%;overflow:hidden;background:#0b0f1a;font-family:sy
 canvas{display:block}
 /* HUD estilo Digivice: paneles azul oscuro con borde neón */
 #hud{position:fixed;left:16px;top:16px;pointer-events:none}
-.panel{display:flex;gap:12px;align-items:center;padding:10px 14px;border-radius:12px;
-  background:linear-gradient(135deg,rgba(18,28,52,.94),rgba(8,12,26,.94));
-  border:2px solid #4fc3f7;box-shadow:0 0 16px rgba(79,195,247,.35)}
-#pimg{width:60px;height:60px;image-rendering:pixelated;border-radius:10px;background:rgba(79,195,247,.12);border:1px solid #2a3a5c}
-.barwrap{width:230px;height:12px;background:#000;border:1px solid #2a3a5c;border-radius:6px;overflow:hidden;margin-top:6px}
-#hp{height:100%;width:100%;background:linear-gradient(90deg,#c62828,#ff7043);transition:width .15s}
-#info{font-size:13px;margin-top:6px;letter-spacing:.3px;opacity:.95;text-shadow:0 1px 2px #000}
+.hud-card{display:flex;gap:14px;align-items:center;padding:10px 14px 10px 10px;border-radius:16px;
+  background:linear-gradient(160deg,rgba(24,62,110,.94),rgba(8,18,40,.95));border:2px solid #7fd0ff;
+  box-shadow:0 0 18px rgba(79,195,247,.35),inset 0 2px 0 rgba(255,255,255,.15)}
+.hud-portrait{position:relative;width:66px;height:66px;border-radius:14px;display:grid;place-items:center;
+  border:2px solid #7fd0ff;background:radial-gradient(circle,rgba(127,208,255,.35),rgba(127,208,255,.05))}
+#pimg{width:54px;height:54px;image-rendering:pixelated}
+.hud-lvl{position:absolute;right:-9px;bottom:-9px;min-width:26px;height:26px;padding:0 6px;border-radius:13px;display:grid;place-items:center;
+  background:#ffd54f;color:#1a1200;font-weight:900;font-size:13px;border:2px solid #1a1200}
+.hud-main{min-width:250px}
+.hud-name{font-weight:900;font-size:17px;letter-spacing:.5px;color:#ffd54f;text-shadow:0 2px 0 #7a4b00;line-height:1.1}
+.hud-hp{position:relative;width:250px;height:18px;margin-top:6px;border-radius:9px;background:#06141a;border:1px solid #3b78b0;overflow:hidden}
+#hp{position:absolute;left:0;top:0;bottom:0;width:100%;background:linear-gradient(90deg,#3fb950,#a6e35a);transition:width .15s}
+#hpTxt{position:absolute;inset:0;display:grid;place-items:center;font-size:11px;font-weight:bold;letter-spacing:.5px;text-shadow:0 1px 2px #000}
+.hud-chips{display:flex;gap:6px;margin-top:7px}
+.chip{font-size:12px;padding:2px 9px;border-radius:9px;background:rgba(8,18,40,.85);border:1px solid #2d5f78;color:#cfe8ff;white-space:nowrap}
+.chip b{color:#fff}
+.chip.ready{border-color:#7cf29c;color:#7cf29c;box-shadow:0 0 8px rgba(124,242,156,.5)}
 #timer{position:fixed;top:14px;left:50%;transform:translateX(-50%);padding:4px 18px;border-radius:10px;
   background:#0b1120;border:2px solid #ffd54f;box-shadow:0 0 14px rgba(255,213,79,.35);
   font-family:'Consolas',monospace;font-size:26px;font-weight:bold;color:#ffd54f;pointer-events:none}
@@ -183,7 +193,14 @@ canvas{display:block}
 </script>
 </head>
 <body>
-<div id="hud"><div class="panel"><img id="pimg" alt=""><div><div class="barwrap"><div id="hp"></div></div><div id="info"></div></div></div></div>
+<div id="hud"><div class="hud-card">
+  <div class="hud-portrait"><img id="pimg" alt=""><span class="hud-lvl" id="hudLvl">1</span></div>
+  <div class="hud-main">
+    <div class="hud-name" id="hudName">Gabumon</div>
+    <div class="hud-hp"><div id="hp"></div><span id="hpTxt"></span></div>
+    <div class="hud-chips"><span class="chip">☠ <b id="hudKills">0</b></span><span class="chip" id="hudDash">Dash listo</span></div>
+  </div>
+</div></div>
 <div id="timer">5:00</div>
 <div id="xp"></div>
 <div id="overlay"></div>
@@ -1271,7 +1288,7 @@ function update(dt){
   // Muertes
   const dead = g.enemies.filter(e => e.hp <= 0);
   for (const e of dead){
-    g.gems.push({x:e.x, z:e.z, v:e.xp, mesh: null});
+    g.gems.push({x:e.x, z:e.z, v:e.xp, heal: Math.random() < 0.06, mesh: null});
     world.remove(e.mesh);
     world.remove(e.shadow);
   }
@@ -1285,7 +1302,7 @@ function update(dt){
   // Gemas de XP
   for (const gm of g.gems){
     if (!gm.mesh){
-      gm.mesh = new THREE.Mesh(new THREE.OctahedronGeometry(0.25), new THREE.MeshBasicMaterial({color:0x29b6f6}));
+      gm.mesh = new THREE.Mesh(new THREE.OctahedronGeometry(gm.heal ? 0.32 : 0.25), new THREE.MeshBasicMaterial({color: gm.heal ? 0x66bb6a : 0x29b6f6}));
       world.add(gm.mesh);
     }
     const d = dist2(gm.x, gm.z, p.x, p.z), dd = d || 1;
@@ -1295,7 +1312,11 @@ function update(dt){
     }
     gm.mesh.position.set(gm.x, 0.4 + terrainH(gm.x, gm.z), gm.z);
     gm.mesh.rotation.y += dt*3;
-    if (d < 0.9){ gm.taken = true; p.xp += gm.v; world.remove(gm.mesh); }
+    if (d < 0.9){
+      gm.taken = true; world.remove(gm.mesh);
+      if (gm.heal){ p.hp = Math.min(p.maxHp, p.hp + 10); popText(gm.x, gm.z, '+10', '#7cf29c'); sfx('chest'); }
+      else p.xp += gm.v;
+    }
   }
   g.gems = g.gems.filter(gm => !gm.taken);
 
@@ -1511,9 +1532,13 @@ function updateHUD(){
   document.getElementById('xp').style.width = (100*p.xp/p.nextXp) + '%';
   const left = Math.max(0, BOSS_AT - g.t);
   document.getElementById('timer').textContent = g.bossSpawned ? 'JEFE' : `${Math.floor(left/60)}:${String(Math.floor(left%60)).padStart(2,'0')}`;
-  const dashTxt = g.dashCd > 0 ? `${g.dashCd.toFixed(1)} s` : 'listo';
-  document.getElementById('info').textContent =
-    `Pueblo Primario · ${g.ch.evolved ? EVO[g.ch.id].name : g.ch.name} · Nivel ${p.lvl} · Bajas ${g.kills} · Dash ${dashTxt}`;
+  document.getElementById('hpTxt').textContent = `${Math.ceil(Math.max(0, p.hp))} / ${p.maxHp}`;
+  document.getElementById('hudName').textContent = g.ch.evolved ? EVO[g.ch.id].name : g.ch.name;
+  document.getElementById('hudLvl').textContent = p.lvl;
+  document.getElementById('hudKills').textContent = g.kills;
+  const dash = document.getElementById('hudDash');
+  dash.textContent = g.dashCd > 0 ? `Dash ${g.dashCd.toFixed(1)} s` : 'Dash listo';
+  dash.classList.toggle('ready', g.dashCd <= 0);
   // Daño recibido: activa la viñeta roja (se desvanece en frame)
   if (g.lastHp !== undefined && p.hp < g.lastHp - 0.01){ hurtT = 0.45; sfx('hurt'); }
   g.lastHp = p.hp;
