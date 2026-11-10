@@ -1136,12 +1136,12 @@ function randomSpawn(){
   return {x: Math.cos(a)*r, z: Math.sin(a)*r};
 }
 const CHARS = {
-  agumon:  {name:'Agumon',  desc:'Dispara al enemigo más cercano', sprite:'sprites/agumon.png',  kind:'shot',  cd:0.6, dmg:12},
-  gabumon: {name:'Gabumon', desc:'Onda de energía alrededor',      sprite:'sprites/gabumon.png', kind:'ring',  cd:1.6, dmg:8},
-  palmon:  {name:'Palmon',  desc:'Cuchillas giratorias',           sprite:'sprites/palmon.png',  kind:'orbit', cd:0,   dmg:9},
+  agumon:  {name:'Agumon',  desc:'Dispara al enemigo más cercano', sprite:'sprites/agumon.png',  kind:'shot',  cd:0.6, dmg:10},
+  gabumon: {name:'Gabumon', desc:'Onda de energía alrededor',      sprite:'sprites/gabumon.png', kind:'ring',  cd:1.6, dmg:10},
+  palmon:  {name:'Palmon',  desc:'Cuchillas giratorias',           sprite:'sprites/palmon.png',  kind:'orbit', cd:0,   dmg:10},
   garurumon:{name:'Garurumon', desc:'Colmillos rápidos hacia el enemigo más cercano', sprite:'sprites/garurumon.png', kind:'shot',  cd:0.5, dmg:10},
-  tentomon: {name:'Tentomon',   desc:'Descarga eléctrica en círculo',                 sprite:'sprites/adventure/tentomon.png',  kind:'ring',  cd:1.8, dmg:7},
-  gatomon:  {name:'Gatomon',    desc:'Garras giratorias',                             sprite:'sprites/gatomon.png',   kind:'orbit', cd:0,   dmg:8}
+  tentomon: {name:'Tentomon',   desc:'Descarga eléctrica en círculo',                 sprite:'sprites/adventure/tentomon.png',  kind:'ring',  cd:1.8, dmg:10},
+  gatomon:  {name:'Gatomon',    desc:'Garras giratorias',                             sprite:'sprites/gatomon.png',   kind:'orbit', cd:0,   dmg:10}
 };
 // Digievolución (se activa al llegar a este nivel)
 // Etapas de digievolución: se alcanzan a estos niveles (las que tenga cada línea en Digimon Adventure)
@@ -2300,7 +2300,7 @@ function spawnMini(m){
   const shadow = makeShadow(4.4);
   world.add(shadow);
   const sp = clampArena(g.p.x + Math.cos(a)*24, g.p.z + Math.sin(a)*24, ARENA_R - 0.5);
-  const hp = m.hp*(1 + t/90);
+  const hp = m.hp*(1 + t/90)*evoHp();
   g.enemies.push({kind: 'mini', name: m.name, sprite: m.sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 2.5, r: 1.9, xp: 60, dmg: 16*(1 + t/300), cd: 0});
   sfx('boss');
   announce('¡' + m.name.toUpperCase() + '!', 'Un jefe menor entra en combate', '#ce93d8');
@@ -2355,14 +2355,14 @@ function digivolve(){
   const evo = line[st - 1];
   g.ch.evolved = st;
   recordEvolve(g.ch.id);
-  g.p.dmg *= 1.35;
-  g.p.area *= 1.1;
+  g.p.dmg *= 1.2;
+  g.p.area *= 1.05;
   g.p.maxHp += 20; g.p.hp += 20;
   if (st === 1) g.p.count += 1;
   g.evoAnim = {t: 0, dur: 2.6, swapped: false, sprite: spriteOf(g.ch.id, st), name: evo.name};
   shake = Math.max(shake, 0.5);
   sfx('evolve');
-  announce(evo.name + '!', 'Digievolución · +35% daño, +10% área, +20 vida', '#ffd54f');
+  announce(evo.name + '!', 'Digievolución · +20% daño, +5% área, +20 vida', '#ffd54f');
 }
 
 // Animación de digievolución: 0-0.6 s brillo y temblor, cambio de sprite con destello y anillo, 0.6-1.6 s asentamiento
@@ -2548,6 +2548,9 @@ function tryDash(){
 }
 function dist2(ax, az, bx, bz){ return Math.hypot(ax-bx, az-bz); }
 
+// Los enemigos siguen el poder del jugador: cada digievolución les da más vida y daño
+function evoHp(){ return Math.pow(1.25, g.ch.evolved | 0); }
+function evoDmg(){ return Math.pow(1.1, g.ch.evolved | 0); }
 function spawnEnemy(forced){
   const t = g.t, r = Math.random(), a = Math.random()*Math.PI*2, R = (g.idleT || 0) > 2.5 ? 13 : 25;
   let kind = 'basic';
@@ -2565,7 +2568,7 @@ function spawnEnemy(forced){
   world.add(shadow);
   g.enemies.push({
     kind, sprite, mesh, shadow, x: sp[0], z: sp[1],
-    hp: d.hp*k, max: d.hp*k, spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + t/300), cd: 0
+    hp: d.hp*k*evoHp(), max: d.hp*k*evoHp(), spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + t/300)*evoDmg(), cd: 0
   });
 }
 
@@ -2836,7 +2839,7 @@ function update(dt){
     world.add(mesh);
     const shadow = makeShadow(5);
     world.add(shadow);
-    g.boss = {kind: 'boss', boss: true, mesh, shadow, x: p.x + 14, z: p.z, hp: 2400, max: 2400,
+    g.boss = {kind: 'boss', boss: true, mesh, shadow, x: p.x + 14, z: p.z, hp: 2400*evoHp(), max: 2400*evoHp(),
               spd: 2.2, r: 2.4, xp: 40, dmg: 15, cd: 0};
     g.enemies.push(g.boss);
     g.bossShotT = 2;
@@ -3031,8 +3034,8 @@ function updateSkills(dt){
     S.aura.position.set(p.x, terrainH(p.x, p.z) + 0.06, p.z);
     S.auraT -= dt;
     if (S.auraT <= 0){
-      S.auraT = 0.25;
-      const dmg = (3 + 1.5*lv('aura')) * dm;
+      S.auraT = 0.3;
+      const dmg = (1.5 + 0.8*lv('aura')) * dm;
       for (const e of g.enemies) if (e.hp > 0 && dist2(p.x, p.z, e.x, e.z) < (R + e.r)*(R + e.r)) hurt(e, dmg);
     }
   }
@@ -3053,7 +3056,7 @@ function updateSkills(dt){
         if (e.hp <= 0) continue;
         const dx = e.x - bx, dz = e.z - bz, d = Math.hypot(dx, dz);
         if (d < e.r + 0.9){
-          if (!(e.tcd > 0)){ hurt(e, (4 + 2*lv('tornado')) * dm); e.tcd = 0.5; }
+          if (!(e.tcd > 0)){ hurt(e, (3 + 1.5*lv('tornado')) * dm); e.tcd = 0.5; }
           const push = 1.2/(d || 1); e.x += dx*push; e.z += dz*push;
           [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5);
         }
@@ -3077,7 +3080,7 @@ function updateSkills(dt){
         if (e.hp <= 0) continue;
         const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz);
         if (d < R + e.r){
-          hurt(e, (8 + 3*L2) * dm);
+          hurt(e, (6 + 2*L2) * dm);
           const push = 5/(d || 1); e.x += dx*push; e.z += dz*push;
           [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5);
         }
@@ -3159,7 +3162,7 @@ function updateSkills(dt){
         m.life = 0;
         spawnRing(m.x, m.z, 0xff7043, R, 0.45);
         burst(m.x, m.z, 0xff7043);
-        for (const e of g.enemies) if (e.hp > 0 && dist2(m.x, m.z, e.x, e.z) < (R + e.r)*(R + e.r)) hurt(e, (18 + 6*m.lv) * dm);
+        for (const e of g.enemies) if (e.hp > 0 && dist2(m.x, m.z, e.x, e.z) < (R + e.r)*(R + e.r)) hurt(e, (12 + 4*m.lv) * dm);
       }
     }
     S.mines = S.mines.filter(m => { if (m.life > 0) return true; world.remove(m.mesh); return false; });
@@ -3181,7 +3184,7 @@ function updateSkills(dt){
         wm.position.set(mx, terrainH(mx, mz) + 0.07, mz);
         wm.scale.setScalar(R);
         world.add(wm);
-        S.meteors.push({x: mx, z: mz, t: 0, R, mesh: wm, dmg: (14 + 5*L2) * dm});
+        S.meteors.push({x: mx, z: mz, t: 0, R, mesh: wm, dmg: (10 + 3*L2) * dm});
       }
     }
     for (const m of S.meteors){
@@ -4490,14 +4493,14 @@ function makeAura(skinId, key){
    Valores iniciales basados en el daño por segundo (daño / recarga × multiplicador)
    y en la facilidad de cada estilo. Hay que ajustarlos con pruebas reales. */
 const BALANCE = {
-  tentomon:{dif:'Media',    hp:98,  speed:5.8, dmgMul:1.70, why:'Descarga en círculo algo más lenta que la de Gabumon, pero más fuerte'},
-  agumon:  {dif:'Fácil',    hp:105, speed:6.0, dmgMul:0.90, why:'Dispara al enemigo más cercano: equilibrado y fácil de llevar'},
-  palmon:  {dif:'Fácil',    hp:115, speed:5.6, dmgMul:1.00, why:'Cuchillas que giran alrededor: cubren a su alrededor sin apuntar'},
-  gomamon: {dif:'Fácil',    hp:120, speed:5.4, dmgMul:0.80, why:'Mucha vida y ataques rápidos al más cercano: perdona errores'},
-  gabumon: {dif:'Media',    hp:100, speed:6.0, dmgMul:1.60, why:'Onda en círculo: equilibrado, pero hay que colocarse entre enemigos'},
-  gatomon: {dif:'Media',    hp:88,  speed:6.6, dmgMul:1.00, why:'Garras giratorias y velocidad alta: hay que mantenerse en movimiento'},
-  biyomon: {dif:'Media',    hp:92,  speed:6.2, dmgMul:0.85, why:'Mucho daño por disparo, pero aguanta menos golpes'},
-  patamon: {dif:'Difícil',  hp:84,  speed:7.0, dmgMul:0.75, why:'Muy rápido y de poco daño: exige buena posición y movimiento'}
+  tentomon:{dif:'Media',    hp:100,  speed:6.0, dmgMul:1.00, why:'Descarga en círculo: cubre el área alrededor del Digimon'},
+  agumon:  {dif:'Media',    hp:100, speed:6.0, dmgMul:1.00, why:'Dispara al enemigo más cercano: apuntado, sin área'},
+  palmon:  {dif:'Media',    hp:100, speed:6.0, dmgMul:1.00, why:'Cuchillas que giran alrededor: cubren a su alrededor sin apuntar'},
+  gomamon: {dif:'Media',    hp:100, speed:6.0, dmgMul:1.00, why:'Ataques rápidos al enemigo más cercano'},
+  gabumon: {dif:'Media',    hp:100, speed:6.0, dmgMul:1.00, why:'Onda en círculo: hay que colocarse entre enemigos'},
+  gatomon: {dif:'Media',    hp:100,  speed:6.0, dmgMul:1.00, why:'Garras giratorias: hay que mantenerse en movimiento'},
+  biyomon: {dif:'Media',    hp:100,  speed:6.0, dmgMul:1.00, why:'Disparo dirigido de cadencia media'},
+  patamon: {dif:'Media',  hp:100,  speed:6.0, dmgMul:1.00, why:'Ataque dirigido: la clave es colocarse bien'}
 };
 function applyBalance(key){
   const b = BALANCE[key];
