@@ -63,6 +63,68 @@ canvas{display:block}
 .card img{width:72px;height:72px;image-rendering:pixelated;display:block;margin:0 auto 8px}
 .card b{color:#ffd54f;font-size:17px}
 .card small{display:block;opacity:.8;margin-top:6px;font-size:13px}
+/* ---- Pantalla de inicio: vista previa del Digimon, stats y tecla de atajo ---- */
+#overlay.menu-mode{background:radial-gradient(ellipse 90% 80% at 70% 40%,rgba(21,46,96,.55),rgba(4,7,16,.96) 70%)}
+.menu{grid-template-columns:minmax(0,1fr) 340px;grid-template-rows:minmax(0,1fr) auto;gap:26px 30px;padding:30px 40px 24px}
+.m-left{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:26px;align-items:center}
+.m-left .brand{min-width:0}
+.preview{background:linear-gradient(170deg,rgba(30,42,68,.96),rgba(10,16,32,.96));border:2px solid #ffd54f;border-radius:18px;
+  padding:18px;text-align:center;box-shadow:0 0 26px rgba(255,213,79,.25)}
+.preview img{width:150px;height:150px;image-rendering:pixelated;display:block;margin:0 auto 8px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.6))}
+.preview h2{margin:0;color:#ffd54f;font-size:24px;letter-spacing:1px}
+.preview .pdesc{margin:6px 0 12px;font-size:13px;color:#cfe8ff;min-height:34px}
+.stat{display:grid;grid-template-columns:70px 1fr;align-items:center;gap:8px;font-size:12px;margin:6px 0;text-align:left;color:#b0bec5}
+.stat i{display:block;height:8px;border-radius:4px;background:#1b2740;overflow:hidden}
+.stat i b{display:block;height:100%;background:linear-gradient(90deg,#0288d1,#4fc3f7);border-radius:4px}
+.stat i b.warm{background:linear-gradient(90deg,#ff8f00,#ffd54f)}
+.tiles{margin-top:18px}
+.picker{padding:10px 4px 14px}
+.pick-card{position:relative;width:118px;flex:0 0 118px;padding:10px 8px;cursor:pointer}
+.pick-card.sel{transform:translateY(-4px)}
+.pick-card img{width:60px;height:60px;margin:0 auto 4px}
+.pick-card b{font-size:13px}
+.pick-card small{font-size:10px;line-height:1.25;opacity:.75}
+.pick-card .num{position:absolute;top:6px;left:8px;font-size:11px;color:#90caf9;font-weight:bold}
+.kbd{display:inline-block;min-width:22px;padding:1px 6px;margin:0 2px;border-radius:5px;background:#16213a;border:1px solid #4fc3f7;
+  border-bottom-width:3px;font-size:12px;font-weight:bold;text-align:center;color:#e3f2fd}
+.hints{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:#cfe8ff}
+.hints span{white-space:nowrap}
+.rec{align-items:center}
+.rec span:first-child{font-weight:bold}
+.m-right h3 small{display:block;font-size:12px;opacity:.6;letter-spacing:0;margin-top:4px;color:#90caf9}
+/* ---- Subida de nivel: tarjetas por categoría ---- */
+.card{width:230px;text-align:left;position:relative;border-top-width:6px}
+.card.ofensiva{border-color:#ef5350;border-top-color:#ef5350}
+.card.defensiva{border-color:#66bb6a;border-top-color:#66bb6a}
+.card.utilidad{border-color:#ab47bc;border-top-color:#ab47bc}
+.card .tag{display:inline-block;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:8px;margin-bottom:6px;color:#0b0f1a;font-weight:bold}
+.card.ofensiva .tag{background:#ef5350}
+.card.defensiva .tag{background:#66bb6a}
+.card.utilidad .tag{background:#ab47bc;color:#fff}
+.card .num{position:absolute;right:12px;top:14px;color:#90caf9;font-weight:bold;font-size:14px}
+.card b{display:block;font-size:17px;padding-right:24px;text-align:left;color:#ffd54f}
+.card p{margin:8px 0 0;font-size:13px;line-height:1.35;color:#dbe9ff;text-align:left}
+#overlay h2{margin:0;font-size:24px;color:#ffd54f;letter-spacing:1px;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.up-sub{margin:6px 0 0;font-size:13px;color:#90caf9}
+.card.sel-key{outline:2px dashed rgba(255,255,255,.25);outline-offset:4px}
+/* ---- Pausa ---- */
+#pause{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(4,7,16,.72);backdrop-filter:blur(3px);z-index:20}
+#pause.hidden{display:none}
+.pause-box{width:min(680px,92vw);padding:28px 32px;border-radius:18px;background:linear-gradient(170deg,rgba(24,36,64,.98),rgba(8,12,26,.98));
+  border:2px solid #4fc3f7;box-shadow:0 0 30px rgba(79,195,247,.35);text-align:center;color:#fff}
+.pause-box h1{margin:0;font-size:42px;letter-spacing:6px;color:#4fc3f7;text-shadow:0 0 18px rgba(79,195,247,.6)}
+.pause-box .who{margin:6px 0 18px;color:#90caf9;font-size:14px}
+.pause-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.pause-stats div{background:rgba(18,28,52,.9);border:1px solid #2a3a5c;border-radius:10px;padding:10px 6px}
+.pause-stats b{display:block;font-size:20px;color:#ffd54f}
+.pause-stats small{font-size:11px;letter-spacing:.5px;color:#90caf9;text-transform:uppercase}
+.pause-btns{display:flex;flex-direction:column;gap:10px;align-items:center}
+.pause-btns button{width:260px;padding:12px 0;border-radius:12px;border:0;cursor:pointer;font-size:16px;font-weight:bold;letter-spacing:1px;
+  color:#fff;background:linear-gradient(180deg,#1e3a66,#0e1f3d);box-shadow:0 4px 0 #050b18;border:1px solid #4fc3f7}
+.pause-btns button.primary{color:#1a1200;background:linear-gradient(180deg,#ffe082,#ffb300);border-color:#ffd54f;box-shadow:0 4px 0 #b27300}
+.pause-btns button:hover{filter:brightness(1.12)}
+.pause-help{margin-top:18px;font-size:13px;color:#cfe8ff;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;text-align:left;justify-content:center}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -76,6 +138,7 @@ canvas{display:block}
 <div id="bossbar" style="position:fixed;top:56px;left:50%;transform:translateX(-50%);width:420px;height:14px;background:#000;border:1px solid #888;display:none;pointer-events:none"><div id="bosshp" style="height:100%;background:#ab47bc;width:100%"></div></div>
 <div id="combo"style="position:fixed;right:24px;top:12px;font-size:34px;font-weight:bold;color:#ffd54f;text-shadow:0 2px 4px #000;pointer-events:none"></div>
 <div id="flash"style="position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none"></div>
+<div id="pause" class="hidden"></div>
 
 <script type="module">
 import * as THREE from 'three';
@@ -158,14 +221,15 @@ const ENEMY = {
   fast:  {sprite:'sprites/meramon.png', hp:14, spd:6.0, r:0.6, scale:1.4, xp:3, dmg:4},
   tank:  {sprite:'sprites/tank.png',  hp:90, spd:2.0, r:1.3, scale:2.6, xp:8, dmg:12}
 };
+// Mejoras al subir de nivel. k = categoría (color de la tarjeta), d = descripción
 const UPGRADES = [
-  {t:'Daño +20%',               f:p=>{p.dmg*=1.2;}},
-  {t:'Cadencia +15%',           f:p=>{p.cdMul*=0.85;}},
-  {t:'Velocidad +10%',          f:p=>{p.speed*=1.1;}},
-  {t:'+25 vida máx. y cura',    f:p=>{p.maxHp+=25; p.hp+=25;}},
-  {t:'Proyectil / cuchilla +1', f:p=>{p.count+=1;}},
-  {t:'Área +20%',               f:p=>{p.area*=1.2;}},
-  {t:'Imán +30%',               f:p=>{p.pickup*=1.3;}}
+  {t:'Daño +20%',               k:'ofensiva', d:'Tus ataques hacen un 20% más de daño.',            f:p=>{p.dmg*=1.2;}},
+  {t:'Cadencia +15%',           k:'ofensiva', d:'Atacas un 15% más rápido.',                         f:p=>{p.cdMul*=0.85;}},
+  {t:'Velocidad +10%',          k:'defensiva',d:'Te mueves un 10% más deprisa.',                     f:p=>{p.speed*=1.1;}},
+  {t:'+25 vida máx. y cura',    k:'defensiva',d:'Sube tu vida máxima y te cura 25 puntos.',          f:p=>{p.maxHp+=25; p.hp+=25;}},
+  {t:'Proyectil / cuchilla +1', k:'ofensiva', d:'Añade un proyectil o cuchilla más a tu ataque.',    f:p=>{p.count+=1;}},
+  {t:'Área +20%',               k:'ofensiva', d:'Tus ataques cubren un 20% más de área.',            f:p=>{p.area*=1.2;}},
+  {t:'Imán +30%',               k:'utilidad', d:'Recoges los orbes de experiencia desde más lejos.', f:p=>{p.pickup*=1.3;}}
 ];
 
 // ---------- Escena ----------
@@ -435,16 +499,80 @@ const overlay = document.getElementById('overlay');
 
 addEventListener('keydown', e => {
   const k = e.key.toLowerCase();
+  // Esc pausa y reanuda. Con el ratón bloqueado el navegador puede no entregar esta tecla:
+  // en ese caso la pausa la dispara el evento pointerlockchange (ver más abajo).
+  if (k === 'escape'){
+    if (state === 'play'){ pauseGame(); return; }
+    if (state === 'paused'){ resumeGame(); return; }
+  }
+  if (state === 'paused'){ if (k === 'enter') resumeGame(); return; }
   keys[k] = true;
   if (state === 'play' && k === 'shift') tryDash();
   if (state === 'play' && k === ' ' && g && g.p.y === 0) g.p.vy = 11;   // salto (altura ~2)
   if (state === 'play' && k === 'e' && g && g.nearChest) openChest(g.nearChest);
-  if (state === 'select' && k.length === 1 && '123456789'.includes(k) && +k <= SEASONS.adventure.chars.length) startGame(SEASONS.adventure.chars[+k-1]);
+  const list = SEASONS.adventure.chars;
+  if (state === 'select'){
+    if (k.length === 1 && '123456789'.includes(k) && +k <= list.length){
+      selectedKey = list[+k-1];            // dígito: elige (Enter o JUGAR para empezar)
+      if (menuRefresh) menuRefresh();
+    }
+    else if (k === 'arrowleft') moveSelection(-1);
+    else if (k === 'arrowright') moveSelection(1);
+    else if (k === 'enter') startGame(selectedKey);
+  }
   else if (state === 'levelup' && k.length === 1 && '123'.includes(k)) pickUpgrade(+k-1);
-  else if (state === 'select' && k === 'enter') startGame(selectedKey);
   else if (state === 'end' && (k === 'enter' || k === 'r')) showSelect();
 });
 addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+
+// ---------- Pausa ----------
+const pauseEl = document.getElementById('pause');
+function pauseGame(){
+  if (state !== 'play' || !g) return;
+  state = 'paused';
+  for (const k in keys) keys[k] = false;   // que ninguna tecla quede "pulsada" al volver
+  unlockMouse();
+  showPause();
+}
+function resumeGame(){
+  if (state !== 'paused') return;
+  hidePause();
+  state = 'play';
+  lockMouse();   // si el navegador rechaza el bloqueo, el juego sigue; un clic en pantalla lo vuelve a activar
+}
+function hidePause(){ pauseEl.classList.add('hidden'); }
+function showPause(){
+  const name = g.ch.evolved ? EVO[g.ch.id].name : g.ch.name;
+  pauseEl.innerHTML = `
+    <div class="pause-box">
+      <h1>PAUSA</h1>
+      <div class="who">${name} · Pueblo Primario</div>
+      <div class="pause-stats">
+        <div><b>${fmtTime(Math.floor(g.t))}</b><small>Tiempo</small></div>
+        <div><b>${g.kills}</b><small>Bajas</small></div>
+        <div><b>${g.p.lvl}</b><small>Nivel</small></div>
+        <div><b>x${g.p.dmg.toFixed(2)}</b><small>Daño</small></div>
+      </div>
+      <div class="pause-btns">
+        <button class="primary" id="pResume">CONTINUAR</button>
+        <button id="pRestart">REINICIAR PARTIDA</button>
+        <button id="pSelect">CAMBIAR DIGIMON</button>
+      </div>
+      <div class="pause-help">
+        <span><i class="kbd">Esc</i></span><span>continuar</span>
+        <span><i class="kbd">W A S D</i></span><span>mover · <i class="kbd">Espacio</i> saltar · <i class="kbd">Shift</i> dash · <i class="kbd">E</i> cofres</span>
+        <span><i class="kbd">Ratón</i></span><span>mover la cámara · clic en la pantalla para volver a capturarlo</span>
+      </div>
+    </div>`;
+  pauseEl.classList.remove('hidden');
+  document.getElementById('pResume').onclick = resumeGame;
+  document.getElementById('pRestart').onclick = () => startGame(g.ch.id);   // no guarda récord: se descarta la partida
+  document.getElementById('pSelect').onclick = () => showSelect();          // vuelve al menú sin guardar récord
+}
+// Si el bloqueo de ratón se pierde durante la partida (p. ej. Esc del navegador), se pausa
+document.addEventListener('pointerlockchange', () => {
+  if (!document.pointerLockElement && state === 'play') pauseGame();
+});
 
 function showOverlay(html){
   overlay.classList.remove('menu-mode');
@@ -466,49 +594,96 @@ function saveRecord(win){
 const fmtTime = s => `${Math.floor(s/60)}:${String(s%60).padStart(2, '0')}`;
 
 let selectedKey = 'gabumon';
+let menuRefresh = null;   // refresca la selección y la vista previa del menú de inicio
 // Oculta/muestra el HUD de partida (el menú no debe mostrar barras ni temporizador)
 function setHud(v){
   const d = v ? '' : 'none';
   for (const id of ['hud', 'timer', 'xp', 'combo', 'bossbar']) document.getElementById(id).style.display = d;
 }
+// Barra de estadística (0-100%)
+const statBar = (label, pct, warm) =>
+  `<div class="stat"><span>${label}</span><i><b class="${warm ? 'warm' : ''}" style="width:${Math.max(4, Math.min(100, pct))}%"></b></i></div>`;
+const ATTACK_NAME = {shot:'Disparo dirigido', ring:'Onda circular', orbit:'Órbita defensiva'};
+
 function showSelect(){
   state = 'select';
   setHud(false);
   if (g){ scene.remove(world); world = new THREE.Group(); scene.add(world); g = null; }
+  hidePause();
   const recs = getRecords();
   const recRows = recs.length
     ? recs.map((r, i) => `<div class="rec"><span>${i+1}. ${r.name}${r.win ? ' ★' : ''}</span><span>${fmtTime(r.t)} · ${r.kills} bajas · Nv ${r.lvl}</span></div>`).join('')
     : '<p class="muted">Todavía no hay partidas. ¡Empieza una!</p>';
+  const chars = SEASONS.adventure.chars;
   showOverlay(`
     <div class="menu">
       <section class="m-left">
-        <div class="logo"><span>DIGI</span>BONK<em> 3D</em></div>
-        <div class="sub">Temporada 1 · Digimon Adventure</div>
-        <button class="play" id="playBtn">JUGAR</button>
-        <div class="tiles">
-          <div class="tile"><b>Temporada 1</b><small>Digimon Adventure · activa</small></div>
-          <div class="tile dis"><b>Temporada 2</b><small>Próximamente</small></div>
+        <div class="brand">
+          <div class="logo"><span>DIGI</span>BONK<em> 3D</em></div>
+          <div class="sub">Temporada 1 · Digimon Adventure</div>
+          <button class="play" id="playBtn">JUGAR</button>
+          <div class="tiles">
+            <div class="tile"><b>Temporada 1</b><small>Digimon Adventure · activa</small></div>
+            <div class="tile dis"><b>Temporada 2</b><small>Próximamente</small></div>
+          </div>
         </div>
+        <div class="preview" id="preview"></div>
       </section>
       <section class="m-right">
-        <h3>Mejores partidas</h3>
+        <h3>Mejores partidas<small>las 10 mejores de este navegador</small></h3>
         ${recRows}
       </section>
       <section class="m-bottom">
-        <div class="hint">Elige tu Digimon (clic, o 1-6) · Enter o JUGAR para empezar · WASD mover · Ratón cámara · Espacio saltar · Shift dash · E cofres</div>
-        <div class="picker">${SEASONS.adventure.chars.map((k, i) =>
-          `<div class="pick-card" data-pick="${k}"><img src="${CHARS[k].sprite}" alt=""><b>${i+1}. ${CHARS[k].name}</b><small>${CHARS[k].desc}</small></div>`).join('')}</div>
+        <div class="picker">${chars.map((k, i) =>
+          `<div class="pick-card" data-pick="${k}"><span class="num">${i+1}</span><img src="${CHARS[k].sprite}" alt=""><b>${CHARS[k].name}</b><small>${CHARS[k].desc}</small></div>`).join('')}</div>
+        <div class="hints">
+          <span><i class="kbd">1</i>-<i class="kbd">6</i> elegir</span>
+          <span><i class="kbd">←</i><i class="kbd">→</i> cambiar</span>
+          <span><i class="kbd">Enter</i> jugar</span>
+          <span><i class="kbd">W A S D</i> mover</span>
+          <span><i class="kbd">Ratón</i> cámara</span>
+          <span><i class="kbd">Espacio</i> saltar</span>
+          <span><i class="kbd">Shift</i> dash</span>
+          <span><i class="kbd">E</i> cofres</span>
+          <span><i class="kbd">Esc</i> pausa</span>
+        </div>
         <p class="legal">Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon. Sprites de King (uso no comercial, ver sprites/CREDITS.txt).</p>
       </section>
     </div>`);
   overlay.classList.add('menu-mode');
-  const refreshSel = () => overlay.querySelectorAll('[data-pick]').forEach(el => el.classList.toggle('sel', el.dataset.pick === selectedKey));
+  const refreshSel = () => {
+    overlay.querySelectorAll('[data-pick]').forEach(el => el.classList.toggle('sel', el.dataset.pick === selectedKey));
+    renderPreview();
+  };
+  menuRefresh = refreshSel;
+  // Panel de vista previa: sprite grande, stats y evolución del Digimon seleccionado
+  function renderPreview(){
+    const k = selectedKey, c = CHARS[k], evo = EVO[k];
+    const dmgPct = (c.dmg / 14) * 100;          // 14 = el más fuerte de la temporada
+    const rate = (0.4 / Math.max(c.cd, 0.1)) * 100;   // 0.4 s entre ataques = el más rápido
+    overlay.querySelector('#preview').innerHTML = `
+      <img src="${c.sprite}" alt="">
+      <h2>${c.name}</h2>
+      <div class="pdesc">${c.desc}</div>
+      ${statBar('Daño', dmgPct, true)}
+      ${statBar('Cadencia', rate)}
+      <div class="muted" style="margin-top:8px;text-align:left">Ataque: ${ATTACK_NAME[c.kind] || c.kind}</div>
+      <div class="muted" style="margin-top:4px;text-align:left">Nivel 5 → ${evo ? evo.name : '—'} (+50% daño)</div>`;
+  }
   overlay.querySelectorAll('[data-pick]').forEach(el => {
     el.onclick = () => { selectedKey = el.dataset.pick; refreshSel(); };
     el.ondblclick = () => startGame(el.dataset.pick);
   });
   refreshSel();
   document.getElementById('playBtn').onclick = () => startGame(selectedKey);
+}
+
+// Mueve la selección en el menú (flechas)
+function moveSelection(delta){
+  const list = SEASONS.adventure.chars;
+  const i = Math.max(0, list.indexOf(selectedKey));
+  selectedKey = list[(i + delta + list.length) % list.length];
+  if (menuRefresh) menuRefresh();
 }
 
 function startGame(key){
@@ -530,6 +705,7 @@ function startGame(key){
   g.playerShadow = makeShadow(1.6);
   world.add(g.playerShadow);
   hideOverlay();
+  hidePause();
   setHud(true);
   lockMouse();   // ratón integrado: la cámara sigue al ratón
   state = 'play';
@@ -1091,8 +1267,16 @@ function update(dt){
 function openUpgrades(){
   state = 'levelup';
   unlockMouse();   // hay que poder hacer clic en las mejoras
-  showOverlay(`<h2>¡Subida de nivel! Elige una mejora (1-3 o clic)</h2><div class="row">${
-    g.choices.map((c,i)=>`<div class="card" data-up="${i}"><b>${i+1}. ${c.t}</b></div>`).join('')}</div>`);
+  const cat = {ofensiva:'Ofensiva', defensiva:'Defensiva', utilidad:'Utilidad'};
+  showOverlay(`<h2>¡Nivel ${g.p.lvl}! Elige una mejora</h2>
+    <p class="up-sub">Pulsa 1-3 o haz clic</p>
+    <div class="row">${g.choices.map((c,i)=>`
+      <div class="card ${c.k || 'utilidad'}" data-up="${i}">
+        <span class="num">${i+1}</span>
+        <span class="tag">${cat[c.k] || 'Mejora'}</span>
+        <b>${c.t}</b>
+        <p>${c.d || ''}</p>
+      </div>`).join('')}</div>`);
   overlay.querySelectorAll('[data-up]').forEach(el => el.onclick = () => pickUpgrade(+el.dataset.up));
 }
 
