@@ -194,10 +194,10 @@ canvas{display:block}
 #bigmap{width:min(72vh,600px);height:min(72vh,600px);border-radius:50%;border:3px solid #4fc3f7;box-shadow:0 0 30px rgba(79,195,247,.4)}
 .mapleg{font-size:13px;color:#cfe8ff;text-align:center;background:rgba(6,14,26,.85);padding:6px 14px;border-radius:10px;border:1px solid #2d5f78}
 /* Menú de inicio: fila de skins y monedas */
-.menu-row{display:flex;align-items:center;gap:10px;margin-top:12px}
+.menu-row{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:12px}
 .mini-btn{padding:9px 16px;border-radius:12px;border:1px solid #7fd0ff;background:linear-gradient(180deg,#1e3a66,#0e1f3d);color:#fff;font-weight:bold;letter-spacing:1px;cursor:pointer;box-shadow:0 4px 0 #050b18}
 .mini-btn:hover{filter:brightness(1.15)}
-.bits-chip{padding:7px 12px;border-radius:10px;background:#1b2a14;border:1px solid #7cf29c;color:#b9f6ca;font-weight:bold}
+.bits-chip{padding:7px 12px;border-radius:10px;background:#1b2a14;border:1px solid #7cf29c;color:#b9f6ca;font-weight:bold;white-space:nowrap}
 .daily-chip{font-size:12px;color:#cfe8ff;opacity:.9}
 .dif{padding:1px 7px;border-radius:7px;font-size:11px;color:#06101e}
 .dif-Fácil{background:#7cf29c}.dif-Media{background:#ffd54f}.dif-Difícil{background:#ef5350;color:#fff}
@@ -230,6 +230,28 @@ canvas{display:block}
 .g-skin.r-n{border-color:#4fc3f7}.g-skin.r-c{border-color:#ffb74d}.g-skin.r-r{border-color:#ab47bc}.g-skin.r-e{border-color:#ffd54f}
 .g-skin.eq{box-shadow:0 0 12px #ffd54f}
 .g-note{font-size:11px;color:#9fd4ff;margin:10px 0 0}
+/* Pantalla "Elige tu Digimon" */
+.picker-screen{width:min(1000px,96vw);height:min(640px,92vh);display:flex;flex-direction:column;gap:12px;padding:16px 18px;border-radius:18px;
+  background:linear-gradient(170deg,rgba(24,36,64,.97),rgba(8,12,26,.97));border:2px solid #4fc3f7;box-shadow:0 0 30px rgba(79,195,247,.35);color:#e6f4ff;text-align:left}
+.pk-head{display:flex;align-items:center;gap:14px}
+.pk-head h2{margin:0;flex:1;font-size:24px;color:#ffd54f;letter-spacing:1px}
+.pk-tabs{display:flex;gap:6px}
+.pk-tab{padding:8px 16px;border-radius:10px;border:1px solid #2d5f78;background:rgba(8,20,40,.8);color:#9ad3e8;font-weight:bold;cursor:pointer;letter-spacing:.5px}
+.pk-tab.on{background:linear-gradient(180deg,#ffe082,#ffb300);color:#1a1200;border-color:#ffd54f}
+.pk-body{flex:1;display:grid;grid-template-columns:240px 1fr;gap:14px;min-height:0}
+.pk-list{display:flex;flex-direction:column;gap:8px;overflow:auto;padding-right:4px}
+.pk-card{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;border:2px solid #2d5f78;
+  background:rgba(8,20,40,.8);color:#e6f4ff;cursor:pointer;text-align:left}
+.pk-card img{width:44px;height:44px;object-fit:contain;image-rendering:pixelated}
+.pk-card b{font-size:14px}
+.pk-card.sel{border-color:#ffd54f;box-shadow:0 0 12px rgba(255,213,79,.4)}
+.pk-right{border-radius:14px;padding:14px;background:rgba(8,20,40,.8);border:1px solid #2d5f78;overflow:auto;min-height:0}
+.pk-skins-title{font-size:18px;color:#ffd54f;font-weight:bold;margin-bottom:10px}
+.pk-foot{display:flex;align-items:center;gap:16px}
+.pk-start{padding:12px 30px;font-size:16px;border:0;border-radius:14px;cursor:pointer;font-weight:900;letter-spacing:1.5px;color:#0f2a05;background:linear-gradient(180deg,#eaff86,#86d63f 60%,#4fa52a);box-shadow:0 5px 0 #2e6b13,0 0 18px rgba(190,255,90,.4)}
+.pk-start:active{transform:translateY(3px)}
+.pk-hint{font-size:12px;color:#9fd4ff}
+.pk-right .g-tiles{grid-template-columns:repeat(3,1fr)}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -436,7 +458,7 @@ function loadTex(path, rx, ry){
 const floor = new THREE.Mesh(terrainGeo, new THREE.MeshStandardMaterial({map: loadTex('textures/hierba_cc0.jpg', 20, 20), roughness: 1, vertexColors: true}));
 scene.add(floor);
 {
-  const water = new THREE.Mesh(new THREE.CircleGeometry(POND.r, 40),
+  const water = new THREE.Mesh(new THREE.CircleGeometry(POND.r + 4, 48),   // más grande que el cuenco: la orilla la tapa el terreno
     new THREE.MeshStandardMaterial({color: 0xffffff, map: loadTex('textures/agua.png', 3, 3), roughness: 0.15, metalness: 0.1, transparent: true, opacity: 0.92}));
   water.rotation.x = -Math.PI/2;
   water.position.set(POND.x, POND.water, POND.z);
@@ -542,7 +564,22 @@ function propTex(kind){
   const t = new THREE.CanvasTexture(c); t.magFilter = THREE.NearestFilter; return t;
 }
 function buildEnvironment(){
-  const texes = {tree: propTex('tree'), rock: propTex('rock'), flower: propTex('flower')};
+  // Geometría y material compartidos por todos los árboles y rocas (menos llamadas de dibujado)
+  const trunkGeo = new THREE.CylinderGeometry(0.16, 0.24, 1, 6); trunkGeo.translate(0, 0.5, 0);
+  const barkMat = new THREE.MeshStandardMaterial({map: loadTex('textures/corteza_cc0.jpg', 1, 2), roughness: 1});
+  const canopyGeo = new THREE.IcosahedronGeometry(1, 1);
+  const leafMat = new THREE.MeshStandardMaterial({map: loadTex('textures/hojas.png', 2, 2), roughness: 0.9, flatShading: true});
+  const rockGeo = new THREE.IcosahedronGeometry(1, 1);
+  { // irregularidad fija de la piedra
+    const pos = rockGeo.attributes.position;
+    for (let i = 0; i < pos.count; i++){
+      const j = 0.82 + 0.3*Math.abs(Math.sin(pos.getX(i)*7.1 + pos.getY(i)*3.3 + pos.getZ(i)*5.7));
+      pos.setXYZ(i, pos.getX(i)*j, pos.getY(i)*j*0.8, pos.getZ(i)*j);
+    }
+    rockGeo.computeVertexNormals();
+  }
+  const rockMat = new THREE.MeshStandardMaterial({map: loadTex('textures/roca_cc0.jpg', 1, 1), roughness: 1, flatShading: true});
+  const flowerTex = propTex('flower');
   for (let i = 0; i < Q.decor; i++){
     const r = Math.random();
     const kind = r < 0.5 ? 'tree' : r < 0.75 ? 'rock' : 'flower';
@@ -550,15 +587,36 @@ function buildEnvironment(){
     const x0 = Math.cos(ang)*rad, z0 = Math.sin(ang)*rad;
     if (Math.hypot(x0, z0) < 22) continue;   // deja libre la zona de aparición
     if (pondWeight(x0, z0) > 0.01) continue;   // no pone decoración dentro del estanque
-    const h = kind === 'tree' ? 5 + Math.random()*2 : kind === 'rock' ? 1.2 : 0.9;
-    const w = kind === 'tree' ? h*0.67 : h;
-    const s = new THREE.Sprite(new THREE.SpriteMaterial({map: texes[kind], transparent: true}));
-    s.scale.set(w, h, 1);
-    s.position.set(x0, terrainH(x0, z0) + h/2, z0);
-    scene.add(s);
-    if (kind !== 'flower'){            // sombra del prop en su posición (antes se apilaban en el origen)
-      const sh = makeShadow(w*0.8);
-      sh.position.set(x0, terrainH(x0, z0) + 0.02, z0);
+    const gy = terrainH(x0, z0);
+    if (kind === 'flower'){
+      const s = new THREE.Sprite(new THREE.SpriteMaterial({map: flowerTex, transparent: true}));
+      s.scale.set(0.9, 0.9, 1);
+      s.position.set(x0, gy + 0.45, z0);
+      scene.add(s);
+    } else if (kind === 'tree'){
+      const h = 5 + Math.random()*2, cr = h*0.3;
+      const tree = new THREE.Group();
+      const trunk = new THREE.Mesh(trunkGeo, barkMat);
+      trunk.scale.set(1, h*0.55, 1);
+      const canopy = new THREE.Mesh(canopyGeo, leafMat);
+      canopy.scale.set(cr, cr*0.9, cr);
+      canopy.position.y = h*0.55 + cr*0.55;
+      tree.add(trunk, canopy);
+      tree.position.set(x0, gy, z0);
+      tree.rotation.y = Math.random()*Math.PI*2;
+      scene.add(tree);
+      const sh = makeShadow(h*0.5);
+      sh.position.set(x0, gy + 0.02, z0);
+      scene.add(sh);
+    } else {
+      const sc = 0.45 + Math.random()*0.35;
+      const rock = new THREE.Mesh(rockGeo, rockMat);
+      rock.scale.set(sc, sc*0.7, sc);
+      rock.position.set(x0, gy + sc*0.25, z0);
+      rock.rotation.y = Math.random()*Math.PI;
+      scene.add(rock);
+      const sh = makeShadow(sc*2.2);
+      sh.position.set(x0, gy + 0.02, z0);
       scene.add(sh);
     }
   }
@@ -582,8 +640,8 @@ function buildVillage(){
   water.position.y = 1.21;
   scene.add(water);
   // casas de madera alrededor de la plaza
-  const wood = new THREE.MeshStandardMaterial({color: 0x8d6e63, flatShading: true});
-  const roofMat = new THREE.MeshStandardMaterial({color: 0x5d4037, flatShading: true});
+  const wood = new THREE.MeshStandardMaterial({map: loadTex('textures/madera_cc0.jpg', 1, 1), flatShading: true});
+  const roofMat = new THREE.MeshStandardMaterial({map: loadTex('textures/tejado.png', 2, 2), flatShading: true});
   for (let i = 0; i < 7; i++){
     const a = i/7*Math.PI*2 + 0.3, R = 17;
     const x = Math.cos(a)*R, z = Math.sin(a)*R;
@@ -704,13 +762,14 @@ addEventListener('keydown', e => {
   if (state === 'play' && k === 'e' && g && g.nearChest) openChest(g.nearChest);
   const list = SEASONS.adventure.chars;
   if (state === 'select'){
-    if (k.length === 1 && '123456789'.includes(k) && +k <= list.length){
-      selectedKey = list[+k-1];            // dígito: elige (Enter o JUGAR para empezar)
-      if (menuRefresh) menuRefresh();
-    }
-    else if (k === 'arrowleft') moveSelection(-1);
-    else if (k === 'arrowright') moveSelection(1);
+    if (k === 'enter') showPicker('personaje');
+  }
+  else if (state === 'pick'){
+    if (k.length === 1 && '123456789'.includes(k) && +k <= list.length){ selectedKey = list[+k-1]; showPicker(); }
+    else if (k === 'arrowleft') pickMove(-1);
+    else if (k === 'arrowright') pickMove(1);
     else if (k === 'enter') startGame(selectedKey);
+    else if (k === 'escape') showSelect();
   }
   else if (state === 'levelup' && k.length === 1 && '123'.includes(k)) pickUpgrade(+k-1);
   else if (state === 'end' && (k === 'enter' || k === 'r')) showSelect();
@@ -838,7 +897,6 @@ function saveRecord(win){
 const fmtTime = s => `${Math.floor(s/60)}:${String(s%60).padStart(2, '0')}`;
 
 let selectedKey = 'gabumon';
-let menuRefresh = null;   // refresca la selección y la vista previa del menú de inicio
 // Oculta/muestra el HUD de partida (el menú no debe mostrar barras ni temporizador)
 function setHud(v){
   const d = v ? '' : 'none';
@@ -859,7 +917,6 @@ function showSelect(){
   const recRows = recs.length
     ? recs.map((r, i) => `<div class="rec${i === 0 ? ' best' : ''}"><span>${i === 0 ? '👑 ' : ''}${i+1}. ${r.name}${r.win ? ' ★' : ''}</span><span>${fmtTime(r.t)} · ${r.kills} bajas · Nv ${r.lvl}</span></div>`).join('')
     : '<p class="muted">Todavía no hay partidas. ¡Empieza una!</p>';
-  const chars = SEASONS.adventure.chars;
   showOverlay(`
     <div class="menu">
       <section class="m-left">
@@ -873,18 +930,13 @@ function showSelect(){
             <div class="tile dis"><b>Temporada 2</b><small>Próximamente</small></div>
           </div>
         </div>
-        <div class="preview" id="preview"></div>
       </section>
       <section class="m-right">
         <h3>Mejores partidas<small>las 10 mejores de este navegador</small></h3>
         ${recRows}
       </section>
       <section class="m-bottom">
-        <div class="picker">${chars.map((k, i) =>
-          `<div class="pick-card" data-pick="${k}"><span class="num">${i+1}</span><img src="${CHARS[k].sprite}" alt=""><b>${CHARS[k].name}</b><small>${CHARS[k].desc}</small></div>`).join('')}</div>
         <div class="hints">
-          <span><i class="kbd">1</i>-<i class="kbd">6</i> elegir</span>
-          <span><i class="kbd">←</i><i class="kbd">→</i> cambiar</span>
           <span><i class="kbd">Enter</i> jugar</span>
           <span><i class="kbd">W A S D</i> mover</span>
           <span><i class="kbd">Ratón</i> cámara</span>
@@ -899,33 +951,7 @@ function showSelect(){
       </section>
     </div>`);
   overlay.classList.add('menu-mode');
-  const refreshSel = () => {
-    overlay.querySelectorAll('[data-pick]').forEach(el => el.classList.toggle('sel', el.dataset.pick === selectedKey));
-    renderPreview();
-  };
-  menuRefresh = refreshSel;
-  // Panel de vista previa: sprite grande, stats y evolución del Digimon seleccionado
-  function renderPreview(){
-    const k = selectedKey, c = CHARS[k], evo = EVO[k];
-    const dmgPct = (c.dmg / 14) * 100;          // 14 = el más fuerte de la temporada
-    const rate = (0.4 / Math.max(c.cd, 0.1)) * 100;   // 0.4 s entre ataques = el más rápido
-    overlay.querySelector('#preview').innerHTML = `
-      <img src="${spriteOf(k, false)}" alt="">
-      <h2>${c.name}</h2>
-      <div class="pdesc">${c.desc}</div>
-      ${statBar('Daño', dmgPct, true)}
-      ${statBar('Cadencia', rate)}
-      <div class="muted" style="margin-top:8px;text-align:left">Ataque: ${ATTACK_NAME[c.kind] || c.kind}</div>
-      <div class="muted" style="margin-top:4px;text-align:left">Nivel 5 → ${evo ? evo.name : '—'} (+50% daño)</div>
-      <div class="muted" style="margin-top:6px;text-align:left">Dificultad: <b class="dif dif-${BALANCE[k].dif}">${BALANCE[k].dif}</b> · Vida ${BALANCE[k].hp} · Velocidad ${BALANCE[k].speed}</div>
-      <div class="muted" style="margin-top:2px;text-align:left;font-size:11px">${BALANCE[k].why}</div>`;
-  }
-  overlay.querySelectorAll('[data-pick]').forEach(el => {
-    el.onclick = () => { selectedKey = el.dataset.pick; refreshSel(); };
-    el.ondblclick = () => startGame(el.dataset.pick);
-  });
-  refreshSel();
-  document.getElementById('playBtn').onclick = () => startGame(selectedKey);
+  document.getElementById('playBtn').onclick = () => showPicker('personaje');
   document.getElementById('btnGacha').onclick = () => showGacha();
   document.getElementById('btnQuality').onclick = () => {
     const order = ['auto', 'alta', 'baja'];
@@ -935,12 +961,92 @@ function showSelect(){
   };
 }
 
-// Mueve la selección en el menú (flechas)
-function moveSelection(delta){
+// Pantalla "Elige tu Digimon": pestañas Personaje y Skins, y botón para empezar
+let pickTab = 'personaje';
+function showPicker(tab){
+  if (tab) pickTab = tab;
+  state = 'pick';
+  setHud(false);
+  const chars = SEASONS.adventure.chars;
+  const list = chars.map((k, i) => `
+    <button class="pk-card${k === selectedKey ? ' sel' : ''}" data-pick="${k}">
+      <img src="${spriteOf(k, false)}" alt=""><b>${CHARS[k].name}</b><em class="dif dif-${BALANCE[k].dif}">${BALANCE[k].dif}</em>
+    </button>`).join('');
+  const right = pickTab === 'skins' ? skinsPanelHtml(selectedKey) : '<div class="preview" id="pkPreview"></div>';
+  showOverlay(`
+    <div class="picker-screen">
+      <header class="pk-head">
+        <button class="g-back" id="pkBack">← Volver</button>
+        <h2>Elige tu Digimon</h2>
+        <div class="pk-tabs">
+          <button class="pk-tab${pickTab === 'personaje' ? ' on' : ''}" data-tab="personaje">Personaje</button>
+          <button class="pk-tab${pickTab === 'skins' ? ' on' : ''}" data-tab="skins">Skins</button>
+        </div>
+      </header>
+      <div class="pk-body">
+        <div class="pk-list">${list}</div>
+        <div class="pk-right">${right}</div>
+      </div>
+      <footer class="pk-foot">
+        <button class="btn btn-primary pk-start" id="pkStart">¡Empezar! <small>(Enter)</small></button>
+        <span class="pk-hint">1-6 elegir · ←→ cambiar · Enter empezar · Esc volver</span>
+      </footer>
+    </div>`);
+  overlay.querySelectorAll('.pk-card').forEach(b => {
+    b.onclick = () => { selectedKey = b.dataset.pick; showPicker(); };
+    b.ondblclick = () => startGame(b.dataset.pick);
+  });
+  overlay.querySelectorAll('.pk-tab').forEach(b => b.onclick = () => showPicker(b.dataset.tab));
+  document.getElementById('pkBack').onclick = () => showSelect();
+  document.getElementById('pkStart').onclick = () => startGame(selectedKey);
+  if (pickTab === 'personaje') renderPickPreview(); else bindSkinTiles();
+}
+// Vista previa del personaje elegido: sprite, estadísticas, dificultad y evolución
+function renderPickPreview(){
+  const k = selectedKey, c = CHARS[k], evo = EVO[k];
+  const dmgPct = (c.dmg / 14) * 100;
+  const rate = (0.4 / Math.max(c.cd, 0.1)) * 100;
+  const el = document.getElementById('pkPreview');
+  if (!el) return;
+  el.innerHTML = `
+    <img src="${spriteOf(k, false)}" alt="">
+    <h2>${c.name}</h2>
+    <div class="pdesc">${c.desc}</div>
+    ${statBar('Daño', dmgPct, true)}
+    ${statBar('Cadencia', rate)}
+    <div class="muted" style="margin-top:8px;text-align:left">Ataque: ${ATTACK_NAME[c.kind] || c.kind}</div>
+    <div class="muted" style="margin-top:4px;text-align:left">Nivel 5 → ${evo ? evo.name : '—'} (+50% daño)</div>
+    <div class="muted" style="margin-top:6px;text-align:left">Dificultad: <b class="dif dif-${BALANCE[k].dif}">${BALANCE[k].dif}</b> · Vida ${BALANCE[k].hp} · Velocidad ${BALANCE[k].speed}</div>
+    <div class="muted" style="margin-top:2px;text-align:left;font-size:11px">${BALANCE[k].why}</div>`;
+}
+// Skins del personaje elegido: equipar las que tienes y ver cómo se consiguen las demás
+function skinsPanelHtml(key){
+  const owned = ownedSkins(key);
+  const tiles = SKINS.map(sk => {
+    const has = owned.includes(sk.id);
+    const eq = (skinEquipped[key] || 'clasico') === sk.id;
+    return `<button class="g-skin r-${sk.tier}${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}"
+      data-skin="${sk.id}" ${has ? '' : 'disabled'} title="${sk.desc || sk.name}">
+      <img src="${spriteWith(key, false, sk.id)}" alt=""><small>${has ? sk.name : '???'}</small>
+      ${has ? '' : `<em>${howTo(key, sk)}</em>`}</button>`;
+  }).join('');
+  return `
+    <div class="pk-skins-title">Skins de ${CHARS[key].name}</div>
+    <div class="g-tiles">${tiles}</div>
+    <p class="g-note">Las skins que tienes dan su bonus a este Digimon aunque no las lleves equipadas. Equipar cambia solo el aspecto y el aura.</p>`;
+}
+function bindSkinTiles(){
+  overlay.querySelectorAll('.g-skin.owned').forEach(b => b.onclick = () => {
+    equipSkin(selectedKey, b.dataset.skin);
+    showPicker('skins');
+  });
+}
+// Cambia de personaje en la pantalla de elección (flechas)
+function pickMove(delta){
   const list = SEASONS.adventure.chars;
   const i = Math.max(0, list.indexOf(selectedKey));
   selectedKey = list[(i + delta + list.length) % list.length];
-  if (menuRefresh) menuRefresh();
+  showPicker();
 }
 
 function startGame(key){
