@@ -418,11 +418,20 @@ function zoneTint(x, z){
   for (let i = 0; i < pos.count; i++) col.set(zoneTint(pos.getX(i), pos.getZ(i)), i*3);
   terrainGeo.setAttribute('color', new THREE.BufferAttribute(col, 3));
 }
-const floor = new THREE.Mesh(terrainGeo, new THREE.MeshStandardMaterial({map: groundTexture(), roughness: 1, vertexColors: true}));
+// Texturas de archivo (textures/*.png): se repiten sin costuras
+const loader = new THREE.TextureLoader();
+function loadTex(path, rx, ry){
+  const t = loader.load(path);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(rx, ry);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+const floor = new THREE.Mesh(terrainGeo, new THREE.MeshStandardMaterial({map: loadTex('textures/hierba.png', 20, 20), roughness: 1, vertexColors: true}));
 scene.add(floor);
 {
   const water = new THREE.Mesh(new THREE.CircleGeometry(POND.r, 40),
-    new THREE.MeshStandardMaterial({color: 0x2a7fb8, roughness: 0.15, metalness: 0.1, transparent: true, opacity: 0.92}));
+    new THREE.MeshStandardMaterial({color: 0xffffff, map: loadTex('textures/agua.png', 3, 3), roughness: 0.15, metalness: 0.1, transparent: true, opacity: 0.92}));
   water.rotation.x = -Math.PI/2;
   water.position.set(POND.x, POND.water, POND.z);
   scene.add(water);
@@ -470,7 +479,6 @@ addEventListener('resize', () => {
 });
 
 // ---------- Recursos ----------
-const loader = new THREE.TextureLoader();
 const texCache = {};
 function tex(url){
   if (!texCache[url]){
@@ -604,7 +612,7 @@ function buildAmbience(){
   const paths = 8;
   const pathAngles = Array.from({length: paths}, (_, i) => i/paths*Math.PI*2);
   // caminos de tierra desde la plaza hacia las montañas
-  const pathMat = new THREE.MeshBasicMaterial({color: 0x8d6e4b});
+  const pathMat = new THREE.MeshBasicMaterial({color: 0xffffff, map: loadTex('textures/camino_piedra.png', 1, 5)});
   const L = 26 - 14;   // los caminos llegan hasta el borde llano del pueblo
   for (const a of pathAngles){
     const geo = new THREE.PlaneGeometry(2.6, L);
@@ -960,54 +968,6 @@ function startGame(key){
 // ---------- Lógica ----------
 // ---------- Texturas procedurales (sin archivos externos) ----------
 // Terreno procedural: hierba con matices, parches de tierra y claros (textura que se repite)
-// Hierba procedural sin costuras: cada elemento se dibuja también una vuelta desplazada,
-// así los bordes de la textura encajan al repetirse
-function groundTexture(){
-  const S = 256;
-  const c = document.createElement('canvas'); c.width = c.height = S;
-  const x = c.getContext('2d');
-  const rnd = (a, b) => a + Math.random()*(b - a);
-  const wrap = (cx, cy, fn) => { for (const ox of [-S, 0, S]) for (const oy of [-S, 0, S]) fn(cx + ox, cy + oy); };
-  x.fillStyle = '#3f6e35'; x.fillRect(0, 0, S, S);
-  for (let i = 0; i < 46; i++){
-    const cx = rnd(0, S), cy = rnd(0, S), r = rnd(14, 44), light = Math.random() < 0.55;
-    wrap(cx, cy, (px, py) => {
-      const g = x.createRadialGradient(px, py, 0, px, py, r);
-      g.addColorStop(0, light ? 'rgba(140,186,80,0.32)' : 'rgba(22,52,26,0.35)');
-      g.addColorStop(1, 'rgba(0,0,0,0)');
-      x.fillStyle = g; x.fillRect(px - r, py - r, r*2, r*2);
-    });
-  }
-  for (let i = 0; i < 12; i++){
-    const cx = rnd(0, S), cy = rnd(0, S), r = rnd(5, 14);
-    wrap(cx, cy, (px, py) => {
-      const g = x.createRadialGradient(px, py, 0, px, py, r);
-      g.addColorStop(0, 'rgba(128,98,58,0.6)'); g.addColorStop(1, 'rgba(128,98,58,0)');
-      x.fillStyle = g; x.fillRect(px - r, py - r, r*2, r*2);
-    });
-  }
-  for (let i = 0; i < 340; i++){
-    const cx = rnd(0, S), cy = rnd(0, S), v = Math.random();
-    const col = v < 0.45 ? '90,150,60' : v < 0.8 ? '45,95,40' : '160,200,95';
-    wrap(cx, cy, (px, py) => {
-      x.strokeStyle = `rgba(${col},0.75)`; x.lineWidth = 1;
-      for (let k = 0; k < 4; k++){
-        const ang = rnd(-1.25, -0.55), len = rnd(3, 6), ox = rnd(-2, 2);
-        x.beginPath(); x.moveTo(px + ox, py); x.lineTo(px + ox + Math.cos(ang)*len, py + Math.sin(ang)*len); x.stroke();
-      }
-    });
-  }
-  const flowers = ['#ffe082', '#f48fb1', '#ffffff', '#ce93d8'];
-  for (let i = 0; i < 70; i++){
-    const cx = rnd(0, S), cy = rnd(0, S), col = flowers[i % flowers.length];
-    wrap(cx, cy, (px, py) => { x.fillStyle = col; x.fillRect(px, py, 2, 2); });
-  }
-  const t = new THREE.CanvasTexture(c);
-  t.wrapS = t.wrapT = THREE.RepeatWrapping;
-  t.repeat.set(20, 20);
-  t.colorSpace = THREE.SRGBColorSpace;
-  return t;
-}
 let chestTex = null;
 function getChestTex(){
   if (chestTex) return chestTex;
