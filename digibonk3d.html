@@ -1597,7 +1597,8 @@ addEventListener('keydown', e => {
   if (state === 'savecode'){ if (k === 'escape') showSettings(); return; }
   if (state === 'register') return;
   if (k === 'n'){ toggleMute(); return; }
-  if (k === 'm'){ if (state === 'play') openMap(); else if (state === 'map') closeMap(); return; }
+  // Tab abre y cierra el mapa completo (la partida se queda parada mientras está abierto)
+  if (k === 'tab'){ e.preventDefault(); if (state === 'play') openMap(); else if (state === 'map') closeMap(); return; }
   if (state === 'map'){ if (k === 'escape') closeMap(); return; }
   if (k === 'q' && state === 'play'){ bonkRelease(); return; }
   if (state === 'help'){ if (k === 'escape') showSelect(); if (k === 'arrowright') tutoStep(1); if (k === 'arrowleft') tutoStep(-1); return; }
@@ -1715,7 +1716,7 @@ function showPause(askQuit = false){
           <span><i class="kbd">Espacio</i> saltar</span>
           <span><i class="kbd">Shift</i> dash</span>
           <span><i class="kbd">E</i> cofres</span>
-          <span><i class="kbd">M</i> mapa</span>
+          <span><i class="kbd">Tab</i> mapa</span>
           <span><i class="kbd">N</i> sonido</span>
           <span><i class="kbd">Ratón</i> cámara</span>
         </div>
@@ -3608,7 +3609,7 @@ addEventListener('pointerdown', audioInit);
 addEventListener('pointerover', e => { if (state !== 'play' && e.target.closest && e.target.closest('button') && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('button') === e.target.closest('button'))) sfx('uiHover'); });
 addEventListener('click', e => { if (state !== 'play' && e.target.closest && e.target.closest('button')) sfx('uiClick'); }, true);
 
-/* ---------- Mapa 2D: minimapa en la esquina y mapa completo (tecla M) ---------- */
+/* ---------- Mapa 2D: minimapa en la esquina y mapa completo (tecla Tab) ---------- */
 const VILLAGE_R = 14;   // radio aproximado del Pueblo Primario, en unidades del escenario
 // Iconos: sprites del juego cargados una vez y reutilizados en el mapa
 const iconCache = {};
@@ -3716,7 +3717,7 @@ const PULL_COST = 100, DUP_REFUND = 25;
 const EVENT = {name:'Navidad Digital', start: Date.parse('2026-11-01T00:00:00'), end: Date.parse('2026-12-31T23:59:59')};
 function eventActive(){ const now = Date.now(); return now >= EVENT.start && now <= EVENT.end; }
 // Skins por personaje (recoloreados). src: 'base' | 'logro' | 'gacha' | 'evento'
-// f: filtro CSS del recoloreado · fx: efecto propio (glitch)
+// f: filtro CSS del recoloreado · fx: efecto propio (glitch) · px: hojas generadas con sprites/anim/navidad.py
 const SKINS = [
   {id:'clasico',   name:'Clásico',    src:'base',   tier:'n', f:''},
   {id:'galactico', name:'Galáctico',  src:'logro',  tier:'r', req:{plays:3},   desc:'Juega 3 partidas con este Digimon',
@@ -3724,10 +3725,8 @@ const SKINS = [
   {id:'glitch',    name:'Glitch',     src:'logro',  tier:'r', req:{kills:150}, desc:'Consigue 150 bajas con este Digimon', fx:'glitch', f:''},
   {id:'cristal',   name:'Cristal',    src:'gacha',  tier:'l', desc:'Gacha de Bits (banner permanente)',
    f:'hue-rotate(165deg) saturate(.6) brightness(1.3) contrast(.9)'},
-  {id:'festival',  name:'Papá Noel',  src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)',
-   f:'sepia(.7) hue-rotate(-45deg) saturate(2.4) brightness(1.06)'},
-  {id:'reno',      name:'Reno',       src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)',
-   f:'sepia(.9) hue-rotate(-10deg) saturate(1.2) brightness(.95)'}
+  {id:'festival',  name:'Papá Noel',  src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)', px:'navidad'},
+  {id:'reno',      name:'Reno',       src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)', px:'navidad'}
 ];
 const SKIN_BY_ID = Object.fromEntries(SKINS.map(sk => [sk.id, sk]));
 function loadJSON(k, def){ try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e){ return def; } }
@@ -4657,7 +4656,7 @@ function drawMenuBg(){
 initMenuBg();
 
 // ---------- Bucle ----------
-let last = performance.now();
+let last = performance.now(), animMs = 0;
 function frame(now){
   const dt = Math.min(0.05, (now-last)/1000);
   last = now;
@@ -4674,7 +4673,8 @@ function frame(now){
   hurtT = Math.max(0, hurtT - dt);
   document.getElementById('hurt').style.opacity = (hurtT / 0.45) * 0.85;
   // Animación: los enemigos alternan sus dos fotogramas de reposo; el jugador además ataca y recibe daño
-  const idleF = Math.floor(now/380) % 2;
+  if (state !== 'map') animMs += dt*1000;   // reloj de animación: se congela con el mapa abierto
+  const idleF = Math.floor(animMs/380) % 2;
   for (const tx of animTexs) tx.offset.x = idleF/ANIM_N;
   if (g && g.playerMesh){
     const pm = g.playerMesh.material.map;
@@ -4684,7 +4684,7 @@ function frame(now){
         const lp = g.lastPos || (g.lastPos = {x: g.p.x, z: g.p.z});
         g.moving = Math.hypot(g.p.x - lp.x, g.p.z - lp.z) > 0.004; lp.x = g.p.x; lp.z = g.p.z;
       }
-      const f = hurtT > 0.25 ? 4 : g.atkT > 0.13 ? 2 : g.atkT > 0 ? 3 : Math.floor(now/(g.moving ? 150 : 380)) % 2;
+      const f = hurtT > 0.25 ? 4 : g.atkT > 0.13 ? 2 : g.atkT > 0 ? 3 : Math.floor(animMs/(g.moving ? 150 : 380)) % 2;
       pm.offset.x = f/ANIM_N;
     }
   }

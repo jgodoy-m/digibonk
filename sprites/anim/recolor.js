@@ -21,7 +21,7 @@ const { chromium } = require('playwright');
         const base = name(st ? EVO_LINE[key][st - 1].sprite : CHARS[key].sprite);
         const img = await load(`sprites/anim/${base}.png`);
         for (const sk of SKINS){
-          if (sk.id === 'clasico') continue;
+          if (sk.id === 'clasico' || sk.px) continue;   // las de Navidad salen de navidad.py
           const c = document.createElement('canvas');
           c.width = img.naturalWidth; c.height = img.naturalHeight;
           const x = c.getContext('2d');
