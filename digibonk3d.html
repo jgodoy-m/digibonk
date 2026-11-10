@@ -160,6 +160,8 @@ canvas{display:block}
 .pz-profile{display:grid;grid-template-columns:92px 1fr;gap:14px;align-items:center;margin-top:10px}
 .pz-av{width:92px;height:92px;border-radius:14px;border:2px solid #7fd0ff;display:grid;place-items:center;background:radial-gradient(circle,rgba(127,208,255,.35),rgba(127,208,255,.04))}
 .pz-av img{width:74px;height:74px;object-fit:contain;image-rendering:pixelated}
+.pz-av .pz-anim{width:84px;height:84px;background-size:500% 100%;background-position:0 50%}
+
 .pz-name{font-size:26px;font-weight:900;color:#ffd54f;text-shadow:0 2px 0 #7a4b00;line-height:1.05}
 .pz-quote{font-size:12px;font-style:italic;color:#bfe9ff;margin:2px 0 6px}
 .pz-lbl{display:flex;justify-content:space-between;font-size:10px;letter-spacing:1px;color:#bfe9ff;text-transform:uppercase;margin:5px 0 2px}
@@ -999,6 +1001,29 @@ canvas{display:block}
 .anim.pv-hero,.anim.sv-hero{animation:animIdle .8s steps(1) infinite,pvBob 2.4s ease-in-out infinite}
 .dvl-duo .anim{position:relative;width:180px;height:180px;filter:drop-shadow(0 0 16px rgba(61,224,255,.8));animation:animIdle .8s steps(1) infinite,pvBob 1.8s ease-in-out infinite}
 .dvl-duo .anim.flip{filter:drop-shadow(0 0 16px rgba(255,138,30,.8));animation:animIdle .8s steps(1) infinite,dvlBobF 1.8s ease-in-out .5s infinite}
+
+/* Selección: preview a la izquierda, parrilla de cabezas a la derecha, skins bajo la preview */
+.pk-body.pk-split{grid-template-columns:minmax(0,1fr) 300px;align-items:stretch}
+.pk-right-main{min-height:0;overflow:auto;display:flex;flex-direction:column;gap:10px}
+.pk-right-main .pv-stage{height:auto;flex:0 0 auto}
+.pk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-content:start;overflow:auto;min-height:0}
+.pk-body.pk-split .pk-grid .pv-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 6px;text-align:center}
+.pk-body.pk-split .pk-grid .pv-meta{display:flex;flex-direction:column;align-items:center;gap:2px}
+.pk-body.pk-split .pk-grid .pv-num{position:absolute;top:6px;right:8px}
+.pk-skins{padding:10px;border-radius:14px;background:rgba(8,26,34,.8);border:1px solid #2d5f78}
+.pk-skins-t{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#9ad3e8}
+.pk-skins-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin-top:6px}
+.pk-skin{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:10px;border:1px solid #2d5f78;background:#071a22;color:#fff;cursor:pointer;font:inherit}
+.anim.pk-face{width:64px;height:64px;background-size:500% 100%;background-position:0 50%;border-radius:12px;background-color:rgba(127,208,255,.08)}
+.anim.pk-skin-face{width:52px;height:52px;background-size:500% 100%;background-position:0 50%}
+.pk-skin.locked .anim.pk-skin-face{filter:grayscale(1) brightness(.35)}
+.pk-skin.locked .anim.pk-face{filter:grayscale(1) brightness(.35)}
+.pk-skin small{font-size:10px;font-weight:700}
+.pk-skin em{font-size:9px;font-style:normal;color:#7cf29c}
+.pk-skin.on{border-color:#7cf29c;box-shadow:0 0 0 1px #7cf29c inset}
+.pk-skin.locked{cursor:default;opacity:.6}
+.pk-skin:not(.locked):hover{filter:brightness(1.15)}
+.pl3-avs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;overflow:visible}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -1664,7 +1689,7 @@ function showPause(askQuit = false){
         <div class="pz-zone">Pueblo Primario · <span class="pz-st">● En línea</span></div>
         <button class="pz-close" id="pClose" aria-label="Cerrar menú de pausa">✕</button>
         <div class="pz-profile">
-          <div class="pz-av"><img src="${sprite}" alt="${name}"></div>
+          <div class="pz-av">${animEl(sprite, 'pz-anim')}</div>
           <div>
             <div class="pz-name">${name}</div>
             <div class="pz-quote">${PAUSE_LINE[c.id] || ''}</div>
@@ -2045,17 +2070,19 @@ const DIF_COL = {'Fácil': '#66bb6a', 'Media': '#ffb300', 'Difícil': '#ef5350'}
 const SKIN_TIER_NAME = {n: 'Base', c: 'Común', r: 'Rara', e: 'Épica', l: 'Legendaria'};
 const SKIN_SRC_NAME = {base: 'Original', logro: 'Logro', gacha: 'Gacha', evento: 'Evento'};
 function showPicker(tab){
-  if (tab) pickTab = tab;
+  if (tab) pickTab = tab === 'skins' ? 'personaje' : tab;
   state = 'pick';
   setHud(false);
   const chars = SEASONS.adventure.chars;
-  const roster = chars.map((k, i) => `
-    <button class="pv-card${k === selectedKey ? ' sel' : ''}" data-pick="${k}" style="--c:${DIF_COL[BALANCE[k].dif]}">
+  // Parrilla de cabezas a la derecha; la preview y las skins van a la izquierda
+  const grid = chars.map((k, i) => `
+    <button class="pv-card${k === selectedKey ? ' sel' : ''}" data-pick="${k}" style="--c:${DIF_COL[BALANCE[k].dif]}" title="${CHARS[k].name}">
       <span class="pv-num">${i + 1}</span>
-      <img src="${spriteOf(k, false)}" alt="">
+      ${animEl(spriteOf(k, false), 'pk-face')}
       <span class="pv-meta"><b>${CHARS[k].name}</b><em>${BALANCE[k].dif}</em></span>
     </button>`).join('');
-  const right = pickTab === 'skins' ? skinsPanelHtml(selectedKey) : pickTab === 'objetos' ? itemsPanelHtml() : '<div class="pv-stage" id="pkPreview"></div>';
+  const left = pickTab === 'objetos' ? itemsPanelHtml()
+    : skinStripHtml(selectedKey) + '<div class="pv-stage" id="pkPreview"></div>';
   showOverlay(`
     <div class="picker-screen">
       <header class="pk-head">
@@ -2063,13 +2090,12 @@ function showPicker(tab){
         <h2>Elige tu Digimon</h2>
         <div class="pk-tabs">
           <button class="pk-tab${pickTab === 'personaje' ? ' on' : ''}" data-tab="personaje">Personaje</button>
-          <button class="pk-tab${pickTab === 'skins' ? ' on' : ''}" data-tab="skins">Skins</button>
           <button class="pk-tab${pickTab === 'objetos' ? ' on' : ''}" data-tab="objetos">Objetos</button>
         </div>
       </header>
-      <div class="pk-body">
-        <div class="pk-list pv-roster">${roster}</div>
-        <div class="pk-right">${right}</div>
+      <div class="pk-body pk-split">
+        <div class="pk-right-main">${left}</div>
+        <aside class="pk-grid">${grid}</aside>
       </div>
       <footer class="pk-foot">
         <button class="btn btn-primary pk-start" id="pkStart">¡Empezar! <small>(Enter)</small></button>
@@ -2081,9 +2107,26 @@ function showPicker(tab){
     b.ondblclick = () => startGame(b.dataset.pick);
   });
   overlay.querySelectorAll('.pk-tab').forEach(b => b.onclick = () => showPicker(b.dataset.tab));
+  overlay.querySelectorAll('.pk-skin:not(.locked)').forEach(b => b.onclick = () => {
+    equipSkin(selectedKey, b.dataset.skin);
+    showPicker();
+  });
   document.getElementById('pkBack').onclick = () => showSelect();
   document.getElementById('pkStart').onclick = () => startGame(selectedKey);
-  if (pickTab === 'personaje') renderPickPreview(); else if (pickTab === 'skins') bindSkinTiles(); else bindItemTiles();
+  if (pickTab === 'personaje') renderPickPreview(); else bindItemTiles();
+}
+// Selector de skin debajo de la preview: solo las desbloqueadas se pueden equipar
+function skinStripHtml(k){
+  const owned = ownedSkins(k), eq = skinEquipped[k] || 'clasico';
+  return `<div class="pk-skins">
+    <span class="pk-skins-t">Skin de ${CHARS[k].name}</span>
+    <div class="pk-skins-row">${SKINS.map(sk => {
+      const h = owned.includes(sk.id), e = eq === sk.id;
+      return `<button class="pk-skin${h ? '' : ' locked'}${e ? ' on' : ''}" data-skin="${sk.id}" title="${h ? sk.name : howTo(k, sk)}">
+        ${animEl(spriteWith(k, false, sk.id), 'pk-skin-face')}
+        <small>${h ? sk.name : '???'}</small>${e ? '<em>Equipada</em>' : ''}</button>`;
+    }).join('')}</div>
+  </div>`;
 }
 // Escaparate del Digimon elegido: héroe animado, estadísticas y línea de evolución
 function renderPickPreview(){
@@ -2128,42 +2171,6 @@ function skinProgress(key, sk){
   const st = statsOf(key);
   return sk.req.plays ? Math.min(1, st.plays / sk.req.plays) : Math.min(1, st.kills / sk.req.kills);
 }
-// Vestidor: escaparate de la skin enfocada + parrilla de skins tipo póster
-function skinsPanelHtml(key){
-  const owned = ownedSkins(key), eqId = skinEquipped[key] || 'clasico';
-  const fid = skinFocusId(), fs = SKIN_BY_ID[fid];
-  const has = owned.includes(fid), eq = eqId === fid;
-  const heroFilter = has ? (fs.f ? `filter:${fs.f}` : '') : 'filter:grayscale(1) brightness(.35)';
-  const prog = skinProgress(key, fs);
-  const cards = SKINS.map(sk => {
-    const h = owned.includes(sk.id), e = eqId === sk.id, f = fid === sk.id, p = skinProgress(key, sk);
-    return `<button class="sv-card tc-${sk.tier}${h ? ' owned' : ' locked'}${e ? ' eq' : ''}${f ? ' foc' : ''}" data-focus="${sk.id}">
-      <span class="sv-tier">${SKIN_TIER_NAME[sk.tier]}</span>
-      <span class="sv-img"><img src="${spriteWith(key, false, sk.id)}" alt="" style="${h ? (sk.f ? `filter:${sk.f}` : '') : 'filter:grayscale(1) brightness(.35)'}"></span>
-      <b>${h ? sk.name : '???'}</b>
-      <small>${h ? (e ? '✔ Equipada' : 'En tu colección') : howTo(key, sk)}</small>
-      ${!h && p !== null ? `<i class="sv-bar"><u style="width:${Math.round(p * 100)}%"></u></i>` : ''}
-    </button>`;
-  }).join('');
-  const action = eq ? '✔ Equipada' : has ? 'Equipar' : 'Bloqueada';
-  return `
-    <div class="sv-room">
-      <div class="sv-title">Vestidor · ${CHARS[key].name}</div>
-      <div class="sv-layout">
-        <section class="sv-show tc-${fs.tier}">
-          <div class="sv-show-top"><span>${SKIN_TIER_NAME[fs.tier]}</span><span>${SKIN_SRC_NAME[fs.src]}</span></div>
-          <div class="sv-spot">${animEl(spriteWith(key, false, fs.id), 'sv-hero', heroFilter)}</div>
-          <h3>${has ? fs.name : '???'}</h3>
-          <p>${fs.desc || (fs.src === 'base' ? 'Aspecto original del Digimon' : '')}</p>
-          ${!has && prog !== null ? `<i class="sv-bar big"><u style="width:${Math.round(prog * 100)}%"></u></i><small class="sv-req">${howTo(key, fs)}</small>` : ''}
-          <button class="sv-equip" id="skEquip" ${has && !eq ? '' : 'disabled'}>${action}</button>
-        </section>
-        <div class="sv-grid">${cards}</div>
-      </div>
-      <p class="g-note">Las skins que tienes dan su bonus aunque no las lleves equipadas. Equipar cambia solo el aspecto y el aura.</p>
-    </div>`;
-}
-// Objetos para la próxima partida: se eligen aquí antes de jugar y se gastan al empezar
 function itemsPanelHtml(){
   const tiles = ITEMS.map(i => {
     const n = inv.items[i.id] || 0, eq = extra.item === i.id;
@@ -2182,21 +2189,6 @@ function bindItemTiles(){
     saveExtra();
     showPicker('objetos');
   });
-}
-let skinFocus = null;   // {key, id}: skin que se muestra en el escaparate del vestidor
-function skinFocusId(){
-  return skinFocus && skinFocus.key === selectedKey ? skinFocus.id : (skinEquipped[selectedKey] || 'clasico');
-}
-function bindSkinTiles(){
-  overlay.querySelectorAll('.sv-card').forEach(b => b.onclick = () => {
-    skinFocus = {key: selectedKey, id: b.dataset.focus};
-    showPicker('skins');
-  });
-  const eqBtn = document.getElementById('skEquip');
-  if (eqBtn && !eqBtn.disabled) eqBtn.onclick = () => {
-    equipSkin(selectedKey, skinFocusId());
-    showPicker('skins');
-  };
 }
 // Cambia de personaje en la pantalla de elección (flechas)
 function pickMove(delta){
@@ -2553,13 +2545,13 @@ function tryDash(){
 function dist2(ax, az, bx, bz){ return Math.hypot(ax-bx, az-bz); }
 
 function spawnEnemy(forced){
-  const t = g.t, r = Math.random(), a = Math.random()*Math.PI*2, R = 25;
+  const t = g.t, r = Math.random(), a = Math.random()*Math.PI*2, R = (g.idleT || 0) > 2.5 ? 13 : 25;
   let kind = 'basic';
   const z2 = g.zone >= 2;   // la zona 2 trae más tanques y rápidos
   if (forced) kind = forced;
   else if (t > 120 && r < (z2 ? 0.3 : 0.2)) kind = 'tank';
   else if (t > 60 && r < (z2 ? 0.5 : 0.4)) kind = 'fast';
-  const d = ENEMY[kind], k = 1 + t/90;
+  const d = ENEMY[kind], k = 1 + t/60 + (t/200)*(t/200);   // vida: x4,8 a los 3 min y x20 a los 10 min
   const pool = ZONE_FOES[g.zone - 1][kind], sprite = pool ? pool[Math.floor(Math.random()*pool.length)] : d.sprite;
   const mesh = billboard(sprite, d.scale);
   mesh.position.y = d.scale/2;
@@ -2573,6 +2565,14 @@ function spawnEnemy(forced){
   });
 }
 
+function spawnChest(p){
+  const a = Math.random()*Math.PI*2, R = 10 + Math.random()*8;
+  const [cx, cz] = clampArena(p.x + Math.cos(a)*R, p.z + Math.sin(a)*R, ARENA_R - 2);
+  const {group, pivot} = makeChest();
+  group.position.set(cx, terrainH(cx, cz), cz);
+  world.add(group);
+  g.chests.push({x: cx, z: cz, group, pivot, open: false, openT: 0, gone: false});
+}
 // Imán total: objeto que cae del 2% de los enemigos y se recoge pasando por encima
 function spawnMagnetDrop(x, z){
   const mesh = new THREE.Mesh(new THREE.TorusGeometry(0.45, 0.14, 8, 18), new THREE.MeshBasicMaterial({color: 0xff4081}));
@@ -2628,14 +2628,21 @@ function update(dt){
   if (!g.hordeWarned && g.t >= 45){ g.hordeWarned = true; announce('¡HORDAS!', 'Más enemigos aparecen', '#ef5350'); }
   if (!g.bossWarned && g.t >= BOSS_AT - 15){ g.bossWarned = true; announce('Algo se acerca…', 'Piedmon llega en 15 s', '#ce93d8'); }
 
+  // Quedarse quieto: tras 2,5 s sin moverte, los enemigos salen más deprisa y más cerca
+  const mvd = Math.hypot(g.p.x - (g.lastPx ?? g.p.x), g.p.z - (g.lastPz ?? g.p.z));
+  g.idleT = mvd > 0.02 ? 0 : (g.idleT || 0) + dt;
+  g.lastPx = g.p.x; g.lastPz = g.p.z;
+  if (g.idleT > 2.5 && !g.idleWarned){ g.idleWarned = true; announce('¡Muévete!', 'Los enemigos se acercan si te quedas quieto', '#ef5350'); }
+  if (g.idleT <= 2.5) g.idleWarned = false;
+
   // Aparición
-  g.spawnT -= dt;
+  g.spawnT -= dt * (g.idleT > 2.5 ? 1.8 : 1);
   if (g.spawnT <= 0){
     spawnEnemy();
     // Presión creciente: tras 45 s salen más enemigos por tanda (1 extra, +1 cada 90 s, máximo 3)
     const extra = g.t > 45 ? Math.min(3, 1 + Math.floor(g.t/90)) : 0;
     for (let i = 0; i < extra && g.enemies.length < Q.maxEnemies; i++) spawnEnemy();
-    g.spawnT = Math.max(0.12, 0.9 - g.t/120);
+    g.spawnT = Math.max(0.3, 0.9 - g.t/180);
   }
 
   // Minijefes en sus minutos
@@ -2729,7 +2736,8 @@ function update(dt){
   const dead = g.enemies.filter(e => e.hp <= 0);
   for (const e of dead){
     g.gems.push({x:e.x, z:e.z, v:e.xp, heal: Math.random() < 0.06, mesh: null});
-    if (Math.random() < 0.02) spawnMagnetDrop(e.x, e.z);   // 2%: imán total
+    // 2% por baja, pero con enfriamiento de 45 s y un solo imán en el mapa a la vez
+    if ((g.magnetT || 0) <= 0 && Math.random() < 0.02){ spawnMagnetDrop(e.x, e.z); g.magnetT = 45; }
     // Tickets de tirada: 25% de cada élite y 3 seguros del jefe
     if (e.kind === 'elite' && Math.random() < 0.25){ g.tix++; popText(e.x, e.z, '+1 ticket', '#3de0ff', 1); }
     if (e.kind === 'mini'){ g.tix++; announce('¡' + e.name + ' derrotado!', '+1 ticket de tirada', '#3de0ff'); }
@@ -2784,16 +2792,13 @@ function update(dt){
   }
   g.gems = g.gems.filter(gm => !gm.taken);
 
-  // Cofres: aparecen cada 25 s y dan una mejora aleatoria al pasar por encima
+  // Cofres: aparecen cada 50 s (máximo 2 vivos) y dan una mejora aleatoria al pasar por encima
   g.chestT -= dt;
+  g.magnetT = Math.max(0, (g.magnetT || 0) - dt);
   if (g.chestT <= 0){
-    g.chestT = 25;
-    const a = Math.random()*Math.PI*2, R = 10 + Math.random()*8;
-    const [cx, cz] = clampArena(p.x + Math.cos(a)*R, p.z + Math.sin(a)*R, ARENA_R - 2);
-    const {group, pivot} = makeChest();
-    group.position.set(cx, terrainH(cx, cz), cz);
-    world.add(group);
-    g.chests.push({x: cx, z: cz, group, pivot, open: false, openT: 0, gone: false});
+    g.chestT = 50;
+    // Como mucho 2 cofres vivos a la vez: si ya hay dos en el mapa, no sale otro
+    if (g.chests.filter(c => !c.gone && !c.open).length < 2) spawnChest(p);
   }
   g.nearChest = null;
   let best = 2.0;
@@ -2934,14 +2939,29 @@ const SKILLS = {
   mina:     {name:'Mina Digital',          k:'utilidad',  d:'Dejas minas al moverte; explotan en área cuando un enemigo las pisa.'},
   meteoro:  {name:'Lluvia de Meteoros',    k:'ofensiva',  d:'Impactos aleatorios cerca de ti, avisados con un círculo en el suelo.'}
 };
-const SKILL_MAX = 3;
+const SKILL_MAX = 3;      // niveles por habilidad
+const SKILL_SLOTS = 3;   // habilidades distintas que puedes llevar en una partida
+// Cada Digimon tiene su propio grupo de 4 ataques (de los 8 disponibles)
+const CHAR_SKILLS = {
+  agumon:   ['espiral', 'laser', 'meteoro', 'mina'],
+  gabumon:  ['cuchilla', 'pulso', 'aura', 'tornado'],
+  palmon:   ['mina', 'tornado', 'aura', 'pulso'],
+  gatomon:  ['cuchilla', 'laser', 'espiral', 'pulso'],
+  gomamon:  ['pulso', 'tornado', 'espiral', 'mina'],
+  patamon:  ['aura', 'meteoro', 'pulso', 'laser'],
+  biyomon:  ['meteoro', 'espiral', 'cuchilla', 'aura'],
+  tentomon: ['laser', 'mina', 'meteoro', 'tornado']
+};
 function addSkill(id){ g.skills[id] = Math.min(SKILL_MAX, (g.skills[id] || 0) + 1); }
-// Opciones del nivel: mejoras base + habilidades que aún no están al máximo
+// Opciones del nivel: mejoras base + ataques de este Digimon (máximo SKILL_SLOTS distintos por partida)
 function upgradeChoices(){
   const pool = [...UPGRADES];
-  for (const id of Object.keys(SKILLS)){
+  const mine = CHAR_SKILLS[g.ch.id] || Object.keys(SKILLS).slice(0, 4);
+  const owned = Object.keys(g.skills).filter(id => g.skills[id] > 0);
+  for (const id of mine){
     const lv = g.skills[id] || 0;
     if (lv >= SKILL_MAX) continue;
+    if (!lv && owned.length >= SKILL_SLOTS) continue;   // ya llevas el máximo de ataques distintos
     const s = SKILLS[id];
     pool.push({t: `${s.name} · ${lv ? 'Nivel ' + (lv + 1) : 'Nueva'}`, name: s.name, skill: id, lv, k: s.k, d: s.d, f: () => addSkill(id)});
   }
@@ -3692,15 +3712,19 @@ const PULL_COST = 100, DUP_REFUND = 25;
 // Evento temporal: mientras dura, el gacha tiene el banner de Navidad (cambia aquí las fechas)
 const EVENT = {name:'Navidad Digital', start: Date.parse('2026-11-01T00:00:00'), end: Date.parse('2026-12-31T23:59:59')};
 function eventActive(){ const now = Date.now(); return now >= EVENT.start && now <= EVENT.end; }
-// Cuatro skins por personaje. src: 'base' | 'logro' | 'gacha' | 'evento'
+// Skins por personaje (recoloreados). src: 'base' | 'logro' | 'gacha' | 'evento'
 // f: filtro CSS del recoloreado · fx: efecto propio (glitch)
 const SKINS = [
-  {id:'clasico',   name:'Clásico',    src:'base',   tier:'n'},
-  {id:'galactico', name:'Goggles',    src:'logro',  tier:'r', req:{plays:3},   desc:'Goggles de líder. Juega 3 partidas con este Digimon'},
-  {id:'glitch',    name:'Cinta roja', src:'logro',  tier:'r', req:{kills:150}, desc:'Cinta de combate. Consigue 150 bajas con este Digimon', fx:'glitch'},
-  {id:'cristal',   name:'Corona',     src:'gacha',  tier:'l', desc:'Corona dorada. Legendaria del banner permanente'},
-  {id:'festival',  name:'Papá Noel',  src:'evento', tier:'l', desc:'Gorro de Papá Noel. Legendaria exclusiva del banner de Navidad'},
-  {id:'reno',      name:'Reno',       src:'evento', tier:'l', desc:'Astas de reno con acebo. Legendaria exclusiva del banner de Navidad'}
+  {id:'clasico',   name:'Clásico',    src:'base',   tier:'n', f:''},
+  {id:'galactico', name:'Galáctico',  src:'logro',  tier:'r', req:{plays:3},   desc:'Juega 3 partidas con este Digimon',
+   f:'hue-rotate(235deg) saturate(1.9) brightness(.88) contrast(1.12)'},
+  {id:'glitch',    name:'Glitch',     src:'logro',  tier:'r', req:{kills:150}, desc:'Consigue 150 bajas con este Digimon', fx:'glitch', f:''},
+  {id:'cristal',   name:'Cristal',    src:'gacha',  tier:'l', desc:'Gacha de Bits (banner permanente)',
+   f:'hue-rotate(165deg) saturate(.6) brightness(1.3) contrast(.9)'},
+  {id:'festival',  name:'Papá Noel',  src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)',
+   f:'sepia(.7) hue-rotate(-45deg) saturate(2.4) brightness(1.06)'},
+  {id:'reno',      name:'Reno',       src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)',
+   f:'sepia(.9) hue-rotate(-10deg) saturate(1.2) brightness(.95)'}
 ];
 const SKIN_BY_ID = Object.fromEntries(SKINS.map(sk => [sk.id, sk]));
 function loadJSON(k, def){ try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e){ return def; } }
@@ -3778,7 +3802,7 @@ function buildSkins(){
       const path = st ? EVO_LINE[key][st - 1].sprite : CHARS[key].sprite;
       for (const sk of SKINS){
         if (sk.id === 'clasico') continue;
-        skinURL[`${key}|${st}|${sk.id}`] = `sprites/skins/${key}_${st}_${sk.id}.png`;   // sprite con el accesorio ya dibujado
+        skinURL[`${key}|${st}|${sk.id}`] = `sprites/anim/${key}_${st}_${sk.id}.png`;   // hoja animada recoloreada (generada con sprites/anim/recolor.js)
       }
     }
   }
@@ -3799,11 +3823,26 @@ function headUrl(src){
   headCache[src] = 'pending';
   const im = new Image();
   im.onload = () => {
-    const w = im.naturalWidth, h = im.naturalHeight;
+    // Las hojas animadas tienen ANIM_N fotogramas en horizontal: el icono usa solo el primero
+    const fr = sheetOf(src) ? ANIM_N : 1;
+    const fw = Math.floor(im.naturalWidth / fr), h = im.naturalHeight;
+    // Caja real del Digimon dentro del fotograma (píxeles con alfa)
+    const probe = document.createElement('canvas'); probe.width = fw; probe.height = h;
+    const pc = probe.getContext('2d', {willReadFrequently: true});
+    pc.drawImage(im, 0, 0, fw, h, 0, 0, fw, h);
+    const d = pc.getImageData(0, 0, fw, h).data;
+    let x0 = fw, y0 = h, x1 = -1, y1 = -1;
+    for (let y = 0; y < h; y++) for (let x = 0; x < fw; x++){
+      if (d[(y*fw + x)*4 + 3] > 40){ if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    }
+    if (x1 < 0){ x0 = 0; y0 = 0; x1 = fw - 1; y1 = h - 1; }
+    // Cabeza: la franja superior de la caja, cuadrada y centrada
+    const bw = x1 - x0 + 1, bh = y1 - y0 + 1;
+    const hh = bh * 0.5, side = hh * 1.45;
+    const cx = x0 + bw/2, cy = y0 + hh/2;
     const c = document.createElement('canvas'); c.width = 96; c.height = 96;
     const x = c.getContext('2d'); x.imageSmoothingEnabled = false;
-    // recorte de la parte superior centrada: la cabeza
-    x.drawImage(im, w*0.2, h*0.14, w*0.6, h*0.56, 0, 0, 96, 96);   // los sprites llevan margen arriba para los accesorios
+    x.drawImage(im, cx - side/2, cy - side/2, side, side, 0, 0, 96, 96);
     headCache[src] = c.toDataURL('image/png');
   };
   im.src = src;
@@ -4664,6 +4703,8 @@ if (new URLSearchParams(location.search).has('demo')){
     get g(){ return g; }, get state(){ return state; }, get scene(){ return scene; },
     rollReward, grantReward, setBanner: b => { gxBanner = b; },
     startGame, spawnEnemy, spawnMagnetDrop, setZone, showGacha, addSkill, upgradeChoices,
+    // Datos y filtros que usa sprites/anim/recolor.js para generar las skins
+    SKINS, EVO_LINE, CHARS, SEASONS, glitchPixels,
     nearChest(){
       const p = g.p, a = p.dir ? Math.atan2(p.dir.z, p.dir.x) : 0;
       const [cx, cz] = clampArena(p.x + Math.cos(a)*3, p.z + Math.sin(a)*3, ARENA_R - 2);
