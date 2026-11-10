@@ -961,7 +961,7 @@ canvas{display:block}
 .cl-prog i{display:block;height:100%;background:linear-gradient(90deg,var(--dv-cyan),var(--dv-yel))}
 .cl-body{flex:1;overflow:auto;padding-right:6px}
 .cl-body h3{margin:14px 0 8px;font:900 13px 'Orbitron',system-ui,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--dv-cyan)}
-.cl-row{display:grid;grid-template-columns:110px repeat(5,1fr);gap:8px;align-items:stretch;margin-bottom:8px}
+.cl-row{display:grid;grid-template-columns:110px repeat(6,1fr);gap:8px;align-items:stretch;margin-bottom:8px}
 .cl-name{display:flex;align-items:center;font:700 13px 'Orbitron',system-ui,sans-serif}
 .cl-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
 .cl-cell{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;background:#081a4a;border:2px dashed #2a4a8a;text-align:center;min-height:104px}
@@ -1724,14 +1724,14 @@ const TXT = {
        play:'JUGAR', playS:'Elige tu Digimon y sobrevive 10 minutos', gacha:'GACHA', gachaS:'Tiradas con Bits o tickets', player:'JUGADOR', playerS:'Tu tarjeta, marcos y títulos',
        coll:'COLECCIÓN', collS:'Skins, marcos, títulos y evoluciones', help:'CÓMO JUGAR', helpS:'Tutorial con vídeos', set:'AJUSTES', setS:'Calidad, sonido y guardado', recs:'Tus récords', runs:'Partidas', best:'Mejor tiempo', lvl:'Mejor nivel',
        kills:'Bajas', none:'Todavía no hay partidas. ¡Empieza una!', partner:'Tu compañero', noTitle:'Sin título', guestTag:'invitado · pruebas',
-       evEnds:'Termina en', evSkin:'Skin Festival como legendaria en el gacha', tipT:'Consejo', tip:'Los élites y el jefe sueltan tickets de tirada.', daily:'Misión diaria',
+       evEnds:'Termina en', evSkin:'Skins de Navidad como legendarias en el gacha', tipT:'Consejo', tip:'Los élites y el jefe sueltan tickets de tirada.', daily:'Misión diaria',
        legal:'Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon.'},
   en: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'A free 3D Digimon survivor in your browser', boot:'DIGIVICE · DIGITAL WORLD ACCESS', who:'DigiDestined, identify yourself',
        saved:'Your name is saved in this browser.', ph:'YOUR NAME', enter:'ENTER THE DIGITAL WORLD', guest:'Enter as guest (testing)', needName:'Type a name',
        play:'PLAY', playS:'Pick your Digimon and survive 10 minutes', gacha:'GACHA', gachaS:'Pulls with Bits or tickets', player:'PLAYER', playerS:'Your card, frames and titles',
        coll:'COLLECTION', collS:'Skins, frames, titles and evolutions', help:'HOW TO PLAY', helpS:'Video tutorial', set:'SETTINGS', setS:'Quality, sound and save', recs:'Your records', runs:'Runs', best:'Best time', lvl:'Best level',
        kills:'Kills', none:'No runs yet. Start one!', partner:'Your partner', noTitle:'No title', guestTag:'guest · testing',
-       evEnds:'Ends in', evSkin:'Festival skin as the legendary in the gacha', tipT:'Tip', tip:'Elites and the boss drop pull tickets.', daily:'Daily mission',
+       evEnds:'Ends in', evSkin:'Christmas skins as legendaries in the gacha', tipT:'Tip', tip:'Elites and the boss drop pull tickets.', daily:'Daily mission',
        legal:'Unofficial, free, non-profit fan game. Not affiliated with Bandai, Toei Animation or the Digimon rights holders.'}
 };
 const t = k => TXT[LANG][k] || TXT.es[k] || k;
@@ -1903,7 +1903,7 @@ function showHelp(){
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
-  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-pity'];
+  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-pity', 'digibonk3d-legnew'];
 function makeSaveCode(){
   const data = {};
   for (const k of SAVE_KEYS){ const v = localStorage.getItem(k); if (v !== null) data[k] = v; }
@@ -3652,7 +3652,8 @@ const SKIN_FX = {
   galactico: {bonus:{speed:1.06}, aura:'stars',   text:'+6% velocidad · estrellas'},
   glitch:    {bonus:{dmg:1.08},   aura:'ghost',   text:'+8% daño · ecos glitch'},
   cristal:   {bonus:{pickup:1.2}, aura:'shards',  text:'+20% imán · cristales'},
-  festival:  {bonus:{maxHp:15},   aura:'confetti',text:'+15 PS máx. · confeti'}
+  festival:  {bonus:{maxHp:15},   aura:'confetti',text:'+15 PS máx. · confeti'},
+  reno:      {bonus:{speed:1.06}, aura:'confetti',text:'+6% velocidad · confeti'}
 };
 const SAVE = {
   get bits(){ return +(localStorage.getItem('digibonk3d-bits') || 0); },
@@ -3661,22 +3662,18 @@ const SAVE = {
   set tickets(v){ localStorage.setItem('digibonk3d-tickets', String(Math.max(0, Math.floor(v)))); }
 };
 const PULL_COST = 100, DUP_REFUND = 25;
-// Evento temporal: la skin Festival se consigue jugando durante estas fechas (cámbialas aquí)
-const EVENT = {name:'Festival de otoño', start: Date.parse('2026-11-01T00:00:00'), end: Date.parse('2026-12-31T23:59:59')};
+// Evento temporal: mientras dura, el gacha tiene el banner de Navidad (cambia aquí las fechas)
+const EVENT = {name:'Navidad Digital', start: Date.parse('2026-11-01T00:00:00'), end: Date.parse('2026-12-31T23:59:59')};
 function eventActive(){ const now = Date.now(); return now >= EVENT.start && now <= EVENT.end; }
 // Cuatro skins por personaje. src: 'base' | 'logro' | 'gacha' | 'evento'
 // f: filtro CSS del recoloreado · fx: efecto propio (glitch)
 const SKINS = [
-  {id:'clasico',  name:'Clásico',  src:'base',   tier:'n', f:''},
-  {id:'galactico', name:'Galáctico', src:'logro', tier:'r', req:{plays:3},
-   desc:'Juega 3 partidas con este Digimon',
-   f:'hue-rotate(235deg) saturate(1.9) brightness(.88) contrast(1.12)'},
-  {id:'glitch',   name:'Glitch',   src:'logro',  tier:'r', req:{kills:150},
-   desc:'Consigue 150 bajas con este Digimon', fx:'glitch'},
-  {id:'cristal',  name:'Cristal',  src:'gacha',  tier:'l', f:'hue-rotate(165deg) saturate(.6) brightness(1.3) contrast(.9)',
-   desc:'Gacha de Bits'},
-  {id:'festival', name:'Festival', src:'evento', tier:'l', f:'sepia(.7) hue-rotate(-45deg) saturate(2.4) brightness(1.06)',
-   desc:'Exclusiva del banner de evento del gacha (legendaria)'}
+  {id:'clasico',   name:'Clásico',    src:'base',   tier:'n'},
+  {id:'galactico', name:'Goggles',    src:'logro',  tier:'r', req:{plays:3},   desc:'Goggles de líder. Juega 3 partidas con este Digimon'},
+  {id:'glitch',    name:'Cinta roja', src:'logro',  tier:'r', req:{kills:150}, desc:'Cinta de combate. Consigue 150 bajas con este Digimon', fx:'glitch'},
+  {id:'cristal',   name:'Corona',     src:'gacha',  tier:'l', desc:'Corona dorada. Legendaria del banner permanente'},
+  {id:'festival',  name:'Papá Noel',  src:'evento', tier:'l', desc:'Gorro de Papá Noel. Legendaria exclusiva del banner de Navidad'},
+  {id:'reno',      name:'Reno',       src:'evento', tier:'l', desc:'Astas de reno con acebo. Legendaria exclusiva del banner de Navidad'}
 ];
 const SKIN_BY_ID = Object.fromEntries(SKINS.map(sk => [sk.id, sk]));
 function loadJSON(k, def){ try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e){ return def; } }
@@ -3754,7 +3751,7 @@ function buildSkins(){
       const path = st ? EVO_LINE[key][st - 1].sprite : CHARS[key].sprite;
       for (const sk of SKINS){
         if (sk.id === 'clasico') continue;
-        makeSkin(path, sk, url => { skinURL[`${key}|${st}|${sk.id}`] = url; });
+        skinURL[`${key}|${st}|${sk.id}`] = `sprites/skins/${key}_${st}_${sk.id}.png`;   // sprite con el accesorio ya dibujado
       }
     }
   }
@@ -4038,15 +4035,16 @@ function frameClass(){ return extra.frame ? ' fr-' + extra.frame : ''; }
 // Pesos por tipo de recompensa y por rareza
 // Banners del gacha: cada uno tiene su skin legendaria. El de evento solo aparece mientras dura el evento
 const BANNERS = {
-  std:    {name: 'Digivice Estándar', sub: 'Skins Cristal', skin: 'cristal'},
-  evento: {name: EVENT.name, sub: 'Skins Festival · tiempo limitado', skin: 'festival'}
+  std:    {name: 'Digivice Estándar', sub: 'Skin Corona', skins: ['cristal']},
+  evento: {name: EVENT.name, sub: 'Skins Papá Noel y Reno · tiempo limitado', skins: ['festival', 'reno']}
 };
 let gxBanner = 'std';
 // Garantía: si pasan PITY_AT tiradas sin legendaria, la siguiente lo es. Una legendaria repetida devuelve Bits
 const PITY_AT = 80, LEG_DUP_REFUND = 200;
 const pityCount = () => +(localStorage.getItem('digibonk3d-pity') || 0);
-function bannerSkin(){ if (gxBanner === 'evento' && !eventActive()) gxBanner = 'std'; return SKIN_BY_ID[BANNERS[gxBanner].skin]; }
-// La rareza se decide primero. Legendaria = skin Cristal; el resto reparte entre marco, título y objeto
+function bannerSkins(){ if (gxBanner === 'evento' && !eventActive()) gxBanner = 'std'; return BANNERS[gxBanner].skins.map(id => SKIN_BY_ID[id]); }
+function bannerSkin(){ return bannerSkins()[0]; }
+// La rareza se decide primero. Legendaria = skin; el resto reparte entre marco, título y objeto
 const TIER_ODDS = {c: 60, r: 28, e: 10, l: 2};
 const CAT_WEIGHTS = [['frame', 30], ['title', 25], ['item', 45]];
 function rollTier(){
@@ -4071,12 +4069,25 @@ function unownedPool(list, tier, owned){
   }
 }
 function pickOne(pool){ return pool[Math.floor(Math.random()*pool.length)]; }
-// Devuelve una recompensa: {type, ...}. Legendaria da una skin Cristal que no tengas (si ya las tienes todas, cae a épica)
+// Devuelve una recompensa: {type, ...}. Legendaria da una skin de un Digimon
 function rollReward(tier){
   if (tier === 'l'){
-    // En el banner de temporada: 50% su skin y 50% la del banner permanente. Puede salir repetida
-    const sk = bannerSkin().id !== 'cristal' && Math.random() < 0.5 ? SKIN_BY_ID.cristal : bannerSkin();
-    return {type:'skin', key: pickOne(SEASONS.adventure.chars), sk, tier:'l'};
+    // Banner de temporada: 50% una de sus skins y 50% la del banner permanente. Puede salir repetida,
+    // pero tras una repetida la siguiente legendaria es nueva seguro (mientras quede alguna por conseguir)
+    const seasonal = bannerSkins().filter(x => x.id !== 'cristal');
+    const pickSkin = () => seasonal.length && Math.random() < 0.5 ? pickOne(seasonal) : SKIN_BY_ID.cristal;
+    if (localStorage.getItem('digibonk3d-legnew') === '1'){
+      const skins = seasonal.length ? [...seasonal, SKIN_BY_ID.cristal] : [SKIN_BY_ID.cristal];
+      const fresh = [];
+      for (const sk of skins) for (const key of SEASONS.adventure.chars) if (!ownedSkins(key).includes(sk.id)) fresh.push({key, sk});
+      if (fresh.length){
+        // respeta el 50/50 si en la mitad que toca queda algo nuevo
+        const want = pickSkin(), same = fresh.filter(f => (f.sk.id === 'cristal') === (want.id === 'cristal'));
+        const f = pickOne(same.length ? same : fresh);
+        return {type:'skin', key: f.key, sk: f.sk, tier:'l'};
+      }
+    }
+    return {type:'skin', key: pickOne(SEASONS.adventure.chars), sk: pickSkin(), tier:'l'};
   }
   const cat = pickCategory();
   if (cat === 'frame'){
@@ -4093,7 +4104,12 @@ function rollReward(tier){
 // Aplica la recompensa a la colección; los repetidos se convierten en Bits
 function grantReward(r){
   if (r.type === 'skin'){
-    if (ownedSkins(r.key).includes(r.sk.id)){ SAVE.bits = SAVE.bits + LEG_DUP_REFUND; return {...r, dup:true, refund: LEG_DUP_REFUND}; }
+    if (ownedSkins(r.key).includes(r.sk.id)){
+      SAVE.bits = SAVE.bits + LEG_DUP_REFUND;
+      localStorage.setItem('digibonk3d-legnew', '1');   // la siguiente legendaria será nueva
+      return {...r, dup:true, refund: LEG_DUP_REFUND};
+    }
+    localStorage.removeItem('digibonk3d-legnew');
     grantSkin(r.key, r.sk.id);
     return {...r, dup:false};
   }
@@ -4221,7 +4237,7 @@ const CAT_LABEL = {skin: 'Skin', frame: 'Marco', title: 'Título', item: 'Objeto
 let gxIdx = 0, gxTimer = null;
 // Todo lo que puede salir, en el orden del carrusel
 function gxShowcase(){
-  const list = SEASONS.adventure.chars.map(key => ({type:'skin', key, sk: bannerSkin(), tier:'l'}));
+  const list = bannerSkins().flatMap(sk => SEASONS.adventure.chars.map(key => ({type:'skin', key, sk, tier:'l'})));
   FRAMES.forEach(f => list.push({type:'frame', f, tier: f.tier}));
   TITLES.forEach(t => list.push({type:'title', t, tier: t.tier}));
   ITEMS.forEach(it => list.push({type:'item', it, tier: it.tier}));
@@ -4285,7 +4301,7 @@ function showGacha(){
       <div class="gx-tabs">${Object.keys(BANNERS).filter(k => k === 'std' || eventActive()).map(k => `<button class="gx-tab${gxBanner === k ? ' on' : ''}" data-banner="${k}">${BANNERS[k].name}<small>${BANNERS[k].sub}</small></button>`).join('')}</div>
       <div class="gx-top">
         <section class="gx-show">
-          <div class="gx-show-head"><span>${BANNERS[gxBanner].name} · legendaria: skin ${bannerSkin().id === 'cristal' ? 'Cristal' : bannerSkin().name + ' (50%) o Cristal (50%)'}</span><span id="gxCount"></span></div>
+          <div class="gx-show-head"><span>${BANNERS[gxBanner].name} · legendaria: ${gxBanner === 'std' ? 'skin Corona' : 'Papá Noel o Reno (50%) · Corona (50%)'}</span><span id="gxCount"></span></div>
           <div class="gx-feat">${SEASONS.adventure.chars.slice(0, 3).map(k => `<img src="${spriteWith(k, false, bannerSkin().id)}" alt="">`).join('')}</div>
           <div class="gx-stage-wrap">
             <button class="gx-arrow" id="gxPrev" aria-label="Anterior">‹</button>
@@ -4306,7 +4322,7 @@ function showGacha(){
           <h4>Común, rara y épica reparten</h4>
           ${probCats}
           <div class="gx-pity"><b>Legendaria garantizada en ${PITY_AT - pityCount()} tiradas</b><i><u style="width:${Math.round(pityCount()/PITY_AT*100)}%"></u></i></div>
-          <p class="gx-note">Legendaria = skin de un Digimon al azar. En el banner de temporada, 50% su skin y 50% Cristal. Puede salir repetida: devuelve ${LEG_DUP_REFUND} Bits. Marcos y títulos repetidos dan 30 Bits.</p>
+          <p class="gx-note">Legendaria = skin de un Digimon al azar. En el banner de temporada, 50% una skin de Navidad y 50% Corona. Puede salir repetida (devuelve ${LEG_DUP_REFUND} Bits), pero después de una repetida la siguiente legendaria es nueva. Marcos y títulos repetidos dan 30 Bits.</p>
         </aside>
       </div>
     </div>`);
@@ -4604,6 +4620,7 @@ if (trainerName) showSelect(); else showRegister();
 if (new URLSearchParams(location.search).has('demo')){
   window.__dbk = {
     get g(){ return g; }, get state(){ return state; }, get scene(){ return scene; },
+    rollReward, grantReward, setBanner: b => { gxBanner = b; },
     startGame, spawnEnemy, spawnMagnetDrop, setZone, showGacha, addSkill, upgradeChoices,
     nearChest(){
       const p = g.p, a = p.dir ? Math.atan2(p.dir.z, p.dir.x) : 0;
