@@ -593,6 +593,38 @@ canvas{display:block}
 .sv-bar{display:block;width:100%;height:6px;border-radius:3px;background:#1a2c4a;overflow:hidden;margin-top:3px}
 .sv-bar u{display:block;height:100%;background:var(--tc)}
 .sv-bar.big{height:8px;width:80%}
+/* ===== Gacha v2: escaparate, tiradas y probabilidades ===== */
+.gacha.gx{width:min(1100px,96vw);max-height:94vh;padding:16px 20px}
+.gx-top{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:14px;margin-top:12px}
+.gx-show{display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:20px;border:3px solid #3a6fc4;background:radial-gradient(70% 60% at 50% 35%,rgba(206,147,216,.28),transparent 70%),linear-gradient(180deg,#1b2d6b,#0a1430)}
+.gx-show-head{display:flex;justify-content:space-between;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#bfe9ff;font-weight:bold}
+.gx-stage-wrap{display:flex;align-items:center;gap:10px}
+.gx-stage{flex:1;min-height:250px;display:flex;align-items:center;justify-content:center}
+.gx-arrow{width:44px;height:64px;border-radius:14px;border:2px solid #4fc3f7;background:rgba(8,20,40,.85);color:#e6f4ff;font-size:30px;cursor:pointer;flex:none}
+.gx-arrow:hover{background:#17335e}
+.gx-card{width:min(300px,100%);display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 14px 16px;border-radius:22px;border:3px solid var(--gc);background:linear-gradient(180deg,color-mix(in srgb,var(--gc) 22%,transparent),rgba(6,14,30,.92) 65%);box-shadow:0 0 28px color-mix(in srgb,var(--gc) 45%,transparent);animation:gxIn .4s ease-out}
+@keyframes gxIn{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+.gx-badge{font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:var(--gc);color:#0a1020;font-weight:900}
+.gx-art{width:150px;height:150px;display:flex;align-items:center;justify-content:center;animation:gxFloat 2.6s ease-in-out infinite}
+.gx-art img{width:140px;height:140px;object-fit:contain;image-rendering:pixelated}
+.gx-art .rw-frame,.gx-art .rw-title,.gx-art .rw-item{transform:scale(2.2)}
+@keyframes gxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.gx-card b{font-size:17px;text-align:center}
+.gx-card small{font-size:12px;color:#b9dcff}
+.gx-pulls{display:grid;grid-template-columns:1fr 1.4fr;gap:12px}
+.gx-pull{display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 10px;border-radius:18px;border:0;cursor:pointer;color:#1a1200;background:linear-gradient(180deg,#ffe082,#ffb300);box-shadow:0 6px 0 #b27300;font-weight:900}
+.gx-pull span{font-size:22px;letter-spacing:1.5px}
+.gx-pull small{font-size:12px;font-weight:bold;opacity:.85}
+.gx-pull10{background:linear-gradient(180deg,#d1c4e9,#9575cd);box-shadow:0 6px 0 #4a2f8a;color:#120a24}
+.gx-pull:active{transform:translateY(4px);box-shadow:0 2px 0 #b27300}
+.gx-odds{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:20px;border:3px solid #3a6fc4;background:rgba(8,20,40,.92);font-size:14px}
+.gx-odds h3{margin:0 0 4px;color:#ffd54f;font-size:20px}
+.gx-odds h4{margin:10px 0 2px;font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:#8fb3d9}
+.gx-prow{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed #2a4a7a}
+.gx-prow b{color:#fff}
+.gx-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:middle}
+.gx-note{margin:auto 0 0;font-size:12px;color:#9fd4ff;line-height:1.4}
+.gx-coll{margin-top:14px;padding-top:6px;border-top:1px solid #2a4a7a}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -3005,22 +3037,33 @@ function pickCategory(){
   return 'item';
 }
 // Devuelve una recompensa: {type, ...} o null si no queda nada de ese tipo
+// Si no quedan recompensas de ese nivel, baja al inmediatamente inferior (los objetos no tienen épicos)
+const TIER_DOWN = {e: 'r', r: 'c', c: 'c'};
+function unownedPool(list, tier, owned){
+  let t = tier;
+  for (;;){
+    const pool = list.filter(x => x.tier === t && !owned(x));
+    if (pool.length || t === 'c') return pool;
+    t = TIER_DOWN[t];
+  }
+}
+function pickOne(pool){ return pool[Math.floor(Math.random()*pool.length)]; }
+// Devuelve una recompensa: {type, ...}. Las skins Cristal son siempre épicas; si una categoría está completa cae en la siguiente
 function rollReward(tier){
   const cat = pickCategory();
   if (cat === 'skin'){
-    const pool = SEASONS.adventure.chars.filter(k => !ownedSkins(k).includes('cristal'));
-    if (pool.length){ const key = pool[Math.floor(Math.random()*pool.length)]; return {type:'skin', key, sk: SKIN_BY_ID.cristal, tier:'e'}; }
+    const keys = SEASONS.adventure.chars.filter(k => !ownedSkins(k).includes('cristal'));
+    if (keys.length) return {type:'skin', key: pickOne(keys), sk: SKIN_BY_ID.cristal, tier:'e'};
   }
-  if (cat === 'frame' || cat === 'skin'){
-    const pool = FRAMES.filter(f => f.tier === tier && !inv.frames.includes(f.id));
-    if (pool.length){ const f = pool[Math.floor(Math.random()*pool.length)]; return {type:'frame', f, tier: f.tier}; }
+  if (cat === 'skin' || cat === 'frame'){
+    const pool = unownedPool(FRAMES, tier, f => inv.frames.includes(f.id));
+    if (pool.length){ const f = pickOne(pool); return {type:'frame', f, tier: f.tier}; }
   }
-  if (cat === 'title' || cat === 'frame' || cat === 'skin'){
-    const pool = TITLES.filter(t => t.tier === tier && !inv.titles.includes(t.id));
-    if (pool.length){ const t = pool[Math.floor(Math.random()*pool.length)]; return {type:'title', t, tier: t.tier}; }
+  if (cat !== 'item'){
+    const pool = unownedPool(TITLES, tier, t => inv.titles.includes(t.id));
+    if (pool.length){ const t = pickOne(pool); return {type:'title', t, tier: t.tier}; }
   }
-  const pool = ITEMS.filter(i => i.tier === tier);
-  const it = pool[Math.floor(Math.random()*pool.length)];
+  const it = pickOne(unownedPool(ITEMS, tier, () => false));
   return {type:'item', it, tier: it.tier};
 }
 // Aplica la recompensa a la colección; los repetidos se convierten en Bits
@@ -3105,9 +3148,48 @@ function howTo(key, sk){
   if (sk.req.plays) return `${Math.min(st.plays, sk.req.plays)}/${sk.req.plays} partidas`;
   return `${Math.min(st.kills, sk.req.kills)}/${sk.req.kills} bajas`;
 }
+// Gacha: escaparate con carrusel de todo lo que puede salir, botones de tirada y probabilidades
+const GX_TIER_COL = {c: '#9e9e9e', r: '#4fc3f7', e: '#ce93d8'};
+const CAT_LABEL = {skin: 'Skin Cristal', frame: 'Marco', title: 'Título', item: 'Objeto'};
+let gxIdx = 0, gxTimer = null;
+// Todo lo que puede salir, en el orden del carrusel
+function gxShowcase(){
+  const list = SEASONS.adventure.chars.map(key => ({type:'skin', key, tier:'e'}));
+  FRAMES.forEach(f => list.push({type:'frame', f, tier: f.tier}));
+  TITLES.forEach(t => list.push({type:'title', t, tier: t.tier}));
+  ITEMS.forEach(it => list.push({type:'item', it, tier: it.tier}));
+  return list;
+}
+function gxOwned(s){
+  if (s.type === 'skin') return ownedSkins(s.key).includes('cristal');
+  if (s.type === 'frame') return inv.frames.includes(s.f.id);
+  if (s.type === 'title') return inv.titles.includes(s.t.id);
+  return (inv.items[s.it.id] || 0) > 0;
+}
+function gxCard(s){
+  const owned = gxOwned(s);
+  const note = s.type === 'skin' ? 'Siempre épica' : owned ? '✔ En tu colección' : 'Aún no la tienes';
+  return `<div class="gx-card" style="--gc:${GX_TIER_COL[s.tier]}">
+    <div class="gx-badge">${CAT_LABEL[s.type]} · ${TIER_NAME[s.tier]}</div>
+    <div class="gx-art">${rewardIcon(s)}</div>
+    <b>${rewardName(s)}</b>
+    <small>${note}</small>
+  </div>`;
+}
+// Muestra la tarjeta i del carrusel (la animación se repite en cada cambio)
+function gxShow(i){
+  const stage = document.getElementById('gxStage');
+  if (!stage || state !== 'gacha') return;
+  const list = gxShowcase();
+  gxIdx = (i + list.length) % list.length;
+  stage.innerHTML = gxCard(list[gxIdx]);
+  document.getElementById('gxCount').textContent = `${gxIdx + 1} / ${list.length}`;
+}
 function showGacha(){
   state = 'gacha';
   setHud(false);
+  clearInterval(gxTimer);
+  gxTimer = setInterval(() => { if (state !== 'gacha') return clearInterval(gxTimer); gxShow(gxIdx + 1); }, 3500);
   const rows = SEASONS.adventure.chars.map(key => {
     const owned = ownedSkins(key);
     const tiles = SKINS.map(sk => {
@@ -3125,42 +3207,60 @@ function showGacha(){
     return `<button class="col-tile${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}" data-kind="frame" data-id="${f.id}" ${has ? '' : 'disabled'}>
       <div class="rw-frame fr-${f.id}"></div><small>${has ? f.name : '???'}</small></button>`;
   }).join('');
-  const titleTiles = TITLES.map(t => {
-    const has = inv.titles.includes(t.id), eq = extra.title === t.id;
-    return `<button class="col-tile${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}" data-kind="title" data-id="${t.id}" ${has ? '' : 'disabled'}>
-      <div class="rw-title">🏅</div><small>${has ? t.name : '???'}</small><em>${has ? 'Cosmético' : t.how}</em></button>`;
-  }).join('');
   const itemTiles = ITEMS.map(i => {
     const n = inv.items[i.id] || 0, eq = extra.item === i.id;
     return `<button class="col-tile${n ? ' owned' : ' locked'}${eq ? ' eq' : ''}" data-kind="item" data-id="${i.id}" ${n ? '' : 'disabled'}>
       <div class="rw-item">${i.icon}</div><small>${n ? `${i.name} ×${n}` : '???'}</small><em>${i.desc}</em></button>`;
   }).join('');
+  const probCats = CAT_WEIGHTS.map(([k, w]) => `<div class="gx-prow"><span>${CAT_LABEL[k]}</span><b>${w}%</b></div>`).join('');
+  const probTiers = ['e', 'r', 'c'].map(t => `<div class="gx-prow"><span><i class="gx-dot" style="background:${GX_TIER_COL[t]}"></i>${TIER_NAME[t]}</span><b>${({c: 60, r: 30, e: 10})[t]}%</b></div>`).join('');
   showOverlay(`
-    <div class="gacha">
+    <div class="gacha gx">
       <header class="g-head">
         <button class="g-back" id="gBack">← Volver</button>
         <h2>Gacha</h2>
         <span class="g-bits">Ⓑ ${SAVE.bits} Bits</span>
       </header>
-      <div class="pull-bar">
-        <button class="pull-btn" id="gPull1"><span>TIRAR</span><small>Ⓑ ${PULL_COST}</small></button>
-        <button class="pull-btn pull-btn-10" id="gPull10"><span>TIRAR ×10</span><small>Ⓑ ${PULL_COST_10} · garantiza rara</small></button>
+      <div class="gx-top">
+        <section class="gx-show">
+          <div class="gx-show-head"><span>Lo que puede salir</span><span id="gxCount"></span></div>
+          <div class="gx-stage-wrap">
+            <button class="gx-arrow" id="gxPrev" aria-label="Anterior">‹</button>
+            <div class="gx-stage" id="gxStage"></div>
+            <button class="gx-arrow" id="gxNext" aria-label="Siguiente">›</button>
+          </div>
+          <div class="gx-pulls">
+            <button class="gx-pull" id="gPull1"><span>Tirar</span><small>Ⓑ ${PULL_COST}</small></button>
+            <button class="gx-pull gx-pull10" id="gPull10"><span>Tirar ×10</span><small>Ⓑ ${PULL_COST_10} · al menos una rara o épica</small></button>
+          </div>
+        </section>
+        <aside class="gx-odds">
+          <h3>Probabilidades</h3>
+          <h4>Qué sale</h4>
+          ${probCats}
+          <h4>Rareza de marcos, títulos y objetos</h4>
+          ${probTiers}
+          <p class="gx-note">Las skins Cristal son siempre épicas. Si ya tienes todo de una categoría, la tirada cae en otra. Los repetidos dan Bits.</p>
+        </aside>
       </div>
-      <p class="g-odds">Puede salir una skin, un marco, un título o un objeto. Los repetidos se convierten en Bits.</p>
-      <h3 class="g-sec">Colección</h3>
-      <p class="g-note">Marcos y títulos: en el menú Jugador.</p>
-      <div class="col-sec"><div class="col-label">Objetos (se gastan al empezar la partida)</div><div class="col-grid">${itemTiles}</div></div>
-      <div class="col-equip">
-        <span>Objeto para la próxima partida: <b>${extra.item ? ITEMS.find(i => i.id === extra.item).name : 'ninguno'}</b></span>
+      <div class="gx-coll">
+        <h3 class="g-sec">Objetos (se gastan al empezar la partida)</h3>
+        <div class="col-grid">${itemTiles}</div>
+        <div class="col-equip"><span>Objeto para la próxima partida: <b>${extra.item ? ITEMS.find(i => i.id === extra.item).name : 'ninguno'}</b></span></div>
+        <h3 class="g-sec">Marcos del icono (se equipan en el menú Jugador)</h3>
+        <div class="col-grid">${frameTiles}</div>
+        <h3 class="g-sec">Skins</h3>
+        <div class="g-list">${rows}</div>
+        <p class="g-note">Galáctico: 3 partidas con el Digimon · Glitch: 150 bajas con el Digimon · Cristal: gacha · Festival: juega durante el evento "${EVENT.name}".</p>
+        <p class="g-note">Bonus permanente por Digimon al conseguir la skin: Galáctico ${SKIN_FX.galactico.text} · Glitch ${SKIN_FX.glitch.text} · Cristal ${SKIN_FX.cristal.text} · Festival ${SKIN_FX.festival.text}.</p>
       </div>
-      <h3 class="g-sec">Skins</h3>
-      <div class="g-list">${rows}</div>
-      <p class="g-note">Galáctico: 3 partidas con el Digimon · Glitch: 150 bajas con el Digimon · Cristal: gacha · Festival: juega durante el evento "${EVENT.name}".</p>
-      <p class="g-note">Bonus permanente por Digimon al conseguir la skin: Galáctico ${SKIN_FX.galactico.text} · Glitch ${SKIN_FX.glitch.text} · Cristal ${SKIN_FX.cristal.text} · Festival ${SKIN_FX.festival.text}.</p>
     </div>`);
   document.getElementById('gBack').onclick = () => showSelect();
   document.getElementById('gPull1').onclick = () => doPulls(1);
   document.getElementById('gPull10').onclick = () => doPulls(10);
+  document.getElementById('gxPrev').onclick = () => gxShow(gxIdx - 1);
+  document.getElementById('gxNext').onclick = () => gxShow(gxIdx + 1);
+  gxShow(gxIdx);
   overlay.querySelectorAll('.g-skin.owned').forEach(b => b.onclick = () => {
     equipSkin(b.dataset.key, b.dataset.skin);
     showGacha();
