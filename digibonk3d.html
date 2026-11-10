@@ -666,7 +666,7 @@ import * as THREE from 'three';
 
 // Prototipo 3D estilo Megabonk. Sprites 2D (pixel art de King) como billboards.
 const BOSS_AT = 240; // segundos hasta el jefe final; ganas al derrotarlo
-const ARENA_R = 70;  // radio del escenario: el mapa tiene límite circular con montañas
+const ARENA_R = 110;  // radio del escenario: el mapa tiene límite circular con montañas
 // Dos zonas: el bosque inicial y el pantano de datos (a partir de 120 s). El jefe final está al final de la zona 2.
 const ZONES = [
   {name:'Bosque Inicial',   at:0,   fog:0xbcd9e8, sky:['#4d86c9', '#a9d4ee', '#d8efff'], tint:0xffffff, color:'#ffd54f'},
@@ -737,7 +737,8 @@ const CHARS = {
   tentomon: {name:'Tentomon',   desc:'Descarga eléctrica en círculo',                 sprite:'sprites/tentomon.png',  kind:'ring',  cd:1.8, dmg:7},
   gatomon:  {name:'Gatomon',    desc:'Garras giratorias',                             sprite:'sprites/gatomon.png',   kind:'orbit', cd:0,   dmg:8}
 };
-// Digievolución (se activa al llegar al nivel 5)
+// Digievolución (se activa al llegar a este nivel)
+const EVO_LEVEL = 10;
 // Temporada 1: Digimon Adventure (solo evoluciones con sprite disponible en el pack)
 const EVO = {
   gabumon:  {name:'Garurumon',  sprite:'sprites/garurumon.png'},
@@ -777,8 +778,8 @@ const UPGRADES = [
 function qualityChoice(){ return localStorage.getItem('digibonk3d-quality') || 'auto'; }
 function autoIsLow(){ return (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4; }
 const QUALITY = {
-  alta: {dpr: 2, aa: true,  maxEnemies: 150, shadows: true,  decor: 200, minimapEvery: 1},
-  baja: {dpr: 1, aa: false, maxEnemies: 70,  shadows: false, decor: 70,  minimapEvery: 4}
+  alta: {dpr: 2, aa: true,  maxEnemies: 150, shadows: true,  decor: 500, minimapEvery: 1},
+  baja: {dpr: 1, aa: false, maxEnemies: 70,  shadows: false, decor: 175, minimapEvery: 4}
 };
 const Q = QUALITY[qualityChoice() === 'alta' || (qualityChoice() === 'auto' && !autoIsLow()) ? 'alta' : 'baja'];
 function qualityLabel(){
@@ -821,7 +822,7 @@ const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 280)
 applyRetroSize();
 camera.position.set(0, 16, 11);
 
-const TERRAIN_SIZE = ARENA_R*2 + 20, TERRAIN_SEG = 160;
+const TERRAIN_SIZE = ARENA_R*2 + 20, TERRAIN_SEG = 240;
 const terrainGeo = new THREE.PlaneGeometry(TERRAIN_SIZE, TERRAIN_SIZE, TERRAIN_SEG, TERRAIN_SEG);
 terrainGeo.rotateX(-Math.PI/2);
 {
@@ -879,7 +880,7 @@ scene.add(floor);
 // Montañas altas que cierran el escenario (dos anillos, el exterior más alto)
 function buildMountains(){
   // Una sola malla continua de crestas: no hay conos que se crucen, así que no parpadea
-  const SEG = 360, rBase = ARENA_R + 16, rPeak = ARENA_R + 5;
+  const SEG = 480, rBase = ARENA_R + 16, rPeak = ARENA_R + 5;
   const H = a => 40 + 12*Math.sin(a*5 + 1.3) + 6*Math.sin(a*11 + 0.4) + 3*Math.sin(a*23);
   const rock = new THREE.Color(0x4b5a73), snow = new THREE.Color(0xe8f1ff);
   const pos = [], col = [];
@@ -1550,7 +1551,7 @@ function showPicker(tab){
       <img src="${spriteOf(k, false)}" alt="">
       <span class="pv-meta"><b>${CHARS[k].name}</b><em>${BALANCE[k].dif}</em></span>
     </button>`).join('');
-  const right = pickTab === 'skins' ? skinsPanelHtml(selectedKey) : '<div class="pv-stage" id="pkPreview"></div>';
+  const right = pickTab === 'skins' ? skinsPanelHtml(selectedKey) : pickTab === 'objetos' ? itemsPanelHtml() : '<div class="pv-stage" id="pkPreview"></div>';
   showOverlay(`
     <div class="picker-screen">
       <header class="pk-head">
@@ -1559,6 +1560,7 @@ function showPicker(tab){
         <div class="pk-tabs">
           <button class="pk-tab${pickTab === 'personaje' ? ' on' : ''}" data-tab="personaje">Personaje</button>
           <button class="pk-tab${pickTab === 'skins' ? ' on' : ''}" data-tab="skins">Skins</button>
+          <button class="pk-tab${pickTab === 'objetos' ? ' on' : ''}" data-tab="objetos">Objetos</button>
         </div>
       </header>
       <div class="pk-body">
@@ -1577,7 +1579,7 @@ function showPicker(tab){
   overlay.querySelectorAll('.pk-tab').forEach(b => b.onclick = () => showPicker(b.dataset.tab));
   document.getElementById('pkBack').onclick = () => showSelect();
   document.getElementById('pkStart').onclick = () => startGame(selectedKey);
-  if (pickTab === 'personaje') renderPickPreview(); else bindSkinTiles();
+  if (pickTab === 'personaje') renderPickPreview(); else if (pickTab === 'skins') bindSkinTiles(); else bindItemTiles();
 }
 // Escaparate del Digimon elegido: héroe animado, estadísticas y línea de evolución
 function renderPickPreview(){
@@ -1610,7 +1612,7 @@ function renderPickPreview(){
     </div>
     <div class="pv-evo">
       <div class="pv-node"><img src="${spriteOf(k, false)}" alt=""><small>${c.name}</small></div>
-      <div class="pv-arrow">Nivel 5 ➜</div>
+      <div class="pv-arrow">Nivel ${EVO_LEVEL} ➜</div>
       ${evo ? `<div class="pv-node"><img src="${evo.sprite}" alt=""><small>${evo.name}</small></div>` : '<div class="pv-node"><small>—</small></div>'}
       <span class="pv-note">+50% daño · solo durante la partida</span>
     </div>
@@ -1656,6 +1658,26 @@ function skinsPanelHtml(key){
       </div>
       <p class="g-note">Las skins que tienes dan su bonus aunque no las lleves equipadas. Equipar cambia solo el aspecto y el aura.</p>
     </div>`;
+}
+// Objetos para la próxima partida: se eligen aquí antes de jugar y se gastan al empezar
+function itemsPanelHtml(){
+  const tiles = ITEMS.map(i => {
+    const n = inv.items[i.id] || 0, eq = extra.item === i.id;
+    return `<button class="col-tile${n ? ' owned' : ' locked'}${eq ? ' eq' : ''}" data-kind="item" data-id="${i.id}" ${n ? '' : 'disabled'}>
+      <div class="rw-item">${i.icon}</div><small>${n ? `${i.name} ×${n}` : '???'}</small><em>${i.desc}</em></button>`;
+  }).join('');
+  return `
+    <div class="pk-skins-title">Objeto para la próxima partida</div>
+    <div class="col-grid">${tiles}</div>
+    <p class="g-note">Solo puedes llevar uno. Se gasta al empezar la partida. Se consiguen en el gacha.</p>
+    <div class="col-equip"><span>Equipado: <b>${extra.item ? ITEMS.find(i => i.id === extra.item).name : 'ninguno'}</b></span></div>`;
+}
+function bindItemTiles(){
+  overlay.querySelectorAll('.col-tile.owned').forEach(b => b.onclick = () => {
+    extra.item = extra.item === b.dataset.id ? null : b.dataset.id;
+    saveExtra();
+    showPicker('objetos');
+  });
 }
 let skinFocus = null;   // {key, id}: skin que se muestra en el escaparate del vestidor
 function skinFocusId(){
@@ -1965,7 +1987,7 @@ function spawnEnemy(){
   const z2 = g.zone >= 2;   // la zona 2 trae más tanques y rápidos
   if (t > 120 && r < (z2 ? 0.3 : 0.2)) kind = 'tank';
   else if (t > 60 && r < (z2 ? 0.5 : 0.4)) kind = 'fast';
-  const d = ENEMY[kind], k = 1 + t/120;
+  const d = ENEMY[kind], k = 1 + t/60;
   const mesh = billboard(d.sprite, d.scale);
   mesh.position.y = d.scale/2;
   world.add(mesh);
@@ -1974,7 +1996,7 @@ function spawnEnemy(){
   world.add(shadow);
   g.enemies.push({
     kind, mesh, shadow, x: sp[0], z: sp[1],
-    hp: d.hp*k, max: d.hp*k, spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg, cd: 0
+    hp: d.hp*k, max: d.hp*k, spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + t/200), cd: 0
   });
 }
 
@@ -2031,7 +2053,7 @@ function update(dt){
   if (g.spawnT <= 0){
     spawnEnemy();
     if (g.t > 45 && g.enemies.length < Q.maxEnemies) spawnEnemy();   // hordas más densas tras 45 s
-    g.spawnT = Math.max(0.15, 1.1 - g.t/150);
+    g.spawnT = Math.max(0.12, 0.9 - g.t/120);
   }
 
   // Enemigos: persiguen y dañan por contacto
@@ -2185,7 +2207,7 @@ function update(dt){
     world.add(mesh);
     const shadow = makeShadow(5);
     world.add(shadow);
-    g.boss = {kind: 'boss', boss: true, mesh, shadow, x: p.x + 14, z: p.z, hp: 900, max: 900,
+    g.boss = {kind: 'boss', boss: true, mesh, shadow, x: p.x + 14, z: p.z, hp: 1300, max: 1300,
               spd: 2.2, r: 2.4, xp: 40, dmg: 15, cd: 0};
     g.enemies.push(g.boss);
     g.bossShotT = 2;
@@ -2236,7 +2258,7 @@ function update(dt){
     p.lvl++;
     p.nextXp = Math.floor(10*Math.pow(1.35, p.lvl-1));
     g.choices = [...UPGRADES].sort(() => Math.random()-0.5).slice(0,3);
-    if (p.lvl >= 5) digivolve();
+    if (p.lvl >= EVO_LEVEL) digivolve();
     g.pendingUp = true;
   }
   // Las mejoras aparecen cuando termina la animación de digievolución
@@ -3207,11 +3229,6 @@ function showGacha(){
     return `<button class="col-tile${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}" data-kind="frame" data-id="${f.id}" ${has ? '' : 'disabled'}>
       <div class="rw-frame fr-${f.id}"></div><small>${has ? f.name : '???'}</small></button>`;
   }).join('');
-  const itemTiles = ITEMS.map(i => {
-    const n = inv.items[i.id] || 0, eq = extra.item === i.id;
-    return `<button class="col-tile${n ? ' owned' : ' locked'}${eq ? ' eq' : ''}" data-kind="item" data-id="${i.id}" ${n ? '' : 'disabled'}>
-      <div class="rw-item">${i.icon}</div><small>${n ? `${i.name} ×${n}` : '???'}</small><em>${i.desc}</em></button>`;
-  }).join('');
   const probCats = CAT_WEIGHTS.map(([k, w]) => `<div class="gx-prow"><span>${CAT_LABEL[k]}</span><b>${w}%</b></div>`).join('');
   const probTiers = ['e', 'r', 'c'].map(t => `<div class="gx-prow"><span><i class="gx-dot" style="background:${GX_TIER_COL[t]}"></i>${TIER_NAME[t]}</span><b>${({c: 60, r: 30, e: 10})[t]}%</b></div>`).join('');
   showOverlay(`
@@ -3244,9 +3261,6 @@ function showGacha(){
         </aside>
       </div>
       <div class="gx-coll">
-        <h3 class="g-sec">Objetos (se gastan al empezar la partida)</h3>
-        <div class="col-grid">${itemTiles}</div>
-        <div class="col-equip"><span>Objeto para la próxima partida: <b>${extra.item ? ITEMS.find(i => i.id === extra.item).name : 'ninguno'}</b></span></div>
         <h3 class="g-sec">Marcos del icono (se equipan en el menú Jugador)</h3>
         <div class="col-grid">${frameTiles}</div>
         <h3 class="g-sec">Skins</h3>
