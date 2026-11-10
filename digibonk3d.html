@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <title>DigiBonk 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
 html,body{margin:0;height:100%;overflow:hidden;background:#0b0f1a;font-family:system-ui,sans-serif;color:#fff}
 canvas{display:block}
@@ -369,6 +371,30 @@ canvas{display:block}
 .dg-skin img{width:36px;height:36px;image-rendering:pixelated}
 .dg-skin.locked img{filter:brightness(0);opacity:.5}
 .dg-skin.eq{border-color:#ffd54f;box-shadow:0 0 8px rgba(255,213,79,.6)}
+
+/* ---- Menú de inicio (versión 2): columna de botones, datos arriba, ayuda con "?" ---- */
+#overlay.menu-mode{backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);background:linear-gradient(90deg,rgba(4,8,18,.78) 0%,rgba(4,8,18,.35) 55%,rgba(4,8,18,.1) 100%)}
+.menu2{position:absolute;inset:0;font-family:'Orbitron',system-ui,sans-serif}
+.menu2 .top-bar{position:absolute;top:18px;right:22px;display:flex;align-items:center;gap:12px}
+.menu2 .m-left{position:absolute;left:64px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.menu2 .logo{font-family:'Orbitron',system-ui,sans-serif;font-size:52px;font-weight:900}
+.menu2 .sub{font-family:'Orbitron',system-ui,sans-serif;font-size:12px;letter-spacing:3px;color:#9fd4ff;margin:0 0 10px}
+.vmenu{display:flex;flex-direction:column;gap:10px;align-items:stretch;width:280px}
+.vmenu .play{font-family:'Orbitron',system-ui,sans-serif;font-size:26px;padding:16px 20px;margin:0}
+.vbtn{font-family:'Orbitron',system-ui,sans-serif;font-size:14px;letter-spacing:2px;padding:12px 18px;border-radius:14px;border:2px solid #3a6fc4;background:rgba(8,20,40,.9);color:#e6f4ff;text-align:left;cursor:pointer;display:flex;align-items:center;transition:transform .12s,border-color .12s}
+.vbtn:hover{transform:translateX(6px);border-color:#ffd54f}
+.companion{position:absolute;right:9%;bottom:12%;width:220px;height:220px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 10px 18px rgba(0,0,0,.6));animation:companionBob 2.6s ease-in-out infinite}
+@keyframes companionBob{50%{transform:translateY(-12px)}}
+.rec-box{position:absolute;right:22px;top:72px;width:300px;background:rgba(10,18,40,.92);border:2px solid #3a6fc4;border-radius:16px;font-family:'Orbitron',system-ui,sans-serif;font-size:13px}
+.rec-box summary{list-style:none;cursor:pointer;padding:10px 14px;color:#ffd54f;font-weight:700;display:flex;justify-content:space-between;letter-spacing:1px}
+.rec-box summary::-webkit-details-marker{display:none}
+.rec-list{padding:0 12px 12px;max-height:300px;overflow:auto}
+.rec-list .rec{font-family:system-ui,sans-serif;font-size:12px}
+.help-btn{position:absolute;right:22px;bottom:110px;width:44px;height:44px;border-radius:50%;border:2px solid #ffd54f;background:rgba(10,18,40,.9);color:#ffd54f;font:900 20px 'Orbitron',system-ui,sans-serif;cursor:pointer}
+.menu2 .legal{position:absolute;left:64px;bottom:14px;margin:0;font-size:10px;opacity:.6;max-width:520px;text-align:left}
+.help-box{width:min(640px,94vw);padding:18px 22px;border-radius:22px;background:rgba(10,18,40,.95);border:3px solid #3a6fc4;color:#e6f4ff}
+.help-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin-top:10px}
+.help-grid span{font-size:14px}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -859,7 +885,7 @@ addEventListener('keydown', e => {
   if (k === 'n'){ toggleMute(); return; }
   if (k === 'm'){ if (state === 'play') openMap(); else if (state === 'map') closeMap(); return; }
   if (state === 'map'){ if (k === 'escape') closeMap(); return; }
-  if (state === 'gacha' || state === 'settings' || state === 'player'){ if (k === 'escape') showSelect(); return; }
+  if (state === 'gacha' || state === 'settings' || state === 'player' || state === 'help'){ if (k === 'escape') showSelect(); return; }
   // Esc o P pausan y reanudan. Con el ratón bloqueado el navegador puede no entregar Esc:
   // en ese caso la pausa la dispara pointerlockchange (ver más abajo). P sirve en pantalla completa.
   if (k === 'escape' || k === 'p'){
@@ -1033,39 +1059,56 @@ function showSelect(){
     ? recs.map((r, i) => `<div class="rec${i === 0 ? ' best' : ''}"><span>${i === 0 ? '👑 ' : ''}${i+1}. ${r.name}${r.win ? ' ★' : ''}</span><span>${fmtTime(r.t)} · ${r.kills} bajas · Nv ${r.lvl}</span></div>`).join('')
     : '<p class="muted">Todavía no hay partidas. ¡Empieza una!</p>';
   showOverlay(`
-    <div class="menu">
+    <div class="menu2">
+      <div class="top-bar">
+        <span class="bits-chip">Ⓑ ${SAVE.bits}</span>
+        <span class="daily-chip">${dailyText()}</span>
+      </div>
       <section class="m-left">
-        <div class="brand">
-          <div class="logo"><span>DIGI</span>BONK<em> 3D</em></div>
-          <div class="sub">Digimon Adventure</div>
+        <div class="logo"><span>DIGI</span>BONK<em> 3D</em></div>
+        <div class="sub">Digimon Adventure</div>
+        <nav class="vmenu">
           <button class="play" id="playBtn">JUGAR</button>
-          <div class="menu-row"><button class="mini-btn gacha-btn" id="btnGacha"><i class="dv-ico"></i>Gacha</button><button class="mini-btn" id="btnPlayer">Jugador</button><span class="bits-chip">Ⓑ ${SAVE.bits}</span><span class="daily-chip">${dailyText()}</span><button class="mini-btn" id="btnSettings">Ajustes</button></div>
-        </div>
+          <button class="vbtn" id="btnGacha"><i class="dv-ico"></i>Gacha</button>
+          <button class="vbtn" id="btnPlayer">Jugador</button>
+          <button class="vbtn" id="btnSettings">Ajustes</button>
+        </nav>
       </section>
-      <section class="m-right">
-        <h3>Mejores partidas<small>las 10 mejores de este navegador</small></h3>
-        ${recRows}
-      </section>
-      <section class="m-bottom">
-        <div class="hints">
-          <span><i class="kbd">Enter</i> jugar</span>
-          <span><i class="kbd">W A S D</i> mover</span>
-          <span><i class="kbd">Ratón</i> cámara</span>
-          <span><i class="kbd">Espacio</i> saltar</span>
-          <span><i class="kbd">Shift</i> dash</span>
-          <span><i class="kbd">E</i> cofres</span>
-          <span><i class="kbd">Esc</i> pausa</span>
-          <span><i class="kbd">M</i> mapa</span>
-          <span><i class="kbd">N</i> sonido</span>
-        </div>
-        <p class="legal">Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon. Sprites de King (uso no comercial, ver sprites/CREDITS.txt).</p>
-      </section>
+      <img class="companion" src="${spriteOf(selectedKey, false)}" alt="">
+      <details class="rec-box">
+        <summary>Mejores partidas <span>▾</span></summary>
+        <div class="rec-list">${recRows}</div>
+      </details>
+      <button class="help-btn" id="btnHelp" aria-label="Controles y ayuda">?</button>
+      <p class="legal">Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon. Sprites de King (uso no comercial, ver sprites/CREDITS.txt).</p>
     </div>`);
   overlay.classList.add('menu-mode');
   document.getElementById('playBtn').onclick = () => showPicker('personaje');
   document.getElementById('btnGacha').onclick = () => showGacha();
   document.getElementById('btnPlayer').onclick = () => showPlayer('perfil');
   document.getElementById('btnSettings').onclick = () => showSettings();
+  document.getElementById('btnHelp').onclick = () => showHelp();
+}
+// Ventana de controles: se abre con el botón "?" desde el inicio
+function showHelp(){
+  state = 'help';
+  showOverlay(`
+    <div class="help-box">
+      <header class="set-head"><button class="g-back" id="helpBack">← Volver</button><h2>Controles</h2></header>
+      <div class="help-grid">
+        <span><i class="kbd">WASD</i> mover</span>
+        <span><i class="kbd">Ratón</i> cámara</span>
+        <span><i class="kbd">Espacio</i> saltar</span>
+        <span><i class="kbd">Shift</i> dash</span>
+        <span><i class="kbd">E</i> cofres e interactuar</span>
+        <span><i class="kbd">Esc</i> / <i class="kbd">P</i> pausa</span>
+        <span><i class="kbd">M</i> mapa</span>
+        <span><i class="kbd">N</i> sonido</span>
+        <span><i class="kbd">Enter</i> jugar / empezar</span>
+        <span><i class="kbd">1</i>-<i class="kbd">6</i> elegir Digimon</span>
+      </div>
+    </div>`);
+  document.getElementById('helpBack').onclick = () => showSelect();
 }
 
 // Ajustes: calidad gráfica, efectos de sonido y música
