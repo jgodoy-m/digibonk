@@ -463,6 +463,13 @@ canvas{display:block}
 .reg-go{margin-top:16px;width:100%;font-size:22px;padding:14px}
 .name-edit{display:flex;gap:8px;margin-top:8px}
 .name-edit input{flex:1;padding:8px 10px;border-radius:10px;border:2px solid #3a6fc4;background:#0a1428;color:#fff;font:700 14px 'Orbitron',system-ui,sans-serif}
+
+/* Código de guardado */
+.sc-box{width:min(680px,94vw)}
+.sc-p{font-family:system-ui,sans-serif;font-size:13px;color:#9fd4ff;margin:8px 0}
+.sc-box textarea{width:100%;height:92px;padding:10px;border-radius:12px;border:2px solid #3a6fc4;background:#0a1428;color:#cfe8ff;font:12px ui-monospace,Menlo,monospace;resize:vertical;box-sizing:border-box}
+.sc-row{display:flex;justify-content:flex-end;margin:8px 0 6px}
+.sc-row .mini-btn.armed{background:repeating-linear-gradient(-45deg,#ff7a6b 0 10px,#e0463a 10px 20px);color:#fff}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -951,6 +958,7 @@ const overlay = document.getElementById('overlay');
 addEventListener('keydown', e => {
   const k = e.key.toLowerCase();
   audioInit();
+  if (state === 'savecode'){ if (k === 'escape') showSettings(); return; }
   if (state === 'register') return;
   if (k === 'n'){ toggleMute(); return; }
   if (k === 'm'){ if (state === 'play') openMap(); else if (state === 'map') closeMap(); return; }
@@ -1195,6 +1203,71 @@ function showHelp(){
   document.getElementById('helpBack').onclick = () => showSelect();
 }
 
+/* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
+const SAVE_KEYS = ['digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
+  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records'];
+function makeSaveCode(){
+  const data = {};
+  for (const k of SAVE_KEYS){ const v = localStorage.getItem(k); if (v !== null) data[k] = v; }
+  return 'DBK1-' + btoa(unescape(encodeURIComponent(JSON.stringify({v: 1, data}))));
+}
+function readSaveCode(code){
+  const t = (code || '').trim();
+  if (!t.startsWith('DBK1-')) throw new Error('El código debe empezar por DBK1-');
+  let obj;
+  try { obj = JSON.parse(decodeURIComponent(escape(atob(t.slice(5))))); }
+  catch(e){ throw new Error('El código está incompleto o alterado'); }
+  if (!obj || obj.v !== 1 || typeof obj.data !== 'object') throw new Error('Formato no válido');
+  const out = {};
+  for (const k of SAVE_KEYS){
+    if (k in obj.data){
+      if (typeof obj.data[k] !== 'string') throw new Error('Dato no válido');
+      out[k] = obj.data[k];
+    }
+  }
+  if (!Object.keys(out).length) throw new Error('El código no contiene progreso');
+  return out;
+}
+let scArmed = false;
+function showSaveCode(){
+  state = 'savecode';
+  setHud(false);
+  scArmed = false;
+  showOverlay(`
+    <div class="settings sc-box">
+      <header class="set-head"><button class="g-back" id="scBack">← Volver</button><h2>Código de guardado</h2></header>
+      <p class="sc-p">Copia este código para llevar tu progreso a otro navegador. Pégalo allí en "Cargar código".</p>
+      <textarea id="scOut" readonly>${makeSaveCode()}</textarea>
+      <div class="sc-row"><button class="mini-btn" id="scCopy">Copiar código</button></div>
+      <p class="sc-p">¿Tienes un código de otro navegador? Pégalo aquí. Sustituye el progreso de este navegador.</p>
+      <textarea id="scIn" placeholder="DBK1-..."></textarea>
+      <div class="sc-row"><button class="mini-btn" id="scLoad">Cargar código</button></div>
+    </div>`);
+  document.getElementById('scBack').onclick = () => showSettings();
+  document.getElementById('scCopy').onclick = () => {
+    const ta = document.getElementById('scOut');
+    ta.select();
+    const done = () => announce('Código copiado', 'Pégalo en el otro navegador', '#7cf29c');
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(ta.value).then(done, () => { document.execCommand('copy'); done(); });
+    } else { document.execCommand('copy'); done(); }
+  };
+  document.getElementById('scLoad').onclick = () => {
+    const btn = document.getElementById('scLoad');
+    let data;
+    try { data = readSaveCode(document.getElementById('scIn').value); }
+    catch(e){ announce('Código no válido', e.message, '#ef5350'); return; }
+    if (!scArmed){
+      scArmed = true;
+      btn.textContent = '¿Sustituir el progreso? Pulsa otra vez';
+      btn.classList.add('armed');
+      setTimeout(() => { scArmed = false; btn.textContent = 'Cargar código'; btn.classList.remove('armed'); }, 4000);
+      return;
+    }
+    for (const k of Object.keys(data)) localStorage.setItem(k, data[k]);
+    location.reload();
+  };
+}
 // Ajustes: calidad gráfica, efectos de sonido y música
 function showSettings(){
   state = 'settings';
@@ -1219,6 +1292,10 @@ function showSettings(){
         <div><b>Música</b><small>Ambiente suave en los menús y en la partida.</small></div>
         <button class="set-toggle${Music.on ? ' on' : ''}" id="tMusic">${Music.on ? 'Activada' : 'Silenciada'}</button>
       </div>
+      <div class="set-row">
+        <div><b>Progreso</b><small>Exporta tu progreso a un código para usarlo en otro navegador.</small></div>
+        <button class="mini-btn" id="btnSaveCode">Código de guardado</button>
+      </div>
     </div>`);
   document.getElementById('setBack').onclick = () => showSelect();
   overlay.querySelectorAll('.set-seg').forEach(b => b.onclick = () => {
@@ -1227,6 +1304,7 @@ function showSettings(){
     location.reload();
   });
   document.getElementById('tSfx').onclick = () => { toggleMute(true); showSettings(); };
+  document.getElementById('btnSaveCode').onclick = () => showSaveCode();
   document.getElementById('tMusic').onclick = () => {
     Music.on = !Music.on;
     localStorage.setItem('digibonk3d-music', Music.on ? '1' : '0');
