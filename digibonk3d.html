@@ -625,6 +625,19 @@ canvas{display:block}
 .gx-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:middle}
 .gx-note{margin:auto 0 0;font-size:12px;color:#9fd4ff;line-height:1.4}
 .gx-coll{margin-top:14px;padding-top:6px;border-top:1px solid #2a4a7a}
+
+/* ===== Impacto en partida: BONK, radar de bordes, contorno y HUD tipo Digivice ===== */
+#edgeCv{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
+#bonkBar{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);width:280px;height:18px;border-radius:10px;background:rgba(0,0,0,.6);border:2px solid #37474f;overflow:hidden;pointer-events:none;box-shadow:inset 0 0 0 1px #b0bec5;z-index:6}
+#bonkFill{height:100%;width:0;background:linear-gradient(90deg,#ff8f00,#ffd54f)}
+#bonkBar.ready{border-color:#ffd54f;box-shadow:0 0 14px #ffd54f}
+#bonkBar.ready #bonkFill{animation:bonkPulse .6s ease-in-out infinite alternate}
+#bonkTxt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;letter-spacing:1px;color:#fff;text-shadow:0 1px 2px #000}
+@keyframes bonkPulse{from{filter:brightness(1)}to{filter:brightness(1.7)}}
+#xp{box-shadow:0 0 12px #4fc3f7,0 0 26px #29b6f6}
+.hud-card{box-shadow:inset 0 0 0 2px #b0bec5,inset 0 0 0 4px #263238,0 6px 18px rgba(0,0,0,.55)}
+#hudDash.flash{animation:dashFlash .5s ease-out}
+@keyframes dashFlash{0%{background:#fff;color:#000;box-shadow:0 0 0 #fff}100%{background:transparent;box-shadow:0 0 18px #4fc3f7}}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -646,6 +659,8 @@ canvas{display:block}
 <div id="timer">5:00</div>
 <div id="zoneName" style="position:fixed;top:10px;left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e1f5fe;text-shadow:0 1px 3px #000;pointer-events:none"></div>
 <div id="xp"></div>
+<canvas id="edgeCv"></canvas>
+<div id="bonkBar" style="display:none"><div id="bonkFill"></div><span id="bonkTxt">BONK 0%</span></div>
 <div id="xpTxt"></div>
 <div id="overlay"></div>
 <div id="bossbar" style="position:fixed;top:56px;left:50%;transform:translateX(-50%);width:420px;height:14px;background:#000;border:1px solid #888;display:none;pointer-events:none"><div id="bosshp" style="height:100%;background:#ab47bc;width:100%"></div></div>
@@ -1159,6 +1174,7 @@ addEventListener('keydown', e => {
   if (k === 'n'){ toggleMute(); return; }
   if (k === 'm'){ if (state === 'play') openMap(); else if (state === 'map') closeMap(); return; }
   if (state === 'map'){ if (k === 'escape') closeMap(); return; }
+  if (k === 'q' && state === 'play'){ bonkRelease(); return; }
   if (state === 'help'){ if (k === 'escape') showSelect(); if (k === 'arrowright') tutoStep(1); if (k === 'arrowleft') tutoStep(-1); return; }
   if (state === 'gacha' || state === 'settings' || state === 'player'){ if (k === 'escape') showSelect(); return; }
   // Esc o P pausan y reanudan. Con el ratón bloqueado el navegador puede no entregar Esc:
@@ -1315,6 +1331,7 @@ const fmtTime = s => `${Math.floor(s/60)}:${String(s%60).padStart(2, '0')}`;
 let selectedKey = 'gabumon';
 // Oculta/muestra el HUD de partida (el menú no debe mostrar barras ni temporizador)
 function setHud(v){
+  const bb0 = document.getElementById('bonkBar'); if (bb0) bb0.style.display = v ? 'block' : 'none';
   const d = v ? '' : 'none';
   document.getElementById('menubg').style.display = 'none';
   document.getElementById('menuart').style.display = v ? 'none' : 'block';
@@ -1715,7 +1732,7 @@ function startGame(key){
     dash: 0, dashCd: 0, dir: {x:0, z:-1}, chests: [], chestT: 20, flash: '', flashT: 0,
     texts: [], nearChest: null, combo: 0, comboT: 0,
     boss: null, bossSpawned: false, bossDown: false, bossShotT: 0, eshots: [],
-    zone: 1, eliteT: 60, drops: []
+    zone: 1, eliteT: 60, drops: [], bonk: 0, dashReady: true
   };
   applyZoneVisuals(1);
   applyBalance(key);
@@ -1727,6 +1744,11 @@ function startGame(key){
   g.aura = makeAura(skinEquipped[key], key);
   g.playerShadow = makeShadow(1.6);
   world.add(g.playerShadow);
+  // Contorno de legibilidad: anillo brillante en el suelo bajo el Digimon
+  g.hiRing = new THREE.Mesh(new THREE.RingGeometry(0.95, 1.2, 40),
+    new THREE.MeshBasicMaterial({color: 0xfff176, transparent: true, opacity: 0.75, depthWrite: false}));
+  g.hiRing.rotation.x = -Math.PI/2;
+  world.add(g.hiRing);
   hideOverlay();
   hidePause();
   setHud(true);
@@ -1958,9 +1980,29 @@ function animateEvo(dt){
   }
 }
 
+// BONK: al estar cargado (100%), libera una onda que daña y empuja a los enemigos cercanos y borra los proyectiles del jefe
+function bonkRelease(){
+  if (!g || g.bonk < 100) return;
+  g.bonk = 0;
+  const p = g.p, R = 14;
+  for (const e of g.enemies){
+    const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz);
+    if (d > R) continue;
+    e.hp -= 80;
+    [e.x, e.z] = clampArena(e.x + dx/(d || 1)*6, e.z + dz/(d || 1)*6, ARENA_R - 0.5);
+    popText(e.x, e.z, 80, '#ffd54f', 0.7);
+  }
+  for (const s of g.eshots) s.life = 0;   // el bucle de proyectiles retira las bolas del jefe
+  shake = Math.max(shake, 0.8);
+  sfx('evolve');
+  announce('¡BONK!', 'Onda de choque', '#ffd54f');
+}
 function hurt(e, dmg){
+  // 12% de golpes críticos: doble daño, número naranja y sacudida ligera
+  const crit = Math.random() < 0.12;
+  if (crit){ dmg *= 2; shake = Math.max(shake, 0.2); }
   e.hp -= dmg;
-  popText(e.x, e.z, Math.round(dmg));
+  popText(e.x, e.z, Math.round(dmg), crit ? '#ffb300' : '#ffffff', crit ? 0.8 : 0.55);
   burst(e.x, e.z, hitColors[e.kind] || '#ffe082');
   sfx('hit');
 }
@@ -2156,6 +2198,11 @@ function update(dt){
     world.remove(e.shadow);
   }
   if (dead.length) sfx('kill');
+  if (dead.length){
+    shake = Math.max(shake, Math.min(0.5, 0.1*dead.length));
+    if (dead.some(e => e.kind === 'elite' || e.boss)) shake = Math.max(shake, 0.7);
+    g.bonk = Math.min(100, g.bonk + 3*dead.length);
+  }
   g.kills += dead.length;
   if (dead.length){ g.combo += dead.length; g.comboT = 3; }
   g.comboT -= dt;
@@ -2192,7 +2239,7 @@ function update(dt){
     if (d < 0.9){
       gm.taken = true; world.remove(gm.mesh);
       if (gm.heal){ p.hp = Math.min(p.maxHp, p.hp + 10); popText(gm.x, gm.z, '+10', '#7cf29c'); sfx('chest'); }
-      else p.xp += gm.v;
+      else { p.xp += gm.v; g.bonk = Math.min(100, g.bonk + 0.5); }
     }
   }
   g.gems = g.gems.filter(gm => !gm.taken);
@@ -2305,9 +2352,39 @@ function update(dt){
   else if (g.bossDown) endGame(true);
 }
 
+// Radar de bordes: flechas en el borde de la pantalla hacia cofres y jefe que están fuera de vista
+function drawEdgeMarkers(){
+  const cv = document.getElementById('edgeCv');
+  if (!cv) return;
+  if (cv.width !== innerWidth || cv.height !== innerHeight){ cv.width = innerWidth; cv.height = innerHeight; }
+  const c = cv.getContext('2d');
+  c.clearRect(0, 0, cv.width, cv.height);
+  if (state !== 'play' || !g) return;
+  const targets = g.chests.filter(ch => !ch.open && !ch.gone).map(ch => ({x: ch.x, z: ch.z, col: '#ffd54f'}));
+  if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
+  const W = cv.width, H = cv.height, cx = W/2, cy = H/2;
+  for (const t of targets){
+    const v = new THREE.Vector3(t.x, terrainH(t.x, t.z) + 1.5, t.z).project(camera);
+    const sx = (v.x + 1)/2*W, sy = (1 - v.y)/2*H;
+    const inside = v.z < 1 && sx > 40 && sx < W - 40 && sy > 40 && sy < H - 40;
+    if (inside) continue;
+    let dx = sx - cx, dy = sy - cy;
+    if (v.z > 1){ dx = -dx; dy = -dy; }          // detrás de la cámara: la flecha apunta al lado correcto
+    const k = Math.min((cx - 40)/Math.abs(dx || 1e-6), (cy - 40)/Math.abs(dy || 1e-6));
+    const px = cx + dx*k, py = cy + dy*k;
+    c.save(); c.translate(px, py); c.rotate(Math.atan2(dy, dx));
+    c.fillStyle = t.col; c.strokeStyle = '#000'; c.lineWidth = 2;
+    c.beginPath(); c.moveTo(16, 0); c.lineTo(-9, -11); c.lineTo(-9, 11); c.closePath(); c.fill(); c.stroke();
+    c.restore();
+    c.fillStyle = '#fff'; c.strokeStyle = '#000'; c.lineWidth = 3; c.font = 'bold 13px system-ui'; c.textAlign = 'center';
+    const d = Math.round(Math.hypot(t.x - g.p.x, t.z - g.p.z));
+    c.strokeText(d + ' m', px, py - 16); c.fillText(d + ' m', px, py - 16);
+  }
+}
 function openUpgrades(){
   state = 'levelup';
   sfx('levelup');
+  document.getElementById('flash').animate([{opacity: .75}, {opacity: 0}], {duration: 520});
   unlockMouse();   // hay que poder hacer clic en las mejoras
   const cat = {ofensiva:'Ofensiva', defensiva:'Defensiva', utilidad:'Utilidad'};
   showOverlay(`<h2>¡Nivel ${g.p.lvl}! Elige una mejora</h2>
@@ -2364,6 +2441,7 @@ function syncMeshes(){
   const gp = terrainH(p.x, p.z);
   g.playerMesh.position.set(p.x, gp + 1.1 + p.y, p.z);
   g.playerShadow.position.set(p.x, gp + 0.02, p.z);
+  if (g.hiRing) g.hiRing.position.set(p.x, gp + 0.03, p.z);
   for (const e of g.enemies){
     const ge = terrainH(e.x, e.z);
     e.mesh.position.set(e.x, ge + e.mesh.scale.y/2, e.z);
@@ -2470,6 +2548,18 @@ function updateHUD(){
   const dash = document.getElementById('hudDash');
   dash.textContent = g.dashCd > 0 ? `Dash ${g.dashCd.toFixed(1)} s` : 'Dash listo';
   dash.classList.toggle('ready', g.dashCd <= 0);
+  const dashReady = g.dashCd <= 0;
+  if (dashReady && !g.dashReady && g.t > 1){
+    sfx('ready');
+    dash.classList.remove('flash'); void dash.offsetWidth; dash.classList.add('flash');
+  }
+  g.dashReady = dashReady;
+  const bf = document.getElementById('bonkFill'), bbar = document.getElementById('bonkBar');
+  if (bf){
+    bf.style.width = Math.min(100, g.bonk).toFixed(1) + '%';
+    bbar.classList.toggle('ready', g.bonk >= 100);
+    document.getElementById('bonkTxt').textContent = g.bonk >= 100 ? 'BONK LISTO · pulsa Q' : `BONK ${Math.floor(g.bonk)}%`;
+  }
   // Daño recibido: activa la viñeta roja (se desvanece en frame)
   if (g.lastHp !== undefined && p.hp < g.lastHp - 0.01){ hurtT = 0.45; sfx('hurt'); }
   g.lastHp = p.hp;
@@ -2609,6 +2699,7 @@ function sfx(name){
     case 'kill':    tone(520, .10, 'square', .06, 260); break;
     case 'hurt':    tone(170, .28, 'sawtooth', .16, 70); noise(.15, .06, 0, 300); break;
     case 'chest':   [523,659,784,1046].forEach((f,i) => tone(f, .16, 'triangle', .18, null, i*.07)); break;
+    case 'ready':   tone(1568, .10, 'square', .05); tone(2349, .16, 'triangle', .06, null, .07); break;
     case 'levelup': [440,554,660,880].forEach((f,i) => tone(f, .18, 'square', .07, null, i*.08)); break;
     case 'evolve':  tone(220, 1.0, 'sawtooth', .10, 880); [523,659,784].forEach((f,i) => tone(f, .5, 'triangle', .14, null, .6 + i*.1)); break;
     case 'boss':    tone(65, 1.6, 'sawtooth', .16, 40); noise(1.2, .07, 0, 200); break;
@@ -3569,7 +3660,7 @@ function frame(now){
   if (state === 'play' && g){
     if (!g.evoAnim) update(dt);   // durante la digievolución el mundo se detiene y solo corre la animación
     if (g){
-      syncMeshes(); updateCamera(dt); updateHUD();
+      syncMeshes(); updateCamera(dt); updateHUD(); drawEdgeMarkers();
       if (g.aura){ g.aura.group.position.set(g.p.x, terrainH(g.p.x, g.p.z) + g.p.y, g.p.z); g.aura.update(g.t); }
     }
   }
