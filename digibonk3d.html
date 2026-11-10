@@ -212,14 +212,15 @@ canvas{display:block}
 .g-result span{font-size:13px;color:#cfe8ff}
 .g-result.pop{animation:pop .5s ease}
 @keyframes pop{0%{transform:scale(.8);opacity:0}70%{transform:scale(1.06)}100%{transform:none;opacity:1}}
-.rar-n{color:#90caf9}.rar-c{color:#90caf9}.rar-r{color:#ce93d8}.rar-e{color:#ffd54f;text-shadow:0 0 10px rgba(255,213,79,.6)}
+.rar-n{color:#4fc3f7}.rar-c{color:#ffb74d}.rar-r{color:#ce93d8}.rar-e{color:#ffd54f;text-shadow:0 0 10px rgba(255,213,79,.6)}
 .g-row{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:center;margin-bottom:8px}
 .g-name{font-weight:bold;color:#ffd54f}
-.g-tiles{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.g-tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.g-skin em{display:block;font-style:normal;font-size:9px;opacity:.85;margin-top:3px;line-height:1.2}
 .g-skin{padding:6px 4px;border-radius:10px;border:2px solid #2d5f78;background:rgba(8,20,40,.8);color:#cfe8ff;cursor:pointer;text-align:center;font-size:11px}
 .g-skin img{width:44px;height:44px;image-rendering:pixelated;display:block;margin:0 auto 4px}
 .g-skin.locked{opacity:.45;cursor:default;filter:grayscale(.6)}
-.g-skin.r-n{border-color:#4fc3f7}.g-skin.r-c{border-color:#90caf9}.g-skin.r-r{border-color:#ab47bc}.g-skin.r-e{border-color:#ffd54f}
+.g-skin.r-n{border-color:#4fc3f7}.g-skin.r-c{border-color:#ffb74d}.g-skin.r-r{border-color:#ab47bc}.g-skin.r-e{border-color:#ffd54f}
 .g-skin.eq{box-shadow:0 0 12px #ffd54f}
 .g-note{font-size:11px;color:#9fd4ff;margin:10px 0 0}
 </style>
@@ -1506,11 +1507,13 @@ function endGame(win){
   const earned = Math.floor(g.kills/2 + g.t/10);
   SAVE.bits = SAVE.bits + earned;
   g.earned = earned;
+  g.unlocked = recordRun(g.ch.id, g.kills, g.t);
   unlockMouse();
   saveRecord(win);
   showOverlay(`<h1>${win ? '¡Sobreviviste!' : 'Has caído'}</h1>
     <p>Nivel ${g.p.lvl} · Bajas ${g.kills} · Tiempo ${Math.floor(g.t)} s</p>
     <p>+${g.earned} Bits</p>
+    ${g.unlocked.length ? `<p>¡Skin nueva: ${g.unlocked.join(', ')}!</p>` : ''}
     <p>Pulsa Enter o haz clic para volver a elegir</p>`);
   overlay.onclick = () => { if (state === 'end') showSelect(); };
 }
@@ -1750,16 +1753,24 @@ const SAVE = {
   set bits(v){ localStorage.setItem('digibonk3d-bits', String(Math.max(0, Math.floor(v)))); }
 };
 const PULL_COST = 100, DUP_REFUND = 25;
-// Skins: solo cambian el aspecto del sprite (recoloreado). Sin arte nuevo.
+// Evento temporal: la skin Festival se consigue jugando durante estas fechas (cámbialas aquí)
+const EVENT = {name:'Festival de otoño', start: Date.parse('2026-11-01T00:00:00'), end: Date.parse('2026-12-31T23:59:59')};
+function eventActive(){ const now = Date.now(); return now >= EVENT.start && now <= EVENT.end; }
+// Cuatro skins por personaje. src: 'base' | 'logro' | 'gacha' | 'evento'
+// f: filtro CSS del recoloreado · fx: efecto propio (glitch)
 const SKINS = [
-  {id:'clasico', name:'Clásico',  rarity:'Básica', f:''},
-  {id:'cielo',   name:'Cielo',    rarity:'Común',  f:'hue-rotate(190deg) saturate(1.5)'},
-  {id:'rosa',    name:'Rosa',     rarity:'Común',  f:'hue-rotate(300deg) saturate(1.3)'},
-  {id:'bosque',  name:'Bosque',   rarity:'Rara',   f:'hue-rotate(95deg) saturate(1.4)'},
-  {id:'sombra',  name:'Sombra',   rarity:'Rara',   f:'brightness(.5) contrast(1.3) saturate(.6)'},
-  {id:'oro',     name:'Oro',      rarity:'Épica',  f:'sepia(1) saturate(4) hue-rotate(-25deg) brightness(1.1)'}
+  {id:'clasico',  name:'Clásico',  src:'base',   tier:'n', f:''},
+  {id:'galactico', name:'Galáctico', src:'logro', tier:'r', req:{plays:3},
+   desc:'Juega 3 partidas con este Digimon',
+   f:'hue-rotate(235deg) saturate(1.9) brightness(.88) contrast(1.12)'},
+  {id:'glitch',   name:'Glitch',   src:'logro',  tier:'r', req:{kills:150},
+   desc:'Consigue 150 bajas con este Digimon', fx:'glitch'},
+  {id:'cristal',  name:'Cristal',  src:'gacha',  tier:'e', f:'hue-rotate(165deg) saturate(.6) brightness(1.3) contrast(.9)',
+   desc:'Gacha de Bits'},
+  {id:'festival', name:'Festival', src:'evento', tier:'c', f:'sepia(.7) hue-rotate(-45deg) saturate(2.4) brightness(1.06)',
+   desc:'Juega durante el evento'}
 ];
-const RARITY_CLASS = {'Básica':'n', 'Común':'c', 'Rara':'r', 'Épica':'e'};
+const SKIN_BY_ID = Object.fromEntries(SKINS.map(sk => [sk.id, sk]));
 function loadJSON(k, def){ try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e){ return def; } }
 let skinsOwned = loadJSON('digibonk3d-skins', {});      // {personaje: [ids de skin]}
 let skinEquipped = loadJSON('digibonk3d-equip', {});    // {personaje: id de skin}
@@ -1773,16 +1784,61 @@ function grantSkin(key, id){
   skinsOwned[key] = [...new Set([...(skinsOwned[key] || []), id])];
   localStorage.setItem('digibonk3d-skins', JSON.stringify(skinsOwned));
 }
-// Sprites recoloreados, generados en un canvas al arrancar
+// Progreso por personaje: partidas (de al menos 5 s) y bajas
+function statsOf(key){ return loadJSON('digibonk3d-stats', {})[key] || {plays:0, kills:0}; }
+function meetsReq(sk, st){
+  return (!sk.req.plays || st.plays >= sk.req.plays) && (!sk.req.kills || st.kills >= sk.req.kills);
+}
+// Se llama al terminar cada partida: actualiza el progreso y devuelve las skins nuevas
+function recordRun(key, kills, t){
+  const all = loadJSON('digibonk3d-stats', {});
+  const st = all[key] || {plays:0, kills:0};
+  if (t >= 5) st.plays += 1;
+  st.kills += kills;
+  all[key] = st;
+  localStorage.setItem('digibonk3d-stats', JSON.stringify(all));
+  const unlocked = [];
+  for (const sk of SKINS){
+    if (sk.src === 'logro' && !ownedSkins(key).includes(sk.id) && meetsReq(sk, st)){
+      grantSkin(key, sk.id); unlocked.push(`${sk.name} (${CHARS[key].name})`);
+    }
+  }
+  if (t >= 5 && eventActive() && !ownedSkins(key).includes('festival')){
+    grantSkin(key, 'festival'); unlocked.push(`Festival (${CHARS[key].name})`);
+  }
+  return unlocked;
+}
+
+// Sprites recoloreados o con efecto, generados en un canvas al arrancar
 const skinURL = {};   // clave: personaje|evolucionado|skin
-function makeSkin(path, filter, cb){
+// Efecto glitch: desfase de canales R y B y algunas líneas desplazadas
+function glitchPixels(x, w, h){
+  const d = x.getImageData(0, 0, w, h), src = new Uint8ClampedArray(d.data), sh = Math.max(1, Math.round(w/64));
+  for (let y = 0; y < h; y++){
+    const rowShift = (y*37) % 23 === 0 ? sh*2 : 0;   // algunas filas se desplazan más
+    for (let xx = 0; xx < w; xx++){
+      const i = (y*w + xx) * 4;
+      const xr = Math.min(w-1, Math.max(0, xx - sh - rowShift));
+      const xb = Math.min(w-1, Math.max(0, xx + sh + rowShift));
+      const ir = (y*w + xr) * 4, ib = (y*w + xb) * 4;
+      d.data[i]   = src[ir];       // rojo desplazado a la izquierda
+      d.data[i+1] = src[i+1];      // verde en su sitio
+      d.data[i+2] = src[ib+2];     // azul desplazado a la derecha
+      d.data[i+3] = src[i+3];
+    }
+  }
+  x.putImageData(d, 0, 0);
+}
+function makeSkin(path, sk, cb){
   const img = new Image();
   img.onload = () => {
     const c = document.createElement('canvas');
     c.width = img.naturalWidth; c.height = img.naturalHeight;
     const x = c.getContext('2d');
-    x.filter = filter || 'none';
+    x.filter = sk.f || 'none';
     x.drawImage(img, 0, 0);
+    x.filter = 'none';
+    if (sk.fx === 'glitch') glitchPixels(x, c.width, c.height);
     try { cb(c.toDataURL('image/png')); } catch(e){}
   };
   img.src = path;
@@ -1792,13 +1848,13 @@ function buildSkins(){
     for (const evo of [false, true]){
       const path = evo ? EVO[key].sprite : CHARS[key].sprite;
       for (const sk of SKINS){
-        if (!sk.f) continue;
-        makeSkin(path, sk.f, url => { skinURL[`${key}|${evo ? 1 : 0}|${sk.id}`] = url; });
+        if (sk.id === 'clasico') continue;
+        makeSkin(path, sk, url => { skinURL[`${key}|${evo ? 1 : 0}|${sk.id}`] = url; });
       }
     }
   }
 }
-// Sprite a usar para un personaje, con su skin equipada (o el original si aún no está lista)
+// Sprite a usar para un personaje con su skin (o el original si aún no está lista)
 function spriteWith(key, evolved, skinId){
   const base = evolved ? EVO[key].sprite : CHARS[key].sprite;
   if (!skinId || skinId === 'clasico') return base;
@@ -1806,23 +1862,7 @@ function spriteWith(key, evolved, skinId){
 }
 function spriteOf(key, evolved){ return spriteWith(key, evolved, skinEquipped[key]); }
 
-// Tirada: 60% común, 30% rara, 10% épica; si ya tienes esa skin, reembolso
-function rollSkin(){
-  const roll = Math.random();
-  const rarity = roll < .6 ? 'Común' : roll < .9 ? 'Rara' : 'Épica';
-  const pool = [];
-  for (const key of SEASONS.adventure.chars)
-    for (const sk of SKINS)
-      if (sk.f && sk.rarity === rarity && !ownedSkins(key).includes(sk.id)) pool.push({key, sk});
-  let list = pool;
-  if (!list.length){
-    list = [];
-    for (const key of SEASONS.adventure.chars)
-      for (const sk of SKINS) if (sk.f && !ownedSkins(key).includes(sk.id)) list.push({key, sk});
-  }
-  if (!list.length) return null;
-  return list[Math.floor(Math.random() * list.length)];
-}
+// Tirada del gacha: da la skin Cristal a un personaje que aún no la tenga; si no quedan, reembolso
 let lastPull = null;
 function pull(){
   if (SAVE.bits < PULL_COST){
@@ -1830,22 +1870,32 @@ function pull(){
     return;
   }
   SAVE.bits = SAVE.bits - PULL_COST;
-  const r = rollSkin();
-  if (!r){
+  const pool = SEASONS.adventure.chars.filter(key => !ownedSkins(key).includes('cristal'));
+  if (!pool.length){
     SAVE.bits = SAVE.bits + DUP_REFUND;
     lastPull = {dup: true};
   } else {
-    grantSkin(r.key, r.sk.id);
-    lastPull = {key: r.key, sk: r.sk};
+    const key = pool[Math.floor(Math.random() * pool.length)];
+    grantSkin(key, 'cristal');
+    lastPull = {key, sk: SKIN_BY_ID.cristal};
   }
-  showGacha(lastPull);
+  showGacha();
 }
 function resultHtml(lp){
-  if (!lp) return '<span>Tira para descubrir una skin nueva</span>';
-  if (lp.dup) return `<b>Ya tenías todas esas skins</b><span>Reembolso +${DUP_REFUND} Bits</span>`;
-  return `<b class="rar-${RARITY_CLASS[lp.sk.rarity]}">¡${lp.sk.name}!</b>
-    <img src="${spriteWith(lp.key, false, lp.sk.id)}" alt="">
-    <span>${CHARS[lp.key].name} · ${lp.sk.rarity}</span>`;
+  if (!lp) return '<span>Tira para conseguir una skin Cristal</span>';
+  if (lp.dup) return `<b>Ya tienen todas la skin Cristal</b><span>Reembolso +${DUP_REFUND} Bits</span>`;
+  return `<b class="rar-${lp.sk.tier}">¡Skin ${lp.sk.name}!</b>
+    <img src="${spriteWith(lp.key, false, 'cristal')}" alt="">
+    <span>${CHARS[lp.key].name}</span>`;
+}
+// Texto que explica cómo se consigue una skin que aún no tienes
+function howTo(key, sk){
+  if (sk.src === 'base') return '';
+  if (sk.src === 'gacha') return 'Gacha de Bits';
+  if (sk.src === 'evento') return eventActive() ? 'Evento: juega ahora' : 'Evento terminado';
+  const st = statsOf(key);
+  if (sk.req.plays) return `${Math.min(st.plays, sk.req.plays)}/${sk.req.plays} partidas`;
+  return `${Math.min(st.kills, sk.req.kills)}/${sk.req.kills} bajas`;
 }
 function showGacha(){
   state = 'gacha';
@@ -1855,9 +1905,11 @@ function showGacha(){
     const tiles = SKINS.map(sk => {
       const has = owned.includes(sk.id);
       const eq = (skinEquipped[key] || 'clasico') === sk.id;
-      return `<button class="g-skin r-${RARITY_CLASS[sk.rarity]}${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}"
-        data-key="${key}" data-skin="${sk.id}" ${has ? '' : 'disabled'} title="${sk.name} · ${sk.rarity}">
-        <img src="${spriteWith(key, false, sk.id)}" alt=""><small>${has ? sk.name : '???'}</small></button>`;
+      return `<button class="g-skin r-${sk.tier}${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}"
+        data-key="${key}" data-skin="${sk.id}" ${has ? '' : 'disabled'} title="${sk.desc || sk.name}">
+        <img src="${spriteWith(key, false, sk.id)}" alt="">
+        <small>${has ? sk.name : '???'}</small>
+        ${has ? '' : `<em>${howTo(key, sk)}</em>`}</button>`;
     }).join('');
     return `<div class="g-row"><div class="g-name">${CHARS[key].name}</div><div class="g-tiles">${tiles}</div></div>`;
   }).join('');
@@ -1865,25 +1917,25 @@ function showGacha(){
     <div class="gacha">
       <header class="g-head">
         <button class="g-back" id="gBack">← Volver</button>
-        <h2>Gacha de skins</h2>
+        <h2>Skins</h2>
         <span class="g-bits">Ⓑ ${SAVE.bits} Bits</span>
       </header>
       <div class="g-top">
         <div class="g-pull">
-          <div class="g-cost">Tirada · ${PULL_COST} Bits</div>
+          <div class="g-cost">Gacha · ${PULL_COST} Bits</div>
           <button class="g-btn" id="gPull">TIRAR</button>
-          <div class="g-odds">Común 60% · Rara 30% · Épica 10%</div>
+          <div class="g-odds">Da la skin Cristal a un personaje</div>
         </div>
         <div class="g-result${lastPull ? ' pop' : ''}">${resultHtml(lastPull)}</div>
       </div>
       <div class="g-list">${rows}</div>
-      <p class="g-note">Las skins solo cambian el aspecto. Ganas Bits al terminar partidas: 1 por cada 2 bajas y 1 por cada 10 s de partida.</p>
+      <p class="g-note">Galáctico: 3 partidas con el Digimon · Glitch: 150 bajas con el Digimon · Cristal: gacha de Bits · Festival: juega durante el evento "${EVENT.name}".</p>
     </div>`);
   document.getElementById('gBack').onclick = () => { lastPull = null; showSelect(); };
   document.getElementById('gPull').onclick = pull;
   overlay.querySelectorAll('.g-skin.owned').forEach(b => b.onclick = () => {
     equipSkin(b.dataset.key, b.dataset.skin);
-    showGacha(lastPull);
+    showGacha();
   });
 }
 
