@@ -287,6 +287,58 @@ canvas{display:block}
 .set-seg.on{background:repeating-linear-gradient(-45deg,#ffe082 0 10px,#ffc94d 10px 20px);color:#1a1200;border-color:#ffd54f}
 .set-toggle{padding:9px 16px;border-radius:12px;border:2px solid #7a7a7a;background:#2a2f3a;color:#bbb;font-weight:bold;cursor:pointer;min-width:130px}
 .set-toggle.on{border-color:#7cf29c;background:repeating-linear-gradient(-45deg,#3fb950 0 10px,#2e9a3e 10px 20px);color:#fff}
+
+/* Gacha: botones grandes, colección, animación de cápsula y resultados */
+.pull-bar{display:grid;grid-template-columns:1fr 1.4fr;gap:14px;margin:12px 0}
+.pull-btn{padding:20px 12px;border-radius:20px;border:3px solid #fff;cursor:pointer;color:#1a1200;font-weight:900;letter-spacing:2px;font-size:24px;
+  background:repeating-linear-gradient(-45deg,#ffe082 0 14px,#ffc94d 14px 28px);box-shadow:0 9px 0 #b27300}
+.pull-btn small{display:block;font-size:13px;letter-spacing:.5px;font-weight:700;margin-top:4px}
+.pull-btn-10{background:repeating-linear-gradient(-45deg,#ff8a65 0 14px,#ff6e40 14px 28px);color:#fff;box-shadow:0 9px 0 #8e2d10}
+.pull-btn:active{transform:translateY(5px)}
+.g-sec{margin:14px 0 6px;color:#ffd54f;font-size:18px}
+.col-sec{margin-bottom:10px}
+.col-label{font-size:12px;letter-spacing:1px;color:#9fd4ff;text-transform:uppercase;margin-bottom:6px}
+.col-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.col-tile{padding:8px 6px;border-radius:14px;border:2px solid #2d5f78;background:rgba(8,20,40,.9);color:#cfe8ff;cursor:pointer;text-align:center;font-size:12px}
+.col-tile.locked{opacity:.4;cursor:default}
+.col-tile.eq{border-color:#ffd54f;box-shadow:0 0 10px rgba(255,213,79,.5)}
+.col-tile em{display:block;font-style:normal;font-size:10px;opacity:.85;margin-top:3px}
+.col-equip{display:flex;flex-wrap:wrap;gap:6px 18px;margin:10px 0;font-size:13px;color:#cfe8ff;background:rgba(8,20,40,.8);padding:10px 12px;border-radius:12px;border:1px solid #2d5f78}
+.col-equip b{color:#ffd54f}
+.rw-frame{width:44px;height:44px;margin:0 auto 4px;border-radius:10px;background:#1a2440}
+.rw-title{font-size:30px;line-height:44px;height:44px}
+.rw-item{font-size:32px;line-height:44px;height:44px}
+/* Marcos del icono del Digimon (HUD) */
+.hud-portrait.fr-bronce{border-color:#cd7f32;box-shadow:0 0 8px #cd7f32}
+.hud-portrait.fr-digivice{border-color:#4fc3f7;box-shadow:0 0 12px #4fc3f7}
+.hud-portrait.fr-neon{border-color:#ff4fd8;box-shadow:0 0 14px #ff4fd8}
+.hud-portrait.fr-oro{border-color:#ffd54f;box-shadow:0 0 16px #ffd54f}
+.rw-frame.fr-bronce{border:3px solid #cd7f32}.rw-frame.fr-digivice{border:3px solid #4fc3f7}
+.rw-frame.fr-neon{border:3px solid #ff4fd8}.rw-frame.fr-oro{border:3px solid #ffd54f}
+.hud-title{font-size:11px;color:#bfe9ff;letter-spacing:.5px;margin-top:2px;text-shadow:0 1px 2px #000}
+/* Animación de la cápsula */
+.pull-stage{display:flex;flex-direction:column;align-items:center;gap:14px}
+.capsule{position:relative;width:110px;height:110px;animation:capShake .9s ease-in-out both}
+.cap-top,.cap-bot{position:absolute;left:0;width:110px;height:55px;border:3px solid #fff}
+.cap-top{top:0;background:#ff3b3b;border-radius:55px 55px 0 0}
+.cap-bot{bottom:0;background:#fff;border-radius:0 0 55px 55px}
+.cap-glow{position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(circle,rgba(255,240,160,.9),transparent 65%);animation:capGlow .9s ease-out both}
+@keyframes capShake{0%{transform:rotate(0)}15%{transform:rotate(-14deg)}30%{transform:rotate(14deg)}45%{transform:rotate(-12deg)}60%{transform:rotate(12deg)}75%{transform:scale(1.15)}100%{transform:scale(1.25);opacity:0}}
+@keyframes capGlow{0%,70%{opacity:0}85%{opacity:1}100%{opacity:0}}
+.pull-wait{color:#ffd54f;font-weight:bold;letter-spacing:2px}
+/* Resultados de la tirada */
+.pull-results{display:flex;flex-direction:column;align-items:center;gap:16px;width:min(760px,94vw)}
+.pr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;width:100%}
+.multi .pr-grid{grid-template-columns:repeat(5,1fr)}
+.rw-card{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 10px;border-radius:18px;background:rgba(10,18,40,.95);border:3px solid #4fc3f7;color:#e6f4ff;text-align:center;animation:rwIn .45s cubic-bezier(.2,1.4,.4,1) both}
+.rw-card img{width:64px;height:64px;image-rendering:pixelated}
+.rw-card b{font-size:13px}
+.rw-card small{font-size:11px;opacity:.85}
+.rw-card.tier-r{border-color:#ce93d8;box-shadow:0 0 14px rgba(206,147,216,.6)}
+.rw-card.tier-e{border-color:#ffd54f;box-shadow:0 0 22px rgba(255,213,79,.8);animation:rwIn .45s cubic-bezier(.2,1.4,.4,1) both,rwPulse 1.4s ease-in-out infinite}
+@keyframes rwIn{from{opacity:0;transform:translateY(24px) scale(.6) rotate(-6deg)}to{opacity:1;transform:none}}
+@keyframes rwPulse{50%{box-shadow:0 0 30px rgba(255,213,79,1)}}
+.pr-ok{padding:14px 40px;font-size:18px}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -295,9 +347,10 @@ canvas{display:block}
 <body>
 <div id="vignette"></div>
 <div id="hud"><div class="hud-card">
-  <div class="hud-portrait"><img id="pimg" alt=""><span class="hud-lvl" id="hudLvl">1</span></div>
+  <div class="hud-portrait" id="hudPortrait"><img id="pimg" alt=""><span class="hud-lvl" id="hudLvl">1</span></div>
   <div class="hud-main">
     <div class="hud-name" id="hudName">Gabumon</div>
+    <div class="hud-title" id="hudTitle"></div>
     <div class="hud-hp"><div id="hp"></div><span id="hpTxt"></span></div>
     <div class="hud-chips"><span class="chip">☠ <b id="hudKills">0</b></span><span class="chip" id="hudDash">Dash listo</span></div>
   </div>
@@ -1126,6 +1179,7 @@ function startGame(key){
   };
   applyBalance(key);
   applySkinFx(key);
+  applyRunItem();
   resolveSolids(g.p, 0.5);   // aparición aleatoria: fuera de casas y vallas
   g.playerMesh = billboard(spriteOf(key, false), 2.2);
   world.add(g.playerMesh);
@@ -1809,6 +1863,9 @@ function updateHUD(){
   document.getElementById('xpTxt').textContent = `Nivel ${p.lvl} · EXP ${Math.floor(p.xp)} / ${p.nextXp}`;
   document.getElementById('hpTxt').textContent = `${Math.ceil(Math.max(0, p.hp))} / ${p.maxHp}`;
   document.getElementById('hudName').textContent = g.ch.evolved ? EVO[g.ch.id].name : g.ch.name;
+  const tt = TITLES.find(t => t.id === extra.title);
+  document.getElementById('hudTitle').textContent = tt ? tt.name : '';
+  document.getElementById('hudPortrait').className = 'hud-portrait' + frameClass();
   document.getElementById('hudLvl').textContent = p.lvl;
   document.getElementById('hudKills').textContent = g.kills;
   const dash = document.getElementById('hudDash');
@@ -2141,32 +2198,158 @@ function spriteWith(key, evolved, skinId){
 }
 function spriteOf(key, evolved){ return spriteWith(key, evolved, skinEquipped[key]); }
 
-// Tirada del gacha: da la skin Cristal a un personaje que aún no la tenga; si no quedan, reembolso
-let lastPull = null;
-function pull(){
-  if (SAVE.bits < PULL_COST){
-    announce('Bits insuficientes', `Necesitas ${PULL_COST} Bits · juega partidas para ganar más`, '#ef5350');
+/* ---------- Gacha: skins, marcos, títulos y objetos ---------- */
+// Catálogo de recompensas (lo que sale en las tiradas, además de las skins)
+const FRAMES = [
+  {id:'bronce',  name:'Marco bronce',  tier:'c', css:'border:3px solid #cd7f32;box-shadow:0 0 8px #cd7f32'},
+  {id:'digivice', name:'Marco Digivice', tier:'c', css:'border:3px solid #4fc3f7;box-shadow:0 0 12px #4fc3f7'},
+  {id:'neon',    name:'Marco neón',    tier:'r', css:'border:3px solid #ff4fd8;box-shadow:0 0 14px #ff4fd8'},
+  {id:'oro',     name:'Marco oro',     tier:'e', css:'border:3px solid #ffd54f;box-shadow:0 0 16px #ffd54f,inset 0 0 0 2px #fff3c4'}
+];
+const TITLES = [
+  {id:'novato',    name:'Novato',            tier:'c'},
+  {id:'cazador',   name:'Cazador de bajas',  tier:'c'},
+  {id:'explorador', name:'Explorador',        tier:'r'},
+  {id:'maestro',   name:'Maestro Digimon',   tier:'r'},
+  {id:'leyenda',   name:'Leyenda digital',   tier:'e'}
+];
+const ITEMS = [
+  {id:'pocion',   name:'Poción digital',   icon:'🧪', tier:'c', desc:'Empiezas la partida con +20 PS'},
+  {id:'iman',     name:'Imán de datos',    icon:'🧲', tier:'c', desc:'Empiezas con +30% de imán'},
+  {id:'cadencia', name:'Chip de velocidad', icon:'⚡', tier:'r', desc:'Empiezas con +15% de cadencia'}
+];
+const TIER_NAME = {c:'Común', r:'Rara', e:'Épica'};
+const TIER_CLASS = {c:'c', r:'r', e:'e'};
+let inv = loadJSON('digibonk3d-inv', {frames: [], titles: [], items: {}});
+let extra = loadJSON('digibonk3d-extra', {frame: null, title: null, item: null});
+function saveInv(){ localStorage.setItem('digibonk3d-inv', JSON.stringify(inv)); }
+function saveExtra(){ localStorage.setItem('digibonk3d-extra', JSON.stringify(extra)); }
+function equipExtra(kind, id){
+  if (kind === 'frame' && inv.frames.includes(id)) extra.frame = id;
+  if (kind === 'title' && inv.titles.includes(id)) extra.title = id;
+  if (kind === 'item' && (inv.items[id] || 0) > 0) extra.item = id;
+  saveExtra();
+}
+function unequipExtra(kind){
+  if (kind === 'frame') extra.frame = null;
+  if (kind === 'title') extra.title = null;
+  if (kind === 'item') extra.item = null;
+  saveExtra();
+}
+// Objeto equipado: se gasta al empezar la partida
+function applyRunItem(){
+  if (!extra.item || (inv.items[extra.item] || 0) <= 0) return;
+  const p = g.p, id = extra.item;
+  if (id === 'pocion'){ p.hp = Math.min(p.maxHp, p.hp + 20); }
+  if (id === 'iman') p.pickup *= 1.3;
+  if (id === 'cadencia') p.cdMul *= 0.85;
+  inv.items[id] -= 1;
+  if (inv.items[id] <= 0){ delete inv.items[id]; extra.item = null; saveExtra(); }
+  saveInv();
+}
+// Marco del icono del Digimon en el HUD
+function frameClass(){ return extra.frame ? ' fr-' + extra.frame : ''; }
+
+// Pesos por tipo de recompensa y por rareza
+const CAT_WEIGHTS = [['skin', 35], ['frame', 20], ['title', 20], ['item', 25]];
+function rollTier(){ const r = Math.random(); return r < 0.6 ? 'c' : r < 0.9 ? 'r' : 'e'; }
+function pickCategory(){
+  let tot = CAT_WEIGHTS.reduce((a, c) => a + c[1], 0), x = Math.random()*tot;
+  for (const [k, w] of CAT_WEIGHTS){ if ((x -= w) < 0) return k; }
+  return 'item';
+}
+// Devuelve una recompensa: {type, ...} o null si no queda nada de ese tipo
+function rollReward(tier){
+  const cat = pickCategory();
+  if (cat === 'skin'){
+    const pool = SEASONS.adventure.chars.filter(k => !ownedSkins(k).includes('cristal'));
+    if (pool.length){ const key = pool[Math.floor(Math.random()*pool.length)]; return {type:'skin', key, sk: SKIN_BY_ID.cristal, tier:'e'}; }
+  }
+  if (cat === 'frame' || cat === 'skin'){
+    const pool = FRAMES.filter(f => f.tier === tier && !inv.frames.includes(f.id));
+    if (pool.length){ const f = pool[Math.floor(Math.random()*pool.length)]; return {type:'frame', f, tier: f.tier}; }
+  }
+  if (cat === 'title' || cat === 'frame' || cat === 'skin'){
+    const pool = TITLES.filter(t => t.tier === tier && !inv.titles.includes(t.id));
+    if (pool.length){ const t = pool[Math.floor(Math.random()*pool.length)]; return {type:'title', t, tier: t.tier}; }
+  }
+  const pool = ITEMS.filter(i => i.tier === tier);
+  const it = pool[Math.floor(Math.random()*pool.length)];
+  return {type:'item', it, tier: it.tier};
+}
+// Aplica la recompensa a la colección; los repetidos se convierten en Bits
+function grantReward(r){
+  if (r.type === 'skin'){
+    grantSkin(r.key, 'cristal');
+    return {...r, dup:false};
+  }
+  if (r.type === 'frame'){
+    if (inv.frames.includes(r.f.id)){ SAVE.bits = SAVE.bits + 30; return {...r, dup:true, refund:30}; }
+    inv.frames.push(r.f.id); saveInv(); return {...r, dup:false};
+  }
+  if (r.type === 'title'){
+    if (inv.titles.includes(r.t.id)){ SAVE.bits = SAVE.bits + 30; return {...r, dup:true, refund:30}; }
+    inv.titles.push(r.t.id); saveInv(); return {...r, dup:false};
+  }
+  inv.items[r.it.id] = (inv.items[r.it.id] || 0) + 1; saveInv();
+  return {...r, dup:false};
+}
+// Tirada: 1 o 10. Con 10 se garantiza al menos una recompensa rara o épica
+function doPulls(n){
+  const cost = n === 10 ? PULL_COST_10 : PULL_COST;
+  if (SAVE.bits < cost){
+    announce('Bits insuficientes', `Necesitas ${cost} Bits`, '#ef5350');
     return;
   }
-  SAVE.bits = SAVE.bits - PULL_COST;
-  const pool = SEASONS.adventure.chars.filter(key => !ownedSkins(key).includes('cristal'));
-  if (!pool.length){
-    SAVE.bits = SAVE.bits + DUP_REFUND;
-    lastPull = {dup: true};
-  } else {
-    const key = pool[Math.floor(Math.random() * pool.length)];
-    grantSkin(key, 'cristal');
-    lastPull = {key, sk: SKIN_BY_ID.cristal};
+  SAVE.bits = SAVE.bits - cost;
+  const tiers = Array.from({length: n}, () => rollTier());
+  if (n === 10 && !tiers.some(t => t !== 'c')) tiers[9] = 'r';
+  const results = [];
+  for (const t of tiers){
+    let r = rollReward(t);
+    results.push(grantReward(r));
   }
-  showGacha();
+  playPullAnimation(results);
 }
-function resultHtml(lp){
-  if (!lp) return '<span>Tira para conseguir una skin Cristal</span>';
-  if (lp.dup) return `<b>Ya tienen todas la skin Cristal</b><span>Reembolso +${DUP_REFUND} Bits</span>`;
-  return `<b class="rar-${lp.sk.tier}">¡Skin ${lp.sk.name}!</b>
-    <img src="${spriteWith(lp.key, false, 'cristal')}" alt="">
-    <span>${CHARS[lp.key].name}</span>`;
+const PULL_COST_10 = 900;
+// Animación: la cápsula se agita y se abre; después se revelan las tarjetas
+function playPullAnimation(results){
+  const big = results.length === 1;
+  showOverlay(`
+    <div class="pull-stage">
+      <div class="capsule"><div class="cap-top"></div><div class="cap-bot"></div><div class="cap-glow"></div></div>
+      <p class="pull-wait">Abriendo…</p>
+    </div>`);
+  setTimeout(() => showPullResults(results), 1300);
 }
+function rewardIcon(r){
+  if (r.type === 'skin') return `<img src="${spriteWith(r.key, false, 'cristal')}" alt="">`;
+  if (r.type === 'frame') return `<div class="rw-frame fr-${r.f.id}"></div>`;
+  if (r.type === 'title') return `<div class="rw-title">🏅</div>`;
+  return `<div class="rw-item">${r.it.icon}</div>`;
+}
+function rewardName(r){
+  if (r.type === 'skin') return `Skin Cristal · ${CHARS[r.key].name}`;
+  if (r.type === 'frame') return r.f.name;
+  if (r.type === 'title') return `Título: ${r.t.name}`;
+  return r.it.name;
+}
+function showPullResults(results){
+  const cards = results.map((r, i) => `
+    <div class="rw-card tier-${TIER_CLASS[r.tier]}" style="animation-delay:${i*0.09}s">
+      ${rewardIcon(r)}
+      <b>${rewardName(r)}</b>
+      <small>${r.dup ? `Repetido · +${r.refund} Bits` : TIER_NAME[r.tier]}</small>
+    </div>`).join('');
+  showOverlay(`
+    <div class="pull-results${results.length > 1 ? ' multi' : ''}">
+      <div class="pr-grid">${cards}</div>
+      <button class="g-btn pr-ok" id="prOk">Continuar</button>
+    </div>`);
+  document.getElementById('prOk').onclick = () => showGacha();
+  state = 'gacha';
+}
+
 // Texto que explica cómo se consigue una skin que aún no tienes
 function howTo(key, sk){
   if (sk.src === 'base') return '';
@@ -2186,35 +2369,63 @@ function showGacha(){
       const eq = (skinEquipped[key] || 'clasico') === sk.id;
       return `<button class="g-skin r-${sk.tier}${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}"
         data-key="${key}" data-skin="${sk.id}" ${has ? '' : 'disabled'} title="${sk.desc || sk.name}">
-        <img src="${spriteWith(key, false, sk.id)}" alt="">
-        <small>${has ? sk.name : '???'}</small>
+        <img src="${spriteWith(key, false, sk.id)}" alt=""><small>${has ? sk.name : '???'}</small>
         ${has ? '' : `<em>${howTo(key, sk)}</em>`}</button>`;
     }).join('');
     return `<div class="g-row"><div class="g-name">${CHARS[key].name}</div><div class="g-tiles">${tiles}</div></div>`;
+  }).join('');
+  const frameTiles = FRAMES.map(f => {
+    const has = inv.frames.includes(f.id), eq = extra.frame === f.id;
+    return `<button class="col-tile${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}" data-kind="frame" data-id="${f.id}" ${has ? '' : 'disabled'}>
+      <div class="rw-frame fr-${f.id}"></div><small>${has ? f.name : '???'}</small></button>`;
+  }).join('');
+  const titleTiles = TITLES.map(t => {
+    const has = inv.titles.includes(t.id), eq = extra.title === t.id;
+    return `<button class="col-tile${has ? ' owned' : ' locked'}${eq ? ' eq' : ''}" data-kind="title" data-id="${t.id}" ${has ? '' : 'disabled'}>
+      <div class="rw-title">🏅</div><small>${has ? t.name : '???'}</small></button>`;
+  }).join('');
+  const itemTiles = ITEMS.map(i => {
+    const n = inv.items[i.id] || 0, eq = extra.item === i.id;
+    return `<button class="col-tile${n ? ' owned' : ' locked'}${eq ? ' eq' : ''}" data-kind="item" data-id="${i.id}" ${n ? '' : 'disabled'}>
+      <div class="rw-item">${i.icon}</div><small>${n ? `${i.name} ×${n}` : '???'}</small><em>${i.desc}</em></button>`;
   }).join('');
   showOverlay(`
     <div class="gacha">
       <header class="g-head">
         <button class="g-back" id="gBack">← Volver</button>
-        <h2>Skins</h2>
+        <h2>Gacha</h2>
         <span class="g-bits">Ⓑ ${SAVE.bits} Bits</span>
       </header>
-      <div class="g-top">
-        <div class="g-pull">
-          <div class="g-cost">Gacha · ${PULL_COST} Bits</div>
-          <button class="g-btn" id="gPull">TIRAR</button>
-          <div class="g-odds">Da la skin Cristal a un personaje</div>
-        </div>
-        <div class="g-result${lastPull ? ' pop' : ''}">${resultHtml(lastPull)}</div>
+      <div class="pull-bar">
+        <button class="pull-btn" id="gPull1"><span>TIRAR</span><small>Ⓑ ${PULL_COST}</small></button>
+        <button class="pull-btn pull-btn-10" id="gPull10"><span>TIRAR ×10</span><small>Ⓑ ${PULL_COST_10} · garantiza rara</small></button>
       </div>
+      <p class="g-odds">Puede salir una skin, un marco, un título o un objeto. Los repetidos se convierten en Bits.</p>
+      <h3 class="g-sec">Colección</h3>
+      <div class="col-sec"><div class="col-label">Marcos del icono</div><div class="col-grid">${frameTiles}</div></div>
+      <div class="col-sec"><div class="col-label">Títulos</div><div class="col-grid">${titleTiles}</div></div>
+      <div class="col-sec"><div class="col-label">Objetos (se gastan al empezar la partida)</div><div class="col-grid">${itemTiles}</div></div>
+      <div class="col-equip">
+        <span>Marco: <b>${extra.frame ? FRAMES.find(f => f.id === extra.frame).name : 'ninguno'}</b></span>
+        <span>Título: <b>${extra.title ? TITLES.find(t => t.id === extra.title).name : 'ninguno'}</b></span>
+        <span>Objeto para la próxima partida: <b>${extra.item ? ITEMS.find(i => i.id === extra.item).name : 'ninguno'}</b></span>
+      </div>
+      <h3 class="g-sec">Skins</h3>
       <div class="g-list">${rows}</div>
-      <p class="g-note">Galáctico: 3 partidas con el Digimon · Glitch: 150 bajas con el Digimon · Cristal: gacha de Bits · Festival: juega durante el evento "${EVENT.name}".</p>
+      <p class="g-note">Galáctico: 3 partidas con el Digimon · Glitch: 150 bajas con el Digimon · Cristal: gacha · Festival: juega durante el evento "${EVENT.name}".</p>
       <p class="g-note">Bonus permanente por Digimon al conseguir la skin: Galáctico ${SKIN_FX.galactico.text} · Glitch ${SKIN_FX.glitch.text} · Cristal ${SKIN_FX.cristal.text} · Festival ${SKIN_FX.festival.text}.</p>
     </div>`);
-  document.getElementById('gBack').onclick = () => { lastPull = null; showSelect(); };
-  document.getElementById('gPull').onclick = pull;
+  document.getElementById('gBack').onclick = () => showSelect();
+  document.getElementById('gPull1').onclick = () => doPulls(1);
+  document.getElementById('gPull10').onclick = () => doPulls(10);
   overlay.querySelectorAll('.g-skin.owned').forEach(b => b.onclick = () => {
     equipSkin(b.dataset.key, b.dataset.skin);
+    showGacha();
+  });
+  overlay.querySelectorAll('.col-tile.owned').forEach(b => b.onclick = () => {
+    const kind = b.dataset.kind, id = b.dataset.id;
+    if (kind === 'item'){ extra.item = extra.item === id ? null : id; saveExtra(); }
+    else { extra[kind] = extra[kind] === id ? null : id; saveExtra(); }
     showGacha();
   });
 }
