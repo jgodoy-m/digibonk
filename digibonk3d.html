@@ -871,7 +871,8 @@ canvas{display:block}
 .dvl-pitch{margin:4px 0 0;font-size:15px;color:#dff8ff;letter-spacing:1px}
 .dvl-duo{position:relative;display:flex;align-items:flex-end;justify-content:center;gap:40px;margin-top:26px;height:200px}
 .dvl-duo img{position:relative;width:180px;height:180px;object-fit:contain;image-rendering:pixelated;animation:pvBob 1.8s ease-in-out infinite;filter:drop-shadow(0 0 16px rgba(255,138,30,.8))}
-.dvl-duo img.flip{transform:scaleX(-1);animation-name:dvlBobF;animation-delay:.5s;filter:drop-shadow(0 0 16px rgba(61,224,255,.8))}
+.dvl-duo img.flip{transform:scaleX(-1);animation-name:dvlBobF;animation-delay:.5s}
+.dvl-duo img:not(.flip){filter:drop-shadow(0 0 16px rgba(61,224,255,.8))}
 @keyframes dvlBobF{0%,100%{transform:scaleX(-1) translateY(0)}50%{transform:scaleX(-1) translateY(-9px)}}
 .dvl-duo .m4-pad{bottom:-18px;width:460px}
 .dvl-bits{position:absolute;inset:0;pointer-events:none}
@@ -1109,6 +1110,7 @@ const CHARS = {
 const EVO_LEVEL = 15;
 // Temporada 1: Digimon Adventure (solo evoluciones con sprite disponible en el pack)
 const EVO = {
+  agumon:   {name:'Greymon',    sprite:'sprites/greymon.png'},
   gabumon:  {name:'Garurumon',  sprite:'sprites/garurumon.png'},
   palmon:   {name:'Togemon',    sprite:'sprites/togemon.png'},
   gatomon:  {name:'Angewomon',  sprite:'sprites/angewomon.png'},
@@ -1116,9 +1118,9 @@ const EVO = {
   patamon:  {name:'Angemon',    sprite:'sprites/angemon.png'},
   biyomon:  {name:'Birdramon',  sprite:'sprites/birdramon.png'}
 };
-// Personajes de la temporada 1 (Tentomon y Agumon quedan fuera: no hay sprite en el pack)
+// Personajes de la temporada 1
 const SEASONS = {
-  adventure: {name:'Digimon Adventure', chars:['gabumon','palmon','gatomon','gomamon','patamon','biyomon']}
+  adventure: {name:'Digimon Adventure', chars:['agumon','gabumon','palmon','gatomon','gomamon','patamon','biyomon']}
 };
 Object.assign(CHARS, {
   gomamon: {name:'Gomamon', desc:'Burbujas al enemigo más cercano', sprite:'sprites/gomamon.png', kind:'shot', cd:0.7, dmg:11},
@@ -1687,7 +1689,7 @@ function saveRecord(win){
 }
 const fmtTime = s => `${Math.floor(s/60)}:${String(s%60).padStart(2, '0')}`;
 
-let selectedKey = 'gabumon';
+let selectedKey = 'agumon';
 // Oculta/muestra el HUD de partida (el menú no debe mostrar barras ni temporizador)
 function setHud(v){
   const sb0 = document.getElementById('skillBar'); if (sb0){ sb0.style.display = v ? 'flex' : 'none'; if (!v) sb0.innerHTML = ''; }
@@ -2033,7 +2035,7 @@ function showPicker(tab){
       </div>
       <footer class="pk-foot">
         <button class="btn btn-primary pk-start" id="pkStart">¡Empezar! <small>(Enter)</small></button>
-        <span class="pk-hint">1-6 elegir · ←→ cambiar · Enter empezar · Esc volver</span>
+        <span class="pk-hint">1-7 elegir · ←→ cambiar · Enter empezar · Esc volver</span>
       </footer>
     </div>`);
   overlay.querySelectorAll('.pv-card').forEach(b => {
@@ -3773,7 +3775,7 @@ function showRegister(){
         <div class="dvl-logo"><span>DIGI</span>BONK</div>
         <div class="dvl-tag">${t('tag')}</div>
         <p class="dvl-pitch">${t('pitch')}</p>
-        <div class="dvl-duo"><i class="m4-pad"></i><img src="sprites/patamon.png" alt="Patamon"><img class="flip" src="sprites/gabumon.png" alt="Gabumon"></div>
+        <div class="dvl-duo"><i class="m4-pad"></i><img class="flip" src="sprites/agumon.png" alt="Agumon"><img src="sprites/gabumon.png" alt="Gabumon"></div>
       </section>
       <section class="dvl">
         <div class="dvl-device">
@@ -4349,6 +4351,7 @@ function makeAura(skinId, key){
    Valores iniciales basados en el daño por segundo (daño / recarga × multiplicador)
    y en la facilidad de cada estilo. Hay que ajustarlos con pruebas reales. */
 const BALANCE = {
+  agumon:  {dif:'Fácil',    hp:105, speed:6.0, dmgMul:0.90, why:'Dispara al enemigo más cercano: equilibrado y fácil de llevar'},
   palmon:  {dif:'Fácil',    hp:115, speed:5.6, dmgMul:1.00, why:'Cuchillas que giran alrededor: cubren a su alrededor sin apuntar'},
   gomamon: {dif:'Fácil',    hp:120, speed:5.4, dmgMul:0.80, why:'Mucha vida y ataques rápidos al más cercano: perdona errores'},
   gabumon: {dif:'Media',    hp:100, speed:6.0, dmgMul:1.60, why:'Onda en círculo: equilibrado, pero hay que colocarse entre enemigos'},
