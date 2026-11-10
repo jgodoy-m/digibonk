@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DigiBonk · Menú de pausa Digivice (demo)</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#05070d;color:#e6f4ff;
+  font-family:"Trebuchet MS",system-ui,sans-serif;user-select:none}
+#world{position:fixed;inset:0;width:100%;height:100%;display:block}
+.hud{position:fixed;left:16px;top:14px;font-size:13px;color:#e6f4ff;text-shadow:0 1px 3px #000;pointer-events:none;line-height:1.6}
+.hud b{color:#ffd54f}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);opacity:0;transition:.3s;
+  padding:10px 18px;border-radius:12px;background:rgba(6,16,32,.9);border:1px solid #4fc3f7;font-size:13px;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- Superposición de pausa ---------- */
+#pause{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;
+  background:rgba(4,8,18,.4);backdrop-filter:blur(8px) saturate(.8);-webkit-backdrop-filter:blur(8px) saturate(.8);
+  opacity:0;pointer-events:none;transition:opacity .28s ease}
+#pause.open{opacity:1;pointer-events:auto}
+
+/* ---------- Carcasa del Digivice ---------- */
+.device{position:relative;width:min(600px,96vw);max-height:96vh;overflow-y:auto;padding:22px 52px 24px;
+  border-radius:70px 70px 56px 56px;
+  background:linear-gradient(165deg,#f4f7fb 0%,#c3cddb 22%,#7f8ca1 62%,#3a455a 100%);
+  box-shadow:inset 0 3px 0 rgba(255,255,255,.85),inset 0 -10px 18px rgba(0,0,0,.35),0 0 0 3px #1e2636,0 30px 70px rgba(0,0,0,.75);
+  transform:translateY(70px) scale(.86) rotate(-2deg);opacity:0;
+  transition:transform .55s cubic-bezier(.18,1.25,.35,1),opacity .3s ease}
+#pause.open .device{transform:none;opacity:1}
+.device::-webkit-scrollbar{width:0}
+.brand{text-align:center;font-weight:900;letter-spacing:7px;font-size:13px;color:#2b3446;margin:0 0 8px;text-shadow:0 1px 0 rgba(255,255,255,.7)}
+.grill{width:38%;height:8px;margin:0 auto 14px;border-radius:4px;background:repeating-linear-gradient(90deg,#3a455a 0 4px,transparent 4px 9px)}
+.side{position:absolute;width:14px;height:50px;border-radius:8px;background:linear-gradient(90deg,#2a3344,#6b7a92);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.3),0 3px 6px rgba(0,0,0,.5)}
+.side.l{left:-7px}.side.r{right:-7px}
+.s1{top:150px}.s2{top:214px}.s3{top:278px}
+
+/* Marco y pantalla LCD */
+.bezel{background:linear-gradient(180deg,#1a2130,#0b0f1a);border-radius:30px;padding:14px;
+  box-shadow:inset 0 3px 10px rgba(0,0,0,.85),0 1px 0 #fff}
+.lcd{position:relative;border-radius:18px;overflow:hidden;padding:14px 16px 14px;
+  background:radial-gradient(ellipse at 50% 25%,#17537f 0%,#0b3054 50%,#06172c 100%);box-shadow:inset 0 0 40px rgba(0,0,0,.6)}
+.lcd::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
+  background:linear-gradient(120deg,rgba(255,255,255,.09),transparent 35%)}
+.lcd::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:3;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 3px)}
+#pause.open .lcd{animation:lcdOn .6s ease-out .12s both}
+@keyframes lcdOn{0%{opacity:.15;filter:brightness(2.2) contrast(.5)}30%{opacity:1;filter:brightness(1.5)}60%{filter:brightness(.9)}100%{opacity:1;filter:none}}
+.lcd > *{position:relative;z-index:1}
+
+/* Cabecera */
+.lcd-head{display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#9fe3ff}
+.zone{font-weight:bold;color:#fff;background:rgba(79,195,247,.18);border:1px solid #4fc3f7;border-radius:6px;padding:4px 8px}
+.status{margin-left:auto;display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:#7cf29c;box-shadow:0 0 8px #7cf29c;animation:blink 1.6s infinite}
+@keyframes blink{50%{opacity:.25}}
+.battery{width:24px;height:11px;border:1px solid #9fe3ff;border-radius:2px;position:relative;margin-left:4px}
+.battery::after{content:"";position:absolute;right:-4px;top:3px;width:2px;height:5px;background:#9fe3ff}
+.battery i{position:absolute;left:2px;top:2px;bottom:2px;width:72%;background:#7cf29c}
+.close{width:30px;height:30px;border-radius:50%;border:2px solid #9fe3ff;background:#0a2a4d;color:#fff;cursor:pointer;
+  font-size:14px;font-weight:bold;display:grid;place-items:center;margin-left:6px}
+.close:hover{background:#15527f}
+
+/* Perfil del Digimon */
+.profile{display:grid;grid-template-columns:118px 1fr;gap:16px;margin-top:14px;align-items:center}
+.avatar{width:118px;height:118px;border-radius:16px;border:2px solid #4fc3f7;display:grid;place-items:center;
+  background:radial-gradient(circle,rgba(79,195,247,.4),rgba(79,195,247,.04))}
+.avatar img{width:94px;height:94px;object-fit:contain;image-rendering:pixelated;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.pname{font-size:30px;font-weight:900;letter-spacing:1.5px;color:#ffd54f;text-shadow:0 2px 0 #7a4b00;line-height:1.1}
+.quote{font-size:14px;font-style:italic;color:#9fe3ff;margin:4px 0 8px;min-height:20px}
+.bar-l{display:flex;justify-content:space-between;font-size:10px;letter-spacing:1px;color:#9fe3ff;text-transform:uppercase;margin:7px 0 3px}
+.bar{height:15px;border-radius:8px;background:#041427;border:1px solid #2b6c9e;overflow:hidden;position:relative}
+.bar i{position:absolute;top:0;bottom:0;left:0;width:0;border-radius:8px;background:linear-gradient(90deg,#43a047,#9ccc65);transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.bar.exp i{background:linear-gradient(90deg,#8e24aa,#ffd54f)}
+
+/* Pestañas */
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:16px 0 10px}
+.tab{padding:9px 4px;border-radius:10px;border:1px solid #2b6c9e;background:rgba(4,20,39,.7);color:#9fe3ff;cursor:pointer;
+  font:bold 11px "Trebuchet MS",system-ui,sans-serif;letter-spacing:1px;text-transform:uppercase;transition:background .2s,color .2s,border-color .2s}
+.tab:hover{border-color:#4fc3f7;color:#fff}
+.tab[aria-selected="true"]{background:linear-gradient(180deg,#ffe082,#ffb300);color:#1a1200;border-color:#ffd54f;box-shadow:0 0 14px rgba(255,213,79,.5)}
+.tab:focus-visible{outline:2px solid #fff;outline-offset:2px}
+
+/* Paneles */
+.panels{min-height:230px}
+.panel{display:none}
+.panel.active{display:block;animation:panelIn .35s ease both}
+@keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:rgba(4,20,39,.75);border:1px solid #2b6c9e;border-radius:12px;padding:11px 14px}
+.stat small{display:block;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:#9fe3ff}
+.stat b{display:block;font-size:26px;color:#fff;margin-top:3px;font-variant-numeric:tabular-nums}
+.stat em{font-style:normal;font-size:12px;color:#7cf29c}
+
+.sec-title{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#9fe3ff;margin:0 0 8px;display:flex;justify-content:space-between}
+.skill{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:10px 12px;margin-bottom:8px;
+  border:1px solid #2b6c9e;border-radius:12px;background:rgba(4,20,39,.75)}
+.ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:21px;border:2px solid var(--c);color:var(--c);
+  background:rgba(255,255,255,.05)}
+.skill h4{margin:0;font-size:15px;color:#fff;display:flex;gap:8px;align-items:center}
+.el{font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:6px;background:var(--c);color:#06101e;font-weight:bold}
+.meta{font-size:11px;color:#9fe3ff;margin-top:3px}
+.cd{height:6px;border-radius:3px;background:#041427;margin-top:7px;overflow:hidden}
+.cd i{display:block;height:100%;background:var(--c);animation:recharge var(--cd) linear infinite}
+@keyframes recharge{from{width:0}to{width:100%}}
+.dmg{text-align:right;font-size:10px;letter-spacing:1px;color:#9fe3ff;text-transform:uppercase}
+.dmg b{display:block;font-size:22px;color:#fff;letter-spacing:0}
+
+.slots{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.slot{border:1px dashed #2b6c9e;border-radius:12px;padding:12px;background:rgba(4,20,39,.5);font-size:12px;color:#7aa3c4}
+.slot b{display:block;font-size:14px;color:#9fe3ff;margin-bottom:4px}
+.slot .lock{float:right;font-size:14px;opacity:.7}
+.slot .bar{height:8px;margin-top:8px}
+.slot .bar i{background:linear-gradient(90deg,#4fc3f7,#90caf9)}
+
+/* Botones físicos y de acción */
+.phys{display:flex;justify-content:center;gap:34px;margin:16px 0 4px}
+.round{width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;color:#1d2636;font-weight:900;font-size:15px;
+  background:radial-gradient(circle at 35% 30%,#ffffff,#a9b5c8 60%,#56627a);box-shadow:0 5px 0 #2a3346,0 8px 12px rgba(0,0,0,.4)}
+.round:active{transform:translateY(3px);box-shadow:0 2px 0 #2a3346}
+.actions{display:grid;gap:10px;margin-top:14px}
+.btn{padding:14px;border-radius:14px;border:0;cursor:pointer;font-weight:900;letter-spacing:1.5px;font-size:15px;text-transform:uppercase;transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(4px)}
+.btn-primary{background:linear-gradient(180deg,#eaff86,#86d63f 60%,#4fa52a);color:#0f2a05;box-shadow:0 6px 0 #2e6b13,0 0 24px rgba(190,255,90,.45)}
+.btn-danger{background:linear-gradient(180deg,#ff8a7d,#d32f2f 60%,#9a1c1c);color:#fff;box-shadow:0 6px 0 #5e0f0f}
+.btn-danger.armed{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)}}
+
+/* Pantallas bajas: compacta la carcasa para que quepa sin desplazarse */
+@media (max-height:860px){
+  .device{padding-top:14px;padding-bottom:16px}
+  .brand{margin-bottom:2px}
+  .grill{margin-bottom:8px}
+  .profile{grid-template-columns:96px 1fr;gap:12px;margin-top:10px}
+  .avatar{width:96px;height:96px}
+  .avatar img{width:76px;height:76px}
+  .pname{font-size:26px}
+  .tabs{margin:12px 0 8px}
+  .panels{min-height:0}
+  .stat{padding:8px 12px}
+  .stat b{font-size:22px}
+  .phys{margin:10px 0 0}
+  .actions{margin-top:10px}
+  .btn{padding:12px}
+  .keys{margin-top:12px}
+}
+.keys{display:flex;flex-wrap:wrap;gap:8px 14px;justify-content:center;margin-top:16px;font-size:12px;color:#cfe8ff}
+.keys span{white-space:nowrap}
+kbd{display:inline-block;min-width:22px;padding:2px 7px;border-radius:6px;background:linear-gradient(180deg,#f4f7fb,#b8c4d6);
+  color:#1a2236;font:bold 11px ui-monospace,Menlo,monospace;border:1px solid #fff;box-shadow:0 2px 0 #55607a;text-align:center}
+</style>
+</head>
+<body>
+
+<canvas id="world"></canvas>
+<div class="hud">
+  WASD mover · Espacio saltar · Shift dash · E interactuar<br>
+  <b>Bajas: <span id="hudKills">0</span></b> · <span id="hudTime">0:00</span>
+</div>
+<div class="toast" id="toast"></div>
+
+<div id="pause" aria-hidden="true">
+  <div class="device" role="dialog" aria-modal="true" aria-label="Menú de pausa Digivice">
+    <div class="side l s1"></div><div class="side l s2"></div><div class="side l s3"></div>
+    <div class="side r s1"></div><div class="side r s2"></div><div class="side r s3"></div>
+
+    <div class="brand">DIGIVICE</div>
+    <div class="grill"></div>
+
+    <div class="bezel">
+      <div class="lcd">
+        <!-- Cabecera: zona, estado del Digivice y cierre -->
+        <div class="lcd-head">
+          <span class="zone">Pueblo Primario</span>
+          <div class="status">
+            <span class="dot"></span><span>En línea</span>
+            <span class="battery"><i></i></span>
+            <button class="close" id="btnClose" aria-label="Cerrar menú de pausa">✕</button>
+          </div>
+        </div>
+
+        <!-- Perfil del Digimon -->
+        <div class="profile">
+          <div class="avatar"><img id="avatarImg" src="sprites/gabumon.png" alt="Gabumon"></div>
+          <div>
+            <div class="pname" id="pName">Gabumon</div>
+            <div class="quote" id="pQuote">“¡Aún no nos rendimos!”</div>
+            <div class="bar-l"><span>Salud (PS)</span><span id="pHpTxt">82 / 100</span></div>
+            <div class="bar hp"><i id="barHp"></i></div>
+            <div class="bar-l"><span>EXP · Nv <span id="pLvlA">4</span> → 5</span><span id="pExpTxt">62%</span></div>
+            <div class="bar exp"><i id="barExp"></i></div>
+          </div>
+        </div>
+
+        <!-- Pestañas -->
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" data-tab="estado" aria-selected="true">Estado</button>
+          <button class="tab" role="tab" data-tab="tecnicas" aria-selected="false">Técnicas</button>
+          <button class="tab" role="tab" data-tab="fusiones" aria-selected="false">Fusiones</button>
+          <button class="tab" role="tab" data-tab="altares" aria-selected="false">Altares</button>
+        </div>
+
+        <div class="panels">
+          <!-- Estado: métricas de la partida -->
+          <section class="panel active" data-panel="estado" role="tabpanel">
+            <div class="stats">
+              <div class="stat"><small>Tiempo de viaje</small><b id="sTime">0:00</b></div>
+              <div class="stat"><small>Bajas</small><b id="sKills">0</b></div>
+              <div class="stat"><small>Nivel actual</small><b id="sLevel">4</b></div>
+              <div class="stat"><small>Multiplicador de ataque</small><b id="sMult">x1.20</b><em id="sDps">Daño/s 18.8</em></div>
+            </div>
+          </section>
+
+          <!-- Técnicas: movimientos equipados -->
+          <section class="panel" data-panel="tecnicas" role="tabpanel">
+            <div class="sec-title"><span>Equipadas</span><span>3 / 4</span></div>
+            <div id="skillList"></div>
+          </section>
+
+          <!-- Fusiones -->
+          <section class="panel" data-panel="fusiones" role="tabpanel">
+            <div class="slots">
+              <div class="slot"><span class="lock">🔒</span><b>Gabumon + Palmon</b>Requiere nivel 8<div class="bar"><i style="width:50%"></i></div></div>
+              <div class="slot"><span class="lock">🔒</span><b>Gabumon + Gomamon</b>0 / 3 datos recogidos<div class="bar"><i style="width:0%"></i></div></div>
+            </div>
+          </section>
+
+          <!-- Altares -->
+          <section class="panel" data-panel="altares" role="tabpanel">
+            <div class="slots">
+              <div class="slot"><span class="lock">🔒</span><b>Altar de la Luz</b>Ofrendas 0 / 3<div class="bar"><i style="width:0%"></i></div></div>
+              <div class="slot"><span class="lock">🔒</span><b>Altar de Hielo</b>Ofrendas 0 / 3<div class="bar"><i style="width:0%"></i></div></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones físicos decorativos: A/C cambian de pestaña, B cierra -->
+    <div class="phys">
+      <button class="round" id="btnA" aria-label="Pestaña anterior">A</button>
+      <button class="round" id="btnB" aria-label="Volver a la batalla">B</button>
+      <button class="round" id="btnC" aria-label="Pestaña siguiente">C</button>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="btnResume">Volver a la batalla</button>
+      <button class="btn btn-danger" id="btnQuit">Desconectar del Digital World</button>
+    </div>
+
+    <div class="keys">
+      <span><kbd>Esc</kbd> / <kbd>P</kbd> Pausa</span>
+      <span><kbd>W A S D</kbd> Mover</span>
+      <span><kbd>Espacio</kbd> Saltar</span>
+      <span><kbd>Shift</kbd> Dash</span>
+      <span><kbd>E</kbd> Interactuar</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => [...document.querySelectorAll(s)];
+
+/* ---------- Datos de demostración ----------
+   Las técnicas, la vida y la experiencia son datos de ejemplo para la demo. */
+const SKILLS = [
+  {icon:'◎', name:'Onda de energía', el:'Energía', c:'#4fc3f7', cd:1.6, dmg:8,  desc:'Onda alrededor del Digimon'},
+  {icon:'❄', name:'Garra helada',    el:'Hielo',   c:'#80deea', cd:3.2, dmg:14, desc:'Golpe frontal que ralentiza'},
+  {icon:'✦', name:'Colmillo veloz',  el:'Físico',  c:'#ffb74d', cd:0.8, dmg:5,  desc:'Ráfaga rápida al enemigo más cercano'}
+];
+const TABS = ['estado','tecnicas','fusiones','altares'];
+const QUOTE = '“¡Aún no nos rendimos!”';
+
+const game = {paused:false, t:0, kills:0, level:4, hp:82, maxHp:100, exp:0.62, dmgMult:1.2, dash:0, dashCd:0};
+const P = {wx:0, wy:0, z:0, vz:0};                // jugador en coordenadas de mundo
+const keys = {};
+const enemies = [], particles = [], trees = [];
+const hero = new Image(); hero.src = 'sprites/gabumon.png';
+
+/* ---------- Canvas: fondo de juego ---------- */
+const canvas = $('#world'), ctx = canvas.getContext('2d');
+let VW = 0, VH = 0, DPR = 1;
+function resize(){
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  VW = innerWidth; VH = innerHeight;
+  canvas.width = Math.floor(VW * DPR); canvas.height = Math.floor(VH * DPR);
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+function toScreen(wx, wy){ return [VW/2 + wx - P.wx, VH/2 + wy - P.wy]; }
+function seedTrees(){
+  for (let i = 0; i < 90; i++) trees.push({x:Math.random()*3000-1500, y:Math.random()*3000-1500, r:14+Math.random()*16});
+}
+function spawnEnemy(){
+  const a = Math.random()*Math.PI*2, d = 420 + Math.random()*120;
+  enemies.push({x:P.wx + Math.cos(a)*d, y:P.wy + Math.sin(a)*d, v:50 + Math.random()*40, ph:Math.random()*6});
+}
+function burst(x, y){
+  for (let i = 0; i < 12; i++){
+    const a = Math.random()*Math.PI*2, s = 60 + Math.random()*140;
+    particles.push({x, y, vx:Math.cos(a)*s, vy:Math.sin(a)*s, life:.5, c:i%2 ? '#ffd54f' : '#4fc3f7'});
+  }
+}
+
+function update(dt){
+  game.t += dt;
+  const mx = (keys.d || keys.arrowright ? 1 : 0) - (keys.a || keys.arrowleft ? 1 : 0);
+  const my = (keys.s || keys.arrowdown ? 1 : 0) - (keys.w || keys.arrowup ? 1 : 0);
+  const L = Math.hypot(mx, my);
+  let sp = 190;
+  if (game.dash > 0){ sp = 520; game.dash -= dt; }
+  if (game.dashCd > 0) game.dashCd -= dt;
+  if (L > 0){ P.wx += mx/L*sp*dt; P.wy += my/L*sp*dt; }
+  if (P.z > 0 || P.vz !== 0){                        // salto
+    P.vz -= 900*dt; P.z += P.vz*dt;
+    if (P.z <= 0){ P.z = 0; P.vz = 0; }
+  }
+  if (Math.random() < dt*1.2) spawnEnemy();
+  for (let i = enemies.length - 1; i >= 0; i--){
+    const e = enemies[i];
+    const dx = P.wx - e.x, dy = P.wy - e.y, d = Math.hypot(dx, dy) || 1;
+    e.x += dx/d*e.v*dt; e.y += dy/d*e.v*dt;
+    if (d < 30 && P.z < 18){ enemies.splice(i, 1); game.kills++; burst(e.x, e.y); }
+    else if (d > 1400) enemies.splice(i, 1);
+  }
+  for (let i = particles.length - 1; i >= 0; i--){
+    const p = particles[i];
+    p.x += p.vx*dt; p.y += p.vy*dt; p.life -= dt;
+    if (p.life <= 0) particles.splice(i, 1);
+  }
+}
+
+function draw(now){
+  ctx.clearRect(0, 0, VW, VH);
+  // Suelo con viñeta
+  const g = ctx.createRadialGradient(VW/2, VH/2, 60, VW/2, VH/2, Math.max(VW, VH)*.75);
+  g.addColorStop(0, '#5f9e4a'); g.addColorStop(1, '#1d4628');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, VW, VH);
+  // Baldosas que se desplazan con el jugador
+  const step = 64;
+  const ox = ((VW/2 - P.wx) % step + step) % step, oy = ((VH/2 - P.wy) % step + step) % step;
+  ctx.strokeStyle = 'rgba(255,255,255,.07)'; ctx.beginPath();
+  for (let x = ox; x < VW; x += step){ ctx.moveTo(x, 0); ctx.lineTo(x, VH); }
+  for (let y = oy; y < VH; y += step){ ctx.moveTo(0, y); ctx.lineTo(VW, y); }
+  ctx.stroke();
+  // Árboles
+  for (const t of trees){
+    const [sx, sy] = toScreen(t.x, t.y);
+    if (sx < -60 || sx > VW+60 || sy < -60 || sy > VH+60) continue;
+    ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.beginPath(); ctx.ellipse(sx+4, sy+t.r*.6, t.r*.9, t.r*.45, 0, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#2e6b34'; ctx.beginPath(); ctx.arc(sx, sy, t.r, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#4c8f47'; ctx.beginPath(); ctx.arc(sx-t.r*.25, sy-t.r*.25, t.r*.55, 0, Math.PI*2); ctx.fill();
+  }
+  // Enemigos (blobs rojos con ojos)
+  for (const e of enemies){
+    const [sx, sy] = toScreen(e.x, e.y);
+    if (sx < -40 || sx > VW+40 || sy < -40 || sy > VH+40) continue;
+    const bob = Math.sin(now/160 + e.ph)*2;
+    ctx.fillStyle = 'rgba(0,0,0,.3)'; ctx.beginPath(); ctx.ellipse(sx, sy+14, 12, 5, 0, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#c62828'; ctx.beginPath(); ctx.arc(sx, sy+bob, 14, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.fillRect(sx-7, sy+bob-4, 5, 5); ctx.fillRect(sx+2, sy+bob-4, 5, 5);
+  }
+  // Partículas
+  for (const p of particles){
+    ctx.globalAlpha = Math.max(0, p.life/.5); ctx.fillStyle = p.c;
+    const [sx, sy] = toScreen(p.x, p.y); ctx.fillRect(sx-2, sy-2, 4, 4);
+  }
+  ctx.globalAlpha = 1;
+  // Jugador (centrado)
+  const px = VW/2, py = VH/2;
+  const sh = Math.max(.4, 1 - P.z/120);
+  ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(px, py+30, 26*sh, 9*sh, 0, 0, Math.PI*2); ctx.fill();
+  if (hero.complete && hero.naturalWidth) ctx.drawImage(hero, px-36, py-36-P.z, 72, 72);
+  else { ctx.fillStyle = '#90caf9'; ctx.beginPath(); ctx.arc(px, py-P.z, 22, 0, Math.PI*2); ctx.fill(); }
+}
+
+/* ---------- Estado del menú ---------- */
+let currentTab = 0, armed = false, armTimer = null, toastTimer = null;
+
+function fmt(s){ s = Math.floor(s); return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
+
+function renderSkills(){
+  $('#skillList').innerHTML = SKILLS.map(s => `
+    <div class="skill" style="--c:${s.c};--cd:${s.cd}s">
+      <div class="ico">${s.icon}</div>
+      <div>
+        <h4>${s.name} <span class="el">${s.el}</span></h4>
+        <div class="meta">${s.desc} · Recarga ${s.cd.toFixed(1)} s</div>
+        <div class="cd"><i></i></div>
+      </div>
+      <div class="dmg">Daño<b>${s.dmg}</b></div>
+    </div>`).join('');
+}
+
+function setBars(){
+  $('#barHp').style.width = (100*game.hp/game.maxHp).toFixed(1) + '%';
+  $('#barExp').style.width = (100*game.exp).toFixed(1) + '%';
+}
+function refreshPanel(){
+  const dps = SKILLS.reduce((a, s) => a + s.dmg/s.cd, 0) * game.dmgMult;
+  $('#pName').textContent = 'Gabumon';
+  $('#pQuote').textContent = QUOTE;
+  $('#pHpTxt').textContent = `${Math.ceil(game.hp)} / ${game.maxHp}`;
+  $('#pLvlA').textContent = game.level;
+  $('#pExpTxt').textContent = Math.round(game.exp*100) + '%';
+  $('#sTime').textContent = fmt(game.t);
+  $('#sKills').textContent = game.kills;
+  $('#sLevel').textContent = game.level;
+  $('#sMult').textContent = 'x' + game.dmgMult.toFixed(2);
+  $('#sDps').textContent = 'Daño/s ' + dps.toFixed(1);
+}
+function animateBars(){
+  $('#barHp').style.width = '0%'; $('#barExp').style.width = '0%';
+  requestAnimationFrame(() => requestAnimationFrame(setBars));   // reinicia la transición
+}
+
+function setTab(name){
+  currentTab = TABS.indexOf(name);
+  $$('.tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
+  $$('.panel').forEach(p => p.classList.toggle('active', p.dataset.panel === name));
+}
+function cycleTab(d){ setTab(TABS[(currentTab + d + TABS.length) % TABS.length]); }
+
+function openPause(){
+  if (game.paused) return;
+  game.paused = true;
+  for (const k in keys) keys[k] = false;
+  refreshPanel();
+  setTab('estado');
+  $('#pause').classList.add('open');
+  $('#pause').setAttribute('aria-hidden', 'false');
+  animateBars();
+}
+function closePause(){
+  game.paused = false;
+  $('#pause').classList.remove('open');
+  $('#pause').setAttribute('aria-hidden', 'true');
+  disarm();
+}
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function disarm(){
+  armed = false; clearTimeout(armTimer);
+  const b = $('#btnQuit');
+  b.textContent = 'Desconectar del Digital World'; b.classList.remove('armed');
+}
+function resetRun(){
+  game.t = 0; game.kills = 0; game.hp = game.maxHp; game.dash = 0; game.dashCd = 0;
+  enemies.length = 0; particles.length = 0; P.wx = 0; P.wy = 0; P.z = 0; P.vz = 0;
+}
+
+/* ---------- Eventos ---------- */
+addEventListener('keydown', e => {
+  const k = e.key.toLowerCase();
+  if (k === 'escape' || k === 'p'){ e.preventDefault(); game.paused ? closePause() : openPause(); return; }
+  if (game.paused){
+    if (k === 'arrowleft') cycleTab(-1);
+    if (k === 'arrowright') cycleTab(1);
+    return;
+  }
+  keys[k] = true;
+  if (k === ' ' && P.z === 0){ P.vz = 420; e.preventDefault(); }
+  if (k === 'shift' && game.dashCd <= 0){ game.dash = .18; game.dashCd = 1.2; }
+  if (k === 'e') toast('Nada con que interactuar cerca · el Pueblo Primario está tranquilo');
+});
+addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+
+$('#btnClose').onclick = closePause;
+$('#btnB').onclick = closePause;
+$('#btnResume').onclick = closePause;
+$('#btnA').onclick = () => cycleTab(-1);
+$('#btnC').onclick = () => cycleTab(1);
+$$('.tab').forEach(b => b.onclick = () => setTab(b.dataset.tab));
+
+$('#btnQuit').onclick = () => {
+  const b = $('#btnQuit');
+  if (!armed){                                     // primer clic: pedir confirmación
+    armed = true;
+    b.textContent = '¿Confirmar? Pulsa otra vez';
+    b.classList.add('armed');
+    armTimer = setTimeout(disarm, 2500);
+    return;
+  }
+  resetRun(); closePause();
+  toast('Desconectado del Digital World · partida descartada');
+};
+
+addEventListener('resize', resize);
+
+/* ---------- Bucle ---------- */
+let last = performance.now();
+function frame(now){
+  const dt = Math.min(.05, (now - last)/1000); last = now;
+  if (!game.paused) update(dt);
+  draw(now);
+  $('#hudKills').textContent = game.kills;
+  $('#hudTime').textContent = fmt(game.t);
+  requestAnimationFrame(frame);
+}
+
+resize(); seedTrees(); renderSkills(); setBars();
+toast('Pulsa Esc o P para abrir el Digivice');
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
