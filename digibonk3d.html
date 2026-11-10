@@ -186,7 +186,7 @@ canvas{display:block}
 /* Viñeta suave del entorno */
 #vignette{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at center,transparent 58%,rgba(10,20,40,.45) 100%)}
 /* Minimapa y mapa completo */
-#minimap{position:fixed;right:18px;bottom:18px;width:170px;height:170px;border-radius:50%;border:3px solid #4fc3f7;
+#minimap{position:fixed;left:16px;top:132px;width:170px;height:170px;border-radius:50%;border:3px solid #4fc3f7;
   box-shadow:0 0 14px rgba(79,195,247,.4);pointer-events:none;background:#16321f}
 #mapview{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;
   background:rgba(4,8,18,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:15;cursor:pointer}
@@ -258,7 +258,7 @@ canvas{display:block}
 <canvas id="minimap" width="170" height="170"></canvas>
 <div id="mapview">
   <canvas id="bigmap" width="600" height="600"></canvas>
-  <div class="mapleg">Tú (flecha) · ◆ cofres · puntos rojos: enemigos · morado: jefe · centro: Pueblo<br>M o Esc para cerrar</div>
+  <div class="mapleg">Tú (tu Digimon) · 🎁 cofres · enemigos con su sprite · jefe · centro: Pueblo<br>M o Esc para cerrar</div>
 </div>
 <div id="pause" class="hidden"></div>
 
@@ -1729,11 +1729,23 @@ addEventListener('pointerdown', audioInit);
 
 /* ---------- Mapa 2D: minimapa en la esquina y mapa completo (tecla M) ---------- */
 const VILLAGE_R = 14;   // radio aproximado del Pueblo Primario, en unidades del escenario
+// Iconos: sprites del juego cargados una vez y reutilizados en el mapa
+const iconCache = {};
+function iconImg(src){
+  if (!iconCache[src]){ const im = new Image(); im.src = src; iconCache[src] = im; }
+  return iconCache[src];
+}
+function drawIcon(c, src, cx, cy, size){
+  const im = iconImg(src);
+  if (im.complete && im.naturalWidth) c.drawImage(im, cx - size/2, cy - size/2, size, size);
+  else { c.fillStyle = '#ffffff'; c.beginPath(); c.arc(cx, cy, size/4, 0, Math.PI*2); c.fill(); }
+}
 function drawWorldMap(cv, size){
   if (!cv) return;
   const c = cv.getContext('2d');
   const R = size / 2, k = (R - 6) / ARENA_R;
   const X = x => R + x*k, Y = z => R + z*k;
+  const u = size / 170;   // escala de los iconos según el tamaño del mapa
   c.clearRect(0, 0, size, size);
   c.fillStyle = '#4b5d72'; c.beginPath(); c.arc(R, R, R - 1, 0, Math.PI*2); c.fill();      // montañas
   c.fillStyle = '#3f7d3f'; c.beginPath(); c.arc(R, R, ARENA_R*k, 0, Math.PI*2); c.fill();  // prado
@@ -1742,27 +1754,26 @@ function drawWorldMap(cv, size){
   c.fillStyle = '#fff3d6'; c.font = `${Math.max(9, size/28)}px system-ui`; c.textAlign = 'center';
   c.fillText('Pueblo', X(0), Y(0) + 3);
   if (!g) return;
-  c.fillStyle = '#ffd54f';
+  // Cofres sin abrir: icono de regalo
+  c.font = `${Math.max(12, 14*u)}px system-ui`; c.textAlign = 'center'; c.textBaseline = 'middle';
   for (const ch of g.chests){
     if (ch.open) continue;
-    const x = X(ch.x), y = Y(ch.z);
-    c.beginPath(); c.moveTo(x, y-4); c.lineTo(x+4, y); c.lineTo(x, y+4); c.lineTo(x-4, y); c.closePath(); c.fill();
+    c.fillText('🎁', X(ch.x), Y(ch.z));
   }
-  c.fillStyle = '#ef5350';
+  // Enemigos: su propio sprite, en miniatura
   for (const e of g.enemies){
     if (e.boss) continue;
-    c.fillRect(X(e.x) - 1.5, Y(e.z) - 1.5, 3, 3);
+    const d = ENEMY[e.kind];
+    drawIcon(c, d ? d.sprite : 'sprites/numemon.png', X(e.x), Y(e.z), (e.kind === 'tank' ? 16 : 12) * u);
   }
+  // Jefe: Devimon
   if (g.boss && g.enemies.includes(g.boss)){
-    c.fillStyle = '#ce93d8'; c.beginPath(); c.arc(X(g.boss.x), Y(g.boss.z), Math.max(4, size/30), 0, Math.PI*2); c.fill();
+    drawIcon(c, 'sprites/devimon.png', X(g.boss.x), Y(g.boss.z), 26 * u);
   }
-  // Jugador: flecha que apunta hacia donde mira
-  const a = Math.atan2(g.dir.z, g.dir.x);
-  c.save(); c.translate(X(g.p.x), Y(g.p.z)); c.rotate(a);
-  const s = Math.max(1, size/120);
-  c.fillStyle = '#fff'; c.strokeStyle = '#000'; c.lineWidth = 1.2;
-  c.beginPath(); c.moveTo(7*s, 0); c.lineTo(-5*s, 4.5*s); c.lineTo(-3*s, 0); c.lineTo(-5*s, -4.5*s); c.closePath(); c.fill(); c.stroke();
-  c.restore();
+  // Jugador: el Digimon que estás usando
+  const pc = X(g.p.x), py = Y(g.p.z);
+  c.fillStyle = 'rgba(255,255,255,.25)'; c.beginPath(); c.arc(pc, py, 12*u, 0, Math.PI*2); c.fill();
+  drawIcon(c, spriteOf(g.ch.id, g.ch.evolved), pc, py, 24 * u);
 }
 function openMap(){
   if (state !== 'play' || !g) return;
