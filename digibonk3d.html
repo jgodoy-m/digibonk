@@ -3582,7 +3582,7 @@ function showHelp(){
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
-  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-pity', 'digibonk3d-legnew'];
+  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew'];
 function makeSaveCode(){
   const data = {};
   for (const k of SAVE_KEYS){ const v = localStorage.getItem(k); if (v !== null) data[k] = v; }
@@ -5051,7 +5051,7 @@ function endGame(win){
   if (!daily.claimed && daily.runs >= DAILY.runsGoal){ daily.claimed = true; bonus = DAILY.reward; }
   saveDaily(daily);
   SAVE.bits = SAVE.bits + earned + bonus;
-  SAVE.tickets = SAVE.tickets + g.tix;
+  addTickets('std', g.tix);   // élites y jefe: monedero del permanente
   g.earned = earned + bonus;
   g.bonus = bonus;
   g.unlocked = recordRun(g.ch.id, g.kills, g.t);
@@ -5500,9 +5500,29 @@ const SKIN_FX = {
 const SAVE = {
   get bits(){ return +(localStorage.getItem('digibonk3d-bits') || 0); },
   set bits(v){ localStorage.setItem('digibonk3d-bits', String(Math.max(0, Math.floor(v)))); },
-  get tickets(){ return +(localStorage.getItem('digibonk3d-tickets') || 0); },
-  set tickets(v){ localStorage.setItem('digibonk3d-tickets', String(Math.max(0, Math.floor(v)))); }
+  // Total de tickets (suma de los monederos de cada banner). Para cambiar tickets usa addTickets / spendTickets
+  get tickets(){ return totalTickets(); }
 };
+// Monedero de tickets por banner: cada banner tiene los suyos y solo sirven para tirar en él
+const TIX_KEY = 'digibonk3d-tix';
+function tixWallet(){
+  let w = loadJSON(TIX_KEY, null);
+  if (!w){
+    // Migración: el número único antiguo pasa al permanente
+    w = {std: +(localStorage.getItem('digibonk3d-tickets') || 0), navidadP: 0, navidadR: 0};
+    localStorage.removeItem('digibonk3d-tickets');
+    localStorage.setItem(TIX_KEY, JSON.stringify(w));
+  }
+  return w;
+}
+function ticketsOf(bn){ return tixWallet()[bn] || 0; }
+function totalTickets(){ return Object.values(tixWallet()).reduce((a, b) => a + b, 0); }
+function addTickets(bn, n){
+  const w = tixWallet();
+  w[bn] = Math.max(0, (w[bn] || 0) + n);
+  localStorage.setItem(TIX_KEY, JSON.stringify(w));
+}
+function spendTickets(bn, n){ addTickets(bn, -n); }
 const PULL_COST = 300, DUP_REFUND = 25;
 // Evento temporal: mientras dura, el gacha tiene el banner de Navidad (cambia aquí las fechas)
 const EVENT = {name:'Navidad Digital', start: Date.parse('2026-11-01T00:00:00'), end: Date.parse('2026-12-31T23:59:59')};
@@ -5926,7 +5946,7 @@ function addWeekPulls(n){
   const st = weekState();
   st.pulls += n;
   let done = false;
-  if (!st.claimed && st.pulls >= WEEK_PULLS){ st.claimed = true; done = true; SAVE.tickets = SAVE.tickets + 1; }
+  if (!st.claimed && st.pulls >= WEEK_PULLS){ st.claimed = true; done = true; addTickets('std', 1); }
   localStorage.setItem('digibonk3d-weekly', JSON.stringify(st));
   return done;
 }
@@ -5966,8 +5986,8 @@ const CAT_WEIGHTS = [['frame', 32], ['title', 28], ['ticket', 10], ['bits', 30]]
 const BITS_BY_TIER = {c: 30, r: 80, e: 160};
 // Tickets por banner: peso del drop (en el reparto no legendario) y cantidad por drop.
 // El permanente da poco; los promocionales dan más para tirar en su evento.
-const TICKET_RULES = {std: {w: 10, amt: 1}, navidadP: {w: 22, amt: 2}, navidadR: {w: 22, amt: 3}};
-function ticketRule(){ return TICKET_RULES[gxBanner] || TICKET_RULES.std; }
+const TICKET_DROP = {w: 10, amt: 1};   // todos los banners: mismo peso y cantidad de ticket por drop
+function ticketRule(){ return TICKET_DROP; }
 function rollTier(){
   let x = Math.random()*100;
   for (const t of ['c', 'r', 'e', 'l']){ if ((x -= TIER_ODDS[t]) < 0) return t; }
@@ -6050,14 +6070,14 @@ function grantReward(r){
     inv.titles.push(r.t.id); saveInv(); return {...r, dup:false};
   }
   if (r.type === 'bits'){ SAVE.bits = SAVE.bits + r.amount; return {...r, dup:false}; }
-  if (r.type === 'ticket'){ SAVE.tickets = SAVE.tickets + r.amount; return {...r, dup:false}; }
+  if (r.type === 'ticket'){ addTickets(gxBanner, r.amount); return {...r, dup:false}; }   // el ticket es del banner en el que tiraste
   return {...r, dup:false};
 }
 // Tirada: 1 o 10. Con 10 se garantiza al menos una recompensa rara o épica
 function doPulls(n, withTickets = false){
   if (withTickets){
-    if (SAVE.tickets < n){ announce('Tickets insuficientes', `Necesitas ${n} · los sueltan élites y jefe`, '#ef5350'); return; }
-    SAVE.tickets = SAVE.tickets - n;
+    if (ticketsOf(gxBanner) < n){ announce('Tickets insuficientes', `Te faltan tickets de este banner`, '#ef5350'); return; }
+    spendTickets(gxBanner, n);
   } else {
     const cost = n === 10 ? PULL_COST_10 : PULL_COST;
     if (SAVE.bits < cost){
@@ -6076,7 +6096,7 @@ function doPulls(n, withTickets = false){
     if (tiers[i] === 'l') pity = 0;
   }
   localStorage.setItem('digibonk3d-pity', String(pity));
-  if (gxBanner === 'std' && n === 10){ SAVE.tickets = SAVE.tickets + 1; announce('+1 ticket', '10 tiradas en el banner permanente', '#3de0ff'); }
+  if (gxBanner === 'std' && n === 10){ addTickets('std', 1); announce('+1 ticket', '10 tiradas en el banner permanente', '#3de0ff'); }
   if (addWeekPulls(n)) announce('Misión semanal completada', '+1 ticket por 5 tiradas esta semana', '#ffd54f');
   const results = [];
   for (const t of tiers){
@@ -6242,8 +6262,8 @@ function showGacha(){
           <div class="gx2-portal"><div class="gx2-ring r1"></div><div class="gx2-ring r2"></div><div class="gx2-pad"></div>${featHtml}</div>
           <div class="gx2-pulls">
             <button class="gx2-btn" id="gPull1"><b>1 TIRADA</b><small>Ⓑ ${PULL_COST} Bits</small></button>
-            <button class="gx2-btn big${SAVE.tickets >= 10 ? ' tix10' : ''}" id="gPull10"><b>10 TIRADAS</b><small>${SAVE.tickets >= 10 ? `🎟 10 tickets · tienes ${SAVE.tickets}` : `Ⓑ ${PULL_COST_10} Bits`}</small></button>
-            <button class="gx2-btn tix" id="gTix1"><b>USAR TICKET</b><small>× 1 Ticket · tienes ${SAVE.tickets}</small></button>
+            <button class="gx2-btn big${ticketsOf(gxBanner) >= 10 ? ' tix10' : ''}" id="gPull10"><b>10 TIRADAS</b><small>${ticketsOf(gxBanner) >= 10 ? `🎟 10 tickets · tienes ${ticketsOf(gxBanner)}` : `Ⓑ ${PULL_COST_10} Bits`}</small></button>
+            <button class="gx2-btn tix" id="gTix1"><b>USAR TICKET</b><small>× 1 Ticket · tienes ${ticketsOf(gxBanner)}</small></button>
           </div>
         </section>
         <aside class="gx2-right">
@@ -6263,7 +6283,7 @@ function showGacha(){
   overlay.querySelectorAll('img.gx2-ico').forEach(im => spriteIcon(im.dataset.src, d => { im.src = d; }));
   document.getElementById('gBack').onclick = () => showSelect();
   document.getElementById('gPull1').onclick = () => doPulls(1);
-  document.getElementById('gPull10').onclick = () => doPulls(10, SAVE.tickets >= 10);
+  document.getElementById('gPull10').onclick = () => doPulls(10, ticketsOf(gxBanner) >= 10);
   document.getElementById('gTix1').onclick = () => doPulls(1, true);
   const moveBanner = d => { gxBanner = keys[(keys.indexOf(gxBanner) + d + keys.length) % keys.length]; showGacha(); };
   document.getElementById('gxPrevB').onclick = () => moveBanner(-1);
