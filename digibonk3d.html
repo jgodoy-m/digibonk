@@ -1594,6 +1594,35 @@ body:has(.realhub) #hudTop{display:none!important}
 .pl4 .pl3-avs{display:grid!important;grid-template-columns:repeat(8,minmax(0,1fr))!important;gap:10px!important}
 .pl4 .tc-avb{width:100%!important;height:auto!important;aspect-ratio:1/1!important;padding:0!important;border-radius:50%!important;overflow:hidden!important;display:block!important}
 .pl4 .tc-avb img{width:100%!important;height:100%!important;object-fit:cover!important;image-rendering:auto!important;border-radius:0!important;display:block}
+.cz-back{position:fixed;inset:0;z-index:300;background:#050d22c0;display:flex;align-items:center;justify-content:center;padding:16px}
+.cz-box{width:min(640px,100%);max-height:min(92vh,720px);display:flex;flex-direction:column;background:#1b1f2e;border-radius:16px;border:2px solid #2a3350;box-shadow:0 12px 40px #000a;overflow:hidden;font-family:system-ui,sans-serif;color:#fff}
+.cz-head{display:flex;gap:18px;padding:18px 20px;align-items:center;background:linear-gradient(180deg,#232a40,#1b1f2e)}
+.cz-prev{flex:0 0 150px;text-align:center}
+.cz-prev .hud-portrait{width:130px;height:130px;margin:0 auto;border-radius:50%}
+.cz-prev .hud-portrait img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.cz-ttl{display:inline-block;margin-top:6px;font-size:12px;font-weight:800;color:#ffd55e}
+.cz-copy small{font-size:11px;letter-spacing:.12em;color:#9fb0d0;text-transform:uppercase}
+.cz-copy h2{margin:4px 0 6px;font-size:24px;font-weight:900}
+.cz-copy p{margin:0;font-size:12px;color:#aab6d0;line-height:1.4}
+.cz-tabs{display:flex;gap:6px;justify-content:center;margin:12px 0;flex-wrap:wrap}
+.cz-tab{appearance:none;border:0;border-radius:999px;padding:7px 16px;background:#2a3350;color:#cfd8ee;font:800 13px system-ui;cursor:pointer}
+.cz-tab.on{background:#3d5a8c;color:#fff;box-shadow:inset 0 0 0 2px #7fb0ff}
+.cz-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding:0 18px;overflow:auto;min-height:0}
+.cz-tile{position:relative;appearance:none;border:2px solid #2d3754;border-radius:12px;background:#222a42;color:#fff;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;font:inherit;min-height:110px}
+.cz-tile:hover:not(.locked){border-color:#7fb0ff}
+.cz-tile.sel{border-color:#ffd55e;box-shadow:0 0 12px #ffd55e66}
+.cz-tile.locked{opacity:.45;cursor:default}
+.cz-tile b{font-size:12px;text-align:center;line-height:1.2}
+.cz-tile small{font-size:10px;color:#9fb0d0;text-align:center}
+.cz-av{width:64px;height:64px;border-radius:50%;overflow:hidden;display:block}
+.cz-av img{width:100%;height:100%;object-fit:cover;display:block}
+.cz-fr{width:64px;height:64px;display:grid;place-items:center}
+.cz-fr .rw-frame{width:52px;height:52px}
+.cz-lock{position:absolute;top:6px;right:8px;font-style:normal;font-size:12px}
+.cz-foot{display:flex;gap:12px;justify-content:center;padding:16px;border-top:1px solid #2a3350;margin-top:12px}
+.cz-btn{appearance:none;border:0;border-radius:999px;padding:10px 26px;font:900 14px system-ui;color:#fff;background:#3a4560;cursor:pointer;box-shadow:0 3px 0 #111}
+.cz-btn.ok{background:linear-gradient(#5be07d,#2fa75a);box-shadow:0 3px 0 #145c2c}
+@media (max-width:640px){.cz-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.cz-head{flex-direction:column;text-align:center}}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -4981,18 +5010,6 @@ function showPlayer(){
   const pct = day.claimed ? 100 : Math.min(100, Math.round(day.runs / DAILY.runsGoal * 100));
   const prog = {novato: [Math.min(ach.runs, 1), 1], cazador: [Math.min(kills, 300), 300], explorador: [ach.zone2 ? 1 : 0, 1], maestro: [ach.boss ? 1 : 0, 1]};
   const idNum = String([...(trainerName || 'x')].reduce((a, c) => (a*31 + c.charCodeAt(0)) % 99999, 7)).padStart(5, '0');
-  const frames = [{id: '', name: 'Sin marco'}, ...FRAMES].map(f => {
-    const has = !f.id || inv.frames.includes(f.id), eq = (extra.frame || '') === f.id;
-    return `<button class="tc-opt${has ? '' : ' locked'}${eq ? ' eq' : ''}" data-kind="frame" data-id="${f.id}" ${has ? '' : 'disabled'}>
-      <div class="rw-frame${f.id ? ' fr-' + f.id : ''}"></div><small>${has ? f.name : 'Gacha'}</small></button>`;
-  }).join('');
-  const titles = [{id: '', name: 'Sin título', how: ''}, ...TITLES].map(t => {
-    const has = !t.id || inv.titles.includes(t.id), eq = (extra.title || '') === t.id, pg = prog[t.id];
-    return `<button class="tc-row${has ? '' : ' locked'}${eq ? ' eq' : ''}" data-kind="title" data-id="${t.id}" data-name="${t.name}" ${has ? '' : 'disabled'}>
-      <b>${has ? t.name : '???'}</b><small>${has ? (t.id ? 'Desbloqueado' : '') : t.how}</small>
-      ${!has && pg ? `<i class="sv-bar"><u style="width:${Math.round(pg[0]/pg[1]*100)}%"></u></i><em>${pg[0]}/${pg[1]}</em>` : ''}</button>`;
-  }).join('');
-  const avs = PLAYER_ICONS.map(ic => `<button class="tc-avb${(localStorage.getItem('digibonk3d-avatar') || '') === ic.id ? ' on' : ''}" data-av="${ic.id}" title="${ic.name}"><img src="${ic.src}" alt=""></button>`).join('');
   const tt = extra.title ? TITLES.find(t => t.id === extra.title) : null;
   const recs = getRecords();
   const bestT = recs.reduce((a, r) => Math.max(a, r.t), 0), bestL = recs.reduce((a, r) => Math.max(a, r.lvl || 0), 0);
@@ -5032,18 +5049,13 @@ function showPlayer(){
         <section class="pl4-panel"><h3>Récords</h3>${recRows}</section>
         <section class="pl4-panel"><h3>Logros</h3>${achRows}</section>
         <section class="pl4-panel pl4-wide"><h3>Especialidad por Digimon</h3><div class="pl4-specs">${specRows}</div></section>
-        <section class="pl4-panel pl4-wide"><h3>Personalizar</h3>
-          <h4>Avatar</h4><div class="pl3-avs">${avs}</div>
-          <h4>Marco del icono</h4><div class="pl3-frames">${frames}</div>
-          <h4>Título</h4><div class="pl3-titles">${titles}</div>
-          <p class="g-note">Pasa el ratón por un marco o título para verlo en la tarjeta. Haz clic para equiparlo. El nombre se edita en la propia tarjeta.</p>
-        </section>
+
       </div>
     </div>`);
 
   document.getElementById('plBack').onclick = () => showSelect();
-  document.getElementById('plChange').onclick = () => document.querySelector('.pl4 .pl3-avs')?.scrollIntoView({block:'center',behavior:'smooth'});
-  const tc = document.getElementById('tc'), av = document.getElementById('tcAv'), ttEl = document.getElementById('tcTitle');
+  document.getElementById('plChange').onclick = openCustomizer;
+  const tc = document.getElementById('tc');
   // La tarjeta se inclina siguiendo al ratón
   tc.onmousemove = e => {
     const r = tc.getBoundingClientRect(), x = (e.clientX - r.left)/r.width - .5, y = (e.clientY - r.top)/r.height - .5;
@@ -5062,30 +5074,63 @@ function showPlayer(){
   const saveName = () => { const v = nameIn.value.trim(); if (v && v !== trainerName){ setTrainerName(v); announce('Nombre guardado', v, '#3de0ff'); } else if (!v) nameIn.value = trainerName || ''; };
   nameIn.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') nameIn.blur(); });
   nameIn.onblur = saveName;
-  // Vista previa al pasar el ratón y equipar con clic, sin recargar la pantalla
-  const paint = (frame, title) => {
-    av.className = 'hud-portrait pf-av' + (frame ? ' fr-' + frame : '');
-    const t = title ? TITLES.find(x => x.id === title) : null;
-    ttEl.textContent = t ? t.name : 'Sin título';
+}
+
+// Diálogo "Avatar, marco y título" (botón Cambiar de la ficha). Solo guarda al pulsar Guardar.
+function openCustomizer(){
+  const host = document.getElementById('overlay');
+  if (!host || document.getElementById('czBack')) return;
+  let pAv = localStorage.getItem('digibonk3d-avatar') || '';
+  let pFrame = extra.frame || '', pTitle = extra.title || '';
+  let tab = 'av';
+  const ownsFrame = id => !id || inv.frames.includes(id);
+  const ownsTitle = id => !id || inv.titles.includes(id);
+  const prog = (() => { const a = loadAch(), k = loadJSON('digibonk3d-stats', {}); const kills = Object.values(k).reduce((s, x) => s + (x.kills || 0), 0); return {novato: [Math.min(a.runs, 1), 1], cazador: [Math.min(kills, 300), 300], explorador: [a.zone2 ? 1 : 0, 1], maestro: [a.boss ? 1 : 0, 1]}; })();
+  const back = document.createElement('div');
+  back.id = 'czBack'; back.className = 'cz-back';
+  back.innerHTML = '<div class="cz-box" role="dialog" aria-label="Avatar, marco y título"></div>';
+  host.appendChild(back);
+  const box = back.firstElementChild;
+  const tile = (sel, cls, img, name, sub, locked, extraCls) => `<button type="button" class="cz-tile${sel ? ' sel' : ''}${locked ? ' locked' : ''}${extraCls || ''}" ${locked ? 'disabled' : ''} data-v="${cls}">${img}<b>${name}</b>${sub ? `<small>${sub}</small>` : ''}${locked ? '<i class="cz-lock">🔒</i>' : ''}</button>`;
+  const grid = () => {
+    if (tab === 'av') return PLAYER_ICONS.map(ic => tile(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av"><img src="${ic.src}" alt=""></span>`, ic.name, '', false)).join('');
+    if (tab === 'frame') return [{id: '', name: 'Sin marco'}, ...FRAMES].map(f => { const ok = ownsFrame(f.id); return tile(pFrame === f.id, 'fr:' + f.id, `<span class="cz-fr"><span class="rw-frame${f.id ? ' fr-' + f.id : ''}"></span></span>`, ok ? f.name : '???', ok ? '' : 'Gacha', !ok); }).join('');
+    return [{id: '', name: 'Sin título', how: ''}, ...TITLES].map(t => { const ok = ownsTitle(t.id), pg = prog[t.id]; return tile(pTitle === t.id, 'ti:' + t.id, '', ok ? t.name : '???', ok ? '' : (t.how + (pg ? ` · ${pg[0]}/${pg[1]}` : '')), !ok); }).join('');
   };
-  overlay.querySelectorAll('.tc-opt:not(.locked), .tc-row:not(.locked)').forEach(b => {
-    const kind = b.dataset.kind, id = b.dataset.id;
-    b.onmouseenter = () => paint(kind === 'frame' ? id : extra.frame, kind === 'title' ? id : extra.title);
-    b.onmouseleave = () => paint(extra.frame, extra.title);
-    b.onclick = () => {
-      if (id) equipExtra(kind, id); else unequipExtra(kind);
-      overlay.querySelectorAll(`[data-kind="${kind}"]`).forEach(o => o.classList.toggle('eq', o === b));
-      paint(extra.frame, extra.title);
-      sfx('ready');
-      tc.animate([{filter: 'brightness(1.7)'}, {filter: 'brightness(1)'}], {duration: 350});
-    };
-  });
-  overlay.querySelectorAll('.tc-avb').forEach(b => b.onclick = () => {
-    localStorage.setItem('digibonk3d-avatar', b.dataset.av);
-    overlay.querySelectorAll('.tc-avb').forEach(o => o.classList.toggle('on', o === b));
-    document.getElementById('tcImg').src = avatarSrc();
-    sfx('ready');
-  });
+  const preview = () => {
+    const ic = PLAYER_ICONS.find(x => x.id === pAv);
+    const img = ic ? ic.src : headUrl(spriteOf(avatarKey(), false));
+    const t = pTitle ? TITLES.find(x => x.id === pTitle) : null;
+    return `<div class="cz-prev"><div class="hud-portrait pf-av${pFrame ? ' fr-' + pFrame : ''}"><img src="${img}" alt=""></div><span class="cz-ttl">${t ? t.name : 'Sin título'}</span></div>`;
+  };
+  const render = () => {
+    box.innerHTML = `
+      <div class="cz-head">${preview()}
+        <div class="cz-copy"><small>Tu imagen en la clasificación y en tu ficha</small><h2>Avatar, marco y título</h2>
+          <p>Los marcos y títulos se ganan con el gacha y con los logros. Los iconos de entrenador están disponibles desde el principio.</p></div></div>
+      <div class="cz-tabs">${[['av', 'Entrenadores'], ['frame', 'Marcos'], ['title', 'Títulos']].map(([k, l]) => `<button type="button" class="cz-tab${tab === k ? ' on' : ''}" data-tab="${k}">${l}</button>`).join('')}</div>
+      <div class="cz-grid">${grid()}</div>
+      <div class="cz-foot"><button type="button" class="cz-btn" id="czCancel">Cancelar</button><button type="button" class="cz-btn ok" id="czSave">Guardar</button></div>`;
+    box.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { tab = b.dataset.tab; render(); });
+    box.querySelectorAll('.cz-tile:not(.locked)').forEach(b => b.onclick = () => {
+      const [k, v] = b.dataset.v.split(':');
+      if (k === 'av') pAv = v; else if (k === 'fr') pFrame = v; else pTitle = v;
+      render(); sfx('ready');
+    });
+    box.querySelector('#czCancel').onclick = close;
+    box.querySelector('#czSave').onclick = save;
+  };
+  const close = () => { back.remove(); document.removeEventListener('keydown', onKey, true); };
+  const save = () => {
+    if (pAv) localStorage.setItem('digibonk3d-avatar', pAv);
+    if (pFrame) equipExtra('frame', pFrame); else unequipExtra('frame');
+    if (pTitle) equipExtra('title', pTitle); else unequipExtra('title');
+    close(); sfx('ready'); showPlayer();
+  };
+  const onKey = e => { if (e.key === 'Escape'){ e.stopPropagation(); close(); } };
+  document.addEventListener('keydown', onKey, true);
+  back.addEventListener('mousedown', e => { if (e.target === back) close(); });
+  render();
 }
 
 /* ---------- Gacha: skins, marcos, títulos y objetos ---------- */
