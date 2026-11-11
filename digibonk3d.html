@@ -3018,7 +3018,7 @@ function showSelect(){
   fitHub(); if (!window.__hmFitBound){ window.__hmFitBound = true; addEventListener('resize', () => { if (document.querySelector('#overlay.menu-mode .realhub:not(.pl4)')) fitHub(); }); }
   // Always start with a valid still portrait: no animation strip flashes in the Digivice.
   const playPortrait = document.getElementById('rhPlayPortrait');
-  if (playPortrait) playPortrait.src = 'ui/menu_portraits/' + (CHARS[selectedKey] ? selectedKey : 'agumon') + '.png';
+  if (playPortrait) { const pk = CHARS[selectedKey] ? selectedKey : 'agumon'; const pic = PLAYER_ICONS.find(x => x.id === pk); if (pic) playPortrait.src = pic.src; else menuPlayPortrait(spriteOf(pk, false), d => { playPortrait.src = d; }); }
   // The equipped skin may have a unique appearance; if so, use that sprite's first frame.
   if (typeof skinEquipped !== 'undefined' && skinEquipped[selectedKey] && skinEquipped[selectedKey] !== 'classic') {
     menuPlayPortrait(spriteOf(selectedKey,false), data => {
@@ -5933,7 +5933,7 @@ function showGacha(){
   const prevKey = trPrevIdx >= 0 ? chars[trPrevIdx] : fk;
   const skinId = prevKey === fk ? feat.id : 'clasico';
   const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const portrait = k => `ui/menu_portraits/${k}.png`;
+  const portrait = k => { const ic = PLAYER_ICONS.find(x => x.id === k); return ic ? ic.src : ''; };
   const partner = {agumon:'tai', gabumon:'matt', biyomon:'sora', tentomon:'izzy', palmon:'mimi', gomamon:'joe', patamon:'tk', gatomon:'kari'}[prevKey] || '';
   const wallet = ticketsOf(gxBanner);
   const frameOpts = FRAMES.filter(f => !f.weekly && !f.seasonal);
@@ -5950,8 +5950,8 @@ function showGacha(){
   ];
   const tile = r => `<button type="button" class="treasure-card tier-${r.tier}" data-info="${esc(r.name)}" data-tier="${r.tier}"><span class="tc-shine"></span><span class="tc-art">${r.icon}</span><strong>${esc(r.name)}</strong><small>${esc(TIER_NAME[r.tier])}</small></button>`;
   const featName = prevKey === fk ? `${CHARS[fk].name} ${FEATURED_NAME[feat.id]}` : `${CHARS[prevKey].name} · Vista previa`;
-  const grand = `<div class="tr11-grand"><div class="tr11-grand-inner"><div class="tr11-rays"></div><div class="tr11-digital-orbit"></div><div class="tr12-grand-portrait" aria-hidden="true"><img src="${portrait(prevKey)}" alt=""></div><div class="tr11-feature-art">${sprEl(spriteWith(prevKey, false, skinId), 164, 'tr11-hero-spr')}</div>${partner ? `<div class="tr12-partner" aria-hidden="true"><img src="ui/gacha_portraits/${partner}.png" alt=""></div>` : ''}<div class="tr11-grand-sub"><span>✦ PREMIO DESTACADO ✦</span><b>${esc(featName)}</b><small>La selección de personaje es solo una vista previa</small></div></div></div>`;
-  const fighters = chars.map((k, i) => `<button type="button" class="tr11-fighter${i === trPrevIdx ? ' active' : ''}" data-index="${i}" aria-pressed="${i === trPrevIdx}"><span class="tr12-portrait"><img class="tr12-portrait-img" src="${portrait(k)}" alt="" loading="lazy"></span><span class="tr12-fighter-text"><b>${esc(CHARS[k].name)}</b><small>Vista previa</small></span></button>`).join('');
+  const grand = `<div class="tr11-grand"><div class="tr11-grand-inner"><div class="tr11-rays"></div><div class="tr11-digital-orbit"></div><div class="tr12-grand-portrait" aria-hidden="true">${portrait(prevKey) ? `<img src="${portrait(prevKey)}" alt="">` : ''}</div><div class="tr11-feature-art">${sprEl(spriteWith(prevKey, false, skinId), 164, 'tr11-hero-spr')}</div>${partner ? `<div class="tr12-partner" aria-hidden="true"><img src="ui/jugador/${partner}.png" alt=""></div>` : ''}<div class="tr11-grand-sub"><span>✦ PREMIO DESTACADO ✦</span><b>${esc(featName)}</b><small>La selección de personaje es solo una vista previa</small></div></div></div>`;
+  const fighters = chars.map((k, i) => `<button type="button" class="tr11-fighter${i === trPrevIdx ? ' active' : ''}" data-index="${i}" aria-pressed="${i === trPrevIdx}"><span class="tr12-portrait">${portrait(k) ? `<img class="tr12-portrait-img" src="${portrait(k)}" alt="" loading="lazy">` : sprEl(spriteWith(k, false, 'clasico'), 48)}</span><span class="tr12-fighter-text"><b>${esc(CHARS[k].name)}</b><small>Vista previa</small></span></button>`).join('');
   const oddsRows = [['l', 5], ['e', 4], ['r', 3], ['c', 2]].map(([t, n]) => `<div class="gx2-odd"><i style="color:${GX_TIER_COL[t]}">${'★'.repeat(n)}</i><span>${esc(TIER_NAME[t])}</span><b>${TIER_ODDS[t].toFixed(2)}%</b></div>`).join('');
   const pity = pityCount(gxBanner), pityMax = pityAt(gxBanner);
   showOverlay(`<main class="tr11" id="trRoot">
