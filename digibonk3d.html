@@ -4040,7 +4040,7 @@ function spawnSpecial(){
   const sp = clampArena(g.p.x + Math.cos(a)*24, g.p.z + Math.sin(a)*24, ARENA_R - 0.5);
   const hp = 900*(1 + (t - BOSS_AT)/120)*evoHp();
   const name = CHARS[pick.key].name;
-  g.enemies.push({kind: 'mini', special: true, name, sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 3.0, r: 1.9, xp: 120, dmg: 18*(1 + diffT(t)/300), cd: 0});
+  g.enemies.push({kind: 'mini', special: true, name, sprite, mesh, shadow, x: sp[0], z: sp[1], hp: hp*DIFF.hp, max: hp*DIFF.hp, spd: 3.0, r: 1.9, xp: 120, dmg: 18*(1 + diffT(t)/300)*DIFF.dmg, cd: 0});
   sfx('boss');
   announce('¡' + name.toUpperCase() + '!', 'Jefe especial', '#ffd54f');
 }
@@ -4051,8 +4051,8 @@ function spawnMini(m){
   const shadow = makeShadow(4.4);
   world.add(shadow);
   const sp = clampArena(g.p.x + Math.cos(a)*24, g.p.z + Math.sin(a)*24, ARENA_R - 0.5);
-  const hp = m.hp*(1 + diffT(t)/90)*evoHp();
-  g.enemies.push({kind: 'mini', name: m.name, sprite: m.sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 2.5, r: 1.9, xp: 60, dmg: 16*(1 + diffT(t)/300), cd: 0});
+  const hp = m.hp*(1 + diffT(t)/90)*evoHp()*DIFF.hp;
+  g.enemies.push({kind: 'mini', name: m.name, sprite: m.sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 2.5, r: 1.9, xp: 60, dmg: 16*(1 + diffT(t)/300)*DIFF.dmg, cd: 0});
   sfx('boss');
   announce('¡' + m.name.toUpperCase() + '!', 'Un jefe menor entra en combate', '#ce93d8');
 }
@@ -4302,6 +4302,9 @@ function dist2(ax, az, bx, bz){ return Math.hypot(ax-bx, az-bz); }
 // Los enemigos siguen el poder del jugador: cada digievolución les da más vida y daño
 function evoHp(){ return Math.pow(1.25, g.ch.evolved | 0); }
 function evoDmg(){ return Math.pow(1.1, g.ch.evolved | 0); }
+// Dificultad de la partida (modo difícil, para jugadores experimentados). Multiplicadores sobre la base:
+// vida y daño de enemigos y minijefes, ritmo de aparición (menor = más enemigos) y tiempo entre élites
+const DIFF = {hp: 1.35, dmg: 1.35, spawn: 0.75, eliteT: 35, spawnMin: 0.22};
 // Tiempo que cuenta para la dificultad: igual que el tiempo real hasta el minuto 10 (la dificultad de siempre)
 // y después avanza a 0,3 para que el minuto 20 no sea imposible
 const diffT = t => t <= 600 ? t : 600 + (t - 600) * 0.3;
@@ -4323,7 +4326,7 @@ function spawnEnemy(forced){
   world.add(shadow);
   g.enemies.push({
     kind, sprite, mesh, shadow, x: sp[0], z: sp[1],
-    hp: d.hp*k*evoHp(), max: d.hp*k*evoHp(), spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300)*evoDmg(), cd: 0
+    hp: d.hp*k*evoHp()*DIFF.hp, max: d.hp*k*evoHp()*DIFF.hp, spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300)*evoDmg()*DIFF.dmg, cd: 0
   });
 }
 
@@ -4441,7 +4444,7 @@ function update(dt){
     // Presión creciente: tras 45 s salen más enemigos por tanda (1 extra, +1 cada 90 s, máximo 3)
     const extra = g.t > 45 ? Math.min(3, 1 + Math.floor(diffT(g.t)/90)) : 0;
     for (let i = 0; i < extra && g.enemies.length < Q.maxEnemies; i++) spawnEnemy();
-    g.spawnT = Math.max(0.3, 0.9 - diffT(g.t)/180);
+    g.spawnT = Math.max(DIFF.spawnMin, (0.9 - diffT(g.t)/180) * DIFF.spawn);
   }
 
   // Minijefes en sus minutos
@@ -4452,7 +4455,7 @@ function update(dt){
   // Élites: cada 45 s desde el minuto 1; a partir del minuto 5 salen de dos en dos
   g.eliteT -= dt;
   if (g.eliteT <= 0){
-    g.eliteT = 45;
+    g.eliteT = DIFF.eliteT;
     const n = g.t >= 300 ? 2 : 1;
     for (let i = 0; i < n; i++) spawnEnemy('elite');
     announce('¡Élite!', n > 1 ? 'Dos Digimon élite se acercan' : 'Un Digimon élite se acerca', '#ff7043');
