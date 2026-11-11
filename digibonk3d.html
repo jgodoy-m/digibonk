@@ -3087,12 +3087,7 @@ function showSelect(){
   const playPortrait = document.getElementById('rhPlayPortrait');
   if (playPortrait) { const pk = CHARS[selectedKey] ? selectedKey : 'agumon'; const pic = PLAYER_ICONS.find(x => x.id === pk); if (pic && pic.src) playPortrait.src = pic.src; else menuPlayPortrait(spriteOf(pk, false), d => { playPortrait.src = d; }); }
   // The equipped skin may have a unique appearance; if so, use that sprite's first frame.
-  if (typeof skinEquipped !== 'undefined' && skinEquipped[selectedKey] && skinEquipped[selectedKey] !== 'classic') {
-    menuPlayPortrait(spriteOf(selectedKey,false), data => {
-      const im=document.getElementById('rhPlayPortrait');
-      if(im && im.isConnected) im.src=data;
-    });
-  }
+  // El botón Jugar siempre muestra el icono del compañero (no la skin equipada)
   if(!avatarIcon()) headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
   document.getElementById('playBtn').onclick=()=>showPicker('personaje');
   const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { gxBanner = 'navidadP'; showGacha(); };
