@@ -2568,14 +2568,27 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .gx2-strip{flex-wrap:nowrap}
 }
 /* Cuadrícula de modos del menú principal */
-.realhub .hm-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:2px}
+.realhub .hm-row1,.realhub .hm-row2{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(0,1fr);gap:10px;margin-top:10px;align-items:stretch}
+.realhub .hm-row1 .real-play{margin:0!important;max-width:none!important;width:100%!important;height:100%!important;min-height:118px!important;padding:8px 12px!important}
+.realhub .hm-row1 .real-device{position:relative!important;left:auto!important;top:auto!important;flex:0 0 96px!important;width:96px!important;height:96px!important}
+.realhub .hm-row1 .real-play-txt{margin-left:0!important}
+.realhub .hm-row1 .real-play-txt b{font-size:clamp(30px,3.1vw,44px)!important}
+.realhub .hm-row1 .real-play-txt small{font-size:11px!important}
+.realhub .hm-row1 .real-arrow{font-size:30px!important}
+.realhub .hm-tile em{font-size:10px!important}
+.realhub .hm-tile .hm-txt b{font-size:11px!important;max-width:100%}
+.realhub .hm-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:10px}
 .realhub .hm-card,.realhub .hm-tile{appearance:none;position:relative;cursor:pointer;color:#fff;border:2px solid #8eeeff88;border-radius:12px;background:linear-gradient(150deg,#14489a,#0b2262 70%,#2a1d63);box-shadow:0 4px 0 #04103a;font:inherit;text-align:left;padding:10px 12px;display:flex;align-items:center;gap:10px;min-height:66px;transition:transform .15s ease,filter .15s ease}
-.realhub .hm-surv{grid-column:span 2;background:linear-gradient(150deg,#6a3fd0,#2e1f78);min-height:78px}
+.realhub .hm-surv{background:linear-gradient(150deg,#6a3fd0,#2e1f78)}
 .realhub .hm-enc{background:linear-gradient(150deg,#8a5a12,#3d2508)}
+.realhub .hm-event{background:linear-gradient(150deg,#7a1d2a,#3f0d18)}
 .realhub .hm-ico{width:40px;height:40px;flex:none;display:grid;place-items:center;font-size:22px}
 .realhub .hm-ico img{width:100%;height:100%;object-fit:contain;image-rendering:auto}
 .realhub .hm-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
 .realhub .hm-txt b{font-size:clamp(14px,1.25vw,19px);font-weight:900;font-style:italic;text-shadow:1px 2px #020f30;line-height:1.05}
+.realhub .hm-tile{flex-direction:column;justify-content:center;text-align:center;padding:8px 4px;gap:4px;min-height:86px}
+.realhub .hm-tile .hm-ico{width:34px;height:34px;font-size:20px}
+.realhub .hm-tile .hm-txt{align-items:center}
 .realhub .hm-tile .hm-txt b{font-size:clamp(12px,.92vw,16px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .realhub .hm-tile{gap:8px;padding:10px 10px}
 .realhub .hm-txt small,.realhub .hm-txt em{font-size:11px;font-style:normal;opacity:.9;line-height:1.2}
@@ -3533,16 +3546,20 @@ function showSelect(){
       <section class="real-main">
         <div class="real-left">
           <h1 class="real-brand"><strong><em>DIGI</em><span>BONK</span></strong><small>FAN GAME · DIGITAL WORLD</small></h1>
-          ${eventActive() ? `<button type="button" class="real-event" id="rhEvent"><b>🎄 Navidad Digital</b><small>Papá Noel y Reno · quedan ${Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000))} días</small></button>` : ''}
+          <div class="hm-row1">
           <button type="button" id="playBtn" class="real-play" aria-label="Jugar con ${safeText(choice.name)}"><span class="real-device"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span class="real-play-txt"><b>JUGAR</b><small>Último compañero: ${safeText(choice.name)}</small></span><span class="real-arrow" aria-hidden="true">▶</span><span class="real-shine" aria-hidden="true"></span></button>
-          <div class="hm-grid">
             <button type="button" class="hm-card hm-surv hm-soon" id="mSurv"><span class="hm-txt"><b>Supervivencia</b><small>Modo infinito</small><em>Próximamente</em></span></button>
+          </div>
+          <div class="hm-row2">
+                    ${eventActive() ? `<button type="button" class="real-event" id="rhEvent"><b>🎄 Navidad Digital</b><small>Papá Noel y Reno · quedan ${Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000))} días</small></button>` : `<button type="button" class="hm-card hm-event hm-soon" id="mEvent"><span class="hm-txt"><b>Evento</b><small>Próximamente</small></span></button>`}
             <button type="button" class="hm-card hm-enc hm-soon" id="mEnc"><span class="hm-txt"><b>Encargos</b><small>Misiones</small><em>Próximamente</em></span></button>
+          </div>
+          <div class="hm-grid">
             <button type="button" class="hm-tile" id="btnColl"><span class="hm-ico"><img src="ui/icons/coleccion.png" alt=""></span><span class="hm-txt"><b>Digidex</b></span></button>
             <button type="button" class="hm-tile" id="btnGacha"><span class="hm-ico"><img src="ui/icons/gacha.png" alt=""></span><span class="hm-txt"><b>Laboratorio</b></span></button>
-            <button type="button" class="hm-tile hm-soon" id="mLog"><span class="hm-ico">★</span><span class="hm-txt"><b>Logros</b><em>Próximamente</em></span></button>
-            <button type="button" class="hm-tile hm-soon" id="mRank"><span class="hm-ico">🏆</span><span class="hm-txt"><b>Ranking</b><em>Próximamente</em></span></button>
-            <button type="button" class="hm-tile hm-soon" id="mBuild"><span class="hm-ico">⚙</span><span class="hm-txt"><b>Build</b><em>Próximamente</em></span></button>
+            <button type="button" class="hm-tile hm-soon" id="mLog"><span class="hm-ico">★</span><span class="hm-txt"><b>Logros</b><em>Pronto</em></span></button>
+            <button type="button" class="hm-tile hm-soon" id="mRank"><span class="hm-ico">🏆</span><span class="hm-txt"><b>Ranking</b><em>Pronto</em></span></button>
+            <button type="button" class="hm-tile hm-soon" id="mBuild"><span class="hm-ico">⚙</span><span class="hm-txt"><b>Build</b><em>Pronto</em></span></button>
             <button type="button" class="hm-tile" id="btnPlayer"><span class="hm-ico"><img src="ui/icons/jugador.png" alt=""></span><span class="hm-txt"><b>Jugador</b></span></button>
           </div>
           <nav class="hm-bar" aria-label="Enlaces y ajustes">
@@ -3587,7 +3604,7 @@ function showSelect(){
   document.getElementById('btnAjustes').onclick=showSettings;
   // Botones del menú principal aún sin contenido: muestran un aviso breve en lugar de abrir nada
   const hmSoon=(msg)=>{const m=document.getElementById('hmMsg'); if(!m) return; m.textContent=msg||'Próximamente'; clearTimeout(m._t); m._t=setTimeout(()=>{m.textContent='';},1800);};
-  ['mSurv','mEnc','mLog','mRank','mBuild'].forEach(id=>document.getElementById(id).onclick=()=>hmSoon('Próximamente'));
+  ['mSurv','mEnc','mEvent','mLog','mRank','mBuild'].forEach(id=>{const el=document.getElementById(id); if(el) el.onclick=()=>hmSoon('Próximamente');});
   document.getElementById('mBug').onclick=()=>window.open('https://github.com/jgodoy-m/digibonk/issues','_blank','noopener');
   // Enlaces de Discord y X: rellenar cuando existan (vacío = aún no disponible)
   const HM_DISCORD_URL='', HM_X_URL='';
