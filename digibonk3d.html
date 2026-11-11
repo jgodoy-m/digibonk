@@ -3271,7 +3271,7 @@ function unlockHow(k){ return UNLOCK[k] ? UNLOCK[k].how : 'Compañero inicial: e
 // Jugadores anteriores a este sistema (sin lista guardada): todo desbloqueado
 function unlockedSet(){
   if (!localStorage.getItem('digibonk3d-unlocked')) return new Set(SEASONS.adventure.chars);
-  return new Set(loadJSON('digibonk3d-unlocked', []));
+  return new Set([...loadJSON('digibonk3d-unlocked', []), 'agumon']); // Agumon es el inicial: siempre disponible
 }
 function isUnlocked(k){ return unlockedSet().has(k); }
 function unlockDigi(k){ localStorage.setItem('digibonk3d-unlocked', JSON.stringify([...new Set([...unlockedSet(), k])])); }
