@@ -2028,6 +2028,9 @@ body:has(.tr11) #hudTop{display:none!important}
 .pl5-hero{padding:14px 20px 8px 34px!important}
 .pl5-hero .pl4-av .hud-portrait{margin-top:6px}
 .pl4-wrap{padding-bottom:6px!important}
+.realhub .hm-brand{display:flex;flex-direction:column;align-items:flex-start;gap:4px;margin:0}
+.realhub .hm-logo{width:clamp(260px,26vw,420px);height:auto;display:block;filter:drop-shadow(0 4px 0 #0a1a3a) drop-shadow(0 0 14px #00c8ff55)}
+.realhub .hm-brand small{margin-left:6px}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2974,7 +2977,7 @@ function showSelect(){
       </header>
       <section class="real-main">
         <div class="real-left">
-          <h1 class="real-brand"><strong><em>DIGI</em><span>BONK</span></strong><small>FAN GAME · DIGITAL WORLD</small></h1>
+          <h1 class="real-brand hm-brand"><img class="hm-logo" src="ui/logo_digibonk.webp" alt="DIGIBONK"><small>FAN GAME · DIGITAL WORLD</small></h1>
           <div class="hm-row1">
           <button type="button" id="playBtn" class="real-play" aria-label="Jugar con ${safeText(choice.name)}"><span class="real-device"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span class="real-play-txt"><b>JUGAR</b><small>Último compañero: ${safeText(choice.name)}</small></span><span class="real-arrow" aria-hidden="true">▶</span><span class="real-shine" aria-hidden="true"></span></button>
             <button type="button" class="hm-card hm-surv hm-soon hm-art" id="mSurv" aria-label="Supervivencia: modo infinito. Próximamente"></button>
