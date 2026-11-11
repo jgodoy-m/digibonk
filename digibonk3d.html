@@ -2496,7 +2496,7 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .gx2-bar span{position:absolute;inset:0;display:grid;place-items:center;font-size:12px;font-weight:800;color:#1a1200}
 .gx2-foot{margin-top:10px;padding:10px 12px;border-radius:14px;border:2px solid #2c8fe0;background:rgba(8,24,60,.92)}
 .gx2-strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
-.gx2-strip .spr{flex:none;background:rgba(0,0,0,.25);border-radius:10px;padding:4px;box-sizing:content-box}
+.gx2-strip .gx2-ico{flex:none;width:58px;height:58px;object-fit:contain;image-rendering:pixelated;background:rgba(0,0,0,.25);border-radius:10px;padding:4px;box-sizing:content-box;border:1px solid #2c5a8a}
 .gx2-strip{justify-content:flex-start}
 @media (max-height:700px){.gx2-portal .gx2-hero{width:140px;height:140px}.gx2-ring.r1{width:200px;height:200px}.gx2-ring.r2{width:150px;height:150px}}
 </style>
@@ -6104,6 +6104,33 @@ function gxOwned(s){
   return (inv.items[s.it.id] || 0) > 0;
 }
 // Muestra la tarjeta i del carrusel (la animación se repite en cada cambio)
+// Icono estático de un sprite: primer fotograma recortado al contorno real del Digimon (para miniaturas)
+const spriteIconCache = {};
+function spriteIcon(src, onReady){
+  if (spriteIconCache[src]){ onReady(spriteIconCache[src]); return; }
+  const im = new Image();
+  im.onload = () => {
+    const fr = im.naturalWidth / im.naturalHeight > ANIM_N - 1 ? ANIM_N : 1;
+    const fw = Math.floor(im.naturalWidth / fr), h = im.naturalHeight;
+    const probe = document.createElement('canvas'); probe.width = fw; probe.height = h;
+    const pc = probe.getContext('2d', {willReadFrequently: true});
+    pc.drawImage(im, 0, 0, fw, h, 0, 0, fw, h);
+    const d = pc.getImageData(0, 0, fw, h).data;
+    let x0 = fw, y0 = h, x1 = -1, y1 = -1;
+    for (let y = 0; y < h; y++) for (let x = 0; x < fw; x++){
+      if (d[(y*fw + x)*4 + 3] > 40){ if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    }
+    if (x1 < 0){ x0 = 0; y0 = 0; x1 = fw - 1; y1 = h - 1; }
+    const bw = x1 - x0 + 1, bh = y1 - y0 + 1, side = Math.max(bw, bh) * 1.06;
+    const cx = x0 + bw/2, cy = y0 + bh/2;
+    const c = document.createElement('canvas'); c.width = 96; c.height = 96;
+    const x = c.getContext('2d'); x.imageSmoothingEnabled = false;
+    x.drawImage(im, cx - side/2, cy - side/2, side, side, 0, 0, 96, 96);
+    spriteIconCache[src] = c.toDataURL('image/png');
+    onReady(spriteIconCache[src]);
+  };
+  im.src = sheetOf(src) || src;
+}
 function showGacha(){
   state = 'gacha';
   setHud(false);
@@ -6117,7 +6144,8 @@ function showGacha(){
   const featHtml = sprEl(spriteWith('agumon', false, 'galactico'), 190, 'gx2-hero');
   const oddsRows = [['l', 5], ['e', 4], ['r', 3], ['c', 2]].map(([t, n]) =>
     `<div class="gx2-odd"><i style="color:${GX_TIER_COL[t]}">${'★'.repeat(n)}</i><span>${TIER_NAME[t] === 'Legendaria' ? 'Recompensa Legendaria' : 'Recompensa ' + TIER_NAME[t]}</span><b>${TIER_ODDS[t].toFixed(2)}%</b></div>`).join('');
-  const possible = bannerSkins().flatMap(sk => chars.map(key => sprEl(spriteWith(key, false, sk.id), 46))).join('');
+  const blank = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  const possible = bannerSkins().flatMap(sk => chars.map(key => `<img class="gx2-ico" data-src="${spriteWith(key, false, sk.id)}" src="${blank}" alt="">`)).join('');
   showOverlay(`
     <div class="gacha gx2">
       <header class="gx2-head"><button class="g-back" id="gBack">← Volver</button><h2>Gacha</h2></header>
@@ -6151,6 +6179,7 @@ function showGacha(){
       </div>
       <footer class="gx2-foot"><h3>Posibles recompensas</h3><div class="gx2-strip">${possible}</div></footer>
     </div>`);
+  overlay.querySelectorAll('img.gx2-ico').forEach(im => spriteIcon(im.dataset.src, d => { im.src = d; }));
   document.getElementById('gBack').onclick = () => showSelect();
   document.getElementById('gPull1').onclick = () => doPulls(1);
   document.getElementById('gPull10').onclick = () => doPulls(10);
