@@ -2795,7 +2795,7 @@ function loadTex(path, rx, ry, pixel = false){
   if (pixel) t.magFilter = THREE.NearestFilter;   // pixel art: bordes nítidos
   return t;
 }
-const floorMat = new THREE.MeshStandardMaterial({map: loadTex('textures/hierba_pixel.png', 20, 20, true), roughness: 1, vertexColors: true});
+const floorMat = new THREE.MeshStandardMaterial({map: loadTex('textures/hierba_cc0.jpg', 20, 20, true), roughness: 1, vertexColors: true});
 const floor = new THREE.Mesh(terrainGeo, floorMat);
 scene.add(floor);
 {
@@ -3027,7 +3027,7 @@ function buildAmbience(){
   const paths = 8;
   const pathAngles = Array.from({length: paths}, (_, i) => i/paths*Math.PI*2);
   // caminos de tierra desde la plaza hacia las montañas
-  const pathMat = new THREE.MeshBasicMaterial({color: 0xffffff, map: loadTex('textures/camino_pixel.png', 1, 5, true)});
+  const pathMat = new THREE.MeshBasicMaterial({color: 0xffffff, map: loadTex('textures/camino_cc0.jpg', 1, 5, true)});
   const L = 26 - 14;   // los caminos llegan hasta el borde llano del pueblo
   for (const a of pathAngles){
     const geo = new THREE.PlaneGeometry(2.6, L);
@@ -3257,6 +3257,7 @@ const fmtTime = s => `${Math.floor(s/60)}:${String(s%60).padStart(2, '0')}`;
 let selectedKey = (() => { try { const k = localStorage.getItem('digibonk3d-last-choice'); return k && CHARS[k] ? k : 'agumon'; } catch(e){ return 'agumon'; } })();
 // Oculta/muestra el HUD de partida (el menú no debe mostrar barras ni temporizador)
 function setHud(v){
+  { const shEl = document.getElementById('shrineHud'); if (shEl && !v) shEl.style.display = 'none'; }
   const sb0 = document.getElementById('skillBar'); if (sb0){ sb0.style.display = v ? 'flex' : 'none'; if (!v) sb0.innerHTML = ''; }
   const bb0 = document.getElementById('bonkBar'); if (bb0) bb0.style.display = v ? 'block' : 'none';
   const d = v ? '' : 'none';
@@ -4343,7 +4344,7 @@ const SHRINE_TYPES = [
 ];
 function initShrines(){
   g.shrines = [];
-  for (let i = 0; i < 6; i++){
+  for (let i = 0; i < 3; i++){   // 3 santuarios por partida
     const type = SHRINE_TYPES[i % SHRINE_TYPES.length];
     const a = Math.random()*Math.PI*2, R = 22 + Math.random()*68;
     const [x, z] = clampArena(Math.cos(a)*R, Math.sin(a)*R, ARENA_R - 6);
@@ -4355,13 +4356,32 @@ function initShrines(){
 }
 // Para cargar un santuario hay que quedarse dentro de su círculo unos 3 segundos; si te alejas, la carga baja
 const SHRINE_CHARGE = 3, SHRINE_RANGE = 2.2;
+// Aviso con la cuenta atrás mientras se carga un santuario
+function shrineHud(sh){
+  let el = document.getElementById('shrineHud');
+  if (!el){
+    el = document.createElement('div');
+    el.id = 'shrineHud';
+    el.style.cssText = 'position:fixed;left:50%;bottom:92px;transform:translateX(-50%);min-width:280px;padding:10px 16px;border-radius:12px;background:rgba(8,14,30,.94);border:2px solid #ffd54f;color:#fff;font:700 14px system-ui,sans-serif;text-align:center;z-index:9;pointer-events:none';
+    el.innerHTML = '<div id="shrineTxt"></div><div style="height:10px;margin-top:6px;border-radius:5px;background:#1b2740;overflow:hidden"><div id="shrineBar" style="height:100%;width:0;background:linear-gradient(90deg,#ffd54f,#fff59d)"></div></div>';
+    document.body.appendChild(el);
+  }
+  if (!sh){ el.style.display = 'none'; return; }
+  el.style.display = 'block';
+  el.style.borderColor = '#' + sh.type.col.toString(16).padStart(6, '0');
+  const left = Math.max(0, SHRINE_CHARGE - sh.charge);
+  document.getElementById('shrineTxt').textContent = `${sh.type.name} · ${left > 0.05 ? 'mantente dentro: ' + left.toFixed(1) + ' s' : '¡listo!'}`;
+  document.getElementById('shrineBar').style.width = (100 * sh.charge / SHRINE_CHARGE).toFixed(0) + '%';
+}
 function updateShrines(dt){
   if (!g.shrines) initShrines();
+  let charging = null;
   for (const sh of g.shrines){
     if (sh.used) continue;
     const inside = dist2(sh.x, sh.z, g.p.x, g.p.z) < SHRINE_RANGE*SHRINE_RANGE;
     sh.charge = Math.max(0, Math.min(SHRINE_CHARGE, (sh.charge || 0) + (inside ? dt : -dt*0.5)));
     sh.mesh.scale.y = 1 + 0.6 * (sh.charge / SHRINE_CHARGE);   // el santuario crece mientras se carga
+    if (inside && sh.charge > 0 && !sh.used) charging = sh;
     if (inside && sh.charge >= SHRINE_CHARGE){
       sh.used = true; world.remove(sh.mesh);
       sh.type.apply(g);
@@ -4369,6 +4389,7 @@ function updateShrines(dt){
       sfx('ready');
     }
   }
+  shrineHud(charging);
 }
 function spawnChest(p){
   const a = Math.random()*Math.PI*2, R = 10 + Math.random()*8;
@@ -6616,7 +6637,7 @@ if (new URLSearchParams(location.search).has('demo')){
     SKINS, EVO_LINE, CHARS, SEASONS, glitchPixels,
     headUrl, spriteWith,
     checkUnlocks, isUnlocked,
-    showSelect, showCollection,
+    showSelect, showCollection, showPicker,
     showSettings,
     rollTier,
     get music(){ return Music.file; },
