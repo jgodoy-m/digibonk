@@ -922,6 +922,15 @@ canvas{display:block}
 .lv3-ic{font-size:74px;line-height:1;color:var(--cc);filter:drop-shadow(0 0 14px var(--cc))}
 .lv3-card b{font-size:18px;line-height:1.15}
 .lv3-card p{margin:0;font:13px/1.35 system-ui,sans-serif;color:#cfe9ff;flex:1}
+.lv3-banner{margin:0;font-size:38px;font-style:italic;color:#fff;padding:4px 26px;border-radius:12px;background:linear-gradient(90deg,#ff8a3d,#ff5c8a);box-shadow:0 5px 0 #7a1d3a;display:inline-block;text-shadow:0 3px 0 #7a1d3a}
+.lv3-new{position:absolute;right:12px;top:10px;font-size:10px;letter-spacing:1px;padding:3px 8px;border-radius:99px;background:#ffd54f;color:#1a1200;font-weight:900}
+.lv3-card.ban{outline:3px dashed #ff5c8a;outline-offset:4px}
+.lv3-acts{display:flex;gap:12px;justify-content:center;margin-top:18px}
+.lv3-act{padding:10px 18px;border-radius:12px;border:0;cursor:pointer;color:#fff;font:700 14px system-ui,sans-serif;background:linear-gradient(180deg,#3aa0ff,#1b5fd0);box-shadow:0 4px 0 #0b2d64}
+.lv3-act.red{background:linear-gradient(180deg,#ff6b6b,#c62828);box-shadow:0 4px 0 #6a1010}
+.lv3-act.red.on{outline:3px solid #fff}
+.lv3-act:disabled{opacity:.4;cursor:default}
+.lv3-act kbd{margin-left:6px;padding:1px 6px;border-radius:5px;background:rgba(0,0,0,.35);font-size:11px}
 .lv3-pips{display:flex;gap:6px;font-size:11px;letter-spacing:2px;color:#9fd4ff;text-transform:uppercase}
 .lv3-pips i{width:26px;height:8px;background:#1a2c5a}
 .lv3-pips i.on{background:var(--cc)}
@@ -3127,7 +3136,10 @@ addEventListener('keydown', e => {
     else if (k === 'enter') startGame(selectedKey);
     else if (k === 'escape') showSelect();
   }
-  else if (state === 'levelup' && k.length === 1 && '123'.includes(k)) pickUpgrade(+k-1);
+  else if (state === 'levelup' && k.length === 1 && '123'.includes(k)) (g.upMode === 'ban' ? banishUp(+k-1) : pickUpgrade(+k-1));
+  else if (state === 'levelup' && k === 'f') rerollUp();
+  else if (state === 'levelup' && k === 'x') skipUp();
+  else if (state === 'levelup' && k === 'z') toggleBanish();
   else if (state === 'end' && (k === 'enter' || k === 'r')) showSelect();
 });
 addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
@@ -4801,7 +4813,31 @@ function upgradeChoices(){
     const s = SKILLS[id];
     pool.push({t: `${s.name} · ${lv ? 'Nivel ' + (lv + 1) : 'Nueva'}`, name: s.name, skill: id, lv, k: s.k, d: s.d, f: () => addSkill(id)});
   }
-  return pool.sort(() => Math.random() - 0.5).slice(0, 3);
+  // Las cartas desterradas en esta partida no vuelven a salir
+  return pool.filter(c => !upRes().banned.includes(upKey(c))).sort(() => Math.random() - 0.5).slice(0, 3);
+}
+// Recursos de la subida de nivel por partida: refrescar 2, saltar 2, desterrar 1
+function upRes(){ return g.upRes || (g.upRes = {rer: 2, skip: 2, ban: 1, banned: []}); }
+function upKey(c){ return c.skill ? 'skill:' + c.skill : 'up:' + c.t; }
+function rerollUp(){
+  const r = upRes(); if (r.rer <= 0 || state !== 'levelup') return;
+  r.rer--; g.upMode = null;
+  g.choices = upgradeChoices(); openUpgrades();
+}
+function skipUp(){
+  const r = upRes(); if (r.skip <= 0 || state !== 'levelup') return;
+  r.skip--; SAVE.bits = SAVE.bits + 15;
+  announce('+15 Bits', 'Carta saltada', '#ffd54f');
+  hideOverlay(); lockMouse(); state = 'play';
+}
+function toggleBanish(){
+  if (upRes().ban <= 0 || state !== 'levelup') return;
+  g.upMode = g.upMode === 'ban' ? null : 'ban'; openUpgrades();
+}
+function banishUp(i){
+  const r = upRes(); if (r.ban <= 0 || state !== 'levelup') return;
+  r.ban--; r.banned.push(upKey(g.choices[i])); g.upMode = null;
+  g.choices = upgradeChoices(); openUpgrades();
 }
 // Materiales y geometrías compartidos (evitan crear objetos en cada disparo o impacto)
 const matCache = {};
@@ -5077,20 +5113,30 @@ function openUpgrades(){
   document.getElementById('flash').animate([{opacity: .75}, {opacity: 0}], {duration: 520});
   unlockMouse();   // hay que poder hacer clic en las mejoras
   const cat = {ofensiva: 'Ataque', defensiva: 'Zona', utilidad: 'Utilidad'};
+  const r = upRes(), banMode = g.upMode === 'ban';
   showOverlay(`
     <div class="lv3">
-      <div class="lv3-head"><small>NIVEL ${g.p.lvl}</small><h2>Elige una tarjeta de datos</h2><p>Pulsa 1-3 o haz clic</p></div>
+      <div class="lv3-head"><h2 class="lv3-banner">¡Nivel ${g.p.lvl}!</h2><p>${banMode ? 'Elige una carta para desterrarla' : 'Pulsa 1-3 o haz clic'}</p></div>
       <div class="lv3-row">${g.choices.map((c, i) => `
-        <button class="lv3-card ${c.k || 'utilidad'}" data-up="${i}" style="animation-delay:${i*0.09}s">
+        <button class="lv3-card ${c.k || 'utilidad'}${banMode ? ' ban' : ''}" data-up="${i}" style="animation-delay:${i*0.09}s">
           <span class="lv3-key">${i + 1}</span>
+          ${c.skill && !c.lv ? '<span class="lv3-new">NUEVO</span>' : ''}
           <span class="lv3-tag">${c.skill ? (c.lv ? 'Mejora' : 'Nueva habilidad') : cat[c.k] || 'Mejora'}</span>
           <span class="lv3-ic">${svgIcon(c.skill || c.k)}</span>
           <b>${c.name || c.t}</b>
           <p>${c.d || ''}</p>
           ${c.skill ? `<span class="lv3-pips">${[1, 2, 3].map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : '<span class="lv3-pips pasiva">Pasiva</span>'}
         </button>`).join('')}</div>
+      <div class="lv3-acts">
+        <button class="lv3-act" id="upRer" ${r.rer > 0 ? '' : 'disabled'}>Refrescar (${r.rer}) <kbd>F</kbd></button>
+        <button class="lv3-act" id="upSkip" ${r.skip > 0 ? '' : 'disabled'}>Saltar (${r.skip}) <kbd>X</kbd></button>
+        <button class="lv3-act red${banMode ? ' on' : ''}" id="upBan" ${r.ban > 0 ? '' : 'disabled'}>Desterrar (${r.ban}) <kbd>Z</kbd></button>
+      </div>
     </div>`);
-  overlay.querySelectorAll('[data-up]').forEach(el => el.onclick = () => pickUpgrade(+el.dataset.up));
+  overlay.querySelectorAll('[data-up]').forEach(el => el.onclick = () => banMode ? banishUp(+el.dataset.up) : pickUpgrade(+el.dataset.up));
+  document.getElementById('upRer').onclick = rerollUp;
+  document.getElementById('upSkip').onclick = skipUp;
+  document.getElementById('upBan').onclick = toggleBanish;
 }
 
 function pickUpgrade(i){
