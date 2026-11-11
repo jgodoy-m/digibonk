@@ -1860,6 +1860,43 @@ body:has(.tr11) #hudTop{display:none!important}
 .pl4-av .hud-portrait{width:96px!important;height:96px!important}
 .pl4-hero{padding:28px 26px!important}
 .pl4-av{padding-bottom:18px!important}
+.cz-box{background:linear-gradient(180deg,#1d2640,#111728);border:1px solid #34437a;border-radius:20px;box-shadow:0 24px 70px #000c,inset 0 1px 0 #ffffff14}
+.cz-head{background:radial-gradient(ellipse at 20% 0%,#2f4a86 0%,transparent 60%)}
+.cz-prev .hud-portrait{box-shadow:0 10px 30px #000a}
+.cz-ttl{display:inline-block;padding:4px 14px;border-radius:999px;background:linear-gradient(#3a2f08,#241d05);border:1px solid #ffd55e;color:#ffe9a0;font-size:12px;font-weight:800;margin-top:8px}
+.cz-tab{background:#1f2942;border:1px solid #33406a;box-shadow:0 3px 0 #0a0f1f}
+.cz-tab.on{background:linear-gradient(#5b8fe0,#2e5aa8);border-color:#9cc4ff;box-shadow:0 3px 0 #0b1a33,inset 0 1px 0 #ffffff40;color:#fff}
+.cz-grid{gap:12px;padding:6px 20px 16px}
+.cz-tile{min-height:96px;padding:12px 10px 10px;gap:5px;border-radius:14px;background:linear-gradient(170deg,#283354,#171e33);border:1px solid #3a4a78;box-shadow:0 4px 0 #0a0f1f;overflow:hidden}
+.cz-tile::before{content:'';position:absolute;left:12px;right:12px;top:0;height:3px;border-radius:0 0 4px 4px;background:var(--tc,#8a94b8)}
+.cz-t-c{--tc:#9aa6c8}.cz-t-r{--tc:#5fb4ff}.cz-t-e{--tc:#c58bff}.cz-t-l{--tc:#ffd55e}
+.cz-tile:hover:not(.locked){transform:translateY(-2px);border-color:var(--tc,#7fb0ff)}
+.cz-tile.sel{border-color:var(--tc,#ffd55e);box-shadow:inset 0 0 0 1px var(--tc,#ffd55e),0 0 18px -4px var(--tc,#ffd55e),0 4px 0 #0a0f1f;background:linear-gradient(170deg,#33406a,#1a2238)}
+.cz-tile b{font-size:13px;font-weight:800;color:#f2f5ff;line-height:1.2}
+.cz-tile small{font-size:10px;font-weight:800;color:var(--tc,#9aa6c8);text-transform:uppercase;letter-spacing:.07em;line-height:1.3}
+.cz-tile.locked{opacity:.85;background:linear-gradient(170deg,#1f2640,#141a2c)}
+.cz-tile.locked b{color:#6f7aa0}
+.cz-tile.locked small{color:#7d88ac;text-transform:none;font-weight:500;letter-spacing:0;font-size:10.5px}
+.cz-tile.locked::before{background:#3a4568}
+.cz-bar{display:block;width:84%;height:5px;border-radius:4px;background:#0a0f1f;overflow:hidden;margin-top:3px}
+.cz-bar u{display:block;height:100%;background:linear-gradient(90deg,#4f86d8,#8fc4ff)}
+.cz-tile em{font-style:normal;font-size:10px;font-weight:700;color:#aab4d4}
+.cz-av{width:62px;height:62px;border-radius:50%;overflow:hidden;display:block;border:2px solid #3a4a78;box-shadow:0 3px 10px #0008}
+.cz-tile.sel .cz-av{border-color:#ffd55e}
+.cz-fr{width:66px;height:66px;display:grid;place-items:center}
+.cz-fr .rw-frame{width:58px;height:58px}
+.cz-none{font-size:30px;color:#4a5680}
+.cz-lock{position:absolute;top:9px;right:9px;font-style:normal;font-size:11px;opacity:.8}
+.cz-foot{background:#0c1120;border-top:1px solid #2a3558}
+.cz-btn{border-radius:12px;font-weight:900;letter-spacing:.02em}
+.cz-btn.ok{background:linear-gradient(#66e68a,#2b9e56);box-shadow:0 3px 0 #145c2c,inset 0 1px 0 #ffffff50}
+.cz-head{padding-top:30px!important}
+.cz-prev{flex:0 0 150px}
+.cz-prev .hud-portrait{width:104px!important;height:104px!important}
+.cz-tile{min-height:110px}
+.cz-prev{padding-bottom:22px}
+.cz-ttl{margin-top:20px!important;position:relative;z-index:4}
+.cz-box .rw-frame::after,.cz-box .hud-portrait::after{display:none!important}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -5326,10 +5363,19 @@ function openCustomizer(){
   host.appendChild(back);
   const box = back.firstElementChild;
   const tile = (sel, cls, img, name, sub, locked, extraCls) => `<button type="button" class="cz-tile${sel ? ' sel' : ''}${locked ? ' locked' : ''}${extraCls || ''}" ${locked ? 'disabled' : ''} data-v="${cls}">${img}<b>${name}</b>${sub ? `<small>${sub}</small>` : ''}${locked ? '<i class="cz-lock">🔒</i>' : ''}</button>`;
+  const rar = t => ({c:'Común', r:'Rara', e:'Épica', l:'Legendaria'})[t] || '';
+  const card = (sel, v, inner, locked, tier) => `<button type="button" class="cz-tile cz-t-${tier || 'c'}${sel ? ' sel' : ''}${locked ? ' locked' : ''}" ${locked ? 'disabled' : ''} data-v="${v}">${inner}${locked ? '<i class="cz-lock">🔒</i>' : ''}</button>`;
   const grid = () => {
-    if (tab === 'av') return PLAYER_ICONS.map(ic => tile(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av"><img src="${ic.src}" alt=""></span>`, ic.name, '', false)).join('');
-    if (tab === 'frame') return [{id: '', name: 'Sin marco'}, ...FRAMES].map(f => { const ok = ownsFrame(f.id); return tile(pFrame === f.id, 'fr:' + f.id, `<span class="cz-fr"><span class="rw-frame${f.id ? ' fr-' + f.id : ''}"></span></span>`, ok ? f.name : '???', ok ? '' : 'Gacha', !ok); }).join('');
-    return [{id: '', name: 'Sin título', how: ''}, ...TITLES].map(t => { const ok = ownsTitle(t.id), pg = prog[t.id]; return tile(pTitle === t.id, 'ti:' + t.id, '', ok ? t.name : '???', ok ? '' : (t.how + (pg ? ` · ${pg[0]}/${pg[1]}` : '')), !ok); }).join('');
+    if (tab === 'av') return PLAYER_ICONS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av"><img src="${ic.src}" alt=""></span><b>${ic.name}</b>`, false, 'c')).join('');
+    if (tab === 'frame') return [{id: '', name: 'Sin marco', tier: 'c'}, ...FRAMES.filter(f => !f.weekly && !f.seasonal)].map(f => {
+      const ok = ownsFrame(f.id);
+      return card(pFrame === f.id, 'fr:' + f.id, `<span class="cz-fr">${f.id ? `<span class="rw-frame fr-${f.id}"></span>` : '<span class="cz-none">∅</span>'}</span><b>${ok ? f.name : '???'}</b><small>${ok ? (f.id ? rar(f.tier) : 'Sin marco') : 'Gacha'}</small>`, !ok, ok ? f.tier : 'c');
+    }).join('');
+    return [{id: '', name: 'Sin título', how: '', tier: 'c'}, ...TITLES].map(t => {
+      const ok = ownsTitle(t.id), pg = prog[t.id];
+      const bar = !ok && pg ? `<i class="cz-bar"><u style="width:${Math.round(pg[0] / pg[1] * 100)}%"></u></i><em>${pg[0]}/${pg[1]}</em>` : '';
+      return card(pTitle === t.id, 'ti:' + t.id, `<b>${ok ? t.name : '???'}</b><small>${ok ? (t.id ? rar(t.tier) : 'Sin título') : t.how}</small>${bar}`, !ok, ok ? (t.tier || 'c') : 'c');
+    }).join('');
   };
   const preview = () => {
     const ic = PLAYER_ICONS.find(x => x.id === pAv);
