@@ -1818,6 +1818,598 @@ body:has(#overlay.menu-mode .approved-hub) #topbar .tb-id{margin:0 auto 0 0!impo
   display: none !important;
 }
 
+
+
+/* ===== DIGIBONK / MENÚ REAL POR CAPAS (no PNG de interfaz, datos reales) ===== */
+#overlay.menu-mode:has(.realhub){display:block!important;background:#05132c!important;padding:0!important;overflow:auto!important;backdrop-filter:none!important;filter:none!important}
+#overlay.menu-mode>.realhub{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}
+body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuart{display:none!important}
+.realhub{position:relative;isolation:isolate;min-height:100dvh;width:100%;overflow:hidden;background:#051731;color:#f5faff;font:600 clamp(12px,1vw,16px)/1.3 system-ui,sans-serif}
+.real-world{position:absolute;inset:0;z-index:-2;overflow:hidden;background:#08142c}
+.real-world .rw-scenery{position:absolute;inset:-1.5%;background-image:url('ui/mundo_digital_solo_escenario.jpg');background-position:center center;background-size:cover;filter:saturate(1.11) contrast(1.04);animation:rw-parallax 32s ease-in-out infinite alternate;transform-origin:center center}
+.real-world .rw-light{position:absolute;left:60%;top:16%;width:29%;height:49%;background:radial-gradient(ellipse,#36f5ff3d 0,transparent 67%);mix-blend-mode:screen;animation:rw-breathe 3.7s ease-in-out infinite alternate}
+.real-world .rw-aurora{position:absolute;left:19%;top:-24%;width:65%;height:49%;transform:rotate(-7deg);background:radial-gradient(ellipse,#21fcfa27 5%,#ad36e420 31%,transparent 72%);animation:rw-breathe 9s ease-in-out infinite alternate;pointer-events:none}
+.real-world .rw-water{position:absolute;inset:0;background:repeating-linear-gradient(95deg,transparent 0 65px,#5bf8ff0d 66px 69px,transparent 70px 145px);mask-image:linear-gradient(transparent 35%,black 84%);animation:rw-water 8s linear infinite;mix-blend-mode:screen;pointer-events:none}
+.real-world .rw-stars{position:absolute;inset:0;background-image:radial-gradient(#fff9 1px,transparent 2px),radial-gradient(#58f9ffbb 1px,transparent 2px);background-size:187px 132px,239px 177px;animation:rw-stars 22s linear infinite;opacity:.65}
+@keyframes rw-parallax{0%{transform:scale(1.03) translate(-.45%,-.15%)}100%{transform:scale(1.045) translate(.6%,.35%)}}
+@keyframes rw-breathe{from{opacity:.55;transform:scale(.91)}to{opacity:1;transform:scale(1.09)}}
+@keyframes rw-water{to{background-position:300px 0}}
+@keyframes rw-stars{to{background-position:150px -90px,-75px 60px}}
+.real-top{position:relative;display:flex;align-items:center;gap:12px;height:70px;box-sizing:border-box;padding:7px clamp(14px,2.1vw,36px);z-index:10;background:linear-gradient(180deg,#071b3ff7,#071f48eb);border-bottom:2px solid #30d6f8;box-shadow:0 4px 18px #04102da3}
+.real-user{display:flex;align-items:center;gap:9px;appearance:none;border:1px solid #60daff;background:linear-gradient(100deg,#0b2858,#09183b);color:#fff;text-align:left;min-width:180px;max-width:280px;padding:4px 12px 4px 5px;cursor:pointer;clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%)}
+.real-user img{width:44px;height:44px;object-fit:contain;image-rendering:pixelated;background:#124b83;border-radius:50%;border:2px solid #89e5ff}
+.real-user strong{display:block;color:#fff1ae;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.real-user small{font-size:11px;font-weight:400;color:#bbebff}
+.real-top .real-spacer{flex:1}
+.real-chip{display:flex;align-items:center;gap:5px;padding:7px 12px;background:#071c47e8;border:1px solid #52cfff;border-radius:5px;color:#ffe488;font-weight:900;white-space:nowrap;font-size:clamp(12px,1.05vw,18px)}
+.real-mini{appearance:none;background:#071d48;border:1px solid #56d7ff;border-radius:5px;min-width:42px;height:40px;color:#fff;font-size:17px;font-weight:900;cursor:pointer;box-shadow:inset 0 2px #a7ecff35}
+.real-mini:hover,.real-user:hover{filter:brightness(1.25)}
+.real-main{position:relative;display:grid;grid-template-columns:minmax(355px,40%) 1fr minmax(244px,22%);gap:clamp(8px,1.6vw,26px);padding:clamp(24px,4vh,46px) clamp(18px,2.4vw,48px) 48px;min-height:calc(100dvh - 70px);box-sizing:border-box;z-index:1}
+.real-left{align-self:start;display:flex;flex-direction:column;gap:clamp(14px,2.5vh,25px);max-width:650px}
+.real-brand{margin:0 0 2px 5px;filter:drop-shadow(5px 7px 0 #092559) drop-shadow(0 0 12px #00aaff);width:max-content;max-width:100%;transform:skew(-9deg)}
+.real-brand strong{display:block;font-size:clamp(44px,5.7vw,99px);font-style:italic;font-weight:1000;letter-spacing:-.09em;line-height:.98;-webkit-text-stroke:2px #122e66;text-shadow:0 3px #020a1e}
+.real-brand strong em{font-style:normal;color:#ffc127;background:linear-gradient(#fff49e 6%,#ffc32d 31%,#e97b1d 72%,#b53d08);background-clip:text;-webkit-text-fill-color:transparent}
+.real-brand strong span{color:#e3f5ff;background:linear-gradient(#fff 15%,#7edaff 60%,#3a87dd);background-clip:text;-webkit-text-fill-color:transparent}
+.real-brand small{display:block;letter-spacing:.35em;text-transform:uppercase;text-align:center;font-weight:950;font-size:clamp(9px,1.1vw,16px);color:#7bfaff;margin-top:6px;text-shadow:0 2px #071732}
+.real-play{appearance:none;position:relative;display:flex;align-items:center;gap:clamp(9px,1.4vw,22px);width:100%;height:clamp(120px,16vh,165px);padding:12px 22px 12px 10px;border:5px solid #fff0a0;color:#fff;cursor:pointer;background:linear-gradient(175deg,#ffd93d 0%,#ff9f16 26%,#f5680d 60%,#a8380b 100%);clip-path:polygon(3.5% 0,95% 0,100% 20%,100% 80%,95% 100%,3.5% 100%,0 81%,0 19%);box-shadow:inset 0 7px #ffffff80,inset 0 -8px #9936099e;filter:drop-shadow(0 7px 0 #451b0b) drop-shadow(0 0 17px #ffa218b8)}
+.real-play:hover{filter:brightness(1.12) drop-shadow(0 5px #351609) drop-shadow(0 0 20px #ffd55e);transform:translateY(-2px)}
+.real-device{position:relative;display:grid;place-items:center;aspect-ratio:1;flex:0 0 clamp(95px,10vw,140px);border-radius:50%;border:8px solid #bdf3ff;background:radial-gradient(circle,#25dfff 0%,#035ca8 54%,#061b51 60%);box-shadow:0 0 0 6px #153b7a,inset 0 0 0 6px #349ef8,0 5px 0 #0b1939;overflow:hidden}
+.real-device::before{content:'';position:absolute;inset:10%;border:2px dashed #80edff;border-radius:50%;animation:rw-rotate 22s linear infinite}
+.real-device img{position:relative;z-index:1;width:78%;height:78%;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(2px 3px #10265b)}
+@keyframes rw-rotate{to{transform:rotate(360deg)}}
+.real-play-txt{text-align:left;min-width:0;display:flex;flex-direction:column;gap:7px;text-shadow:0 3px #813107}
+.real-play-txt b{font-size:clamp(39px,5vw,81px);letter-spacing:-.04em;line-height:.9;font-weight:1000;font-style:italic;-webkit-text-stroke:1px #6b2e0c}
+.real-play-txt small{font-size:clamp(10px,1vw,16px);font-weight:850;line-height:1.24}
+.real-play .real-arrow{margin-left:auto;color:#fff;font-size:clamp(27px,3.2vw,49px)}
+.real-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.real-nav{min-height:clamp(94px,11vh,116px);appearance:none;border:3px solid #8eeeff;border-radius:9px;display:flex;align-items:center;gap:11px;text-align:left;padding:10px 12px;background:linear-gradient(147deg,#145faa 0%,#0c3679 50%,#131d54 100%);color:#fff;box-shadow:inset 0 4px #79eaff81,0 5px #051536,0 0 17px #30e6ff57;cursor:pointer;transition:transform .15s,filter .15s}
+.real-nav:hover{filter:brightness(1.22);transform:translateY(-3px)}.real-nav:active{transform:translateY(1px)}
+.real-nav img{width:clamp(40px,5vw,67px);height:clamp(40px,5vw,67px);image-rendering:pixelated;object-fit:contain;flex-shrink:0}
+.real-nav b{display:block;font-size:clamp(15px,1.6vw,25px);font-weight:1000;font-style:italic;text-shadow:1px 2px #020f30}.real-nav small{display:block;font-size:clamp(10px,.79vw,13px);font-weight:450;opacity:.95;max-width:200px}
+.real-scene{position:relative;min-width:0;pointer-events:none}
+.real-scene .rw-buddy{position:absolute;width:clamp(60px,7vw,110px);height:clamp(60px,7vw,110px);object-fit:contain;image-rendering:pixelated;filter:drop-shadow(2px 5px #061b4c);animation:rw-float 4.4s ease-in-out infinite alternate}
+.real-scene .rw-one{left:25%;bottom:13%}.real-scene .rw-two{left:59%;bottom:19%;animation-delay:-2s}
+@keyframes rw-float{to{transform:translateY(-12px)}}
+.real-right{display:flex;flex-direction:column;gap:18px;min-width:0;align-self:start;padding-top:clamp(22px,9vh,93px)}
+.real-panel{background:linear-gradient(145deg,#102f69f5,#071737f2);border:3px solid #69deff;border-radius:10px;box-shadow:inset 0 3px #b7eeff40,0 5px 0 #071c42,0 0 18px #00baff85;padding:clamp(12px,1.2vw,20px);color:#f9fcff;width:100%;box-sizing:border-box;text-align:left;cursor:pointer;min-width:0}
+.real-panel:hover{filter:brightness(1.14)}
+.real-panel h2{font-size:clamp(15px,1.2vw,21px);color:#ffe06d;text-transform:uppercase;margin:0 0 14px;display:flex;align-items:center;gap:8px;text-shadow:0 2px #061535}
+.real-panel p{font-size:clamp(11px,.87vw,15px);line-height:1.4;margin:7px 0;color:#e1f7ff}
+.real-panel .real-meter{display:block;height:10px;border:1px solid #7ef3ff;background:#07152c;margin-top:13px;box-shadow:inset 0 2px #0007}
+.real-panel .real-meter i{display:block;height:100%;background:linear-gradient(90deg,#ff9c18,#ffeb85)}
+.real-panel .real-reward{color:#ffd94e;font-weight:950}
+.real-stats{display:grid;gap:9px}
+.real-stats>span{display:flex;justify-content:space-between;gap:5px;border-bottom:1px solid #70b3eb62;padding-bottom:9px;font-size:clamp(11px,.88vw,15px)}
+.real-stats b{color:#fff7bb}
+.real-legal{position:absolute;left:0;right:0;bottom:0;padding:9px 24px 8px;background:#061b3dc9;border-top:2px solid #30c8ee;color:#d2e4fa;font-size:10px;font-weight:400;text-align:center}
+.real-user:focus-visible,.real-nav:focus-visible,.real-play:focus-visible,.real-mini:focus-visible,.real-panel:focus-visible{outline:3px solid #fff4a2;outline-offset:3px}
+.real-modal-host{position:fixed;inset:0;z-index:100;pointer-events:none}.real-modal-host:has(.approved-info-scrim){pointer-events:auto}
+@media(max-width:1260px){.real-main{grid-template-columns:minmax(320px,43%) 1fr minmax(215px,23%);gap:12px}.real-left{gap:15px}.real-nav{padding:8px}.real-nav small{font-size:10px}.real-top{gap:6px}.real-user{min-width:130px}}
+@media(max-width:980px){.real-main{grid-template-columns:minmax(315px,1fr) minmax(200px,.7fr);min-height:calc(100vh - 70px)}.real-scene{display:none}.real-right{padding-top:45px}.real-play{height:133px}.real-nav{min-height:90px}.real-actions{gap:8px}.real-left{max-width:520px}.real-brand strong{font-size:60px}}
+@media(max-width:700px){.realhub{min-height:100dvh;overflow:auto}.real-top{height:auto;min-height:59px;gap:5px;padding:5px 8px;flex-wrap:wrap}.real-user{min-width:110px;flex:1;max-width:50%}.real-user img{width:36px;height:36px}.real-user strong{font-size:12px}.real-chip{font-size:11px;padding:6px}.real-mini{min-width:32px;height:32px;font-size:12px}.real-spacer{display:none}.real-main{display:flex;flex-direction:column;padding:28px 12px 55px;gap:24px}.real-brand{margin:0 auto}.real-brand strong{font-size:clamp(49px,14vw,85px)}.real-brand small{font-size:10px;letter-spacing:.22em}.real-play{height:126px;min-height:126px}.real-device{flex-basis:94px}.real-play-txt b{font-size:41px}.real-actions{gap:9px}.real-nav{min-height:83px;padding:7px}.real-nav img{width:45px;height:45px}.real-nav b{font-size:15px}.real-nav small{font-size:10px}.real-right{padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}.real-panel{padding:10px;border-width:2px}.real-panel h2{font-size:13px}.real-panel p{font-size:11px}.real-stats>span{font-size:10px}.real-world .rw-scenery{inset:-3%;background-position:58% center}.real-legal{position:relative;bottom:auto;font-size:9px;margin:10px 0 -45px;padding:12px}}
+@media(max-width:420px){.real-right{grid-template-columns:1fr}.real-play .real-arrow{font-size:28px}.real-brand strong{font-size:52px}.real-nav img{width:39px;height:39px}.real-nav b{font-size:14px}.real-nav small{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.real-world *,.real-device::before,.rw-buddy{animation:none!important}}
+
+
+/* Refuerzo de contraste del logo. Las letras son texto HTML real. */
+.realhub .real-brand strong em{background:none!important;-webkit-text-fill-color:#ffb322!important;color:#ffb322!important;-webkit-text-stroke:2px #11275e!important;text-shadow:0 4px #86390c,0 0 9px #0b52b9!important}
+.realhub .real-brand strong span{background:none!important;-webkit-text-fill-color:#f4faff!important;color:#f4faff!important;-webkit-text-stroke:2px #103773!important;text-shadow:0 4px #164eae,0 0 9px #4abbff!important}
+.realhub .real-brand small{color:#a7fff7!important}
+
+
+.realhub .real-brand small{letter-spacing:.24em!important;text-shadow:0 2px #081c37!important;line-height:1.6!important}
+@media(max-width:700px){
+ .real-right{align-self:stretch!important;width:100%!important;min-width:0!important}
+ .real-top{position:relative;min-height:91px;padding-bottom:43px;box-sizing:border-box}
+ .real-mini{position:absolute;bottom:5px;width:36px;height:33px;min-width:36px}
+ #rhLang{right:127px}#rhSound{right:85px}#rhFullscreen{right:43px}#rhSettings{right:2px}
+ .real-chip{font-size:10px;max-width:100%}
+}
+
+
+.realhub .real-brand{filter:none!important}
+.realhub .real-brand strong{filter:drop-shadow(0 4px #0b275b) drop-shadow(0 0 9px #1589df)}
+.realhub .real-brand small{letter-spacing:.21em!important;text-shadow:0 1px 2px #061d38!important}
+
+/* ═══ DIGIBONK: reconstrucción verificable a partir del ARTE APROBADO ═══
+   El fondo usa solamente una región libre de interfaz de MENU_APROBADO.png.
+   No hay un screenshot entero detrás de controles; todos los menús son DOM. */
+#overlay.menu-mode:has(.realhub){overflow-y:auto!important}
+.realhub{background:#08153b;isolation:isolate}
+.real-world{isolation:isolate;background:#081a43}
+.real-world .rw-scenery{
+  inset:0!important;
+  background-image:url('ui/escenario_original_recorte.png')!important;
+  background-size:cover!important;
+  background-position:65% 46%!important;
+  filter:blur(18px) saturate(1.4) brightness(.65)!important;
+  transform:scale(1.1)!important;
+  animation:none!important;
+  opacity:.85;
+}
+.real-world .rw-scenery-core{
+ position:absolute;z-index:1;left:40%;width:40%;top:0;bottom:0;
+ background-image:url('ui/escenario_original_recorte.png');
+ background-size:100% 100%;background-position:center;
+ image-rendering:auto;
+ -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 9%,#000 91%,transparent 100%);
+ mask-image:linear-gradient(90deg,transparent 0%,#000 9%,#000 91%,transparent 100%);
+}
+.real-world::before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:
+ linear-gradient(90deg, #081638de 0%,#081b40a0 23%,transparent 41%,transparent 78%,#08183894 90%,#07173be0 100%),
+ linear-gradient(0deg,#05152a88,transparent 24%,transparent 83%,#05152b65);
+}
+.real-world .rw-light{z-index:2;left:61%;top:16%;opacity:.6;mix-blend-mode:screen}
+.real-world .rw-aurora{z-index:2;mix-blend-mode:screen;opacity:.7}
+.real-world .rw-water,.real-world .rw-stars{z-index:2;pointer-events:none}
+.real-top{height:70px;background:linear-gradient(90deg,#07132be8,#071d42e6);border-bottom:2px solid #20d6fd}
+.real-main{grid-template-columns:minmax(0,39%) minmax(0,1fr) minmax(245px,22%);padding:clamp(25px,4.5vh,55px) clamp(17px,2.15vw,43px) 54px;gap:clamp(11px,1.5vw,29px)}
+.real-left{gap:clamp(18px,2.65vh,27px)}
+.real-brand{margin-left:6px;transform:skew(-8deg);filter:drop-shadow(4px 5px 0 #061b55) drop-shadow(0 0 12px #118ffd)}
+.real-brand strong{font-size:clamp(53px,5.8vw,101px);letter-spacing:-.082em;-webkit-text-stroke:2px #173f8b}
+.real-brand small{font-size:clamp(10px,.9vw,15px);text-shadow:0 2px 0 #021e46}
+.real-play{height:clamp(124px,18.5vh,179px);min-height:124px;clip-path:polygon(0 19%,6% 0,93% 0,100% 20%,100% 78%,93% 100%,6% 100%,0 83%);
+ border:5px solid #ffe8a0;border-radius:6px;background:linear-gradient(168deg,#fff17b 0%,#ffbb29 18%,#ff8519 53%,#e64b0a 85%,#c52d0b 100%);
+ box-shadow:inset 0 5px 0 #fff9c2aa,inset 0 -10px 0 #9b3609aa;filter:drop-shadow(0 6px 0 #0b1843) drop-shadow(0 0 18px #feaa2369)}
+.real-play::after{content:'';position:absolute;inset:7px 10px;clip-path:polygon(0 18%,5% 0,94% 0,100% 21%,100% 80%,94% 100%,5% 100%,0 80%);border:2px solid #ffe08480;pointer-events:none}
+.real-device{border:9px solid #d3f0ff;box-shadow:0 0 0 6px #5674a5,0 0 0 11px #19285e,inset 0 0 0 5px #30b3eb,0 6px 0 #09163d;background:radial-gradient(circle,#20edff 0,#0583c7 47%,#092d75 75%);overflow:hidden}
+.real-device::before{border:3px dashed #8ae9ff;animation:rw-rotate 27s linear infinite}
+.real-device::after{content:'';position:absolute;inset:9%;border-radius:50%;box-shadow:inset 0 0 17px #c4faff82;pointer-events:none}
+.real-play-txt b{font-weight:1000;font-size:clamp(49px,4.8vw,79px);letter-spacing:-.04em;text-shadow:2px 3px #7d2c12}
+.real-play-txt small{font-size:clamp(11px,.9vw,15px);max-width:260px}
+.real-play .real-arrow{filter:drop-shadow(2px 3px 1px #7c2810)}
+.real-actions{gap:12px;grid-auto-rows:minmax(101px,auto)}
+.real-nav{position:relative;min-height:101px;clip-path:polygon(8% 0,94% 0,100% 13%,100% 84%,94% 100%,8% 100%,0 85%,0 16%);border:0;border-radius:0;padding:12px 15px;
+ background:linear-gradient(160deg,#1ebfd4 0 4%,#1358a4 4% 8%,#123e84 8% 66%,#382075 100%);box-shadow:inset 0 3px #d8fbffb5,inset 0 -4px #25e4ff6b,0 6px #021a42;outline:2px solid #42e7f7;outline-offset:-5px}
+.real-nav::before{content:'';position:absolute;inset:5px;z-index:-1;clip-path:polygon(7% 0,94% 0,100% 14%,100% 84%,94% 100%,7% 100%,0 83%,0 16%);background:linear-gradient(120deg,#0d549d,#0a285d 62%,#2b246a)}
+.real-nav b{font-size:clamp(17px,1.45vw,24px);letter-spacing:.01em}
+.real-nav small{font-size:clamp(10px,.77vw,13px)}
+.real-nav img{filter:drop-shadow(1px 3px 0 #071839)}
+.real-right{padding-top:clamp(50px,8.6vh,100px);gap:15px}
+.real-panel{clip-path:polygon(6% 0,94% 0,100% 10%,100% 91%,95% 100%,5% 100%,0 91%,0 10%);border:0;border-radius:0;outline:2px solid #48e4ff;outline-offset:-6px;box-shadow:inset 0 0 0 5px #073466,inset 0 7px #9af8ff31,0 7px 0 #02193c;background:linear-gradient(150deg,#163872f5,#09234df5 55%,#0b1842f7);padding:clamp(17px,1.5vw,23px)}
+.real-panel h2{border-bottom:2px solid #32cfff80;padding-bottom:12px}
+.real-scene{min-width:0}
+.real-legal{border-top:1px solid #58d6f3;background:#061b39a9;padding:7px 24px;opacity:.9}
+.real-nav:focus-visible,.real-play:focus-visible,.real-panel:focus-visible{outline:4px solid #fff097;outline-offset:3px}
+@media (max-width:1100px){.real-main{grid-template-columns:minmax(315px,43%) minmax(0,1fr) minmax(213px,24%);padding-inline:19px;gap:12px}.real-nav{padding:9px}.real-actions{gap:8px}.real-panel{padding:14px}.real-device{flex-basis:110px}}
+@media (max-width:980px){.real-main{grid-template-columns:minmax(315px,1fr) minmax(210px,.76fr)}.real-world .rw-scenery-core{left:31%;width:65%;opacity:.85}.real-right{padding-top:30px}.real-scene{display:none}}
+@media (max-width:700px){
+ .real-main{display:flex;flex-direction:column;padding:24px 12px 42px;gap:20px}
+ .real-world .rw-scenery-core{left:0;width:100%;opacity:.65;mask-image:linear-gradient(90deg,transparent,#000 13%,#000 87%,transparent);background-size:cover;background-position:60% center}
+ .real-world::before{background:linear-gradient(180deg,#061539ae,#06163d9b 40%,#07173dc9)}
+ .real-brand strong{font-size:clamp(45px,12vw,77px)}
+ .real-play{min-height:120px;height:126px;padding:10px 16px 10px 12px}
+ .real-device{flex:0 0 92px;border-width:6px}
+ .real-play-txt b{font-size:clamp(37px,10vw,55px)}
+ .real-right{padding-top:0;display:grid;grid-template-columns:1fr 1fr;gap:9px}
+ .real-nav{min-height:88px;clip-path:polygon(7% 0,95% 0,100% 16%,100% 85%,95% 100%,7% 100%,0 85%,0 15%)}
+ .real-panel h2{font-size:12px}.real-panel p,.real-stats>span{font-size:10px}
+}
+@media (max-width:430px){.real-right{grid-template-columns:1fr}.real-actions{gap:8px}.real-nav img{width:42px;height:42px}.real-play-txt small{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.real-world .rw-aurora,.real-world .rw-water,.real-world .rw-stars,.real-world .rw-light{animation:none!important}}
+
+
+/* ====================================================================
+   DIGIBONK · RECONSTRUCCIÓN DEL MENU APROBADO (COMPONENTES REALES)
+   El paisaje es una imagen SIN UI; no hay textos ni controles horneados.
+   Toda la navegación, contadores, progreso, registros y retrato son DOM.
+   Agumon y Gabumon proceden de la MISMA ilustración aprobada.
+   ==================================================================== */
+#overlay.menu-mode:has(.realhub){padding:0!important;overflow-x:hidden!important;overflow-y:auto!important;background:#071b42!important}
+#overlay.menu-mode:has(.realhub)>.realhub{opacity:1!important;animation:none!important;filter:none!important;transform:none!important}
+.realhub{background:#082457!important;min-height:100dvh!important;font-family:system-ui,'Segoe UI',Arial,sans-serif!important}
+.real-world{position:absolute!important;inset:0!important;background:#082c58!important;isolation:isolate!important;overflow:hidden!important;z-index:-2!important}
+.real-world .rw-scenery{
+ position:absolute!important;inset:0!important;
+ background-image:url('ui/mundo_digital_solo_escenario.jpg')!important;
+ background-size:cover!important;background-position:center center!important;
+ filter:none!important;transform:none!important;animation:none!important;opacity:1!important;
+ image-rendering:auto!important
+}
+.real-world .rw-scenery-core{display:none!important}
+.real-world::before{content:''!important;position:absolute!important;inset:0!important;z-index:1!important;pointer-events:none!important;background:linear-gradient(90deg,#061a3e77 0%,#061a3e35 23%,transparent 43%,transparent 76%,#05163336 89%,#05163366 100%),linear-gradient(0deg,#03152e66,transparent 19%,transparent 91%,#04143132)!important}
+.real-world .rw-aurora{position:absolute!important;z-index:2!important;left:35%!important;top:-15%!important;width:56%!important;height:48%!important;opacity:.38!important;background:radial-gradient(ellipse at 70% 40%,#4bfde81b,transparent 58%),radial-gradient(ellipse at 40% 58%,#c954f71d,transparent 60%)!important;animation:dw-aurora-slow 13s ease-in-out infinite alternate!important;mix-blend-mode:screen!important}
+.real-world .rw-light{position:absolute!important;z-index:2!important;left:59%!important;top:17%!important;opacity:.5!important;width:26%!important;height:48%!important;background:radial-gradient(ellipse,#54f8ff2e,transparent 65%)!important;animation:dw-portal-breathe 4.5s ease-in-out infinite alternate!important;mix-blend-mode:screen!important}
+.real-world .rw-water{z-index:2!important;opacity:.17!important;background:repeating-linear-gradient(0deg,transparent 0px,transparent 13px,#78ffff0b 14px,#8effff12 15px,transparent 17px,transparent 35px)!important;mask-image:linear-gradient(transparent 49%,#000 82%)!important;animation:dw-water-shimmer 12s linear infinite!important}
+.real-world .rw-stars{z-index:2!important;opacity:.36!important;mix-blend-mode:screen!important;animation:rw-stars 33s linear infinite!important}
+@keyframes dw-aurora-slow{0%{transform:translateX(-2%) scale(1);opacity:.25}100%{transform:translateX(2%) scale(1.04);opacity:.48}}
+@keyframes dw-portal-breathe{0%{opacity:.15;transform:scale(.97)}100%{opacity:.48;transform:scale(1.04)}}
+@keyframes dw-water-shimmer{to{background-position:0 90px}}
+.real-top{height:clamp(60px,7.3vh,75px)!important;min-height:60px!important;display:flex!important;align-items:center!important;padding:6px clamp(15px,1.8vw,28px)!important;gap:clamp(6px,.9vw,16px)!important;background:linear-gradient(180deg,#071435f0,#071a3abf)!important;border-bottom:2px solid #23d6ff!important;box-shadow:0 2px 10px #05153444!important;z-index:15!important}
+.real-user{border-color:#68ddff!important;background:#0d254fcf!important;min-width:165px!important}
+.real-user strong{color:#ffe194!important}
+.real-chip{border:2px solid #42dcff!important;background:#071c48ef!important;color:#ffe077!important;box-shadow:inset 0 2px #98f9ff3a!important}
+.real-mini{border:2px solid #52e3ff!important;background:#082253ea!important;border-radius:4px!important}
+.real-main{position:relative!important;display:grid!important;grid-template-columns:minmax(0,40%) minmax(0,1fr) minmax(0,21%)!important;gap:1.7vw!important;width:100%!important;min-height:calc(100dvh - 70px)!important;padding:clamp(38px,6.2vh,65px) 2.9vw 50px 2.4vw!important;align-items:start!important}
+.real-left{gap:0!important;max-width:650px!important;z-index:3!important;position:relative!important}
+.real-brand{margin:0 0 clamp(28px,4vh,43px) 12px!important;filter:drop-shadow(4px 5px 0 #071348) drop-shadow(0 0 10px #067cff)!important;transform:skew(-8deg)!important}
+.real-brand strong{font-size:clamp(58px,6.2vw,105px)!important;line-height:.94!important;letter-spacing:-.07em!important;white-space:nowrap!important}
+.real-brand small{font-size:clamp(9px,.88vw,15px)!important;letter-spacing:.2em!important;margin-top:7px!important;text-shadow:0 2px #051633!important}
+.real-play{width:100%!important;max-width:615px!important;min-height:130px!important;height:clamp(136px,18.5vh,183px)!important;display:flex!important;gap:clamp(15px,1.8vw,28px)!important;padding:12px 26px 12px 19px!important;margin-bottom:clamp(22px,3.1vh,36px)!important;border:0!important;border-radius:0!important;clip-path:polygon(0% 20%,6% 0,94% 0,100% 21%,100% 79%,94% 100%,6% 100%,0 80%)!important;background:linear-gradient(174deg,#ffed69 0%,#ffbb24 23%,#ff8613 47%,#f35a0e 75%,#bf320d 100%)!important;box-shadow:inset 0 6px #fff2aa9e,inset 0 -9px #9c340f!important;filter:drop-shadow(0 7px 0 #0b2d64) drop-shadow(0 0 18px #f88e1d83)!important}
+.real-play:before{content:'';position:absolute!important;inset:0!important;z-index:0!important;border:10px solid #ffdf4c!important;clip-path:inherit!important;pointer-events:none!important}
+.real-play:after{inset:8px!important;border-color:#fff7b4!important;opacity:.88!important}
+.real-play>*{z-index:1!important}
+.real-play:hover{filter:brightness(1.12) drop-shadow(0 4px 0 #0b2d64) drop-shadow(0 0 21px #ffbf67)!important}
+.real-device{height:clamp(94px,12.2vw,148px)!important;flex:0 0 clamp(94px,12.2vw,148px)!important;border:8px solid #c0eaff!important;outline:5px solid #244c8d!important;background:radial-gradient(circle,#28ecff 0%,#0879c6 54%,#071e62 80%)!important;box-shadow:0 0 0 6px #526bab,inset 0 0 0 5px #0e47ac,0 0 22px #4adeff8f!important;clip-path:none!important}
+.real-device img{width:80%!important;height:80%!important;image-rendering:pixelated!important}
+.real-play-txt b{font-size:clamp(46px,5vw,83px)!important;line-height:1!important;font-weight:1000!important;color:#fff!important;text-shadow:2px 4px #7b2914!important}
+.real-play-txt small{font-size:clamp(12px,.99vw,17px)!important;font-weight:750!important;color:#fff7db!important}
+.real-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:clamp(10px,1.1vw,18px)!important;grid-auto-rows:minmax(96px,11vh)!important}
+.real-nav{min-width:0!important;width:100%!important;min-height:96px!important;height:100%!important;clip-path:polygon(6% 0%,93% 0%,100% 19%,100% 80%,93% 100%,6% 100%,0% 80%,0% 20%)!important;box-shadow:none!important;border:0!important;border-radius:0!important;padding:12px 14px!important;gap:clamp(9px,1vw,17px)!important;outline:none!important;background:linear-gradient(160deg,#9cfaff 0 4%,#148fc9 4% 9%,#103b83 10% 80%,#4b2b92 100%)!important;filter:drop-shadow(0 5px 0 #061c42) drop-shadow(0 0 11px #31c3ff7a)!important}
+.real-nav::before{inset:6px!important;z-index:0!important;background:linear-gradient(145deg,#115fa1,#102b69 74%,#33217b)!important}
+.real-nav>*{position:relative;z-index:1}
+.real-nav img{width:clamp(46px,4.4vw,65px)!important;height:clamp(46px,4.4vw,65px)!important;object-fit:contain!important;filter:drop-shadow(2px 3px #07183e)!important}
+.real-nav b{font-size:clamp(16px,1.38vw,23px)!important;font-style:italic!important;letter-spacing:0!important;text-shadow:1px 2px #02122d!important}
+.real-nav small{font-size:clamp(10px,.79vw,13px)!important;line-height:1.2!important;color:#e8f9ff!important}
+.real-right{z-index:4!important;gap:clamp(16px,2.1vh,25px)!important;padding-top:clamp(70px,11vh,105px)!important;width:100%!important;min-width:0!important}
+.real-panel{background:linear-gradient(168deg,#153e79f5,#091f4be8 65%,#061738f7)!important;border:0!important;border-radius:0!important;outline:none!important;clip-path:polygon(6% 0,94% 0,100% 12%,100% 87%,94% 100%,6% 100%,0 88%,0 12%)!important;padding:clamp(16px,1.35vw,22px)!important;box-shadow:inset 0 0 0 5px #5bd6ff,inset 0 0 0 9px #0f63ab,0 5px 0 #061f47!important;filter:drop-shadow(0 3px 7px #05153391)!important}
+.real-panel h2{margin:0 0 15px!important;font-size:clamp(16px,1.2vw,22px)!important;text-shadow:0 2px #05142c!important;color:#ffd964!important;border-bottom:2px solid #47bff3aa!important;padding-bottom:11px!important}
+.real-panel p{font-size:clamp(11px,.85vw,15px)!important}
+.real-panel .real-meter{height:13px!important;border:2px solid #4de7fc!important;background:#1c3b65!important}
+.real-stats{gap:10px!important}.real-stats>span{font-size:clamp(11px,.86vw,15px)!important;padding-bottom:10px!important}
+.real-scene{position:relative!important;display:block!important;pointer-events:none!important;z-index:2!important}
+.real-scene .rw-buddy{display:none!important}
+.real-scene .rw-character{position:absolute!important;display:block!important;height:auto!important;max-height:none!important;object-fit:contain!important;image-rendering:pixelated!important;filter:drop-shadow(2px 7px 1px #0016368a)!important;animation:none!important}
+.real-scene .rw-agumon{width:clamp(100px,10.8vw,168px)!important;left:32%!important;top:clamp(325px,44vh,465px)!important}
+.real-scene .rw-gabumon{width:clamp(110px,12vw,185px)!important;left:71%!important;top:clamp(338px,45vh,474px)!important}
+.real-legal{position:absolute!important;bottom:0!important;left:0!important;right:0!important;font-size:10px!important;text-align:left!important;padding:9px 30px!important;border-top:2px solid #27caf7!important;background:#081a3fc9!important}
+@media(max-width:1230px) and (min-width:901px){
+ .real-main{grid-template-columns:41% minmax(0,1fr) 23%!important;gap:1.2vw!important;padding-left:2vw!important;padding-right:2vw!important}
+ .real-brand strong{font-size:clamp(55px,5.7vw,78px)!important}
+ .real-play{height:clamp(120px,17vh,157px)!important}
+ .real-device{flex-basis:106px!important;height:106px!important}
+ .real-play-txt b{font-size:clamp(39px,4.2vw,60px)!important}
+ .real-actions{grid-auto-rows:minmax(80px,10.1vh)!important}
+ .real-nav{min-height:80px!important;padding:8px!important}
+ .real-nav img{width:43px!important;height:43px!important}
+ .real-nav small{font-size:10px!important}
+ .real-panel{padding:12px!important}
+ .real-right{padding-top:clamp(43px,8vh,80px)!important}
+}
+@media(max-width:900px){
+ .real-main{grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr)!important;gap:16px!important;padding:40px 20px 50px!important}
+ .real-scene{display:none!important}
+ .real-left{max-width:none!important}
+ .real-brand strong{font-size:clamp(53px,8vw,85px)!important}
+ .real-play{height:145px!important}
+ .real-device{flex:0 0 104px!important;height:104px!important}
+ .real-play-txt b{font-size:clamp(46px,6vw,70px)!important}
+ .real-right{padding-top:45px!important}
+ .real-nav{min-height:90px!important}
+ .real-actions{grid-auto-rows:96px!important}
+ .real-nav img{width:48px!important;height:48px!important}
+ .real-nav small{display:none!important}
+}
+@media(max-width:680px){
+ .realhub{overflow-x:hidden!important}
+ .real-world{position:fixed!important;inset:0!important}
+ .real-world .rw-scenery{background-position:57% center!important;opacity:.92!important}
+ .real-world::before{background:linear-gradient(180deg,#051633c9,#061c42bc 47%,#062347d5)!important}
+ .real-top{height:auto!important;min-height:60px!important;flex-wrap:wrap!important;padding:6px 9px!important;gap:5px!important}
+ .real-user{min-width:0!important;max-width:47%!important;flex:1 0 47%!important}
+ .real-user img{width:36px!important;height:36px!important}
+ .real-user strong{font-size:13px!important}.real-user small{font-size:10px!important}
+ .real-spacer{display:none!important}
+ .real-chip{font-size:11px!important;padding:6px!important}
+ .real-mini{min-width:34px!important;width:34px!important;height:34px!important;font-size:12px!important}
+ .real-main{display:flex!important;flex-direction:column!important;gap:18px!important;padding:26px 14px 24px!important;min-height:0!important}
+ .real-left{width:100%!important;max-width:none!important}
+ .real-brand{margin:0 auto 27px!important}
+ .real-brand strong{font-size:clamp(55px,12vw,80px)!important}
+ .real-brand small{font-size:10px!important;letter-spacing:.14em!important}
+ .real-play{min-height:120px!important;height:130px!important;margin-bottom:20px!important;padding:10px 15px!important}
+ .real-device{flex:0 0 90px!important;height:90px!important;border-width:5px!important;outline-width:3px!important}
+ .real-play-txt b{font-size:clamp(39px,10vw,60px)!important}
+ .real-play-txt small{font-size:11px!important}
+ .real-actions{grid-template-columns:1fr 1fr!important;gap:9px!important;grid-auto-rows:90px!important}
+ .real-nav{height:90px!important;min-height:90px!important;padding:7px 9px!important;gap:6px!important}
+ .real-nav img{width:41px!important;height:41px!important}
+ .real-nav b{font-size:clamp(13px,3.8vw,17px)!important}
+ .real-nav small{display:none!important}
+ .real-right{padding:0!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important}
+ .real-panel{min-height:165px!important;padding:12px!important;overflow:hidden!important}
+ .real-panel h2{font-size:12px!important;margin-bottom:8px!important;padding-bottom:8px!important}
+ .real-panel p,.real-stats>span{font-size:11px!important}
+ .real-legal{position:relative!important;padding:12px!important;font-size:9px!important;margin-top:2px!important}
+}
+@media(max-width:410px){.real-right{grid-template-columns:1fr!important}.real-play .real-arrow{font-size:24px!important}.real-nav b{font-size:13px!important}.real-play-txt b{font-size:40px!important}}
+@media(prefers-reduced-motion:reduce){.real-world *{animation:none!important}}
+
+\n/* DIGIBONK · IMPLEMENTACIÓN DEL ARTE APROBADO: ELEMENTOS REALES (v2)
+ * Los botones son PNG separados de la referencia, el DOM aporta eventos y datos.
+ * Los valores del jugador NUNCA están impresos en las imágenes.
+ */
+#overlay.menu-mode:has(.realhub){background:#06204c!important}
+.realhub{background:#042456!important;isolation:isolate!important}
+.real-world{background:#082655!important;z-index:-1!important}
+.real-world .rw-scenery{
+  position:absolute!important;inset:0!important;
+  background-image:url('ui/mundo_digital_solo_escenario.jpg')!important;
+  background-size:cover!important;background-position:center 43%!important;
+  filter:saturate(1.15) contrast(1.02)!important;
+  transform:none!important;animation:none!important;opacity:1!important;
+  image-rendering:auto!important;
+}
+.real-world .rw-scenery-core{display:none!important}
+.real-world::before{content:''!important;position:absolute!important;inset:0!important;z-index:1!important;pointer-events:none!important;
+  background:linear-gradient(90deg,rgba(1,18,49,.58),rgba(2,20,53,.15) 36%,transparent 48%,transparent 75%,rgba(3,16,43,.20) 87%,rgba(1,14,40,.39)),linear-gradient(0deg,rgba(0,10,28,.18),transparent 33%,transparent 79%,rgba(2,10,27,.11))!important;
+}
+.real-world .rw-aurora{z-index:2!important;opacity:.38!important}
+.real-world .rw-water{opacity:.12!important}
+.real-world .rw-stars{opacity:.34!important}
+.real-top{background:linear-gradient(180deg,rgba(2,18,51,.95),rgba(5,26,66,.88))!important;border-bottom:2px solid #31e7ff!important;box-shadow:0 2px 8px #051841aa!important}
+.real-main{grid-template-columns:minmax(0,40%) minmax(0,1fr) minmax(250px,21%)!important;column-gap:clamp(14px,1.75vw,30px)!important;padding:clamp(32px,5vh,55px) clamp(19px,2.15vw,36px) 65px!important;}
+.real-left{max-width:630px!important;gap:clamp(16px,2.3vh,25px)!important}
+.real-brand{margin:0 0 clamp(16px,2vh,25px) 18px!important;filter:drop-shadow(0 4px 0 #072b70) drop-shadow(0 0 14px #059afca8)!important}
+.real-brand strong{font-size:clamp(56px,6.1vw,100px)!important;line-height:.96!important}
+.real-brand small{letter-spacing:.22em!important;color:#9dfbf8!important}
+.real-play{max-width:630px!important;width:100%!important;height:clamp(140px,17.9vh,181px)!important;min-height:137px!important;margin:0 0 clamp(16px,2.2vh,26px)!important;border:0!important;border-radius:0!important;
+  clip-path:polygon(2% 22%,8% 0,93% 0,100% 20%,100% 79%,93% 100%,8% 100%,2% 78%)!important;
+  background:linear-gradient(175deg,#fff6aa 0%,#ffce34 13%,#ff9b13 31%,#fa6d0e 75%,#b93a0a 100%)!important;
+  box-shadow:inset 0 6px #fff5a1,inset 0 -9px #aa3607!important;
+  filter:drop-shadow(0 6px 0 #163d75) drop-shadow(0 0 22px #ed9b29aa)!important;
+  padding:12px 22px 12px 16px!important;
+}
+.real-play:before{content:''!important;position:absolute!important;inset:3px!important;border:5px solid #e87312!important;clip-path:inherit!important;pointer-events:none!important}
+.real-play:after{inset:9px!important;border:2px solid #ffe586aa!important}
+.real-device{height:clamp(108px,11vw,153px)!important;flex:0 0 clamp(108px,11vw,153px)!important;border:8px solid #d7eaff!important;outline:5px solid #20437c!important;box-shadow:0 0 0 6px #4c639c,inset 0 0 0 5px #149dff,0 0 20px #1bdcff!important;background:radial-gradient(circle,#23dbf1,#094db4 65%,#061d55)!important}
+.real-play-txt b{font-size:clamp(50px,5.2vw,86px)!important;color:white!important;-webkit-text-stroke:1px #63270c!important;text-shadow:3px 5px #823410!important}
+.real-play-txt small{color:#fff9db!important;font-size:clamp(12px,.9vw,16px)!important}
+.real-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:clamp(9px,1vw,16px)!important;grid-auto-rows:clamp(91px,10.7vh,121px)!important}
+.real-nav{position:relative!important;display:block!important;overflow:visible!important;height:100%!important;min-height:0!important;background:none!important;filter:drop-shadow(1px 4px 0 #071f4b) drop-shadow(0 0 7px #2cefff6b)!important;border:0!important;clip-path:none!important;padding:0!important;outline:none!important;box-shadow:none!important;border-radius:0!important}
+.real-nav::before{display:none!important}
+.real-nav>.real-nav-art{width:100%!important;height:100%!important;position:absolute!important;inset:0!important;object-fit:fill!important;image-rendering:auto!important;filter:none!important;z-index:1!important}
+.real-nav>.real-nav-hidden{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important}
+.real-nav:hover{filter:brightness(1.15) drop-shadow(1px 3px 0 #071f4b) drop-shadow(0 0 16px #2cefffaa)!important;transform:translateY(-3px)!important}
+.real-nav:focus-visible{outline:4px solid #ffe377!important;outline-offset:4px!important}
+.real-right{padding-top:clamp(62px,8vh,88px)!important;gap:clamp(16px,2vh,24px)!important}
+.real-panel{border:0!important;border-radius:0!important;clip-path:polygon(6% 0,94% 0,100% 12%,100% 87%,94% 100%,6% 100%,0 88%,0 12%)!important;
+   background:linear-gradient(155deg,#16457dcf,#092552ef 71%,#071738f5)!important;
+   box-shadow:inset 0 0 0 5px #6cd9fc,inset 0 0 0 8px #0c57b0,0 6px 0 #061e46!important;
+   filter:drop-shadow(0 0 13px #18cdff5e)!important;
+   padding:clamp(17px,1.25vw,23px)!important
+}
+.real-panel h2{font-size:clamp(17px,1.25vw,22px)!important;line-height:1.1!important;margin:0 0 14px!important;border-bottom:2px solid #64b9ed8c!important;padding-bottom:11px!important}
+.real-scene .rw-character{filter:drop-shadow(0 5px 3px #071e3dba)!important;image-rendering:pixelated!important}
+.real-scene .rw-agumon{width:clamp(112px,11.1vw,175px)!important;left:31%!important;top:clamp(325px,46vh,470px)!important}
+.real-scene .rw-gabumon{width:clamp(116px,11.8vw,182px)!important;left:71%!important;top:clamp(338px,47vh,488px)!important}
+.real-legal{background:#021a41c9!important;border-top:2px solid #2de5ff!important;text-align:left!important}
+@media(max-width:1300px) and (min-width:901px){
+ .real-main{grid-template-columns:minmax(0,40%) minmax(0,1fr) minmax(250px,23%)!important;gap:1vw!important}
+ .real-play-txt b{font-size:clamp(42px,4.4vw,64px)!important}
+ .real-device{height:110px!important;flex-basis:110px!important}
+ .real-actions{grid-auto-rows:clamp(81px,10vh,103px)!important}
+ .real-brand strong{font-size:clamp(54px,5.4vw,75px)!important}
+ .real-panel{padding:13px!important}
+}
+@media(max-width:900px){
+ .real-main{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)!important;gap:18px!important;padding:35px 20px 55px!important}
+ .real-scene{display:none!important}
+ .real-brand strong{font-size:clamp(52px,8vw,80px)!important}
+ .real-right{padding-top:20px!important}
+ .real-actions{grid-auto-rows:96px!important}
+}
+@media(max-width:680px){
+ .real-world{position:fixed!important}
+ .real-world .rw-scenery{background-position:57% center!important;opacity:1!important}
+ .real-world::before{background:linear-gradient(180deg,#06162fb8 0%,#041f4ba6 51%,#05142bcf 100%)!important}
+ .real-main{display:flex!important;flex-direction:column!important;gap:20px!important;padding:25px 14px 28px!important}
+ .real-brand{margin:0 auto 25px!important}
+ .real-brand strong{font-size:clamp(54px,12.5vw,74px)!important}
+ .real-play{height:130px!important;min-height:130px!important;padding:8px 16px!important}
+ .real-device{height:93px!important;flex:0 0 93px!important;border-width:5px!important;outline-width:3px!important}
+ .real-play-txt b{font-size:clamp(42px,10vw,61px)!important}
+ .real-actions{grid-auto-rows:clamp(77px,21vw,104px)!important;gap:10px!important}
+ .real-right{padding:0!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important}
+ .real-panel{min-height:172px!important;padding:13px!important}
+ .real-panel h2{font-size:13px!important}
+ .real-legal{position:relative!important;padding:14px!important;margin-top:8px!important}
+}
+@media(max-width:410px){.real-right{grid-template-columns:1fr!important}}
+@media(prefers-reduced-motion:reduce){.real-world *{animation:none!important}}
+
+
+/* QA móvil y limpieza del borde inferior (sin tocar el paisaje ni generar imágenes). */
+.real-world::after{content:''!important;position:absolute!important;left:0!important;right:0!important;bottom:0!important;height:35px!important;z-index:3!important;pointer-events:none!important;background:linear-gradient(0deg,#041932ee,transparent)!important}
+@media(max-width:680px){
+ .real-top{display:grid!important;grid-template-columns:minmax(0,1fr) repeat(4,35px)!important;gap:7px!important;padding:7px 9px!important;min-height:112px!important;height:auto!important;align-items:center!important}
+ .real-user{grid-column:1 / 3!important;grid-row:1!important;max-width:none!important;width:100%!important;min-width:0!important}
+ .real-spacer{display:none!important}
+ .real-chip{grid-row:2!important;max-width:none!important;min-width:0!important;justify-content:center!important;white-space:nowrap!important;padding:5px 4px!important;font-size:12px!important}
+ .real-chip:nth-of-type(2){grid-column:1 / 4!important}
+ .real-chip:nth-of-type(3){grid-column:4 / 6!important}
+ .real-mini{grid-row:3!important;width:34px!important;height:34px!important;min-width:34px!important}
+ #rhLang{grid-column:2!important}#rhSound{grid-column:3!important}#rhFullscreen{grid-column:4!important}#rhSettings{grid-column:5!important}
+ .real-main{padding-top:23px!important}
+ .real-actions{grid-auto-rows:clamp(85px,23vw,108px)!important}
+ .real-nav-art{object-fit:fill!important}
+ .real-legal{margin-top:12px!important}
+}
+@media(max-width:420px){.real-right{grid-template-columns:1fr!important}.real-top{grid-template-columns:minmax(0,1fr) repeat(4,35px)!important}}
+
+
+@media(max-width:680px){
+ .real-top{display:flex!important;flex-wrap:wrap!important;gap:6px!important;align-items:center!important;justify-content:space-between!important;padding:7px 9px!important;min-height:112px!important}
+ .real-top .real-user{flex:0 0 100%!important;max-width:100%!important;height:45px!important}
+ .real-top .real-chip{flex:1 1 calc(50% - 6px)!important;max-width:calc(50% - 3px)!important;box-sizing:border-box!important;padding:5px 4px!important;font-size:11px!important}
+ .real-top .real-mini{flex:1 1 calc(25% - 6px)!important;min-width:0!important;max-width:calc(25% - 5px)!important;height:32px!important}
+ .real-top .real-spacer{display:none!important}
+}
+
+
+@media(max-width:680px){
+ .real-top{display:flex!important;flex-flow:row wrap!important;justify-content:space-between!important;align-content:start!important;gap:6px!important}
+ .real-top .real-user{order:0!important;flex:none!important;width:100%!important;max-width:100%!important}
+ .real-top .real-chip{order:1!important;flex:0 0 calc(50% - 3px)!important;width:calc(50% - 3px)!important;max-width:calc(50% - 3px)!important;min-width:0!important;box-sizing:border-box!important}
+ .real-top .real-mini{order:2!important;flex:0 0 calc(25% - 5px)!important;width:calc(25% - 5px)!important;max-width:calc(25% - 5px)!important;min-width:0!important}
+}
+
+@media(max-width:680px){.real-top .real-mini{position:static!important;top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;transform:none!important}}
+
+/* =============================================================
+  MENÚ APROBADO / BOTONES REALES EN CAPAS SEPARADAS (2026-11-11)
+  Gráficos extraídos del diseño aprobado, no una imagen con hotspots.
+  Cada uno sigue siendo un botón HTML independiente con handler.
+============================================================= */
+.realhub .real-left{gap:clamp(12px,2vh,20px)!important}
+.realhub .real-play{position:relative!important;background:transparent url('ui/boton_independiente_jugar.png') center / 100% 100% no-repeat!important;overflow:visible!important;clip-path:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;height:clamp(160px,22vh,235px)!important;padding:0!important;aspect-ratio:629/259!important;min-height:0!important;filter:drop-shadow(0 5px 4px #061c4a90)!important}
+.realhub .real-play::after{display:none!important}
+.realhub .real-play:hover{transform:translateY(-3px)!important;filter:brightness(1.14) drop-shadow(0 8px 6px #061c4a)!important}
+.realhub .real-play:focus-visible{outline:4px solid #fff0a0!important;outline-offset:2px!important}
+.realhub .real-device{position:absolute!important;left:2.2%!important;top:18.5%!important;width:30%!important;height:69%!important;flex:none!important;overflow:hidden!important;border-radius:50%!important;border:0!important;background:radial-gradient(circle at center,#0bb7ec 0 38%,#0b5db5 65%,#02256a 82%)!important;box-shadow:inset 0 0 0 3px #b5ffff!important;display:grid!important;place-items:center!important}
+.realhub .real-device::before,.realhub .real-device::after{display:none!important}
+.realhub .real-device img{width:82%!important;height:83%!important;object-fit:contain!important;image-rendering:pixelated!important;filter:drop-shadow(2px 3px #072b60)!important}
+/* The approved graphic already carries the JUGAR caption. Hidden DOM remains for accessibility. */
+.realhub .real-play-txt,.realhub .real-arrow{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important}
+.realhub .real-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:clamp(8px,1vw,14px)!important;grid-auto-rows:auto!important}
+.realhub .real-nav{display:block!important;position:relative!important;min-width:0!important;min-height:0!important;aspect-ratio:344/125!important;padding:0!important;overflow:visible!important;border:0!important;outline:0!important;background:none!important;box-shadow:none!important;clip-path:none!important;filter:drop-shadow(0 4px 3px #081b44)!important}
+.realhub .real-nav::before{display:none!important}
+.realhub .real-nav-art,.realhub .real-nav img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:fill!important;filter:none!important;image-rendering:auto!important}
+.realhub .real-nav-hidden{position:absolute!important;width:1px!important;height:1px!important;clip-path:inset(50%)!important;overflow:hidden!important}
+.realhub .real-nav:hover{transform:translateY(-3px)!important;filter:brightness(1.2) drop-shadow(0 5px 8px #01d5ff90)!important}
+.realhub .real-nav:focus-visible{outline:4px solid #ffe06f!important;outline-offset:2px!important}
+@media(max-width:980px){.realhub .real-play{height:auto!important;width:100%!important}}
+@media(max-width:700px){.realhub .real-play{height:auto!important;min-height:0!important;width:100%!important}.realhub .real-device{top:18%!important;height:70%!important}.realhub .real-actions{gap:7px!important}.realhub .real-nav{min-height:0!important}}
+@media(prefers-reduced-motion:reduce){.realhub .real-play,.realhub .real-nav{transition:none!important}}
+
+/* Fidelity fix: the original baked Agumon is removed from the LCD art. */
+.realhub .real-play{outline:0!important}
+.realhub .real-device{left:9.3%!important;top:18%!important;width:24.9%!important;height:64%!important;background:radial-gradient(circle at 45% 35%,#27bcea,#0461a4 78%)!important;box-shadow:none!important;border:0!important}
+.realhub .real-device img{width:83%!important;height:88%!important;object-fit:contain!important}
+
+.realhub .real-play::before{display:none!important;content:none!important}
+
+/* ================================================================
+   MENU V3 / independent Digivice LCD and consistently spaced panels
+   This patch modifies only the menu, never the game mechanics.
+   ================================================================ */
+.realhub .real-play{background-image:url('ui/boton_independiente_jugar.png')!important;isolation:isolate!important}
+.realhub .real-device{left:12.0%!important;top:22.1%!important;width:22.3%!important;height:59%!important;box-sizing:border-box!important;
+ border-radius:50%!important;overflow:hidden!important;background:radial-gradient(circle at 42% 30%,#168cca 0,#064978 67%,#021e45 100%)!important;
+ box-shadow:inset 0 0 0 3px #86edff,inset 0 0 16px #00365b!important;z-index:2!important}
+.realhub .real-device img{width:99%!important;height:99%!important;object-fit:contain!important;object-position:center center!important;
+ image-rendering:pixelated!important;filter:drop-shadow(2px 3px 1px #041b43)!important}
+.realhub .real-nav{transition:transform .16s ease,filter .16s ease!important}
+.realhub .real-panel{background:linear-gradient(162deg,#0d3a7cf5,#061b44f2 72%,#081a40f9)!important;
+ box-shadow:inset 0 0 0 3px #73e9ff,inset 0 0 0 7px #0c57a3,0 5px 0 #051b3f!important}
+.realhub .real-panel h2{color:#ffe391!important;letter-spacing:.012em!important}
+.realhub .real-panel:hover{filter:brightness(1.14)!important}
+.realhub .real-brand{filter:drop-shadow(3px 4px 0 #062054) drop-shadow(0 0 10px #14b9ff)!important}
+.realhub .real-legal{background:linear-gradient(90deg,#04122fa9,#04122f42,transparent)!important;padding:6px 11px!important}
+@media(min-width:1100px){
+ .realhub .real-main{grid-template-columns:minmax(0,40%) minmax(0,1fr) minmax(270px,21%)!important}
+ .realhub .real-right{padding-top:clamp(64px,9vh,91px)!important}
+}
+@media(max-width:700px){
+ .realhub .real-device{left:11.6%!important;top:22%!important;width:22.9%!important;height:57.5%!important}
+ .realhub .real-actions{gap:10px!important}
+ .realhub .real-panel{min-height:153px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .realhub .real-nav,.realhub .real-panel,.realhub .real-play{transition:none!important}
+}
+
+/* V4: missing-asset protection; independent buttons stay real HTML controls. */
+.realhub .real-nav.asset-missing{background:linear-gradient(140deg,#166cb2,#102d67 70%,#372381)!important;
+ border:3px solid #68dbff!important;clip-path:polygon(5% 0,95% 0,100% 15%,100% 85%,95% 100%,5% 100%,0 85%,0 15%)!important;
+ display:flex!important;align-items:center!important;justify-content:center!important}
+.realhub .real-nav.asset-missing .real-nav-hidden{position:static!important;width:auto!important;height:auto!important;
+ clip-path:none!important;overflow:visible!important;white-space:normal!important;color:#fff!important;font-size:clamp(12px,1.6vw,20px)!important;
+ font-weight:900!important;text-shadow:0 2px #001637!important;padding:6px!important;text-align:center!important}
+.realhub .real-nav .real-nav-art{display:block;z-index:2!important}
+.realhub .real-device img{image-rendering:pixelated!important}
+
+/* V5 — Restauración fiel del primer plano de la referencia aprobada.
+   Escenario sin nueva ilustración, personajes originales sobre el fondo,
+   HUD enteramente DOM independiente. */
+#overlay.menu-mode:has(.realhub) .real-world .rw-scenery {
+ background-image:url('ui/escenario_referencia_con_personajes.jpg')!important;
+ background-size:cover!important; background-position:center center!important;
+ animation:none!important;transform:none!important;filter:none!important;
+}
+.realhub .real-scene .rw-character{display:none!important}
+/* Neutralización de capa oscura sobre los colores originales */
+.realhub .real-world::before{background:linear-gradient(90deg,rgba(0,13,39,.33),transparent 38%,transparent 75%,rgba(0,12,36,.10))!important}
+/* No inventar Digimon: el entorno conserva los de la imagen aprobada. */
+.realhub .rw-aurora{opacity:.23!important;mix-blend-mode:screen!important}
+.realhub .rw-water{opacity:.11!important;mix-blend-mode:screen!important}
+.realhub .real-legal{background:#04152be8!important;isolation:isolate!important;z-index:9!important}
+/* Tap targets / hierarchy */
+.realhub .real-nav,.realhub .real-play{touch-action:manipulation}
+.realhub .real-nav:active,.realhub .real-play:active{transform:translateY(2px)!important;filter:brightness(.9)!important}
+.realhub .real-panel:focus-visible,.realhub .real-mini:focus-visible,.realhub .real-user:focus-visible{outline:3px solid #ffe070!important;outline-offset:3px!important}
+@media(max-width:680px){
+  .realhub .real-world .rw-scenery{background-position:61% center!important}
+  .realhub .real-world::before{background:linear-gradient(180deg,rgba(0,16,43,.65),rgba(0,20,49,.48) 52%,rgba(0,14,42,.66))!important}
+}
+
+/* ===== DIGIBONK V6 — PULIDO EXCLUSIVAMENTE SOBRE EL DISEÑO APROBADO =====
+   No se cambia el paisaje ni los sprites; las funciones JS permanecen intactas. */
+.realhub .real-world .rw-scenery{
+  animation:none!important;transform:none!important;
+  background-image:url('ui/escenario_referencia_con_personajes.jpg')!important;
+  background-position:center!important;background-size:cover!important;
+}
+/* Animación independiente y tenue únicamente sobre las zonas luminosas del paisaje. */
+.realhub .real-world::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:2;
+  background:radial-gradient(ellipse 8% 17% at 69% 39%,#59fbff52 0%,#4d74ff22 36%,transparent 78%),
+             radial-gradient(ellipse 15% 7% at 62% 81%,#8cffff1e 0%,transparent 80%);
+  mix-blend-mode:screen;animation:db-v6-portal 4.2s ease-in-out infinite alternate;
+}
+@keyframes db-v6-portal {from{opacity:.24}to{opacity:.70}}
+.realhub .rw-stars{opacity:.2!important}
+.realhub .rw-water{opacity:.13!important}
+.realhub .rw-aurora{opacity:.21!important}
+/* Unificar el bisel de las ventanas de datos con los cantos de los botones. */
+.realhub .real-right{gap:clamp(15px,2.4vh,25px)!important}
+.realhub .real-panel{
+  position:relative!important;isolation:isolate;
+  padding:clamp(17px,1.6vw,25px)!important;
+  background:linear-gradient(150deg,#124888ed 0%,#0b336eea 14%,#092657f2 55%,#061a43f7 100%)!important;
+  outline:none!important;clip-path:polygon(5% 0,94% 0,100% 12%,100% 88%,94% 100%,6% 100%,0 88%,0 11%)!important;
+  box-shadow:inset 0 0 0 2px #a6f6ff, inset 0 0 0 6px #166dad, inset 0 9px #a8fbff17,0 7px 0 #021942,0 0 17px #009bff82!important;
+  border:1px solid #77e5ff!important;transition:filter .18s ease,transform .18s ease!important
+}
+.realhub .real-panel::before{content:'';position:absolute;inset:7px;z-index:-1;pointer-events:none;
+  background:linear-gradient(125deg,#64ddff19,transparent 40%),
+  repeating-linear-gradient(90deg,transparent 0 14px,#61ddff08 15px 17px,transparent 18px 27px);
+  clip-path:polygon(5% 0,95% 0,100% 11%,100% 89%,95% 100%,5% 100%,0 89%,0 11%)}
+.realhub .real-panel h2{font-size:clamp(16px,1.4vw,23px)!important;color:#ffe48d!important;
+  text-shadow:0 2px #031130,0 0 12px #ffc55925!important;
+  padding-bottom:11px!important;margin-bottom:12px!important;border-bottom:2px solid #39dfff8c!important}
+.realhub .real-panel h2::after{content:'◆';font-size:12px;color:#36dfff;margin-left:auto;text-shadow:0 0 6px #69e6ff}
+.realhub .real-panel .real-stats>span{padding:9px 1px!important;border-bottom:1px solid #72d9ff47!important}
+.realhub .real-panel .real-stats>span:last-child{border-bottom:0!important}
+.realhub .real-meter{height:13px!important;border:2px solid #60dcff!important;box-shadow:inset 0 0 0 2px #021536,0 0 10px #19cfff55!important}
+.realhub .real-meter i{background:linear-gradient(90deg,#ff9a1d,#ffda43 70%,#fff7a0)!important}
+/* Los accesos mantienen exactamente sus PNG y son botones de verdad. */
+.realhub .real-nav{transform:translateZ(0)}
+.realhub .real-nav:hover{filter:brightness(1.12) drop-shadow(0 3px 9px #31e6ff7e)!important}
+.realhub .real-play:hover{filter:brightness(1.08) drop-shadow(0 5px 13px #ffb32b66)!important}
+.realhub .real-legal{background:linear-gradient(90deg,#02152bdc,#031c399a 55%,#02152bdc)!important}
+/* Menor altura: todos los botones visibles sin quedar por debajo del borde. */
+@media(min-width:701px) and (max-height:760px){
+ .realhub .real-main{padding-top:18px!important;padding-bottom:40px!important}
+ .realhub .real-left{gap:12px!important}
+ .realhub .real-brand strong{font-size:clamp(42px,5vw,76px)!important}
+ .realhub .real-play{height:clamp(100px,16vh,132px)!important}
+ .realhub .real-right{padding-top:27px!important;gap:10px!important}
+ .realhub .real-panel{padding:13px!important}
+}
+@media(max-width:700px){
+ .realhub .real-main{gap:17px!important;padding-top:20px!important}
+ .realhub .real-left{gap:12px!important}
+ .realhub .real-panel{padding:15px!important;clip-path:polygon(5% 0,95% 0,100% 9%,100% 91%,95% 100%,5% 100%,0 91%,0 9%)!important}
+ .realhub .real-panel h2{font-size:15px!important}
+ .realhub .real-panel .real-stats>span{font-size:12px!important}
+ .realhub .real-right{gap:12px!important}
+ .realhub .real-world::after{background:radial-gradient(ellipse 17% 10% at 70% 38%,#39f1ff25,transparent 80%)}
+}
+@media(prefers-reduced-motion:reduce){
+ .realhub .real-world::after{animation:none!important}
+ .realhub .rw-aurora,.realhub .rw-stars,.realhub .rw-water,.realhub .rw-light{animation:none!important}
+}
+
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2691,6 +3283,38 @@ function refreshTopbar(){
   document.getElementById('tbSet').onclick = () => showSettings();
 }
 let newsTimer = null;
+// Portrait for the MENU PLAY Digivice: draw a fresh icon from the actual
+// sprite sheet. Unlike the tiny head icon, this preserves the whole head/neck.
+const menuPlayPortraitCache = Object.create(null);
+function menuPlayPortrait(src, onReady){
+  if(menuPlayPortraitCache[src]) { onReady(menuPlayPortraitCache[src]); return; }
+  const picture = new Image();
+  picture.onload = ()=>{
+    const animCount = typeof ANIM_N==='number' ? ANIM_N : 5;
+    const frames = picture.naturalWidth / picture.naturalHeight > animCount-1 ? animCount : 1;
+    const side = Math.floor(picture.naturalWidth / frames), H=picture.naturalHeight;
+    const probe = document.createElement('canvas'); probe.width=side;probe.height=H;
+    const ctx=probe.getContext('2d',{willReadFrequently:true});ctx.imageSmoothingEnabled=false;
+    ctx.drawImage(picture,0,0,side,H,0,0,side,H);
+    const pixels=ctx.getImageData(0,0,side,H).data;
+    let x0=side,y0=H,x1=-1,y1=-1;
+    for(let y=0;y<H;y++)for(let x=0;x<side;x++)if(pixels[(y*side+x)*4+3]>90){
+      x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);
+    }
+    if(x1<0)return;
+    const bw=x1-x0+1, bh=y1-y0+1;
+    // Crop the upper 72% of the Digimon, never less than 85% of its width.
+    const cropW=Math.min(side,Math.max(bw+8,bh*.88)), cropH=Math.min(H,Math.max(bh*.78,bw*.87));
+    const cx=(x0+x1)/2, cy=y0+cropH*.47;
+    const out=document.createElement('canvas');out.width=144;out.height=144;
+    const o=out.getContext('2d');o.imageSmoothingEnabled=false;
+    const size=Math.max(cropW,cropH);
+    o.drawImage(picture,cx-size/2,cy-size/2,size,size,7,7,130,130);
+    menuPlayPortraitCache[src]=out.toDataURL('image/png');onReady(menuPlayPortraitCache[src]);
+  };
+  picture.onerror=()=>{};picture.src=(typeof sheetOf==='function' ? (sheetOf(src)||src) : src);
+}
+
 function showSelect(){
   state = 'select';
   setHud(false);
@@ -2698,99 +3322,86 @@ function showSelect(){
   hidePause();
   const recs = getRecords();
   const st = loadJSON('digibonk3d-stats', {});
-  const plays = Object.values(st).reduce((a, x) => a + (x.plays || 0), 0);
   const kills = Object.values(st).reduce((a, x) => a + (x.kills || 0), 0);
-  const bestT = recs.reduce((a, r) => Math.max(a, r.t), 0), bestL = recs.reduce((a, r) => Math.max(a, r.lvl || 0), 0);
-  const top3 = recs.slice(0, 3).map((r, i) => `<div class="lb-row${i === 0 ? ' top' : ''}"><span class="lb-n">${i + 1}</span><span class="lb-name">${r.name}${r.win ? ' ★' : ''}</span><span class="lb-val">${fmtTime(r.t)}<small>${r.kills} ${t('kills').toLowerCase()}</small></span></div>`).join('');
-  // Novedades: evento activo, misión diaria y un consejo
-  const news = [];
-  // El banner estacional ya presenta el evento; las noticias muestran información distinta.
-  news.push({k: t('daily').toUpperCase(), tt: dailyText().replace(/^Misión diaria:? ?/, ''), s: `+${DAILY.reward} Bits`});
-  news.push({k: t('tipT').toUpperCase(), tt: t('tip'), s: ''});
-  const item = (id, cls, ic, a, b) => `<button class="m4-item${cls}" id="${id}"><span class="m4-ic">${ic}</span><span class="m4-tx"><b>${a}</b><small>${b}</small></span></button>`;
-  // El arte de este menú es exactamente la referencia aprobada por el usuario.
-  // Los controles HTML y los datos de la partida se dibujan encima, no dentro del PNG.
+  const bestT = recs.reduce((a, r) => Math.max(a, r.t), 0);
+  const bestL = recs.reduce((a, r) => Math.max(a, r.lvl || 0), 0);
+  const d = loadDaily();
+  const currentRuns = Math.min(DAILY.runsGoal, d.runs || 0);
+  const safeText = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const navButton=(id,icon,label,desc)=>`<button class="real-nav" type="button" id="${id}" aria-label="${label}"><img class="real-nav-art" src="ui/boton_independiente_${icon}.png" alt="" aria-hidden="true" onerror="this.style.display='none';this.parentElement.classList.add('asset-missing')"><span class="real-nav-hidden">${label}: ${desc}</span></button>`;
+  const choice = CHARS[selectedKey] || CHARS.agumon;
   showOverlay(`
-    <main class="approved-hub" aria-label="Menú principal de Digibonk">
-      <div class="approved-stage">
-        <img class="approved-art" src="ui/MENU_APROBADO.png" alt="" aria-hidden="true" draggable="false">
-        <div class="approved-aurora" aria-hidden="true"></div>
-        <div class="approved-portal-glow" aria-hidden="true"></div>
-        <div class="approved-pixels" aria-hidden="true"></div>
-        <button id="approvedAccount" class="approved-account" aria-label="Abrir perfil de jugador"><strong>${trainerName || 'Invitado'}</strong><small>${isGuest() ? t('guestTag') : (extra.title ? (TITLES.find(x => x.id === extra.title)?.name || '') : t('noTitle'))}</small></button>
-        <span class="approved-currency approved-bits" title="Bits">${SAVE.bits.toLocaleString('es-ES')}</span>
-        <span class="approved-currency approved-tickets" title="Tickets">${SAVE.tickets}</span>
-        <button id="approvedLang" class="approved-top-button approved-lang" aria-label="Idioma">${LANG.toUpperCase()}</button>
-        <button id="approvedSound" class="approved-top-button approved-sound" aria-label="Sonido">${Sfx.muted ? '🔇' : '🔊'}</button>
-        <button id="approvedFullscreen" class="approved-top-button approved-fs" aria-label="Pantalla completa">⛶</button>
-        <button id="approvedSettings" class="approved-top-button approved-settings" aria-label="Ajustes">⚙</button>
-
-        <button id="playBtn" class="approved-hot approved-play" title="Jugar con ${CHARS[selectedKey].name}" aria-label="Jugar con ${CHARS[selectedKey].name}">
-          <span class="approved-last-portrait${selectedKey === 'agumon' ? ' approved-native-agumon' : ''}"><img id="dwPlayPortrait" src="${spriteOf(selectedKey, false)}" alt="${CHARS[selectedKey].name}"></span>
-          <span class="approved-sr">Jugar · ${CHARS[selectedKey].name}</span>
-        </button>
-        <button id="btnColl" class="approved-hot approved-coll" aria-label="Colección" title="Colección"><span class="approved-sr">Colección</span></button>
-        <button id="btnPlayer" class="approved-hot approved-player" aria-label="Jugador" title="Jugador"><span class="approved-sr">Jugador</span></button>
-        <button id="btnGacha" class="approved-hot approved-gacha" aria-label="Gacha" title="Gacha"><span class="approved-sr">Gacha</span></button>
-        <button id="btnHelp" class="approved-hot approved-help" aria-label="Cómo jugar" title="Cómo jugar"><span class="approved-sr">Cómo jugar</span></button>
-
-        <button class="approved-data approved-mission approved-inspect" id="dwDailyPanel" type="button" aria-label="Ver progreso de misión diaria">
-          <strong>${dailyText()}</strong>
-          <div class="approved-progress"><i style="width:${Math.min(100,Math.round(loadDaily().runs / DAILY.runsGoal * 100))}%"></i></div>
-          <small>+${DAILY.reward} Bits · ver misión</small>
-        </button>
-        <button class="approved-data approved-records approved-inspect" id="dwRecordsPanel" type="button" aria-label="Ver récords de partidas">
-          <div><span>Mejor tiempo</span><b>${fmtTime(bestT)}</b></div>
-          <div><span>Mejor nivel</span><b>${bestL}</b></div>
-          <div><span>Bajas</span><b>${kills}</b></div>
-        </button>
-        <div class="approved-menu-legal" aria-label="Aviso legal">${t('legal')}</div>
-        <div id="approvedModalHost" aria-live="polite"></div>
-      </div>
+    <main class="realhub" aria-label="Menú principal Digibonk">
+      <div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><div class="rw-scenery-core"></div><div class="rw-aurora"></div><div class="rw-light"></div><div class="rw-water"></div><div class="rw-stars"></div></div>
+      <header class="real-top">
+        <button type="button" class="real-user" id="rhProfile"><img id="rhProfileImg" src="${headUrl(spriteOf(avatarKey(),false))}" alt=""><span><strong>${safeText(trainerName || 'Invitado')}</strong><small>${isGuest() ? t('guestTag') : (extra.title ? (TITLES.find(x => x.id === extra.title)?.name || '') : t('noTitle'))}</small></span></button>
+        <span class="real-spacer"></span><span class="real-chip" title="Bits">Ⓑ ${SAVE.bits.toLocaleString('es-ES')} Bits</span><span class="real-chip" title="Tickets">🎟 ${SAVE.tickets}</span>
+        <button class="real-mini" type="button" id="rhLang" aria-label="Idioma">${LANG.toUpperCase()}</button><button class="real-mini" type="button" id="rhSound" aria-label="Sonido">${Sfx.muted?'🔇':'🔊'}</button><button class="real-mini" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button><button class="real-mini" type="button" id="rhSettings" aria-label="Ajustes">⚙</button>
+      </header>
+      <section class="real-main">
+        <div class="real-left">
+          <h1 class="real-brand"><strong><em>DIGI</em><span>BONK</span></strong><small>FAN GAME · DIGITAL WORLD</small></h1>
+          <button type="button" id="playBtn" class="real-play" aria-label="Jugar con ${safeText(choice.name)}"><span class="real-device"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span class="real-play-txt"><b>JUGAR</b><small>Último compañero: ${safeText(choice.name)}</small></span><span class="real-arrow" aria-hidden="true">▶</span></button>
+          <div class="real-actions">
+            ${navButton('btnColl','coleccion','COLECCIÓN','Skins, marcos y evoluciones')}
+            ${navButton('btnPlayer','jugador','JUGADOR','Tarjeta, títulos y perfil')}
+            ${navButton('btnGacha','gacha','GACHA','Invocaciones con Bits y tickets')}
+            ${navButton('btnHelp','ayuda','CÓMO JUGAR','Tutorial y controles')}
+          </div>
+        </div>
+        <div class="real-scene" aria-hidden="true">
+          <img class="rw-character rw-agumon" src="ui/personaje_aprobado_agumon.png" alt="">
+          <img class="rw-character rw-gabumon" src="ui/personaje_aprobado_gabumon.png" alt="">
+        </div>
+        <aside class="real-right" aria-label="Información del jugador">
+          <button type="button" class="real-panel" id="rhMission"><h2>▣ ${t('daily')}</h2><p>${safeText(dailyText())}</p><span class="real-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></span><p class="real-reward">${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits</p></button>
+          <button type="button" class="real-panel" id="rhRecords"><h2>🏆 ${t('recs')}</h2><div class="real-stats"><span>Mejor tiempo <b>${fmtTime(bestT)}</b></span><span>Mejor nivel <b>${bestL}</b></span><span>Bajas <b>${kills}</b></span></div></button>
+        </aside>
+        <footer class="real-legal">${t('legal')}</footer>
+      </section>
+      <div id="realModalHost" class="real-modal-host" aria-live="polite"></div>
     </main>`);
   overlay.classList.add('menu-mode');
-  headUrl(spriteOf(selectedKey, false), (data) => { const portrait = document.getElementById('dwPlayPortrait'); if(portrait) portrait.src = data; });
-  document.getElementById('approvedAccount').onclick = () => showPlayer();
-  document.getElementById('approvedLang').onclick = toggleLang;
-  document.getElementById('approvedSound').onclick = () => {toggleMute(true);showSelect();};
-  document.getElementById('approvedFullscreen').onclick = () => {
-    const r = document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
-    if (r && r.catch) r.catch(() => {});
-  };
-  document.getElementById('approvedSettings').onclick = () => showSettings();
-
-  // Ventanas con información real del guardado, sin estadísticas inventadas.
-  const openInfo = (type) => {
-    const host = document.getElementById('approvedModalHost');
-    if (!host) return;
-    const escapeValue = (v) => String(v).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-    let title, body;
-    if (type === 'mission') {
-      const daily = loadDaily();
-      const runs = Math.min(DAILY.runsGoal, daily.runs || 0);
-      title = t('daily');
-      body = `<p>${escapeValue(dailyText())}</p><div class="approved-info-meter"><i style="width:${Math.round(runs / DAILY.runsGoal * 100)}%"></i></div><p>${runs}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits</p>`;
-    } else {
-      title = t('recs');
-      const data = getRecords();
-      body = data.length ? `<div class="approved-info-records">${data.slice(0, 10).map((r,i) => `<div><b>${i+1}. ${escapeValue(r.name)}</b><span>${fmtTime(r.t)} · Nv. ${Number(r.lvl)||0} · ${Number(r.kills)||0} bajas</span></div>`).join('')}</div>` : `<p>${escapeValue(t('none'))}</p>`;
+  // Always start with a valid still portrait: no animation strip flashes in the Digivice.
+  const playPortrait = document.getElementById('rhPlayPortrait');
+  if (playPortrait) playPortrait.src = 'ui/menu_portraits/' + (CHARS[selectedKey] ? selectedKey : 'agumon') + '.png';
+  // The equipped skin may have a unique appearance; if so, use that sprite's first frame.
+  if (typeof skinEquipped !== 'undefined' && skinEquipped[selectedKey] && skinEquipped[selectedKey] !== 'classic') {
+    menuPlayPortrait(spriteOf(selectedKey,false), data => {
+      const im=document.getElementById('rhPlayPortrait');
+      if(im && im.isConnected) im.src=data;
+    });
+  }
+  headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
+  document.getElementById('playBtn').onclick=()=>showPicker('personaje');
+  document.getElementById('btnColl').onclick=showCollection;
+  document.getElementById('btnPlayer').onclick=showPlayer;
+  document.getElementById('btnGacha').onclick=showGacha;
+  document.getElementById('btnHelp').onclick=showHelp;
+  document.getElementById('rhProfile').onclick=showPlayer;
+  document.getElementById('rhSettings').onclick=showSettings;
+  document.getElementById('rhLang').onclick=toggleLang;
+  document.getElementById('rhSound').onclick=()=>{toggleMute(true);showSelect()};
+  document.getElementById('rhFullscreen').onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{})};
+  const openInfo=type=>{
+    const host=document.getElementById('realModalHost');if(!host)return;
+    let title,content;
+    if(type==='mission'){
+      title=t('daily');
+      content=`<p>${safeText(dailyText())}</p><div class="approved-info-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></div><p>${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits</p>`;
+    }else{
+      title=t('recs');
+      content=recs.length?`<div class="approved-info-records">${recs.slice(0,10).map((r,i)=>`<div><b>${i+1}. ${safeText(r.name)}</b><span>${fmtTime(r.t)} · Nv. ${Number(r.lvl)||0} · ${Number(r.kills)||0} bajas</span></div>`).join('')}</div>`:`<p>${safeText(t('none'))}</p>`;
     }
-    host.innerHTML = `<div class="approved-info-scrim"><section class="approved-info-dialog" role="dialog" aria-modal="true" aria-label="${escapeValue(title)}"><header><h2>${escapeValue(title)}</h2><button type="button" id="approvedInfoClose" aria-label="Cerrar">✕</button></header>${body}<button type="button" id="approvedInfoDone">Volver al menú</button></section></div>`;
-    const close = () => { host.innerHTML = ''; };
-    host.querySelector('#approvedInfoClose').onclick = close;
-    host.querySelector('#approvedInfoDone').onclick = close;
-    host.querySelector('.approved-info-scrim').onclick = (e) => {if(e.target === e.currentTarget) close();};
-    host.querySelector('#approvedInfoClose').focus();
+    host.innerHTML=`<div class="approved-info-scrim"><section class="approved-info-dialog" role="dialog" aria-modal="true" aria-label="${safeText(title)}"><header><h2>${safeText(title)}</h2><button type="button" id="realClose">✕</button></header>${content}<button type="button" id="realDone">Volver al menú</button></section></div>`;
+    const close=()=>{host.innerHTML=''};
+    host.querySelector('#realClose').onclick=close;host.querySelector('#realDone').onclick=close;
+    host.querySelector('.approved-info-scrim').onclick=e=>{if(e.target===e.currentTarget)close()};
+    host.querySelector('#realClose').focus();
   };
-  document.getElementById('dwDailyPanel').onclick = () => openInfo('mission');
-  document.getElementById('dwRecordsPanel').onclick = () => openInfo('records');
-  document.getElementById('playBtn').onclick = () => showPicker('personaje');
-  document.getElementById('btnGacha').onclick = () => showGacha();
-  document.getElementById('btnPlayer').onclick = () => showPlayer();
-  document.getElementById('btnHelp').onclick = () => showHelp();
-  document.getElementById('btnColl').onclick = () => showCollection();
+  document.getElementById('rhMission').onclick=()=>openInfo('mission');
+  document.getElementById('rhRecords').onclick=()=>openInfo('records');
   clearInterval(newsTimer);
-
 }
 // Ventana de controles: se abre con el botón "?" desde el inicio
 // Tutorial en carrusel: cada pantalla muestra un vídeo corto grabado del propio juego (tutorial/*.webm)
