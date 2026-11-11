@@ -18,8 +18,8 @@ const SCENES = {
   nivel: async (p) => { await p.evaluate(() => { __dbk.startGame('palmon'); __dbk.g.p.xp = __dbk.g.p.nextXp; }); await p.waitForFunction(() => __dbk.state === 'levelup', null, {timeout: 60000}); await sleep(2500); },
   cofre: async (p) => { await p.evaluate(() => { __dbk.startGame('gatomon'); __dbk.nearChest(); }); await sleep(600);
     await p.keyboard.down('w'); await sleep(900); await p.keyboard.up('w'); await p.keyboard.press('e'); await sleep(2200); },
-  zona: async (p) => { await p.evaluate(() => { __dbk.startGame('gabumon'); __dbk.g.t = 297; }); await p.waitForFunction(() => __dbk.g.zone === 2, null, {timeout: 120000}); await sleep(3500); },
-  jefe: async (p) => { await p.evaluate(() => { __dbk.startGame('gabumon'); __dbk.g.t = 597; }); await p.waitForFunction(() => __dbk.g.bossSpawned, null, {timeout: 120000}); await sleep(4500); },
+  zona: async (p) => { await p.evaluate(() => { __dbk.startGame('gabumon'); __dbk.g.t = 597; }); await p.waitForFunction(() => __dbk.g.zone === 2, null, {timeout: 120000}); await sleep(3500); },
+  jefe: async (p) => { await p.evaluate(() => { __dbk.startGame('gabumon'); __dbk.g.t = 1197; }); await p.waitForFunction(() => __dbk.g.bossSpawned, null, {timeout: 120000}); await sleep(4500); },
   coleccion: async (p) => { await p.evaluate(() => __dbk.showCollection()); await sleep(3000); },
   gacha: async (p) => { await p.evaluate(() => __dbk.showGacha()); await sleep(3000); }
 };

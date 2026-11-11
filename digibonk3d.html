@@ -2592,12 +2592,12 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 import * as THREE from 'three';
 
 // Prototipo 3D estilo Megabonk. Sprites 2D de Digimon (base DMC) como billboards.
-const BOSS_AT = 600; // segundos hasta el jefe final; ganas al derrotarlo
+const BOSS_AT = 1200; // segundos hasta el jefe final (20 minutos); ganas al derrotarlo
 const ARENA_R = 110;  // radio del escenario: el mapa tiene límite circular con montañas
 // Dos zonas: el bosque inicial y el pantano de datos (a partir de 300 s). El jefe final está al final de la zona 2.
 const ZONES = [
   {name:'Bosque Inicial',   at:0,   fog:0xbcd9e8, sky:['#4d86c9', '#a9d4ee', '#d8efff'], tint:0xffffff, color:'#ffd54f'},
-  {name:'Pantano de Datos', at:300, fog:0x8c7cb8, sky:['#241b4a', '#6a4f9e', '#c59ad6'], tint:0xd8c6ff, color:'#ce93d8'}
+  {name:'Pantano de Datos', at:600, fog:0x8c7cb8, sky:['#241b4a', '#6a4f9e', '#c59ad6'], tint:0xd8c6ff, color:'#ce93d8'}
 ];
 const ZONE2_AT = ZONES[1].at;
 // Recorta un punto al círculo de radio m (para aparecer y moverse dentro del escenario)
@@ -2666,7 +2666,8 @@ const CHARS = {
 };
 // Digievolución (se activa al llegar a este nivel)
 // Etapas de digievolución: se alcanzan a estos niveles (las que tenga cada línea en Digimon Adventure)
-const EVO_LEVELS = [12, 18, 24];   // antes 8 / 15 / 22: la primera llegaba a los ~2 minutos
+const EVO_LEVELS = [18, 36, 54];   // nivel de cada evolución de una línea; las líneas con una sola evolución evolucionan al 40
+function evoLevelFor(key, idx){ return EVO_LINE[key] && EVO_LINE[key].length === 1 ? 40 : (EVO_LEVELS[idx] || 54); }
 const EVO_LINE = {
   agumon:   [{name:'Greymon',     sprite:'sprites/adventure/greymon.png'},   {name:'MetalGreymon',    sprite:'sprites/adventure/metalgreymon.png'},    {name:'WarGreymon',     sprite:'sprites/adventure/wargreymon.png'}],
   gabumon:  [{name:'Garurumon',   sprite:'sprites/adventure/garurumon.png'}, {name:'WereGarurumon',   sprite:'sprites/adventure/weregarurumon.png'},   {name:'MetalGarurumon', sprite:'sprites/adventure/metalgarurumon.png'}],
@@ -3165,7 +3166,7 @@ function showPause(askQuit = false){
   const sprite = spriteOf(c.id, evolved);
   const hpPct = Math.max(0, 100 * g.p.hp / g.p.maxHp);
   const expPct = Math.min(100, 100 * g.p.xp / g.p.nextXp);
-  const evoNext = EVO_LEVELS[evolved | 0], evoMax = (evolved | 0) >= EVO_LINE[c.id].length;
+  const evoNext = evoLevelFor(c.id, evolved | 0), evoMax = (evolved | 0) >= EVO_LINE[c.id].length;
   const evoPct = evoMax ? 100 : Math.min(100, g.p.lvl / evoNext * 100);
   const evoTxt = evoMax ? 'Forma final alcanzada' : `Siguiente digievolución · Nv ${g.p.lvl}/${evoNext}`;
   const actions = askQuit ? `
@@ -3272,14 +3273,14 @@ let LANG = localStorage.getItem('digibonk3d-lang') === 'en' ? 'en' : 'es';
 const TXT = {
   es: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'Survivor 3D de Digimon, gratis en el navegador', boot:'DIGIVICE · ACCESO AL DIGIMUNDO', who:'Niño elegido, identifícate',
        saved:'Tu nombre se guarda en este navegador.', ph:'TU NOMBRE', enter:'ENTRAR AL DIGIMUNDO', guest:'Entrar como invitado (pruebas)', needName:'Escribe un nombre',
-       play:'JUGAR', playS:'Elige tu Digimon y sobrevive 10 minutos', gacha:'GACHA', gachaS:'Tiradas con Bits o tickets', player:'JUGADOR', playerS:'Tu tarjeta, marcos y títulos',
+       play:'JUGAR', playS:'Elige tu Digimon y sobrevive 20 minutos', gacha:'GACHA', gachaS:'Tiradas con Bits o tickets', player:'JUGADOR', playerS:'Tu tarjeta, marcos y títulos',
        coll:'COLECCIÓN', collS:'Skins, marcos, títulos y evoluciones', help:'CÓMO JUGAR', helpS:'Tutorial con vídeos', set:'AJUSTES', setS:'Calidad, sonido y guardado', recs:'Tus récords', runs:'Partidas', best:'Mejor tiempo', lvl:'Mejor nivel',
        kills:'Bajas', none:'Todavía no hay partidas. ¡Empieza una!', partner:'Tu compañero', noTitle:'Sin título', guestTag:'invitado · pruebas',
        evEnds:'Termina en', evSkin:'Skins de Navidad como legendarias en el gacha', tipT:'Consejo', tip:'Los élites y el jefe sueltan tickets de tirada.', daily:'Misión diaria',
        legal:'Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon.'},
   en: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'A free 3D Digimon survivor in your browser', boot:'DIGIVICE · DIGITAL WORLD ACCESS', who:'DigiDestined, identify yourself',
        saved:'Your name is saved in this browser.', ph:'YOUR NAME', enter:'ENTER THE DIGITAL WORLD', guest:'Enter as guest (testing)', needName:'Type a name',
-       play:'PLAY', playS:'Pick your Digimon and survive 10 minutes', gacha:'GACHA', gachaS:'Pulls with Bits or tickets', player:'PLAYER', playerS:'Your card, frames and titles',
+       play:'PLAY', playS:'Pick your Digimon and survive 20 minutes', gacha:'GACHA', gachaS:'Pulls with Bits or tickets', player:'PLAYER', playerS:'Your card, frames and titles',
        coll:'COLLECTION', collS:'Skins, frames, titles and evolutions', help:'HOW TO PLAY', helpS:'Video tutorial', set:'SETTINGS', setS:'Quality, sound and save', recs:'Your records', runs:'Runs', best:'Best time', lvl:'Best level',
        kills:'Kills', none:'No runs yet. Start one!', partner:'Your partner', noTitle:'No title', guestTag:'guest · testing',
        evEnds:'Ends in', evSkin:'Christmas skins as legendaries in the gacha', tipT:'Tip', tip:'Elites and the boss drop pull tickets.', daily:'Daily mission',
@@ -3542,7 +3543,7 @@ const TUTO = [
   {t:'Esquiva con el dash', d:'Shift te lanza hacia delante. Durante el dash no recibes daño de contacto.', clip:'tutorial/dash.webm'},
   {t:'Experiencia y subida de nivel', d:'Recoge los orbes de experiencia. Al subir de nivel eliges una mejora entre tres.', clip:'tutorial/nivel.webm'},
   {t:'Cofres', d:'Pulsa E junto a un cofre para abrirlo y recibir una mejora.', clip:'tutorial/cofre.webm'},
-  {t:'Zonas', d:'El mapa tiene dos zonas. La segunda, el Pantano de Datos, empieza a los 5 minutos y trae enemigos más duros.', clip:'tutorial/zona.webm'},
+  {t:'Zonas', d:'El mapa tiene dos zonas. La segunda, el Pantano de Datos, empieza a los 10 minutos y trae enemigos más duros.', clip:'tutorial/zona.webm'},
   {t:'Jefe final', d:'Devimon, Etemon y Myotismon aparecen como jefes menores; al final llega Piedmon. Esquiva el anillo rojo antes de cada disparo.', clip:'tutorial/jefe.webm'},
   {t:'Colección y gacha', d:'La colección guarda tus skins por etapa, marcos y títulos. El gacha tiene un banner permanente y los promocionales, cada uno con sus tickets.', clip:'tutorial/coleccion.webm'}
 ];
@@ -3897,7 +3898,7 @@ function renderPickPreview(){
         <h3>Evolución</h3>
         <div class="pv-evo">
           <div class="pv-node pk-stage${pickStage === 0 ? ' on' : ''}" data-stage="0">${sprEl(spriteOf(k, 0), 64)}<small>${c.name}</small></div>
-          ${EVO_LINE[k].map((e, i) => `<div class="pv-arrow">Nv ${EVO_LEVELS[i]} ➜</div><div class="pv-node pk-stage${pickStage === i + 1 ? ' on' : ''}" data-stage="${i + 1}">${sprEl(spriteOf(k, i + 1), 64)}<small>${e.name}</small></div>`).join('')}
+          ${EVO_LINE[k].map((e, i) => `<div class="pv-arrow">Nv ${evoLevelFor(k, i)} ➜</div><div class="pv-node pk-stage${pickStage === i + 1 ? ' on' : ''}" data-stage="${i + 1}">${sprEl(spriteOf(k, i + 1), 64)}<small>${e.name}</small></div>`).join('')}
         </div>
         <p class="pk2-note">Cada etapa: +20% daño, +5% área y +20 PS · solo durante la partida</p>
       </div>
@@ -4008,12 +4009,12 @@ const ZONE_FOES = [
 ];
 // Minijefes en el orden de la serie; el último, Piedmon, es el jefe final (BOSS_AT)
 const MINIS = [
-  {at: 120, name: 'Devimon',        sprite: 'sprites/devimon.png',        hp: 300},
-  {at: 240, name: 'Etemon',         sprite: 'sprites/adventure/etemon.png',         hp: 340},
-  {at: 360, name: 'Myotismon',      sprite: 'sprites/adventure/myotismon.png',      hp: 380},
-  {at: 480, name: 'MetalSeadramon', sprite: 'sprites/adventure/metalseadramon.png', hp: 380},
-  {at: 520, name: 'Puppetmon',      sprite: 'sprites/adventure/puppetmon.png',      hp: 380},
-  {at: 560, name: 'Machinedramon',  sprite: 'sprites/adventure/machinedramon.png',  hp: 420}
+  {at: 240, name: 'Devimon',        sprite: 'sprites/devimon.png',        hp: 300},
+  {at: 480, name: 'Etemon',         sprite: 'sprites/adventure/etemon.png',         hp: 340},
+  {at: 720, name: 'Myotismon',      sprite: 'sprites/adventure/myotismon.png',      hp: 380},
+  {at: 960, name: 'MetalSeadramon', sprite: 'sprites/adventure/metalseadramon.png', hp: 380},
+  {at: 1040, name: 'Puppetmon',      sprite: 'sprites/adventure/puppetmon.png',      hp: 380},
+  {at: 1120, name: 'Machinedramon',  sprite: 'sprites/adventure/machinedramon.png',  hp: 420}
 ];
 // Jefes especiales: los Digimon desbloqueados y sus variantes variocolor que tengas
 const SPECIAL_CHANCE = 0.10;   // probabilidad de que aparezca un jefe especial tras el jefe final
@@ -4039,7 +4040,7 @@ function spawnSpecial(){
   const sp = clampArena(g.p.x + Math.cos(a)*24, g.p.z + Math.sin(a)*24, ARENA_R - 0.5);
   const hp = 900*(1 + (t - BOSS_AT)/120)*evoHp();
   const name = CHARS[pick.key].name;
-  g.enemies.push({kind: 'mini', special: true, name, sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 3.0, r: 1.9, xp: 120, dmg: 18*(1 + t/300), cd: 0});
+  g.enemies.push({kind: 'mini', special: true, name, sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 3.0, r: 1.9, xp: 120, dmg: 18*(1 + t/600), cd: 0});
   sfx('boss');
   announce('¡' + name.toUpperCase() + '!', 'Jefe especial', '#ffd54f');
 }
@@ -4050,8 +4051,8 @@ function spawnMini(m){
   const shadow = makeShadow(4.4);
   world.add(shadow);
   const sp = clampArena(g.p.x + Math.cos(a)*24, g.p.z + Math.sin(a)*24, ARENA_R - 0.5);
-  const hp = m.hp*(1 + t/90)*evoHp();
-  g.enemies.push({kind: 'mini', name: m.name, sprite: m.sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 2.5, r: 1.9, xp: 60, dmg: 16*(1 + t/300), cd: 0});
+  const hp = m.hp*(1 + t/180)*evoHp();
+  g.enemies.push({kind: 'mini', name: m.name, sprite: m.sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 2.5, r: 1.9, xp: 60, dmg: 16*(1 + t/600), cd: 0});
   sfx('boss');
   announce('¡' + m.name.toUpperCase() + '!', 'Un jefe menor entra en combate', '#ce93d8');
 }
@@ -4308,7 +4309,7 @@ function spawnEnemy(forced){
   if (forced) kind = forced;
   else if (t > 120 && r < (z2 ? 0.3 : 0.2)) kind = 'tank';
   else if (t > 60 && r < (z2 ? 0.5 : 0.4)) kind = 'fast';
-  const d = ENEMY[kind], k = 1 + t/60 + (t/200)*(t/200);   // vida: x4,8 a los 3 min y x20 a los 10 min
+  const d = ENEMY[kind], k = 1 + t/120 + (t/400)*(t/400);   // vida: x20 al minuto 20 (igual que x20 al minuto 10 antes)
   const pool = ZONE_FOES[g.zone - 1][kind], sprite = pool ? pool[Math.floor(Math.random()*pool.length)] : d.sprite;
   const mesh = billboard(sprite, d.scale);
   mesh.position.y = d.scale/2;
@@ -4318,10 +4319,42 @@ function spawnEnemy(forced){
   world.add(shadow);
   g.enemies.push({
     kind, sprite, mesh, shadow, x: sp[0], z: sp[1],
-    hp: d.hp*k*evoHp(), max: d.hp*k*evoHp(), spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + t/300)*evoDmg(), cd: 0
+    hp: d.hp*k*evoHp(), max: d.hp*k*evoHp(), spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + t/600)*evoDmg(), cd: 0
   });
 }
 
+// Santuarios: 6 por partida en el mapa. Al pasar por uno, un efecto para el resto de la partida (una sola vez)
+const SHRINE_TYPES = [
+  {name: 'Santuario de curación', col: 0x7cf29c, text: '+40 PS', apply: g => { g.p.hp = Math.min(g.p.maxHp, g.p.hp + 40); }},
+  {name: 'Santuario de poder', col: 0xff7043, text: '+10% daño', apply: g => { g.p.dmg *= 1.1; }},
+  {name: 'Santuario veloz', col: 0x40c4ff, text: '+8% velocidad', apply: g => { g.p.speed *= 1.08; }},
+  {name: 'Santuario de área', col: 0xce93d8, text: '+10% área', apply: g => { g.p.area *= 1.1; }},
+  {name: 'Santuario de tickets', col: 0xffd54f, text: '+1 ticket del permanente', apply: () => addTickets('std', 1)}
+];
+function initShrines(){
+  g.shrines = [];
+  for (let i = 0; i < 6; i++){
+    const type = SHRINE_TYPES[i % SHRINE_TYPES.length];
+    const a = Math.random()*Math.PI*2, R = 22 + Math.random()*68;
+    const [x, z] = clampArena(Math.cos(a)*R, Math.sin(a)*R, ARENA_R - 6);
+    const mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.9, 2.2, 10), new THREE.MeshBasicMaterial({color: type.col}));
+    mesh.position.set(x, 1.1 + terrainH(x, z), z);
+    world.add(mesh);
+    g.shrines.push({x, z, type, mesh, used: false});
+  }
+}
+function updateShrines(){
+  if (!g.shrines) initShrines();
+  for (const sh of g.shrines){
+    if (sh.used) continue;
+    if (dist2(sh.x, sh.z, g.p.x, g.p.z) < 1.8*1.8){
+      sh.used = true; world.remove(sh.mesh);
+      sh.type.apply(g);
+      announce(sh.type.name, sh.type.text, '#' + sh.type.col.toString(16).padStart(6, '0'));
+      sfx('ready');
+    }
+  }
+}
 function spawnChest(p){
   const a = Math.random()*Math.PI*2, R = 10 + Math.random()*8;
   const [cx, cz] = clampArena(p.x + Math.cos(a)*R, p.z + Math.sin(a)*R, ARENA_R - 2);
@@ -4397,9 +4430,9 @@ function update(dt){
   if (g.spawnT <= 0){
     spawnEnemy();
     // Presión creciente: tras 45 s salen más enemigos por tanda (1 extra, +1 cada 90 s, máximo 3)
-    const extra = g.t > 45 ? Math.min(3, 1 + Math.floor(g.t/90)) : 0;
+    const extra = g.t > 45 ? Math.min(3, 1 + Math.floor(g.t/180)) : 0;
     for (let i = 0; i < extra && g.enemies.length < Q.maxEnemies; i++) spawnEnemy();
-    g.spawnT = Math.max(0.3, 0.9 - g.t/180);
+    g.spawnT = Math.max(0.3, 0.9 - g.t/360);
   }
 
   // Minijefes en sus minutos
@@ -4411,7 +4444,7 @@ function update(dt){
   g.eliteT -= dt;
   if (g.eliteT <= 0){
     g.eliteT = 45;
-    const n = g.t >= 300 ? 2 : 1;
+    const n = g.t >= 600 ? 2 : 1;
     for (let i = 0; i < n; i++) spawnEnemy('elite');
     announce('¡Élite!', n > 1 ? 'Dos Digimon élite se acercan' : 'Un Digimon élite se acerca', '#ff7043');
   }
@@ -4494,7 +4527,7 @@ function update(dt){
   // Muertes
   const dead = g.enemies.filter(e => e.hp <= 0);
   for (const e of dead){
-    g.gems.push({x:e.x, z:e.z, v:e.xp, heal: Math.random() < 0.06, mesh: null});
+    g.gems.push({x:e.x, z:e.z, v:e.xp*(1 + g.t/400), heal: Math.random() < 0.06, mesh: null});   // las bajas valen más según avanza la partida
     // 2% por baja, pero con enfriamiento de 45 s y un solo imán en el mapa a la vez
     if ((g.magnetT || 0) <= 0 && Math.random() < 0.02){ spawnMagnetDrop(e.x, e.z); g.magnetT = 45; }
     // Tickets de tirada: 25% de cada élite y 3 seguros del jefe
@@ -4551,6 +4584,7 @@ function update(dt){
   }
   g.gems = g.gems.filter(gm => !gm.taken);
 
+  updateShrines();
   // Cofres: aparecen cada 50 s (máximo 2 vivos) y dan una mejora aleatoria al pasar por encima
   g.chestT -= dt;
   g.magnetT = Math.max(0, (g.magnetT || 0) - dt);
@@ -4645,9 +4679,9 @@ function update(dt){
   if (p.xp >= p.nextXp){
     p.xp -= p.nextXp;
     p.lvl++;
-    p.nextXp = Math.floor(10 + 6*(p.lvl - 1) + 0.6*(p.lvl - 1)*(p.lvl - 1));   // curva suave: nivel 22 alcanzable en 10 minutos
+    p.nextXp = Math.floor(10 + 4*(p.lvl - 1) + 0.35*(p.lvl - 1)*(p.lvl - 1));   // curva para 20 minutos: nivel 54 alcanzable hacia el minuto 19
     g.choices = upgradeChoices();
-    const evoAt = EVO_LEVELS[g.ch.evolved | 0];
+    const evoAt = evoLevelFor(g.ch.id, g.ch.evolved | 0);
     if (evoAt && p.lvl >= evoAt && (g.ch.evolved | 0) < EVO_LINE[g.ch.id].length) digivolve();
     g.pendingUp = true;
   }
@@ -4671,6 +4705,7 @@ function drawEdgeMarkers(){
   c.clearRect(0, 0, cv.width, cv.height);
   if (state !== 'play' || !g) return;
   const targets = g.chests.filter(ch => !ch.open && !ch.gone).map(ch => ({x: ch.x, z: ch.z, col: '#ffd54f'}));
+  for (const sh of g.shrines || []) if (!sh.used) targets.push({x: sh.x, z: sh.z, col: '#' + sh.type.col.toString(16).padStart(6, '0')});
   if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
   for (const e of g.enemies) if (e.kind === 'elite' || e.kind === 'mini') targets.push({x: e.x, z: e.z, col: e.kind === 'mini' ? '#ce93d8' : '#ff7043'});
   const W = cv.width, H = cv.height, cx = W/2, cy = H/2;
@@ -4704,6 +4739,7 @@ const SKILLS = {
   meteoro:  {name:'Lluvia de Meteoros',    k:'ofensiva',  d:'Impactos aleatorios cerca de ti, avisados con un círculo en el suelo.'}
 };
 const SKILL_MAX = 3;      // niveles por habilidad
+const SKILL_K = 0.8;      // factor de daño de las habilidades: regulado para partidas de 20 minutos
 const SKILL_SLOTS = 3;   // habilidades distintas que puedes llevar en una partida
 // Cada Digimon tiene su propio grupo de 4 ataques (de los 8 disponibles)
 const CHAR_SKILLS = {
@@ -4775,7 +4811,7 @@ function dropMine(x, z, lv){
 }
 // Aplica una habilidad activa cada frame: lo que cada una hace está en el bloque de abajo
 function updateSkills(dt){
-  const p = g.p, S = g.sk, L = g.skills, ar = p.area, dm = p.dmg, cm = p.cdMul;
+  const p = g.p, S = g.sk, L = g.skills, ar = p.area, dm = p.dmg * SKILL_K, cm = p.cdMul;
   const lv = id => L[id] || 0;
 
   dmgSrc = 'aura';
