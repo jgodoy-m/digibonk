@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DigiBonk</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
@@ -2488,6 +2489,7 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .gx2-odd{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;padding:3px 0;border-bottom:1px dashed #2c5a8a;font-size:12px}
 .gx2-odd:last-child{border-bottom:0}
 .gx2-odd i{font-style:normal;font-size:12px;letter-spacing:1px}
+.fr-navidad{background:linear-gradient(160deg,#fff,#e53935 45%,#1b5e20 100%)!important;border:4px solid #1b5e20!important;border-radius:18px;box-shadow:0 0 16px #e53935!important}
 .gx2-odd b{font-variant-numeric:tabular-nums}
 .gx2-guar{padding:8px 12px;border-radius:14px;border:2px solid #ffd55e;background:rgba(40,30,8,.7)}
 .gx2-guar p{margin:0 0 6px;font-size:12px;color:#ffe9a8}
@@ -2522,6 +2524,30 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .gx2-tile .rw-frame{transform:scale(.45)}
 .gx2-btn.big.tix10{background:linear-gradient(180deg,#7fe0ff,#1ea7e8 60%,#0a6fb0);box-shadow:0 5px 0 #05405f,0 0 18px rgba(79,195,247,.6)}
 .gx2-btn.big.tix10 b{text-shadow:0 2px #03304a}
+.real-event{display:block;margin:10px 0 4px;padding:8px 14px;border-radius:12px;border:2px solid #ff6b6b;background:linear-gradient(120deg,rgba(150,20,40,.9),rgba(20,100,60,.9));color:#fff;text-align:left;cursor:pointer;font:inherit;box-shadow:0 0 14px rgba(255,107,107,.45)}
+.real-event b{display:block;font-size:15px}
+.real-event small{display:block;font-size:12px;opacity:.95}
+.real-event:hover{filter:brightness(1.12)}
+@media (max-height:820px){.pk2-stage{height:110px!important}.anim.pk2-hero-img{width:100px!important;height:100px!important}.pk2-hero{padding:8px!important}.pk2 .spr{width:40px!important;height:40px!important}.pk2 .pk2-sec{padding:8px!important}.pk2 .pk2-stat{margin:3px 0!important}.pk2-id h2{font-size:24px!important}}
+@media (max-width:760px){
+#overlay{overflow-y:auto;justify-content:flex-start}
+.gx2{height:auto;min-height:100%;padding:10px 10px 18px;grid-template-rows:auto;width:100%;box-sizing:border-box}
+.gx2-main{grid-template-columns:minmax(0,1fr)!important;width:100%!important;gap:12px}
+.gx2{overflow-x:hidden;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto auto auto!important}
+.gx2-main{grid-template-rows:auto auto auto!important}
+.gx2-main>*{min-width:0;width:100%;box-sizing:border-box}
+.gx2-foot{margin-top:12px}
+.gx2,.gx2-main{display:flex!important;flex-direction:column!important;height:auto!important}
+.gx2-main>*,.gx2>*{flex:none!important}
+.gx2-portal{height:250px!important}
+.gx2-center{order:-1}
+.gx2-portal{height:250px;flex:none}
+.gx2-pulls{grid-template-columns:1fr 1fr 1fr;gap:8px}
+.gx2-btn b{font-size:15px}
+.gx2-btn small{font-size:11px}
+.gx2-left,.gx2-right,.gx2-center{overflow:visible!important;height:auto!important;min-height:0!important}
+.gx2-strip{flex-wrap:nowrap}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2641,7 +2667,6 @@ const CHARS = {
 // Digievolución (se activa al llegar a este nivel)
 // Etapas de digievolución: se alcanzan a estos niveles (las que tenga cada línea en Digimon Adventure)
 const EVO_LEVELS = [8, 15, 22];
-const EVO_LEVEL = EVO_LEVELS[0];
 const EVO_LINE = {
   agumon:   [{name:'Greymon',     sprite:'sprites/adventure/greymon.png'},   {name:'MetalGreymon',    sprite:'sprites/adventure/metalgreymon.png'},    {name:'WarGreymon',     sprite:'sprites/adventure/wargreymon.png'}],
   gabumon:  [{name:'Garurumon',   sprite:'sprites/adventure/garurumon.png'}, {name:'WereGarurumon',   sprite:'sprites/adventure/weregarurumon.png'},   {name:'MetalGarurumon', sprite:'sprites/adventure/metalgarurumon.png'}],
@@ -2653,7 +2678,6 @@ const EVO_LINE = {
   tentomon: [{name:'Kabuterimon', sprite:'sprites/adventure/kabuterimon.png'},    {name:'MegaKabuterimon', sprite:'sprites/adventure/megakabuterimon.png'}]
 };
 // Primera etapa de cada línea (colección y menús)
-const EVO = Object.fromEntries(Object.entries(EVO_LINE).map(([k, v]) => [k, v[0]]));
 // Nombre y sprite del Digimon en la etapa st (0 = forma inicial)
 const stageName = (key, st) => st ? EVO_LINE[key][st - 1].name : CHARS[key].name;
 // Personajes de la temporada 1
@@ -2694,10 +2718,6 @@ const QUALITY = {
   baja: {dpr: 1, aa: false, maxEnemies: 50,  shadows: false, decor: 175, minimapEvery: 4}
 };
 const Q = QUALITY[qualityChoice() === 'alta' || (qualityChoice() === 'auto' && !autoIsLow()) ? 'alta' : 'baja'];
-function qualityLabel(){
-  const c = qualityChoice();
-  return c === 'auto' ? `Auto (${Q === QUALITY.alta ? 'alta' : 'baja'})` : (c === 'alta' ? 'Alta' : 'Baja');
-}
 const renderer = new THREE.WebGLRenderer({antialias: Q.aa});
 // Estilo de época (PlayStation): se renderiza a baja resolución y se amplía sin suavizar
 const RETRO_SCALE = Q === QUALITY.alta ? 1 : 2;   // alta: resolución completa y nítida; baja: la mitad
@@ -2908,26 +2928,6 @@ function makeShadow(diameter){
 }
 
 // ---------- Entorno: árboles, rocas y flores (texturas procedurales) ----------
-function propTex(kind){
-  const c = document.createElement('canvas'); const x = c.getContext('2d');
-  if (kind === 'tree'){
-    c.width = 64; c.height = 96;
-    x.fillStyle = '#5d4037'; x.fillRect(28, 60, 8, 36);
-    x.fillStyle = '#2e7d32';
-    for (const [a, b, r] of [[32,36,26],[20,50,18],[44,50,18],[32,22,18]]){ x.beginPath(); x.arc(a, b, r, 0, Math.PI*2); x.fill(); }
-    x.fillStyle = '#43a047'; x.beginPath(); x.arc(26, 28, 7, 0, Math.PI*2); x.fill();
-  } else if (kind === 'rock'){
-    c.width = c.height = 48;
-    x.fillStyle = '#616161'; x.beginPath(); x.ellipse(24, 34, 20, 12, 0, 0, Math.PI*2); x.fill();
-    x.fillStyle = '#9e9e9e'; x.beginPath(); x.ellipse(19, 28, 8, 5, 0, 0, Math.PI*2); x.fill();
-  } else {
-    c.width = c.height = 32;
-    x.fillStyle = '#2e7d32'; x.fillRect(15, 16, 2, 16);
-    x.fillStyle = ['#ff8a80','#fff176','#f48fb1'][Math.random()*3 | 0];
-    x.beginPath(); x.arc(16, 12, 5, 0, Math.PI*2); x.fill();
-  }
-  const t = new THREE.CanvasTexture(c); t.magFilter = THREE.NearestFilter; return t;
-}
 // Decoración 2D integrada en el 3D: sprites de pixel art que siempre miran a la cámara
 function decoTex(file){
   const t = loader.load(file);
@@ -3265,8 +3265,6 @@ function setHud(v){
   if (!v) document.getElementById('hurt').style.opacity = 0;
 }
 // Barra de estadística (0-100%)
-const statBar = (label, pct, warm) =>
-  `<div class="stat"><span>${label}</span><i><b class="${warm ? 'warm' : ''}" style="width:${Math.max(4, Math.min(100, pct))}%"></b></i></div>`;
 const ATTACK_NAME = {shot:'Disparo dirigido', ring:'Onda circular', orbit:'Órbita defensiva'};
 
 // ---------- Idioma (ES/EN) de login, menú principal y barra superior; el resto del juego sigue en español ----------
@@ -3471,6 +3469,7 @@ function showSelect(){
       <section class="real-main">
         <div class="real-left">
           <h1 class="real-brand"><strong><em>DIGI</em><span>BONK</span></strong><small>FAN GAME · DIGITAL WORLD</small></h1>
+          ${eventActive() ? `<button type="button" class="real-event" id="rhEvent"><b>🎄 Navidad Digital</b><small>Papá Noel y Reno · quedan ${Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000))} días</small></button>` : ''}
           <button type="button" id="playBtn" class="real-play" aria-label="Jugar con ${safeText(choice.name)}"><span class="real-device"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span class="real-play-txt"><b>JUGAR</b><small>Último compañero: ${safeText(choice.name)}</small></span><span class="real-arrow" aria-hidden="true">▶</span></button>
           <div class="real-actions">
             ${navButton('btnColl','coleccion','COLECCIÓN','Skins, marcos y evoluciones')}
@@ -3504,6 +3503,7 @@ function showSelect(){
   }
   headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
   document.getElementById('playBtn').onclick=()=>showPicker('personaje');
+  const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { gxBanner = 'navidadP'; showGacha(); };
   document.getElementById('btnColl').onclick=showCollection;
   document.getElementById('btnPlayer').onclick=showPlayer;
   document.getElementById('btnGacha').onclick=showGacha;
@@ -3544,7 +3544,7 @@ const TUTO = [
   {t:'Cofres', d:'Pulsa E junto a un cofre para abrirlo y recibir una mejora.', clip:'tutorial/cofre.webm'},
   {t:'Zonas', d:'El mapa tiene dos zonas. La segunda, el Pantano de Datos, empieza a los 5 minutos y trae enemigos más duros.', clip:'tutorial/zona.webm'},
   {t:'Jefe final', d:'Devimon, Etemon y Myotismon aparecen como jefes menores; al final llega Piedmon. Esquiva el anillo rojo antes de cada disparo.', clip:'tutorial/jefe.webm'},
-  {t:'Colección y gacha', d:'El Digivice del menú abre el gacha: skins, marcos, títulos y objetos. Las evoluciones se guardan en la colección.', clip:'tutorial/coleccion.webm'}
+  {t:'Colección y gacha', d:'La colección guarda tus skins por etapa, marcos y títulos. El gacha tiene un banner permanente y los promocionales, cada uno con sus tickets.', clip:'tutorial/coleccion.webm'}
 ];
 let tutoIdx = 0;
 function tutoShow(i){
@@ -3709,8 +3709,6 @@ function showSettings(){
 let pickTab = 'personaje';
 // Colores de dificultad para la selección (tarjeta y chip)
 // Colores de rareza de las skins (tc-n base, tc-c común, tc-r rara, tc-e épica)
-const SKIN_TIER_NAME = {n: 'Base', c: 'Común', r: 'Rara', e: 'Épica', l: 'Legendaria'};
-const SKIN_SRC_NAME = {base: 'Original', logro: 'Logro', gacha: 'Gacha', evento: 'Evento'};
 // ---------- Desbloqueo de Digimon: el inicial se elige al registrarse; el resto se consigue ----------
 // how: texto que se ve en la pantalla de selección. ok: logro cumplido. rnd: probabilidad por partida terminada
 const UNLOCK = {
@@ -3812,9 +3810,6 @@ function showPicker(tab){
         <button class="g-back" id="pkBack">← Volver</button>
         <h2>Elige tu Digimon</h2>
         <span class="pk2-sub">Temporada 1 · ${chars.length} Digimon</span>
-        <div class="pk-tabs">
-          <button class="pk-tab${pickTab === 'personaje' ? ' on' : ''}" data-tab="personaje">Personaje</button>
-        </div>
       </header>
       <div class="pk2-body">
         <section class="pk2-left">${left}</section>
@@ -3916,11 +3911,6 @@ function renderPickPreview(){
   `;
 }
 // Progreso hacia una skin por logro (0-1); las demás no tienen progreso
-function skinProgress(key, sk){
-  if (sk.src !== 'logro') return null;
-  const st = statsOf(key);
-  return sk.req.plays ? Math.min(1, st.plays / sk.req.plays) : Math.min(1, st.kills / sk.req.kills);
-}
 // Cambia de personaje en la pantalla de elección (flechas)
 function pickMove(delta){
   const list = SEASONS.adventure.chars;
@@ -5576,13 +5566,11 @@ function ownedSkins(key){ return ownedSkinsAt(key, 0); }
 function ownsAnyStage(key, id){ for (let st = 0; st < stageCount(key); st++) if (ownsAt(key, st, id)) return true; return false; }
 // Skins que se muestran en una etapa: las ocultas (variocolor) solo cuando se tienen
 function visibleSkinsAt(key, st){ return SKINS.filter(sk => !sk.hidden || ownsAt(key, st, sk.id)); }
-function visibleSkins(key){ return visibleSkinsAt(key, 0); }
-// Progreso por personaje: partidas (de al menos 5 s) y bajas
+// Se llama al terminar cada partida: actualiza el progreso y devuelve las skins nuevas
 function statsOf(key){ return loadJSON('digibonk3d-stats', {})[key] || {plays:0, kills:0}; }
 function meetsReq(sk, st){
   return (!sk.req.plays || st.plays >= sk.req.plays) && (!sk.req.kills || st.kills >= sk.req.kills);
 }
-// Se llama al terminar cada partida: actualiza el progreso y devuelve las skins nuevas
 function recordRun(key, kills, t){
   const all = loadJSON('digibonk3d-stats', {});
   const st = all[key] || {plays:0, kills:0};
@@ -5618,20 +5606,6 @@ function glitchPixels(x, w, h){
     }
   }
   x.putImageData(d, 0, 0);
-}
-function makeSkin(path, sk, cb){
-  const img = new Image();
-  img.onload = () => {
-    const c = document.createElement('canvas');
-    c.width = img.naturalWidth; c.height = img.naturalHeight;
-    const x = c.getContext('2d');
-    x.filter = sk.f || 'none';
-    x.drawImage(img, 0, 0);
-    x.filter = 'none';
-    if (sk.fx === 'glitch') glitchPixels(x, c.width, c.height);
-    try { cb(c.toDataURL('image/png')); } catch(e){}
-  };
-  img.src = path;
 }
 function buildSkins(){
   for (const key of SEASONS.adventure.chars){
@@ -5908,10 +5882,10 @@ function checkAchievements(win){
   return won;
 }
 const TIER_NAME = {c:'Común', r:'Rara', e:'Épica', l:'Legendaria'};
-const TIER_CLASS = {c:'c', r:'r', e:'e', l:'l'};
 // Marcos y títulos semanales: uno por línea evolutiva, solo se consiguen en el banner permanente
-const WK_COLORS = ['#ff8a80', '#80d8ff', '#b9f6ca', '#ffe57f', '#ea80fc', '#ffab40', '#64ffda', '#f8bbd0'];
 FRAMES.push(...SEASONS.adventure.chars.map((k, i) => ({id: 'wk' + i, name: 'Marco de ' + CHARS[k].name, tier: 'e', weekly: true})));
+FRAMES.push({id: 'navidad', name: 'Marco Navideño', tier: 'e', seasonal: true});
+TITLES.push({id: 'navidad', name: 'Espíritu Navideño', tier: 'e', how: 'Banner de Navidad · tiradas de Papá Noel o Reno', seasonal: true});
 TITLES.push(...SEASONS.adventure.chars.map((k, i) => ({id: 'wk' + i, name: 'Heraldo de ' + CHARS[k].name, tier: 'e', how: 'Banner permanente · semana de ' + CHARS[k].name, weekly: true})));
 let inv = loadJSON('digibonk3d-inv', {frames: [], titles: [], items: {}});
 let extra = loadJSON('digibonk3d-extra', {frame: null, title: null, item: null});
@@ -5934,12 +5908,20 @@ function frameClass(){ return extra.frame ? ' fr-' + extra.frame : ''; }
 // Banners del gacha: cada uno tiene su skin legendaria. El de evento solo aparece mientras dura el evento
 // Banner permanente: cada semana destaca una línea evolutiva distinta (sus skins galácticas)
 const WEEK_MS = 7 * 86400000;
-function weeklyIndex(){ return Math.floor(Date.now() / WEEK_MS) % SEASONS.adventure.chars.length; }
+// Número de semana con cambio los lunes (el 1970-01-05 fue lunes; 4 días después del 1 de enero de 1970)
+const weekNum = () => Math.floor((Date.now() - 4 * 86400000) / WEEK_MS);
+function weeklyIndex(){ const n = SEASONS.adventure.chars.length; return ((weekNum() % n) + n) % n; }
 function weeklyDigimon(){ return SEASONS.adventure.chars[weeklyIndex()]; }
+// Marco y título exclusivos del banner activo (null si el banner no tiene)
+function bannerFrame(){
+  if (gxBanner === 'std') return {frame: 'wk' + weeklyIndex(), title: 'wk' + weeklyIndex()};
+  if (BANNERS[gxBanner] && BANNERS[gxBanner].event) return {frame: 'navidad', title: 'navidad'};
+  return null;
+}
 // Misión semanal: 5 tiradas en la semana dan 1 ticket
 const WEEK_PULLS = 5;
 function weekState(){
-  const w = Math.floor(Date.now() / WEEK_MS), st = loadJSON('digibonk3d-weekly', {});
+  const w = weekNum(), st = loadJSON('digibonk3d-weekly', {});
   return st.week === w ? st : {week: w, pulls: 0, claimed: false};
 }
 function addWeekPulls(n){
@@ -5975,7 +5957,11 @@ function bannerPool(){
 let gxBanner = 'std';
 // Garantía: si pasan PITY_AT tiradas sin legendaria, la siguiente lo es. Una legendaria repetida devuelve Bits
 const PITY_AT = 100, LEG_DUP_REFUND = 200;
-const pityCount = () => +(localStorage.getItem('digibonk3d-pity') || 0);
+// Garantía por banner: el permanente cada 100 tiradas, cada Navidad cada 50 (contadores separados)
+const PITY_BY_BANNER = {std: 100, navidadP: 50, navidadR: 50};
+const pityAt = bn => PITY_BY_BANNER[bn] || 100;
+const pityKey = bn => bn === 'std' ? 'digibonk3d-pity' : 'digibonk3d-pity-' + bn;
+const pityCount = (bn = gxBanner) => +(localStorage.getItem(pityKey(bn)) || 0);
 function bannerSkins(){ if (BANNERS[gxBanner].event && !eventActive()) gxBanner = 'std'; return BANNERS[gxBanner].skins.map(id => SKIN_BY_ID[id]); }
 function bannerSkin(){ return bannerSkins()[0]; }
 // La rareza se decide primero. Legendaria = skin; el resto reparte entre marco, título y objeto
@@ -6033,17 +6019,18 @@ function rollReward(tier){
   if (cat === 'ticket') return {type:'ticket', amount: ticketRule().amt, tier};
   if (cat === 'bits') return {type:'bits', amount: BITS_BY_TIER[tier] || 30, tier};
   // Banner permanente: parte de las tiradas de marco o título dan el de la semana
-  if (gxBanner === 'std' && Math.random() < 0.3){
-    const wid = 'wk' + weeklyIndex();
-    if (cat === 'frame' && !inv.frames.includes(wid)) return {type:'frame', f: FRAMES.find(f => f.id === wid), tier:'e'};
-    if (cat === 'title' && !inv.titles.includes(wid)) return {type:'title', t: TITLES.find(t => t.id === wid), tier:'e'};
+  // Marcos y títulos del banner: la semana en el permanente, Navidad en sus banners
+  const bf = bannerFrame();
+  if (bf && Math.random() < 0.3){
+    if (cat === 'frame' && !inv.frames.includes(bf.frame)) return {type:'frame', f: FRAMES.find(f => f.id === bf.frame), tier:'e'};
+    if (cat === 'title' && !inv.titles.includes(bf.title)) return {type:'title', t: TITLES.find(t => t.id === bf.title), tier:'e'};
   }
   if (cat === 'frame'){
-    const pool = unownedPool(FRAMES.filter(f => !f.weekly), tier, f => inv.frames.includes(f.id));
+    const pool = unownedPool(FRAMES.filter(f => !f.weekly && !f.seasonal), tier, f => inv.frames.includes(f.id));
     if (pool.length){ const f = pickOne(pool); return {type:'frame', f, tier: f.tier}; }
   }
   {
-    const pool = unownedPool(TITLES.filter(t => !t.weekly), tier, t => inv.titles.includes(t.id));
+    const pool = unownedPool(TITLES.filter(t => !t.weekly && !t.seasonal), tier, t => inv.titles.includes(t.id));
     if (pool.length){ const t = pickOne(pool); return {type:'title', t, tier: t.tier}; }
   }
   // Sin marcos ni títulos nuevos: Bits
@@ -6089,13 +6076,13 @@ function doPulls(n, withTickets = false){
   const tiers = Array.from({length: n}, () => rollTier());
   if (n === 10 && !tiers.some(t => t !== 'c')) tiers[9] = 'r';
   // Contador de garantía: se reinicia con cada legendaria y fuerza una en la tirada número PITY_AT
-  let pity = pityCount();
+  let pity = pityCount(gxBanner);
   for (let i = 0; i < tiers.length; i++){
     pity++;
-    if (tiers[i] !== 'l' && pity >= PITY_AT) tiers[i] = 'l';
+    if (tiers[i] !== 'l' && pity >= pityAt(gxBanner)) tiers[i] = 'l';
     if (tiers[i] === 'l') pity = 0;
   }
-  localStorage.setItem('digibonk3d-pity', String(pity));
+  localStorage.setItem(pityKey(gxBanner), String(pity));
   if (gxBanner === 'std' && n === 10){ addTickets('std', 1); announce('+1 ticket', '10 tiradas en el banner permanente', '#3de0ff'); }
   if (addWeekPulls(n)) announce('Misión semanal completada', '+1 ticket por 5 tiradas esta semana', '#ffd54f');
   const results = [];
@@ -6188,15 +6175,8 @@ function howTo(key, sk){
 }
 // Gacha: escaparate con carrusel de todo lo que puede salir, botones de tirada y probabilidades
 const GX_TIER_COL = {c: '#9e9e9e', r: '#4fc3f7', e: '#ce93d8', l: '#ffd23f'};
-const CAT_LABEL = {skin: 'Skin', frame: 'Marco', title: 'Título'};
 let gxIdx = 0, gxTimer = null;
 // Todo lo que puede salir, en el orden del carrusel
-function gxOwned(s){
-  if (s.type === 'skin') return ownsAt(s.key, s.st || 0, s.sk.id);
-  if (s.type === 'frame') return inv.frames.includes(s.f.id);
-  if (s.type === 'title') return inv.titles.includes(s.t.id);
-  return false;
-}
 // Muestra la tarjeta i del carrusel (la animación se repite en cada cambio)
 // Icono estático de un sprite: primer fotograma recortado al contorno real del Digimon (para miniaturas)
 const spriteIconCache = {};
@@ -6232,7 +6212,7 @@ function showGacha(){
   const keys = Object.keys(BANNERS).filter(k => !BANNERS[k].event || eventActive());
   const bi = (keys.indexOf(gxBanner) + keys.length) % keys.length;
   gxBanner = keys[bi];
-  const pity = pityCount();
+  const pity = pityCount(gxBanner);
   const chars = SEASONS.adventure.chars;
   // Skin destacada de la maqueta: Galáctico de Agumon (provisional)
   const feat = bannerSkin();
@@ -6243,7 +6223,7 @@ function showGacha(){
     `<div class="gx2-odd"><i style="color:${GX_TIER_COL[t]}">${'★'.repeat(n)}</i><span>${TIER_NAME[t] === 'Legendaria' ? 'Recompensa Legendaria' : 'Recompensa ' + TIER_NAME[t]}</span><b>${TIER_ODDS[t].toFixed(2)}%</b></div>`).join('');
   const blank = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
   const possibleSkins = bannerPool().slice(0, 10).map(e => `<img class="gx2-ico" data-src="${spriteWith(e.key, e.st, e.sk.id)}" src="${blank}" alt="">`).join('');
-  const possibleFrames = FRAMES.filter(f => !f.weekly).slice(0, 3).map(f => `<div class="gx2-ico gx2-tile"><div class="rw-frame fr-${f.id}"></div></div>`).join('');
+  const possibleFrames = FRAMES.filter(f => !f.weekly && !f.seasonal).slice(0, 3).map(f => `<div class="gx2-ico gx2-tile"><div class="rw-frame fr-${f.id}"></div></div>`).join('');
   const possibleExtra = `<div class="gx2-ico gx2-tile"><b>🎟</b><small>Tickets</small></div><div class="gx2-ico gx2-tile"><b>Ⓑ</b><small>Bits</small></div><div class="gx2-ico gx2-tile"><span>🏅</span><small>Títulos</small></div>`;
   const possible = possibleSkins + possibleFrames + possibleExtra;
   showOverlay(`
@@ -6253,8 +6233,8 @@ function showGacha(){
         <aside class="gx2-left">
           <h3>Recompensas destacadas</h3>
           <div class="gx2-card"><div class="gx2-ic">${sprEl(spriteWith(fk, false, feat.id), 56)}</div><div><small>Skin Exclusiva</small><b>${featName}</b></div></div>
-          <div class="gx2-card"><div class="gx2-ic"><div class="rw-frame fr-${gxBanner === 'std' ? 'wk' + weeklyIndex() : 'oro'}"></div></div><div><small>Marco ${gxBanner === 'std' ? 'de la semana' : 'Especial'}</small><b>${gxBanner === 'std' ? 'Marco de ' + CHARS[weeklyDigimon()].name : 'Emblema Digital'}</b></div></div>
-          <div class="gx2-card"><div class="gx2-ic gx2-medal">${svgIcon('utilidad')}</div><div><small>Título</small><b>${gxBanner === 'std' ? 'Heraldo de ' + CHARS[weeklyDigimon()].name : 'Niño Elegido'}</b></div></div>
+          <div class="gx2-card"><div class="gx2-ic"><div class="rw-frame fr-${bannerFrame() ? bannerFrame().frame : 'oro'}"></div></div><div><small>Marco ${gxBanner === 'std' ? 'de la semana' : 'de Navidad'}</small><b>${gxBanner === 'std' ? 'Marco de ' + CHARS[weeklyDigimon()].name : (bannerFrame() ? FRAMES.find(f => f.id === bannerFrame().frame).name : 'Emblema Digital')}</b></div></div>
+          <div class="gx2-card"><div class="gx2-ic gx2-medal">${svgIcon('utilidad')}</div><div><small>Título</small><b>${gxBanner === 'std' ? 'Heraldo de ' + CHARS[weeklyDigimon()].name : (bannerFrame() ? TITLES.find(t => t.id === bannerFrame().title).name : 'Niño Elegido')}</b></div></div>
           <div class="gx2-card"><div class="gx2-ic gx2-evo">${Array.from({length: Math.min(3, stageCount(fk))}, (_, i) => (i ? '<span>›</span>' : '') + sprEl(spriteWith(fk, i, 'clasico'), 40)).join('')}</div><div><small>Evolución</small><b>Línea ${CHARS[fk].name}</b></div></div>
         </aside>
         <section class="gx2-center">
@@ -6275,7 +6255,7 @@ function showGacha(){
           </div>
           <div class="gx2-odds"><h3>Probabilidades</h3>${oddsRows}</div>
           <div class="gx2-mission"><h3>Misión semanal</h3><p>Haz ${WEEK_PULLS} tiradas esta semana y gana 1 ticket.</p><div class="gx2-bar"><i style="width:${Math.min(100, Math.round(weekState().pulls / WEEK_PULLS * 100))}%"></i><span>${Math.min(weekState().pulls, WEEK_PULLS)}/${WEEK_PULLS}${weekState().claimed ? ' · completada' : ''}</span></div><small>En el banner permanente, cada 10 tiradas dan 1 ticket.</small></div>
-          <div class="gx2-guar"><h3>Recompensa garantizada</h3><p>Obtén una recompensa Legendaria en un máximo de ${PITY_AT} tiradas.</p><div class="gx2-bar"><i style="width:${Math.round(pity / PITY_AT * 100)}%"></i><span>${pity}/${PITY_AT}</span></div></div>
+          <div class="gx2-guar"><h3>Recompensa garantizada</h3><p>Obtén una recompensa Legendaria en un máximo de ${pityAt(gxBanner)} tiradas.</p><div class="gx2-bar"><i style="width:${Math.round(pity / pityAt(gxBanner) * 100)}%"></i><span>${pity}/${pityAt(gxBanner)}</span></div></div>
         </aside>
       </div>
       <footer class="gx2-foot"><h3>Posibles recompensas</h3><div class="gx2-strip">${possible}</div></footer>

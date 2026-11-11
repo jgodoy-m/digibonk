@@ -11,13 +11,15 @@ const { chromium } = require('playwright');
   const page = await browser.newPage();
   await page.goto(url + (url.includes('?') ? '&' : '?') + 'demo=1');
   await page.waitForFunction(() => window.__dbk && window.__dbk.SKINS);
-  const files = await page.evaluate(async () => {
+  const ONLY = (process.env.ONLY || '').split(',').filter(Boolean);
+  const files = await page.evaluate(async (only) => {
     const { SKINS, EVO_LINE, CHARS, SEASONS, glitchPixels } = window.__dbk;
     const name = p => p.split('/').pop().replace(/\.png$/, '');
     const load = src => new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => no(new Error(src)); im.src = src; });
     const res = [];
     for (const key of SEASONS.adventure.chars){
       for (let st = 0; st <= EVO_LINE[key].length; st++){
+        if (only.length && !only.includes(key + '_' + st)) continue;
         const base = name(st ? EVO_LINE[key][st - 1].sprite : CHARS[key].sprite);
         const img = await load(`sprites/anim/${base}.png`);
         for (const sk of SKINS){
@@ -34,7 +36,7 @@ const { chromium } = require('playwright');
       }
     }
     return res;
-  });
+  }, ONLY);
   for (const f of files){
     fs.writeFileSync(path.join(out, f.file), Buffer.from(f.data.split(',')[1], 'base64'));
   }

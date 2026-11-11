@@ -48,12 +48,16 @@ def gradient_map(src, stops):
 # La línea de Agumon tiene skins de Navidad dibujadas a mano: no se regeneran aquí
 SKIP = {"agumon"}
 
+ONLY = set(filter(None, os.environ.get("ONLY", "").split(",")))
+
 def main():
     n = 0
     for key, stages in BASES.items():
         if key in SKIP:
             continue
         for st, base in enumerate(stages):
+            if ONLY and f"{key}_{st}" not in ONLY:
+                continue
             src = os.path.join(HERE, base + ".png")
             for skin, stops in PALETTES.items():
                 out = os.path.join(HERE, f"{key}_{st}_{skin}.png")
