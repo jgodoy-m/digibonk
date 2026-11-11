@@ -1758,6 +1758,66 @@ body:has(#overlay.menu-mode .approved-hub) #topbar .tb-id{margin:0 auto 0 0!impo
 }
 @media(prefers-reduced-motion:reduce){.approved-aurora,.approved-portal-glow,.approved-pixels{animation:none!important}}
 
+
+
+
+/* Botones reales: texturas recortadas directamente de la referencia aprobada. */
+@media(min-width:761px){
+ .approved-hot{background-repeat:no-repeat!important;background-size:100% 100%!important;background-position:center!important}
+ .approved-play{background-image:url('ui/MENU_BOTON_PLAY.png')!important}
+ .approved-coll{background-image:url('ui/MENU_BOTON_COLL.png')!important}
+ .approved-player{background-image:url('ui/MENU_BOTON_PLAYER.png')!important}
+ .approved-gacha{background-image:url('ui/MENU_BOTON_GACHA.png')!important}
+ .approved-help{background-image:url('ui/MENU_BOTON_HELP.png')!important}
+}
+
+/* DIGIBONK UI INTERACTIVA: controles y paneles activos sobre el arte aprobado. */
+.approved-hot{isolation:isolate}
+.approved-hot::after{content:"";position:absolute;inset:2%;border:2px solid transparent;border-radius:10px;pointer-events:none;transition:border-color .15s, box-shadow .15s;z-index:9}
+.approved-hot:hover::after,.approved-hot:focus-visible::after{border-color:#fff3a2;box-shadow:inset 0 0 15px #5bedff99,0 0 18px #00caffbb}
+.approved-inspect{appearance:none;cursor:pointer;text-align:left;border:1px solid #2dd3ff;box-sizing:border-box;transition:background .16s,filter .16s}
+.approved-inspect:hover,.approved-inspect:focus-visible{background:#103f82!important;filter:brightness(1.15);outline:2px solid #ffdc76;outline-offset:1px}
+.approved-info-scrim{position:absolute;inset:0;background:#04112cbe;z-index:99;display:grid;place-items:center;padding:24px}
+.approved-info-dialog{font:500 clamp(14px,1.3vw,20px)/1.45 system-ui,Arial,sans-serif;color:#f4faff;text-shadow:0 1px #021437;background:linear-gradient(145deg,#0b447a,#081947 75%);width:min(92%,520px);max-height:85%;overflow-y:auto;border:3px solid #63ddff;box-shadow:0 0 0 4px #081438,0 15px 40px #020b2f;padding:18px;box-sizing:border-box;border-radius:10px}
+.approved-info-dialog header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;border-bottom:1px solid #3ab5ec}
+.approved-info-dialog h2{margin:0 0 12px;color:#ffdf82;font-size:clamp(20px,2vw,28px)}
+.approved-info-dialog button{background:#104e96;color:#fff;font:700 15px system-ui;border:2px solid #6df1ff;border-radius:8px;padding:9px 16px;cursor:pointer}
+.approved-info-dialog button:hover{background:#197cd2}
+.approved-info-dialog #approvedInfoClose{margin-bottom:12px;padding:3px 10px}
+.approved-info-dialog #approvedInfoDone{margin-top:18px;display:block;width:100%}
+.approved-info-meter{height:15px;background:#34477a;border:1px solid #78e4ff}
+.approved-info-meter i{display:block;height:100%;background:linear-gradient(90deg,#ffac18,#fff07e)}
+.approved-info-records{display:grid;gap:7px}
+.approved-info-records>div{display:flex;justify-content:space-between;gap:10px;padding:8px;border-bottom:1px solid #337cba;font-size:14px}
+@media(max-width:760px){.approved-info-scrim{position:fixed;z-index:300;padding:12px}.approved-info-dialog{max-height:88dvh}.approved-info-records>div{flex-direction:column}}
+
+/* FIX 2026-11-11: el fundido global uiIn oscurecia accidentalmente
+   todo el menu aprobado durante cada renderizado de showSelect().
+   Esta excepcion SOLO afecta al menu principal; ventanas mantienen
+   su fondo de modal normal. La ilustracion aprobada no se modifica. */
+#overlay.menu-mode:has(.approved-hub) {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+}
+#overlay.menu-mode > .approved-hub {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+#overlay.menu-mode .approved-stage > .approved-art {
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+/* El oscurecimiento es exclusivo de dialogos realmente abiertos. */
+#overlay.menu-mode .approved-info-scrim:not(:has(.approved-info-dialog)) {
+  display: none !important;
+}
+
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2674,17 +2734,18 @@ function showSelect(){
         <button id="btnGacha" class="approved-hot approved-gacha" aria-label="Gacha" title="Gacha"><span class="approved-sr">Gacha</span></button>
         <button id="btnHelp" class="approved-hot approved-help" aria-label="Cómo jugar" title="Cómo jugar"><span class="approved-sr">Cómo jugar</span></button>
 
-        <aside class="approved-data approved-mission" id="dwDailyPanel" aria-label="Misión diaria">
+        <button class="approved-data approved-mission approved-inspect" id="dwDailyPanel" type="button" aria-label="Ver progreso de misión diaria">
           <strong>${dailyText()}</strong>
           <div class="approved-progress"><i style="width:${Math.min(100,Math.round(loadDaily().runs / DAILY.runsGoal * 100))}%"></i></div>
-          <small>+${DAILY.reward} Bits</small>
-        </aside>
-        <aside class="approved-data approved-records" id="dwRecordsPanel" aria-label="Récords">
+          <small>+${DAILY.reward} Bits · ver misión</small>
+        </button>
+        <button class="approved-data approved-records approved-inspect" id="dwRecordsPanel" type="button" aria-label="Ver récords de partidas">
           <div><span>Mejor tiempo</span><b>${fmtTime(bestT)}</b></div>
           <div><span>Mejor nivel</span><b>${bestL}</b></div>
           <div><span>Bajas</span><b>${kills}</b></div>
-        </aside>
+        </button>
         <div class="approved-menu-legal" aria-label="Aviso legal">${t('legal')}</div>
+        <div id="approvedModalHost" aria-live="polite"></div>
       </div>
     </main>`);
   overlay.classList.add('menu-mode');
@@ -2698,28 +2759,36 @@ function showSelect(){
   };
   document.getElementById('approvedSettings').onclick = () => showSettings();
 
-  if (document.getElementById('dwMissionShortcut')) document.getElementById('dwMissionShortcut').onclick = () => {
-    const panel = document.querySelector('.dw-daily-panel');
-    if (!panel) return;
-    panel.classList.remove('dw-focus');
-    void panel.offsetWidth;
-    panel.classList.add('dw-focus');
-    panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  // Ventanas con información real del guardado, sin estadísticas inventadas.
+  const openInfo = (type) => {
+    const host = document.getElementById('approvedModalHost');
+    if (!host) return;
+    const escapeValue = (v) => String(v).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    let title, body;
+    if (type === 'mission') {
+      const daily = loadDaily();
+      const runs = Math.min(DAILY.runsGoal, daily.runs || 0);
+      title = t('daily');
+      body = `<p>${escapeValue(dailyText())}</p><div class="approved-info-meter"><i style="width:${Math.round(runs / DAILY.runsGoal * 100)}%"></i></div><p>${runs}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits</p>`;
+    } else {
+      title = t('recs');
+      const data = getRecords();
+      body = data.length ? `<div class="approved-info-records">${data.slice(0, 10).map((r,i) => `<div><b>${i+1}. ${escapeValue(r.name)}</b><span>${fmtTime(r.t)} · Nv. ${Number(r.lvl)||0} · ${Number(r.kills)||0} bajas</span></div>`).join('')}</div>` : `<p>${escapeValue(t('none'))}</p>`;
+    }
+    host.innerHTML = `<div class="approved-info-scrim"><section class="approved-info-dialog" role="dialog" aria-modal="true" aria-label="${escapeValue(title)}"><header><h2>${escapeValue(title)}</h2><button type="button" id="approvedInfoClose" aria-label="Cerrar">✕</button></header>${body}<button type="button" id="approvedInfoDone">Volver al menú</button></section></div>`;
+    const close = () => { host.innerHTML = ''; };
+    host.querySelector('#approvedInfoClose').onclick = close;
+    host.querySelector('#approvedInfoDone').onclick = close;
+    host.querySelector('.approved-info-scrim').onclick = (e) => {if(e.target === e.currentTarget) close();};
+    host.querySelector('#approvedInfoClose').focus();
   };
-  if (document.getElementById('dwGachaShortcut')) document.getElementById('dwGachaShortcut').onclick = () => showGacha();
-  if (document.getElementById('dwCollectionShortcut')) document.getElementById('dwCollectionShortcut').onclick = () => showCollection();
+  document.getElementById('dwDailyPanel').onclick = () => openInfo('mission');
+  document.getElementById('dwRecordsPanel').onclick = () => openInfo('records');
   document.getElementById('playBtn').onclick = () => showPicker('personaje');
   document.getElementById('btnGacha').onclick = () => showGacha();
   document.getElementById('btnPlayer').onclick = () => showPlayer();
-  const bsEl = document.getElementById('btnSettings'); if (bsEl) bsEl.onclick = () => showSettings();
   document.getElementById('btnHelp').onclick = () => showHelp();
   document.getElementById('btnColl').onclick = () => showCollection();
-  const brEl = document.getElementById('btnRecords'); if (brEl) brEl.onclick = () => {
-    const panel = document.querySelector('.dw-board, .approved-records');
-    if (!panel) return;
-    panel.classList.remove('dw-focus'); void panel.offsetWidth; panel.classList.add('dw-focus');
-    panel.scrollIntoView({behavior:'smooth',block:'nearest'});
-  };
   clearInterval(newsTimer);
 
 }
