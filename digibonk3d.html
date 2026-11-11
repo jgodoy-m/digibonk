@@ -2566,6 +2566,14 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .gx2-left,.gx2-right,.gx2-center{overflow:visible!important;height:auto!important;min-height:0!important}
 .gx2-strip{flex-wrap:nowrap}
 }
+/* Botón Jugar del menú: botón de color con brillo que pasa (sustituye al arte anterior) */
+.realhub .real-play{background:linear-gradient(180deg,#ff6a5b,#d32f2f 60%,#8e1b1b)!important;border:2px solid #ffb3a8!important;border-radius:18px!important;clip-path:none!important;aspect-ratio:auto!important;box-shadow:0 6px 0 #4a0b0b,0 0 22px rgba(255,80,80,.45)!important;overflow:hidden!important;isolation:isolate!important}
+.realhub .real-play:hover{box-shadow:0 6px 0 #4a0b0b,0 0 30px rgba(255,110,110,.7)!important}
+.realhub .real-play-txt,.realhub .real-arrow{position:relative!important;z-index:4!important;display:flex!important;width:auto!important;height:auto!important;overflow:visible!important;clip-path:none!important;white-space:normal!important}
+.realhub .real-play-txt{margin-left:clamp(178px,37%,220px)!important;flex-direction:column!important;justify-content:center!important;text-align:left!important}
+.realhub .real-arrow{display:block!important;margin-left:auto!important}
+.realhub .real-shine{position:absolute;inset:0;z-index:2;background:linear-gradient(100deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%);transform:translateX(-120%);animation:db-shine 3.2s ease-in-out infinite;pointer-events:none}
+@keyframes db-shine{0%,55%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -3506,7 +3514,7 @@ function showSelect(){
         <div class="real-left">
           <h1 class="real-brand"><strong><em>DIGI</em><span>BONK</span></strong><small>FAN GAME · DIGITAL WORLD</small></h1>
           ${eventActive() ? `<button type="button" class="real-event" id="rhEvent"><b>🎄 Navidad Digital</b><small>Papá Noel y Reno · quedan ${Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000))} días</small></button>` : ''}
-          <button type="button" id="playBtn" class="real-play" aria-label="Jugar con ${safeText(choice.name)}"><span class="real-device"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span class="real-play-txt"><b>JUGAR</b><small>Último compañero: ${safeText(choice.name)}</small></span><span class="real-arrow" aria-hidden="true">▶</span></button>
+          <button type="button" id="playBtn" class="real-play" aria-label="Jugar con ${safeText(choice.name)}"><span class="real-device"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span class="real-play-txt"><b>JUGAR</b><small>Último compañero: ${safeText(choice.name)}</small></span><span class="real-arrow" aria-hidden="true">▶</span><span class="real-shine" aria-hidden="true"></span></button>
           <div class="real-actions">
             ${navButton('btnColl','coleccion','COLECCIÓN','Skins, marcos y evoluciones')}
             ${navButton('btnPlayer','jugador','JUGADOR','Tarjeta, títulos y perfil')}
