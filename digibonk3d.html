@@ -2122,6 +2122,37 @@ body:has(.tr11) #hudTop{display:none!important}
 .pl4 .pl4-title-badge{background:#EBCB8B!important;color:#2E3440!important;border:0!important;font-weight:700!important;padding:5px 14px!important}
 .pl4 .pl4-chips span:first-child{background:#4C566A!important;color:#ECEFF4!important}
 .pl4 .pl4-chips span:last-child{background:#5E81AC!important;color:#ECEFF4!important}
+/* Móvil (≤700px): menú y ficha en una columna */
+@media (max-width:700px){
+  .realhub .real-top{display:flex!important;flex-wrap:wrap!important;height:auto!important;padding:8px!important;gap:8px!important}
+  .realhub .hm-utils{position:static!important;transform:none!important;order:1;width:100%;justify-content:flex-start}
+  .realhub .hm-pill{margin-left:0!important;width:100%;order:2;justify-content:space-between;flex-wrap:wrap;gap:6px!important}
+  .realhub .hm-pl-user{min-width:0;flex:1 1 auto}
+  .realhub .hm-pl-user strong{font-size:14px!important}
+  .realhub .hm-pl-chip{height:30px;padding:0 9px;font-size:12px!important}
+  .realhub .hm-pl-ic{width:32px;height:32px}
+  .realhub .hm-pl-out{height:32px;padding:0 10px;font-size:11px!important}
+  .realhub .real-brand,.realhub .hm-brand{margin:12px auto 0!important;align-items:center!important}
+  .realhub .hm-logo{width:min(78vw,320px)!important}
+  .pl4 .pl4-top{flex-wrap:wrap!important;gap:10px!important}
+  .pl4 .pl4-banner{flex:1 1 100%!important;order:3}
+  .pl4 .pl4-banner b{font-size:18px!important}
+  .pl4 .pl5-share{margin-left:auto}
+  .pl4 .pl5-hero{grid-template-columns:1fr!important;justify-items:center!important;text-align:center!important;gap:14px!important;padding:18px 14px!important}
+  .pl4 .pl5-hero .pl5-id{justify-self:center!important;flex-direction:column!important;align-items:center!important}
+  .pl4 .pl4-id{align-items:center!important}
+  .pl4 .pl4-name{font-size:26px!important;text-align:center}
+  .pl4 .pl5-center{order:-1}
+  .pl4 .pl5-medals{justify-self:center!important;justify-content:center!important;flex-wrap:wrap!important;gap:8px 14px!important}
+  .pl4 .pl4-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  .pl4 .pl4-stat{padding:12px!important}
+  .pl4 .pl4-stat b{font-size:18px!important}
+  .pl4 .pl5-grid{grid-template-columns:1fr!important}
+  .pl4 .pl5-wide{grid-column:auto}
+  .pl4 .pl5-rec{grid-template-columns:1fr 1fr!important;gap:6px!important}
+  .pl4 .pl5-acc{display:none}
+}
+@media (max-width:700px){.tr11 .treasure-card .tc-art{transform:scale(.55);transform-origin:center;margin:-22px 0 -18px}.tr11 .treasure-card strong{font-size:12px}}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
