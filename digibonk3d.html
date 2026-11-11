@@ -4040,7 +4040,7 @@ function spawnSpecial(){
   const sp = clampArena(g.p.x + Math.cos(a)*24, g.p.z + Math.sin(a)*24, ARENA_R - 0.5);
   const hp = 900*(1 + (t - BOSS_AT)/120)*evoHp();
   const name = CHARS[pick.key].name;
-  g.enemies.push({kind: 'mini', special: true, name, sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 3.0, r: 1.9, xp: 120, dmg: 18*(1 + t/600), cd: 0});
+  g.enemies.push({kind: 'mini', special: true, name, sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 3.0, r: 1.9, xp: 120, dmg: 18*(1 + diffT(t)/300), cd: 0});
   sfx('boss');
   announce('¡' + name.toUpperCase() + '!', 'Jefe especial', '#ffd54f');
 }
@@ -4051,8 +4051,8 @@ function spawnMini(m){
   const shadow = makeShadow(4.4);
   world.add(shadow);
   const sp = clampArena(g.p.x + Math.cos(a)*24, g.p.z + Math.sin(a)*24, ARENA_R - 0.5);
-  const hp = m.hp*(1 + t/180)*evoHp();
-  g.enemies.push({kind: 'mini', name: m.name, sprite: m.sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 2.5, r: 1.9, xp: 60, dmg: 16*(1 + t/600), cd: 0});
+  const hp = m.hp*(1 + diffT(t)/90)*evoHp();
+  g.enemies.push({kind: 'mini', name: m.name, sprite: m.sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 2.5, r: 1.9, xp: 60, dmg: 16*(1 + diffT(t)/300), cd: 0});
   sfx('boss');
   announce('¡' + m.name.toUpperCase() + '!', 'Un jefe menor entra en combate', '#ce93d8');
 }
@@ -4302,6 +4302,9 @@ function dist2(ax, az, bx, bz){ return Math.hypot(ax-bx, az-bz); }
 // Los enemigos siguen el poder del jugador: cada digievolución les da más vida y daño
 function evoHp(){ return Math.pow(1.25, g.ch.evolved | 0); }
 function evoDmg(){ return Math.pow(1.1, g.ch.evolved | 0); }
+// Tiempo que cuenta para la dificultad: igual que el tiempo real hasta el minuto 10 (la dificultad de siempre)
+// y después avanza a 0,3 para que el minuto 20 no sea imposible
+const diffT = t => t <= 600 ? t : 600 + (t - 600) * 0.3;
 function spawnEnemy(forced){
   const t = g.t, r = Math.random(), a = Math.random()*Math.PI*2, R = (g.idleT || 0) > 2.5 ? 13 : 25;
   let kind = 'basic';
@@ -4309,7 +4312,8 @@ function spawnEnemy(forced){
   if (forced) kind = forced;
   else if (t > 120 && r < (z2 ? 0.3 : 0.2)) kind = 'tank';
   else if (t > 60 && r < (z2 ? 0.5 : 0.4)) kind = 'fast';
-  const d = ENEMY[kind], k = 1 + t/120 + (t/400)*(t/400);   // vida: x20 al minuto 20 (igual que x20 al minuto 10 antes)
+  const tt = diffT(t);
+  const d = ENEMY[kind], k = 1 + tt/60 + (tt/200)*(tt/200);   // vida: igual que siempre hasta el minuto 10
   const pool = ZONE_FOES[g.zone - 1][kind], sprite = pool ? pool[Math.floor(Math.random()*pool.length)] : d.sprite;
   const mesh = billboard(sprite, d.scale);
   mesh.position.y = d.scale/2;
@@ -4319,7 +4323,7 @@ function spawnEnemy(forced){
   world.add(shadow);
   g.enemies.push({
     kind, sprite, mesh, shadow, x: sp[0], z: sp[1],
-    hp: d.hp*k*evoHp(), max: d.hp*k*evoHp(), spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + t/600)*evoDmg(), cd: 0
+    hp: d.hp*k*evoHp(), max: d.hp*k*evoHp(), spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300)*evoDmg(), cd: 0
   });
 }
 
@@ -4343,11 +4347,16 @@ function initShrines(){
     g.shrines.push({x, z, type, mesh, used: false});
   }
 }
-function updateShrines(){
+// Para cargar un santuario hay que quedarse dentro de su círculo unos 3 segundos; si te alejas, la carga baja
+const SHRINE_CHARGE = 3, SHRINE_RANGE = 2.2;
+function updateShrines(dt){
   if (!g.shrines) initShrines();
   for (const sh of g.shrines){
     if (sh.used) continue;
-    if (dist2(sh.x, sh.z, g.p.x, g.p.z) < 1.8*1.8){
+    const inside = dist2(sh.x, sh.z, g.p.x, g.p.z) < SHRINE_RANGE*SHRINE_RANGE;
+    sh.charge = Math.max(0, Math.min(SHRINE_CHARGE, (sh.charge || 0) + (inside ? dt : -dt*0.5)));
+    sh.mesh.scale.y = 1 + 0.6 * (sh.charge / SHRINE_CHARGE);   // el santuario crece mientras se carga
+    if (inside && sh.charge >= SHRINE_CHARGE){
       sh.used = true; world.remove(sh.mesh);
       sh.type.apply(g);
       announce(sh.type.name, sh.type.text, '#' + sh.type.col.toString(16).padStart(6, '0'));
@@ -4430,9 +4439,9 @@ function update(dt){
   if (g.spawnT <= 0){
     spawnEnemy();
     // Presión creciente: tras 45 s salen más enemigos por tanda (1 extra, +1 cada 90 s, máximo 3)
-    const extra = g.t > 45 ? Math.min(3, 1 + Math.floor(g.t/180)) : 0;
+    const extra = g.t > 45 ? Math.min(3, 1 + Math.floor(diffT(g.t)/90)) : 0;
     for (let i = 0; i < extra && g.enemies.length < Q.maxEnemies; i++) spawnEnemy();
-    g.spawnT = Math.max(0.3, 0.9 - g.t/360);
+    g.spawnT = Math.max(0.3, 0.9 - diffT(g.t)/180);
   }
 
   // Minijefes en sus minutos
@@ -4444,7 +4453,7 @@ function update(dt){
   g.eliteT -= dt;
   if (g.eliteT <= 0){
     g.eliteT = 45;
-    const n = g.t >= 600 ? 2 : 1;
+    const n = g.t >= 300 ? 2 : 1;
     for (let i = 0; i < n; i++) spawnEnemy('elite');
     announce('¡Élite!', n > 1 ? 'Dos Digimon élite se acercan' : 'Un Digimon élite se acerca', '#ff7043');
   }
@@ -4584,7 +4593,7 @@ function update(dt){
   }
   g.gems = g.gems.filter(gm => !gm.taken);
 
-  updateShrines();
+  updateShrines(dt);
   // Cofres: aparecen cada 50 s (máximo 2 vivos) y dan una mejora aleatoria al pasar por encima
   g.chestT -= dt;
   g.magnetT = Math.max(0, (g.magnetT || 0) - dt);
