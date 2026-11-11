@@ -5406,12 +5406,13 @@ function evolvedUnlocked(key){ return !!loadJSON('digibonk3d-evo', {})[key]; }
 // Icono del entrenador: se elige en la tarjeta (por defecto, el Digimon seleccionado)
 // Iconos de entrenador (Digimon Adventure): el id se guarda en 'digibonk3d-avatar'
 const PLAYER_ICONS = [
-  {id:'tai', name:'Tai'}, {id:'agumon', name:'Tai y Agumon'}, {id:'matt', name:'Matt'}, {id:'gabumon', name:'Matt y Gabumon'},
-  {id:'sora', name:'Sora'}, {id:'biyomon', name:'Sora y Biyomon'}, {id:'izzy', name:'Izzy'}, {id:'tentomon', name:'Izzy y Tentomon'},
-  {id:'mimi', name:'Mimi'}, {id:'palmon', name:'Mimi y Palmon'}, {id:'joe', name:'Joe'}, {id:'gomamon', name:'Joe y Gomamon'},
-  {id:'tk', name:'T.K.'}, {id:'patamon', name:'T.K. y Patamon'}, {id:'kari', name:'Kari'}
-].map(x => ({...x, src: 'ui/jugador/' + x.id + '.png'}));
-function avatarIcon(){ return PLAYER_ICONS.find(x => x.id === localStorage.getItem('digibonk3d-avatar')) || null; }
+  {id:'agumon', name:'Tai y Agumon'}, {id:'gabumon', name:'Matt y Gabumon'}, {id:'biyomon', name:'Sora y Biyomon'}, {id:'tentomon', name:'Izzy y Tentomon'},
+  {id:'palmon', name:'Mimi y Palmon'}, {id:'gomamon', name:'Joe y Gomamon'}, {id:'patamon', name:'T.K. y Patamon'}, {id:'gatomon', name:'Kari y Gatomon', img:'kari'}
+].map(x => ({...x, src: 'ui/jugador/' + (x.img || x.id) + '.png'}));
+// Iconos antiguos (un niño sin Digimon) pasan al Digimon de su pareja
+const LEGACY_AV = {tai:'agumon', matt:'gabumon', sora:'biyomon', izzy:'tentomon', mimi:'palmon', joe:'gomamon', tk:'patamon', kari:'gatomon'};
+function normAv(v){ return LEGACY_AV[v] || v || ''; }
+function avatarIcon(){ return PLAYER_ICONS.find(x => x.id === normAv(localStorage.getItem('digibonk3d-avatar'))) || null; }
 function avatarSrc(){ const ic = avatarIcon(); return ic ? ic.src : headUrl(spriteOf(avatarKey(), false)); }
 function avatarKey(){ const k = localStorage.getItem('digibonk3d-avatar'); return CHARS[k] ? k : selectedKey; }
 // Tarjeta de entrenador: una sola pantalla. Pasar el ratón previsualiza; clic equipa; el nombre se edita en la propia tarjeta
@@ -5497,7 +5498,7 @@ function showPlayer(){
 function openCustomizer(){
   const host = document.getElementById('overlay');
   if (!host || document.getElementById('czBack')) return;
-  let pAv = localStorage.getItem('digibonk3d-avatar') || '';
+  let pAv = normAv(localStorage.getItem('digibonk3d-avatar'));
   let pFrame = extra.frame || '', pTitle = extra.title || '';
   let tab = 'av';
   const ownsFrame = id => !id || inv.frames.includes(id);
@@ -5548,7 +5549,7 @@ function openCustomizer(){
   };
   const close = () => { back.remove(); document.removeEventListener('keydown', onKey, true); };
   const save = () => {
-    if (pAv) localStorage.setItem('digibonk3d-avatar', pAv);
+    if (pAv) { localStorage.setItem('digibonk3d-avatar', pAv); if (PLAYER_ICONS.some(x => x.id === pAv) && isUnlocked(pAv)) { selectedKey = pAv; try { localStorage.setItem('digibonk3d-last-choice', pAv); } catch(e){} } }
     if (pFrame) equipExtra('frame', pFrame); else unequipExtra('frame');
     if (pTitle) equipExtra('title', pTitle); else unequipExtra('title');
     close(); sfx('ready'); showPlayer();
