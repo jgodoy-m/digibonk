@@ -3025,7 +3025,7 @@ function showSelect(){
   fitHub(); if (!window.__hmFitBound){ window.__hmFitBound = true; addEventListener('resize', () => { if (document.querySelector('#overlay.menu-mode .realhub:not(.pl4)')) fitHub(); }); }
   // Always start with a valid still portrait: no animation strip flashes in the Digivice.
   const playPortrait = document.getElementById('rhPlayPortrait');
-  if (playPortrait) { const pk = CHARS[selectedKey] ? selectedKey : 'agumon'; const pic = PLAYER_ICONS.find(x => x.id === pk); if (pic) playPortrait.src = pic.src; else menuPlayPortrait(spriteOf(pk, false), d => { playPortrait.src = d; }); }
+  if (playPortrait) { const pk = CHARS[selectedKey] ? selectedKey : 'agumon'; const pic = PLAYER_ICONS.find(x => x.id === pk); if (pic && !pic.img) playPortrait.src = pic.src; else menuPlayPortrait(spriteOf(pk, false), d => { playPortrait.src = d; }); }
   // The equipped skin may have a unique appearance; if so, use that sprite's first frame.
   if (typeof skinEquipped !== 'undefined' && skinEquipped[selectedKey] && skinEquipped[selectedKey] !== 'classic') {
     menuPlayPortrait(spriteOf(selectedKey,false), data => {
@@ -5406,8 +5406,8 @@ function evolvedUnlocked(key){ return !!loadJSON('digibonk3d-evo', {})[key]; }
 // Icono del entrenador: se elige en la tarjeta (por defecto, el Digimon seleccionado)
 // Iconos de entrenador (Digimon Adventure): el id se guarda en 'digibonk3d-avatar'
 const PLAYER_ICONS = [
-  {id:'agumon', name:'Tai y Agumon'}, {id:'gabumon', name:'Matt y Gabumon'}, {id:'biyomon', name:'Sora y Biyomon'}, {id:'tentomon', name:'Izzy y Tentomon'},
-  {id:'palmon', name:'Mimi y Palmon'}, {id:'gomamon', name:'Joe y Gomamon'}, {id:'patamon', name:'T.K. y Patamon'}, {id:'gatomon', name:'Kari y Gatomon', img:'kari'}
+  {id:'agumon', name:'Agumon'}, {id:'gabumon', name:'Gabumon'}, {id:'biyomon', name:'Biyomon'}, {id:'tentomon', name:'Tentomon'},
+  {id:'palmon', name:'Palmon'}, {id:'gomamon', name:'Gomamon'}, {id:'patamon', name:'Patamon'}, {id:'gatomon', name:'Gatomon', img:'kari'}
 ].map(x => ({...x, src: 'ui/jugador/' + (x.img || x.id) + '.png'}));
 // Iconos antiguos (un niño sin Digimon) pasan al Digimon de su pareja
 const LEGACY_AV = {tai:'agumon', matt:'gabumon', sora:'biyomon', izzy:'tentomon', mimi:'palmon', joe:'gomamon', tk:'patamon', kari:'gatomon'};
