@@ -1636,6 +1636,9 @@ body:has(.pl4) #topbar{display:none!important}
 .pl4-av .hud-portrait{overflow:hidden;border-radius:50%}
 .pl4-av .hud-portrait img{width:100%!important;height:100%!important;object-fit:cover;border-radius:50%;display:block}
 .cz-prev .hud-portrait{overflow:hidden;border-radius:50%}
+#overlay.menu-mode:has(.realhub:not(.pl4)){overflow:hidden!important}
+#overlay.menu-mode .realhub:not(.pl4){min-height:0!important;height:100%!important;overflow:hidden!important}
+#overlay.menu-mode .realhub:not(.pl4) .real-legal{background:none!important;border:0!important;box-shadow:none!important;padding:4px 24px 6px!important;color:#e8f4ff!important;text-shadow:0 1px 3px #000!important;font-size:10px!important;opacity:.9}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2620,6 +2623,9 @@ function showSelect(){
       <div id="realModalHost" class="real-modal-host" aria-live="polite"></div>
     </main>`);
   overlay.classList.add('menu-mode');
+  // Menú sin scroll: si la ventana es más baja que el diseño, se reduce para que entre entero
+  const fitHub = () => { const hub = document.querySelector('#overlay.menu-mode .realhub:not(.pl4)'); if (!hub) return; hub.style.zoom = '1'; hub.style.zoom = String(Math.min(1, innerHeight / hub.scrollHeight)); };
+  fitHub(); if (!window.__hmFitBound){ window.__hmFitBound = true; addEventListener('resize', () => { if (document.querySelector('#overlay.menu-mode .realhub:not(.pl4)')) fitHub(); }); }
   // Always start with a valid still portrait: no animation strip flashes in the Digivice.
   const playPortrait = document.getElementById('rhPlayPortrait');
   if (playPortrait) playPortrait.src = 'ui/menu_portraits/' + (CHARS[selectedKey] ? selectedKey : 'agumon') + '.png';
