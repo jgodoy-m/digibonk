@@ -1855,6 +1855,10 @@ body:has(.pl4) #topbar{display:none!important}
 body:has(.tr11) #topbar{display:none!important}
 .tr11-fighters{overflow-x:auto;flex-wrap:nowrap!important;justify-content:flex-start!important}
 body:has(.tr11) #hudTop{display:none!important}
+.db-event{display:block;width:100%;height:auto;aspect-ratio:2000/669;padding:0;margin:0;border:0;border-radius:14px;cursor:pointer;background:url(ui/evento_navidad.webp) center/100% 100% no-repeat;box-shadow:0 5px 0 #0007;transition:transform .2s ease,filter .2s ease}
+.db-event:hover{transform:translateY(-3px);filter:brightness(1.1)}
+.db-event:active{transform:translateY(2px)}
+.db-event:focus-visible{outline:3px solid #20e8ff;outline-offset:4px}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2783,6 +2787,7 @@ function showSelect(){
   const safeText = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const navButton=(id,icon,label,desc)=>`<button class="real-nav" type="button" id="${id}" aria-label="${label}"><img class="real-nav-art" src="ui/boton_independiente_${icon}.png" alt="" aria-hidden="true" onerror="this.style.display='none';this.parentElement.classList.add('asset-missing')"><span class="real-nav-hidden">${label}: ${desc}</span></button>`;
   const choice = CHARS[selectedKey] || CHARS.agumon;
+  const dbEvDays = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
   showOverlay(`
     <main class="realhub" aria-label="Menú principal Digibonk">
       <div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><video class="rw-video" autoplay muted loop playsinline preload="auto" disablepictureinpicture><source src="ui/menu_video.webm" type="video/webm"><source src="ui/menu_video.mp4" type="video/mp4"></video><div class="rw-scenery-core"></div><div class="rw-aurora"></div><div class="rw-light"></div><div class="rw-water"></div><div class="rw-stars"></div></div>
@@ -2806,7 +2811,7 @@ function showSelect(){
             <button type="button" class="hm-card hm-surv hm-soon" id="mSurv"><span class="hm-txt"><b>Supervivencia</b><small>Modo infinito</small><em>Próximamente</em></span></button>
           </div>
           <div class="hm-row2">
-                    ${eventActive() ? `<button type="button" class="real-event" id="rhEvent"><b>🎄 Navidad Digital</b><small>Papá Noel y Reno · quedan ${Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000))} días</small></button>` : `<button type="button" class="hm-card hm-event hm-soon" id="mEvent"><span class="hm-txt"><b>Evento</b><small>Próximamente</small></span></button>`}
+                    ${eventActive() ? `<button class="db-event" id="rhEvent" type="button" aria-label="Edición Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"></button>` : `<button type="button" class="hm-card hm-event hm-soon" id="mEvent"><span class="hm-txt"><b>Evento</b><small>Próximamente</small></span></button>`}
             <button type="button" class="hm-card hm-enc hm-soon" id="mEnc"><span class="hm-txt"><b>Encargos</b><small>Misiones</small><em>Próximamente</em></span></button>
           </div>
           <div class="hm-grid">
