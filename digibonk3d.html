@@ -1897,6 +1897,11 @@ body:has(.tr11) #hudTop{display:none!important}
 .cz-prev{padding-bottom:22px}
 .cz-ttl{margin-top:20px!important;position:relative;z-index:4}
 .cz-box .rw-frame::after,.cz-box .hud-portrait::after{display:none!important}
+.realhub .hm-art{padding:0!important;border:0!important;box-shadow:none!important;filter:none!important;background-repeat:no-repeat!important;background-size:cover!important;min-height:0!important;overflow:hidden!important;border-radius:12px}
+.realhub .hm-art::before,.realhub .hm-art::after{display:none!important}
+.realhub .hm-surv.hm-art{background-image:url(ui/hub_supervivencia.webp)!important;background-position:left center!important}
+.realhub .hm-enc.hm-art{background-image:url(ui/hub_encargos.webp)!important;background-position:left center!important}
+.realhub .hm-art{background-size:contain!important;background-position:center!important;display:flex;align-items:center;justify-content:center}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2846,11 +2851,11 @@ function showSelect(){
           <h1 class="real-brand"><strong><em>DIGI</em><span>BONK</span></strong><small>FAN GAME · DIGITAL WORLD</small></h1>
           <div class="hm-row1">
           <button type="button" id="playBtn" class="real-play" aria-label="Jugar con ${safeText(choice.name)}"><span class="real-device"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span class="real-play-txt"><b>JUGAR</b><small>Último compañero: ${safeText(choice.name)}</small></span><span class="real-arrow" aria-hidden="true">▶</span><span class="real-shine" aria-hidden="true"></span></button>
-            <button type="button" class="hm-card hm-surv hm-soon" id="mSurv"><span class="hm-txt"><b>Supervivencia</b><small>Modo infinito</small><em>Próximamente</em></span></button>
+            <button type="button" class="hm-card hm-surv hm-soon hm-art" id="mSurv" aria-label="Supervivencia: modo infinito. Próximamente"></button>
           </div>
           <div class="hm-row2">
                     ${eventActive() ? `<button class="db-event" id="rhEvent" type="button" aria-label="Edición Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><span class="db-event__txt" aria-hidden="true">Papá Noel y Reno · quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</span></button>` : `<button type="button" class="hm-card hm-event hm-soon" id="mEvent"><span class="hm-txt"><b>Evento</b><small>Próximamente</small></span></button>`}
-            <button type="button" class="hm-card hm-enc hm-soon" id="mEnc"><span class="hm-txt"><b>Encargos</b><small>Misiones</small><em>Próximamente</em></span></button>
+            <button type="button" class="hm-card hm-enc hm-soon hm-art" id="mEnc" aria-label="Encargos: misiones. Próximamente"></button>
           </div>
           <div class="hm-grid">
             <button type="button" class="hm-tile" id="btnColl"><span class="hm-ico"><img src="ui/icons/coleccion.png" alt=""></span><span class="hm-txt"><b>Digidex</b></span></button>
