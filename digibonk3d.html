@@ -1903,6 +1903,24 @@ body:has(.tr11) #hudTop{display:none!important}
 .realhub .hm-enc.hm-art{background-image:url(ui/hub_encargos.webp)!important;background-position:left center!important}
 .realhub .hm-art{background-size:contain!important;background-position:center!important;display:flex;align-items:center;justify-content:center}
 .realhub .hm-art{height:84px!important;min-height:84px!important;align-self:center!important;width:100%!important}
+.pl4-name{width:auto!important;min-width:260px;max-width:100%}
+.pl4-grid{align-items:start!important}
+.pl4-panel{align-self:start}
+.pl4-specs{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))!important}
+.realhub .hm-pl-frame{width:44px!important;height:44px!important;flex:0 0 44px;border:0!important;background:none!important;box-shadow:none!important;position:relative;overflow:visible!important;border-radius:50%!important}
+.realhub .hm-pl-frame img{width:100%!important;height:100%!important;margin:0!important;border-radius:50%;object-fit:cover;position:relative;z-index:2}
+.realhub .hm-pl-frame::before{content:'';position:absolute;inset:-22%;background:center/contain no-repeat;pointer-events:none;z-index:3}
+.realhub .hm-pl-user img{border:0!important;box-shadow:none!important}
+.realhub .hm-pl-frame.fr-angelical_dorado::before{background-image:url(ui/marcos/angelical_dorado.png)!important}
+.realhub .hm-pl-frame.fr-agua_fiabilidad::before{background-image:url(ui/marcos/agua_fiabilidad.png)!important}
+.realhub .hm-pl-frame.fr-conocimiento_digital::before{background-image:url(ui/marcos/conocimiento_digital.png)!important}
+.realhub .hm-pl-frame.fr-digivice_azul::before{background-image:url(ui/marcos/digivice_azul.png)!important}
+.realhub .hm-pl-frame.fr-amistad_gabumon::before{background-image:url(ui/marcos/amistad_gabumon.png)!important}
+.realhub .hm-pl-frame.fr-alas_rosadas::before{background-image:url(ui/marcos/alas_rosadas.png)!important}
+.realhub .hm-pl-frame.fr-fenix_dorado::before{background-image:url(ui/marcos/fenix_dorado.png)!important}
+.realhub .hm-pl-frame.fr-esperanza_angelical::before{background-image:url(ui/marcos/esperanza_angelical.png)!important}
+.realhub .hm-pl-frame.fr-sinceridad_palmon::before{background-image:url(ui/marcos/sinceridad_palmon.png)!important}
+.realhub .hm-pl-frame.fr-bondad_botanica::before{background-image:url(ui/marcos/bondad_botanica.png)!important}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2838,7 +2856,7 @@ function showSelect(){
       <header class="real-top">
         <div class="hm-utils"><button class="hm-lang" type="button" id="rhLang" aria-label="Idioma">🌐 ${LANG.toUpperCase()}</button><button class="hm-round" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button></div>
         <div class="hm-pill" role="toolbar" aria-label="Jugador">
-          <button type="button" class="hm-pl-user" id="rhProfile"><img id="rhProfileImg" src="${avatarSrc()}" alt=""><span><strong>${safeText(trainerName || 'Invitado')}</strong><small>${isGuest() ? t('guestTag') : (extra.title ? (TITLES.find(x => x.id === extra.title)?.name || '') : t('noTitle'))}</small></span></button>
+          <button type="button" class="hm-pl-user" id="rhProfile"><span class="hud-portrait mini hm-pl-frame${extra.frame ? ' fr-' + extra.frame : ''}"><img id="rhProfileImg" src="${avatarSrc()}" alt=""></span><span><strong>${safeText(trainerName || 'Invitado')}</strong><small>${isGuest() ? t('guestTag') : (extra.title ? (TITLES.find(x => x.id === extra.title)?.name || '') : t('noTitle'))}</small></span></button>
           <span class="hm-pl-chip hm-bits" title="Bits">Ⓑ ${SAVE.bits.toLocaleString('es-ES')}</span>
           <span class="hm-pl-chip hm-dex" title="Digimon desbloqueados"><img src="ui/icons/digivice.png" alt="">${unlockedSet().size}/${Object.keys(CHARS).length}</span>
           <button type="button" class="hm-pl-ic" id="hmNews" aria-label="Noticias" title="Noticias">📰</button>
