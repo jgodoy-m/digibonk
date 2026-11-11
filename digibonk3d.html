@@ -3262,7 +3262,7 @@ function showCollection(){
           <div>
             <h3>${CHARS[k].name}</h3>
             <p>${BALANCE[k].why}</p>
-            <div class="cl4-evo">${stages.map((st, i) => `${i ? '<span>➜</span>' : ''}<div class="cl4-st${st.on ? '' : ' off'}"><img src="${st.sprite}" alt=""><small>${st.on ? st.name : '???'}</small></div>`).join('')}</div>
+            <div class="cl4-evo">${stages.map((st, i) => `${i ? '<span>➜</span>' : ''}<div class="cl4-st${st.on ? '' : ' off'}">${sprEl(spriteWith(k, i, eq), 48)}<small>${st.on ? st.name : '???'}</small></div>`).join('')}</div>
           </div>
         </div>
         <h4>Skins</h4>
@@ -3792,7 +3792,7 @@ function renderPickPreview(){
         <h3>Evolución</h3>
         <div class="pv-evo">
           <div class="pv-node">${sprEl(spriteOf(k, false), 64)}<small>${c.name}</small></div>
-          ${EVO_LINE[k].map((e, i) => `<div class="pv-arrow">Nv ${EVO_LEVELS[i]} ➜</div><div class="pv-node"><img class="spr" style="--s:64px" src="${e.sprite}" alt=""><small>${e.name}</small></div>`).join('')}
+          ${EVO_LINE[k].map((e, i) => `<div class="pv-arrow">Nv ${EVO_LEVELS[i]} ➜</div><div class="pv-node">${sprEl(spriteWith(k, i + 1, skinEquipped[k] || 'clasico'), 64)}<small>${e.name}</small></div>`).join('')}
         </div>
         <p class="pk2-note">Cada etapa: +20% daño, +5% área y +20 PS · solo durante la partida</p>
       </div>
