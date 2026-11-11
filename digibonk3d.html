@@ -1544,7 +1544,11 @@ body:has(.realhub) #hudTop{display:none!important}
 .realhub .real-arrow{display:block!important;margin-left:auto!important}
 .realhub .real-shine{position:absolute;inset:0;z-index:2;background:linear-gradient(100deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%);transform:translateX(-120%);animation:db-shine 3.2s ease-in-out infinite;pointer-events:none}
 @keyframes db-shine{0%,55%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
-.picker-screen.pl4{display:block!important;overflow:auto!important;padding:14px 22px 30px!important}
+.realhub.pl4{position:absolute!important;inset:0!important;display:block!important;overflow:auto!important;height:auto!important;min-height:100%!important;background:transparent!important}
+.pl4-wrap{position:relative;z-index:2;max-width:1240px;margin:0 auto;padding:14px 22px 30px}
+body:has(.pl4) #topbar{display:none!important}
+.pl4-hero,.pl4-stat,.pl4-mission,.pl4-panel{background:rgba(10,16,38,.7)!important;backdrop-filter:blur(3px);border-color:#8eeeff40!important}
+.pl4-grid{align-items:start}
 .pl4-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
 .pl4-banner{flex:1;padding:9px 16px;border-radius:12px;background:linear-gradient(90deg,#e8585a,#ff8a6b);border:2px solid #ffd7c9;color:#fff;box-shadow:0 4px 0 #6b1d1d}
 .pl4-banner b{display:block;font-size:22px;font-weight:900;font-style:italic;text-shadow:1px 2px #5a1212}
@@ -1623,6 +1627,12 @@ body:has(.realhub) #hudTop{display:none!important}
 .cz-btn{appearance:none;border:0;border-radius:999px;padding:10px 26px;font:900 14px system-ui;color:#fff;background:#3a4560;cursor:pointer;box-shadow:0 3px 0 #111}
 .cz-btn.ok{background:linear-gradient(#5be07d,#2fa75a);box-shadow:0 3px 0 #145c2c}
 @media (max-width:640px){.cz-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.cz-head{flex-direction:column;text-align:center}}
+.realhub.pl4 > .real-world{position:fixed!important;inset:0!important;z-index:0}
+.realhub.pl4{text-align:left}
+.pl4-grid{align-items:stretch!important}
+.pl4-panel h3,.pl4-mission h3{text-align:left}
+.pl4-mission .pf-bar{margin-top:2px}
+.pl4-mission small{text-align:center}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -5028,7 +5038,7 @@ function showPlayer(){
   const specRows = SEASONS.adventure.chars.map(k => ({k, s: statsOf(k)})).filter(x => x.s.plays || x.s.kills).sort((a, b) => b.s.kills - a.s.kills).slice(0, 8).map(({k, s}) => `<div class="pl4-spec"><img src="${headUrl(spriteOf(k, false))}" alt=""><span><b>${CHARS[k].name}</b><small>${s.kills} bajas · ${s.plays} partidas</small></span></div>`).join('') || '<p class="pl4-empty">Juega con un Digimon para ver su especialidad.</p>';
   const pct2 = day.claimed ? 100 : pct;
   showOverlay(`
-    <div class="picker-screen player-screen pl4">
+    <main class="realhub pl4" aria-label="Ficha de entrenador"><div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><video class="rw-video" autoplay muted loop playsinline preload="auto" disablepictureinpicture><source src="ui/menu_video.webm" type="video/webm"><source src="ui/menu_video.mp4" type="video/mp4"></video></div><div class="pl4-wrap">
       <header class="pl4-top"><button class="g-back" id="plBack">Esc · Volver</button>
         <div class="pl4-banner"><b>Ficha de entrenador</b><small>Tu tarjeta, tus estadísticas y tus logros</small></div></header>
       <section class="pl4-hero" id="tc">
@@ -5051,7 +5061,7 @@ function showPlayer(){
         <section class="pl4-panel pl4-wide"><h3>Especialidad por Digimon</h3><div class="pl4-specs">${specRows}</div></section>
 
       </div>
-    </div>`);
+    </div></main>`);
 
   document.getElementById('plBack').onclick = () => showSelect();
   document.getElementById('plChange').onclick = openCustomizer;
