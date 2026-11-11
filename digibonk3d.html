@@ -2599,6 +2599,28 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .realhub .hm-link{appearance:none;cursor:pointer;color:#fff;border:2px solid #8eeeff;border-radius:999px;background:#0b2262d9;padding:7px 14px;font:800 13px system-ui,sans-serif}
 .realhub .hm-link:hover{filter:brightness(1.25)}
 .realhub .hm-msg{margin:6px 0 0;min-height:18px;font:700 13px system-ui,sans-serif;color:#ffe9a0;text-shadow:1px 1px #000}
+/* Pulido de los botones del menú principal */
+.realhub .hm-card,.realhub .hm-tile{overflow:hidden;isolation:isolate;border:2px solid #9fe9ff;background:linear-gradient(165deg,#1f67b8 0%,#0d2f70 58%,#0a1c4c 100%);box-shadow:inset 0 1px 0 #ffffff50,inset 0 -12px 18px #04103a90,0 5px 0 #03092a,0 9px 14px #00000066;transition:transform .14s ease,box-shadow .14s ease,filter .14s ease}
+.realhub .hm-card::before,.realhub .hm-tile::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(#ffffff2e,#ffffff00 46%)}
+.realhub .hm-card::after,.realhub .hm-tile::after{content:'';position:absolute;left:0;right:0;bottom:0;height:4px;z-index:0;background:#6fe3ff;box-shadow:0 0 10px #6fe3ff}
+.realhub .hm-card>*,.realhub .hm-tile>*{position:relative;z-index:1}
+.realhub .hm-soon::after{background:#4a5a7a!important;box-shadow:none!important}
+.realhub .hm-surv{background:linear-gradient(165deg,#9a6cf5,#3b2592 60%,#241756)!important}
+.realhub .hm-enc{background:linear-gradient(165deg,#d0922a,#6b3e10 60%,#3d2108)!important}
+.realhub .hm-event{background:linear-gradient(165deg,#c6404f,#6e1a26 60%,#3f0d18)!important}
+.realhub .hm-card:hover,.realhub .hm-tile:hover{transform:translateY(-3px);box-shadow:inset 0 1px 0 #ffffff66,inset 0 -12px 18px #04103a90,0 8px 0 #03092a,0 0 22px #6fe3ff80}
+.realhub .hm-card:active,.realhub .hm-tile:active{transform:translateY(2px);box-shadow:inset 0 -6px 12px #04103a90,0 2px 0 #03092a}
+.realhub .hm-card:focus-visible,.realhub .hm-tile:focus-visible,.realhub .hm-link:focus-visible{outline:3px solid #fff097;outline-offset:3px}
+.realhub .hm-card b,.realhub .hm-tile b{text-shadow:0 2px 0 #020f30,0 0 12px #6fe3ff40}
+.realhub .hm-card small{letter-spacing:.02em}
+.realhub .hm-card em,.realhub .hm-tile em{display:inline-block;margin-top:3px;padding:2px 7px;border-radius:99px;background:#00000066;border:1px solid #ffffff3d;font-size:9px!important;letter-spacing:.06em;text-transform:uppercase;opacity:1!important;color:#fff3c4}
+.realhub .hm-ico{filter:drop-shadow(0 3px 0 #04103a)}
+.realhub .hm-bar{gap:9px}
+.realhub .hm-link{height:34px;padding:0 16px;display:inline-flex;align-items:center;border:2px solid #9fe9ff;background:linear-gradient(#24599f,#0b2262 70%);box-shadow:inset 0 1px 0 #ffffff50,0 3px 0 #03092a;transition:transform .12s ease,box-shadow .12s ease,filter .12s ease;text-shadow:0 1px 0 #020f30}
+.realhub .hm-link:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 #ffffff66,0 5px 0 #03092a,0 0 14px #6fe3ff80;filter:none}
+.realhub .hm-link:active{transform:translateY(1px);box-shadow:inset 0 -4px 8px #04103a90,0 1px 0 #03092a}
+.realhub .hm-msg{text-align:left}
+
 /* Botón Jugar del menú: botón de color con brillo que pasa (sustituye al arte anterior) */
 .realhub .real-play{background:linear-gradient(180deg,#ff6a5b,#d32f2f 60%,#8e1b1b)!important;border:2px solid #ffb3a8!important;border-radius:18px!important;clip-path:none!important;aspect-ratio:auto!important;box-shadow:0 6px 0 #4a0b0b,0 0 22px rgba(255,80,80,.45)!important;overflow:hidden!important;isolation:isolate!important}
 .realhub .real-play:hover{box-shadow:0 6px 0 #4a0b0b,0 0 30px rgba(255,110,110,.7)!important}
