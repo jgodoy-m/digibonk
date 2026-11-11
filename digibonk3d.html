@@ -5963,15 +5963,20 @@ const TIER_ODDS = {c: 60, r: 26, e: 12, l: 2};
 // Reparto de lo que no es legendaria: marcos, títulos, tickets y Bits
 const CAT_WEIGHTS = [['frame', 32], ['title', 28], ['ticket', 10], ['bits', 30]];
 // Bits según rareza: común 30, rara 80, épica 160. Tickets: siempre 1 por drop
-const BITS_BY_TIER = {c: 30, r: 80, e: 160}, TICKETS_BY_TIER = {c: 1, r: 1, e: 1};
+const BITS_BY_TIER = {c: 30, r: 80, e: 160};
+// Tickets por banner: peso del drop (en el reparto no legendario) y cantidad por drop.
+// El permanente da poco; los promocionales dan más para tirar en su evento.
+const TICKET_RULES = {std: {w: 10, amt: 1}, navidadP: {w: 22, amt: 2}, navidadR: {w: 22, amt: 3}};
+function ticketRule(){ return TICKET_RULES[gxBanner] || TICKET_RULES.std; }
 function rollTier(){
   let x = Math.random()*100;
   for (const t of ['c', 'r', 'e', 'l']){ if ((x -= TIER_ODDS[t]) < 0) return t; }
   return 'c';
 }
 function pickCategory(){
-  let tot = CAT_WEIGHTS.reduce((a, c) => a + c[1], 0), x = Math.random()*tot;
-  for (const [k, w] of CAT_WEIGHTS){ if ((x -= w) < 0) return k; }
+  const W = CAT_WEIGHTS.map(([k, w]) => [k, k === 'ticket' ? ticketRule().w : w]);
+  let tot = W.reduce((a, c) => a + c[1], 0), x = Math.random()*tot;
+  for (const [k, w] of W){ if ((x -= w) < 0) return k; }
   return 'title';
 }
 // Devuelve una recompensa: {type, ...} o null si no queda nada de ese tipo
@@ -6005,7 +6010,7 @@ function rollReward(tier){
     return {type:'skin', key: pick.key, st: pick.st, sk: pick.sk, tier:'l'};
   }
   const cat = pickCategory();
-  if (cat === 'ticket') return {type:'ticket', amount: TICKETS_BY_TIER[tier] || 1, tier};
+  if (cat === 'ticket') return {type:'ticket', amount: ticketRule().amt, tier};
   if (cat === 'bits') return {type:'bits', amount: BITS_BY_TIER[tier] || 30, tier};
   // Banner permanente: parte de las tiradas de marco o título dan el de la semana
   if (gxBanner === 'std' && Math.random() < 0.3){
@@ -6022,7 +6027,7 @@ function rollReward(tier){
     if (pool.length){ const t = pickOne(pool); return {type:'title', t, tier: t.tier}; }
   }
   // Sin marcos ni títulos nuevos: Bits
-  return {type:'bits', amount: 30, tier};
+  return {type:'bits', amount: BITS_BY_TIER[tier] || 30, tier};
 }
 // Aplica la recompensa a la colección; los repetidos se convierten en Bits
 function grantReward(r){
