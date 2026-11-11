@@ -1633,6 +1633,9 @@ body:has(.pl4) #topbar{display:none!important}
 .pl4-panel h3,.pl4-mission h3{text-align:left}
 .pl4-mission .pf-bar{margin-top:2px}
 .pl4-mission small{text-align:center}
+.pl4-av .hud-portrait{overflow:hidden;border-radius:50%}
+.pl4-av .hud-portrait img{width:100%!important;height:100%!important;object-fit:cover;border-radius:50%;display:block}
+.cz-prev .hud-portrait{overflow:hidden;border-radius:50%}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -5066,13 +5069,6 @@ function showPlayer(){
   document.getElementById('plBack').onclick = () => showSelect();
   document.getElementById('plChange').onclick = openCustomizer;
   const tc = document.getElementById('tc');
-  // La tarjeta se inclina siguiendo al ratón
-  tc.onmousemove = e => {
-    const r = tc.getBoundingClientRect(), x = (e.clientX - r.left)/r.width - .5, y = (e.clientY - r.top)/r.height - .5;
-    tc.style.transform = `perspective(900px) rotateY(${x*14}deg) rotateX(${-y*14}deg)`;
-    tc.style.setProperty('--sx', (x + .5)*100 + '%'); tc.style.setProperty('--sy', (y + .5)*100 + '%');
-  };
-  tc.onmouseleave = () => { tc.style.transform = ''; };
   // Contadores animados
   document.querySelectorAll('.pl4 [data-n]').forEach(el => {
     const n = +el.dataset.n, t0 = performance.now();
