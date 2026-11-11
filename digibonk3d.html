@@ -2567,6 +2567,25 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .gx2-left,.gx2-right,.gx2-center{overflow:visible!important;height:auto!important;min-height:0!important}
 .gx2-strip{flex-wrap:nowrap}
 }
+/* Cuadrícula de modos del menú principal */
+.realhub .hm-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:2px}
+.realhub .hm-card,.realhub .hm-tile{appearance:none;position:relative;cursor:pointer;color:#fff;border:2px solid #8eeeff88;border-radius:12px;background:linear-gradient(150deg,#14489a,#0b2262 70%,#2a1d63);box-shadow:0 4px 0 #04103a;font:inherit;text-align:left;padding:10px 12px;display:flex;align-items:center;gap:10px;min-height:66px;transition:transform .15s ease,filter .15s ease}
+.realhub .hm-surv{grid-column:span 2;background:linear-gradient(150deg,#6a3fd0,#2e1f78);min-height:78px}
+.realhub .hm-enc{background:linear-gradient(150deg,#8a5a12,#3d2508)}
+.realhub .hm-ico{width:40px;height:40px;flex:none;display:grid;place-items:center;font-size:22px}
+.realhub .hm-ico img{width:100%;height:100%;object-fit:contain;image-rendering:auto}
+.realhub .hm-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.realhub .hm-txt b{font-size:clamp(14px,1.25vw,19px);font-weight:900;font-style:italic;text-shadow:1px 2px #020f30;line-height:1.05}
+.realhub .hm-tile .hm-txt b{font-size:clamp(12px,.92vw,16px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.realhub .hm-tile{gap:8px;padding:10px 10px}
+.realhub .hm-txt small,.realhub .hm-txt em{font-size:11px;font-style:normal;opacity:.9;line-height:1.2}
+.realhub .hm-soon{filter:saturate(.6) brightness(.92)}
+.realhub .hm-card:hover,.realhub .hm-tile:hover{filter:brightness(1.18);transform:translateY(-2px)}
+.realhub .hm-soon:hover{filter:saturate(.6) brightness(1.08)}
+.realhub .hm-bar{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.realhub .hm-link{appearance:none;cursor:pointer;color:#fff;border:2px solid #8eeeff;border-radius:999px;background:#0b2262d9;padding:7px 14px;font:800 13px system-ui,sans-serif}
+.realhub .hm-link:hover{filter:brightness(1.25)}
+.realhub .hm-msg{margin:6px 0 0;min-height:18px;font:700 13px system-ui,sans-serif;color:#ffe9a0;text-shadow:1px 1px #000}
 /* Botón Jugar del menú: botón de color con brillo que pasa (sustituye al arte anterior) */
 .realhub .real-play{background:linear-gradient(180deg,#ff6a5b,#d32f2f 60%,#8e1b1b)!important;border:2px solid #ffb3a8!important;border-radius:18px!important;clip-path:none!important;aspect-ratio:auto!important;box-shadow:0 6px 0 #4a0b0b,0 0 22px rgba(255,80,80,.45)!important;overflow:hidden!important;isolation:isolate!important}
 .realhub .real-play:hover{box-shadow:0 6px 0 #4a0b0b,0 0 30px rgba(255,110,110,.7)!important}
@@ -3516,12 +3535,24 @@ function showSelect(){
           <h1 class="real-brand"><strong><em>DIGI</em><span>BONK</span></strong><small>FAN GAME · DIGITAL WORLD</small></h1>
           ${eventActive() ? `<button type="button" class="real-event" id="rhEvent"><b>🎄 Navidad Digital</b><small>Papá Noel y Reno · quedan ${Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000))} días</small></button>` : ''}
           <button type="button" id="playBtn" class="real-play" aria-label="Jugar con ${safeText(choice.name)}"><span class="real-device"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span class="real-play-txt"><b>JUGAR</b><small>Último compañero: ${safeText(choice.name)}</small></span><span class="real-arrow" aria-hidden="true">▶</span><span class="real-shine" aria-hidden="true"></span></button>
-          <div class="real-actions">
-            ${navButton('btnColl','coleccion','COLECCIÓN','Skins, marcos y evoluciones')}
-            ${navButton('btnPlayer','jugador','JUGADOR','Tarjeta, títulos y perfil')}
-            ${navButton('btnGacha','gacha','GACHA','Invocaciones con Bits y tickets')}
-            ${navButton('btnHelp','ayuda','CÓMO JUGAR','Tutorial y controles')}
+          <div class="hm-grid">
+            <button type="button" class="hm-card hm-surv hm-soon" id="mSurv"><span class="hm-txt"><b>Supervivencia</b><small>Modo infinito</small><em>Próximamente</em></span></button>
+            <button type="button" class="hm-card hm-enc hm-soon" id="mEnc"><span class="hm-txt"><b>Encargos</b><small>Misiones</small><em>Próximamente</em></span></button>
+            <button type="button" class="hm-tile" id="btnColl"><span class="hm-ico"><img src="ui/icons/coleccion.png" alt=""></span><span class="hm-txt"><b>Digidex</b></span></button>
+            <button type="button" class="hm-tile" id="btnGacha"><span class="hm-ico"><img src="ui/icons/gacha.png" alt=""></span><span class="hm-txt"><b>Laboratorio</b></span></button>
+            <button type="button" class="hm-tile hm-soon" id="mLog"><span class="hm-ico">★</span><span class="hm-txt"><b>Logros</b><em>Próximamente</em></span></button>
+            <button type="button" class="hm-tile hm-soon" id="mRank"><span class="hm-ico">🏆</span><span class="hm-txt"><b>Ranking</b><em>Próximamente</em></span></button>
+            <button type="button" class="hm-tile hm-soon" id="mBuild"><span class="hm-ico">⚙</span><span class="hm-txt"><b>Build</b><em>Próximamente</em></span></button>
+            <button type="button" class="hm-tile" id="btnPlayer"><span class="hm-ico"><img src="ui/icons/jugador.png" alt=""></span><span class="hm-txt"><b>Jugador</b></span></button>
           </div>
+          <nav class="hm-bar" aria-label="Enlaces y ajustes">
+            <button type="button" class="hm-link" id="btnAjustes">Ajustes</button>
+            <button type="button" class="hm-link" id="btnHelp">Guía</button>
+            <button type="button" class="hm-link" id="mBug">Reportar bugs</button>
+            <button type="button" class="hm-link" id="mDiscord">Discord</button>
+            <button type="button" class="hm-link" id="mX">X</button>
+          </nav>
+          <p class="hm-msg" id="hmMsg" aria-live="polite"></p>
         </div>
         <div class="real-scene" aria-hidden="true">
           <img class="rw-character rw-agumon" src="ui/personaje_aprobado_agumon.png" alt="">
@@ -3553,6 +3584,15 @@ function showSelect(){
   document.getElementById('btnPlayer').onclick=showPlayer;
   document.getElementById('btnGacha').onclick=showGacha;
   document.getElementById('btnHelp').onclick=showHelp;
+  document.getElementById('btnAjustes').onclick=showSettings;
+  // Botones del menú principal aún sin contenido: muestran un aviso breve en lugar de abrir nada
+  const hmSoon=(msg)=>{const m=document.getElementById('hmMsg'); if(!m) return; m.textContent=msg||'Próximamente'; clearTimeout(m._t); m._t=setTimeout(()=>{m.textContent='';},1800);};
+  ['mSurv','mEnc','mLog','mRank','mBuild'].forEach(id=>document.getElementById(id).onclick=()=>hmSoon('Próximamente'));
+  document.getElementById('mBug').onclick=()=>window.open('https://github.com/jgodoy-m/digibonk/issues','_blank','noopener');
+  // Enlaces de Discord y X: rellenar cuando existan (vacío = aún no disponible)
+  const HM_DISCORD_URL='', HM_X_URL='';
+  document.getElementById('mDiscord').onclick=()=>HM_DISCORD_URL?window.open(HM_DISCORD_URL,'_blank','noopener'):hmSoon('Discord: próximamente');
+  document.getElementById('mX').onclick=()=>HM_X_URL?window.open(HM_X_URL,'_blank','noopener'):hmSoon('X: próximamente');
   document.getElementById('rhProfile').onclick=showPlayer;
   document.getElementById('rhSettings').onclick=showSettings;
   document.getElementById('rhLang').onclick=toggleLang;
