@@ -1855,10 +1855,11 @@ body:has(.pl4) #topbar{display:none!important}
 body:has(.tr11) #topbar{display:none!important}
 .tr11-fighters{overflow-x:auto;flex-wrap:nowrap!important;justify-content:flex-start!important}
 body:has(.tr11) #hudTop{display:none!important}
-.db-event{display:block;width:100%;height:auto;aspect-ratio:2000/669;padding:0;margin:0;border:0;border-radius:14px;cursor:pointer;background:url(ui/evento_navidad.webp) center/100% 100% no-repeat;box-shadow:0 5px 0 #0007;transition:transform .2s ease,filter .2s ease}
+.db-event{display:block;width:100%;height:auto;aspect-ratio:2000/669;padding:0;margin:0;border:0;border-radius:14px;cursor:pointer;background:url(ui/evento_navidad_base.webp) center/100% 100% no-repeat;container-type:inline-size;position:relative;box-shadow:0 5px 0 #0007;transition:transform .2s ease,filter .2s ease}
 .db-event:hover{transform:translateY(-3px);filter:brightness(1.1)}
 .db-event:active{transform:translateY(2px)}
 .db-event:focus-visible{outline:3px solid #20e8ff;outline-offset:4px}
+.db-event__txt{position:absolute;left:21%;top:56%;transform:translateY(-50%);font-size:2.5cqw;font-weight:700;color:#f2f8ff;white-space:nowrap;text-shadow:1px 2px 3px #00142a;pointer-events:none;font-family:system-ui,sans-serif}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2811,7 +2812,7 @@ function showSelect(){
             <button type="button" class="hm-card hm-surv hm-soon" id="mSurv"><span class="hm-txt"><b>Supervivencia</b><small>Modo infinito</small><em>Próximamente</em></span></button>
           </div>
           <div class="hm-row2">
-                    ${eventActive() ? `<button class="db-event" id="rhEvent" type="button" aria-label="Edición Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"></button>` : `<button type="button" class="hm-card hm-event hm-soon" id="mEvent"><span class="hm-txt"><b>Evento</b><small>Próximamente</small></span></button>`}
+                    ${eventActive() ? `<button class="db-event" id="rhEvent" type="button" aria-label="Edición Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><span class="db-event__txt" aria-hidden="true">Papá Noel y Reno · quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</span></button>` : `<button type="button" class="hm-card hm-event hm-soon" id="mEvent"><span class="hm-txt"><b>Evento</b><small>Próximamente</small></span></button>`}
             <button type="button" class="hm-card hm-enc hm-soon" id="mEnc"><span class="hm-txt"><b>Encargos</b><small>Misiones</small><em>Próximamente</em></span></button>
           </div>
           <div class="hm-grid">
