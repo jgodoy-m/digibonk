@@ -34,6 +34,7 @@ canvas{display:block}
 #xp{position:fixed;left:0;bottom:0;height:8px;width:0;background:linear-gradient(90deg,#0288d1,#4fc3f7);box-shadow:0 0 10px #4fc3f7;pointer-events:none}
 #xpTxt{position:fixed;left:16px;bottom:14px;font-size:12px;font-weight:bold;letter-spacing:.5px;color:#cfe8ff;text-shadow:0 1px 3px #000;pointer-events:none}
 /* El temporizador avisa cuando falta menos de 30 s para el jefe */
+#hudZone{position:fixed;top:72px;left:50%;transform:translateX(-50%);padding:3px 14px;border-radius:9px;background:rgba(8,14,30,.85);border:1px solid #2d5f78;color:#cfe8ff;font:700 12px system-ui,sans-serif;letter-spacing:.5px;pointer-events:none;white-space:nowrap}
 #timer.urgent{color:#ff5252;border-color:#ff5252;box-shadow:0 0 18px rgba(255,82,82,.6);animation:timerPulse .8s ease-in-out infinite}
 @keyframes timerPulse{50%{transform:translateX(-50%) scale(1.06)}}
 #combo{position:fixed;right:24px;top:200px;padding:4px 14px;border-radius:10px;background:#ffd54f;color:#1a1200;
@@ -2576,6 +2577,7 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
   </div>
 </div></div>
 <div id="timer">5:00</div>
+<div id="hudZone"></div>
 <div id="zoneName" style="position:fixed;top:10px;left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e1f5fe;text-shadow:0 1px 3px #000;pointer-events:none"></div>
 <div id="xp"></div>
 <canvas id="edgeCv"></canvas>
@@ -2804,7 +2806,7 @@ function loadTex(path, rx, ry, pixel = false){
   if (pixel) t.magFilter = THREE.NearestFilter;   // pixel art: bordes nítidos
   return t;
 }
-const floorMat = new THREE.MeshStandardMaterial({map: loadTex('textures/hierba_pixel.png', 20, 20, true), roughness: 1, vertexColors: true});
+const floorMat = new THREE.MeshStandardMaterial({map: loadTex('textures/puny_hierba.png', 20, 20, true), roughness: 1, vertexColors: true});
 const floor = new THREE.Mesh(terrainGeo, floorMat);
 scene.add(floor);
 {
@@ -3098,6 +3100,13 @@ scene.add(world);
 const keys = {};
 const overlay = document.getElementById('overlay');
 
+// Volver atrás en el navegador durante la partida: se queda en el juego y abre la pausa
+addEventListener('popstate', () => {
+  if (['play', 'paused', 'levelup', 'map'].includes(state)){
+    try { history.pushState({dbk: 1}, ''); } catch(e){}
+    if (state === 'play') pauseGame();
+  }
+});
 addEventListener('keydown', e => {
   const k = e.key.toLowerCase();
   audioInit();
@@ -3270,6 +3279,8 @@ let selectedKey = (() => { try { const k = localStorage.getItem('digibonk3d-last
 // Oculta/muestra el HUD de partida (el menú no debe mostrar barras ni temporizador)
 function setHud(v){
   { const shEl = document.getElementById('shrineHud'); if (shEl && !v) shEl.style.display = 'none'; }
+  // Fuera de partida no se dibujan flechas de radar (así no quedan las de la última partida)
+  if (!v){ const ec = document.getElementById('edgeCv'); if (ec){ const ectx = ec.getContext('2d'); ectx.clearRect(0, 0, ec.width, ec.height); } }
   const sb0 = document.getElementById('skillBar'); if (sb0){ sb0.style.display = v ? 'flex' : 'none'; if (!v) sb0.innerHTML = ''; }
   const bb0 = document.getElementById('bonkBar'); if (bb0) bb0.style.display = v ? 'block' : 'none';
   const d = v ? '' : 'none';
@@ -3938,6 +3949,8 @@ function pickMove(delta){
 }
 
 function startGame(key){
+  // El botón de volver del navegador no saca de la partida: queda una entrada de historial que lo absorbe
+  try { history.pushState({dbk: 1}, ''); } catch(e){}
   scene.remove(world); world = new THREE.Group(); scene.add(world);
   const c = CHARS[key];
   const sp = randomSpawn();   // aparición aleatoria en el mapa
@@ -4753,7 +4766,6 @@ function drawEdgeMarkers(){
   c.clearRect(0, 0, cv.width, cv.height);
   if (state !== 'play' || !g) return;
   const targets = g.chests.filter(ch => !ch.open && !ch.gone).map(ch => ({x: ch.x, z: ch.z, col: '#ffd54f'}));
-  for (const sh of g.shrines || []) if (!sh.used) targets.push({x: sh.x, z: sh.z, col: '#' + sh.type.col.toString(16).padStart(6, '0')});
   if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
   for (const e of g.enemies) if (e.kind === 'elite' || e.kind === 'mini') targets.push({x: e.x, z: e.z, col: e.kind === 'mini' ? '#ce93d8' : '#ff7043'});
   const W = cv.width, H = cv.height, cx = W/2, cy = H/2;
@@ -5302,6 +5314,9 @@ function updateHUD(){
   document.getElementById('xpTxt').textContent = `Nivel ${p.lvl} · EXP ${Math.floor(p.xp)} / ${p.nextXp}`;
   document.getElementById('hpTxt').textContent = `${Math.ceil(Math.max(0, p.hp))} / ${p.maxHp}`;
   document.getElementById('hudName').textContent = stageName(g.ch.id, g.ch.evolved);
+  // Zona actual, progreso de zonas y récord de tiempo (como en la barra superior de la referencia)
+  const recMax = getRecords().reduce((a, r) => Math.max(a, r.t), 0);
+  document.getElementById('hudZone').textContent = `${ZONES[g.zone - 1].name} · Zona ${g.zone}/${ZONES.length}${recMax ? ' · Récord ' + fmtTime(recMax) : ''}`;
   const tt = TITLES.find(t => t.id === extra.title);
   document.getElementById('hudTitle').textContent = tt ? tt.name : '';
   const zn = document.getElementById('zoneName');
