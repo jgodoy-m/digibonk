@@ -1921,6 +1921,20 @@ body:has(.tr11) #hudTop{display:none!important}
 .realhub .hm-pl-frame.fr-esperanza_angelical::before{background-image:url(ui/marcos/esperanza_angelical.png)!important}
 .realhub .hm-pl-frame.fr-sinceridad_palmon::before{background-image:url(ui/marcos/sinceridad_palmon.png)!important}
 .realhub .hm-pl-frame.fr-bondad_botanica::before{background-image:url(ui/marcos/bondad_botanica.png)!important}
+.realhub .hm-art-tile{position:relative;appearance:none;border:0;padding:0;margin:0;background:transparent;cursor:pointer;aspect-ratio:768/520;width:100%;min-width:0;display:block;transition:transform .15s ease,filter .15s ease;isolation:isolate}
+.realhub .hm-art-tile{background:var(--art) center/100% 100% no-repeat!important}
+.realhub .hm-art-tile:hover{transform:translateY(-3px);filter:brightness(1.12)}
+.realhub .hm-art-tile:active{transform:translateY(2px)}
+.realhub .hm-art-tile:focus-visible{outline:3px solid #fff097;outline-offset:3px;border-radius:10px}
+.realhub .hm-art-tile.hm-soon{filter:saturate(.55) brightness(.9)}
+.realhub .hm-badge{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);z-index:2;padding:2px 10px;border-radius:999px;background:#0b1430e6;border:1px solid #ffd55e;color:#ffe9a0;font:800 10px system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.realhub .hm-art-bar{appearance:none;border:0;padding:0;margin:0;background:transparent;cursor:pointer;width:clamp(150px,15vw,200px);aspect-ratio:850/250;position:relative;isolation:isolate;transition:transform .12s ease,filter .12s ease}
+.realhub .hm-art-bar{background:var(--art) center/100% 100% no-repeat!important}
+.realhub .hm-art-bar:hover{transform:translateY(-2px);filter:brightness(1.15)}
+.realhub .hm-art-bar:active{transform:translateY(1px)}
+.realhub .hm-art-bar:focus-visible{outline:3px solid #fff097;outline-offset:3px;border-radius:999px}
+.realhub .hm-grid{gap:8px!important}
+.realhub .hm-bar{gap:10px!important}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2877,19 +2891,19 @@ function showSelect(){
             <button type="button" class="hm-card hm-enc hm-soon hm-art" id="mEnc" aria-label="Encargos: misiones. Próximamente"></button>
           </div>
           <div class="hm-grid">
-            <button type="button" class="hm-tile" id="btnColl"><span class="hm-ico"><img src="ui/icons/coleccion.png" alt=""></span><span class="hm-txt"><b>Digidex</b></span></button>
-            <button type="button" class="hm-tile" id="btnGacha"><span class="hm-ico"><img src="ui/icons/gacha.png" alt=""></span><span class="hm-txt"><b>Laboratorio</b></span></button>
-            <button type="button" class="hm-tile hm-soon" id="mLog"><span class="hm-ico">★</span><span class="hm-txt"><b>Logros</b><em>Pronto</em></span></button>
-            <button type="button" class="hm-tile hm-soon" id="mRank"><span class="hm-ico">🏆</span><span class="hm-txt"><b>Ranking</b><em>Pronto</em></span></button>
-            <button type="button" class="hm-tile hm-soon" id="mBuild"><span class="hm-ico">⚙</span><span class="hm-txt"><b>Build</b><em>Pronto</em></span></button>
-            <button type="button" class="hm-tile" id="btnPlayer"><span class="hm-ico"><img src="ui/icons/jugador.png" alt=""></span><span class="hm-txt"><b>Jugador</b></span></button>
+            <button type="button" class="hm-art-tile" id="btnColl" aria-label="Digidex" style="--art:url(ui/botones/digidex.png)"></button>
+            <button type="button" class="hm-art-tile" id="btnGacha" aria-label="Laboratorio" style="--art:url(ui/botones/laboratorio.png)"></button>
+            <button type="button" class="hm-art-tile hm-soon" id="mLog" aria-label="Logros. Próximamente" style="--art:url(ui/botones/logros.png)"><span class="hm-badge">Pronto</span></button>
+            <button type="button" class="hm-art-tile hm-soon" id="mRank" aria-label="Ranking. Próximamente" style="--art:url(ui/botones/ranking.png)"><span class="hm-badge">Pronto</span></button>
+            <button type="button" class="hm-art-tile hm-soon" id="mBuild" aria-label="Build. Próximamente" style="--art:url(ui/botones/build.png)"><span class="hm-badge">Pronto</span></button>
+            <button type="button" class="hm-art-tile" id="btnPlayer" aria-label="Jugador" style="--art:url(ui/botones/jugador.png)"></button>
           </div>
           <nav class="hm-bar" aria-label="Enlaces y ajustes">
-            <button type="button" class="hm-link" id="btnAjustes">Ajustes</button>
-            <button type="button" class="hm-link" id="btnHelp">Guía</button>
-            <button type="button" class="hm-link" id="mBug">Reportar bugs</button>
-            <button type="button" class="hm-link" id="mDiscord">Discord</button>
-            <button type="button" class="hm-link" id="mX">X</button>
+            <button type="button" class="hm-art-bar" id="btnAjustes" aria-label="Ajustes" style="--art:url(ui/botones/ajustes.png)"></button>
+            <button type="button" class="hm-art-bar" id="btnHelp" aria-label="Guía" style="--art:url(ui/botones/guia.png)"></button>
+            <button type="button" class="hm-art-bar" id="mBug" aria-label="Reportar bugs" style="--art:url(ui/botones/reportar_bugs.png)"></button>
+            <button type="button" class="hm-art-bar" id="mDiscord" aria-label="Discord" style="--art:url(ui/botones/discord.png)"></button>
+            <button type="button" class="hm-art-bar" id="mX" aria-label="X" style="--art:url(ui/botones/x.png)"></button>
           </nav>
           <p class="hm-msg" id="hmMsg" aria-live="polite"></p>
         </div>
