@@ -34,8 +34,13 @@ canvas{display:block}
 #xp{position:fixed;left:0;bottom:0;height:8px;width:0;background:linear-gradient(90deg,#0288d1,#4fc3f7);box-shadow:0 0 10px #4fc3f7;pointer-events:none}
 #xpTxt{position:fixed;left:16px;bottom:14px;font-size:12px;font-weight:bold;letter-spacing:.5px;color:#cfe8ff;text-shadow:0 1px 3px #000;pointer-events:none}
 /* El temporizador avisa cuando falta menos de 30 s para el jefe */
-#hudZone{position:fixed;top:72px;left:50%;transform:translateX(-50%);padding:3px 14px;border-radius:9px;background:rgba(8,14,30,.85);border:1px solid #2d5f78;color:#cfe8ff;font:700 12px system-ui,sans-serif;letter-spacing:.5px;pointer-events:none;white-space:nowrap}
-#hudChips{position:fixed;top:106px;left:50%;transform:translateX(-50%);display:flex;gap:6px;pointer-events:none;white-space:nowrap}
+/* Barra superior de partida: zona, temporizador y contadores en un solo panel (estilo de la referencia) */
+#hudTop{position:fixed;top:10px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 16px 8px;min-width:300px;border-radius:14px;background:linear-gradient(180deg,rgba(26,46,92,.96),rgba(8,14,30,.96));border:2px solid #4fc3f7;box-shadow:0 0 18px rgba(79,195,247,.35),inset 0 2px 0 rgba(255,255,255,.12);pointer-events:none;z-index:6}
+#hudTop #timer{position:static;transform:none;animation:none;padding:0 14px;border-radius:8px;font-size:24px;line-height:1.2}
+#hudTop #timer.urgent{animation:none}
+#hudZone{font:800 11px system-ui,sans-serif;letter-spacing:2px;text-transform:uppercase;color:#9fe3ff;white-space:nowrap}
+#hudChips{display:flex;gap:6px;white-space:nowrap}
+#hudChips span{padding:2px 10px;border-radius:8px;background:rgba(0,0,0,.35);border:1px solid #2d5f78;color:#fff;font:700 12px system-ui,sans-serif}
 #hudChips span{padding:2px 10px;border-radius:9px;background:rgba(8,14,30,.85);border:1px solid #2d5f78;color:#fff;font:700 12px system-ui,sans-serif}
 #hudChips b{color:#ffd54f}
 #timer.urgent{color:#ff5252;border-color:#ff5252;box-shadow:0 0 18px rgba(255,82,82,.6);animation:timerPulse .8s ease-in-out infinite}
@@ -2579,9 +2584,11 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
     <div class="hud-chips"><span class="chip">☠ <b id="hudKills">0</b></span><span class="chip" id="hudDash">Dash listo</span><span class="chip" id="hudSkills"></span></div>
   </div>
 </div></div>
-<div id="timer">5:00</div>
-<div id="hudZone"></div>
-<div id="hudChips"></div>
+<div id="hudTop">
+  <div id="hudZone"></div>
+  <div id="timer">5:00</div>
+  <div id="hudChips"></div>
+</div>
 <div id="zoneName" style="position:fixed;top:10px;left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e1f5fe;text-shadow:0 1px 3px #000;pointer-events:none"></div>
 <div id="xp"></div>
 <canvas id="edgeCv"></canvas>
