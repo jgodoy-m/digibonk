@@ -2499,6 +2499,11 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .gx2-strip .gx2-ico{flex:none;width:58px;height:58px;object-fit:contain;image-rendering:pixelated;background:rgba(0,0,0,.25);border-radius:10px;padding:4px;box-sizing:content-box;border:1px solid #2c5a8a}
 .gx2-strip{justify-content:flex-start}
 @media (max-height:700px){.gx2-portal .gx2-hero{width:140px;height:140px}.gx2-ring.r1{width:200px;height:200px}.gx2-ring.r2{width:150px;height:150px}}
+.cl4-st{cursor:pointer;border-radius:10px;padding:2px}
+.cl4-st.sel{outline:2px solid #ffd55e;background:rgba(255,213,94,.12)}
+.cl4-st.off{cursor:default}
+.pk-stage{cursor:pointer}
+.pk-stage.on{outline:2px solid #ffd55e;border-radius:12px}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -3271,17 +3276,18 @@ function toggleLang(){
   if (state === 'register') showRegister(); else if (state === 'select') showSelect(); else refreshTopbar();
 }
 // Colección: todo lo que se puede conseguir, con porcentaje de completado (solo consulta)
-// Colección: lista de Digimon a la izquierda, sus skins y etapas a la derecha; marcos y títulos en otra pestaña
-let colKey = null, colTab = 'digimon';
+// Colección: lista de Digimon a la izquierda, etapas y skins de cada etapa a la derecha; marcos y títulos en otra pestaña
+let colKey = null, colTab = 'digimon', colStage = 0, colStageFor = null;
 function showCollection(){
   state = 'collection';
   setHud(false);
   const chars = SEASONS.adventure.chars;
   if (!colKey || !chars.includes(colKey)) colKey = selectedKey;
-  // Progreso global: skins visibles, una evolución por Digimon, marcos y títulos
+  if (colStageFor !== colKey){ colStage = 0; colStageFor = colKey; }
+  // Progreso global: skins de cada etapa, una evolución por Digimon, marcos y títulos
   let have = 0, total = 0;
   for (const k of chars){
-    for (const sk of visibleSkins(k)){ total++; if (ownedSkins(k).includes(sk.id)) have++; }
+    for (let st = 0; st < stageCount(k); st++) for (const sk of visibleSkinsAt(k, st)){ total++; if (ownsAt(k, st, sk.id)) have++; }
     total++; if (evolvedUnlocked(k)) have++;
   }
   total += FRAMES.length + TITLES.length;
@@ -3299,34 +3305,39 @@ function showCollection(){
     body = `<div class="cl4-other"><h3>Marcos</h3><div class="cl4-cards">${frames}</div><h3>Títulos</h3><div class="cl4-cards">${titles}</div></div>`;
   } else {
     const list = chars.map(k => {
-      const open = isUnlocked(k), own = visibleSkins(k).filter(sk => ownedSkins(k).includes(sk.id)).length;
+      const open = isUnlocked(k);
+      let own = 0, all = 0;
+      for (let st = 0; st < stageCount(k); st++) for (const sk of visibleSkinsAt(k, st)){ all++; if (ownsAt(k, st, sk.id)) own++; }
       return `<button class="cl4-item${k === colKey ? ' sel' : ''}${open ? '' : ' lock'}" data-k="${k}" ${open ? '' : 'disabled'}>
         ${sprEl(spriteOf(k, false), 48)}
-        <span><b>${open ? CHARS[k].name : '???'}</b><small>${open ? own + '/' + visibleSkins(k).length + ' skins' : unlockHow(k)}</small></span></button>`;
+        <span><b>${open ? CHARS[k].name : '???'}</b><small>${open ? own + '/' + all + ' skins' : unlockHow(k)}</small></span></button>`;
     }).join('');
     const k = colKey, open = isUnlocked(k);
     let detail;
     if (!open){
       detail = `<div class="cl4-empty"><b>???</b><p>${unlockHow(k)}</p></div>`;
     } else {
-      const eq = skinEquipped[k] || 'clasico';
-      const stages = [{name: CHARS[k].name, sprite: CHARS[k].sprite, on: true}, ...EVO_LINE[k].map(e => ({name: e.name, sprite: e.sprite, on: evolvedUnlocked(k)}))];
-      const cards = visibleSkins(k).map(sk => {
-        const has = ownedSkins(k).includes(sk.id), on = eq === sk.id;
+      const n = stageCount(k);
+      const stages = Array.from({length: n}, (_, i) => ({name: stageName(k, i), on: i === 0 || evolvedUnlocked(k)}));
+      if (colStage >= n) colStage = 0;
+      const st = colStage, eq = equippedAt(k, st);
+      const evoRow = stages.map((x, i) => `${i ? '<span>➜</span>' : ''}<div class="cl4-st${x.on ? '' : ' off'}${i === st ? ' sel' : ''}" data-st="${i}">${sprEl(spriteWith(k, i, equippedAt(k, i)), 48)}<small>${x.on ? x.name : '???'}</small></div>`).join('');
+      const cards = visibleSkinsAt(k, st).map(sk => {
+        const has = ownsAt(k, st, sk.id), on = eq === sk.id;
         return `<button class="cl4-skin${has ? ' owned' : ' locked'}${on ? ' eq' : ''}" data-skin="${sk.id}" ${has ? '' : 'disabled'}>
-          ${sprEl(spriteWith(k, false, sk.id), 72)}
+          ${sprEl(spriteWith(k, st, sk.id), 72)}
           <b>${has ? sk.name : '???'}</b><small>${has ? (on ? 'Equipada' : 'Pulsa para equipar') : howTo(k, sk)}</small></button>`;
       }).join('');
       detail = `
         <div class="cl4-hero">
-          ${sprEl(spriteOf(k, false), 150)}
+          ${sprEl(spriteOf(k, st), 150)}
           <div>
-            <h3>${CHARS[k].name}</h3>
+            <h3>${stageName(k, st)}</h3>
             <p>${BALANCE[k].why}</p>
-            <div class="cl4-evo">${stages.map((st, i) => `${i ? '<span>➜</span>' : ''}<div class="cl4-st${st.on ? '' : ' off'}">${sprEl(spriteWith(k, i, eq), 48)}<small>${st.on ? st.name : '???'}</small></div>`).join('')}</div>
+            <div class="cl4-evo">${evoRow}</div>
           </div>
         </div>
-        <h4>Skins</h4>
+        <h4>Skins · ${stageName(k, st)}</h4>
         <div class="cl4-skins">${cards}</div>`;
     }
     body = `<div class="cl4-body"><aside class="cl4-list">${list}</aside><section class="cl4-detail">${detail}</section></div>`;
@@ -3341,7 +3352,8 @@ function showCollection(){
   document.getElementById('clBack').onclick = () => showSelect();
   overlay.querySelectorAll('.cl4-tab').forEach(b => b.onclick = () => { colTab = b.dataset.t; showCollection(); });
   overlay.querySelectorAll('.cl4-item:not(.lock)').forEach(b => b.onclick = () => { colKey = b.dataset.k; showCollection(); });
-  overlay.querySelectorAll('.cl4-skin.owned').forEach(b => b.onclick = () => { equipSkin(colKey, b.dataset.skin); showCollection(); });
+  overlay.querySelectorAll('.cl4-st:not(.off)').forEach(b => b.onclick = () => { colStage = +b.dataset.st; showCollection(); });
+  overlay.querySelectorAll('.cl4-skin.owned').forEach(b => b.onclick = () => { equipSkinAt(colKey, colStage, b.dataset.skin); showCollection(); });
 }
 // ---------- Barra superior fija en los menús: tarjeta, Bits, tickets, idioma, sonido, pantalla completa y ajustes ----------
 const TOP_STATES = ['select', 'gacha', 'pick', 'player', 'settings', 'help', 'savecode', 'collection'];
@@ -3750,6 +3762,7 @@ function showStarter(){
 
 // Filtro y búsqueda de la pantalla de selección
 let pickQuery = '';
+let pickStage = 0, pickStageFor = null;   // etapa de la línea que se previsualiza y se viste
 function pickIsEvolved(k){ return !!loadJSON('digibonk3d-evo', {})[k]; }
 function pickProgress(){
   const chars = SEASONS.adventure.chars;
@@ -3758,6 +3771,7 @@ function pickProgress(){
 }
 function showPicker(tab){
   if (tab) pickTab = tab === 'skins' ? 'personaje' : tab;
+  if (pickStageFor !== selectedKey){ pickStage = 0; pickStageFor = selectedKey; }
   try { localStorage.setItem('digibonk3d-last-choice', selectedKey); } catch(e){}
   state = 'pick';
   setHud(false);
@@ -3813,21 +3827,24 @@ function showPicker(tab){
   overlay.querySelectorAll('.pk-tab').forEach(b => b.onclick = () => showPicker(b.dataset.tab));
   document.getElementById('pkBack').onclick = () => showSelect();
   document.getElementById('pkStart').onclick = () => startGame(selectedKey);
-  if (pickTab === 'personaje'){ renderPickPreview(); bindSkinStrip(); } else bindItemTiles();
+  if (pickTab === 'personaje'){
+    renderPickPreview(); bindSkinStrip();
+    overlay.querySelectorAll('.pk-stage').forEach(b => b.onclick = () => { pickStage = +b.dataset.stage; showPicker(); });
+  } else bindItemTiles();
 }
 // Selector de skin dentro de la columna izquierda: solo las desbloqueadas se pueden equipar
 function bindSkinStrip(){
   overlay.querySelectorAll('.pk-skin:not(.locked)').forEach(b => b.onclick = () => {
-    equipSkin(selectedKey, b.dataset.skin);
+    equipSkinAt(selectedKey, pickStage, b.dataset.skin);
     showPicker();
   });
 }
 function skinStripHtml(k){
-  const owned = ownedSkins(k), eq = skinEquipped[k] || 'clasico';
-  return `<div class="pk2-sec"><h3>Vestidor</h3><div class="pk-skins-row">${visibleSkins(k).map(sk => {
+  const st = pickStage, owned = ownedSkinsAt(k, st), eq = equippedAt(k, st);
+  return `<div class="pk2-sec"><h3>Vestidor · ${stageName(k, st)}</h3><div class="pk-skins-row">${visibleSkinsAt(k, st).map(sk => {
     const h = owned.includes(sk.id), e = eq === sk.id;
     return `<button class="pk-skin${h ? '' : ' locked'}${e ? ' on' : ''}" data-skin="${sk.id}" title="${h ? sk.name : howTo(k, sk)}">
-      ${animEl(spriteWith(k, false, sk.id), 'pk-skin-face')}
+      ${animEl(spriteWith(k, st, sk.id), 'pk-skin-face')}
       <small>${h ? sk.name : '???'}</small>${e ? '<em>Equipada</em>' : ''}</button>`;
   }).join('')}</div></div>`;
 }
@@ -3845,10 +3862,10 @@ function renderPickPreview(){
   }).join('');
   el.innerHTML = `
     <div class="pk2-hero">
-      <div class="pk2-stage">${animEl(spriteOf(k, false), 'pk2-hero-img')}</div>
+      <div class="pk2-stage">${animEl(spriteOf(k, pickStage), 'pk2-hero-img')}</div>
       <div class="pk2-id">
         <small>#${String(idx).padStart(3, '0')} · Digimon</small>
-        <h2>${c.name}</h2>
+        <h2>${stageName(k, pickStage)}</h2>
         <div class="pk2-tags">
           <span>${ATTACK_NAME[c.kind] || c.kind}</span>
           <span>Partidas ${st.plays}</span>
@@ -3868,8 +3885,8 @@ function renderPickPreview(){
       <div class="pk2-sec">
         <h3>Evolución</h3>
         <div class="pv-evo">
-          <div class="pv-node">${sprEl(spriteOf(k, false), 64)}<small>${c.name}</small></div>
-          ${EVO_LINE[k].map((e, i) => `<div class="pv-arrow">Nv ${EVO_LEVELS[i]} ➜</div><div class="pv-node">${sprEl(spriteWith(k, i + 1, skinEquipped[k] || 'clasico'), 64)}<small>${e.name}</small></div>`).join('')}
+          <div class="pv-node pk-stage${pickStage === 0 ? ' on' : ''}" data-stage="0">${sprEl(spriteOf(k, 0), 64)}<small>${c.name}</small></div>
+          ${EVO_LINE[k].map((e, i) => `<div class="pv-arrow">Nv ${EVO_LEVELS[i]} ➜</div><div class="pv-node pk-stage${pickStage === i + 1 ? ' on' : ''}" data-stage="${i + 1}">${sprEl(spriteOf(k, i + 1), 64)}<small>${e.name}</small></div>`).join('')}
         </div>
         <p class="pk2-note">Cada etapa: +20% daño, +5% área y +20 PS · solo durante la partida</p>
       </div>
@@ -3924,7 +3941,7 @@ function startGame(key){
   const c = CHARS[key];
   const sp = randomSpawn();   // aparición aleatoria en el mapa
   // Versión variocolor: 1 entre 8192 al empezar una partida; queda guardada como skin del Digimon
-  if (Math.random() < 1 / 8192){ grantSkin(key, 'variocolor'); equipSkin(key, 'variocolor'); }
+  if (Math.random() < 1 / 8192){ grantSkinAt(key, 0, 'variocolor'); equipSkinAt(key, 0, 'variocolor'); }
   g = {
     ch: {...c, id:key},
     p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:2.5, critChance:0.12, critMul:2},
@@ -3942,7 +3959,7 @@ function startGame(key){
   resolveSolids(g.p, 0.5);   // aparición aleatoria: fuera de casas y vallas
   g.playerMesh = billboard(spriteOf(key, false), 2.6, false);   // sprite propio: la digievolución cambia su textura
   world.add(g.playerMesh);
-  g.aura = makeAura(skinEquipped[key], key);
+  g.aura = makeAura(equippedAt(key, 0), key);
   g.playerShadow = makeShadow(1.6);
   world.add(g.playerShadow);
   // Contorno de legibilidad: anillo brillante en el suelo bajo el Digimon
@@ -4019,7 +4036,7 @@ function specialPool(){
   for (const k of SEASONS.adventure.chars){
     if (!isUnlocked(k)) continue;
     out.push({key: k, skin: 'clasico'});
-    if (ownedSkins(k).includes('variocolor')) out.push({key: k, skin: 'variocolor'});
+    if (ownsAnyStage(k, 'variocolor')) out.push({key: k, skin: 'variocolor'});
   }
   return out;
 }
@@ -5509,20 +5526,42 @@ const SKINS = [
 ];
 const SKIN_BY_ID = Object.fromEntries(SKINS.map(sk => [sk.id, sk]));
 // Skins que se muestran a un Digimon: las ocultas (variocolor) solo aparecen cuando las tienes
-function visibleSkins(key){ const own = ownedSkins(key); return SKINS.filter(sk => !sk.hidden || own.includes(sk.id)); }
 function loadJSON(k, def){ try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e){ return def; } }
-let skinsOwned = loadJSON('digibonk3d-skins', {});      // {personaje: [ids de skin]}
-let skinEquipped = loadJSON('digibonk3d-equip', {});    // {personaje: id de skin}
-function ownedSkins(key){ return ['clasico', ...(skinsOwned[key] || [])]; }
-function equipSkin(key, id){
-  if (!ownedSkins(key).includes(id)) return;
-  skinEquipped[key] = id;
+let skinsOwned = loadJSON('digibonk3d-skins', {});      // {personaje: ["id@etapa", ...]}  ("id" sin etapa = todas las etapas, datos antiguos)
+let skinEquipped = loadJSON('digibonk3d-equip', {});    // {personaje: id} (antiguo) o {"personaje@etapa": id}
+// Número de etapas de una línea (forma inicial + digievoluciones)
+const stageCount = key => (EVO_LINE[key] ? EVO_LINE[key].length : 0) + 1;
+// Skins que tiene un Digimon en una etapa concreta
+function ownedSkinsAt(key, st){
+  const out = ['clasico'];
+  for (const e of (skinsOwned[key] || [])){
+    const at = e.indexOf('@');
+    if (at < 0) out.push(e);
+    else if (+e.slice(at + 1) === st) out.push(e.slice(0, at));
+  }
+  return [...new Set(out)];
+}
+function ownsAt(key, st, id){ return id === 'clasico' || ownedSkinsAt(key, st).includes(id); }
+// Skin equipada en una etapa; sin elección propia usa la antigua (que vale para todas)
+function equippedAt(key, st){
+  const id = skinEquipped[key + '@' + st] || skinEquipped[key] || 'clasico';
+  return ownsAt(key, st, id) ? id : 'clasico';
+}
+function equipSkinAt(key, st, id){
+  if (!ownsAt(key, st, id)) return;
+  skinEquipped[key + '@' + st] = id;
   localStorage.setItem('digibonk3d-equip', JSON.stringify(skinEquipped));
 }
-function grantSkin(key, id){
-  skinsOwned[key] = [...new Set([...(skinsOwned[key] || []), id])];
+function grantSkinAt(key, st, id){
+  skinsOwned[key] = [...new Set([...(skinsOwned[key] || []), id + '@' + st])];
   localStorage.setItem('digibonk3d-skins', JSON.stringify(skinsOwned));
 }
+// Para la etapa 0 (lo que se ve en la selección del Digimon)
+function ownedSkins(key){ return ownedSkinsAt(key, 0); }
+function ownsAnyStage(key, id){ for (let st = 0; st < stageCount(key); st++) if (ownsAt(key, st, id)) return true; return false; }
+// Skins que se muestran en una etapa: las ocultas (variocolor) solo cuando se tienen
+function visibleSkinsAt(key, st){ return SKINS.filter(sk => !sk.hidden || ownsAt(key, st, sk.id)); }
+function visibleSkins(key){ return visibleSkinsAt(key, 0); }
 // Progreso por personaje: partidas (de al menos 5 s) y bajas
 function statsOf(key){ return loadJSON('digibonk3d-stats', {})[key] || {plays:0, kills:0}; }
 function meetsReq(sk, st){
@@ -5538,8 +5577,8 @@ function recordRun(key, kills, t){
   localStorage.setItem('digibonk3d-stats', JSON.stringify(all));
   const unlocked = [];
   for (const sk of SKINS){
-    if (sk.src === 'logro' && !ownedSkins(key).includes(sk.id) && meetsReq(sk, st)){
-      grantSkin(key, sk.id); unlocked.push(`${sk.name} (${CHARS[key].name})`);
+    if (sk.src === 'logro' && !ownsAt(key, 0, sk.id) && meetsReq(sk, st)){
+      grantSkinAt(key, 0, sk.id); unlocked.push(`${sk.name} (${CHARS[key].name})`);
     }
   }
   return unlocked;
@@ -5597,7 +5636,7 @@ function spriteWith(key, evolved, skinId){
   if (!skinId || skinId === 'clasico') return base;
   return skinURL[`${key}|${st}|${skinId}`] || base;
 }
-function spriteOf(key, evolved){ return spriteWith(key, evolved, skinEquipped[key]); }
+function spriteOf(key, evolved){ const st = +evolved || 0; return spriteWith(key, st, equippedAt(key, st)); }
 
 /* ---------- Icono del jugador: solo la cabeza del Digimon ---------- */
 const headCache = {};
@@ -5894,15 +5933,19 @@ function frameClass(){ return extra.frame ? ' fr-' + extra.frame : ''; }
 
 // Pesos por tipo de recompensa y por rareza
 // Banners del gacha: cada uno tiene su skin legendaria. El de evento solo aparece mientras dura el evento
+// Tres banners: el permanente con las skins galácticas y dos de Navidad (Papá Noel y Reno, solo con el evento activo)
 const BANNERS = {
-  std:    {name: 'Digivice Estándar', sub: 'Skin Corona', skins: ['cristal']},
-  evento: {name: EVENT.name, sub: 'Skins Papá Noel y Reno · tiempo limitado', skins: ['festival', 'reno']}
+  std:      {name: 'Digivice Estándar', sub: 'Skins galácticas', skins: ['galactico']},
+  navidadP: {name: EVENT.name, sub: 'Skin Papá Noel · tiempo limitado', skins: ['festival'], event: true},
+  navidadR: {name: EVENT.name, sub: 'Skin Reno · tiempo limitado', skins: ['reno'], event: true}
 };
+// Nombre que se muestra a la skin destacada de cada banner
+const FEATURED_NAME = {galactico: 'Agumon Aventurero', festival: 'Agumon Papá Noel', reno: 'Agumon Reno'};
 let gxBanner = 'std';
 // Garantía: si pasan PITY_AT tiradas sin legendaria, la siguiente lo es. Una legendaria repetida devuelve Bits
 const PITY_AT = 100, LEG_DUP_REFUND = 200;
 const pityCount = () => +(localStorage.getItem('digibonk3d-pity') || 0);
-function bannerSkins(){ if (gxBanner === 'evento' && !eventActive()) gxBanner = 'std'; return BANNERS[gxBanner].skins.map(id => SKIN_BY_ID[id]); }
+function bannerSkins(){ if (BANNERS[gxBanner].event && !eventActive()) gxBanner = 'std'; return BANNERS[gxBanner].skins.map(id => SKIN_BY_ID[id]); }
 function bannerSkin(){ return bannerSkins()[0]; }
 // La rareza se decide primero. Legendaria = skin; el resto reparte entre marco, título y objeto
 const TIER_ODDS = {c: 60, r: 26, e: 12, l: 2};
@@ -5934,20 +5977,20 @@ function rollReward(tier){
   if (tier === 'l'){
     // Banner de temporada: 50% una de sus skins y 50% la del banner permanente. Puede salir repetida,
     // pero tras una repetida la siguiente legendaria es nueva seguro (mientras quede alguna por conseguir)
-    const seasonal = bannerSkins().filter(x => x.id !== 'cristal');
-    const pickSkin = () => seasonal.length && Math.random() < 0.5 ? pickOne(seasonal) : SKIN_BY_ID.cristal;
+    const pool = bannerSkins();
+    const pickSkin = () => pickOne(pool);
     if (localStorage.getItem('digibonk3d-legnew') === '1'){
-      const skins = seasonal.length ? [...seasonal, SKIN_BY_ID.cristal] : [SKIN_BY_ID.cristal];
+      const skins = pool;
       const fresh = [];
-      for (const sk of skins) for (const key of SEASONS.adventure.chars) if (!ownedSkins(key).includes(sk.id)) fresh.push({key, sk});
+      for (const sk of skins) for (const key of SEASONS.adventure.chars) for (let st = 0; st < stageCount(key); st++) if (!ownsAt(key, st, sk.id)) fresh.push({key, st, sk});
       if (fresh.length){
         // respeta el 50/50 si en la mitad que toca queda algo nuevo
-        const want = pickSkin(), same = fresh.filter(f => (f.sk.id === 'cristal') === (want.id === 'cristal'));
-        const f = pickOne(same.length ? same : fresh);
-        return {type:'skin', key: f.key, sk: f.sk, tier:'l'};
+        const f = pickOne(fresh);
+        return {type:'skin', key: f.key, st: f.st, sk: f.sk, tier:'l'};
       }
     }
-    return {type:'skin', key: pickOne(SEASONS.adventure.chars), sk: pickSkin(), tier:'l'};
+    const key = pickOne(SEASONS.adventure.chars);
+    return {type:'skin', key, st: Math.floor(Math.random() * stageCount(key)), sk: pickSkin(), tier:'l'};
   }
   const cat = pickCategory();
   if (cat === 'frame'){
@@ -5964,13 +6007,13 @@ function rollReward(tier){
 // Aplica la recompensa a la colección; los repetidos se convierten en Bits
 function grantReward(r){
   if (r.type === 'skin'){
-    if (ownedSkins(r.key).includes(r.sk.id)){
+    if (ownsAt(r.key, r.st, r.sk.id)){
       SAVE.bits = SAVE.bits + LEG_DUP_REFUND;
       localStorage.setItem('digibonk3d-legnew', '1');   // la siguiente legendaria será nueva
       return {...r, dup:true, refund: LEG_DUP_REFUND};
     }
     localStorage.removeItem('digibonk3d-legnew');
-    grantSkin(r.key, r.sk.id);
+    grantSkinAt(r.key, r.st, r.sk.id);
     return {...r, dup:false};
   }
   if (r.type === 'frame'){
@@ -6040,7 +6083,7 @@ function playPullAnimation(results){
   setTimeout(() => { if (alive()) go(); }, 2950);
 }
 function rewardIcon(r){
-  if (r.type === 'skin') return animEl(spriteWith(r.key, false, r.sk.id), 'rw-anim');
+  if (r.type === 'skin') return animEl(spriteWith(r.key, r.st || 0, r.sk.id), 'rw-anim');
   if (r.type === 'frame') return `<div class="rw-frame fr-${r.f.id}"></div>`;
   if (r.type === 'title') return `<div class="rw-title">🏅</div>`;
   return `<div class="rw-item">${r.it.icon}</div>`;
@@ -6098,7 +6141,7 @@ const CAT_LABEL = {skin: 'Skin', frame: 'Marco', title: 'Título', item: 'Objeto
 let gxIdx = 0, gxTimer = null;
 // Todo lo que puede salir, en el orden del carrusel
 function gxOwned(s){
-  if (s.type === 'skin') return ownedSkins(s.key).includes(s.sk.id);
+  if (s.type === 'skin') return ownsAt(s.key, s.st || 0, s.sk.id);
   if (s.type === 'frame') return inv.frames.includes(s.f.id);
   if (s.type === 'title') return inv.titles.includes(s.t.id);
   return (inv.items[s.it.id] || 0) > 0;
@@ -6135,13 +6178,14 @@ function showGacha(){
   state = 'gacha';
   setHud(false);
   clearInterval(gxTimer);
-  const keys = Object.keys(BANNERS).filter(k => k === 'std' || eventActive());
+  const keys = Object.keys(BANNERS).filter(k => !BANNERS[k].event || eventActive());
   const bi = (keys.indexOf(gxBanner) + keys.length) % keys.length;
   gxBanner = keys[bi];
   const pity = pityCount();
   const chars = SEASONS.adventure.chars;
   // Skin destacada de la maqueta: Galáctico de Agumon (provisional)
-  const featHtml = sprEl(spriteWith('agumon', false, 'galactico'), 190, 'gx2-hero');
+  const feat = bannerSkin();
+  const featHtml = sprEl(spriteWith('agumon', false, feat.id), 190, 'gx2-hero');
   const oddsRows = [['l', 5], ['e', 4], ['r', 3], ['c', 2]].map(([t, n]) =>
     `<div class="gx2-odd"><i style="color:${GX_TIER_COL[t]}">${'★'.repeat(n)}</i><span>${TIER_NAME[t] === 'Legendaria' ? 'Recompensa Legendaria' : 'Recompensa ' + TIER_NAME[t]}</span><b>${TIER_ODDS[t].toFixed(2)}%</b></div>`).join('');
   const blank = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
@@ -6152,13 +6196,13 @@ function showGacha(){
       <div class="gx2-main">
         <aside class="gx2-left">
           <h3>Recompensas destacadas</h3>
-          <div class="gx2-card"><div class="gx2-ic">${sprEl(spriteWith('agumon', false, 'galactico'), 56)}</div><div><small>Skin Exclusiva</small><b>Agumon Aventurero</b></div></div>
+          <div class="gx2-card"><div class="gx2-ic">${sprEl(spriteWith('agumon', false, feat.id), 56)}</div><div><small>Skin Exclusiva</small><b>${FEATURED_NAME[feat.id]}</b></div></div>
           <div class="gx2-card"><div class="gx2-ic"><div class="rw-frame fr-oro"></div></div><div><small>Marco Especial</small><b>Emblema Digital</b></div></div>
           <div class="gx2-card"><div class="gx2-ic gx2-medal">${svgIcon('utilidad')}</div><div><small>Título</small><b>Niño Elegido</b></div></div>
           <div class="gx2-card"><div class="gx2-ic gx2-evo">${sprEl(spriteWith('agumon', false, 'clasico'), 40)}<span>›</span>${sprEl(spriteWith('agumon', 1, 'clasico'), 40)}<span>›</span>${sprEl(spriteWith('agumon', 2, 'clasico'), 40)}</div><div><small>Evolución</small><b>Línea Agumon</b></div></div>
         </aside>
         <section class="gx2-center">
-          <div class="gx2-spot"><span>¡SKIN DESTACADA!</span><b>Agumon Aventurero</b></div>
+          <div class="gx2-spot"><span>¡SKIN DESTACADA!</span><b>${FEATURED_NAME[feat.id]}</b></div>
           <div class="gx2-portal"><div class="gx2-ring r1"></div><div class="gx2-ring r2"></div><div class="gx2-pad"></div>${featHtml}</div>
           <div class="gx2-pulls">
             <button class="gx2-btn" id="gPull1"><b>1 TIRADA</b><small>Ⓑ ${PULL_COST} Bits</small></button>
@@ -6170,7 +6214,7 @@ function showGacha(){
           <div class="gx2-brand"><h2>GACHA DIGITAL</h2><p>Obtén skins, marcos, títulos y evoluciones de tus Digimon favoritos.</p></div>
           <div class="gx2-banner">
             <button class="gx2-arrow" id="gxPrevB" aria-label="Banner anterior">‹</button>
-            <div class="gx2-banner-txt"><b>${gxBanner === 'std' ? 'Invocación de los Elegidos' : BANNERS[gxBanner].name}</b><small>${gxBanner === 'std' ? '¡Skins exclusivas y recompensas temáticas!' : BANNERS[gxBanner].sub}</small></div>
+            <div class="gx2-banner-txt"><b>${gxBanner === 'std' ? 'Invocación de los Elegidos' : BANNERS[gxBanner].name}</b><small>${BANNERS[gxBanner].sub}</small></div>
             <button class="gx2-arrow" id="gxNextB" aria-label="Banner siguiente">›</button>
           </div>
           <div class="gx2-odds"><h3>Probabilidades</h3>${oddsRows}</div>
