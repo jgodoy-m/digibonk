@@ -2095,6 +2095,10 @@ body:has(.tr11) #hudTop{display:none!important}
 .pl4 .rw-video,.pl4 .rw-scenery{filter:brightness(.34) saturate(.85)!important}
 .pl4 .pl4-av{margin-bottom:10px}
 .pl4 .pl4-chg{margin-top:10px!important;position:relative;z-index:6}
+.pl5-hero{display:grid!important;grid-template-columns:1fr auto 1fr!important;align-items:center!important;gap:24px!important}
+.pl5-hero .pl5-id{justify-self:start}
+.pl5-center{display:flex;flex-direction:column;align-items:center;gap:8px}
+.pl5-medals{justify-self:end}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -5516,14 +5520,16 @@ function showPlayer(){
         <button type="button" class="pl5-share" disabled title="Próximamente">Compartir mi ficha</button></header>
       <section class="pl5-hero" id="tc">
         <div class="pl5-id">
-          <div class="pl4-av">
-            <div class="hud-portrait pf-av${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img id="tcImg" src="${avatarSrc()}" alt=""></div>
-            <button type="button" class="pl4-chg" id="plChange">Cambiar</button>
-          </div>
           <div class="pl4-id">
             <input class="pl4-name" id="tcName" maxlength="16" value="${trainerName || ''}" placeholder="Tu nombre" title="Haz clic para cambiar tu nombre">
             <span class="pl4-title-badge" id="tcTitle">${tt ? tt.name : 'Sin título'}</span>
             <div class="pl4-chips"><span>ID ${idNum}</span>${companion}</div>
+          </div>
+        </div>
+        <div class="pl5-center">
+          <div class="pl4-av">
+            <div class="hud-portrait pf-av${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img id="tcImg" src="${avatarSrc()}" alt=""></div>
+            <button type="button" class="pl4-chg" id="plChange">Cambiar</button>
           </div>
         </div>
         <div class="pl5-medals">${medals}</div>
