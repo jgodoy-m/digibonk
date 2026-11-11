@@ -226,14 +226,6 @@ canvas{display:block}
 .rw-frame{width:44px;height:44px;margin:0 auto 4px;border-radius:10px;background:#1a2440}
 .rw-title{font-size:30px;line-height:44px;height:44px}
 .rw-item{font-size:32px;line-height:44px;height:44px}
-.hud-portrait.fr-bronce{border-color:#cd7f32;box-shadow:0 0 8px #cd7f32}
-.hud-portrait.fr-digivice{border-color:#4fc3f7;box-shadow:0 0 12px #4fc3f7}
-.hud-portrait.fr-neon{border-color:#ff4fd8;box-shadow:0 0 14px #ff4fd8}
-.hud-portrait.fr-oro{border-color:#ffd54f;box-shadow:0 0 16px #ffd54f}
-.rw-frame.fr-bronce{border:3px solid #cd7f32}
-.rw-frame.fr-digivice{border:3px solid #4fc3f7}
-.rw-frame.fr-neon{border:3px solid #ff4fd8}
-.rw-frame.fr-oro{border:3px solid #ffd54f}
 .hud-title{font-size:11px;color:#bfe9ff;letter-spacing:.5px;margin-top:2px;text-shadow:0 1px 2px #000}
 @keyframes capShake{0%{transform:rotate(0)}15%{transform:rotate(-14deg)}30%{transform:rotate(14deg)}45%{transform:rotate(-12deg)}60%{transform:rotate(12deg)}75%{transform:scale(1.15)}100%{transform:scale(1.25);opacity:0}}
 @keyframes capGlow{0%,70%{opacity:0}85%{opacity:1}100%{opacity:0}}
@@ -254,17 +246,7 @@ canvas{display:block}
 .hud-portrait.mini img{width:34px;height:34px}
 #menubg{position:fixed;inset:0;width:100%;height:100%;z-index:0;image-rendering:pixelated;display:block}
 #overlay{z-index:1}
-.hud-portrait.fr-bronce,.rw-frame.fr-bronce{background:linear-gradient(160deg,#fff0bd,#d89a3e 55%,#8a5a1c);border:4px solid #5a3510;border-radius:20px;box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 0 12px rgba(216,154,62,.7)}
-.hud-portrait.fr-digivice,.rw-frame.fr-digivice{background:linear-gradient(160deg,#d9f3ff,#2a7fd0 60%,#0d3f7a);border:4px solid #0b3d78;border-radius:20px;box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 0 14px rgba(79,195,247,.8)}
-.hud-portrait.fr-dpower,.rw-frame.fr-dpower{background:linear-gradient(160deg,#e6ffc4,#4fb84a 60%,#1f5c22);border:4px solid #1f5c22;border-radius:14px 14px 22px 22px;box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 0 14px rgba(120,230,110,.8)}
-.hud-portrait.fr-neon,.rw-frame.fr-neon{background:linear-gradient(160deg,#2b0f3d,#14061f);border:4px solid #ff4fd8;border-radius:24px;box-shadow:0 0 16px #ff4fd8,inset 0 0 12px rgba(255,79,216,.5)}
-.hud-portrait.fr-oro,.rw-frame.fr-oro{background:linear-gradient(160deg,#fff8d6,#e8b42a 55%,#7a5410);border:4px solid #7a5410;border-radius:18px;box-shadow:0 0 18px #ffd54f,inset 0 0 0 2px #fff3c4}
 .hud-portrait[class*="fr-"]::after,.rw-frame[class*="fr-"]::after{content:"";position:absolute;right:-6px;top:-6px;width:10px;height:10px;border-radius:50%;background:#7cf29c;box-shadow:0 0 8px #7cf29c;border:2px solid #0a1428}
-.hud-portrait.fr-neon::after{background:#ff4fd8;box-shadow:0 0 8px #ff4fd8}
-.hud-portrait.fr-oro::after{background:#fff3c4;box-shadow:0 0 8px #ffd54f}
-.hud-portrait.fr-digivice::after{background:#bfeaff;box-shadow:0 0 8px #4fc3f7}
-.hud-portrait.fr-dpower::after{background:#e6ffc4}
-.hud-portrait.fr-bronce::after{background:#ffe9a8}
 .rw-frame{position:relative;border-radius:14px}
 .sc-box{width:min(680px,94vw)}
 .sc-p{font-family:system-ui,sans-serif;font-size:13px;color:#9fd4ff;margin:8px 0}
@@ -1639,6 +1621,26 @@ body:has(.pl4) #topbar{display:none!important}
 #overlay.menu-mode:has(.realhub:not(.pl4)){overflow:hidden!important}
 #overlay.menu-mode .realhub:not(.pl4){min-height:0!important;height:100%!important;overflow:hidden!important}
 #overlay.menu-mode .realhub:not(.pl4) .real-legal{background:none!important;border:0!important;box-shadow:none!important;padding:4px 24px 6px!important;color:#e8f4ff!important;text-shadow:0 1px 3px #000!important;font-size:10px!important;opacity:.9}
+.hud-portrait[class*="fr-"]{position:relative;overflow:visible!important;border:0!important;background:none!important;box-shadow:none!important;border-radius:50%!important}
+.hud-portrait[class*="fr-"] img{width:86%!important;height:86%!important;margin:7%;border-radius:50%;object-fit:cover}
+.hud-portrait[class*="fr-"]::before{content:'';position:absolute;inset:-25%;background:center/contain no-repeat;pointer-events:none;z-index:3}
+.hud-portrait[class*="fr-"]::after{display:none!important}
+.rw-frame[class*="fr-"]{border:0!important;background:center/contain no-repeat;box-shadow:none!important}
+.hud-portrait.fr-digivice_original::before,.rw-frame.fr-digivice_original{background-image:url(ui/marcos/digivice_original.png)}
+.hud-portrait.fr-valor::before,.rw-frame.fr-valor{background-image:url(ui/marcos/valor.png)}
+.hud-portrait.fr-amistad::before,.rw-frame.fr-amistad{background-image:url(ui/marcos/amistad.png)}
+.hud-portrait.fr-amor::before,.rw-frame.fr-amor{background-image:url(ui/marcos/amor.png)}
+.hud-portrait.fr-conocimiento::before,.rw-frame.fr-conocimiento{background-image:url(ui/marcos/conocimiento.png)}
+.hud-portrait.fr-sinceridad::before,.rw-frame.fr-sinceridad{background-image:url(ui/marcos/sinceridad.png)}
+.hud-portrait.fr-esperanza::before,.rw-frame.fr-esperanza{background-image:url(ui/marcos/esperanza.png)}
+.hud-portrait.fr-luz::before,.rw-frame.fr-luz{background-image:url(ui/marcos/luz.png)}
+.hud-portrait.fr-amabilidad::before,.rw-frame.fr-amabilidad{background-image:url(ui/marcos/amabilidad.png)}
+.hud-portrait.fr-determinacion::before,.rw-frame.fr-determinacion{background-image:url(ui/marcos/determinacion.png)}
+.hud-portrait.fr-digital::before,.rw-frame.fr-digital{background-image:url(ui/marcos/digital.png)}
+.hud-portrait.fr-virus::before,.rw-frame.fr-virus{background-image:url(ui/marcos/virus.png)}
+.hud-portrait.fr-vacuna::before,.rw-frame.fr-vacuna{background-image:url(ui/marcos/vacuna.png)}
+.hud-portrait.fr-datos::before,.rw-frame.fr-datos{background-image:url(ui/marcos/datos.png)}
+.hud-portrait.fr-sagrado::before,.rw-frame.fr-sagrado{background-image:url(ui/marcos/sagrado.png)}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -5148,11 +5150,21 @@ function openCustomizer(){
 /* ---------- Gacha: skins, marcos, títulos y objetos ---------- */
 // Catálogo de recompensas (lo que sale en las tiradas, además de las skins)
 const FRAMES = [
-  {id:'bronce',  name:'Digivice Original', tier:'c'},
-  {id:'digivice', name:'Digivice D-3',     tier:'c'},
-  {id:'dpower',  name:'Digivice D-Power', tier:'r'},
-  {id:'neon',    name:'Digivice Burst',   tier:'r'},
-  {id:'oro',     name:'Digivice Spirits', tier:'e'}
+  {id:'digivice_original', name:'Digivice original', tier:'c'},
+  {id:'valor', name:'Valor', tier:'c'},
+  {id:'amistad', name:'Amistad', tier:'c'},
+  {id:'amor', name:'Amor', tier:'c'},
+  {id:'conocimiento', name:'Conocimiento', tier:'c'},
+  {id:'sinceridad', name:'Sinceridad', tier:'r'},
+  {id:'esperanza', name:'Esperanza', tier:'r'},
+  {id:'luz', name:'Luz', tier:'r'},
+  {id:'amabilidad', name:'Amabilidad', tier:'r'},
+  {id:'determinacion', name:'Determinación', tier:'r'},
+  {id:'digital', name:'Digital', tier:'e'},
+  {id:'virus', name:'Virus', tier:'e'},
+  {id:'vacuna', name:'Vacuna', tier:'e'},
+  {id:'datos', name:'Datos', tier:'e'},
+  {id:'sagrado', name:'Sagrado', tier:'e'}
 ];
 // Títulos: solo cosmética (no dan bonus). Se consiguen con el gacha o con logros (ver checkAchievements)
 const TITLES = [
