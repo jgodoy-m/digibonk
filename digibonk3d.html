@@ -1544,6 +1544,56 @@ body:has(.realhub) #hudTop{display:none!important}
 .realhub .real-arrow{display:block!important;margin-left:auto!important}
 .realhub .real-shine{position:absolute;inset:0;z-index:2;background:linear-gradient(100deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%);transform:translateX(-120%);animation:db-shine 3.2s ease-in-out infinite;pointer-events:none}
 @keyframes db-shine{0%,55%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.picker-screen.pl4{display:block!important;overflow:auto!important;padding:14px 22px 30px!important}
+.pl4-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.pl4-banner{flex:1;padding:9px 16px;border-radius:12px;background:linear-gradient(90deg,#e8585a,#ff8a6b);border:2px solid #ffd7c9;color:#fff;box-shadow:0 4px 0 #6b1d1d}
+.pl4-banner b{display:block;font-size:22px;font-weight:900;font-style:italic;text-shadow:1px 2px #5a1212}
+.pl4-banner small{font-size:12px;opacity:.95}
+.pl4-hero{display:flex;gap:20px;align-items:center;padding:16px 20px;border-radius:16px;background:linear-gradient(120deg,#17306a,#0b1a3f);border:2px solid #8eeeff;box-shadow:0 5px 0 #03092a}
+.pl4-av{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pl4-av .hud-portrait{width:112px;height:112px;border-radius:50%}
+.pl4-chg{appearance:none;border:2px solid #8eeeff;border-radius:999px;background:linear-gradient(#2b6fc0,#0b2262);color:#fff;font:900 13px system-ui,sans-serif;padding:5px 16px;cursor:pointer;box-shadow:0 3px 0 #03092a}
+.pl4-chg:hover{filter:brightness(1.2)}
+.pl4-id{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.pl4-name{background:transparent;border:0;border-bottom:2px dashed #ffd55e66;color:#ffd55e;font:900 32px system-ui,sans-serif;width:100%;outline:none;padding:0 0 2px}
+.pl4-title-badge{display:inline-block;padding:3px 12px;border-radius:999px;background:#2a2000;border:2px solid #ffd55e;color:#ffe9a0;font:800 13px system-ui,sans-serif}
+.pl4-chips{display:flex;flex-wrap:wrap;gap:6px}
+.pl4-chips span{padding:4px 11px;border-radius:999px;background:#0c2d5f;border:1px solid #3b78c4;color:#cfeeff;font:700 12px system-ui,sans-serif}
+.pl4-stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:14px}
+.pl4-stat{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 14px;border-radius:12px;background:#0e2550;border:2px solid #2d5f9a;box-shadow:0 3px 0 #03092a}
+.pl4-stat i{font-style:normal;font-size:18px;line-height:1}
+.pl4-stat b{font-size:22px;color:#ffd55e;font-weight:900;line-height:1.1}
+.pl4-stat small{font-size:11px;color:#bfe4ff}
+.pl4-mission{margin-top:12px;padding:10px 14px;border-radius:12px;background:#0e2550;border:2px solid #2d5f9a}
+.pl4-mission h3{margin:0 0 6px;font-size:14px;color:#ffd55e}
+.pl4-mission small{display:block;margin-top:6px;color:#bfe4ff;font-size:12px}
+.pl4-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.pl4-wide{grid-column:1 / -1}
+.pl4-panel{padding:14px;border-radius:14px;background:#0e2550;border:2px solid #2d5f9a;box-shadow:0 4px 0 #03092a;min-width:0}
+.pl4-panel h3{margin:0 0 10px;font-size:16px;color:#ffd55e;font-weight:900;border-left:4px solid #ff6b6b;padding-left:10px}
+.pl4-panel h4{margin:12px 0 6px;color:#bfe4ff;font-size:13px}
+.pl4-rec{display:grid;grid-template-columns:1.6fr .8fr .9fr .8fr .9fr;gap:8px;align-items:center;padding:8px 6px;border-bottom:1px solid #1d4378;font-size:13px;color:#cfe8ff}
+.pl4-rec b{color:#fff}
+.pl4-rec em{font-style:normal;font-weight:800;color:#9fb6d4}
+.pl4-rec em.ok{color:#7cf29c}
+.pl4-ach{padding:8px 6px;border-bottom:1px solid #1d4378}
+.pl4-ach-top{display:flex;justify-content:space-between;align-items:center}
+.pl4-ach-top b{color:#fff;font-size:14px}
+.pl4-ach-top em{font-style:normal;font-size:12px;color:#cfe8ff}
+.pl4-ach small{display:block;color:#9fb6d4;font-size:11px;margin:2px 0 5px}
+.pl4-ach i{display:block;height:8px;border-radius:6px;background:#06142e;overflow:hidden}
+.pl4-ach u{display:block;height:100%;background:#5ed0ff}
+.pl4-ach.done u{background:#7cf29c}
+.pl4-specs{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.pl4-spec{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:12px;background:#0a1d44;border:2px solid #2d5f9a}
+.pl4-spec img{width:48px;height:48px;object-fit:contain;image-rendering:pixelated}
+.pl4-spec b{display:block;color:#fff;font-size:14px}
+.pl4-spec small{color:#9fd4ff;font-size:12px}
+.pl4-empty{color:#9fb6d4;font-size:13px;margin:6px 0}
+@media (max-width:900px){.pl4-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.pl4-grid{grid-template-columns:1fr}.pl4-hero{flex-direction:column;text-align:center}.pl4-id{align-items:center}}
+.pl4 .pl3-avs{display:grid!important;grid-template-columns:repeat(8,minmax(0,1fr))!important;gap:10px!important}
+.pl4 .tc-avb{width:100%!important;height:auto!important;aspect-ratio:1/1!important;padding:0!important;border-radius:50%!important;overflow:hidden!important;display:block!important}
+.pl4 .tc-avb img{width:100%!important;height:100%!important;object-fit:cover!important;image-rendering:auto!important;border-radius:0!important;display:block}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2394,7 +2444,7 @@ function refreshTopbar(){
   if (!show) return;
   const tt = extra.title ? TITLES.find(x => x.id === extra.title) : null;
   el.innerHTML = `
-    <button class="tb-id" id="tbId"><span class="hud-portrait mini${extra.frame ? ' fr-' + extra.frame : ''}"><img src="${headUrl(spriteOf(avatarKey(), false))}" alt=""></span>
+    <button class="tb-id" id="tbId"><span class="hud-portrait mini${extra.frame ? ' fr-' + extra.frame : ''}"><img src="${avatarSrc()}" alt=""></span>
       <span><b>${trainerName || 'Entrenador'}</b><small>${isGuest() ? t('guestTag') : (tt ? tt.name : t('noTitle'))}</small></span></button>
     <span class="tb-sp"></span>
     <span class="tb-chip" title="Bits">Ⓑ ${SAVE.bits}</span>
@@ -2478,7 +2528,7 @@ function showSelect(){
       <header class="real-top">
         <div class="hm-utils"><button class="hm-lang" type="button" id="rhLang" aria-label="Idioma">🌐 ${LANG.toUpperCase()}</button><button class="hm-round" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button></div>
         <div class="hm-pill" role="toolbar" aria-label="Jugador">
-          <button type="button" class="hm-pl-user" id="rhProfile"><img id="rhProfileImg" src="${headUrl(spriteOf(avatarKey(),false))}" alt=""><span><strong>${safeText(trainerName || 'Invitado')}</strong><small>${isGuest() ? t('guestTag') : (extra.title ? (TITLES.find(x => x.id === extra.title)?.name || '') : t('noTitle'))}</small></span></button>
+          <button type="button" class="hm-pl-user" id="rhProfile"><img id="rhProfileImg" src="${avatarSrc()}" alt=""><span><strong>${safeText(trainerName || 'Invitado')}</strong><small>${isGuest() ? t('guestTag') : (extra.title ? (TITLES.find(x => x.id === extra.title)?.name || '') : t('noTitle'))}</small></span></button>
           <span class="hm-pl-chip hm-bits" title="Bits">Ⓑ ${SAVE.bits.toLocaleString('es-ES')}</span>
           <span class="hm-pl-chip hm-dex" title="Digimon desbloqueados"><img src="ui/icons/digivice.png" alt="">${unlockedSet().size}/${Object.keys(CHARS).length}</span>
           <button type="button" class="hm-pl-ic" id="hmNews" aria-label="Noticias" title="Noticias">📰</button>
@@ -2538,7 +2588,7 @@ function showSelect(){
       if(im && im.isConnected) im.src=data;
     });
   }
-  headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
+  if(!avatarIcon()) headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
   document.getElementById('playBtn').onclick=()=>showPicker('personaje');
   const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { gxBanner = 'navidadP'; showGacha(); };
   document.getElementById('btnColl').onclick=showCollection;
@@ -4909,6 +4959,15 @@ function recordEvolve(key){
 }
 function evolvedUnlocked(key){ return !!loadJSON('digibonk3d-evo', {})[key]; }
 // Icono del entrenador: se elige en la tarjeta (por defecto, el Digimon seleccionado)
+// Iconos de entrenador (Digimon Adventure): el id se guarda en 'digibonk3d-avatar'
+const PLAYER_ICONS = [
+  {id:'tai', name:'Tai'}, {id:'agumon', name:'Tai y Agumon'}, {id:'matt', name:'Matt'}, {id:'gabumon', name:'Matt y Gabumon'},
+  {id:'sora', name:'Sora'}, {id:'biyomon', name:'Sora y Biyomon'}, {id:'izzy', name:'Izzy'}, {id:'tentomon', name:'Izzy y Tentomon'},
+  {id:'mimi', name:'Mimi'}, {id:'palmon', name:'Mimi y Palmon'}, {id:'joe', name:'Joe'}, {id:'gomamon', name:'Joe y Gomamon'},
+  {id:'tk', name:'T.K.'}, {id:'patamon', name:'T.K. y Patamon'}, {id:'kari', name:'Kari'}
+].map(x => ({...x, src: 'ui/jugador/' + x.id + '.png'}));
+function avatarIcon(){ return PLAYER_ICONS.find(x => x.id === localStorage.getItem('digibonk3d-avatar')) || null; }
+function avatarSrc(){ const ic = avatarIcon(); return ic ? ic.src : headUrl(spriteOf(avatarKey(), false)); }
 function avatarKey(){ const k = localStorage.getItem('digibonk3d-avatar'); return CHARS[k] ? k : selectedKey; }
 // Tarjeta de entrenador: una sola pantalla. Pasar el ratón previsualiza; clic equipa; el nombre se edita en la propia tarjeta
 function showPlayer(){
@@ -4933,36 +4992,57 @@ function showPlayer(){
       <b>${has ? t.name : '???'}</b><small>${has ? (t.id ? 'Desbloqueado' : '') : t.how}</small>
       ${!has && pg ? `<i class="sv-bar"><u style="width:${Math.round(pg[0]/pg[1]*100)}%"></u></i><em>${pg[0]}/${pg[1]}</em>` : ''}</button>`;
   }).join('');
-  const avs = SEASONS.adventure.chars.map(k => `<button class="tc-avb${k === avatarKey() ? ' on' : ''}" data-av="${k}" title="${CHARS[k].name}"><img src="${headUrl(spriteOf(k, false))}" alt=""></button>`).join('');
+  const avs = PLAYER_ICONS.map(ic => `<button class="tc-avb${(localStorage.getItem('digibonk3d-avatar') || '') === ic.id ? ' on' : ''}" data-av="${ic.id}" title="${ic.name}"><img src="${ic.src}" alt=""></button>`).join('');
   const tt = extra.title ? TITLES.find(t => t.id === extra.title) : null;
+  const recs = getRecords();
+  const bestT = recs.reduce((a, r) => Math.max(a, r.t), 0), bestL = recs.reduce((a, r) => Math.max(a, r.lvl || 0), 0);
+  const skinsRaw = loadJSON('digibonk3d-skins', []);
+  const skinsOwned = Array.isArray(skinsRaw) ? skinsRaw.length : Object.keys(skinsRaw).length;
+  const achDone = Object.keys(prog).filter(k => prog[k][0] >= prog[k][1]).length;
+  const digiOwned = unlockedSet().size, digiTotal = Object.keys(CHARS).length;
+  const statList = [
+    ['🎮', plays, 'Partidas'], ['⚔', kills, 'Bajas'], ['⏱', bestT ? fmtTime(bestT) : '—', 'Mejor tiempo'], ['⭐', bestL || '—', 'Mejor nivel'],
+    ['🧬', evos, 'Evoluciones'], ['📘', `${digiOwned}/${digiTotal}`, 'Digimon'], ['Ⓑ', SAVE.bits, 'Bits'], ['🎟', SAVE.tickets, 'Tickets'],
+    ['🖼', (inv.frames || []).length, 'Marcos'], ['🏷', (inv.titles || []).length, 'Títulos'], ['🎨', skinsOwned, 'Skins'], ['🏆', achDone, 'Logros']
+  ];
+  const statTiles = statList.map(([ic, v, l]) => `<div class="pl4-stat"><i>${ic}</i><b${typeof v === 'number' ? ` data-n="${v}"` : ''}>${typeof v === 'number' ? '0' : v}</b><small>${l}</small></div>`).join('');
+  const recRows = recs.slice(0, 5).map(r => `<div class="pl4-rec"><b>${String(r.name).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</b><span>${fmtTime(r.t)}</span><span>${r.kills} bajas</span><span>Nv. ${r.lvl}</span><em class="${r.win ? 'ok' : ''}">${r.win ? 'Victoria' : 'Derrota'}</em></div>`).join('') || '<p class="pl4-empty">Aún no hay partidas. Juega una para ver tus récords.</p>';
+  const achRows = Object.keys(prog).map(id => { const t = TITLES.find(x => x.id === id), [a, b] = prog[id], ok = a >= b; return `<div class="pl4-ach${ok ? ' done' : ''}"><div class="pl4-ach-top"><b>${t ? t.name : id}</b><em>${a}/${b}</em></div><small>${t ? t.how : ''}</small><i><u style="width:${Math.round(a / b * 100)}%"></u></i></div>`; }).join('');
+  const specRows = SEASONS.adventure.chars.map(k => ({k, s: statsOf(k)})).filter(x => x.s.plays || x.s.kills).sort((a, b) => b.s.kills - a.s.kills).slice(0, 8).map(({k, s}) => `<div class="pl4-spec"><img src="${headUrl(spriteOf(k, false))}" alt=""><span><b>${CHARS[k].name}</b><small>${s.kills} bajas · ${s.plays} partidas</small></span></div>`).join('') || '<p class="pl4-empty">Juega con un Digimon para ver su especialidad.</p>';
+  const pct2 = day.claimed ? 100 : pct;
   showOverlay(`
-    <div class="picker-screen player-screen pl3">
-      <header class="pk-head"><button class="g-back" id="plBack">← Volver</button><h2>Tarjeta de entrenador</h2></header>
-      <div class="pl3-body">
-        <div class="pl3-left">
-          <div class="tc" id="tc"><div class="tc-shine"></div>
-            <div class="tc-top"><span>DIGIMUNDO · NIÑO ELEGIDO</span><span>ID ${idNum}</span></div>
-            <div class="hud-portrait pf-av${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img id="tcImg" src="${headUrl(spriteOf(avatarKey(), false))}" alt=""></div>
-            <input class="tc-name" id="tcName" maxlength="16" value="${trainerName || ''}" placeholder="Tu nombre" title="Haz clic para cambiar tu nombre">
-            <div class="tc-title" id="tcTitle">${tt ? tt.name : 'Sin título'}</div>
-            <div class="tc-stats">
-              <span><b data-n="${plays}">0</b>Partidas</span><span><b data-n="${kills}">0</b>Bajas</span>
-              <span><b data-n="${evos}">0</b>Evoluciones</span><span><b data-n="${SAVE.bits}">0</b>Bits</span>
-            </div>
-          </div>
-          <div class="pl3-avs">${avs}</div>
+    <div class="picker-screen player-screen pl4">
+      <header class="pl4-top"><button class="g-back" id="plBack">Esc · Volver</button>
+        <div class="pl4-banner"><b>Ficha de entrenador</b><small>Tu tarjeta, tus estadísticas y tus logros</small></div></header>
+      <section class="pl4-hero" id="tc">
+        <div class="pl4-av">
+          <div class="hud-portrait pf-av${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img id="tcImg" src="${avatarSrc()}" alt=""></div>
+          <button type="button" class="pl4-chg" id="plChange">Cambiar</button>
+        </div>
+        <div class="pl4-id">
+          <input class="pl4-name" id="tcName" maxlength="16" value="${trainerName || ''}" placeholder="Tu nombre" title="Haz clic para cambiar tu nombre">
+          <span class="pl4-title-badge" id="tcTitle">${tt ? tt.name : 'Sin título'}</span>
+          <div class="pl4-chips"><span>ID ${idNum}</span>${CHARS[selectedKey] ? `<span>Compañero: ${CHARS[selectedKey].name}</span>` : ''}</div>
+        </div>
+      </section>
+      <div class="pl4-stats">${statTiles}</div>
+      <div class="pl4-mission"><h3>Misión diaria</h3><div class="pf-bar"><i style="width:${pct2}%"></i></div>
+        <small>${day.claimed ? 'Completada hoy' : `${Math.min(day.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits`}</small></div>
+      <div class="pl4-grid">
+        <section class="pl4-panel"><h3>Récords</h3>${recRows}</section>
+        <section class="pl4-panel"><h3>Logros</h3>${achRows}</section>
+        <section class="pl4-panel pl4-wide"><h3>Especialidad por Digimon</h3><div class="pl4-specs">${specRows}</div></section>
+        <section class="pl4-panel pl4-wide"><h3>Personalizar</h3>
+          <h4>Avatar</h4><div class="pl3-avs">${avs}</div>
+          <h4>Marco del icono</h4><div class="pl3-frames">${frames}</div>
+          <h4>Título</h4><div class="pl3-titles">${titles}</div>
           <p class="g-note">Pasa el ratón por un marco o título para verlo en la tarjeta. Haz clic para equiparlo. El nombre se edita en la propia tarjeta.</p>
-        </div>
-        <div class="pl3-right">
-          <h3>Marco del icono</h3><div class="pl3-frames">${frames}</div>
-          <h3>Título</h3><div class="pl3-titles">${titles}</div>
-          <h3>Misión diaria</h3>
-          <div class="pf-mission"><div class="pf-bar"><i style="width:${pct}%"></i></div>
-            <small>${day.claimed ? 'Completada hoy' : `${Math.min(day.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits`}</small></div>
-        </div>
+        </section>
       </div>
     </div>`);
+
   document.getElementById('plBack').onclick = () => showSelect();
+  document.getElementById('plChange').onclick = () => document.querySelector('.pl4 .pl3-avs')?.scrollIntoView({block:'center',behavior:'smooth'});
   const tc = document.getElementById('tc'), av = document.getElementById('tcAv'), ttEl = document.getElementById('tcTitle');
   // La tarjeta se inclina siguiendo al ratón
   tc.onmousemove = e => {
@@ -4972,7 +5052,7 @@ function showPlayer(){
   };
   tc.onmouseleave = () => { tc.style.transform = ''; };
   // Contadores animados
-  tc.querySelectorAll('[data-n]').forEach(el => {
+  document.querySelectorAll('.pl4 [data-n]').forEach(el => {
     const n = +el.dataset.n, t0 = performance.now();
     const step = now => { const k = Math.min(1, (now - t0)/700); el.textContent = Math.round(n*k*(2 - k)); if (k < 1 && document.body.contains(el)) requestAnimationFrame(step); };
     requestAnimationFrame(step);
@@ -5003,7 +5083,7 @@ function showPlayer(){
   overlay.querySelectorAll('.tc-avb').forEach(b => b.onclick = () => {
     localStorage.setItem('digibonk3d-avatar', b.dataset.av);
     overlay.querySelectorAll('.tc-avb').forEach(o => o.classList.toggle('on', o === b));
-    document.getElementById('tcImg').src = headUrl(spriteOf(b.dataset.av, false));
+    document.getElementById('tcImg').src = avatarSrc();
     sfx('ready');
   });
 }
