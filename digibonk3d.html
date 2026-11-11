@@ -2657,16 +2657,16 @@ function randomSpawn(){
   return {x: Math.cos(a)*r, z: Math.sin(a)*r};
 }
 const CHARS = {
-  agumon:  {name:'Agumon',  desc:'Dispara al enemigo más cercano', sprite:'sprites/adventure/agumon.png',  kind:'shot',  cd:0.6, dmg:10},
-  gabumon: {name:'Gabumon', desc:'Onda de energía alrededor',      sprite:'sprites/adventure/gabumon.png', kind:'ring',  cd:1.6, dmg:10},
+  agumon:  {name:'Agumon',  desc:'Dispara al enemigo más cercano', sprite:'sprites/adventure/agumon.png',  kind:'shot',  cd:0.83, dmg:10},
+  gabumon: {name:'Gabumon', desc:'Onda de energía alrededor',      sprite:'sprites/adventure/gabumon.png', kind:'ring',  cd:1.0, dmg:10},
   palmon:  {name:'Palmon',  desc:'Cuchillas giratorias',           sprite:'sprites/adventure/palmon.png',  kind:'orbit', cd:0,   dmg:10},
-  garurumon:{name:'Garurumon', desc:'Colmillos rápidos hacia el enemigo más cercano', sprite:'sprites/adventure/garurumon.png', kind:'shot',  cd:0.5, dmg:10},
-  tentomon: {name:'Tentomon',   desc:'Descarga eléctrica en círculo',                 sprite:'sprites/adventure/tentomon.png',  kind:'ring',  cd:1.8, dmg:10},
+  garurumon:{name:'Garurumon', desc:'Colmillos rápidos hacia el enemigo más cercano', sprite:'sprites/adventure/garurumon.png', kind:'shot',  cd:0.83, dmg:10},
+  tentomon: {name:'Tentomon',   desc:'Descarga eléctrica en círculo',                 sprite:'sprites/adventure/tentomon.png',  kind:'ring',  cd:1.2, dmg:10},
   gatomon:  {name:'Gatomon',    desc:'Garras giratorias',                             sprite:'sprites/adventure/gatomon.png',   kind:'orbit', cd:0,   dmg:10}
 };
 // Digievolución (se activa al llegar a este nivel)
 // Etapas de digievolución: se alcanzan a estos niveles (las que tenga cada línea en Digimon Adventure)
-const EVO_LEVELS = [8, 15, 22];
+const EVO_LEVELS = [12, 18, 24];   // antes 8 / 15 / 22: la primera llegaba a los ~2 minutos
 const EVO_LINE = {
   agumon:   [{name:'Greymon',     sprite:'sprites/adventure/greymon.png'},   {name:'MetalGreymon',    sprite:'sprites/adventure/metalgreymon.png'},    {name:'WarGreymon',     sprite:'sprites/adventure/wargreymon.png'}],
   gabumon:  [{name:'Garurumon',   sprite:'sprites/adventure/garurumon.png'}, {name:'WereGarurumon',   sprite:'sprites/adventure/weregarurumon.png'},   {name:'MetalGarurumon', sprite:'sprites/adventure/metalgarurumon.png'}],
@@ -2685,9 +2685,9 @@ const SEASONS = {
   adventure: {name:'Digimon Adventure', chars:['agumon','gabumon','biyomon','tentomon','palmon','gomamon','patamon','gatomon']}
 };
 Object.assign(CHARS, {
-  gomamon: {name:'Gomamon', desc:'Burbujas al enemigo más cercano', sprite:'sprites/adventure/gomamon.png', kind:'shot', cd:0.7, dmg:11},
-  patamon: {name:'Patamon', desc:'Ráfagas rápidas al enemigo más cercano', sprite:'sprites/adventure/patamon.png', kind:'shot', cd:0.4, dmg:7},
-  biyomon: {name:'Biyomon', desc:'Ráfaga de viento al enemigo más cercano', sprite:'sprites/adventure/biyomon.png', kind:'shot', cd:0.9, dmg:14}
+  gomamon: {name:'Gomamon', desc:'Burbujas al enemigo más cercano', sprite:'sprites/adventure/gomamon.png', kind:'shot', cd:0.92, dmg: 11},
+  patamon: {name:'Patamon', desc:'Ráfagas rápidas al enemigo más cercano', sprite:'sprites/adventure/patamon.png', kind:'shot', cd:0.58, dmg:7},
+  biyomon: {name:'Biyomon', desc:'Ráfaga de viento al enemigo más cercano', sprite:'sprites/adventure/biyomon.png', kind:'shot', cd:1.17, dmg:14}
 });
 const ENEMY = {
   basic: {sprite:'sprites/numemon.png', hp:22, spd:3.2, r:0.9, scale:1.8, xp:2, dmg:5},
