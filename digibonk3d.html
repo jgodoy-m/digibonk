@@ -2035,6 +2035,8 @@ body:has(.tr11) #hudTop{display:none!important}
 .realhub .hm-row1 .real-play{justify-content:space-between!important;padding:8px 26px!important}
 .realhub .hm-row1 .real-device{margin:0 auto 0 0!important}
 .realhub .hm-row1 .real-arrow{font-size:44px!important;margin-left:auto!important}
+.pl5-wide .pl4-empty{max-width:none!important;width:100%}
+.pl5-hero .pl4-av{margin-top:8px}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -3025,7 +3027,7 @@ function showSelect(){
   fitHub(); if (!window.__hmFitBound){ window.__hmFitBound = true; addEventListener('resize', () => { if (document.querySelector('#overlay.menu-mode .realhub:not(.pl4)')) fitHub(); }); }
   // Always start with a valid still portrait: no animation strip flashes in the Digivice.
   const playPortrait = document.getElementById('rhPlayPortrait');
-  if (playPortrait) { const pk = CHARS[selectedKey] ? selectedKey : 'agumon'; const pic = PLAYER_ICONS.find(x => x.id === pk); if (pic && !pic.img) playPortrait.src = pic.src; else menuPlayPortrait(spriteOf(pk, false), d => { playPortrait.src = d; }); }
+  if (playPortrait) { const pk = CHARS[selectedKey] ? selectedKey : 'agumon'; const pic = PLAYER_ICONS.find(x => x.id === pk); if (pic && pic.src) playPortrait.src = pic.src; else menuPlayPortrait(spriteOf(pk, false), d => { playPortrait.src = d; }); }
   // The equipped skin may have a unique appearance; if so, use that sprite's first frame.
   if (typeof skinEquipped !== 'undefined' && skinEquipped[selectedKey] && skinEquipped[selectedKey] !== 'classic') {
     menuPlayPortrait(spriteOf(selectedKey,false), data => {
@@ -5406,14 +5408,16 @@ function evolvedUnlocked(key){ return !!loadJSON('digibonk3d-evo', {})[key]; }
 // Icono del entrenador: se elige en la tarjeta (por defecto, el Digimon seleccionado)
 // Iconos de entrenador (Digimon Adventure): el id se guarda en 'digibonk3d-avatar'
 const PLAYER_ICONS = [
-  {id:'agumon', name:'Agumon'}, {id:'gabumon', name:'Gabumon'}, {id:'biyomon', name:'Biyomon'}, {id:'tentomon', name:'Tentomon'},
-  {id:'palmon', name:'Palmon'}, {id:'gomamon', name:'Gomamon'}, {id:'patamon', name:'Patamon'}, {id:'gatomon', name:'Gatomon', img:'kari'}
-].map(x => ({...x, src: 'ui/jugador/' + (x.img || x.id) + '.png'}));
+  {id:'agumon', name:'Agumon', kid:'tai', src:'ui/jugador/agumon.png'}, {id:'gabumon', name:'Gabumon', kid:'matt', src:'ui/jugador/gabumon.png'},
+  {id:'biyomon', name:'Biyomon', kid:'sora', src:'ui/jugador/biyomon.png'}, {id:'tentomon', name:'Tentomon', kid:'izzy', src:'ui/jugador/tentomon.png'},
+  {id:'palmon', name:'Palmon', kid:'mimi', src:'ui/jugador/palmon.png'}, {id:'gomamon', name:'Gomamon', kid:'joe', src:'ui/jugador/gomamon.png'},
+  {id:'patamon', name:'Patamon', kid:'tk', src:'ui/jugador/patamon.png'}, {id:'gatomon', name:'Gatomon', kid:'kari', src:null}
+];
 // Iconos antiguos (un niño sin Digimon) pasan al Digimon de su pareja
 const LEGACY_AV = {tai:'agumon', matt:'gabumon', sora:'biyomon', izzy:'tentomon', mimi:'palmon', joe:'gomamon', tk:'patamon', kari:'gatomon'};
 function normAv(v){ return LEGACY_AV[v] || v || ''; }
 function avatarIcon(){ return PLAYER_ICONS.find(x => x.id === normAv(localStorage.getItem('digibonk3d-avatar'))) || null; }
-function avatarSrc(){ const ic = avatarIcon(); return ic ? ic.src : headUrl(spriteOf(avatarKey(), false)); }
+function avatarSrc(){ const ic = avatarIcon(); return ic ? 'ui/jugador/' + ic.kid + '.png' : headUrl(spriteOf(avatarKey(), false)); }
 function avatarKey(){ const k = localStorage.getItem('digibonk3d-avatar'); return CHARS[k] ? k : selectedKey; }
 // Tarjeta de entrenador: una sola pantalla. Pasar el ratón previsualiza; clic equipa; el nombre se edita en la propia tarjeta
 function showPlayer(){
@@ -5513,7 +5517,7 @@ function openCustomizer(){
   const rar = t => ({c:'Común', r:'Rara', e:'Épica', l:'Legendaria'})[t] || '';
   const card = (sel, v, inner, locked, tier) => `<button type="button" class="cz-tile cz-t-${tier || 'c'}${sel ? ' sel' : ''}${locked ? ' locked' : ''}" ${locked ? 'disabled' : ''} data-v="${v}">${inner}${locked ? '<i class="cz-lock">🔒</i>' : ''}</button>`;
   const grid = () => {
-    if (tab === 'av') return PLAYER_ICONS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av"><img src="${ic.src}" alt=""></span><b>${ic.name}</b>`, false, 'c')).join('');
+    if (tab === 'av') return PLAYER_ICONS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av">${ic.src ? `<img src="${ic.src}" alt="">` : sprEl(spriteWith(ic.id, false, 'clasico'), 44)}</span><b>${ic.name}</b>`, false, 'c')).join('');
     if (tab === 'frame') return [{id: '', name: 'Sin marco', tier: 'c'}, ...FRAMES.filter(f => !f.weekly && !f.seasonal)].map(f => {
       const ok = ownsFrame(f.id);
       return card(pFrame === f.id, 'fr:' + f.id, `<span class="cz-fr">${f.id ? `<span class="rw-frame fr-${f.id}"></span>` : '<span class="cz-none">∅</span>'}</span><b>${ok ? f.name : '???'}</b><small>${ok ? (f.id ? rar(f.tier) : 'Sin marco') : 'Gacha'}</small>`, !ok, ok ? f.tier : 'c');
@@ -5526,7 +5530,7 @@ function openCustomizer(){
   };
   const preview = () => {
     const ic = PLAYER_ICONS.find(x => x.id === pAv);
-    const img = ic ? ic.src : headUrl(spriteOf(avatarKey(), false));
+    const img = ic ? 'ui/jugador/' + ic.kid + '.png' : headUrl(spriteOf(avatarKey(), false));
     const t = pTitle ? TITLES.find(x => x.id === pTitle) : null;
     return `<div class="cz-prev"><div class="hud-portrait pf-av${pFrame ? ' fr-' + pFrame : ''}"><img src="${img}" alt=""></div><span class="cz-ttl">${t ? t.name : 'Sin título'}</span></div>`;
   };
