@@ -2517,6 +2517,9 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .gx2-mission h3{margin:0 0 4px;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#ffd55e}
 .gx2-mission p{margin:0 0 6px;font-size:12px;color:#cfeaff}
 .gx2-mission small{display:block;margin-top:4px;font-size:10px;color:#9ad3e8}
+.gx2-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#fff;font-size:18px}
+.gx2-tile small{font-size:9px;color:#9ad3e8}
+.gx2-tile .rw-frame{transform:scale(.45)}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -5955,7 +5958,9 @@ function bannerSkins(){ if (BANNERS[gxBanner].event && !eventActive()) gxBanner 
 function bannerSkin(){ return bannerSkins()[0]; }
 // La rareza se decide primero. Legendaria = skin; el resto reparte entre marco, título y objeto
 const TIER_ODDS = {c: 60, r: 26, e: 12, l: 2};
-const CAT_WEIGHTS = [['frame', 55], ['title', 45]];
+// Reparto de lo que no es legendaria: marcos, títulos, tickets y Bits
+const CAT_WEIGHTS = [['frame', 30], ['title', 25], ['ticket', 30], ['bits', 15]];
+const BITS_BY_TIER = {c: 30, r: 60, e: 120}, TICKETS_BY_TIER = {c: 1, r: 1, e: 2};
 function rollTier(){
   let x = Math.random()*100;
   for (const t of ['c', 'r', 'e', 'l']){ if ((x -= TIER_ODDS[t]) < 0) return t; }
@@ -5993,9 +5998,12 @@ function rollReward(tier){
       }
     }
     const key = pickOne(SEASONS.adventure.chars);
-    return {type:'skin', key, st: Math.floor(Math.random() * stageCount(key)), sk: pickSkin(), tier:'l'};
+    const pick = pickOne(pool);
+    return {type:'skin', key: pick.key, st: pick.st, sk: pick.sk, tier:'l'};
   }
   const cat = pickCategory();
+  if (cat === 'ticket') return {type:'ticket', amount: TICKETS_BY_TIER[tier] || 1, tier};
+  if (cat === 'bits') return {type:'bits', amount: BITS_BY_TIER[tier] || 30, tier};
   // Banner permanente: parte de las tiradas de marco o título dan el de la semana
   if (gxBanner === 'std' && Math.random() < 0.3){
     const wid = 'wk' + weeklyIndex();
@@ -6034,6 +6042,7 @@ function grantReward(r){
     inv.titles.push(r.t.id); saveInv(); return {...r, dup:false};
   }
   if (r.type === 'bits'){ SAVE.bits = SAVE.bits + r.amount; return {...r, dup:false}; }
+  if (r.type === 'ticket'){ SAVE.tickets = SAVE.tickets + r.amount; return {...r, dup:false}; }
   return {...r, dup:false};
 }
 // Tirada: 1 o 10. Con 10 se garantiza al menos una recompensa rara o épica
@@ -6097,12 +6106,14 @@ function rewardIcon(r){
   if (r.type === 'skin') return animEl(spriteWith(r.key, r.st || 0, r.sk.id), 'rw-anim');
   if (r.type === 'frame') return `<div class="rw-frame fr-${r.f.id}"></div>`;
   if (r.type === 'title') return `<div class="rw-title">🏅</div>`;
+  if (r.type === 'ticket') return `<div class="rw-item">🎟</div>`;
   return `<div class="rw-item">Ⓑ</div>`;
 }
 function rewardName(r){
   if (r.type === 'skin') return `Skin ${r.sk.name} · ${CHARS[r.key].name}`;
   if (r.type === 'frame') return r.f.name;
   if (r.type === 'title') return `Título: ${r.t.name}`;
+  if (r.type === 'ticket') return `${r.amount} ticket${r.amount > 1 ? 's' : ''} de tirada`;
   return `${r.amount} Bits`;
 }
 // Cartas boca abajo: se giran solas una a una (o al hacer clic); las épicas estallan
@@ -6203,7 +6214,10 @@ function showGacha(){
   const oddsRows = [['l', 5], ['e', 4], ['r', 3], ['c', 2]].map(([t, n]) =>
     `<div class="gx2-odd"><i style="color:${GX_TIER_COL[t]}">${'★'.repeat(n)}</i><span>${TIER_NAME[t] === 'Legendaria' ? 'Recompensa Legendaria' : 'Recompensa ' + TIER_NAME[t]}</span><b>${TIER_ODDS[t].toFixed(2)}%</b></div>`).join('');
   const blank = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-  const possible = bannerPool().slice(0, 24).map(e => `<img class="gx2-ico" data-src="${spriteWith(e.key, e.st, e.sk.id)}" src="${blank}" alt="">`).join('');
+  const possibleSkins = bannerPool().slice(0, 10).map(e => `<img class="gx2-ico" data-src="${spriteWith(e.key, e.st, e.sk.id)}" src="${blank}" alt="">`).join('');
+  const possibleFrames = FRAMES.filter(f => !f.weekly).slice(0, 3).map(f => `<div class="gx2-ico gx2-tile"><div class="rw-frame fr-${f.id}"></div></div>`).join('');
+  const possibleExtra = `<div class="gx2-ico gx2-tile"><b>🎟</b><small>Tickets</small></div><div class="gx2-ico gx2-tile"><b>Ⓑ</b><small>Bits</small></div><div class="gx2-ico gx2-tile"><span>🏅</span><small>Títulos</small></div>`;
+  const possible = possibleSkins + possibleFrames + possibleExtra;
   showOverlay(`
     <div class="gacha gx2">
       <header class="gx2-head"><button class="g-back" id="gBack">← Volver</button><h2>Gacha</h2></header>
@@ -6545,6 +6559,7 @@ if (new URLSearchParams(location.search).has('demo')){
     checkUnlocks, isUnlocked,
     showSelect, showCollection,
     showSettings,
+    rollTier,
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
     nearChest(){
