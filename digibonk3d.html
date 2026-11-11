@@ -2438,6 +2438,7 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .realhub .real-scene .rw-character{animation:db-idle 3.2s ease-in-out infinite alternate}
 @keyframes db-idle{from{transform:translateY(0)}to{transform:translateY(-5px)}}
 @media (prefers-reduced-motion:reduce){.realhub *,.realhub *::after{animation:none!important;transition:none!important}}
+.mini-btn.danger{background:linear-gradient(180deg,#ff7a6b,#c62828)!important;border-color:#ffb3a8!important;color:#fff!important}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -3583,6 +3584,10 @@ function showSettings(){
         <div><b>Progreso</b><small>Exporta tu progreso a un código para usarlo en otro navegador.</small></div>
         <button class="mini-btn" id="btnSaveCode">Código de guardado</button>
       </div>
+      <div class="set-row">
+        <div><b>Cuenta</b><small>Cerrar sesión deja tu progreso guardado en este navegador. Eliminar la cuenta borra todo el progreso de este navegador.</small></div>
+        <div class="set-seg-wrap"><button class="mini-btn" id="btnLogout">Cerrar sesión</button><button class="mini-btn danger" id="btnDelete">Eliminar cuenta</button></div>
+      </div>
     </div>`);
   document.getElementById('setBack').onclick = () => showSelect();
   overlay.querySelectorAll('.set-seg').forEach(b => b.onclick = () => {
@@ -3592,6 +3597,18 @@ function showSettings(){
   });
   document.getElementById('tSfx').onclick = () => { toggleMute(true); showSettings(); };
   document.getElementById('btnSaveCode').onclick = () => showSaveCode();
+  // Cerrar sesión: vuelve a la pantalla de registro; el progreso sigue en este navegador
+  document.getElementById('btnLogout').onclick = () => {
+    localStorage.removeItem('digibonk3d-name');
+    localStorage.removeItem('digibonk3d-guest');
+    location.reload();
+  };
+  // Eliminar cuenta: borra todo lo guardado por el juego en este navegador
+  document.getElementById('btnDelete').onclick = () => {
+    if (!confirm('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Bits, skins, colección, récords). No se puede deshacer.')) return;
+    Object.keys(localStorage).filter(k => k.startsWith('digibonk3d-')).forEach(k => localStorage.removeItem(k));
+    location.reload();
+  };
   document.getElementById('tMusic').onclick = () => {
     Music.on = !Music.on;
     localStorage.setItem('digibonk3d-music', Music.on ? '1' : '0');
@@ -6424,6 +6441,7 @@ if (new URLSearchParams(location.search).has('demo')){
     headUrl, spriteWith,
     checkUnlocks, isUnlocked,
     showSelect, showCollection,
+    showSettings,
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
     nearChest(){

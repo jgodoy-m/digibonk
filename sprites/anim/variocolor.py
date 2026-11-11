@@ -10,10 +10,15 @@ from navidad import BASES, gradient_map  # mismas hojas base que las skins de Na
 # Escala oscura: negro con brillos grises (luminosidad 0-1 -> color)
 STOPS = [(0.0, (6, 6, 10)), (0.5, (38, 38, 48)), (0.85, (120, 120, 136)), (1.0, (220, 220, 232))]
 
+# La variocolor de Agumon etapa 0 viene del paquete de skins verificadas: no se regenera aquí
+SKIP = {("agumon", 0)}
+
 def main():
     n = 0
     for key, stages in BASES.items():
         for st, base in enumerate(stages):
+            if (key, st) in SKIP:
+                continue
             src = os.path.join(HERE, base + ".png")
             gradient_map(src, STOPS).save(os.path.join(HERE, f"{key}_{st}_variocolor.png"))
             n += 1
