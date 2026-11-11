@@ -3527,6 +3527,8 @@ function pickMove(delta){
 }
 
 function startGame(key){
+  // El botón Jugar muestra el último Digimon con el que se jugó
+  if (CHARS[key]) { selectedKey = key; try { localStorage.setItem('digibonk3d-last-choice', key); } catch(e){} }
   // El botón de volver del navegador no saca de la partida: queda una entrada de historial que lo absorbe
   try { history.pushState({dbk: 1}, ''); } catch(e){}
   // Al entrar en partida se cierra por completo el menú: no queda ninguna pantalla del menú debajo
@@ -5611,7 +5613,7 @@ function openCustomizer(){
   };
   const close = () => { back.remove(); document.removeEventListener('keydown', onKey, true); };
   const save = () => {
-    if (pAv) { localStorage.setItem('digibonk3d-avatar', pAv); if (PLAYER_ICONS.some(x => x.id === pAv)) { selectedKey = pAv; try { localStorage.setItem('digibonk3d-last-choice', pAv); } catch(e){} } }
+    if (pAv) localStorage.setItem('digibonk3d-avatar', pAv);
     if (pFrame) equipExtra('frame', pFrame); else unequipExtra('frame');
     if (pTitle) equipExtra('title', pTitle); else unequipExtra('title');
     close(); sfx('ready'); showPlayer();
