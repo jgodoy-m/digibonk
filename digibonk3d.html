@@ -1622,25 +1622,10 @@ body:has(.pl4) #topbar{display:none!important}
 #overlay.menu-mode .realhub:not(.pl4){min-height:0!important;height:100%!important;overflow:hidden!important}
 #overlay.menu-mode .realhub:not(.pl4) .real-legal{background:none!important;border:0!important;box-shadow:none!important;padding:4px 24px 6px!important;color:#e8f4ff!important;text-shadow:0 1px 3px #000!important;font-size:10px!important;opacity:.9}
 .hud-portrait[class*="fr-"]{position:relative;overflow:visible!important;border:0!important;background:none!important;box-shadow:none!important;border-radius:50%!important}
-.hud-portrait[class*="fr-"] img{width:86%!important;height:86%!important;margin:7%;border-radius:50%;object-fit:cover;position:relative;z-index:2}
-.hud-portrait[class*="fr-"]::before{content:'';position:absolute;inset:-25%;background:center/contain no-repeat;pointer-events:none;z-index:1}
+.hud-portrait[class*="fr-"] img{width:86%!important;height:86%!important;margin:7%;border-radius:50%;object-fit:cover}
+.hud-portrait[class*="fr-"]::before{content:'';position:absolute;inset:-25%;background:center/contain no-repeat;pointer-events:none;z-index:3}
 .hud-portrait[class*="fr-"]::after{display:none!important}
 .rw-frame[class*="fr-"]{border:0!important;background:center/contain no-repeat;box-shadow:none!important}
-.hud-portrait.fr-digivice_original::before,.rw-frame.fr-digivice_original{background-image:url(ui/marcos/digivice_original.png)}
-.hud-portrait.fr-valor::before,.rw-frame.fr-valor{background-image:url(ui/marcos/valor.png)}
-.hud-portrait.fr-amistad::before,.rw-frame.fr-amistad{background-image:url(ui/marcos/amistad.png)}
-.hud-portrait.fr-amor::before,.rw-frame.fr-amor{background-image:url(ui/marcos/amor.png)}
-.hud-portrait.fr-conocimiento::before,.rw-frame.fr-conocimiento{background-image:url(ui/marcos/conocimiento.png)}
-.hud-portrait.fr-sinceridad::before,.rw-frame.fr-sinceridad{background-image:url(ui/marcos/sinceridad.png)}
-.hud-portrait.fr-esperanza::before,.rw-frame.fr-esperanza{background-image:url(ui/marcos/esperanza.png)}
-.hud-portrait.fr-luz::before,.rw-frame.fr-luz{background-image:url(ui/marcos/luz.png)}
-.hud-portrait.fr-amabilidad::before,.rw-frame.fr-amabilidad{background-image:url(ui/marcos/amabilidad.png)}
-.hud-portrait.fr-determinacion::before,.rw-frame.fr-determinacion{background-image:url(ui/marcos/determinacion.png)}
-.hud-portrait.fr-digital::before,.rw-frame.fr-digital{background-image:url(ui/marcos/digital.png)}
-.hud-portrait.fr-virus::before,.rw-frame.fr-virus{background-image:url(ui/marcos/virus.png)}
-.hud-portrait.fr-vacuna::before,.rw-frame.fr-vacuna{background-image:url(ui/marcos/vacuna.png)}
-.hud-portrait.fr-datos::before,.rw-frame.fr-datos{background-image:url(ui/marcos/datos.png)}
-.hud-portrait.fr-sagrado::before,.rw-frame.fr-sagrado{background-image:url(ui/marcos/sagrado.png)}
 /* Gacha Tesoros */
 .tr11 .tc-shine{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--sx,30%) var(--sy,20%),rgba(255,255,255,.38),transparent 45%)}
 #overlay:has(.tr11){padding:0!important;overflow:auto!important;background:#080d22!important;align-items:stretch!important;justify-content:stretch!important}
@@ -1860,6 +1845,18 @@ body:has(.tr11) #hudTop{display:none!important}
 .db-event:active{transform:translateY(2px)}
 .db-event:focus-visible{outline:3px solid #20e8ff;outline-offset:4px}
 .db-event__txt{position:absolute;left:19%;top:64%;transform:translateY(-50%);font-size:2.5cqw;font-weight:700;color:#f2f8ff;white-space:nowrap;text-shadow:1px 2px 3px #00142a;pointer-events:none;font-family:system-ui,sans-serif}
+.hud-portrait.fr-angelical_dorado::before,.rw-frame.fr-angelical_dorado{background-image:url(ui/marcos/angelical_dorado.png)}
+.hud-portrait.fr-agua_fiabilidad::before,.rw-frame.fr-agua_fiabilidad{background-image:url(ui/marcos/agua_fiabilidad.png)}
+.hud-portrait.fr-conocimiento_digital::before,.rw-frame.fr-conocimiento_digital{background-image:url(ui/marcos/conocimiento_digital.png)}
+.hud-portrait.fr-digivice_azul::before,.rw-frame.fr-digivice_azul{background-image:url(ui/marcos/digivice_azul.png)}
+.hud-portrait.fr-amistad_gabumon::before,.rw-frame.fr-amistad_gabumon{background-image:url(ui/marcos/amistad_gabumon.png)}
+.hud-portrait.fr-alas_rosadas::before,.rw-frame.fr-alas_rosadas{background-image:url(ui/marcos/alas_rosadas.png)}
+.hud-portrait.fr-fenix_dorado::before,.rw-frame.fr-fenix_dorado{background-image:url(ui/marcos/fenix_dorado.png)}
+.hud-portrait.fr-esperanza_angelical::before,.rw-frame.fr-esperanza_angelical{background-image:url(ui/marcos/esperanza_angelical.png)}
+.hud-portrait.fr-sinceridad_palmon::before,.rw-frame.fr-sinceridad_palmon{background-image:url(ui/marcos/sinceridad_palmon.png)}
+.hud-portrait.fr-bondad_botanica::before,.rw-frame.fr-bondad_botanica{background-image:url(ui/marcos/bondad_botanica.png)}
+.pl4-av{padding-bottom:30px}
+.pl4-chg{position:relative;z-index:5;margin-top:14px}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -5370,21 +5367,16 @@ function openCustomizer(){
 /* ---------- Gacha: skins, marcos, títulos y objetos ---------- */
 // Catálogo de recompensas (lo que sale en las tiradas, además de las skins)
 const FRAMES = [
-  {id:'digivice_original', name:'Digivice original', tier:'c'},
-  {id:'valor', name:'Valor', tier:'c'},
-  {id:'amistad', name:'Amistad', tier:'c'},
-  {id:'amor', name:'Amor', tier:'c'},
-  {id:'conocimiento', name:'Conocimiento', tier:'c'},
-  {id:'sinceridad', name:'Sinceridad', tier:'r'},
-  {id:'esperanza', name:'Esperanza', tier:'r'},
-  {id:'luz', name:'Luz', tier:'r'},
-  {id:'amabilidad', name:'Amabilidad', tier:'r'},
-  {id:'determinacion', name:'Determinación', tier:'r'},
-  {id:'digital', name:'Digital', tier:'e'},
-  {id:'virus', name:'Virus', tier:'e'},
-  {id:'vacuna', name:'Vacuna', tier:'e'},
-  {id:'datos', name:'Datos', tier:'e'},
-  {id:'sagrado', name:'Sagrado', tier:'e'}
+  {id:'angelical_dorado', name:'Angelical dorado', tier:'e'},
+  {id:'agua_fiabilidad', name:'Agua y fiabilidad', tier:'c'},
+  {id:'conocimiento_digital', name:'Conocimiento digital', tier:'c'},
+  {id:'digivice_azul', name:'Digivice azul neón', tier:'r'},
+  {id:'amistad_gabumon', name:'Amistad de Gabumon', tier:'c'},
+  {id:'alas_rosadas', name:'Alas rosadas y doradas', tier:'r'},
+  {id:'fenix_dorado', name:'Fénix dorado', tier:'e'},
+  {id:'esperanza_angelical', name:'Esperanza angelical', tier:'e'},
+  {id:'sinceridad_palmon', name:'Sinceridad de Palmon', tier:'r'},
+  {id:'bondad_botanica', name:'Bondad botánica', tier:'r'}
 ];
 // Títulos: solo cosmética (no dan bonus). Se consiguen con el gacha o con logros (ver checkAchievements)
 const TITLES = [
