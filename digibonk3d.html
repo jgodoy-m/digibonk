@@ -2520,6 +2520,8 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .gx2-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#fff;font-size:18px}
 .gx2-tile small{font-size:9px;color:#9ad3e8}
 .gx2-tile .rw-frame{transform:scale(.45)}
+.gx2-btn.big.tix10{background:linear-gradient(180deg,#7fe0ff,#1ea7e8 60%,#0a6fb0);box-shadow:0 5px 0 #05405f,0 0 18px rgba(79,195,247,.6)}
+.gx2-btn.big.tix10 b{text-shadow:0 2px #03304a}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -5959,8 +5961,9 @@ function bannerSkin(){ return bannerSkins()[0]; }
 // La rareza se decide primero. Legendaria = skin; el resto reparte entre marco, título y objeto
 const TIER_ODDS = {c: 60, r: 26, e: 12, l: 2};
 // Reparto de lo que no es legendaria: marcos, títulos, tickets y Bits
-const CAT_WEIGHTS = [['frame', 30], ['title', 25], ['ticket', 30], ['bits', 15]];
-const BITS_BY_TIER = {c: 30, r: 60, e: 120}, TICKETS_BY_TIER = {c: 1, r: 1, e: 2};
+const CAT_WEIGHTS = [['frame', 32], ['title', 28], ['ticket', 10], ['bits', 30]];
+// Bits según rareza: común 30, rara 80, épica 160. Tickets: siempre 1 por drop
+const BITS_BY_TIER = {c: 30, r: 80, e: 160}, TICKETS_BY_TIER = {c: 1, r: 1, e: 1};
 function rollTier(){
   let x = Math.random()*100;
   for (const t of ['c', 'r', 'e', 'l']){ if ((x -= TIER_ODDS[t]) < 0) return t; }
@@ -6234,7 +6237,7 @@ function showGacha(){
           <div class="gx2-portal"><div class="gx2-ring r1"></div><div class="gx2-ring r2"></div><div class="gx2-pad"></div>${featHtml}</div>
           <div class="gx2-pulls">
             <button class="gx2-btn" id="gPull1"><b>1 TIRADA</b><small>Ⓑ ${PULL_COST} Bits</small></button>
-            <button class="gx2-btn big" id="gPull10"><b>10 TIRADAS</b><small>Ⓑ ${PULL_COST_10} Bits</small></button>
+            <button class="gx2-btn big${SAVE.tickets >= 10 ? ' tix10' : ''}" id="gPull10"><b>10 TIRADAS</b><small>${SAVE.tickets >= 10 ? `🎟 10 tickets · tienes ${SAVE.tickets}` : `Ⓑ ${PULL_COST_10} Bits`}</small></button>
             <button class="gx2-btn tix" id="gTix1"><b>USAR TICKET</b><small>× 1 Ticket · tienes ${SAVE.tickets}</small></button>
           </div>
         </section>
@@ -6255,7 +6258,7 @@ function showGacha(){
   overlay.querySelectorAll('img.gx2-ico').forEach(im => spriteIcon(im.dataset.src, d => { im.src = d; }));
   document.getElementById('gBack').onclick = () => showSelect();
   document.getElementById('gPull1').onclick = () => doPulls(1);
-  document.getElementById('gPull10').onclick = () => doPulls(10);
+  document.getElementById('gPull10').onclick = () => doPulls(10, SAVE.tickets >= 10);
   document.getElementById('gTix1').onclick = () => doPulls(1, true);
   const moveBanner = d => { gxBanner = keys[(keys.indexOf(gxBanner) + d + keys.length) % keys.length]; showGacha(); };
   document.getElementById('gxPrevB').onclick = () => moveBanner(-1);
