@@ -1957,6 +1957,24 @@ body:has(.tr11) #hudTop{display:none!important}
 .pl5-hero{padding:22px 34px 22px 44px!important}
 .pl5-mission .pf-bar{min-width:0!important;margin-right:12px}
 .pl5-mission small{margin-left:auto}
+.pl4 .real-world::after{content:'';position:absolute;inset:0;background:rgba(6,9,20,.74);pointer-events:none}
+.pl5-share{appearance:none;border:2px solid #9fc8ff;border-radius:999px;padding:10px 18px;background:linear-gradient(#3d8cf0,#2360c8);color:#fff;font:800 14px system-ui,sans-serif;box-shadow:0 3px 0 #0b2a5c;opacity:.9;white-space:nowrap}
+.pl5-hero .pl4-av .hud-portrait{width:116px!important;height:116px!important}
+.pl5-medals{gap:12px!important}
+.pl5-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;margin-top:14px;align-items:start}
+.pl5-wide{grid-column:1 / -1}
+.pl5-panel{background:#161c2c;border:1px solid #2a3350;border-radius:14px;padding:14px 16px;box-shadow:0 4px 0 #070b16;min-width:0}
+.pl5-panel h3{margin:0 0 12px;font-size:17px;font-weight:900;color:#fff;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.pl5-panel h4{margin:16px 0 8px;font-size:15px;font-weight:900;color:#fff}
+.pl5-panel h3 small,.pl5-panel h4 small{font-size:12px;font-weight:600;color:#8e98b8}
+.pl5-rec{display:grid;grid-template-columns:4px 1.5fr 1fr .7fr .8fr;gap:12px;align-items:center;padding:10px 12px;margin-bottom:8px;border-radius:10px;background:#1d2437}
+.pl5-acc{align-self:stretch;width:4px;border-radius:4px;background:#ff8a6b}
+.pl5-acc.win{background:#6fdc8c}
+.pl5-rn b{display:block;color:#fff;font-size:14px}
+.pl5-rn small{color:#8e98b8;font-size:11px}
+.pl5-rv,.pl5-rt{color:#e5ebff;font-weight:700;font-size:13px}
+.pl5-right .pl4-ach{background:#1d2437;border-radius:10px;padding:10px 12px;margin-bottom:8px;border:0}
+.pl5-specs .pl4-spec{background:#1d2437}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -5365,14 +5383,17 @@ function showPlayer(){
   const achRows = Object.keys(prog).map(id => { const t = TITLES.find(x => x.id === id), [a, b] = prog[id], ok = a >= b; return `<div class="pl4-ach${ok ? ' done' : ''}"><div class="pl4-ach-top"><b>${t ? t.name : id}</b><em>${a}/${b}</em></div><small>${t ? t.how : ''}</small><i><u style="width:${Math.round(a / b * 100)}%"></u></i></div>`; }).join('');
   const specRows = SEASONS.adventure.chars.map(k => ({k, s: statsOf(k)})).filter(x => x.s.plays || x.s.kills).sort((a, b) => b.s.kills - a.s.kills).slice(0, 8).map(({k, s}) => `<div class="pl4-spec"><img src="${headUrl(spriteOf(k, false))}" alt=""><span><b>${CHARS[k].name}</b><small>${s.kills} bajas · ${s.plays} partidas</small></span></div>`).join('') || '<p class="pl4-empty">Juega con un Digimon para ver su especialidad.</p>';
   const pct2 = day.claimed ? 100 : pct;
-  const medalIcon = {novato: '🏁', cazador: '⚔', explorador: '🧭', maestro: '👑'};
-  const medals = Object.keys(prog).map(id => { const ok = prog[id][0] >= prog[id][1]; return `<span class="pl5-medal${ok ? ' ok' : ''}" title="${TITLES.find(t => t.id === id)?.name || id}"><i>${medalIcon[id] || '★'}</i><b>x${ok ? 1 : 0}</b></span>`; }).join('');
-  const missionText = day.claimed ? 'Completada hoy' : `${Math.min(day.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits`;
-  const companion = CHARS[selectedKey] ? `<span>Compañero: ${CHARS[selectedKey].name}</span>` : '';
+  const esc12 = v => String(v).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+  const medalIcon = {novato: '🏁', cazador: '⚔', explorador: '🧭', maestro: '👑', leyenda: '💎', navidad: '🎄'};
+  const medalDone = id => ['novato', 'cazador', 'explorador', 'maestro'].includes(id) ? prog[id][0] >= prog[id][1] : inv.titles.includes(id);
+  const medals = Object.keys(medalIcon).map(id => { const ok = medalDone(id); return `<span class="pl5-medal${ok ? ' ok' : ''}" title="${esc12(TITLES.find(t => t.id === id)?.name || id)}"><i>${medalIcon[id]}</i><b>x${ok ? 1 : 0}</b></span>`; }).join('');
+  const companion = CHARS[selectedKey] ? `<span>Compañero: ${esc12(CHARS[selectedKey].name)}</span>` : '';
+  const recList = recs.slice(0, 4).map(r => `<div class="pl5-rec"><span class="pl5-acc${r.win ? ' win' : ''}"></span><span class="pl5-rn"><b>${esc12(r.name)}</b><small>${r.win ? 'Victoria' : 'Derrota'}</small></span><span class="pl5-rv">${r.kills} bajas</span><span class="pl5-rv">Nv. ${r.lvl}</span><span class="pl5-rt">${fmtTime(r.t)}</span></div>`).join('') || '<p class="pl4-empty">Aún no hay partidas. Juega una para ver tus récords.</p>';
   showOverlay(`
     <main class="realhub pl4" aria-label="Ficha de entrenador"><div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><video class="rw-video" autoplay muted loop playsinline preload="auto" disablepictureinpicture><source src="ui/menu_video.webm" type="video/webm"><source src="ui/menu_video.mp4" type="video/mp4"></video></div><div class="pl4-wrap">
-      <header class="pl4-top"><button class="g-back" id="plBack">‹ Volver <kbd>Esc</kbd></button>
-        <div class="pl4-banner"><b>Ficha de entrenador</b><small>Tu tarjeta, tus estadísticas y tus logros</small></div></header>
+      <header class="pl4-top"><button class="g-back" id="plBack"><kbd>Esc</kbd> Volver</button>
+        <div class="pl4-banner"><b>Ficha de entrenador</b><small>Tu tarjeta, tus estadísticas y tus logros</small></div>
+        <button type="button" class="pl5-share" disabled title="Próximamente">Compartir mi ficha</button></header>
       <section class="pl5-hero" id="tc">
         <div class="pl5-id">
           <div class="pl4-av">
@@ -5388,11 +5409,11 @@ function showPlayer(){
         <div class="pl5-medals">${medals}</div>
       </section>
       <div class="pl4-stats">${statTiles}</div>
-      <div class="pl5-mission"><b>Misión diaria</b><div class="pf-bar"><i style="width:${pct2}%"></i></div><small>${missionText}</small></div>
-      <div class="pl4-grid">
-        <section class="pl4-panel"><h3>Récords</h3>${recRows}</section>
-        <section class="pl4-panel"><h3>Logros</h3>${achRows}</section>
-        <section class="pl4-panel pl4-wide"><h3>Especialista en</h3><div class="pl4-specs">${specRows}</div></section>
+      <div class="pl5-grid">
+        <section class="pl5-panel pl5-left"><h3>Récords <small>Bajas · contrarreloj</small></h3>${recList}
+          <h4>Eventos <small>Piso · tiempo</small></h4><p class="pl4-empty">Sin eventos todavía.</p></section>
+        <section class="pl5-panel pl5-right"><h3>Vitrina de logros <small>${achDone} de 4</small></h3>${achRows}</section>
+        <section class="pl5-panel pl5-wide"><h3>Especialista en <small>Digimon con más bajas</small></h3><div class="pl4-specs">${specRows}</div></section>
       </div>
     </div></main>`);
 
