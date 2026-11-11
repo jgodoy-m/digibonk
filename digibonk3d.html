@@ -1935,6 +1935,28 @@ body:has(.tr11) #hudTop{display:none!important}
 .realhub .hm-art-bar:focus-visible{outline:3px solid #fff097;outline-offset:3px;border-radius:999px}
 .realhub .hm-grid{gap:8px!important}
 .realhub .hm-bar{gap:10px!important}
+.pl4-panel,.pl4-stat,.pl4-mission,.pl5-hero{background:#161c2c!important;border:1px solid #2a3350!important;box-shadow:0 4px 0 #070b16!important}
+.pl4-stats{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+.pl4-stat{flex-direction:row!important;align-items:center!important;gap:12px!important;padding:14px 16px!important;border-radius:12px!important}
+.pl4-stat i{font-size:22px!important;flex:0 0 32px;text-align:center;font-style:normal}
+.pl4-stat span{display:flex;flex-direction:column;min-width:0}
+.pl4-stat b{font-size:24px!important;color:#fff!important;line-height:1.1}
+.pl4-stat small{text-transform:uppercase;letter-spacing:.05em;font-size:10.5px!important;color:#9aa6c8!important}
+.pl5-hero{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:22px 26px;border-radius:16px}
+.pl5-id{display:flex;gap:22px;align-items:center;min-width:0}
+.pl5-medals{display:flex;gap:16px;flex-wrap:wrap;justify-content:flex-end}
+.pl5-medal{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:52px;color:#8e98b8}
+.pl5-medal i{font-style:normal;font-size:26px;filter:grayscale(1);opacity:.45}
+.pl5-medal.ok i{filter:none;opacity:1}
+.pl5-medal b{font-size:12px;font-weight:800}
+.pl5-mission{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px;padding:10px 16px;border-radius:12px}
+.pl5-mission b{color:#ffd55e;font-size:14px;white-space:nowrap}
+.pl5-mission .pf-bar{flex:1;min-width:200px;height:8px}
+.pl5-mission small{color:#c5cde4;font-size:12px;white-space:nowrap}
+.pl4-top kbd{font:inherit;opacity:.8;margin-left:6px}
+.pl5-hero{padding:22px 34px 22px 44px!important}
+.pl5-mission .pf-bar{min-width:0!important;margin-right:12px}
+.pl5-mission small{margin-left:auto}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -5338,34 +5360,39 @@ function showPlayer(){
     ['🧬', evos, 'Evoluciones'], ['📘', `${digiOwned}/${digiTotal}`, 'Digimon'], ['Ⓑ', SAVE.bits, 'Bits'], ['🎟', SAVE.tickets, 'Tickets'],
     ['🖼', (inv.frames || []).length, 'Marcos'], ['🏷', (inv.titles || []).length, 'Títulos'], ['🎨', skinsOwned, 'Skins'], ['🏆', achDone, 'Logros']
   ];
-  const statTiles = statList.map(([ic, v, l]) => `<div class="pl4-stat"><i>${ic}</i><b${typeof v === 'number' ? ` data-n="${v}"` : ''}>${typeof v === 'number' ? '0' : v}</b><small>${l}</small></div>`).join('');
+  const statTiles = statList.map(([ic, v, l]) => `<div class="pl4-stat"><i>${ic}</i><span><b${typeof v === 'number' ? ` data-n="${v}"` : ''}>${typeof v === 'number' ? '0' : v}</b><small>${l}</small></span></div>`).join('');
   const recRows = recs.slice(0, 5).map(r => `<div class="pl4-rec"><b>${String(r.name).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</b><span>${fmtTime(r.t)}</span><span>${r.kills} bajas</span><span>Nv. ${r.lvl}</span><em class="${r.win ? 'ok' : ''}">${r.win ? 'Victoria' : 'Derrota'}</em></div>`).join('') || '<p class="pl4-empty">Aún no hay partidas. Juega una para ver tus récords.</p>';
   const achRows = Object.keys(prog).map(id => { const t = TITLES.find(x => x.id === id), [a, b] = prog[id], ok = a >= b; return `<div class="pl4-ach${ok ? ' done' : ''}"><div class="pl4-ach-top"><b>${t ? t.name : id}</b><em>${a}/${b}</em></div><small>${t ? t.how : ''}</small><i><u style="width:${Math.round(a / b * 100)}%"></u></i></div>`; }).join('');
   const specRows = SEASONS.adventure.chars.map(k => ({k, s: statsOf(k)})).filter(x => x.s.plays || x.s.kills).sort((a, b) => b.s.kills - a.s.kills).slice(0, 8).map(({k, s}) => `<div class="pl4-spec"><img src="${headUrl(spriteOf(k, false))}" alt=""><span><b>${CHARS[k].name}</b><small>${s.kills} bajas · ${s.plays} partidas</small></span></div>`).join('') || '<p class="pl4-empty">Juega con un Digimon para ver su especialidad.</p>';
   const pct2 = day.claimed ? 100 : pct;
+  const medalIcon = {novato: '🏁', cazador: '⚔', explorador: '🧭', maestro: '👑'};
+  const medals = Object.keys(prog).map(id => { const ok = prog[id][0] >= prog[id][1]; return `<span class="pl5-medal${ok ? ' ok' : ''}" title="${TITLES.find(t => t.id === id)?.name || id}"><i>${medalIcon[id] || '★'}</i><b>x${ok ? 1 : 0}</b></span>`; }).join('');
+  const missionText = day.claimed ? 'Completada hoy' : `${Math.min(day.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits`;
+  const companion = CHARS[selectedKey] ? `<span>Compañero: ${CHARS[selectedKey].name}</span>` : '';
   showOverlay(`
     <main class="realhub pl4" aria-label="Ficha de entrenador"><div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><video class="rw-video" autoplay muted loop playsinline preload="auto" disablepictureinpicture><source src="ui/menu_video.webm" type="video/webm"><source src="ui/menu_video.mp4" type="video/mp4"></video></div><div class="pl4-wrap">
-      <header class="pl4-top"><button class="g-back" id="plBack">Esc · Volver</button>
+      <header class="pl4-top"><button class="g-back" id="plBack">‹ Volver <kbd>Esc</kbd></button>
         <div class="pl4-banner"><b>Ficha de entrenador</b><small>Tu tarjeta, tus estadísticas y tus logros</small></div></header>
-      <section class="pl4-hero" id="tc">
-        <div class="pl4-av">
-          <div class="hud-portrait pf-av${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img id="tcImg" src="${avatarSrc()}" alt=""></div>
-          <button type="button" class="pl4-chg" id="plChange">Cambiar</button>
+      <section class="pl5-hero" id="tc">
+        <div class="pl5-id">
+          <div class="pl4-av">
+            <div class="hud-portrait pf-av${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img id="tcImg" src="${avatarSrc()}" alt=""></div>
+            <button type="button" class="pl4-chg" id="plChange">Cambiar</button>
+          </div>
+          <div class="pl4-id">
+            <input class="pl4-name" id="tcName" maxlength="16" value="${trainerName || ''}" placeholder="Tu nombre" title="Haz clic para cambiar tu nombre">
+            <span class="pl4-title-badge" id="tcTitle">${tt ? tt.name : 'Sin título'}</span>
+            <div class="pl4-chips"><span>ID ${idNum}</span>${companion}</div>
+          </div>
         </div>
-        <div class="pl4-id">
-          <input class="pl4-name" id="tcName" maxlength="16" value="${trainerName || ''}" placeholder="Tu nombre" title="Haz clic para cambiar tu nombre">
-          <span class="pl4-title-badge" id="tcTitle">${tt ? tt.name : 'Sin título'}</span>
-          <div class="pl4-chips"><span>ID ${idNum}</span>${CHARS[selectedKey] ? `<span>Compañero: ${CHARS[selectedKey].name}</span>` : ''}</div>
-        </div>
+        <div class="pl5-medals">${medals}</div>
       </section>
       <div class="pl4-stats">${statTiles}</div>
-      <div class="pl4-mission"><h3>Misión diaria</h3><div class="pf-bar"><i style="width:${pct2}%"></i></div>
-        <small>${day.claimed ? 'Completada hoy' : `${Math.min(day.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits`}</small></div>
+      <div class="pl5-mission"><b>Misión diaria</b><div class="pf-bar"><i style="width:${pct2}%"></i></div><small>${missionText}</small></div>
       <div class="pl4-grid">
         <section class="pl4-panel"><h3>Récords</h3>${recRows}</section>
         <section class="pl4-panel"><h3>Logros</h3>${achRows}</section>
-        <section class="pl4-panel pl4-wide"><h3>Especialidad por Digimon</h3><div class="pl4-specs">${specRows}</div></section>
-
+        <section class="pl4-panel pl4-wide"><h3>Especialista en</h3><div class="pl4-specs">${specRows}</div></section>
       </div>
     </div></main>`);
 
