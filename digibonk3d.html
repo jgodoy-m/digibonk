@@ -35,6 +35,9 @@ canvas{display:block}
 #xpTxt{position:fixed;left:16px;bottom:14px;font-size:12px;font-weight:bold;letter-spacing:.5px;color:#cfe8ff;text-shadow:0 1px 3px #000;pointer-events:none}
 /* El temporizador avisa cuando falta menos de 30 s para el jefe */
 #hudZone{position:fixed;top:72px;left:50%;transform:translateX(-50%);padding:3px 14px;border-radius:9px;background:rgba(8,14,30,.85);border:1px solid #2d5f78;color:#cfe8ff;font:700 12px system-ui,sans-serif;letter-spacing:.5px;pointer-events:none;white-space:nowrap}
+#hudChips{position:fixed;top:106px;left:50%;transform:translateX(-50%);display:flex;gap:6px;pointer-events:none;white-space:nowrap}
+#hudChips span{padding:2px 10px;border-radius:9px;background:rgba(8,14,30,.85);border:1px solid #2d5f78;color:#fff;font:700 12px system-ui,sans-serif}
+#hudChips b{color:#ffd54f}
 #timer.urgent{color:#ff5252;border-color:#ff5252;box-shadow:0 0 18px rgba(255,82,82,.6);animation:timerPulse .8s ease-in-out infinite}
 @keyframes timerPulse{50%{transform:translateX(-50%) scale(1.06)}}
 #combo{position:fixed;right:24px;top:200px;padding:4px 14px;border-radius:10px;background:#ffd54f;color:#1a1200;
@@ -2578,6 +2581,7 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 </div></div>
 <div id="timer">5:00</div>
 <div id="hudZone"></div>
+<div id="hudChips"></div>
 <div id="zoneName" style="position:fixed;top:10px;left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e1f5fe;text-shadow:0 1px 3px #000;pointer-events:none"></div>
 <div id="xp"></div>
 <canvas id="edgeCv"></canvas>
@@ -3951,6 +3955,10 @@ function pickMove(delta){
 function startGame(key){
   // El botón de volver del navegador no saca de la partida: queda una entrada de historial que lo absorbe
   try { history.pushState({dbk: 1}, ''); } catch(e){}
+  // Al entrar en partida se cierra por completo el menú: no queda ninguna pantalla del menú debajo
+  overlay.classList.remove('menu-mode'); overlay.classList.add('hidden'); overlay.innerHTML = '';
+  document.getElementById('menuart').style.display = 'none';
+  document.getElementById('menubg').style.display = 'none';
   scene.remove(world); world = new THREE.Group(); scene.add(world);
   const c = CHARS[key];
   const sp = randomSpawn();   // aparición aleatoria en el mapa
@@ -5317,6 +5325,9 @@ function updateHUD(){
   // Zona actual, progreso de zonas y récord de tiempo (como en la barra superior de la referencia)
   const recMax = getRecords().reduce((a, r) => Math.max(a, r.t), 0);
   document.getElementById('hudZone').textContent = `${ZONES[g.zone - 1].name} · Zona ${g.zone}/${ZONES.length}${recMax ? ' · Récord ' + fmtTime(recMax) : ''}`;
+  // Contadores de la partida: bajas, tickets ganados y santuarios cargados (como la fila de la referencia)
+  const shrinesDone = (g.shrines || []).filter(s => s.used).length;
+  document.getElementById('hudChips').innerHTML = `<span>☠ <b>${g.kills}</b></span><span>🎟 <b>${g.tix}</b></span><span>⛩ <b>${shrinesDone}/${(g.shrines || []).length}</b></span>`;
   const tt = TITLES.find(t => t.id === extra.title);
   document.getElementById('hudTitle').textContent = tt ? tt.name : '';
   const zn = document.getElementById('zoneName');
