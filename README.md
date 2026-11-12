@@ -19,5 +19,5 @@ Luego abre `http://localhost:8765/` en el navegador.
 
 ## Estado
 
-- Temporada 1 (Digimon Adventure), con el Pueblo Primario como primera zona.
+- Temporada 1 (Digimon Adventure). El mapa empieza en el Bosque Inicial y los Bits se gastan en el Laboratorio del menú (mejoras permanentes); el gacha se paga con tickets.
 - Pendiente: árboles y assets de ambientación con licencia clara, y revisar la licencia del pack de SwampWitch32 antes de incluirlo.
