@@ -32,7 +32,7 @@ const SCENES = {
     await ctx.addInitScript(() => { localStorage.setItem('digibonk3d-name','Ana'); localStorage.setItem('digibonk3d-quality','alta'); });
     const p = await ctx.newPage();
     p.on('pageerror', e => console.log(name, 'PAGE ERR', e.message));
-    await p.goto('http://localhost:8767/digibonk3d.html?demo=1');
+    await p.goto('http://localhost:8767/index.html?demo=1');
     await sleep(2500);
     await run(p);
     await ctx.close();

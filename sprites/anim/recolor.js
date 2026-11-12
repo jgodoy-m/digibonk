@@ -1,11 +1,11 @@
 // Genera las hojas de skin (recoloreados) a partir de las hojas animadas base.
 // Uso: sirve la carpeta del juego (p. ej. python3 -m http.server 8790) y ejecuta
-//   node sprites/anim/recolor.js http://localhost:8790/digibonk3d.html
-// Los filtros salen de SKINS en digibonk3d.html, así que el juego y los archivos no se desalinean.
+//   node sprites/anim/recolor.js http://localhost:8790/index.html
+// Los filtros salen de SKINS en index.html, así que el juego y los archivos no se desalinean.
 const fs = require('fs'), path = require('path');
 const { chromium } = require('playwright');
 (async () => {
-  const url = process.argv[2] || 'http://localhost:8790/digibonk3d.html';
+  const url = process.argv[2] || 'http://localhost:8790/index.html';
   const out = path.join(__dirname);
   const browser = await chromium.launch({args: ['--use-gl=swiftshader', '--no-sandbox']});
   const page = await browser.newPage();
