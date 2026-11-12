@@ -33,8 +33,9 @@ def components(mask):
         sizes.append(s)
     return lab, np.array(sizes)
 
-def clean(mask, keep=0.02):
-    """Quita motas (zonas de menos del 2 % de la mayor) y rellena huecos interiores."""
+def clean(mask, alpha, keep=0.02):
+    """Quita motas (zonas de menos del 2 % de la mayor) y rellena los huecos interiores que eran
+    casi opacos en el original (poros del umbral), no los que eran transparentes (p. ej. dentro de una cola en aro)."""
     lab, sizes = components(mask)
     if len(sizes) <= 1:
         return mask
@@ -44,8 +45,26 @@ def clean(mask, keep=0.02):
     # huecos: zonas vacías que no tocan el borde
     holes, _ = components(~m)
     edge = set(np.unique(np.concatenate([holes[0], holes[-1], holes[:, 0], holes[:, -1]])))
-    fill = ~np.isin(holes, list(edge)) & (holes > 0)
+    fill = np.zeros_like(m)
+    for h in np.unique(holes):
+        if h == 0 or h in edge: continue
+        z = holes == h
+        if alpha[z].mean() >= 128: fill |= z
     return m | fill
+
+def peel(mask, rgb, steps):
+    """Quita desde fuera hacia dentro el halo rojo o magenta que deja el generador alrededor del contorno."""
+    r, g, b = rgb[..., 0], rgb[..., 1], rgb[..., 2]
+    halo = (r > 140) & (g < 0.45 * r) & ((b < 0.45 * r) | (b > 0.6 * r))
+    m = mask.copy()
+    for _ in range(steps):
+        out = ~m
+        edge = np.zeros_like(m)
+        edge[1:] |= out[:-1]; edge[:-1] |= out[1:]; edge[:, 1:] |= out[:, :-1]; edge[:, :-1] |= out[:, 1:]
+        kill = m & edge & halo
+        if not kill.any(): break
+        m &= ~kill
+    return m
 
 def main():
     ap = argparse.ArgumentParser()
@@ -53,6 +72,7 @@ def main():
     ap.add_argument('--alto', type=float, help='altura del Digimon respecto al fotograma (por defecto, la de la hoja actual)')
     ap.add_argument('--abajo', type=float, help='margen inferior respecto al alto del fotograma (por defecto, el de la hoja actual)')
     ap.add_argument('--umbral', type=int, default=128, help='alfa mínima que cuenta como sprite (sube a 240 si hay fondo difuminado)')
+    ap.add_argument('--pelar', type=int, default=0, help='px de halo rojo o magenta a quitar desde fuera (p. ej. 14)')
     ap.add_argument('--lado', type=int, default=256, help='lado del fotograma de salida')
     a = ap.parse_args()
     out = os.path.join(HERE, a.nombre + '.png')
@@ -69,7 +89,9 @@ def main():
     for i in range(N):
         x0, x1 = round(i * W / N), round((i + 1) * W / N)
         s = src[:, x0:x1].copy()
-        m = clean(s[..., 3] >= a.umbral)
+        m = s[..., 3] >= a.umbral
+        if a.pelar: m = peel(m, s[..., :3], a.pelar)
+        m = clean(m, s[..., 3])
         s[..., 3] = np.where(m, 255, 0)
         slots.append(s)
     # caja común a las 5 poses, para que no salten entre fotogramas
