@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Digibonk</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
 html,body{margin:0;height:100%;overflow:hidden;background:#0b0f1a;font-family:system-ui,sans-serif;color:#fff}
 canvas{display:block}
@@ -2068,229 +2068,223 @@ body.is-touch #skillBar{bottom:176px!important}
   #bonkBar{width:84px!important;height:84px!important}
   .lv3-art{max-width:120px}
 }
-/* ---------- Selección de personaje: minimalista, con aire y dos temas (claro por defecto, oscuro opcional) ---------- */
+/* ---------- Selección de personaje: tarjetas blancas (tema claro) o azules de siempre (tema oscuro) ---------- */
 .ps{
-  --ps-bg:#f4f7fc; --ps-card:#ffffff; --ps-sunk:#eef3fa; --ps-line:#e1e8f2; --ps-line2:#cfdbec;
-  --ps-text:#14233f; --ps-mute:#7a8ba6; --ps-soft:#4b5d7c; --ps-acc:#1a6fe0; --ps-acc2:#0d4fb8;
-  --ps-head:linear-gradient(90deg,#1a6fe0,#2f8cf0); --ps-sel:#f5b301; --ps-selbg:#fff8e1; --ps-shadow:0 1px 2px rgba(20,35,63,.06),0 6px 18px rgba(20,35,63,.06);
-  --ps-hero:radial-gradient(60% 55% at 50% 55%,rgba(61,180,255,.22),transparent 72%),linear-gradient(180deg,#e9f2ff,#f7faff);
+  --ps-card:#ffffff; --ps-cardb:#ffffff; --ps-cardline:#dfe6f0; --ps-sunk:#f1f4f9; --ps-line:#e3e9f2; --ps-line2:#cdd8e8;
+  --ps-text:#1d2433; --ps-mute:#6c7a90; --ps-soft:#465269; --ps-acc:#2d7be5;
+  --ps-head:repeating-linear-gradient(135deg,rgba(255,255,255,.09) 0 10px,transparent 10px 20px),linear-gradient(90deg,#2a78e4,#5ca8f6);
+  --ps-sel:#f4b400; --ps-selbg:#fff8e1; --ps-pillsh:0 2px 0 #d5deea; --ps-tile:#3a4566; --ps-tileline:#3d74d8;
+  --ps-hero:radial-gradient(50% 18% at 50% 78%,rgba(255,255,255,.55),transparent 70%),linear-gradient(180deg,#5aa9f5,#2b77e0);
+  --ps-panel:#ffffff; --ps-rowbg:#f3f6fa; font-family:'Nunito',system-ui,sans-serif;
 }
 html[data-theme=oscuro] .ps{
-  --ps-bg:#071531; --ps-card:#0c1d42; --ps-sunk:#081734; --ps-line:#1b3666; --ps-line2:#25579a;
-  --ps-text:#eaf3ff; --ps-mute:#89a6cc; --ps-soft:#b7d0ee; --ps-acc:#3de0ff; --ps-acc2:#7fd0ff;
-  --ps-head:linear-gradient(90deg,#1554b8,#0c3a86); --ps-sel:#ffd23f; --ps-selbg:rgba(255,210,63,.12); --ps-shadow:none;
-  --ps-hero:radial-gradient(60% 55% at 50% 55%,rgba(61,224,255,.25),transparent 72%),linear-gradient(180deg,#0d2c66,#06143a);
+  --ps-card:linear-gradient(150deg,#256cbb 0%,#082f77 49%,#061c4c 100%); --ps-cardb:#0a2a6a; --ps-cardline:#9aefff; --ps-sunk:rgba(4,16,46,.55); --ps-line:#2f6fb3; --ps-line2:#4a8fd6;
+  --ps-text:#eaf6ff; --ps-mute:#a9c6e6; --ps-soft:#cfe4fa; --ps-acc:#3de0ff;
+  --ps-head:repeating-linear-gradient(135deg,rgba(255,255,255,.07) 0 10px,transparent 10px 20px),linear-gradient(90deg,#6ee2f4,#147fbf);
+  --ps-sel:#ffd54f; --ps-selbg:rgba(255,213,79,.16); --ps-pillsh:0 2px 0 #03163d; --ps-tile:#0b2257; --ps-tileline:#2f6fb3;
+  --ps-hero:radial-gradient(50% 18% at 50% 78%,rgba(61,224,255,.35),transparent 70%),linear-gradient(180deg,#0d3c8a,#06143a);
+  --ps-panel:rgba(6,24,64,.82); --ps-rowbg:rgba(4,16,46,.55);
 }
-#overlay:not(.menu-mode)>.picker-screen.ps{width:min(1480px,98vw)!important;height:calc(100dvh - var(--ui-top) - var(--ui-bot))!important;max-height:none!important;
-  padding:24px 28px!important;gap:20px;overflow:hidden;background:var(--ps-bg)!important;color:var(--ps-text)!important;border:1px solid var(--ps-line2)!important;outline:0!important;
-  border-radius:14px!important;box-shadow:0 20px 60px rgba(0,0,0,.35)!important;clip-path:none!important}
+#overlay:not(.menu-mode)>.picker-screen.ps{width:min(1500px,98vw)!important;height:calc(100dvh - var(--ui-top) - var(--ui-bot) + 30px)!important;max-height:none!important;margin-top:-30px;
+  padding:0!important;gap:14px;overflow:visible;background:none!important;border:0!important;outline:0!important;box-shadow:none!important;clip-path:none!important;color:var(--ps-text)!important}
 #overlay:not(.menu-mode):has(>.ps){filter:none}
-#overlay:not(.menu-mode) .ps .g-back{background:var(--ps-card)!important;color:var(--ps-text)!important;border:1px solid var(--ps-line2)!important;border-radius:99px!important;clip-path:none!important;padding:8px 16px;font:700 12px system-ui,sans-serif;letter-spacing:.3px;box-shadow:var(--ps-shadow)!important}
-#overlay:not(.menu-mode) .ps .g-back:hover{border-color:var(--ps-acc)!important;transform:none}
-.ps-lbl{font:700 10.5px/1.2 system-ui,sans-serif;letter-spacing:1.6px;text-transform:uppercase;color:var(--ps-mute)}
-.ps-top{display:flex;align-items:center;gap:18px;min-width:0}
-#overlay .ps-top h2{margin:0;font:900 24px 'Orbitron',system-ui,sans-serif;letter-spacing:1.5px;color:var(--ps-text)!important;text-shadow:none!important}
-.ps-sub{font-size:13px;color:var(--ps-mute)}
-.ps-theme{margin-left:auto;display:inline-flex;gap:2px;padding:3px;border-radius:99px;background:var(--ps-sunk);border:1px solid var(--ps-line)}
-.ps-theme button{border:0;border-radius:99px;padding:6px 14px;background:transparent;color:var(--ps-mute);font:700 12px system-ui,sans-serif;cursor:pointer}
-.ps-theme button.on{background:var(--ps-card);color:var(--ps-text);box-shadow:var(--ps-shadow)}
-.ps-body{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:24px}
-.ps-main{min-height:0;display:flex;flex-direction:column;gap:24px;overflow:auto;padding:0 6px 6px 0;margin-right:-6px;scrollbar-width:thin}
-.ps-main>*{flex:none}
-.ps-card{background:var(--ps-card);border:1px solid var(--ps-line);border-radius:14px;min-width:0;box-shadow:var(--ps-shadow)}
-/* Resumen: héroe · identidad · cifras */
-.ps-sum{display:grid;grid-template-columns:200px minmax(0,1fr) 250px;gap:32px;padding:24px}
-.ps-hero{position:relative;display:grid;place-items:center;border-radius:12px;background:var(--ps-hero);min-height:200px}
-.anim.ps-hero-img{width:170px;height:170px;background-size:500% 100%;background-position:0 50%}
-.ps-hero-tag{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px;background:var(--ps-card);color:var(--ps-soft);box-shadow:var(--ps-shadow)}
-.ps-id{display:flex;flex-direction:column;gap:10px;min-width:0;justify-content:center}
-#overlay .ps-id h3{margin:0 0 2px;font:900 34px/1 'Orbitron',system-ui,sans-serif;color:var(--ps-text);letter-spacing:1px}
-.ps-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
-.ps-attr,.ps-emb{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;padding:3px 11px;border-radius:99px;white-space:nowrap}
-.ps-attr.a-vac{color:#1f8a4c;background:#e3f7ea}
-.ps-attr.a-dat{color:#1764c4;background:#e3efff}
-.ps-attr.a-vir{color:#8a3dbf;background:#f3e7fc}
-.ps-emb{color:#9a6b00;background:#fff3d4}
-html[data-theme=oscuro] .ps-attr.a-vac{color:#8ff5ab;background:rgba(40,140,80,.22)}
-html[data-theme=oscuro] .ps-attr.a-dat{color:#8fd9ff;background:rgba(40,120,200,.25)}
-html[data-theme=oscuro] .ps-attr.a-vir{color:#e3a6ff;background:rgba(140,60,200,.25)}
-html[data-theme=oscuro] .ps-emb{color:#ffe7a4;background:rgba(255,200,80,.12)}
-.ps-evo{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px}
-.ps-node{padding:3px;border-radius:50%;border:2px solid var(--ps-line);background:var(--ps-sunk);cursor:pointer;line-height:0}
-.ps-node:hover{border-color:var(--ps-acc)}
+.ps-lbl{font:800 11px/1.2 'Nunito',system-ui,sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:var(--ps-mute)}
+.ps-lbl small{text-transform:none;letter-spacing:0;font-weight:700}
+.ps kbd{display:inline-grid;place-items:center;padding:1px 6px;border-radius:5px;background:#2b3448;color:#fff;font:800 10px 'Nunito',system-ui,sans-serif;text-shadow:none;border:0}
+/* Cabecera: Volver, cartel naranja y tema */
+.ps-top{display:flex;align-items:center;gap:16px;min-width:0}
+#overlay:not(.menu-mode) .ps .g-back{display:inline-flex;align-items:center;gap:8px;background:#fff!important;color:#1d2433!important;border:0!important;border-radius:99px!important;clip-path:none!important;padding:8px 16px 8px 10px;
+  font:800 14px 'Nunito',system-ui,sans-serif;letter-spacing:0;box-shadow:0 3px 0 #c9d3e2,0 6px 14px rgba(0,0,0,.18)!important}
+#overlay:not(.menu-mode) .ps .g-back:hover{transform:translateY(-1px)}
+.ps-banner{display:flex;align-items:baseline;gap:12px;padding:8px 30px 8px 22px;background:linear-gradient(180deg,#ffb04a,#ff7a1e 55%,#f05a14);transform:skewX(-8deg);border-radius:10px;box-shadow:0 4px 0 #b8400c,0 8px 18px rgba(0,0,0,.25)}
+.ps-banner>*{transform:skewX(8deg)}
+#overlay .ps-banner h2{margin:0;font:900 26px 'Orbitron',system-ui,sans-serif;letter-spacing:1px;color:#fff!important;text-shadow:0 2px 0 #a8380a!important}
+.ps-banner small{font:800 13px 'Nunito',system-ui,sans-serif;color:#fff3e0}
+.ps-theme{margin-left:auto;display:inline-flex;gap:2px;padding:4px;border-radius:99px;background:#fff;box-shadow:0 3px 0 #c9d3e2,0 6px 14px rgba(0,0,0,.18)}
+.ps-theme button{border:0;border-radius:99px;padding:6px 14px;background:transparent;color:#6c7a90;font:800 13px 'Nunito',system-ui,sans-serif;cursor:pointer}
+.ps-theme button.on{background:#1d2433;color:#fff}
+html[data-theme=oscuro] .ps-theme{background:#06102b;box-shadow:0 0 0 2px var(--dv-cyan)}
+html[data-theme=oscuro] .ps-theme button.on{background:linear-gradient(#ffe784,#ffad37);color:#372000}
+html[data-theme=oscuro] #overlay:not(.menu-mode) .ps .g-back{background:#06102b!important;color:#dff8ff!important;box-shadow:0 0 0 2px var(--dv-cyan),0 3px 0 #03163d!important}
+/* Cuerpo: tarjeta grande + plantel */
+.ps-body{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:16px}
+.ps-card{background:var(--ps-card);border:1px solid var(--ps-cardline);border-radius:16px;min-width:0;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+html[data-theme=oscuro] .ps-card{border-width:3px;box-shadow:inset 0 3px #b5ffff76,0 8px 0 #03163d,0 0 22px #21afff7c}
+.ps-main{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.ps-sum{display:grid;grid-template-columns:170px minmax(300px,1fr) 200px 210px;gap:20px;padding:16px 18px;border-bottom:1px solid var(--ps-line)}
+.ps-hero{position:relative;display:grid;place-items:center;border-radius:14px;background:var(--ps-hero);border:3px solid #9cc8f7;min-height:180px;align-self:start}
+html[data-theme=oscuro] .ps-hero{border-color:#2f6fb3}
+.anim.ps-hero-img{width:150px;height:150px;background-size:500% 100%;background-position:0 50%;margin-top:-14px}
+.ps-hero-tag{position:absolute;bottom:9px;left:50%;transform:translateX(-50%);white-space:nowrap;font:800 12px 'Nunito',system-ui,sans-serif;padding:2px 12px;border-radius:99px;background:#fff;color:#1d2433}
+.ps-id{display:flex;flex-direction:column;gap:7px;min-width:0}
+.ps-idline{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#overlay .ps-id h3{margin:0;font:900 38px/1 'Nunito',system-ui,sans-serif;color:var(--ps-text);letter-spacing:.3px}
+html[data-theme=oscuro] #overlay .ps-id h3{color:var(--ui-gold)}
+.ps-attr,.ps-emb{display:inline-flex;align-items:center;gap:5px;font:800 12px 'Nunito',system-ui,sans-serif;padding:3px 12px;border-radius:99px;white-space:nowrap;color:#fff}
+.ps-attr.a-vac{background:#2fb36a}
+.ps-attr.a-dat{background:#2d7be5}
+.ps-attr.a-vir{background:#9a4fd6}
+.ps-emb{background:#a8781c;font-size:11px;padding:2px 10px}
+.ps-evo{display:flex;align-items:center;gap:5px;flex-wrap:nowrap}
+.ps-node{display:inline-block;padding:2px;border-radius:50%;border:3px solid #9cc8f7;background:linear-gradient(180deg,#8cc6ff,#3e8cf0);cursor:pointer;line-height:0}
 .ps-node.on{border-color:var(--ps-sel)}
 .ps-node .spr{border-radius:50%}
-.ps-arrow{font-size:10px;font-weight:700;color:var(--ps-mute);white-space:nowrap}
-.ps-arrow::after{content:' ›'}
-.ps-wins{display:flex;gap:8px;flex-wrap:wrap}
-.ps-wins span{font-size:11.5px;font-weight:700;padding:3px 11px;border-radius:99px;background:var(--ps-sunk);color:var(--ps-mute)}
+.ps-arrow{display:flex;flex-direction:column;align-items:center;white-space:nowrap;font:800 10px 'Nunito',system-ui,sans-serif;color:var(--ps-mute);line-height:1}
+.ps-arrow i{font-style:normal;font-size:18px;color:var(--ps-soft)}
+.ps-wins{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ps-wins .ps-lbl{flex-basis:100%;margin-top:2px}
+.ps-wins span:not(.ps-lbl){font:800 11px 'Nunito',system-ui,sans-serif;padding:2px 10px;border-radius:99px;background:var(--ps-sunk);color:var(--ps-mute)}
 .ps-wins span.on{color:#fff;background:var(--dc)}
-.ps-stats{border-left:1px solid var(--ps-line);padding-left:32px;display:flex;flex-direction:column;justify-content:center;gap:2px}
-.ps-stats .ps-lbl{margin-bottom:8px}
-.ps-row{display:flex;justify-content:space-between;gap:10px;font-size:14px;color:var(--ps-soft);padding:5px 0}
-.ps-row b{color:var(--ps-text);font-variant-numeric:tabular-nums}
-/* Pestañas */
-.ps-tabs-card{display:flex;flex-direction:column}
-.ps-tabs{display:flex;gap:4px;padding:0 20px;border-bottom:1px solid var(--ps-line)}
-.ps-tab{padding:16px 14px 14px;border:0;border-bottom:3px solid transparent;margin-bottom:-1px;background:transparent;color:var(--ps-mute);font:700 13px system-ui,sans-serif;letter-spacing:.3px;cursor:pointer;white-space:nowrap}
-.ps-tab:hover{color:var(--ps-text)}
-.ps-tab.on{color:var(--ps-acc2);border-bottom-color:var(--ps-acc)}
-html[data-theme=oscuro] .ps-tab.on{color:#fff}
-.ps-pane{padding:24px;display:flex;flex-direction:column;gap:16px}
-.ps-note{margin:0;font-size:12px;color:var(--ps-mute)}
-.ps-kit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.ps-atk{padding:16px 18px;border-radius:12px;background:var(--ps-sunk)}
-.ps-atk.base{background:transparent;border:1px solid var(--ps-line)}
-.ps-atk-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.ps-atk-h b{font-size:15px;color:var(--ps-text)}
-.ps-atk-h em{font-size:10.5px;font-style:normal;font-weight:700;text-transform:capitalize;border-radius:99px;padding:2px 10px;color:#1764c4;background:#e3efff}
-.ps-atk-h em.k-ofensiva{color:#b35a00;background:#ffecd6}
-.ps-atk-h em.k-defensiva{color:#1764c4;background:#e3efff}
-.ps-atk-h em.k-utilidad{color:#1f8a4c;background:#e3f7ea}
-html[data-theme=oscuro] .ps-atk-h em{color:#06101e;background:#7fd0ff}
-html[data-theme=oscuro] .ps-atk-h em.k-ofensiva{background:#ffb86b;color:#06101e}
-html[data-theme=oscuro] .ps-atk-h em.k-utilidad{background:#b9f28f;color:#06101e}
-.ps-atk p{margin:6px 0 12px;font-size:13px;color:var(--ps-soft);line-height:1.45}
-.ps-chips{display:flex;gap:14px;flex-wrap:wrap}
-.ps-chips span{display:inline-flex;flex-direction:column;gap:1px;font-size:11px}
-.ps-chips small{color:var(--ps-mute);font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:700}
-.ps-chips b{color:var(--ps-text);font-size:15px;font-variant-numeric:tabular-nums}
-.ps-ult{padding:20px;border-radius:12px;background:var(--ps-sunk)}
-.ps-ult-h{display:flex;gap:16px;align-items:flex-start;margin-bottom:16px}
-.ps-ult-h b{font-size:16px}
-.ps-ult-h p{margin:4px 0 0;font-size:13px;color:var(--ps-soft)}
-.ps kbd{display:inline-grid;place-items:center;min-width:22px;padding:2px 7px;border-radius:6px;border:1px solid var(--ps-line2);background:var(--ps-card);color:var(--ps-text);font:800 12px system-ui,sans-serif;text-shadow:none}
-.ps-ult-h kbd{font-size:18px;min-width:42px;height:42px;padding:0;box-shadow:0 2px 0 var(--ps-line2)}
-.ps-stages{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
-.ps-stage{display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px 8px;border-radius:12px;border:1px solid var(--ps-line);text-align:center}
-.ps-stage.on{border-color:var(--ps-sel);background:var(--ps-selbg)}
-.ps-stage b{font-size:14px}
-.ps-stage small{font-size:10.5px;font-weight:700;color:var(--ps-acc2);text-transform:uppercase;letter-spacing:1px}
-.ps-stage span{font-size:12px;color:var(--ps-soft)}
-.ps-cycle{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
-.ps-cycle i{font-style:normal;color:var(--ps-mute);font-size:11px}
-.ps-cycle .ps-attr{opacity:.45}
-.ps-cycle .ps-attr.me{opacity:1;box-shadow:0 0 0 2px currentColor}
-.ps-type{display:grid;grid-template-columns:130px auto 1fr;align-items:center;gap:14px;padding:16px 18px;border-radius:12px;background:var(--ps-sunk)}
-.ps-type.good .ps-lbl{color:#1f8a4c}
-.ps-type.bad .ps-lbl{color:#c43c2c}
-html[data-theme=oscuro] .ps-type.good .ps-lbl{color:#8ff5ab}
-html[data-theme=oscuro] .ps-type.bad .ps-lbl{color:#ff9a8a}
-.ps-type>b{font-size:13px;color:var(--ps-text)}
-.ps-type .ps-attr{justify-self:start}
-.ps-foes{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.ps-foes img{width:38px;height:38px;object-fit:contain;image-rendering:pixelated;border-radius:8px;background:var(--ps-card)}
-.ps-foes small{font-size:12px;color:var(--ps-mute);margin-left:4px}
-.ps-skins{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px}
-.ps-skins .pk-skin{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;border-radius:12px;border:1px solid var(--ps-line);background:transparent;color:var(--ps-text);cursor:pointer;font:inherit}
-.ps-skins .pk-skin:hover{border-color:var(--ps-acc)}
-.ps-skins .pk-skin.on{border-color:var(--ps-sel);background:var(--ps-selbg)}
-.ps-skins .pk-skin small{font-size:11px;font-weight:700}
-.ps-skins .pk-skin em{font-size:10px;font-style:normal;color:var(--ps-acc2)}
-.ps-skins .anim.pk-skin-face{width:76px;height:76px}
-.ps-sup{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:12px}
-.ps-sup-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 4px;border-radius:12px;border:1px solid var(--ps-line);background:transparent;color:var(--ps-text);font:700 12px system-ui,sans-serif;cursor:pointer}
-.ps-sup-btn:hover{border-color:var(--ps-acc)}
-.ps-sup-btn.on{border-color:var(--ps-sel);background:var(--ps-selbg)}
-.ps-none{display:grid;place-items:center;width:56px;height:56px;color:var(--ps-mute);font-size:18px}
+.ps-stats,.ps-ingame{display:flex;flex-direction:column;gap:3px;min-width:0}
+.ps-stats .ps-lbl,.ps-ingame .ps-lbl{margin-bottom:5px}
+.ps-bar{display:grid;grid-template-columns:66px 1fr 44px;gap:8px;align-items:center;font:800 13px 'Nunito',system-ui,sans-serif;padding:2px 0}
+.ps-bar b{text-align:right;font-variant-numeric:tabular-nums}
+.ps-meter{height:9px;border-radius:5px;background:var(--ps-sunk);overflow:hidden}
+.ps-meter i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,#2a78e4,#5ca8f6)}
+.ps-row{display:flex;justify-content:space-between;gap:8px;font:700 12.5px 'Nunito',system-ui,sans-serif;color:var(--ps-soft);padding:3px 8px;border-radius:5px}
+.ps-row:nth-child(even){background:var(--ps-rowbg)}
+.ps-row b{color:var(--ps-text);font-weight:900;font-variant-numeric:tabular-nums}
+/* Dos paneles con cabecera azul */
+.ps-cols{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px 16px;background:var(--ps-sunk)}
+html[data-theme=oscuro] .ps-cols{background:rgba(4,16,46,.35)}
+.ps-panel{display:flex;flex-direction:column;min-height:0;border-radius:14px;background:var(--ps-panel);border:1px solid var(--ps-line);overflow:hidden}
+.ps-ph{display:flex;align-items:center;gap:10px;margin:0;padding:9px 14px;background:var(--ps-head);color:#fff;font:900 15px 'Nunito',system-ui,sans-serif;letter-spacing:.3px;text-shadow:0 1px 0 rgba(0,0,0,.25)}
+.ps-ph i{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#fff;color:#2a78e4;font:900 13px 'Nunito',system-ui,sans-serif;text-shadow:none}
+.ps-pb{flex:1;min-height:0;overflow:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin}
+.ps-big{margin:0;font:900 17px 'Nunito',system-ui,sans-serif;color:var(--ps-text)}
+.ps-txt{margin:0;font:600 13px/1.45 'Nunito',system-ui,sans-serif;color:var(--ps-soft)}
+.ps-hr{border:0;border-top:1px dashed var(--ps-line2);margin:6px 0;width:100%}
+.ps-note{margin:0;font:700 11.5px 'Nunito',system-ui,sans-serif;color:var(--ps-mute)}
+.ps-chips{display:flex;gap:6px;flex-wrap:wrap}
+.ps-chips span{display:inline-flex;align-items:baseline;gap:5px;padding:2px 9px;border-radius:7px;background:#fff;border:1px solid var(--ps-line2);box-shadow:var(--ps-pillsh);font:700 11px 'Nunito',system-ui,sans-serif;color:var(--ps-mute)}
+.ps-chips b{color:var(--ps-text);font-weight:900;font-size:12px}
+html[data-theme=oscuro] .ps-chips span{background:#06143a;border-color:#1d3f72}
+.ps-kit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ps-atk{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;padding:10px 12px;border-radius:12px;border:2px solid #b9d8fb;background:linear-gradient(180deg,#eef6ff,#e2efff)}
+.ps-atk.k-ofensiva{border-color:#ffd2a6;background:linear-gradient(180deg,#fff6ec,#ffeedd)}
+.ps-atk.k-utilidad{border-color:#bfe8c9;background:linear-gradient(180deg,#effbf2,#e2f6e8)}
+html[data-theme=oscuro] .ps-atk{background:rgba(9,30,72,.75);border-color:#2f6fb3}
+html[data-theme=oscuro] .ps-atk.k-ofensiva{border-color:#a8652a}
+html[data-theme=oscuro] .ps-atk.k-utilidad{border-color:#3f8f5a}
+.ps-ico{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;font-style:normal;font:900 17px system-ui,sans-serif;color:#fff;background:linear-gradient(180deg,#5ca8f6,#2a78e4);box-shadow:0 2px 0 rgba(0,0,0,.15)}
+.ps-atk.k-ofensiva .ps-ico{background:linear-gradient(180deg,#ffb04a,#f06a14)}
+.ps-atk.k-utilidad .ps-ico{background:linear-gradient(180deg,#5fd68a,#26a05a)}
+.ps-ico.r{font:900 15px 'Nunito',system-ui,sans-serif;background:linear-gradient(180deg,#ff8a65,#e0412b)}
+.ps-atk-h{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.ps-atk-h b{font:900 14px 'Nunito',system-ui,sans-serif;color:var(--ps-text)}
+.ps-atk-h em{font:900 10px 'Nunito',system-ui,sans-serif;font-style:normal;text-transform:capitalize;color:#fff;border-radius:99px;padding:1px 8px;background:#2a78e4}
+.ps-atk.k-ofensiva .ps-atk-h em{background:#f06a14}
+.ps-atk.k-utilidad .ps-atk-h em{background:#26a05a}
+.ps-kind{display:block;font:800 11px 'Nunito',system-ui,sans-serif;color:#2a78e4}
+.ps-atk.k-ofensiva .ps-kind{color:#d9580f}
+.ps-atk.k-utilidad .ps-kind{color:#1f9a55}
+html[data-theme=oscuro] .ps-kind{color:#7fd0ff!important}
+.ps-atk p{margin:3px 0 7px;font:600 12px/1.35 'Nunito',system-ui,sans-serif;color:var(--ps-soft)}
+.ps-ult{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}
+.ps-ult b{font:900 14.5px 'Nunito',system-ui,sans-serif;color:var(--ps-text)}
+.ps-ult p{margin:2px 0 0;font:600 12px/1.35 'Nunito',system-ui,sans-serif;color:var(--ps-soft)}
+.ps-ult .ps-node{cursor:default}
+.ps-ult .ps-ico{width:46px;height:46px;font-size:18px}
+.ps-trow{display:grid;grid-template-columns:110px auto 1fr;gap:6px 10px;align-items:center;padding:6px 0}
+.ps-trow .ps-foes{grid-column:1/-1}
+.ps-tl{font:900 13px 'Nunito',system-ui,sans-serif;color:var(--ps-text)}
+.ps-trow.good .ps-tl{color:#1f9a55}
+.ps-trow.bad .ps-tl{color:#d93a2b}
+html[data-theme=oscuro] .ps-trow.good .ps-tl{color:#8ff5ab}
+html[data-theme=oscuro] .ps-trow.bad .ps-tl{color:#ff9a8a}
+.ps-trow>b{font:800 11.5px 'Nunito',system-ui,sans-serif;color:var(--ps-mute);white-space:nowrap}
+.ps-foes{display:flex;gap:3px;flex-wrap:wrap;align-items:center}
+.ps-foes img{width:30px;height:30px;object-fit:contain;image-rendering:pixelated;border-radius:50%;background:var(--ps-sunk);border:1px solid var(--ps-line)}
+.ps-foes small{font:800 11px 'Nunito',system-ui,sans-serif;color:var(--ps-mute);margin-left:2px}
+/* Pie: tus cifras y botón grande */
+.ps-foot{display:flex;align-items:center;gap:16px;padding:12px 18px;border-top:1px solid var(--ps-line)}
+.ps-mine{display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex:1;min-width:0}
+.ps-mine .ps-lbl{margin-right:4px}
+.ps-pill{padding:4px 12px;border-radius:99px;background:#fff;border:1px solid var(--ps-line2);box-shadow:var(--ps-pillsh);font:700 12px 'Nunito',system-ui,sans-serif;color:var(--ps-mute)}
+.ps-pill b{color:var(--ps-text);font-weight:900;font-size:15px;margin-right:2px}
+html[data-theme=oscuro] .ps-pill{background:#06143a;border-color:#1d3f72}
+#overlay:not(.menu-mode) .ps-go{min-width:300px;padding:14px 26px;border-radius:14px!important;clip-path:none!important;font:900 22px 'Nunito',system-ui,sans-serif;letter-spacing:.3px;display:inline-flex;align-items:center;justify-content:center;gap:12px;cursor:pointer;
+  background:linear-gradient(180deg,#ff7a6b,#f0473b 60%,#d83226)!important;border:0!important;box-shadow:0 5px 0 #a3241b,0 8px 18px rgba(216,50,38,.35)!important;text-shadow:0 2px 0 #a3241b!important}
+.ps-go kbd{font-size:11px!important;background:#fff!important;color:#d83226!important}
+html[data-theme=oscuro] #overlay:not(.menu-mode) .ps-go{background:linear-gradient(180deg,#ffe77d,#ffb22c 35%,#fa732d 85%,#cb3d29)!important;border:3px solid #fff0b2!important;box-shadow:0 5px 0 #85312e!important;text-shadow:1px 2px #963524!important}
 /* Plantel */
-.ps-roster{display:flex;flex-direction:column;min-height:0;overflow:hidden}
-.ps-bar{display:flex;justify-content:space-between;align-items:center;padding:18px 20px 6px;font:700 10.5px system-ui,sans-serif;letter-spacing:1.6px;text-transform:uppercase;color:var(--ps-mute)}
-.ps-bar b{color:var(--ps-text);font-size:13px;letter-spacing:0}
-.ps-roster-in{flex:1;min-height:0;overflow:auto;padding:10px 20px 20px;display:flex;flex-direction:column;gap:14px}
-.ps-search{width:100%;box-sizing:border-box;padding:10px 14px;border-radius:10px;border:1px solid var(--ps-line);background:var(--ps-sunk);color:var(--ps-text);font:13px system-ui,sans-serif}
+.ps-roster{display:flex;flex-direction:column;min-height:0;overflow:hidden;padding:14px;gap:10px}
+.ps-seg{display:flex;gap:4px;padding:4px;border-radius:12px;background:var(--ps-sunk)}
+.ps-seg button{flex:1;border:0;border-radius:9px;padding:8px 6px;background:transparent;color:var(--ps-soft);font:800 13px 'Nunito',system-ui,sans-serif;cursor:pointer}
+.ps-seg button.on{background:#1d2433;color:#fff}
+html[data-theme=oscuro] .ps-seg button.on{background:linear-gradient(#ffe784,#ffad37);color:#372000}
+.ps-roster-in{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:10px;padding-right:2px;scrollbar-width:thin}
+.ps-search{width:100%;box-sizing:border-box;padding:9px 14px;border-radius:99px;border:1px solid var(--ps-line2);background:var(--ps-sunk);color:var(--ps-text);font:700 13px 'Nunito',system-ui,sans-serif}
 .ps-search::placeholder{color:var(--ps-mute)}
 .ps-search:focus{outline:none;border-color:var(--ps-acc)}
-.ps-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.ps-tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 4px 12px;border-radius:12px;border:2px solid transparent;background:var(--ps-sunk);color:var(--ps-text);cursor:pointer;font:inherit;min-width:0}
-.ps-tile:hover{border-color:var(--ps-line2)}
-.ps-tile.sel{border-color:var(--ps-sel);background:var(--ps-selbg)}
-.ps-tile.lock{cursor:default;opacity:.55}
-.ps-tile.lock .anim{filter:grayscale(1) brightness(.2)}
+.ps-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ps-tile{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;aspect-ratio:1/1.08;padding:6px 2px;border-radius:12px;border:3px solid var(--ps-tileline);background:linear-gradient(180deg,#4a5a86,var(--ps-tile));color:#fff;cursor:pointer;font:inherit;min-width:0;box-sizing:border-box}
+html[data-theme=oscuro] .ps-tile{background:linear-gradient(180deg,#123a85,var(--ps-tile))}
+.ps-tile:hover{filter:brightness(1.1)}
+.ps-tile.sel{border-color:var(--ps-sel);background:linear-gradient(180deg,#8cc6ff,#3e8cf0);box-shadow:0 0 0 2px rgba(244,180,0,.35)}
+.ps-tile.lock,.ps-tile.soon{cursor:default}
+.ps-tile.lock .anim{filter:grayscale(1) brightness(.3)}
+.ps-tile.soon{border-color:#5c6a8f;opacity:.85}
+html[data-theme=oscuro] .ps-tile.soon{border-color:#1d3f72}
+.ps-tile.soon img{width:62%;height:62%;object-fit:contain;image-rendering:pixelated;filter:grayscale(1) brightness(.35)}
+.ps-lock{position:absolute;top:4px;right:5px;font-size:11px}
 .ps-tile.miss{display:none}
-.ps-tile b{font-size:12px;font-weight:700;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.anim.ps-face{width:64px;height:64px;background-size:500% 100%;background-position:0 50%}
-.ps-key{position:absolute;top:6px;left:8px;font-size:10px;font-weight:700;color:var(--ps-mute)}
-.ps-evo-dot{position:absolute;top:8px;right:8px;width:7px;height:7px;border-radius:50%;background:#2fbf71}
-.ps-roster-in>.ps-lbl{margin-top:8px}
-.ps-soon-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.ps-soon{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;border-radius:10px;border:1px dashed var(--ps-line2);color:var(--ps-mute);min-width:0}
-.ps-soon img{width:36px;height:36px;object-fit:contain;image-rendering:pixelated;filter:grayscale(1) opacity(.45)}
-.ps-soon b{font-size:10px;font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ps-prog{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;font-size:12px;margin-top:auto;padding-top:8px}
-.ps-meter{height:6px;border-radius:4px;background:var(--ps-sunk);overflow:hidden}
-.ps-meter-top{margin:4px 20px 0}
-.ps-meter i{display:block;height:100%;background:var(--ps-acc)}
-/* Pie: tus cifras y botón grande */
-.ps-foot{display:flex;align-items:center;gap:24px;min-width:0}
-.ps-mine{display:flex;align-items:baseline;gap:22px;flex-wrap:wrap;flex:1;min-width:0}
-.ps-mine>span:not(.ps-lbl){font-size:12px;color:var(--ps-mute)}
-.ps-mine b{color:var(--ps-text);font-size:16px;margin-right:3px}
-.ps-mine-m{display:none}
-.ps-keys{font-size:12px;color:var(--ps-mute);white-space:nowrap}
-#overlay:not(.menu-mode) .ps-go{min-width:300px;padding:16px 26px;font:900 19px 'Orbitron',system-ui,sans-serif;letter-spacing:1px;display:inline-flex;align-items:center;justify-content:center;gap:12px;cursor:pointer}
-.ps-go kbd{font-size:11px!important;border-color:#fff0b2!important;background:rgba(120,40,10,.35)!important;color:#fff!important}
+.ps-tile b{font:900 11.5px 'Nunito',system-ui,sans-serif;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 1px 0 rgba(0,0,0,.4)}
+.anim.ps-face{width:72%;height:auto;aspect-ratio:1;background-size:500% 100%;background-position:0 50%}
+.ps-none{display:grid;place-items:center;width:72%;aspect-ratio:1;color:#cfe4fa;font-size:22px}
+.ps-key{position:absolute;top:4px;left:7px;font:900 10px 'Nunito',system-ui,sans-serif;color:#cfe4fa}
+.ps-evo-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:#5fe08f;box-shadow:0 0 0 2px rgba(0,0,0,.25)}
+.ps-prog{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px 4px 2px;border-top:1px solid var(--ps-line);font:900 15px 'Nunito',system-ui,sans-serif}
 @media (max-height:860px) and (min-width:761px){
-  #overlay:not(.menu-mode)>.picker-screen.ps{padding:18px 22px!important;gap:16px}
-  .ps-body,.ps-main{gap:18px}
-  .ps-sum{grid-template-columns:170px minmax(0,1fr) 250px;padding:18px;gap:24px}
-  .ps-hero{min-height:170px}
-  .anim.ps-hero-img{width:130px;height:130px}
-  #overlay .ps-id h3{font-size:28px}
-  .ps-id{gap:7px}
-  .ps-row{padding:2px 0;font-size:13px}
-  .ps-stats{padding-left:24px}
-  .ps-pane{padding:18px}
-  .ps-tab{padding:12px 12px 10px}
+  .ps-sum{grid-template-columns:150px minmax(280px,1fr) 190px 200px;gap:16px;padding:12px 14px}
+  .ps-hero{min-height:150px}
+  .anim.ps-hero-img{width:120px;height:120px}
+  #overlay .ps-id h3{font-size:30px}
+  .ps-id{gap:5px}
+  .ps-node .spr{width:38px!important;height:38px!important}
+  .ps-row{padding:2px 8px;font-size:12px}
+  .ps-bar{font-size:12px;padding:1px 0}
+  .ps-cols{padding:10px 12px;gap:10px}
+  .ps-foot{padding:8px 14px}
+  #overlay:not(.menu-mode) .ps-go{padding:11px 22px;font-size:19px}
 }
-@media (max-width:1180px) and (min-width:761px){
+@media (max-width:1300px) and (min-width:761px){
   .ps-body{grid-template-columns:minmax(0,1fr) 300px}
-  .ps-sum{grid-template-columns:160px minmax(0,1fr);gap:20px}
-  .ps-stats{grid-column:1/-1;border-left:0;padding-left:0;border-top:1px solid var(--ps-line);padding-top:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
-  .ps-stats .ps-lbl{grid-column:1/-1}
-  .ps-keys{display:none}
-  .ps-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ps-sum{grid-template-columns:150px minmax(0,1fr) 210px}
+  .ps-ingame{display:none}
+  .ps-evo{flex-wrap:wrap}
+}
+@media (max-width:1000px) and (min-width:761px){
+  .ps-cols{grid-template-columns:1fr;overflow:auto}
+  .ps-panel{min-height:auto;overflow:visible}
+  .ps-pb{overflow:visible}
+  .ps-kit{grid-template-columns:1fr}
 }
 @media (max-width:760px){
-  #overlay:not(.menu-mode)>.picker-screen.ps{width:auto!important;overflow:visible!important;height:auto!important;padding:16px 14px!important;gap:16px;margin:4px 6px 14px!important}
-  .ps-top{flex-wrap:wrap;gap:8px 12px}
-  #overlay .ps-top h2{font-size:16px;flex:1;min-width:0;letter-spacing:.5px}
-  .ps-sub{flex-basis:100%;order:3}
-  .ps-theme{margin-left:auto}
-  .ps-theme button{padding:5px 10px}
-  .ps-body{display:flex;flex-direction:column;gap:16px}
+  #overlay:not(.menu-mode)>.picker-screen.ps{width:auto!important;height:auto!important;margin:4px 6px 14px!important;overflow:visible!important}
+  .ps-top{flex-wrap:wrap;gap:10px}
+  .ps-banner{order:3;flex-basis:100%;padding:6px 18px;box-sizing:border-box}
+  #overlay .ps-banner h2{font-size:18px}
+  .ps-body{display:flex;flex-direction:column;gap:12px}
   .ps-roster{order:-1;overflow:visible}
-  .ps-roster-in{overflow:visible;padding:8px 14px 16px}
-  .ps-bar{padding:14px 14px 4px}
-  .ps-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-  .anim.ps-face{width:52px;height:52px}
-  .ps-tile{padding:12px 2px 8px}
-  .ps-tile b{font-size:10.5px}
-  .ps-main{display:flex;flex-direction:column;gap:16px;overflow:visible;padding:0;margin:0}
-  .ps-meter-top{margin:4px 14px 0}
-  .ps-sum{grid-template-columns:110px minmax(0,1fr);gap:16px;padding:16px}
-  .ps-hero{min-height:130px;align-self:start}
-  .anim.ps-hero-img{width:96px;height:96px}
-  #overlay .ps-id h3{font-size:22px}
+  .ps-roster-in{overflow:visible}
+  .ps-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  .ps-evo{flex-wrap:wrap}
+  .ps-main{overflow:visible}
+  .ps-sum{grid-template-columns:120px minmax(0,1fr);gap:12px;padding:12px}
+  .ps-hero{min-height:120px}
+  .anim.ps-hero-img{width:100px;height:100px;margin-top:-10px}
+  #overlay .ps-id h3{font-size:26px}
   .ps-node .spr{width:32px!important;height:32px!important}
-  .ps-stats{grid-column:1/-1;border-left:0;padding-left:0;border-top:1px solid var(--ps-line);padding-top:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px}
-  .ps-stats .ps-lbl{grid-column:1/-1}
-  .ps-row{font-size:12.5px}
-  .ps-row:last-child{grid-column:1/-1}
-  .ps-tabs{overflow-x:auto;scrollbar-width:none;padding:0 8px}
-  .ps-tab{padding:12px 9px 10px;font-size:12px}
-  .ps-tabs-card{overflow:visible}
-  .ps-pane{overflow:visible;padding:16px}
-  .ps-kit{grid-template-columns:minmax(0,1fr)}
-  .ps-type{grid-template-columns:auto 1fr}
-  .ps-type>b{grid-column:1/-1}
-  .ps-keys{display:none}
-  .ps-foot>.ps-mine{display:none}
-  .ps-mine-m{display:block;padding:4px 4px 0}
-  .ps-mine-m .ps-mine{gap:8px 18px}
-  .ps-mine-m .ps-mine>.ps-lbl{flex-basis:100%}
-  .ps-foot{position:sticky;bottom:0;z-index:5;margin:0 -14px -16px;padding:12px 14px;background:linear-gradient(180deg,transparent,var(--ps-bg) 30%)}
-  #overlay:not(.menu-mode) .ps-foot .ps-go{min-width:0;width:100%}
+  .ps-stats,.ps-ingame{grid-column:1/-1}
+  .ps-cols{grid-template-columns:1fr;padding:10px}
+  .ps-panel,.ps-pb{overflow:visible}
+  .ps-kit{grid-template-columns:1fr}
+  .ps-trow{grid-template-columns:auto auto 1fr}
+  .ps-foot{position:sticky;bottom:0;z-index:5;flex-direction:column;align-items:stretch;gap:10px;border-radius:0 0 16px 16px;background:var(--ps-cardb)}
+  #overlay:not(.menu-mode) .ps-go{min-width:0;width:100%}
+  .ps-foot .ps-mine{display:none}
+  .ps-foot{padding:10px 12px}
 }
 </style>
 <script type="importmap">
@@ -3924,9 +3918,8 @@ function pickProgress(){
 const uiTheme = () => localStorage.getItem('digibonk3d-theme') === 'oscuro' ? 'oscuro' : 'claro';
 function setUiTheme(t){ try { localStorage.setItem('digibonk3d-theme', t); } catch(e){} document.documentElement.dataset.theme = t; }
 document.documentElement.dataset.theme = uiTheme();
-// Pestaña activa del panel inferior del selector (ataques, evolución, tipos, vestidor, apoyo)
-let pickPane = 'ataques';
-const PICK_PANES = [['ataques', 'Ataques'], ['evo', 'Evolución · R'], ['tipos', 'Tipos'], ['vestidor', 'Vestidor'], ['apoyo', 'Apoyo']];
+// Pestaña de la columna derecha del selector (plantel, vestidor o apoyo)
+let rosterTab = 'todos';
 const fmtN = (v, d = 1) => (+(+v).toFixed(d)).toLocaleString('es-ES');
 const ATTR_ICON = {vac: '✚', dat: '◆', vir: '✖'};
 // Cifras reales a nivel 1 de cada ataque aprendible (mismas fórmulas que updateSkills, con SKILL_K)
@@ -3961,6 +3954,8 @@ function recordCharRun(key, win, diff, kills, lvl){
   if (win){ st.wins = st.wins || {}; st.wins[diff] = (st.wins[diff] || 0) + 1; }
   try { localStorage.setItem('digibonk3d-stats', JSON.stringify(all)); } catch(e){}
 }
+const SKILL_ICON = {aura: '◎', tornado: '✦', pulso: '◉', espiral: '➹', cuchilla: '✧', laser: '⚡', mina: '✹', meteoro: '☄'};
+const KIND_ICON = {shot: '➹', ring: '◉', orbit: '✧'};
 function showPicker(tab){
   if (tab) pickTab = tab === 'skins' ? 'personaje' : tab;
   if (pickStageFor !== selectedKey){ pickStage = 0; pickStageFor = selectedKey; }
@@ -3971,6 +3966,63 @@ function showPicker(tab){
   const pr = pickProgress();
   if (!isUnlocked(selectedKey)) selectedKey = chars.find(k => isUnlocked(k)) || chars[0];
   const k = selectedKey, st = statsOf(k);
+  const wins = Object.values(st.wins || {}).reduce((a, n) => a + n, 0);
+  const pill = (n, label) => `<span class="ps-pill"><b>${n}</b> ${label}</span>`;
+  showOverlay(`
+    <div class="picker-screen pk2 ps">
+      <header class="ps-top">
+        <button class="g-back" id="pkBack"><kbd>Esc</kbd> Volver</button>
+        <div class="ps-banner"><h2>${runMode === 'surv' ? 'Supervivencia' : 'Elige tu Digimon'}</h2><small>${pr.done}/${pr.total} Digimon</small></div>
+        <div class="ps-theme" role="group" aria-label="Tema">${[['claro', '☀ Claro'], ['oscuro', '☾ Oscuro']].map(([v, n]) => `<button type="button" data-theme="${v}" class="${uiTheme() === v ? 'on' : ''}">${n}</button>`).join('')}</div>
+      </header>
+      <div class="ps-body">
+        <main class="ps-card ps-main">
+          <section class="ps-sum" id="pkPreview"></section>
+          <div class="ps-cols">
+            <section class="ps-panel"><h4 class="ps-ph"><i>${KIND_ICON[CHARS[k].kind] || '➹'}</i>Ataque y kit</h4><div class="ps-pb" id="pkKit"></div></section>
+            <section class="ps-panel"><h4 class="ps-ph"><i>R</i>Evolución (tecla R) y tipos</h4><div class="ps-pb" id="pkEvo"></div></section>
+          </div>
+          <footer class="ps-foot">
+            <div class="ps-mine"><span class="ps-lbl">Tus partidas</span>${pill(st.plays, 'Partidas')}${pill(wins, 'Victorias')}${pill(st.best || 0, 'Récord de bajas')}${pill(st.maxLvl || 0, 'Nivel máx.')}</div>
+            <button class="pk-start ps-go" id="pkStart">¡Elegir mapa! <kbd>Enter</kbd></button>
+          </footer>
+        </main>
+        <aside class="ps-card ps-roster">
+          <nav class="ps-seg">${[['todos', 'Todos'], ['vestidor', 'Vestidor'], ['apoyo', 'Apoyo']].map(([id, n]) => `<button type="button" class="${rosterTab === id ? 'on' : ''}" data-rt="${id}">${n}</button>`).join('')}</nav>
+          <div class="ps-roster-in" id="pkRoster"></div>
+          <div class="ps-prog"><span class="ps-lbl">Progreso</span><div class="ps-meter"><i style="width:${Math.round(pr.done / pr.total * 100)}%"></i></div><b>${pr.done}/${pr.total}</b></div>
+        </aside>
+      </div>
+    </div>`);
+  overlay.querySelectorAll('.ps-theme button').forEach(b => b.onclick = () => { setUiTheme(b.dataset.theme); showPicker(); });
+  overlay.querySelectorAll('.ps-seg button').forEach(b => b.onclick = () => { rosterTab = b.dataset.rt; showPicker(); });
+  document.getElementById('pkBack').onclick = () => showSelect();
+  document.getElementById('pkStart').onclick = () => showMapSelect();
+  renderPickPreview();
+  renderPickPanels();
+  renderRoster();
+}
+// Columna derecha: plantel (con búsqueda), vestidor o Digimon de apoyo
+function renderRoster(){
+  const el = document.getElementById('pkRoster');
+  if (!el) return;
+  const k = selectedKey, chars = SEASONS.adventure.chars;
+  if (rosterTab === 'vestidor'){
+    const s = pickStage, owned = ownedSkinsAt(k, s), eq = equippedAt(k, s);
+    const list = visibleSkinsAt(k, s).filter(sk => owned.includes(sk.id));
+    el.innerHTML = `<div class="ps-lbl">${stageName(k, s)} · cambia de etapa en la línea evolutiva</div>
+      <div class="ps-grid">${list.map(sk => `<button type="button" class="ps-tile${eq === sk.id ? ' sel' : ''}" data-skin="${sk.id}" title="${sk.name}">${animEl(spriteWith(k, s, sk.id), 'ps-face')}<b>${sk.name}</b></button>`).join('')}</div>
+      ${list.length <= 1 ? '<p class="ps-note">Consigue skins en Tesoros y con logros.</p>' : ''}`;
+    el.querySelectorAll('[data-skin]').forEach(b => b.onclick = () => { equipSkinAt(k, s, b.dataset.skin); showPicker(); });
+    return;
+  }
+  if (rosterTab === 'apoyo'){
+    const opened = chars.filter(o => isUnlocked(o) && o !== k), cur = supportKey(k);
+    el.innerHTML = `<div class="ps-lbl">Te acompaña y dispara al más cercano con el 40% de tu daño</div>
+      <div class="ps-grid">${['none', ...opened].map(o => `<button type="button" class="ps-tile${(o === 'none' ? !cur : o === cur) ? ' sel' : ''}" data-sup="${o}">${o === 'none' ? '<span class="ps-none">—</span>' : animEl(spriteOf(o, 0), 'ps-face')}<b>${o === 'none' ? 'Ninguno' : CHARS[o].name}</b></button>`).join('')}</div>`;
+    el.querySelectorAll('[data-sup]').forEach(b => b.onclick = () => { localStorage.setItem('digibonk3d-support', b.dataset.sup); showPicker(); });
+    return;
+  }
   const tiles = chars.map((id, i) => {
     const open = isUnlocked(id);
     return `<button type="button" class="ps-tile${id === k ? ' sel' : ''}${open ? '' : ' lock'}" ${open ? `data-pick="${id}"` : 'disabled'} data-name="${open ? CHARS[id].name.toLowerCase() : '???'}" title="${open ? CHARS[id].name : unlockHow(id)}">
@@ -3978,146 +4030,95 @@ function showPicker(tab){
       ${animEl(spriteOf(id, false), 'ps-face')}<b>${open ? CHARS[id].name : '???'}</b>
     </button>`;
   }).join('');
-  const mine = `<div class="ps-mine">
-          <span class="ps-lbl">Tus partidas</span>
-          <span><b>${st.plays}</b> partidas</span><span><b>${Object.values(st.wins || {}).reduce((a, n) => a + n, 0)}</b> victorias</span>
-          <span><b>${st.kills}</b> bajas</span><span><b>${st.best || 0}</b> récord de bajas</span><span><b>${st.maxLvl || 0}</b> nivel máx.</span>
-        </div>`;
-  const soon = COMING_SOON.map(c => `<span class="ps-soon" title="${c.name} · ${c.role} · Próximamente"><img src="${c.sprite}" alt=""><b>${c.name}</b></span>`).join('');
-  showOverlay(`
-    <div class="picker-screen pk2 ps">
-      <header class="ps-top">
-        <button class="g-back" id="pkBack">← Volver</button>
-        <h2>${runMode === 'surv' ? 'Supervivencia' : 'Elige tu Digimon'}</h2>
-        <span class="ps-sub">${runMode === 'surv' ? 'Elige tu Digimon · ' : ''}Temporada 1 · Digimon Adventure</span>
-        <div class="ps-theme" role="group" aria-label="Tema">${[['claro', 'Claro'], ['oscuro', 'Oscuro']].map(([v, n]) => `<button type="button" data-theme="${v}" class="${uiTheme() === v ? 'on' : ''}">${n}</button>`).join('')}</div>
-      </header>
-      <div class="ps-body">
-        <main class="ps-main">
-          <section class="ps-card ps-sum" id="pkPreview"></section>
-          <section class="ps-card ps-tabs-card">
-            <nav class="ps-tabs" role="tablist">${PICK_PANES.map(([id, name]) => `<button type="button" role="tab" class="ps-tab${pickPane === id ? ' on' : ''}" data-pane="${id}" aria-selected="${pickPane === id}">${name}</button>`).join('')}</nav>
-            <div class="ps-pane" id="pkPane"></div>
-          </section>
-          <div class="ps-mine-m">${mine}</div>
-        </main>
-        <aside class="ps-card ps-roster">
-          <div class="ps-bar"><span>Digimon</span><b>${pr.done}/${pr.total}</b></div><div class="ps-meter ps-meter-top"><i style="width:${Math.round(pr.done / pr.total * 100)}%"></i></div>
-          <div class="ps-roster-in">
-            <input class="ps-search" id="pkSearch" placeholder="Buscar por nombre..." value="${pickQuery}" maxlength="20">
-            <div class="ps-grid" id="pkGrid">${tiles}</div>
-            <div class="ps-lbl">En preparación</div>
-            <div class="ps-soon-row">${soon}</div>
-          </div>
-        </aside>
-      </div>
-      <footer class="ps-foot">
-        ${mine}
-        <span class="ps-keys">1-8 elegir · ←→ cambiar · Esc volver</span>
-        <button class="pk-start ps-go" id="pkStart">Elegir mapa <kbd>Enter</kbd></button>
-      </footer>
-    </div>`);
-  overlay.querySelectorAll('.ps-tile:not(.lock)').forEach(b => {
+  const soon = COMING_SOON.map(c => `<span class="ps-tile soon" title="${c.name} · ${c.role} · Próximamente"><span class="ps-lock">🔒</span><img src="${c.sprite}" alt=""><b>???</b></span>`).join('');
+  el.innerHTML = `<input class="ps-search" id="pkSearch" placeholder="Buscar por nombre..." value="${pickQuery}" maxlength="20">
+    <div class="ps-grid" id="pkGrid">${tiles}${soon}</div>
+    <p class="ps-note">1-8 elegir · ←→ cambiar · doble clic para empezar</p>`;
+  el.querySelectorAll('.ps-tile[data-pick]').forEach(b => {
     b.onclick = () => { selectedKey = b.dataset.pick; showPicker(); };
     b.ondblclick = () => { selectedKey = b.dataset.pick; showMapSelect(); };
   });
   // La búsqueda filtra en el DOM sin redibujar; sus teclas no llegan al manejador global
   const search = document.getElementById('pkSearch');
-  const filter = () => overlay.querySelectorAll('.ps-tile').forEach(t => t.classList.toggle('miss', !!pickQuery && !t.dataset.name.includes(pickQuery)));
+  const filter = () => el.querySelectorAll('.ps-tile[data-name]').forEach(t => t.classList.toggle('miss', !!pickQuery && !t.dataset.name.includes(pickQuery)));
   search.addEventListener('keydown', e => e.stopPropagation());
   search.addEventListener('input', () => { pickQuery = search.value.trim().toLowerCase(); filter(); });
   filter();
-  overlay.querySelectorAll('.ps-tab').forEach(b => b.onclick = () => { pickPane = b.dataset.pane; showPicker(); });
-  overlay.querySelectorAll('.ps-theme button').forEach(b => b.onclick = () => { setUiTheme(b.dataset.theme); showPicker(); });
-  document.getElementById('pkBack').onclick = () => showSelect();
-  document.getElementById('pkStart').onclick = () => showMapSelect();
-  renderPickPreview();
-  renderPickPane();
 }
-// Resumen del Digimon elegido: héroe, identidad, línea evolutiva, victorias y cifras en partida
+// Cabecera de la ficha: héroe, identidad, línea evolutiva, victorias, barras y cifras en partida
 function renderPickPreview(){
   const k = selectedKey, c = CHARS[k], b = BALANCE[k], st = statsOf(k);
   const el = document.getElementById('pkPreview');
   if (!el) return;
   const idx = SEASONS.adventure.chars.indexOf(k) + 1, at = ATTR_OF[k], emb = EMBLEMS.find(e => e.owner === k);
   const wins = st.wins || {};
+  const hp = Math.round(b.hp * labMul('hp')), dmg = c.dmg * b.dmgMul * labMul('dmg'), spd = b.speed * labMul('speed');
+  const rate = c.kind === 'orbit' ? 1 / 0.35 : c.kind === 'ring' ? 6 / c.cd : 1 / c.cd;
+  const reach = c.kind === 'ring' ? 8 : c.kind === 'orbit' ? 2.2 : 22;
+  const bar = (label, val, max, shown) => `<div class="ps-bar"><span>${label}</span><div class="ps-meter"><i style="width:${Math.max(6, Math.min(100, Math.round(val / max * 100)))}%"></i></div><b>${shown}</b></div>`;
   const row = (label, val) => `<div class="ps-row"><span>${label}</span><b>${val}</b></div>`;
-  const hp = Math.round(b.hp * labMul('hp')), dmgMul = b.dmgMul * labMul('dmg'), spd = b.speed * labMul('speed');
-  const range = c.kind === 'ring' ? '8 m' : c.kind === 'orbit' ? '2,2 m' : '22 m';
   el.innerHTML = `
     <div class="ps-hero">
       ${animEl(spriteOf(k, pickStage), 'ps-hero-img')}
       <span class="ps-hero-tag">${stageName(k, pickStage)}</span>
     </div>
     <div class="ps-id">
-      <div class="ps-lbl">#${String(idx).padStart(3, '0')} · ${ATTACK_NAME[c.kind] || c.kind}</div>
+      <div class="ps-idline"><span class="ps-lbl">#${String(idx).padStart(3, '0')} · ${ATTACK_NAME[c.kind] || c.kind}</span>${emb ? `<span class="ps-emb" title="${emb.name}: ${emb.text}">${emb.name}</span>` : ''}</div>
       <h3>${c.name}</h3>
-      <div class="ps-tags">
-        <span class="ps-attr a-${at}" title="Vacuna gana a Virus, Virus a Datos y Datos a Vacuna">${ATTR_ICON[at] || ''} ${ATTR_NAME[at] || ''}</span>
-        ${emb ? `<span class="ps-emb" title="${emb.name}: ${emb.text}">${emb.name}</span>` : ''}
-      </div>
-      <div class="ps-lbl">Línea evolutiva</div>
+      <div><span class="ps-attr a-${at}" title="Vacuna gana a Virus, Virus a Datos y Datos a Vacuna">${ATTR_ICON[at] || ''} ${ATTR_NAME[at] || ''}</span></div>
+      <div class="ps-lbl">Evoluciona durante la partida</div>
       <div class="ps-evo">
-        <button type="button" class="ps-node pk-stage${pickStage === 0 ? ' on' : ''}" data-stage="0" title="${c.name}">${sprEl(spriteOf(k, 0), 44)}</button>
-        ${EVO_LINE[k].map((e, i) => `<span class="ps-arrow">Nv ${evoLevelFor(k, i)}</span><button type="button" class="ps-node pk-stage${pickStage === i + 1 ? ' on' : ''}" data-stage="${i + 1}" title="${e.name}">${sprEl(spriteOf(k, i + 1), 44)}</button>`).join('')}
+        <button type="button" class="ps-node pk-stage${pickStage === 0 ? ' on' : ''}" data-stage="0" title="${c.name}">${sprEl(spriteOf(k, 0), 46)}</button>
+        ${EVO_LINE[k].map((e, i) => `<span class="ps-arrow">Nv. ${evoLevelFor(k, i)}<i>›</i></span><button type="button" class="ps-node pk-stage${pickStage === i + 1 ? ' on' : ''}" data-stage="${i + 1}" title="${e.name}">${sprEl(spriteOf(k, i + 1), 46)}</button>`).join('')}
       </div>
-      <div class="ps-lbl">Victorias</div>
-      <div class="ps-wins">${DIFF_ORDER.map(d => `<span class="${wins[d] ? 'on' : ''}" style="--dc:${DIFFS[d].col}" title="${wins[d] ? wins[d] + ' victorias' : 'Sin victorias'} en ${DIFFS[d].name}">${DIFFS[d].name}${wins[d] ? ' <b>' + wins[d] + '</b>' : ''}</span>`).join('')}</div>
+      <div class="ps-wins"><span class="ps-lbl">Victorias</span>${DIFF_ORDER.map(d => `<span class="${wins[d] ? 'on' : ''}" style="--dc:${DIFFS[d].col}" title="${wins[d] ? wins[d] + ' victorias' : 'Sin victorias'} en ${DIFFS[d].name}">${DIFFS[d].name}${wins[d] ? ' ' + wins[d] : ''}</span>`).join('')}</div>
     </div>
     <div class="ps-stats">
+      <div class="ps-lbl">Estadísticas</div>
+      ${bar('PS', hp, 160, hp)}
+      ${bar('Daño', dmg, 16, fmtN(dmg))}
+      ${bar('Cadencia', rate, 6, fmtN(rate) + '/s')}
+      ${bar('Alcance', reach, 24, fmtN(reach) + ' m')}
+      ${bar('Velocidad', spd, 8, fmtN(spd))}
+    </div>
+    <div class="ps-ingame">
       <div class="ps-lbl">En partida</div>
       ${row('PS máx.', hp)}
-      ${row('Daño base', fmtN(c.dmg * dmgMul))}
+      ${row('Daño base', fmtN(dmg))}
       ${row(c.kind === 'orbit' ? 'Golpe cada' : 'Recarga', c.kind === 'orbit' ? '0,35 s' : fmtN(c.cd, 2) + ' s')}
-      ${row(c.kind === 'orbit' ? 'Radio' : 'Alcance', range)}
       ${row('Velocidad', fmtN(spd))}
-      ${row('Crítico', '12% · ×2')}
+      ${row('Prob. crítico', '12%')}
+      ${row('Daño crítico', '×2')}
+      ${row('Ventaja de tipo', '×' + fmtN(ATTR_ADV, 2))}
       ${row('Ataques por partida', SKILL_SLOTS + ' de ' + (CHAR_SKILLS[k] || []).length)}
     </div>`;
   el.querySelectorAll('.pk-stage').forEach(n => n.onclick = () => { pickStage = +n.dataset.stage; showPicker(); });
 }
-// Contenido de la pestaña activa (solo una a la vez para no saturar la pantalla)
-function renderPickPane(){
-  const el = document.getElementById('pkPane');
-  if (!el) return;
+// Paneles inferiores: ataque básico y kit · evolución de emergencia, etapas y tipos
+function renderPickPanels(){
   const k = selectedKey, c = CHARS[k], line = EVO_LINE[k] || [];
-  if (pickPane === 'ataques'){
-    el.innerHTML = `
-      <div class="ps-atk base"><div class="ps-atk-h"><b>Ataque de ${c.name}</b><em>Inicial</em></div><p>${c.desc}</p>${chipsHtml(baseFacts(c))}</div>
-      <div class="ps-kit">${(CHAR_SKILLS[k] || []).map(id => { const sk = SKILLS[id]; return `<div class="ps-atk"><div class="ps-atk-h"><b>${sk.name}</b><em class="k-${sk.k}">${sk.k}</em></div><p>${sk.d}</p>${chipsHtml(skillFacts(id))}</div>`; }).join('')}</div>
-      <p class="ps-note">Cifras a nivel 1. Cada ataque sube hasta el nivel ${SKILL_MAX}; puedes llevar ${SKILL_SLOTS} distintos por partida.</p>`;
-  } else if (pickPane === 'evo'){
-    el.innerHTML = `
-      <div class="ps-ult">
-        <div class="ps-ult-h"><kbd>R</kbd><div><b>Evolución de emergencia</b><p>Por debajo del 20% de PS, pulsa R para evolucionar al instante a la siguiente etapa.</p></div></div>
-        ${chipsHtml([['Activa con', '< 20% PS'], ['Ventana', '6 s'], ['Dura', '15 s'], ['Usos', '1 por partida']])}
-      </div>
-      <div class="ps-stages">${[c.name, ...line.map(e => e.name)].map((n, i) => `<div class="ps-stage${pickStage === i ? ' on' : ''}">${sprEl(spriteOf(k, i), 76)}<b>${n}</b><small>${i ? 'Nivel ' + evoLevelFor(k, i - 1) : 'Inicio'}</small>${i ? '<span>+20% daño · +5% área · +20 PS</span>' : '<span>Etapa base</span>'}</div>`).join('')}</div>
-      <p class="ps-note">Las mejoras de cada etapa se acumulan y solo duran la partida.</p>`;
-  } else if (pickPane === 'tipos'){
-    const at = ATTR_OF[k], beats = BEATS[at], loses = Object.keys(BEATS).find(a => BEATS[a] === at);
-    const foes = a => Object.keys(FOE_ATTR).filter(n => FOE_ATTR[n] === a && n !== 'tank');
-    const icons = a => { const l = foes(a); return `<div class="ps-foes">${l.slice(0, 9).map(n => `<img src="sprites/adventure/${n}.png" alt="" title="${n[0].toUpperCase() + n.slice(1)}" onerror="this.remove()">`).join('')}${l.length > 9 ? `<small>+${l.length - 9}</small>` : ''}</div>`; };
-    const line2 = (lbl, cls, a, eff) => `<div class="ps-type ${cls}"><span class="ps-lbl">${lbl}</span><span class="ps-attr a-${a}">${ATTR_ICON[a]} ${ATTR_NAME[a]}</span><b>${eff}</b>${icons(a)}</div>`;
-    el.innerHTML = `
-      <div class="ps-cycle">${['vac', 'vir', 'dat'].map(a => `<span class="ps-attr a-${a}${a === at ? ' me' : ''}">${ATTR_ICON[a]} ${ATTR_NAME[a]}</span>`).join('<i>➜</i>')}<i>➜</i><span class="ps-attr a-vac${at === 'vac' ? ' me' : ''}">${ATTR_ICON.vac} ${ATTR_NAME.vac}</span></div>
-      ${line2('Eficaz contra', 'good', beats, `+${Math.round((ATTR_ADV - 1) * 100)}% de daño`)}
-      ${line2('Débil ante', 'bad', loses, `Recibes +${Math.round((ATTR_HURT - 1) * 100)}% de daño`)}
-      ${line2('Neutral', '', at, 'Sin cambios')}`;
-  } else if (pickPane === 'vestidor'){
-    const s = pickStage, owned = ownedSkinsAt(k, s), eq = equippedAt(k, s);
-    const list = visibleSkinsAt(k, s).filter(sk => owned.includes(sk.id));
-    el.innerHTML = `<div class="ps-lbl">${stageName(k, s)} · elige la etapa en la línea evolutiva</div>
-      <div class="pk-skins-row ps-skins">${list.map(sk => `<button type="button" class="pk-skin${eq === sk.id ? ' on' : ''}" data-skin="${sk.id}" title="${sk.name}">${animEl(spriteWith(k, s, sk.id), 'pk-skin-face')}<small>${sk.name}</small>${eq === sk.id ? '<em>Equipada</em>' : ''}</button>`).join('')}</div>
-      ${list.length <= 1 ? '<p class="ps-note">Consigue skins en Tesoros y con logros.</p>' : ''}`;
-    el.querySelectorAll('.pk-skin').forEach(b => b.onclick = () => { equipSkinAt(k, s, b.dataset.skin); showPicker(); });
-  } else {
-    const opened = SEASONS.adventure.chars.filter(o => isUnlocked(o) && o !== k), cur = supportKey(k);
-    el.innerHTML = opened.length ? `<div class="ps-sup">${['none', ...opened].map(o => `<button type="button" class="ps-sup-btn${(o === 'none' ? !cur : o === cur) ? ' on' : ''}" data-sup="${o}">${o === 'none' ? '<span class="ps-none">—</span>' : sprEl(spriteOf(o, 0), 56)}<b>${o === 'none' ? 'Ninguno' : CHARS[o].name}</b></button>`).join('')}</div>
-      ${chipsHtml([['Daño', '40% del tuyo'], ['Objetivo', 'Más cercano']])}
-      <p class="ps-note">Tu Digimon de apoyo te acompaña durante toda la partida.</p>` : '<p class="ps-note">Desbloquea otro Digimon para llevarlo de apoyo.</p>';
-    el.querySelectorAll('.ps-sup-btn').forEach(b => b.onclick = () => { localStorage.setItem('digibonk3d-support', b.dataset.sup); showPicker(); });
-  }
+  const kit = document.getElementById('pkKit'), evo = document.getElementById('pkEvo');
+  if (!kit || !evo) return;
+  kit.innerHTML = `
+    <div class="ps-lbl">Ataque básico</div>
+    <h5 class="ps-big">${ATTACK_NAME[c.kind] || 'Ataque'} de ${c.name}</h5>
+    <p class="ps-txt">${BALANCE[k].why}.</p>
+    ${chipsHtml(baseFacts(c))}
+    <hr class="ps-hr">
+    <div class="ps-lbl">Kit de ataques <small>· cifras a nivel 1, sube hasta nivel ${SKILL_MAX}</small></div>
+    <div class="ps-kit">${(CHAR_SKILLS[k] || []).map(id => { const sk = SKILLS[id]; return `<div class="ps-atk k-${sk.k}"><i class="ps-ico">${SKILL_ICON[id] || '✦'}</i><div><div class="ps-atk-h"><b>${sk.name}</b></div><small class="ps-kind">${sk.k[0].toUpperCase() + sk.k.slice(1)}</small><p>${sk.d}</p>${chipsHtml(skillFacts(id))}</div></div>`; }).join('')}</div>`;
+  const at = ATTR_OF[k], beats = BEATS[at], loses = Object.keys(BEATS).find(a => BEATS[a] === at);
+  const foes = a => Object.keys(FOE_ATTR).filter(n => FOE_ATTR[n] === a && n !== 'tank');
+  const icons = a => { const l = foes(a); return `${l.slice(0, 7).map(n => `<img src="sprites/adventure/${n}.png" alt="" title="${n[0].toUpperCase() + n.slice(1)}" onerror="this.remove()">`).join('')}${l.length > 7 ? `<small>+${l.length - 7}</small>` : ''}`; };
+  const trow = (lbl, cls, a, mul) => `<div class="ps-trow ${cls}"><span class="ps-tl">${lbl}</span><span class="ps-attr a-${a}">${ATTR_ICON[a]} ${ATTR_NAME[a]}</span><b>${mul}</b><span class="ps-foes">${icons(a)}</span></div>`;
+  evo.innerHTML = `
+    <div class="ps-ult"><i class="ps-ico r">R</i><div><b>Evolución de emergencia</b><p>Por debajo del 20% de PS tienes 6 s para pulsar R y evolucionar al instante durante 15 s. Una vez por partida.</p></div></div>
+    ${line.map((e, i) => `<div class="ps-ult"><span class="ps-node${pickStage === i + 1 ? ' on' : ''}">${sprEl(spriteOf(k, i + 1), 46)}</span><div><b>${e.name}</b><p>Nivel ${evoLevelFor(k, i)} · +20% daño, +5% área y +20 PS durante el resto de la partida.</p></div></div>`).join('')}
+    <hr class="ps-hr">
+    <div class="ps-lbl">Tipos</div>
+    ${trow('Eficaz contra', 'good', beats, '×' + fmtN(ATTR_ADV, 2) + ' daño')}
+    ${trow('Débil a', 'bad', loses, '×' + fmtN(ATTR_HURT, 2) + ' recibido')}
+    ${trow('Neutral', '', at, '×1')}`;
 }
 // Progreso hacia una skin por logro (0-1); las demás no tienen progreso
 // Cambia de personaje en la pantalla de elección (flechas)
