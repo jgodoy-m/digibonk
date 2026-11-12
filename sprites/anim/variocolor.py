@@ -10,8 +10,8 @@ from navidad import BASES, gradient_map  # mismas hojas base que las skins de Na
 # Escala oscura: negro con brillos grises (luminosidad 0-1 -> color)
 STOPS = [(0.0, (6, 6, 10)), (0.5, (38, 38, 48)), (0.85, (120, 120, 136)), (1.0, (220, 220, 232))]
 
-# Las líneas de Agumon y Gabumon tienen sprites nuevos y sus skins se van a rehacer: no se generan aquí
-SKIP_KEYS = {"agumon", "gabumon"}
+# Todas las líneas jugables tienen sprites nuevos y sus skins se van a rehacer: de momento no se genera ninguna
+SKIP_KEYS = set(BASES)
 
 ONLY = set(filter(None, os.environ.get("ONLY", "").split(",")))
 

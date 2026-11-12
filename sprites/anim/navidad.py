@@ -45,8 +45,8 @@ def gradient_map(src, stops):
             px[x, y] = (cr, cg, cb, a)
     return im
 
-# Las líneas de Agumon y Gabumon tienen sprites nuevos y sus skins se van a rehacer: no se generan aquí
-SKIP = {"agumon", "gabumon"}
+# Todas las líneas jugables tienen sprites nuevos y sus skins se van a rehacer: de momento no se genera ninguna
+SKIP = set(BASES)
 
 ONLY = set(filter(None, os.environ.get("ONLY", "").split(",")))
 

@@ -4,6 +4,8 @@
 // Los filtros salen de SKINS en index.html, así que el juego y los archivos no se desalinean.
 const fs = require('fs'), path = require('path');
 const { chromium } = require('playwright');
+// Todas las líneas jugables tienen sprites nuevos y sus skins se van a rehacer: no se generan salvo con FORZAR=1
+if (!process.env.FORZAR){ console.log('Skins pendientes de rehacer: no se genera nada (usa FORZAR=1)'); process.exit(0); }
 (async () => {
   const url = process.argv[2] || 'http://localhost:8790/index.html';
   const out = path.join(__dirname);
@@ -18,7 +20,6 @@ const { chromium } = require('playwright');
     const load = src => new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => no(new Error(src)); im.src = src; });
     const res = [];
     for (const key of SEASONS.adventure.chars){
-      if (key === 'agumon' || key === 'gabumon') continue;   // sprites nuevos: sus skins se van a rehacer
       for (let st = 0; st <= EVO_LINE[key].length; st++){
         if (only.length && !only.includes(key + '_' + st)) continue;
         const base = name(st ? EVO_LINE[key][st - 1].sprite : CHARS[key].sprite);
