@@ -2154,7 +2154,7 @@ function tex(url){
 }
 // Hojas de animación (sprites/anim/<id>.png): 5 fotogramas en fila -> reposo 1, reposo 2, ataque 1, ataque 2, daño
 const ANIM_N = 5;
-const ANIM_IDS = new Set(["agumon", "leomon", "saberleomon", "hagurumon", "frigimon", "wizardmon", "andromon", "angemon", "angewomon", "bakemon", "birdramon", "biyomon", "darktyrannomon", "devimon", "etemon", "gabumon", "garudamon", "garurumon", "gatomon", "gazimon", "gigadramon", "gizamon", "gomamon", "greymon", "ikkakumon", "kabuterimon", "kuwagamon", "lillymon", "machinedramon", "magnaangemon", "mammothmon", "megadramon", "megakabuterimon", "meramon", "metalgarurumon", "metalgreymon", "metalseadramon", "monochromon", "myotismon", "numemon", "palmon", "patamon", "phantomon", "piedmon", "puppetmon", "raremon", "skullgreymon", "snimon", "tank", "tentomon", "togemon", "tyrannomon", "vegiemon", "wargreymon", "weregarurumon", "zudomon"]);
+const ANIM_IDS = new Set(["agumon", "agumon_0_galactico", "agumon_1_galactico", "agumon_2_galactico", "agumon_3_galactico", "agumon_0_holografica", "agumon_1_holografica", "agumon_2_holografica", "agumon_3_holografica", "leomon", "saberleomon", "hagurumon", "frigimon", "wizardmon", "andromon", "angemon", "angewomon", "bakemon", "birdramon", "biyomon", "darktyrannomon", "devimon", "etemon", "gabumon", "garudamon", "garurumon", "gatomon", "gazimon", "gigadramon", "gizamon", "gomamon", "greymon", "ikkakumon", "kabuterimon", "kuwagamon", "lillymon", "machinedramon", "magnaangemon", "mammothmon", "megadramon", "megakabuterimon", "meramon", "metalgarurumon", "metalgreymon", "metalseadramon", "monochromon", "myotismon", "numemon", "palmon", "patamon", "phantomon", "piedmon", "puppetmon", "raremon", "skullgreymon", "snimon", "tank", "tentomon", "togemon", "tyrannomon", "vegiemon", "wargreymon", "weregarurumon", "zudomon"]);
 function sheetOf(url){ const m = /([^\/]+)\.png$/.exec(url || ''); return m && ANIM_IDS.has(m[1]) ? `sprites/anim/${m[1]}.png` : null; }
 const animTexs = [];   // texturas compartidas (enemigos del mismo tipo marcan el paso a la vez)
 function animTex(url, own = false){
@@ -2667,7 +2667,7 @@ function showSelect(){
             <button type="button" class="hm-card hm-surv hm-art" id="mSurv" aria-label="Supervivencia: modo infinito"></button>
           </div>
           <div class="hm-row2">
-                    ${eventActive() ? `<button class="db-event" id="rhEvent" type="button" aria-label="Edición Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><span class="db-event__txt" aria-hidden="true">Papá Noel y Reno · quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</span></button>` : `<button type="button" class="hm-card hm-event hm-soon" id="mEvent"><span class="hm-txt"><b>Evento</b><small>Próximamente</small></span></button>`}
+                    ${bannerOpen("navidadP") ? `<button class="db-event" id="rhEvent" type="button" aria-label="Edición Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><span class="db-event__txt" aria-hidden="true">Papá Noel y Reno · quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</span></button>` : `<button type="button" class="hm-card hm-event hm-soon" id="mEvent"><span class="hm-txt"><b>Evento</b><small>Próximamente</small></span></button>`}
             <button type="button" class="hm-card hm-enc hm-art" id="mEnc" aria-label="Encargos: misiones diarias"></button>
           </div>
           <div class="hm-grid">
@@ -3169,7 +3169,7 @@ function startGame(key){
   const c = CHARS[key];
   const sp = randomSpawn();   // aparición aleatoria en el mapa
   // Versión variocolor: 1 entre 8192 al empezar una partida; queda guardada como skin del Digimon
-  if (Math.random() < 1 / 8192){ grantSkinAt(key, 0, 'variocolor'); equipSkinAt(key, 0, 'variocolor'); }
+  if (skinHasArt(key, 0, 'variocolor') && Math.random() < 1 / 8192){ grantSkinAt(key, 0, 'variocolor'); equipSkinAt(key, 0, 'variocolor'); }
   g = {
     mode: runMode,
     ch: {...c, id:key},
@@ -5383,7 +5383,7 @@ function showLab(){
 const SKIN_FX = {
   galactico: {bonus:{speed:1.06}, aura:'stars',   text:'+6% velocidad · estrellas'},
   glitch:    {bonus:{dmg:1.08},   aura:'ghost',   text:'+8% daño · ecos glitch'},
-  cristal:   {bonus:{pickup:1.2}, aura:'shards',  text:'+20% imán · cristales'},
+  holografica: {bonus:{pickup:1.2}, aura:'shards', text:'+20% imán · destellos'},
   festival:  {bonus:{maxHp:15},   aura:'confetti',text:'+15 PS máx. · confeti'},
   reno:      {bonus:{speed:1.06}, aura:'confetti',text:'+6% velocidad · confeti'}
 };
@@ -5425,16 +5425,14 @@ function spendUsable(bn, n){
 const EVENT = {name:'Navidad Digital', start: Date.parse('2026-11-01T00:00:00'), end: Date.parse('2026-12-31T23:59:59')};
 function eventActive(){ const now = Date.now(); return now >= EVENT.start && now <= EVENT.end; }
 // Skins por personaje (recoloreados). src: 'base' | 'logro' | 'gacha' | 'evento'
-// f: filtro CSS del recoloreado · fx: efecto propio (glitch) · px: hojas generadas con sprites/anim/navidad.py
+// Cada skin usa sus hojas sprites/anim/<digimon>_<etapa>_<skin>.png (importadas con importar_hoja.py); sin hoja no aparece
 const SKINS = [
   {id:'clasico',   name:'Clásico',    src:'base',   tier:'n', f:''},
-  {id:'galactico', name:'Galáctico',  src:'banner', tier:'r', desc:'Skin galáctica del banner permanente (cambia cada semana)',
-   f:'hue-rotate(235deg) saturate(1.9) brightness(.88) contrast(1.12)'},
-  {id:'cristal',   name:'Cristal',    src:'gacha',  tier:'l', desc:'Gacha de Bits (banner permanente)',
-   f:'hue-rotate(165deg) saturate(.6) brightness(1.3) contrast(.9)'},
-  {id:'festival',  name:'Papá Noel',  src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)', px:'navidad'},
-  {id:'reno',      name:'Reno',       src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)', px:'navidad'},
-  {id:'variocolor', name:'Variocolor', src:'shiny', tier:'l', hidden: true, desc:'Versión variocolor', px:'variocolor'}
+  {id:'galactico', name:'Galáctico',  src:'banner', tier:'r', desc:'Skin galáctica del banner permanente (cambia cada semana)'},
+  {id:'holografica', name:'Holográfica', src:'gacha', tier:'l', desc:'Gacha de Bits (banner permanente)'},
+  {id:'festival',  name:'Papá Noel',  src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)'},
+  {id:'reno',      name:'Reno',       src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)'},
+  {id:'variocolor', name:'Variocolor', src:'shiny', tier:'l', hidden: true, desc:'Versión variocolor'}
 ];
 const SKIN_BY_ID = Object.fromEntries(SKINS.map(sk => [sk.id, sk]));
 // Skins que se muestran a un Digimon: las ocultas (variocolor) solo aparecen cuando las tienes
@@ -5472,7 +5470,9 @@ function grantSkinAt(key, st, id){
 function ownedSkins(key){ return ownedSkinsAt(key, 0); }
 function ownsAnyStage(key, id){ for (let st = 0; st < stageCount(key); st++) if (ownsAt(key, st, id)) return true; return false; }
 // Skins que se muestran en una etapa: las ocultas (variocolor) solo cuando se tienen
-function visibleSkinsAt(key, st){ return SKINS.filter(sk => !sk.hidden || ownsAt(key, st, sk.id)); }
+// Una skin solo existe para un Digimon y etapa si tiene su hoja dibujada (sprites/anim/<digimon>_<etapa>_<skin>.png)
+function skinHasArt(key, st, id){ return id === 'clasico' || ANIM_IDS.has(`${key}_${st}_${id}`); }
+function visibleSkinsAt(key, st){ return SKINS.filter(sk => skinHasArt(key, st, sk.id) && (!sk.hidden || ownsAt(key, st, sk.id))); }
 // Se llama al terminar cada partida: actualiza el progreso y devuelve las skins nuevas
 function statsOf(key){ return loadJSON('digibonk3d-stats', {})[key] || {plays:0, kills:0}; }
 function meetsReq(sk, st){
@@ -5520,7 +5520,7 @@ function buildSkins(){
       const path = st ? EVO_LINE[key][st - 1].sprite : CHARS[key].sprite;
       for (const sk of SKINS){
         if (sk.id === 'clasico') continue;
-        // hoja animada recoloreada (generada con sprites/anim/recolor.js); sin hoja, la skin usa el sprite base
+        // hoja animada de la skin (importada con sprites/anim/importar_hoja.py); sin hoja, la skin usa el sprite base
         if (ANIM_IDS.has(`${key}_${st}_${sk.id}`)) skinURL[`${key}|${st}|${sk.id}`] = `sprites/anim/${key}_${st}_${sk.id}.png`;
       }
     }
@@ -5909,24 +5909,25 @@ function addWeekPulls(n){
 }
 // Tres banners: el permanente con las skins galácticas y dos de Navidad (Papá Noel y Reno, solo con el evento activo)
 const BANNERS = {
-  std:      {name: 'Digivice Estándar', sub: 'Skins galácticas', skins: ['galactico'], weekly: true},
+  std:      {name: 'Digivice Estándar', sub: 'Skins galáctica y holográfica', skins: ['galactico', 'holografica'], weekly: true},
   navidadP: {name: EVENT.name, sub: 'Skin Papá Noel · tiempo limitado', skins: ['festival'], event: true},
   navidadR: {name: EVENT.name, sub: 'Skin Reno · tiempo limitado', skins: ['reno'], event: true}
 };
 // Nombre que se muestra a la skin destacada de cada banner
-const FEATURED_NAME = {galactico: 'Aventurero', festival: 'Papá Noel', reno: 'Reno'};
+const FEATURED_NAME = {galactico: 'Aventurero', holografica: 'Holográfico', festival: 'Papá Noel', reno: 'Reno'};
 // Skins que da un banner: [{key, st, sk}]. El permanente solo tiene la línea de la semana
-function bannerPool(){
-  const b = BANNERS[gxBanner];
+function bannerPool(bn = gxBanner){
+  const b = BANNERS[bn];
   const out = [];
-  const add = (key, times, sk) => { for (let t = 0; t < times; t++) for (let st = 0; st < stageCount(key); st++) out.push({key, st, sk}); };
+  // solo entran las skins que ya tienen hoja dibujada
+  const add = (key, times, sk) => { for (let t = 0; t < times; t++) for (let st = 0; st < stageCount(key); st++) if (skinHasArt(key, st, sk.id)) out.push({key, st, sk}); };
+  const all = () => { for (const sk of b.skins.map(id => SKIN_BY_ID[id])) for (const key of SEASONS.adventure.chars) add(key, 1, sk); };
   if (b.weekly){
     const chars = SEASONS.adventure.chars, i = weeklyIndex();
     const second = chars[(i + 3) % chars.length];
     for (const sk of b.skins.map(id => SKIN_BY_ID[id])){ add(weeklyDigimon(), 2, sk); add(second, 1, sk); }
-  } else {
-    for (const sk of b.skins.map(id => SKIN_BY_ID[id])) for (const key of SEASONS.adventure.chars) add(key, 1, sk);
-  }
+    if (!out.length) all();   // la línea de la semana aún no tiene skins: entran las que haya
+  } else all();
   return out;
 }
 let gxBanner = 'std';
@@ -5937,7 +5938,9 @@ const PITY_BY_BANNER = {std: 100, navidadP: 50, navidadR: 50};
 const pityAt = bn => PITY_BY_BANNER[bn] || 100;
 const pityKey = bn => bn === 'std' ? 'digibonk3d-pity' : 'digibonk3d-pity-' + bn;
 const pityCount = (bn = gxBanner) => +(localStorage.getItem(pityKey(bn)) || 0);
-function bannerSkins(){ if (BANNERS[gxBanner].event && !eventActive()) gxBanner = 'std'; return BANNERS[gxBanner].skins.map(id => SKIN_BY_ID[id]); }
+// Un banner de evento solo se muestra si está activo y tiene alguna skin dibujada
+function bannerOpen(bn){ return !BANNERS[bn].event || (eventActive() && bannerPool(bn).length > 0); }
+function bannerSkins(){ if (!bannerOpen(gxBanner)) gxBanner = 'std'; return BANNERS[gxBanner].skins.map(id => SKIN_BY_ID[id]); }
 function bannerSkin(){ return bannerSkins()[0]; }
 // La rareza se decide primero. Legendaria = skin; el resto reparte entre marco, título y objeto
 const TIER_ODDS = {c: 60, r: 26, e: 12, l: 2};
@@ -5978,6 +5981,7 @@ function rollReward(tier){
     // Banner de temporada: 50% una de sus skins y 50% la del banner permanente. Puede salir repetida,
     // pero tras una repetida la siguiente legendaria es nueva seguro (mientras quede alguna por conseguir)
     const pool = bannerPool();
+    if (!pool.length) return {type:'bits', amount: LEG_DUP_REFUND, tier:'l'};   // aún no hay skins dibujadas para este banner
     if (localStorage.getItem('digibonk3d-legnew') === '1'){
       const fresh = pool.filter(e => !ownsAt(e.key, e.st, e.sk.id));
       if (fresh.length){
@@ -6150,7 +6154,7 @@ function showGacha(){
   state = 'gacha';
   setHud(false);
   clearInterval(gxTimer);
-  const keys = Object.keys(BANNERS).filter(k => !BANNERS[k].event || eventActive());
+  const keys = Object.keys(BANNERS).filter(bannerOpen);
   const bi = (keys.indexOf(gxBanner) + keys.length) % keys.length;
   gxBanner = keys[bi];
   const chars = SEASONS.adventure.chars;
@@ -6511,7 +6515,7 @@ if (new URLSearchParams(location.search).has('demo')){
     get g(){ return g; }, get state(){ return state; }, get scene(){ return scene; },
     rollReward, grantReward, setBanner: b => { gxBanner = b; },
     startGame, spawnEnemy, spawnMagnetDrop, setZone, showGacha, addSkill, upgradeChoices,
-    // Datos y filtros que usa sprites/anim/recolor.js para generar las skins
+    // Datos de skins y personajes
     SKINS, EVO_LINE, CHARS, SEASONS, glitchPixels,
     headUrl, spriteWith,
     checkUnlocks, isUnlocked,
