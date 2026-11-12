@@ -1,8 +1,8 @@
 Texturas que usa index.html:
 - puny_hierba.png (suelo): baldosa de hierba del tileset Puny World, CC0 según su ficha de itch.io.
-- agua_pixel.png, piedra_pixel.png, madera_pixel.png, tejado_pixel.png, camino_pixel.png:
+- agua_pixel.png, piedra_pixel.png:
   pixel art generado dentro del proyecto (paleta corta y trama de Bayer).
 
 Las texturas CC0 de ambientCG (*_cc0.jpg) y las primeras texturas generadas por código
-(hierba.png, tierra.png, camino_piedra.png, roca.png, corteza.png, agua.png, etc.) se retiraron
+(hierba.png, tierra.png, camino_piedra.png, roca.png, corteza.png, agua.png, etc.) y las del Pueblo (madera, tejado y camino) se retiraron
 porque el juego ya no las usaba. Siguen disponibles en el historial de git.
