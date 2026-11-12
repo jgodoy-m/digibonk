@@ -1881,6 +1881,34 @@ body:has(.tr11) #hudTop{display:none!important}
   .pl4 .pl5-acc{display:none}
 }
 @media (max-width:700px){.tr11 .treasure-card .tc-art{transform:scale(.55);transform-origin:center;margin:-22px 0 -18px}.tr11 .treasure-card strong{font-size:12px}}
+
+/* Digimon en preparación (selector) */
+.pk2-tile.soon img.pk2-face{width:58px;height:58px;filter:var(--soon-f,none) grayscale(.85) brightness(.45);image-rendering:pixelated;object-fit:contain}
+.pk2-tile.soon{border-style:dashed}
+/* Laboratorio */
+.lab-screen{max-width:1080px;margin:0 auto;padding:18px 20px 24px;color:#eaf2ff;font-family:system-ui,sans-serif}
+.lab-top{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.lab-head{display:flex;align-items:center;gap:12px;flex:1}
+.lab-head h2{margin:0;font-size:26px;letter-spacing:.5px}
+.lab-head small{color:#9fb3d1}
+.lab-host{width:64px;height:64px;image-rendering:pixelated;object-fit:contain;background:#0e1f3d;border:2px solid #4fc3f7;border-radius:12px}
+.lab-bits{padding:8px 14px;border-radius:10px;background:#1b2a14;border:1px solid #7cf29c;color:#b9f6ca;font-weight:800;font-size:18px}
+.lab-say{margin:14px 0;padding:10px 14px;border-left:3px solid #ffd54f;background:rgba(8,14,30,.7);border-radius:0 10px 10px 0;color:#fff3c4}
+.lab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.lab-card{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;background:rgba(10,20,42,.92);border:1px solid #2c4a78}
+.lab-card.full{border-color:#ffd54f}
+.lab-ic{flex:none;width:44px;height:44px;display:grid;place-items:center;font-size:22px;border-radius:12px;background:#13294d;color:#ffd54f}
+.lab-txt{flex:1;min-width:0}
+.lab-txt h3{margin:0;font-size:15px}
+.lab-txt p{margin:2px 0 6px;font-size:12px;color:#9fb3d1;line-height:1.35}
+.lab-txt small{font-size:12px;color:#7cf29c;font-weight:700}
+.lab-pips{display:flex;gap:4px;margin-bottom:4px}
+.lab-pips i{width:16px;height:6px;border-radius:3px;background:#22385e}
+.lab-pips i.on{background:#ffd54f}
+.lab-buy{flex:none;min-width:84px;padding:9px 10px;border-radius:10px;border:0;background:linear-gradient(#ffe082,#ffb300);color:#1b1300;font-weight:900;cursor:pointer}
+.lab-buy:disabled{background:#2a3550;color:#7d8aa5;cursor:default}
+.lab-foot{display:flex;justify-content:space-between;gap:12px;margin-top:16px;flex-wrap:wrap}
+@media (max-width:640px){.lab-grid{grid-template-columns:1fr}.lab-head h2{font-size:21px}}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -1921,7 +1949,7 @@ body:has(.tr11) #hudTop{display:none!important}
 <canvas id="minimap" width="170" height="170"></canvas>
 <div id="mapview">
   <canvas id="bigmap" width="600" height="600"></canvas>
-  <div class="mapleg">Tú (tu Digimon) · 🎁 cofres · enemigos con su sprite · jefe · centro: Pueblo<br>M o Esc para cerrar</div>
+  <div class="mapleg">Tú (tu Digimon) · 🎁 cofres · enemigos con su sprite · jefe<br>M o Esc para cerrar</div>
 </div>
 <div id="pause" class="hidden"></div>
 
@@ -1942,7 +1970,7 @@ function clampArena(x, z, m){
   const r = Math.hypot(x, z);
   return r > m ? [x*m/r, z*m/r] : [x, z];
 }
-// Terreno: el pueblo (centro) es llano y el resto del mapa tiene colinas suaves
+// Terreno: el claro del centro es llano y el resto del mapa tiene colinas suaves
 const smooth01 = t => { t = Math.min(1, Math.max(0, t)); return t*t*(3 - 2*t); };
 // Estanque al suroeste: cuenca plana con agua; se funde con el terreno alrededor
 const POND = {x: -38, z: 22, r: 6, water: -0.35, bed: -0.9};
@@ -1952,7 +1980,7 @@ function pondWeight(x, z){
 }
 function terrainH(x, z){
   const r = Math.hypot(x, z);
-  const flat = smooth01((r - 26)/14);                 // 0 en el pueblo, 1 fuera
+  const flat = smooth01((r - 26)/14);                 // 0 en el claro central, 1 fuera
   const edge = 1 - smooth01((r - (ARENA_R - 18))/8);  // vuelve a 0 junto a las montañas
   const hills = 4.5*Math.sin(x*0.05 + 1.3)*Math.cos(z*0.043) + 3*Math.sin((x - z)*0.11 + 0.7) + 1.5*Math.cos(x*0.13 + z*0.09);
   const base = hills * flat * edge;
@@ -1964,7 +1992,7 @@ function terrainH(x, z){
   const t = smooth01((d - POND.r)/1.6);
   return POND.bed*(1 - t) + hn*t;
 }
-// Hitboxes: círculos (casas, fuente, habitantes) y segmentos (vallas)
+// Hitboxes: círculos y segmentos (por si se añaden obstáculos al mapa)
 const solids = {circles: [], segs: []};
 // Empuja un objeto {x, z} fuera de los sólidos, teniendo en cuenta su radio
 function resolveSolids(o, rad, height = 0){
@@ -2105,7 +2133,7 @@ terrainGeo.rotateX(-Math.PI/2);
   }
 }
 terrainGeo.computeVertexNormals();
-// Color por zona: tierra alrededor del pueblo, bosque más oscuro hacia las montañas y variación suave
+// Color por zona: tierra en el claro central, bosque más oscuro hacia las montañas y variación suave
 function zoneTint(x, z){
   const r = Math.hypot(x, z);
   const dirt = 1 - smooth01((r - 14)/12);
@@ -2311,113 +2339,6 @@ function buildEnvironment(){
 }
 buildEnvironment();
 
-// ---------- Pueblo Primario: la primera zona de Digimon Adventure (plaza con pozo y casas de madera) ----------
-function buildVillage(){
-  const plaza = new THREE.Mesh(new THREE.CircleGeometry(14, 48), new THREE.MeshBasicMaterial({color: 0x9c7b4f}));
-  plaza.rotation.x = -Math.PI/2;
-  plaza.position.y = 0.01;
-  scene.add(plaza);
-  // pozo del pueblo
-  const well = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.5, 1.2, 12),
-    new THREE.MeshStandardMaterial({color: 0x9e9e9e, flatShading: true}));
-  well.position.y = 0.6;
-  scene.add(well);
-  solids.circles.push({x: 0, z: 0, r: 1.5, h: 1.2});   // la fuente del pueblo bloquea el paso
-  const water = new THREE.Mesh(new THREE.CircleGeometry(1.2, 12), new THREE.MeshBasicMaterial({color: 0x29b6f6}));
-  water.rotation.x = -Math.PI/2;
-  water.position.y = 1.21;
-  scene.add(water);
-  // casas de madera alrededor de la plaza
-  const wood = new THREE.MeshStandardMaterial({map: loadTex('textures/madera_pixel.png', 1, 1, true), flatShading: true});
-  const roofMat = new THREE.MeshStandardMaterial({map: loadTex('textures/tejado_pixel.png', 2, 2, true), flatShading: true});
-  for (let i = 0; i < 7; i++){
-    const a = i/7*Math.PI*2 + 0.3, R = 17;
-    const x = Math.cos(a)*R, z = Math.sin(a)*R;
-    const house = new THREE.Group();
-    const body = new THREE.Mesh(new THREE.BoxGeometry(3.2, 2.4, 2.8), wood);
-    body.position.y = 1.2;
-    house.add(body);
-    const roof = new THREE.Mesh(new THREE.ConeGeometry(2.4, 1.6, 4), roofMat);
-    roof.position.y = 3.2;
-    roof.rotation.y = Math.PI/4;
-    house.add(roof);
-    house.position.set(x, 0, z);
-    house.rotation.y = -a;
-    scene.add(house);
-    solids.circles.push({x, z, r: 2.3, h: 4});
-    const sh = makeShadow(4.5);
-    sh.position.set(x, 0.02, z);
-    scene.add(sh);
-  }
-}
-buildVillage();
-
-// ---------- Ambientación del pueblo: caminos, valla con huecos y habitantes en reposo ----------
-const npcs = [];   // habitantes: solo se mueven (no atacan ni son enemigos)
-function angDiff(a, b){
-  let d = (a - b) % (2*Math.PI);
-  if (d > Math.PI) d -= 2*Math.PI;
-  if (d < -Math.PI) d += 2*Math.PI;
-  return Math.abs(d);
-}
-function buildAmbience(){
-  const paths = 8;
-  const pathAngles = Array.from({length: paths}, (_, i) => i/paths*Math.PI*2);
-  // caminos de tierra desde la plaza hacia las montañas
-  const pathMat = new THREE.MeshBasicMaterial({color: 0xffffff, map: loadTex('textures/camino_pixel.png', 1, 5, true)});
-  const L = 26 - 14;   // los caminos llegan hasta el borde llano del pueblo
-  for (const a of pathAngles){
-    const geo = new THREE.PlaneGeometry(2.6, L);
-    geo.rotateX(-Math.PI/2);
-    const m = new THREE.Mesh(geo, pathMat);
-    const mid = 14 + L/2;
-    m.position.set(Math.cos(a)*mid, 0.012, Math.sin(a)*mid);
-    m.rotation.y = Math.PI/2 - a;
-    scene.add(m);
-  }
-  // valla alrededor del pueblo, con huecos donde salen los caminos
-  const FR = 21, N = 36;
-  const postGeo = new THREE.BoxGeometry(0.25, 1.3, 0.25);
-  const railGeo = (len) => new THREE.BoxGeometry(len, 0.14, 0.12);
-  const fenceMat = new THREE.MeshStandardMaterial({color: 0x6d4c41, flatShading: true});
-  const open = a => pathAngles.some(pa => angDiff(a, pa) < 0.12);
-  const angs = Array.from({length: N}, (_, i) => i/N*2*Math.PI);
-  for (const a of angs){
-    if (open(a)) continue;
-    const post = new THREE.Mesh(postGeo, fenceMat);
-    post.position.set(Math.cos(a)*FR, 0.65, Math.sin(a)*FR);
-    scene.add(post);
-  }
-  for (let i = 0; i < N; i++){
-    const a0 = angs[i], a1 = angs[(i + 1) % N] + (i === N-1 ? 2*Math.PI : 0);
-    if (open(a0) || open(a1 % (2*Math.PI))) continue;
-    const dth = a1 - a0, am = a0 + dth/2;
-    const chord = 2*FR*Math.sin(dth/2);
-    solids.segs.push({ax: Math.cos(a0)*FR, az: Math.sin(a0)*FR, bx: Math.cos(a1)*FR, bz: Math.sin(a1)*FR, r: 0.15, h: 1.4});
-    for (const h of [0.5, 1.0]){
-      const rail = new THREE.Mesh(railGeo(chord), fenceMat);
-      rail.position.set(Math.cos(am)*FR, h, Math.sin(am)*FR);
-      rail.rotation.y = Math.atan2(-Math.cos(am), -Math.sin(am));
-      scene.add(rail);
-    }
-  }
-  // habitantes en reposo: sprites de la temporada 1 que no atacan
-  const npcKeys = ['gomamon', 'patamon', 'palmon', 'gatomon', 'biyomon', 'gabumon'];
-  npcKeys.forEach((k, i) => {
-    const a = i/npcKeys.length*Math.PI*2 + 0.5, r = 7 + (i % 2)*3;
-    const x = Math.cos(a)*r, z = Math.sin(a)*r;
-    const sprite = billboard(CHARS[k].sprite, 1.8);
-    sprite.position.set(x, 0.9, z);
-    scene.add(sprite);
-    const sh = makeShadow(1.4);
-    sh.position.set(x, 0.02, z);
-    scene.add(sh);
-    npcs.push({sprite, base: 0.9, ph: i});
-    solids.circles.push({x, z, r: 0.7, h: 2});
-  });
-}
-buildAmbience();
-
 // ---------- Estado ----------
 let state = 'select';
 let g = null;
@@ -2444,7 +2365,7 @@ addEventListener('keydown', e => {
   if (state === 'map'){ if (k === 'escape') closeMap(); return; }
   if (k === 'q' && state === 'play'){ bonkRelease(); return; }
   if (state === 'help'){ if (k === 'escape') showSelect(); if (k === 'arrowright') tutoStep(1); if (k === 'arrowleft') tutoStep(-1); return; }
-  if (state === 'gacha' || state === 'settings' || state === 'player' || state === 'collection'){ if (k === 'escape') showSelect(); return; }
+  if (state === 'gacha' || state === 'lab' || state === 'settings' || state === 'player' || state === 'collection'){ if (k === 'escape') showSelect(); return; }
   // Esc o P pausan y reanudan. Con el ratón bloqueado el navegador puede no entregar Esc:
   // en ese caso la pausa la dispara pointerlockchange (ver más abajo). P sirve en pantalla completa.
   if (k === 'escape' || k === 'p'){
@@ -2535,7 +2456,7 @@ function showPause(askQuit = false){
       <div class="pz-brand">DIGIVICE</div>
       <div class="pz-bezel"><div class="pz-lcd">
         <div class="pz-title">DIGIVICE · PAUSA</div>
-        <div class="pz-zone">Pueblo Primario · <span class="pz-st">● En línea</span></div>
+        <div class="pz-zone">${ZONES[(g ? g.zone : 1) - 1].name} · <span class="pz-st">● En línea</span></div>
         <button class="pz-close" id="pClose" aria-label="Cerrar menú de pausa">✕</button>
         <div class="pz-profile">
           <div class="pz-av">${animEl(sprite, 'pz-anim')}</div>
@@ -2722,7 +2643,7 @@ function showCollection(){
   overlay.querySelectorAll('.cl4-skin.owned').forEach(b => b.onclick = () => { equipSkinAt(colKey, colStage, b.dataset.skin); showCollection(); });
 }
 // ---------- Barra superior fija en los menús: tarjeta, Bits, tickets, idioma, sonido, pantalla completa y ajustes ----------
-const TOP_STATES = ['select', 'gacha', 'pick', 'player', 'settings', 'help', 'savecode', 'collection'];
+const TOP_STATES = ['select', 'gacha', 'lab', 'pick', 'player', 'settings', 'help', 'savecode', 'collection'];
 function refreshTopbar(){
   const el = document.getElementById('topbar');
   const show = TOP_STATES.includes(state) && !overlay.classList.contains('hidden') && !overlay.querySelector('.pa,.pr3,.dvl2');
@@ -2857,7 +2778,7 @@ function showSelect(){
           <img class="rw-character rw-gabumon" src="ui/personaje_aprobado_gabumon.png" alt="">
         </div>
         <aside class="real-right" aria-label="Información del jugador">
-          <button type="button" class="real-panel" id="rhMission"><h2>▣ ${t('daily')}</h2><p>${safeText(dailyText())}</p><span class="real-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></span><p class="real-reward">${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits</p></button>
+          <button type="button" class="real-panel" id="rhMission"><h2>▣ ${t('daily')}</h2><p>${safeText(dailyText())}</p><span class="real-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></span><p class="real-reward">${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits · +${DAILY.rewardTix} 🎟</p></button>
           <button type="button" class="real-panel" id="rhRecords"><h2>🏆 ${t('recs')}</h2><div class="real-stats"><span>Mejor tiempo <b>${fmtTime(bestT)}</b></span><span>Mejor nivel <b>${bestL}</b></span><span>Bajas <b>${kills}</b></span></div></button>
         </aside>
         <footer class="real-legal">${t('legal')}</footer>
@@ -2878,7 +2799,7 @@ function showSelect(){
   const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { gxBanner = 'navidadP'; showGacha(); };
   document.getElementById('btnColl').onclick=showCollection;
   document.getElementById('btnPlayer').onclick=showPlayer;
-  document.getElementById('btnGacha').onclick=showGacha;
+  document.getElementById('btnGacha').onclick=showLab;
   document.getElementById('btnHelp').onclick=showHelp;
   document.getElementById('btnAjustes').onclick=showSettings;
   // Botones del menú principal aún sin contenido: muestran un aviso breve en lugar de abrir nada
@@ -2902,7 +2823,7 @@ function showSelect(){
     let title,content;
     if(type==='mission'){
       title=t('daily');
-      content=`<p>${safeText(dailyText())}</p><div class="approved-info-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></div><p>${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits</p>`;
+      content=`<p>${safeText(dailyText())}</p><div class="approved-info-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></div><p>${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits · +${DAILY.rewardTix} 🎟</p>`;
     }else{
       title=t('recs');
       content=recs.length?`<div class="approved-info-records">${recs.slice(0,10).map((r,i)=>`<div><b>${i+1}. ${safeText(r.name)}</b><span>${fmtTime(r.t)} · Nv. ${Number(r.lvl)||0} · ${Number(r.kills)||0} bajas</span></div>`).join('')}</div>`:`<p>${safeText(t('none'))}</p>`;
@@ -2965,7 +2886,7 @@ function showHelp(){
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
-  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew'];
+  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab'];
 function makeSaveCode(){
   const data = {};
   for (const k of SAVE_KEYS){ const v = localStorage.getItem(k); if (v !== null) data[k] = v; }
@@ -3161,6 +3082,20 @@ function showStarter(){
 // Filtro y búsqueda de la pantalla de selección
 let pickQuery = '';
 let pickStage = 0, pickStageFor = null;   // etapa de la línea que se previsualiza y se viste
+// Digimon en preparación: se ven en el selector como bloqueados hasta que estén terminados
+const COMING_SOON = [
+  {name:'Leomon',       sprite:'sprites/adventure/leomon.png',      role:'Compañero · cuerpo a cuerpo'},
+  {name:'Hagurumon',    sprite:'sprites/adventure/hagurumon.png',   role:'Compañero · torretas'},
+  {name:'Frigimon',     sprite:'sprites/adventure/frigimon.png',    role:'Compañero · control'},
+  {name:'Wizardmon',    sprite:'sprites/adventure/wizardmon.png',   role:'Compañero · magia de área'},
+  {name:'Elecmon',      sprite:'sprites/adventure/elecmon.png',     role:'Encargado del Laboratorio'},
+  {name:'Piximon',      sprite:'sprites/adventure/piximon.png',     role:'Entrenador en el mapa'},
+  {name:'Numemon dorado', sprite:'sprites/numemon.png',             role:'Evento de caza', f:'sepia(1) saturate(4) hue-rotate(5deg) brightness(1.15)'},
+  {name:'Mekanorimon y Tankmon', sprite:'sprites/adventure/mekanorimon.png', role:'Enemigos de la zona 3'},
+  {name:'MetalEtemon',  sprite:'sprites/adventure/metaletemon.png', role:'Fase 2 de Etemon'},
+  {name:'VenomMyotismon', sprite:'sprites/adventure/venommyotismon.png', role:'Fase 2 de Myotismon'},
+  {name:'Apocalymon',   sprite:'sprites/adventure/apocalymon.png',  role:'Jefe secreto'}
+];
 function pickIsEvolved(k){ return !!loadJSON('digibonk3d-evo', {})[k]; }
 function pickProgress(){
   const chars = SEASONS.adventure.chars;
@@ -3185,14 +3120,19 @@ function showPicker(tab){
       <b>${open ? CHARS[k].name : '???'}</b>
       <small>${open ? (st.plays ? 'Partidas ' + st.plays : 'Sin jugar') : unlockHow(k)}</small>
     </button>`;
-  }).join('');
+  }).join('') + COMING_SOON.map(c => `<button class="pk2-tile lock soon" disabled data-name="${c.name.toLowerCase()}" title="${c.name} · ${c.role} · Próximamente">
+      <span class="pk2-num">🔒</span>
+      <img class="pk2-face" src="${c.sprite}" alt=""${c.f ? ` style="--soon-f:${c.f}"` : ''}>
+      <b>${c.name}</b>
+      <small>Próximamente · ${c.role}</small>
+    </button>`).join('');
   const left = '<div class="pk2-left-in" id="pkPreview"></div>';
   showOverlay(`
     <div class="picker-screen pk2">
       <header class="pk2-top">
         <button class="g-back" id="pkBack">← Volver</button>
         <h2>Elige tu Digimon</h2>
-        <span class="pk2-sub">Temporada 1 · ${chars.length} Digimon</span>
+        <span class="pk2-sub">Temporada 1 · ${chars.length} Digimon · ${COMING_SOON.length} en preparación</span>
       </header>
       <div class="pk2-body">
         <section class="pk2-left">${left}</section>
@@ -3333,7 +3273,8 @@ function startGame(key){
   applyZoneVisuals(1);
   applyBalance(key);
   applySkinFx(key);
-  resolveSolids(g.p, 0.5);   // aparición aleatoria: fuera de casas y vallas
+  applyLab();
+  resolveSolids(g.p, 0.5);   // aparición aleatoria: fuera de los obstáculos
   g.playerMesh = billboard(spriteOf(key, false), 2.6, false);   // sprite propio: la digievolución cambia su textura
   world.add(g.playerMesh);
   g.aura = makeAura(equippedAt(key, 0), key);
@@ -3639,7 +3580,7 @@ function animateEvo(dt){
 // BONK: al estar cargado (100%), libera una onda que daña y empuja a los enemigos cercanos y borra los proyectiles del jefe
 function addBonk(v){
   const was = g.bonk;
-  g.bonk = Math.min(100, g.bonk + v);
+  g.bonk = Math.min(100, g.bonk + v * (g.labBonk || 1));
   if (was < 100 && g.bonk >= 100) sfx('ready');
 }
 function bonkRelease(){
@@ -3836,7 +3777,7 @@ function update(dt){
   }
   // El jugador no puede salir del escenario (las montañas empiezan en ARENA_R - 1)
   [p.x, p.z] = clampArena(p.x, p.z, ARENA_R - 2);
-  resolveSolids(p, 0.5, p.y);   // casas, fuente, habitantes y vallas bloquean al jugador
+  resolveSolids(p, 0.5, p.y);   // los obstáculos del mapa bloquean al jugador
 
   // Avisos de fase: hordas a los 45 s y aviso del jefe 15 s antes
   if (g.zone < 2 && g.t >= ZONE2_AT) setZone(2);
@@ -4004,7 +3945,7 @@ function update(dt){
     if (d < 0.9){
       gm.taken = true; world.remove(gm.mesh);
       if (gm.heal){ p.hp = Math.min(p.maxHp, p.hp + 10); popText(gm.x, gm.z, '+10', '#7cf29c'); sfx('chest'); }
-      else { p.xp += gm.v; addBonk(0.02); }
+      else { p.xp += gm.v * (g.labXp || 1); addBonk(0.02); }
     }
   }
   g.gems = g.gems.filter(gm => !gm.taken);
@@ -4117,6 +4058,13 @@ function update(dt){
   }
 
   // Fin
+  if (p.hp <= 0 && g.revives > 0){
+    // Segunda oportunidad del Laboratorio: vuelve con media vida y aparta a la horda
+    g.revives--; p.hp = Math.round(p.maxHp * 0.5);
+    for (const e of g.enemies){ if (e.boss || e.kind === 'mini') continue; const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz) || 1; if (d < 10) [e.x, e.z] = clampArena(e.x + dx/d*8, e.z + dz/d*8, ARENA_R - 0.5); }
+    spawnRing(p.x, p.z, 0x7cf29c, 10, 0.6); screenFlash = 0.5;
+    announce('¡Segunda oportunidad!', 'Laboratorio · 50% de vida', '#7cf29c');
+  }
   if (p.hp <= 0){ p.hp = 0; endGame(false); }
   else if (g.bossDown && (!g.extraOn || (g.extraSpawned && !g.enemies.some(e => e.special && e.hp > 0)))) endGame(true);
 }
@@ -4527,12 +4475,14 @@ function endGame(win){
   state = 'end';
   sfx(win ? 'victory' : 'defeat');
   const daily = loadDaily();
-  const raw = Math.floor(g.kills/2 + g.t/10);
+  const raw = Math.floor((g.kills/2 + g.t/10) * labMul('bits'));
   const earned = Math.min(raw, Math.max(0, DAILY.runCap - daily.runBits));
   if (g.t >= 5) daily.runs += 1;
   daily.runBits += earned;
   let bonus = 0;
-  if (!daily.claimed && daily.runs >= DAILY.runsGoal){ daily.claimed = true; bonus = DAILY.reward; }
+  if (!daily.claimed && daily.runs >= DAILY.runsGoal){ daily.claimed = true; bonus = DAILY.reward; g.tix += DAILY.rewardTix; g.dailyTix = DAILY.rewardTix; }
+  // Toda partida larga da al menos un ticket, aunque no caiga ningún jefe
+  if (g.t >= DAILY.runTixAt && g.tix < DAILY.runTix) g.tix = DAILY.runTix;
   saveDaily(daily);
   SAVE.bits = SAVE.bits + earned + bonus;
   addTickets('std', g.tix);   // élites y jefe: monedero del permanente
@@ -4548,7 +4498,7 @@ function endGame(win){
   const dmgMax = dmgRows.length ? dmgRows[0][1] : 1;
   const dmgName = k => k === 'base' ? `Ataque de ${g.ch.name}` : (SKILLS[k] ? SKILLS[k].name : k);
   const rewards = [`<li><b>+${g.earned - g.bonus}</b> Bits</li>`];
-  if (g.bonus) rewards.push(`<li><b>+${g.bonus}</b> Bits · misión diaria completada</li>`);
+  if (g.bonus) rewards.push(`<li><b>+${g.bonus}</b> Bits y <b>+${g.dailyTix}</b> tickets · misión diaria completada</li>`);
   if (g.tix) rewards.push(`<li><b>+${g.tix}</b> tickets de tirada</li>`);
   for (const u of g.unlocked) rewards.push(`<li>Skin nueva: <b>${u}</b></li>`);
   for (const tl of g.newTitles) rewards.push(`<li>Título desbloqueado: <b>${tl.name}</b></li>`);
@@ -4557,7 +4507,7 @@ function endGame(win){
   showOverlay(`
     <div class="end3 ${win ? 'win' : 'lose'}">
       <h1>${win ? '¡VICTORIA!' : 'HAS CAÍDO'}</h1>
-      <p class="end3-sub">${win ? 'Piedmon ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Pueblo`} · ${ZONES[g.zone - 1].name}</p>
+      <p class="end3-sub">${win ? 'Piedmon ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Laboratorio`} · ${ZONES[g.zone - 1].name}</p>
       <div class="end3-cells">
         <span><b>${fmtTime(Math.floor(g.t))}</b>Tiempo</span><span><b>${g.p.lvl}</b>Nivel</span><span><b>${g.kills}</b>Bajas</span><span><b>${Object.keys(g.skills).length}</b>Habilidades</span>
       </div>
@@ -4891,7 +4841,6 @@ addEventListener('pointerover', e => { if (state !== 'play' && e.target.closest 
 addEventListener('click', e => { if (state !== 'play' && e.target.closest && e.target.closest('button')) sfx('uiClick'); }, true);
 
 /* ---------- Mapa 2D: minimapa en la esquina y mapa completo (tecla Tab) ---------- */
-const VILLAGE_R = 14;   // radio aproximado del Pueblo Primario, en unidades del escenario
 // Iconos: sprites del juego cargados una vez y reutilizados en el mapa
 const iconCache = {};
 function iconImg(src){
@@ -4912,10 +4861,7 @@ function drawWorldMap(cv, size){
   c.clearRect(0, 0, size, size);
   c.fillStyle = '#4b5d72'; c.beginPath(); c.arc(R, R, R - 1, 0, Math.PI*2); c.fill();      // montañas
   c.fillStyle = '#3f7d3f'; c.beginPath(); c.arc(R, R, ARENA_R*k, 0, Math.PI*2); c.fill();  // prado
-  c.fillStyle = 'rgba(215,168,110,.6)'; c.beginPath(); c.arc(X(0), Y(0), VILLAGE_R*k, 0, Math.PI*2); c.fill();
   c.fillStyle = '#2a7fb8'; c.beginPath(); c.arc(X(POND.x), Y(POND.z), POND.r*k, 0, Math.PI*2); c.fill();
-  c.fillStyle = '#fff3d6'; c.font = `${Math.max(9, size/28)}px system-ui`; c.textAlign = 'center';
-  c.fillText('Pueblo', X(0), Y(0) + 3);
   if (!g) return;
   // Cofres sin abrir: icono de regalo
   c.font = `${Math.max(12, 14*u)}px system-ui`; c.textAlign = 'center'; c.textBaseline = 'middle';
@@ -4967,7 +4913,7 @@ function clearBossRing(){
 
 /* ---------- Monedas (Bits), skins y gacha ---------- */
 // Misión diaria: jugar 3 partidas (de al menos 5 s) da un bonus; las Bits por partida tienen tope diario
-const DAILY = {runsGoal: 3, reward: 150, runCap: 200};
+const DAILY = {runsGoal: 3, reward: 150, rewardTix: 3, runCap: 600, runTix: 1, runTixAt: 300};
 function dayKey(){ const d = new Date(); return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; }
 function loadDaily(){
   const d = loadJSON('digibonk3d-daily', null);
@@ -4977,7 +4923,107 @@ function loadDaily(){
 function saveDaily(d){ localStorage.setItem('digibonk3d-daily', JSON.stringify(d)); }
 function dailyText(){
   const d = loadDaily();
-  return d.claimed ? 'Misión diaria completada' : `Misión diaria: ${Math.min(d.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits`;
+  return d.claimed ? 'Misión diaria completada' : `Misión diaria: ${Math.min(d.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits y ${DAILY.rewardTix} tickets`;
+}
+
+/* ---------- Laboratorio: mejoras permanentes que se compran con Bits ---------- */
+// per = bonus por nivel (multiplicador sumado) · flat = bonus entero · costs = precio de cada nivel
+const LAB_COSTS = [150, 300, 500, 800, 1200];
+const LAB = [
+  {id:'hp',     name:'Vida máxima',       icon:'❤', per:0.04, unit:'%', d:'Más vida máxima al empezar cada partida.'},
+  {id:'dmg',    name:'Daño',              icon:'⚔', per:0.03, unit:'%', d:'Todos tus ataques hacen más daño.'},
+  {id:'speed',  name:'Velocidad',         icon:'➤', per:0.02, unit:'%', d:'Te mueves más deprisa.'},
+  {id:'pickup', name:'Imán',              icon:'◎', per:0.08, unit:'%', d:'Recoges la experiencia desde más lejos.'},
+  {id:'xp',     name:'Experiencia',       icon:'✦', per:0.04, unit:'%', d:'Cada orbe de experiencia vale más.'},
+  {id:'bonk',   name:'Carga del Bonk',    icon:'✸', per:0.06, unit:'%', d:'El medidor Bonk se llena más rápido.'},
+  {id:'rer',    name:'Refrescos de cartas', icon:'↻', flat:[0, 1, 1, 2, 2], unit:'', d:'Más refrescos de cartas al subir de nivel (+1 en los niveles 2 y 4).'},
+  {id:'bits',   name:'Bits por partida',  icon:'Ⓑ', per:0.05, unit:'%', d:'Ganas más Bits al terminar cada partida.'},
+  {id:'revive', name:'Segunda oportunidad', icon:'✚', max:1, costs:[2500], d:'Una vez por partida, al caer vuelves con el 50% de la vida.'},
+  {id:'skill',  name:'Habilidad inicial', icon:'★', max:1, costs:[2000], d:'Empiezas cada partida con una habilidad de tu Digimon a nivel 1.'}
+];
+const LAB_BY_ID = Object.fromEntries(LAB.map(u => [u.id, u]));
+const labMax = u => u.max || LAB_COSTS.length;
+const labCosts = u => u.costs || LAB_COSTS;
+function labLevels(){ return loadJSON('digibonk3d-lab', {}); }
+function labLv(id){ return Math.min(labMax(LAB_BY_ID[id]), labLevels()[id] | 0); }
+// Multiplicador de una mejora con porcentaje: 1 + nivel × bonus
+function labMul(id){ const u = LAB_BY_ID[id]; return 1 + (u.per || 0) * labLv(id); }
+function labFlat(id){ const u = LAB_BY_ID[id], lv = labLv(id); return u.flat ? u.flat[lv] : lv; }
+function labSpent(){ return LAB.reduce((a, u) => a + labCosts(u).slice(0, labLv(u.id)).reduce((x, y) => x + y, 0), 0); }
+function labBuy(id){
+  const u = LAB_BY_ID[id], lv = labLv(id);
+  if (lv >= labMax(u)) return false;
+  const cost = labCosts(u)[lv];
+  if (SAVE.bits < cost){ announce('Bits insuficientes', `Necesitas ${cost} Bits`, '#ef5350'); return false; }
+  SAVE.bits = SAVE.bits - cost;
+  const L = labLevels(); L[id] = lv + 1;
+  localStorage.setItem('digibonk3d-lab', JSON.stringify(L));
+  sfx('ready');
+  return true;
+}
+// Reembolso total: devuelve todos los Bits gastados y deja las mejoras a cero
+function labRefund(){
+  const back = labSpent();
+  SAVE.bits = SAVE.bits + back;
+  localStorage.removeItem('digibonk3d-lab');
+  return back;
+}
+// Aplica el Laboratorio al empezar la partida (después de balance y skin)
+function applyLab(){
+  const p = g.p;
+  p.maxHp = Math.round(p.maxHp * labMul('hp')); p.hp = p.maxHp;
+  p.dmg *= labMul('dmg');
+  p.speed *= labMul('speed');
+  p.pickup *= labMul('pickup');
+  g.labXp = labMul('xp');
+  g.labBonk = labMul('bonk');
+  upRes().rer += labFlat('rer');
+  g.revives = labLv('revive');
+  if (labLv('skill')){
+    const mine = CHAR_SKILLS[g.ch.id] || [];
+    if (mine.length) addSkill(mine[Math.floor(Math.random()*mine.length)]);
+  }
+}
+function labBonusText(u, lv){
+  if (!lv) return 'Sin mejorar';
+  if (u.per) return `+${Math.round(u.per*lv*100)}${u.unit}`;
+  if (u.flat) return `+${u.flat[lv]}`;
+  return 'Activa';
+}
+function showLab(){
+  state = 'lab';
+  setHud(false);
+  const esc = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const bits = SAVE.bits;
+  const cards = LAB.map(u => {
+    const lv = labLv(u.id), max = labMax(u), full = lv >= max, cost = full ? 0 : labCosts(u)[lv];
+    const pips = Array.from({length: max}, (_, i) => `<i class="${i < lv ? 'on' : ''}"></i>`).join('');
+    return `<article class="lab-card${full ? ' full' : ''}">
+      <span class="lab-ic" aria-hidden="true">${u.icon}</span>
+      <div class="lab-txt"><h3>${esc(u.name)}</h3><p>${esc(u.d)}</p>
+        <div class="lab-pips" aria-label="Nivel ${lv} de ${max}">${pips}</div>
+        <small>${esc(labBonusText(u, lv))}${!full && u.per ? ` → +${Math.round(u.per*(lv + 1)*100)}%` : ''}</small></div>
+      <button type="button" class="lab-buy" data-lab="${u.id}" ${full || bits < cost ? 'disabled' : ''}>${full ? 'Máximo' : `Ⓑ ${cost}`}</button>
+    </article>`;
+  }).join('');
+  showOverlay(`
+    <div class="lab-screen">
+      <header class="lab-top">
+        <button class="g-back" id="labBack">← Volver</button>
+        <div class="lab-head"><img src="sprites/adventure/elecmon.png" alt="" class="lab-host"><div><h2>Laboratorio</h2><small>Mejoras permanentes para todas las partidas</small></div></div>
+        <span class="lab-bits">Ⓑ ${bits.toLocaleString('es-ES')}</span>
+      </header>
+      <p class="lab-say">Elecmon: «Con los Bits que traes de tus partidas puedo mejorar a tu compañero. Las mejoras valen para todos los Digimon.»</p>
+      <div class="lab-grid">${cards}</div>
+      <footer class="lab-foot">
+        <button type="button" class="mini-btn" id="labRefund" ${labSpent() ? '' : 'disabled'}>Reembolsar todo (Ⓑ ${labSpent()})</button>
+        <button type="button" class="g-btn" id="labGacha">🎟 Ir al gacha de tickets</button>
+      </footer>
+    </div>`);
+  document.getElementById('labBack').onclick = () => showSelect();
+  document.getElementById('labGacha').onclick = () => showGacha();
+  document.getElementById('labRefund').onclick = () => { const b = labRefund(); announce('Reembolso', `+${b} Bits`, '#ffd54f'); showLab(); };
+  overlay.querySelectorAll('.lab-buy').forEach(b => b.onclick = () => { if (labBuy(b.dataset.lab)) showLab(); });
 }
 // Efectos de cada skin: bonus de estadísticas y aura visual
 const SKIN_FX = {
@@ -5013,7 +5059,14 @@ function addTickets(bn, n){
   localStorage.setItem(TIX_KEY, JSON.stringify(w));
 }
 function spendTickets(bn, n){ addTickets(bn, -n); }
-const PULL_COST = 300, DUP_REFUND = 25;
+// El gacha se paga solo con tickets (los Bits son para el Laboratorio). Los tickets del permanente
+// valen en cualquier banner: primero se gastan los del banner y luego los del permanente
+function usableTickets(bn){ return ticketsOf(bn) + (bn !== 'std' ? ticketsOf('std') : 0); }
+function spendUsable(bn, n){
+  const own = Math.min(n, ticketsOf(bn));
+  if (own) spendTickets(bn, own);
+  if (n - own) spendTickets('std', n - own);
+}
 // Evento temporal: mientras dura, el gacha tiene el banner de Navidad (cambia aquí las fechas)
 const EVENT = {name:'Navidad Digital', start: Date.parse('2026-11-01T00:00:00'), end: Date.parse('2026-12-31T23:59:59')};
 function eventActive(){ const now = Date.now(); return now >= EVENT.start && now <= EVENT.end; }
@@ -5628,18 +5681,9 @@ function grantReward(r){
   return {...r, dup:false};
 }
 // Tirada: 1 o 10. Con 10 se garantiza al menos una recompensa rara o épica
-function doPulls(n, withTickets = false){
-  if (withTickets){
-    if (ticketsOf(gxBanner) < n){ announce('Tickets insuficientes', `Te faltan tickets de este banner`, '#ef5350'); return; }
-    spendTickets(gxBanner, n);
-  } else {
-    const cost = n === 10 ? PULL_COST_10 : PULL_COST;
-    if (SAVE.bits < cost){
-      announce('Bits insuficientes', `Necesitas ${cost} Bits`, '#ef5350');
-      return;
-    }
-    SAVE.bits = SAVE.bits - cost;
-  }
+function doPulls(n){
+  if (usableTickets(gxBanner) < n){ announce('Tickets insuficientes', `Necesitas ${n} ${n === 1 ? 'ticket' : 'tickets'}. Se consiguen jugando`, '#ef5350'); return; }
+  spendUsable(gxBanner, n);
   const tiers = Array.from({length: n}, () => rollTier());
   if (n === 10 && !tiers.some(t => t !== 'c')) tiers[9] = 'r';
   // Contador de garantía: se reinicia con cada legendaria y fuerza una en la tirada número PITY_AT
@@ -5659,7 +5703,6 @@ function doPulls(n, withTickets = false){
   }
   playPullAnimation(results);
 }
-const PULL_COST_10 = 3000;
 // Animación de tirada: el Digivice se carga, su luz adelanta la mejor rareza, estalla y reparte las cartas boca abajo
 function playPullAnimation(results){
   state = 'gacha';
@@ -5763,7 +5806,7 @@ function showGacha(){
   const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const portrait = k => { const ic = PLAYER_ICONS.find(x => x.id === k); return ic ? ic.src : ''; };
   const partner = {agumon:'tai', gabumon:'matt', biyomon:'sora', tentomon:'izzy', palmon:'mimi', gomamon:'joe', patamon:'tk', gatomon:'kari'}[prevKey] || '';
-  const wallet = ticketsOf(gxBanner);
+  const wallet = usableTickets(gxBanner);
   const frameOpts = FRAMES.filter(f => !f.weekly && !f.seasonal);
   const fr = f => `<span class="rw-frame fr-${f.id}"></span>`;
   const first = frameOpts[0], last = frameOpts[frameOpts.length - 1];
@@ -5796,10 +5839,9 @@ function showGacha(){
    <aside class="tr11-side"><div class="tr11-side-cap"><span>RULETA DE TESOROS</span><h2>${esc(BANNERS[gxBanner].name)}</h2><small>${gxBanner === 'std' ? 'Invocación de los Elegidos' : esc(BANNERS[gxBanner].sub)}</small></div>
     <div class="tr11-progress-title"><span>Garantía legendaria</span><b>${pity} / ${pityMax}</b></div><div class="tr11-progress"><i style="width:${Math.min(100, Math.round(pity / pityMax * 100))}%"></i></div><small class="tr11-guarantee">Legendaria en un máximo de ${Math.max(0, pityMax - pity)} tiradas más.</small>
     <div class="tr11-cost"><span>🎟 TIRADAS CON TICKETS</span><strong>${wallet} disponibles</strong></div>
-    <button type="button" class="tr11-pull tr11-pull-primary" id="trPull1"><span>✦ TIRAR ✦</span><small>1 tirada · Ⓑ ${PULL_COST} Bits</small></button>
-    <button type="button" class="tr11-pull tr11-pull-multi" id="trPull10"><span>✦ 10 TIRADAS ✦</span><small>${wallet >= 10 ? '10 tickets' : `Ⓑ ${PULL_COST_10} Bits`} · garantía de al menos una rara</small></button>
-    <button type="button" class="tr11-pull" id="trTix1" ${wallet < 1 ? 'disabled' : ''}><span>USAR TICKET</span><small>× 1 ticket · tienes ${wallet}</small></button>
-    <p class="tr11-help">Los tickets se consiguen jugando. Los resultados se añaden a tu colección.</p>
+    <button type="button" class="tr11-pull tr11-pull-primary" id="trPull1" ${wallet < 1 ? 'disabled' : ''}><span>✦ TIRAR ✦</span><small>1 tirada · 🎟 1 ticket</small></button>
+    <button type="button" class="tr11-pull tr11-pull-multi" id="trPull10" ${wallet < 10 ? 'disabled' : ''}><span>✦ 10 TIRADAS ✦</span><small>🎟 10 tickets · garantía de al menos una rara</small></button>
+    <p class="tr11-help">Los tickets se consiguen jugando: jefes, élites, santuarios, misión diaria y 1 por cada partida de más de 5 minutos. Los del permanente valen en todos los banners. Los Bits se gastan en el Laboratorio.</p>
    </aside>
   </div>
   <footer class="tr11-foot"><span>ⓘ Toca un premio para consultar su nombre y rareza. Las probabilidades no cambian al elegir una vista previa.</span><strong>DIGIBONK</strong></footer>
@@ -5817,8 +5859,7 @@ function showGacha(){
   root.querySelectorAll('.tr11-banner-tab').forEach(b => b.onclick = () => { gxBanner = b.dataset.banner; trPrevIdx = -1; showGacha(); });
   $('trMore').onclick = () => { trPrevIdx = (trPrevIdx + 1) % chars.length; showGacha(); };
   $('trPull1').onclick = () => doPulls(1);
-  $('trPull10').onclick = () => doPulls(10, ticketsOf(gxBanner) >= 10);
-  $('trTix1').onclick = () => doPulls(1, true);
+  $('trPull10').onclick = () => doPulls(10);
 }
 
 /* ---------- Efectos de skin: bonus de estadísticas y aura alrededor del Digimon ---------- */
@@ -6097,7 +6138,6 @@ function frame(now){
       pm.offset.x = f/ANIM_N;
     }
   }
-  for (const n of npcs) n.sprite.position.y = n.base + Math.sin(now*0.003 + n.ph)*0.08;   // habitantes respiran
   frameNo++;
   if (state === 'play' && g && frameNo % Q.minimapEvery === 0) drawWorldMap(document.getElementById('minimap'), 170);
   if (state === 'map' && g) drawWorldMap(document.getElementById('bigmap'), 600);
