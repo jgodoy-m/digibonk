@@ -51,7 +51,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('entrada'); ap.add_argument('nombre')
     ap.add_argument('--alto', type=float, help='altura del Digimon respecto al fotograma (por defecto, la de la hoja actual)')
-    ap.add_argument('--abajo', type=int, help='margen inferior en px de la hoja actual (por defecto, el de la hoja actual)')
+    ap.add_argument('--abajo', type=float, help='margen inferior respecto al alto del fotograma (por defecto, el de la hoja actual)')
     ap.add_argument('--umbral', type=int, default=128, help='alfa mínima que cuenta como sprite (sube a 240 si hay fondo difuminado)')
     ap.add_argument('--lado', type=int, default=256, help='lado del fotograma de salida')
     a = ap.parse_args()
