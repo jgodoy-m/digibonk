@@ -193,7 +193,7 @@ canvas{display:block}
 .sc-box textarea{width:100%;height:92px;padding:10px;border-radius:12px;border:2px solid #3a6fc4;background:#0a1428;color:#cfe8ff;font:12px ui-monospace,Menlo,monospace;resize:vertical;box-sizing:border-box}
 .sc-row{display:flex;justify-content:flex-end;margin:8px 0 6px}
 .sc-row .mini-btn.armed{background:linear-gradient(180deg,#ff7a6b,#e0463a);color:#fff}
-#menuart{position:fixed;inset:0;z-index:0;background:#0a1830 url('ui/fondo-menu.jpg') center/cover no-repeat;overflow:hidden}
+#menuart{position:fixed;inset:0;z-index:0;overflow:hidden}
 #menuart .stars{position:absolute;inset:0;pointer-events:none;
   background-image:radial-gradient(1.5px 1.5px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 37% 9%,#cfe9ff,transparent),
     radial-gradient(2px 2px at 63% 22%,#fff,transparent),radial-gradient(1px 1px at 82% 14%,#ffe0ff,transparent),
@@ -350,14 +350,14 @@ canvas{display:block}
 .tb-chip.tix{border-color:var(--dv-cyan);color:#dff8ff}
 .tb-btn{width:38px;height:36px;border:2px solid var(--dv-cyan);background:#06102b;color:#dff8ff;font:900 13px 'Orbitron',system-ui,sans-serif;cursor:pointer;transition:background .15s}
 .tb-btn:hover{background:#12357a}
-#overlay.has-top:not(.menu-mode){padding-top:56px;box-sizing:border-box}
+#overlay.has-top:not(.menu-mode){box-sizing:border-box}
 #overlay.has-top .picker-screen{height:min(640px,calc(100vh - 78px))}
 #overlay.has-top .gacha{max-height:calc(100vh - 78px) !important}
 .m4-pad{position:absolute;bottom:34px;width:300px;height:70px;border-radius:50%;background:radial-gradient(ellipse,rgba(61,224,255,.55),rgba(61,224,255,0) 70%);box-shadow:0 0 0 2px rgba(61,224,255,.5) inset}
 #overlay:has(.dvl2){background:radial-gradient(ellipse 50% 60% at 28% 55%,rgba(27,79,214,.5),transparent 70%),radial-gradient(ellipse 40% 50% at 78% 45%,rgba(255,138,30,.22),transparent 70%),rgba(6,13,38,.96) !important}
 .dvl2{position:relative;width:100vw;height:100vh;display:grid;grid-template-columns:1.15fr 1fr;align-items:center;font-family:'Orbitron',system-ui,sans-serif}
 .dvl-lang{position:absolute;left:18px;top:16px;z-index:2}
-.dvl-scene{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;border-right:4px solid var(--dv-org)}
+.dvl-scene{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
 .dvl-scene .dvl-logo{font-size:104px}
 .dvl-pitch{margin:4px 0 0;font-size:15px;color:#dff8ff;letter-spacing:1px}
 .dvl-duo{position:relative;display:flex;align-items:flex-end;justify-content:center;gap:40px;margin-top:26px;height:200px}
@@ -1574,16 +1574,16 @@ body:has(.tr11) #hudTop{display:none!important}
 /* Ficha minimalista (última capa) */
 .pl4-wrap{max-width:1180px;margin:0 auto;padding:36px 32px 48px!important}
 .pl4-top{display:flex;align-items:center;gap:16px;margin-bottom:28px!important}
-.pl4 .g-back{border-radius:999px!important;padding:8px 16px!important;font:600 13px system-ui,sans-serif!important;box-shadow:none!important;letter-spacing:0!important}
+.pl4 .g-back{box-shadow:none!important}
 .pl4 .pl4-banner{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;flex:1;min-width:0}
 .pl4 .pl4-banner b{font:600 22px system-ui,sans-serif!important;font-style:normal!important;text-shadow:none!important;display:block}
 .pl4 .pl4-banner small{font:400 13px system-ui,sans-serif!important;display:block;margin-top:2px}
 .pl4 .pl4-top>button:last-child{background:transparent!important;border:1px solid #2b3345!important;color:#cdd5e6!important;border-radius:999px!important;padding:8px 16px!important;font:600 13px system-ui,sans-serif!important;box-shadow:none!important;opacity:.6!important}
-.pl4 .pl5-hero{border-radius:18px!important;padding:30px 36px!important;gap:32px!important;height:auto!important}
+.pl4 .pl5-hero{padding:30px 36px!important;gap:32px!important;height:auto!important}
 .pl4 .pl5-id{gap:28px!important}
 .pl4 .pl5-hero .pl4-av .hud-portrait{width:112px!important;height:112px!important;margin-top:8px}
 .pl4 .pl4-av{gap:12px!important;padding-bottom:0!important}
-.pl4 .pl4-chg{box-shadow:none!important;font:600 12px system-ui,sans-serif!important;padding:6px 14px!important}
+.pl4 .pl4-chg{box-shadow:none!important}
 .pl4 .pl4-name{font:600 30px system-ui,sans-serif!important;border:0!important;border-bottom:1px solid transparent!important;text-shadow:none!important;padding:0!important}
 .pl4 .pl4-name:focus{border-bottom-color:#2b3345!important}
 .pl4 .pl4-id{gap:12px!important}
@@ -1595,12 +1595,12 @@ body:has(.tr11) #hudTop{display:none!important}
 .pl4 .pl5-medal i{filter:grayscale(1)!important;opacity:.35!important;font-size:22px!important}
 .pl4 .pl5-medal b{font:600 11px system-ui,sans-serif!important}
 .pl4 .pl4-stats{gap:12px!important;margin-top:16px!important}
-.pl4 .pl4-stat{border-radius:16px!important;padding:18px 20px!important;gap:14px!important}
+.pl4 .pl4-stat{padding:18px 20px!important;gap:14px!important}
 .pl4 .pl4-stat i{font-size:18px!important;flex:0 0 22px!important}
 .pl4 .pl4-stat b{font:600 22px system-ui,sans-serif!important}
 .pl4 .pl4-stat small{font:600 10.5px system-ui,sans-serif!important;letter-spacing:.09em!important}
 .pl4 .pl5-grid{gap:16px!important;margin-top:16px!important}
-.pl4 .pl5-panel{border-radius:18px!important;padding:24px 26px!important}
+.pl4 .pl5-panel{padding:24px 26px!important}
 .pl4 .pl5-panel h3{font:600 16px system-ui,sans-serif!important;border:0!important;padding:0!important;margin:0 0 16px!important;text-transform:none!important}
 .pl4 .pl5-panel h3 small,.pl4 .pl5-panel h4 small{font:400 12px system-ui,sans-serif!important;color:#7d869c!important;margin-left:8px!important}
 .pl4 .pl5-panel h4{font:600 14px system-ui,sans-serif!important;margin:22px 0 10px!important}
@@ -1608,8 +1608,8 @@ body:has(.tr11) #hudTop{display:none!important}
 .pl4 .pl5-acc{background:#2b3345!important;width:3px!important;border-radius:3px!important}
 .pl4 .pl5-rn b{font:600 14px system-ui,sans-serif!important}
 .pl4 .pl5-rn small{font:400 12px system-ui,sans-serif!important}
-.pl4 .pl5-rv,.pl4 .pl5-rt{font:500 13px system-ui,sans-serif!important;color:#b6bfd3!important}
-.pl4 .pl5-right .pl4-ach{background:transparent!important;border:0!important;border-bottom:1px solid #1f2535!important;border-radius:0!important;padding:12px 0!important;margin:0!important}
+.pl4 .pl5-rv,.pl4 .pl5-rt{font:500 13px system-ui,sans-serif!important}
+.pl4 .pl5-right .pl4-ach{background:transparent!important;border:0!important;border-radius:0!important;padding:12px 0!important;margin:0!important}
 .pl4 .pl5-right .pl4-ach:last-child{border-bottom:0!important}
 .pl4 .pl4-ach-top b{font:600 14px system-ui,sans-serif!important}
 .pl4 .pl4-ach-top em{font:500 12px system-ui,sans-serif!important;color:#9aa3b8!important;font-style:normal!important}
@@ -1626,28 +1626,16 @@ body:has(.tr11) #hudTop{display:none!important}
 .pl5-center{display:flex;flex-direction:column;align-items:center;gap:8px}
 .pl5-medals{justify-self:end}
 /* Ficha de jugador: diseño Nord con el fondo nuevo */
-.pl4 .real-world{background:url(ui/fondo_ficha_nord.png) center/cover no-repeat!important;filter:none!important}
 .pl4 .real-world .rw-video,.pl4 .real-world .rw-scenery,.pl4 .real-world::after{display:none!important}
-.pl4 .pl5-hero,.pl4 .pl4-stat,.pl4 .pl5-panel{background:#2E3440!important;border:0!important;box-shadow:none!important}
 .pl4 .pl4-name,.pl4 .pl5-panel h3,.pl4 .pl4-banner b,.pl4 .pl4-stat b,.pl4 .pl4-ach-top b,.pl4 .pl5-rn b{color:#ECEFF4!important}
-.pl4 .pl4-banner small,.pl4 .pl4-stat small,.pl4 .pl5-panel h3 small,.pl4 .pl5-rn small,.pl4 .pl4-ach small,.pl4 .pl4-empty{color:#D8DEE9!important}
-.pl4 .pl4-title-badge,.pl4 .pl4-chips span{background:#434C5E!important;color:#E5E9F0!important}
-.pl4 .pl5-medal.ok i,.pl4 .pl4-stat i{filter:none!important;opacity:1!important;color:#88C0D0}
-.pl4 .pl4-stat i{color:#88C0D0}
-.pl4 .pl4-ach u,.pl4 .pl5-acc.win{background:#88C0D0!important}
-.pl4 .pl4-ach i,.pl4 .pl5-rec{background:#3B4252!important}
-.pl4 .pl5-rec{border-bottom:1px solid #434C5E!important;background:transparent!important}
-.pl4 .pl4-chg,.pl4 .g-back,.pl4 .pl5-share{background:#3B4252!important;border:1px solid #4C566A!important;color:#ECEFF4!important}
-.pl4 .pl4-chg:hover,.pl4 .g-back:hover{border-color:#88C0D0!important}
+.pl4 .pl5-medal.ok i,.pl4 .pl4-stat i{filter:none!important;opacity:1!important}
+.pl4 .pl5-rec{background:transparent!important}
 .pl4 .pl5-medal{color:#4C566A!important}
-.pl4 .pl5-medal b{color:#D8DEE9!important}
-.pl4 .pl5-medal.ok b{color:#A3BE8C!important}
 .pl4 .pl5-panel h4{color:#ECEFF4!important}
 /* Ficha: acentos de color en el bloque izquierdo (paleta Nord) */
 .pl4 .pl4-name{color:#ECEFF4!important;font-size:34px!important}
-.pl4 .pl4-title-badge{background:#EBCB8B!important;color:#2E3440!important;border:0!important;font-weight:700!important;padding:5px 14px!important}
-.pl4 .pl4-chips span:first-child{background:#4C566A!important;color:#ECEFF4!important}
-.pl4 .pl4-chips span:last-child{background:#5E81AC!important;color:#ECEFF4!important}
+.pl4 .pl4-title-badge{border:0!important;font-weight:700!important;padding:5px 14px!important}
+.pl4 .pl4-chips span:last-child{color:#ECEFF4!important}
 /* Móvil (≤700px): menú y ficha en una columna */
 @media (max-width:700px){
   .realhub .real-top{display:flex!important;flex-wrap:wrap!important;height:auto!important;padding:8px!important;gap:8px!important}
@@ -1688,24 +1676,23 @@ body:has(.tr11) #hudTop{display:none!important}
 .lab-top{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .lab-head{display:flex;align-items:center;gap:12px;flex:1}
 .lab-head h2{margin:0;font-size:26px;letter-spacing:.5px}
-.lab-head small{color:#9fb3d1}
-.lab-host{width:64px;height:64px;image-rendering:pixelated;object-fit:contain;background:#0e1f3d;border:2px solid #4fc3f7;border-radius:12px}
-.lab-bits{padding:8px 14px;border-radius:10px;background:#1b2a14;border:1px solid #7cf29c;color:#b9f6ca;font-weight:800;font-size:18px}
-.lab-say{margin:14px 0;padding:10px 14px;border-left:3px solid #ffd54f;background:rgba(8,14,30,.7);border-radius:0 10px 10px 0;color:#fff3c4}
+.lab-host{image-rendering:pixelated;object-fit:contain;border:2px solid #4fc3f7;border-radius:12px}
+.lab-bits{padding:8px 14px;border-radius:10px;font-weight:800}
+.lab-say{padding:10px 14px;border-left:3px solid #ffd54f;border-radius:0 10px 10px 0;color:#fff3c4}
 .lab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
-.lab-card{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;background:rgba(10,20,42,.92);border:1px solid #2c4a78}
+.lab-card{display:flex;align-items:center;gap:12px;padding:12px}
 .lab-card.full{border-color:#ffd54f}
-.lab-ic{flex:none;width:44px;height:44px;display:grid;place-items:center;font-size:22px;border-radius:12px;background:#13294d;color:#ffd54f}
+.lab-ic{flex:none;width:44px;height:44px;display:grid;place-items:center;font-size:22px;border-radius:12px;color:#ffd54f}
 .lab-txt{flex:1;min-width:0}
 .lab-txt h3{margin:0;font-size:15px}
-.lab-txt p{margin:2px 0 6px;font-size:12px;color:#9fb3d1;line-height:1.35}
+.lab-txt p{margin:2px 0 6px;font-size:12px;line-height:1.35}
 .lab-txt small{font-size:12px;color:#7cf29c;font-weight:700}
 .lab-pips{display:flex;gap:4px;margin-bottom:4px}
 .lab-pips i{width:16px;height:6px;border-radius:3px;background:#22385e}
 .lab-pips i.on{background:#ffd54f}
 .lab-buy{flex:none;min-width:84px;padding:9px 10px;border-radius:10px;border:0;background:linear-gradient(#ffe082,#ffb300);color:#1b1300;font-weight:900;cursor:pointer}
 .lab-buy:disabled{background:#2a3550;color:#7d8aa5;cursor:default}
-.lab-foot{display:flex;justify-content:space-between;gap:12px;margin-top:16px;flex-wrap:wrap}
+.lab-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 @media (max-width:640px){.lab-grid{grid-template-columns:1fr}.lab-head h2{font-size:21px}}
 /* Móvil (<=760px): colección, selección de Digimon y ajustes caben en el ancho y se desplazan en vertical */
 @media (max-width:760px){
@@ -1750,6 +1737,67 @@ body:has(.tr11) #hudTop{display:none!important}
   .settings .set-seg-wrap>button{flex:1;min-height:44px}
   .settings .set-row>.set-toggle,.settings .set-row>.mini-btn{flex:1 1 100%;min-height:44px}
 }
+/* ===== Sistema común de pantallas: mismo fondo, marco, cabecera, botones y márgenes en todos los menús ===== */
+:root{--ui-panel:linear-gradient(150deg,#256cbb 0%,#082f77 49%,#061c4c 100%);--ui-line:#9aefff;--ui-card:rgba(6,24,64,.82);--ui-card-line:#2f6fb3;--ui-text:#eaf6ff;--ui-muted:#a9c6e6;--ui-gold:#ffd54f;--ui-top:28px;--ui-bot:28px;--ui-radius:10px}
+/* Fondo de los menús: escenario limpio del Digimundo, desenfocado y oscurecido (la imagen anterior tenía un formulario dibujado) */
+#menuart{background:#061433 url('ui/mundo_digital_solo_escenario.jpg') center/cover no-repeat;filter:blur(4px) brightness(.5) saturate(1.1);transform:scale(1.06)}
+/* Márgenes iguales arriba y abajo: la barra superior reserva su hueco y el panel nunca toca los bordes */
+#overlay:not(.menu-mode){box-sizing:border-box;padding:var(--ui-top) 16px var(--ui-bot);justify-content:safe center;overflow-y:auto}
+#overlay.has-top:not(.menu-mode){--ui-top:76px;padding-top:var(--ui-top)}
+#overlay:not(.menu-mode)>:is(.picker-screen,.settings,.help-box,.lab-screen,.end3){flex:none;box-sizing:border-box;max-height:calc(100dvh - var(--ui-top) - var(--ui-bot))}
+#overlay:not(.menu-mode)>.picker-screen{width:min(1040px,96vw)}
+#overlay:not(.menu-mode)>:is(.settings,.help-box){width:min(690px,94vw)}
+#overlay:not(.menu-mode)>.settings.sc-box{width:min(730px,94vw)}
+#overlay:not(.menu-mode)>.picker-screen.pk2{height:min(680px,calc(100dvh - var(--ui-top) - var(--ui-bot)))}
+#overlay:not(.menu-mode):has(>:is(.dvl2,.pa,.pr3,.tr11)){padding:0}
+/* Primer compañero: ficha arriba y los 8 Digimon en una rejilla debajo, sin huecos vacíos */
+#overlay:not(.menu-mode)>.pk2-starter{height:auto;width:min(900px,96vw)}
+.pk2-starter .pk2-body{display:flex;flex-direction:column;gap:14px}
+.pk2-starter .pk2-right{width:auto}
+.pk2-starter .pk2-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.pk2-starter .pk2-foot{justify-content:center}
+/* Laboratorio con el mismo marco y cabecera que Ajustes o Colección */
+#overlay:not(.menu-mode)>.lab-screen{width:min(1080px,96vw);max-width:none;margin:0;padding:18px 22px 20px;overflow:auto;text-align:left;color:var(--ui-text);background:var(--ui-panel);border:3px solid var(--ui-line);border-radius:8px;box-shadow:inset 0 3px #b5ffff76,0 8px 0 #03163d,0 0 22px #21afff7c;outline:2px solid #267dbb;outline-offset:3px}
+.lab-top{padding:8px 14px;border:2px solid #c3fdff;border-radius:var(--ui-radius);background:linear-gradient(90deg,#6ee2f4,#147fbf);box-shadow:0 3px #0b3976;color:#06234b}
+#overlay .lab-head h2{color:#07315c;text-shadow:0 1px #d5ffff;font-family:'Orbitron',system-ui,sans-serif;font-size:24px;letter-spacing:1px;text-transform:uppercase}
+.lab-head small{color:#0b3976;font-weight:600}
+.lab-host{width:48px;height:48px;background:#06234b}
+.lab-bits{background:#06102b;border:2px solid var(--ui-gold);color:var(--ui-gold);font-family:'Orbitron',system-ui,sans-serif;font-size:16px}
+.lab-say{margin:14px 0;background:var(--ui-card);border-left-color:var(--ui-gold)}
+.lab-card{text-align:left;background:var(--ui-card);border:1px solid var(--ui-card-line);border-radius:var(--ui-radius)}
+.lab-ic{background:#0f3a7a}
+.lab-txt p{color:var(--ui-muted)}
+.lab-foot{align-items:center;margin-top:16px}
+.lab-foot .g-btn{margin:0}
+/* Ficha de jugador con la paleta Digivice (antes gris Nord, distinta del resto) */
+.pl4 .real-world{background:#061433 url('ui/mundo_digital_solo_escenario.jpg') center/cover no-repeat!important;filter:blur(4px) brightness(.5) saturate(1.1)!important;transform:scale(1.06)}
+.pl4 .pl5-hero,.pl4 .pl4-stat,.pl4 .pl5-panel{background:var(--ui-panel)!important;border:2px solid var(--ui-line)!important;border-radius:var(--ui-radius)!important;box-shadow:inset 0 2px #b5ffff55,0 5px 0 #03163d!important}
+.pl4 .pl4-stat{background:var(--ui-card)!important;border-color:var(--ui-card-line)!important;box-shadow:inset 0 1px #b5ffff33!important}
+.pl4 .pl4-banner b{font-family:'Orbitron',system-ui,sans-serif!important;text-transform:uppercase;letter-spacing:1px;color:#fff!important}
+.pl4 .pl4-banner small,.pl4 .pl4-stat small,.pl4 .pl5-panel h3 small,.pl4 .pl5-rn small,.pl4 .pl4-ach small,.pl4 .pl4-empty{color:var(--ui-muted)!important}
+.pl4 .pl4-title-badge{background:var(--ui-gold)!important;color:#2a1a00!important}
+.pl4 .pl4-chips span,.pl4 .pl4-chips span:first-child{background:#06234b!important;color:var(--ui-text)!important}
+.pl4 .pl4-chips span:last-child{background:#147fbf!important}
+.pl4 .pl4-stat i,.pl4 .pl5-medal.ok i{color:var(--ui-line)}
+.pl4 .pl4-ach u,.pl4 .pl5-acc.win{background:var(--ui-gold)!important}
+.pl4 .pl4-ach i{background:#06234b!important}
+.pl4 .pl5-rec,.pl4 .pl5-right .pl4-ach{border-bottom:1px solid #ffffff1f!important}
+.pl4 .pl5-medal b,.pl4 .pl5-rv,.pl4 .pl5-rt{color:var(--ui-muted)!important}
+.pl4 .pl5-medal.ok b{color:var(--ui-gold)!important}
+.pl4 .g-back,.pl4 .pl4-chg,.pl4 .pl5-share{background:#06102b!important;border:2px solid #3de0ff!important;border-radius:0!important;color:#dff8ff!important;font:12px 'Orbitron',system-ui,sans-serif!important;letter-spacing:1px!important;padding:7px 12px!important}
+.pl4 .pl4-chg:hover,.pl4 .g-back:hover{border-color:var(--ui-gold)!important}
+.pl4 .pl4-wrap{padding:28px 32px!important}
+.pl4 .pl4-top{margin-bottom:20px!important}
+/* Títulos de cabecera alineados igual en todas las pantallas */
+#overlay .help-box .set-head h2{text-align:left}
+/* Botones de ajustes en una sola línea */
+.settings .set-row :is(button,.mini-btn){white-space:nowrap}
+/* Inicio de sesión: separador suave en lugar de la línea naranja */
+.dvl-scene{border-right:0}
+.dvl-scene::after{content:'';position:absolute;right:0;top:12%;bottom:12%;width:2px;background:linear-gradient(180deg,transparent,#3de0ff88,transparent)}
+/* Subida de nivel en móvil: las cartas no quedan bajo el temporizador ni sobre la barra Bonk */
+@media (max-width:760px){#overlay:not(.menu-mode):has(>.lv3){--ui-top:104px;--ui-bot:16px;padding-top:var(--ui-top)}body:has(#overlay:not(.hidden)>.lv3) :is(#bonkBar,#xpTxt){visibility:hidden}}
+@media (max-width:760px){.pk2-starter .pk2-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#overlay:not(.menu-mode){--ui-top:16px;--ui-bot:16px}#overlay.has-top:not(.menu-mode){--ui-top:56px}.pl4 .pl4-wrap{padding:16px 12px!important}}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2374,7 +2422,7 @@ function setHud(v){
   const d = v ? '' : 'none';
   document.getElementById('menubg').style.display = 'none';
   document.getElementById('menuart').style.display = v ? 'none' : 'block';
-  for (const id of ['hud', 'timer', 'xp', 'combo', 'bossbar', 'prompt', 'minimap']) document.getElementById(id).style.display = d;
+  for (const id of ['hud', 'hudTop', 'timer', 'xp', 'combo', 'bossbar', 'prompt', 'minimap']) document.getElementById(id).style.display = d;
   if (!v) document.getElementById('hurt').style.opacity = 0;
 }
 // Barra de estadística (0-100%)
@@ -2897,7 +2945,7 @@ function showStarter(){
         <b>${CHARS[k].name}</b><small>${ATTACK_NAME[CHARS[k].kind] || ''}</small>
       </button>`).join('');
     showOverlay(`
-      <div class="picker-screen pk2">
+      <div class="picker-screen pk2 pk2-starter">
         <header class="pk2-top"><h2>Elige a tu compañero inicial</h2><span class="pk2-sub">Los demás Digimon se desbloquean jugando</span></header>
         <div class="pk2-body">
           <section class="pk2-left">
@@ -2906,7 +2954,7 @@ function showStarter(){
               <div class="pk2-id"><small>Inicial</small><h2>${CHARS[pick].name}</h2><p>${BALANCE[pick].why}</p></div>
             </div>
           </section>
-          <aside class="pk2-right"><div class="pk2-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))">${grid}</div></aside>
+          <aside class="pk2-right"><div class="pk2-grid">${grid}</div></aside>
         </div>
         <footer class="pk2-foot"><button class="btn btn-primary pk-start" id="stGo">Empezar con ${CHARS[pick].name}</button></footer>
       </div>`);
