@@ -1823,6 +1823,92 @@ body:has(.tr11) #hudTop{display:none!important}
 .sup-btn{padding:5px 10px;border-radius:999px;border:1px solid #2c4a78;background:#0e1f3d;color:#cdd5e6;font:600 12px system-ui,sans-serif;cursor:pointer}
 .sup-btn.on{background:#ffd54f;color:#1b1300;border-color:#ffd54f}
 .sup-note{margin:6px 0 0;font-size:11px;color:#9fb3d1}
+
+/* ===================== HUD en partida · estilo Material (superficies, elevación, color por función) ===================== */
+:root{--h-surf:rgba(14,18,30,.74);--h-surf2:rgba(255,255,255,.07);--h-line:rgba(255,255,255,.10);--h-txt:#eef3ff;--h-mut:#a9b6d3;
+  --h-hp:#4cd97b;--h-hp2:#22b35a;--h-low:#ff5d6c;--h-xp:#6aa8ff;--h-xp2:#3d7bff;--h-bonk:#ffb547;--h-bonk2:#ff7a1a;
+  --h-elev:0 10px 28px rgba(0,0,0,.38),0 2px 6px rgba(0,0,0,.28);--h-font:'Roboto','Inter',system-ui,-apple-system,sans-serif}
+#hud{left:16px;top:18px}
+.hud-card{gap:12px;padding:10px 16px 10px 10px;border-radius:24px;background:var(--h-surf)!important;border:1px solid var(--h-line)!important;
+  box-shadow:var(--h-elev)!important;backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3)}
+.hud-portrait:not([class*="fr-"]){width:62px;height:62px;border-radius:50%!important;background:radial-gradient(circle at 50% 35%,#2b3b66,#121a30)!important;
+  border:0!important;box-shadow:0 0 0 3px var(--h-xp),0 0 0 6px rgba(106,168,255,.18)!important}
+.hud-lvl{right:-6px!important;bottom:-6px!important;min-width:28px!important;height:28px!important;border-radius:14px!important;background:var(--h-xp)!important;
+  color:#06122e!important;border:3px solid #0e1220!important;font:900 13px var(--h-font)!important;box-shadow:none!important}
+.hud-main{min-width:240px}
+.hud-name{font:800 16px var(--h-font)!important;color:var(--h-txt)!important;text-shadow:none!important;letter-spacing:.2px!important}
+.hud-title{font:500 11px var(--h-font)!important;color:var(--h-mut)!important;text-shadow:none!important}
+.hud-hp{width:240px!important;height:16px!important;margin-top:7px!important;border-radius:8px!important;background:rgba(0,0,0,.38)!important;border:0!important;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
+.hud-hp #hp{border-radius:8px;background:linear-gradient(180deg,var(--h-hp),var(--h-hp2))!important;box-shadow:0 0 10px rgba(76,217,123,.45)!important}
+.hud-hp.low #hp{background:linear-gradient(180deg,#ff7b86,var(--h-low))!important;box-shadow:0 0 12px rgba(255,93,108,.6)!important;animation:hpLow .9s ease-in-out infinite alternate}
+@keyframes hpLow{to{filter:brightness(1.35)}}
+.hud-hp #hpTxt{font:800 11px var(--h-font)!important;letter-spacing:.3px;color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.6)!important}
+.hud-chips{gap:6px!important;margin-top:8px!important}
+.hud-chips .chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px!important;border-radius:10px!important;background:var(--h-surf2)!important;
+  border:0!important;color:var(--h-txt)!important;font:700 12px var(--h-font)!important;box-shadow:none!important}
+.hud-chips .chip svg,#hudChips svg{width:14px;height:14px;fill:currentColor;flex:none}
+#hudDash{color:var(--h-mut)!important}
+#hudDash.ready{background:rgba(106,168,255,.20)!important;color:#cfe0ff!important}
+/* Barra de experiencia: a todo lo ancho, arriba */
+#xp{top:0!important;bottom:auto!important;height:6px!important;border-radius:0 4px 4px 0;background:linear-gradient(90deg,var(--h-xp2),var(--h-xp))!important;
+  box-shadow:0 0 10px rgba(106,168,255,.8)!important;z-index:7;transition:width .25s ease-out}
+#xpTrack{position:fixed;left:0;right:0;top:0;height:6px;background:rgba(0,0,0,.35);pointer-events:none;z-index:6}
+#xpTxt{left:20px!important;top:112px!important;bottom:auto!important;padding:3px 10px;border-radius:10px;background:var(--h-surf);color:var(--h-mut)!important;
+  font:700 11px var(--h-font)!important;text-shadow:none!important;box-shadow:var(--h-elev)}
+#xpTxt:empty{display:none}
+/* Reloj y contadores: una píldora central */
+#hudTop{top:16px!important;padding:8px 18px 9px!important;min-width:260px!important;gap:5px!important;border-radius:22px!important;background:var(--h-surf)!important;
+  border:1px solid var(--h-line)!important;box-shadow:var(--h-elev)!important;backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3)}
+#hudTop #timer{font:900 30px/1.05 var(--h-font)!important;letter-spacing:1px;color:#fff!important;background:none!important;border:0!important;box-shadow:none!important;
+  text-shadow:none!important;font-variant-numeric:tabular-nums}
+#hudTop #timer.urgent{color:var(--h-low)!important;animation:timerPulse .8s ease-in-out infinite!important}
+#hudZone{font:700 10px var(--h-font)!important;letter-spacing:1.6px!important;color:var(--h-mut)!important}
+#hudChips span{display:inline-flex;align-items:center;gap:5px;padding:3px 10px!important;border-radius:10px!important;background:var(--h-surf2)!important;border:0!important;
+  font:700 12px var(--h-font)!important;color:var(--h-txt)!important}
+#hudChips b{color:var(--h-txt)!important}
+#hudChips .c-tix{color:#7fd8ff}#hudChips .c-shr{color:#c8a6ff}
+#zoneName{display:none}
+/* Minimapa */
+#minimap{top:18px!important;right:18px!important;border:0!important;box-shadow:0 0 0 3px rgba(255,255,255,.14),var(--h-elev)!important}
+/* Bonk: botón circular que se llena */
+#bonkBar{left:auto!important;right:28px!important;bottom:28px!important;transform:none!important;width:96px!important;height:96px!important;border-radius:50%!important;
+  border:0!important;overflow:visible!important;background:conic-gradient(var(--h-bonk) calc(var(--p,0)*1%),rgba(255,255,255,.10) 0)!important;
+  box-shadow:var(--h-elev)!important;transition:transform .2s}
+#bonkBar::before{content:"";position:absolute;inset:7px;border-radius:50%;background:radial-gradient(circle at 50% 30%,#2a2f45,#12162a);box-shadow:inset 0 2px 0 rgba(255,255,255,.08)}
+#bonkFill{display:none!important}
+#bonkTxt{flex-direction:column;gap:1px;font:900 15px var(--h-font)!important;letter-spacing:1px!important;color:var(--h-bonk)!important;text-shadow:none!important;z-index:1}
+#bonkTxt small{font:800 12px var(--h-font);color:var(--h-txt);letter-spacing:.5px}
+#bonkBar.ready{background:conic-gradient(var(--h-bonk),var(--h-bonk2),var(--h-bonk))!important;animation:bonkFab 1s ease-in-out infinite;box-shadow:0 0 0 6px rgba(255,181,71,.25),0 0 30px rgba(255,140,30,.7)!important}
+#bonkBar.ready::before{background:radial-gradient(circle at 50% 30%,#ffcf73,#ff8a1f)}
+#bonkBar.ready #bonkTxt{color:#2a1200!important}#bonkBar.ready #bonkTxt small{color:#2a1200}
+@keyframes bonkFab{50%{transform:scale(1.06)}}
+/* Habilidades: fichas redondeadas abajo a la izquierda */
+#skillBar{left:20px!important;bottom:24px!important;gap:8px!important}
+.sb-i{width:48px!important;height:48px!important;border-radius:16px!important;border:0!important;background:var(--h-surf)!important;box-shadow:var(--h-elev),inset 0 0 0 2px currentColor!important;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.sb-i{--c:var(--dv-cyan)}.sb-i.ofensiva{--c:var(--dv-org)}.sb-i.utilidad{--c:#5ee08a}
+.sb-i em{right:-5px!important;bottom:-5px!important;min-width:20px!important;height:20px!important;line-height:20px!important;border-radius:10px;font:900 11px var(--h-font)!important;
+  background:var(--c)!important;color:#0e1220!important;box-shadow:0 0 0 2px #0e1220}
+#hudKillsChip{display:none!important}
+.hud-lvl{min-width:24px!important;height:24px!important;right:-8px!important;bottom:-8px!important;font-size:12px!important}
+/* Avisos de evento y combo */
+#evHud{top:124px!important;border-radius:16px!important;border:0!important;background:var(--h-surf)!important;box-shadow:var(--h-elev),inset 0 0 0 1px rgba(124,242,156,.5)!important;
+  color:var(--h-txt)!important;font:700 13px var(--h-font)!important;padding:8px 16px!important;backdrop-filter:blur(12px)}
+#combo{border-radius:16px!important;font-family:var(--h-font)!important;box-shadow:var(--h-elev)!important}
+#bossbar{top:118px!important;height:14px!important;border-radius:8px;border:0!important;background:rgba(0,0,0,.45)!important;overflow:visible;box-shadow:var(--h-elev)!important}
+#bosshp{border-radius:8px;background:linear-gradient(90deg,#b05cff,#e48bff)!important}
+#bossbar::before{top:-18px!important;font:800 11px var(--h-font)!important;letter-spacing:2px!important;color:#e7c6ff!important}
+@media (max-width:760px){
+  #hud{left:10px;top:12px}.hud-card{padding:7px 12px 7px 7px;gap:9px;border-radius:20px}
+  .hud-portrait:not([class*="fr-"]){width:46px;height:46px}.hud-lvl{min-width:20px!important;height:20px!important;font-size:10px!important;right:-6px!important;bottom:-6px!important;border-width:2px!important}.hud-main{min-width:0}.hud-hp{width:150px!important;height:13px!important}
+  .hud-name{font-size:14px!important}.hud-title{display:none}.hud-chips{display:none!important}
+  #hudTop{top:auto!important;bottom:14px;min-width:0!important;padding:6px 14px!important}#hudTop #timer{font-size:22px!important}#hudZone{display:none}
+  #minimap{width:92px!important;height:92px!important;top:12px!important;right:10px!important}
+  #bonkBar{width:78px!important;height:78px!important;right:14px!important;bottom:84px!important}
+  #xpTxt{top:80px!important;left:12px!important}#skillBar{left:12px!important;bottom:84px!important}.sb-i{width:40px!important;height:40px!important;border-radius:13px!important}
+  #evHud{top:110px!important;font-size:12px!important;white-space:normal!important;max-width:90vw;text-align:center}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -1838,7 +1924,7 @@ body:has(.tr11) #hudTop{display:none!important}
     <div class="hud-name" id="hudName">Gabumon</div>
     <div class="hud-title" id="hudTitle"></div>
     <div class="hud-hp"><div id="hp"></div><span id="hpTxt"></span></div>
-    <div class="hud-chips"><span class="chip">☠ <b id="hudKills">0</b></span><span class="chip" id="hudDash">Dash listo</span></div>
+    <div class="hud-chips"><span class="chip" id="hudKillsChip">☠ <b id="hudKills">0</b></span><span class="chip" id="hudDash">Dash listo</span></div>
   </div>
 </div></div>
 <div id="hudTop">
@@ -1847,7 +1933,7 @@ body:has(.tr11) #hudTop{display:none!important}
   <div id="hudChips"></div>
 </div>
 <div id="zoneName" style="position:fixed;top:10px;left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e1f5fe;text-shadow:0 1px 3px #000;pointer-events:none"></div>
-<div id="xp"></div>
+<div id="xpTrack" style="display:none"></div><div id="xp"></div>
 <canvas id="edgeCv"></canvas>
 <div id="skillBar"></div>
 <div id="bonkBar" style="display:none"><div id="bonkFill"></div><span id="bonkTxt">BONK 0%</span></div>
@@ -2453,7 +2539,7 @@ function setHud(v){
   const d = v ? '' : 'none';
   document.getElementById('menubg').style.display = 'none';
   document.getElementById('menuart').style.display = v ? 'none' : 'block';
-  for (const id of ['hud', 'hudTop', 'timer', 'xp', 'combo', 'bossbar', 'prompt', 'minimap']) document.getElementById(id).style.display = d;
+  for (const id of ['hud', 'hudTop', 'timer', 'xp', 'xpTrack', 'xpTxt', 'combo', 'bossbar', 'prompt', 'minimap']) document.getElementById(id).style.display = d;
   if (!v) document.getElementById('hurt').style.opacity = 0;
 }
 // Barra de estadística (0-100%)
@@ -4627,16 +4713,18 @@ function updateHUD(){
   document.getElementById('hudZone').textContent = `${ZONES[g.zone - 1].name} · Zona ${g.zone}/${ZONES.length}${recMax ? ' · Récord ' + fmtTime(recMax) : ''}`;
   // Contadores de la partida: bajas, tickets ganados y santuarios cargados (como la fila de la referencia)
   const shrinesDone = (g.shrines || []).filter(s => s.used).length;
-  document.getElementById('hudChips').innerHTML = `<span>☠ <b>${g.kills}</b></span><span>🎟 <b>${g.tix}</b></span><span>⛩ <b>${shrinesDone}/${(g.shrines || []).length}</b></span>`;
+  document.getElementById('hudChips').innerHTML = `<span>${HUD_IC.kills}<b>${g.kills}</b></span><span class="c-tix">${HUD_IC.tix}<b>${g.tix}</b></span><span class="c-shr">${HUD_IC.shr}<b>${shrinesDone}/${(g.shrines || []).length}</b></span>`;
+  document.querySelector('.hud-hp').classList.toggle('low', p.hp < p.maxHp*0.3);
   const tt = TITLES.find(t => t.id === extra.title);
   document.getElementById('hudTitle').textContent = tt ? tt.name : '';
   const zn = document.getElementById('zoneName');
   if (zn.textContent !== ZONES[g.zone - 1].name) zn.textContent = ZONES[g.zone - 1].name;
   document.getElementById('hudPortrait').className = 'hud-portrait' + frameClass();
   document.getElementById('hudLvl').textContent = p.lvl;
+  const kc = document.getElementById('hudKillsChip'); if (!kc.dataset.ic){ kc.dataset.ic = 1; kc.innerHTML = HUD_IC.kills + '<b id="hudKills">0</b>'; }
   document.getElementById('hudKills').textContent = g.kills;
   const dash = document.getElementById('hudDash');
-  dash.textContent = g.dashCd > 0 ? `Dash ${g.dashCd.toFixed(1)} s` : 'Dash listo';
+  dash.innerHTML = HUD_IC.dash + (g.dashCd > 0 ? `Dash ${g.dashCd.toFixed(1)} s` : 'Dash listo');
   dash.classList.toggle('ready', g.dashCd <= 0);
   const dashReady = g.dashCd <= 0;
   if (dashReady && !g.dashReady && g.t > 1){
@@ -4653,7 +4741,8 @@ function updateHUD(){
   if (bf){
     bf.style.width = Math.min(100, g.bonk).toFixed(1) + '%';
     bbar.classList.toggle('ready', g.bonk >= 100);
-    document.getElementById('bonkTxt').textContent = g.bonk >= 100 ? 'BONK LISTO · pulsa Q' : `BONK ${Math.floor(g.bonk)}%`;
+    bbar.style.setProperty('--p', Math.min(100, g.bonk).toFixed(1));
+    document.getElementById('bonkTxt').innerHTML = g.bonk >= 100 ? 'BONK<small>pulsa Q</small>' : `BONK<small>${Math.floor(g.bonk)}%</small>`;
   }
   // Daño recibido: activa la viñeta roja (se desvanece en frame)
   if (g.lastHp !== undefined && p.hp < g.lastHp - 0.01){ hurtT = 0.45; sfx('hurt'); }
@@ -5033,6 +5122,12 @@ function updateBossMechanics(dt){
   if (g.hazards) g.hazards = g.hazards.filter(h => h.t > 0);
 }
 
+const HUD_IC = {
+  kills: '<svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 3 5.6 3 10.2c0 2.6 1.2 4.6 3 5.9V19c0 .6.4 1 1 1h1v2h2v-2h1v2h2v-2h1v2h2v-2h1c.6 0 1-.4 1-1v-2.9c1.8-1.3 3-3.3 3-5.9C21 5.6 17.5 2 12 2zm-3.5 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>',
+  tix: '<svg viewBox="0 0 24 24"><path d="M22 10V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v4a2 2 0 0 1 0 4v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 1 0-4zm-9 7.5h-2v-2h2v2zm0-4.5h-2v-2h2v2zm0-4.5h-2v-2h2v2z"/></svg>',
+  shr: '<svg viewBox="0 0 24 24"><path d="M2 4h20v3h-2v2h-2v11h-2V9H8v11H6V9H4V7H2V4zm6 5h8v2H8V9z"/></svg>',
+  dash: '<svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>'
+};
 /* ---------- Eventos en el mapa (cada 200 s desde el minuto 2:30) ---------- */
 function evHud(text){
   let el = document.getElementById('evHud');
