@@ -379,6 +379,7 @@ canvas{display:block}
 .ico{width:1em;height:1em;vertical-align:-.12em}
 #overlay>*{animation:uiIn .22s ease-out}
 #overlay>.dvl2,#overlay>.pa{animation:none}
+#overlay.redraw>*{animation:none}
 @keyframes uiIn{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
 .lv3{display:flex;flex-direction:column;align-items:center;gap:20px;font-family:'Orbitron',system-ui,sans-serif}
 .lv3-head{text-align:center}
@@ -2815,10 +2816,31 @@ document.addEventListener('pointerlockchange', () => {
   if (!document.pointerLockElement && state === 'play') pauseGame();
 });
 
+// Si se vuelve a dibujar la misma pantalla (p. ej. al elegir Digimon o skin), no se repite
+// la animación de entrada y se conserva el scroll de las listas, para que no parezca una recarga
+let overlayShownState = null;
 function showOverlay(html){
+  const same = overlayShownState === state && !overlay.classList.contains('hidden') && overlay.firstElementChild;
+  const scrolls = [];
+  if (same) overlay.querySelectorAll('*').forEach((el, i) => {
+    if (el.scrollTop || el.scrollLeft) scrolls.push([el.id ? '#' + el.id : null, el.className, i, el.scrollTop, el.scrollLeft]);
+  });
+  const olTop = same ? overlay.scrollTop : 0;
   overlay.classList.remove('menu-mode');
+  overlay.classList.toggle('redraw', !!same);
   overlay.innerHTML = html;
   overlay.classList.remove('hidden');
+  overlayShownState = state;
+  if (same){
+    overlay.scrollTop = olTop;
+    const all = overlay.querySelectorAll('*');
+    for (const [id, cls, i, top, left] of scrolls){
+      let el = id ? overlay.querySelector(id) : null;
+      if (!el && all[i] && all[i].className === cls) el = all[i];
+      if (!el && typeof cls === 'string' && cls) el = overlay.querySelector('.' + cls.trim().split(/\s+/).map(c => CSS.escape(c)).join('.'));
+      if (el){ el.scrollTop = top; el.scrollLeft = left; }
+    }
+  }
   refreshTopbar();
 }
 function hideOverlay(){ overlay.classList.add('hidden'); refreshTopbar(); }
