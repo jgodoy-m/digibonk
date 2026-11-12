@@ -1073,7 +1073,13 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .realhub .hm-row1 .real-play-txt{margin-left:0!important}
 .realhub .hm-row1 .real-play-txt b{font-size:clamp(30px,3.1vw,44px)!important}
 .realhub .hm-row1 .real-play-txt small{font-size:11px!important}
-.realhub .hm-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));margin-top:10px}
+.realhub .hm-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));margin-top:10px}
+/* Botón del gacha en el menú: Digihuevo pixel art sobre fondo propio */
+.realhub .hm-gacha{background:radial-gradient(circle at 50% 38%,#ffe27a 0,#e08a1e 34%,#5a2a8c 72%,#2a1250 100%)!important;border-radius:10px;box-shadow:inset 0 0 0 2px #ffe27a,0 3px 0 #1a0838;overflow:hidden}
+.realhub .hm-gacha img{position:absolute;left:50%;top:44%;height:62%;transform:translate(-50%,-50%);image-rendering:pixelated;filter:drop-shadow(0 0 8px #fff6);animation:hmEgg 2.4s ease-in-out infinite}
+.realhub .hm-gacha b{position:absolute;left:0;right:0;bottom:5%;text-align:center;font:900 italic clamp(9px,.9vw,12px) system-ui;color:#fff;text-shadow:0 1px 0 #000,0 0 6px #000}
+.realhub .hm-gacha em{position:absolute;right:4%;top:6%;min-width:18px;padding:0 5px;border-radius:99px;background:#ff3d6e;color:#fff;font:900 10px/18px system-ui;font-style:normal;text-align:center}
+@keyframes hmEgg{0%,80%,100%{transform:translate(-50%,-50%)}85%{transform:translate(-50%,-50%) rotate(-10deg)}92%{transform:translate(-50%,-50%) rotate(8deg)}}
 .realhub .hm-card{appearance:none;position:relative;cursor:pointer;color:#fff;border-radius:12px;font:inherit;text-align:left;padding:10px 12px;display:flex;align-items:center;gap:10px;min-height:66px}
 .realhub .hm-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
 .realhub .hm-txt b{font-size:clamp(14px,1.25vw,19px);font-weight:900;font-style:italic;text-shadow:1px 2px #020f30;line-height:1.05}
@@ -1823,6 +1829,179 @@ body:has(.tr11) #hudTop{display:none!important}
 .sup-btn{padding:5px 10px;border-radius:999px;border:1px solid #2c4a78;background:#0e1f3d;color:#cdd5e6;font:600 12px system-ui,sans-serif;cursor:pointer}
 .sup-btn.on{background:#ffd54f;color:#1b1300;border-color:#ffd54f}
 .sup-note{margin:6px 0 0;font-size:11px;color:#9fb3d1}
+
+/* ===================== HUD en partida · estilo Material (superficies, elevación, color por función) ===================== */
+:root{--h-surf:rgba(14,18,30,.74);--h-surf2:rgba(255,255,255,.07);--h-line:rgba(255,255,255,.10);--h-txt:#eef3ff;--h-mut:#a9b6d3;
+  --h-hp:#4cd97b;--h-hp2:#22b35a;--h-low:#ff5d6c;--h-xp:#6aa8ff;--h-xp2:#3d7bff;--h-bonk:#ffb547;--h-bonk2:#ff7a1a;
+  --h-elev:0 10px 28px rgba(0,0,0,.38),0 2px 6px rgba(0,0,0,.28);--h-font:'Roboto','Inter',system-ui,-apple-system,sans-serif}
+#hud{left:16px;top:18px}
+.hud-card{gap:12px;padding:10px 16px 10px 10px;border-radius:24px;background:var(--h-surf)!important;border:1px solid var(--h-line)!important;
+  box-shadow:var(--h-elev)!important;backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3)}
+.hud-portrait:not([class*="fr-"]){width:62px;height:62px;border-radius:50%!important;background:radial-gradient(circle at 50% 35%,#2b3b66,#121a30)!important;
+  border:0!important;box-shadow:0 0 0 3px var(--h-xp),0 0 0 6px rgba(106,168,255,.18)!important}
+.hud-lvl{right:-6px!important;bottom:-6px!important;min-width:28px!important;height:28px!important;border-radius:14px!important;background:var(--h-xp)!important;
+  color:#06122e!important;border:3px solid #0e1220!important;font:900 13px var(--h-font)!important;box-shadow:none!important}
+.hud-main{min-width:240px}
+.hud-name{font:800 16px var(--h-font)!important;color:var(--h-txt)!important;text-shadow:none!important;letter-spacing:.2px!important}
+.hud-title{font:500 11px var(--h-font)!important;color:var(--h-mut)!important;text-shadow:none!important}
+.hud-hp{width:240px!important;height:16px!important;margin-top:7px!important;border-radius:8px!important;background:rgba(0,0,0,.38)!important;border:0!important;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
+.hud-hp #hp{border-radius:8px;background:linear-gradient(180deg,var(--h-hp),var(--h-hp2))!important;box-shadow:0 0 10px rgba(76,217,123,.45)!important}
+.hud-hp.low #hp{background:linear-gradient(180deg,#ff7b86,var(--h-low))!important;box-shadow:0 0 12px rgba(255,93,108,.6)!important;animation:hpLow .9s ease-in-out infinite alternate}
+@keyframes hpLow{to{filter:brightness(1.35)}}
+.hud-hp #hpTxt{font:800 11px var(--h-font)!important;letter-spacing:.3px;color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.6)!important}
+.hud-chips{gap:6px!important;margin-top:8px!important}
+.hud-chips .chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px!important;border-radius:10px!important;background:var(--h-surf2)!important;
+  border:0!important;color:var(--h-txt)!important;font:700 12px var(--h-font)!important;box-shadow:none!important}
+.hud-chips .chip svg,#hudChips svg{width:14px;height:14px;fill:currentColor;flex:none}
+.hic{width:16px;height:16px;image-rendering:pixelated;flex:none;object-fit:contain;filter:drop-shadow(0 1px 0 rgba(0,0,0,.5))}
+#hudDash{color:var(--h-mut)!important}
+#hudDash.ready{background:rgba(106,168,255,.20)!important;color:#cfe0ff!important}
+/* Barra de experiencia: a todo lo ancho, arriba */
+#xp{top:0!important;bottom:auto!important;height:6px!important;border-radius:0 4px 4px 0;background:linear-gradient(90deg,var(--h-xp2),var(--h-xp))!important;
+  box-shadow:0 0 10px rgba(106,168,255,.8)!important;z-index:7;transition:width .25s ease-out}
+#xpTrack{position:fixed;left:0;right:0;top:0;height:6px;background:rgba(0,0,0,.35);pointer-events:none;z-index:6}
+#xpTxt{left:20px!important;top:112px!important;bottom:auto!important;padding:3px 10px;border-radius:10px;background:var(--h-surf);color:var(--h-mut)!important;
+  font:700 11px var(--h-font)!important;text-shadow:none!important;box-shadow:var(--h-elev)}
+#xpTxt:empty{display:none}
+/* Reloj y contadores: una píldora central */
+#hudTop{top:16px!important;padding:8px 18px 9px!important;min-width:260px!important;gap:5px!important;border-radius:22px!important;background:var(--h-surf)!important;
+  border:1px solid var(--h-line)!important;box-shadow:var(--h-elev)!important;backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3)}
+#hudTop #timer{font:900 30px/1.05 var(--h-font)!important;letter-spacing:1px;color:#fff!important;background:none!important;border:0!important;box-shadow:none!important;
+  text-shadow:none!important;font-variant-numeric:tabular-nums}
+#hudTop #timer.urgent{color:var(--h-low)!important;animation:timerPulse .8s ease-in-out infinite!important}
+#hudZone{font:700 10px var(--h-font)!important;letter-spacing:1.6px!important;color:var(--h-mut)!important}
+#hudChips span{display:inline-flex;align-items:center;gap:5px;padding:3px 10px!important;border-radius:10px!important;background:var(--h-surf2)!important;border:0!important;
+  font:700 12px var(--h-font)!important;color:var(--h-txt)!important}
+#hudChips b{color:var(--h-txt)!important}
+#hudChips .c-tix{color:#7fd8ff}#hudChips .c-shr{color:#c8a6ff}
+#zoneName{display:none}
+/* Minimapa */
+#minimap{top:18px!important;right:18px!important;border:0!important;box-shadow:0 0 0 3px rgba(255,255,255,.14),var(--h-elev)!important}
+/* Bonk: botón circular que se llena */
+#bonkBar{left:auto!important;right:28px!important;bottom:28px!important;transform:none!important;width:96px!important;height:96px!important;border-radius:50%!important;
+  border:0!important;overflow:visible!important;background:conic-gradient(var(--h-bonk) calc(var(--p,0)*1%),rgba(255,255,255,.10) 0)!important;
+  box-shadow:var(--h-elev)!important;transition:transform .2s}
+#bonkBar::before{content:"";position:absolute;inset:7px;border-radius:50%;background:radial-gradient(circle at 50% 30%,#2a2f45,#12162a);box-shadow:inset 0 2px 0 rgba(255,255,255,.08)}
+#bonkFill{display:none!important}
+#bonkTxt{flex-direction:column;gap:1px;font:900 15px var(--h-font)!important;letter-spacing:1px!important;color:var(--h-bonk)!important;text-shadow:none!important;z-index:1}
+#bonkTxt small{font:800 12px var(--h-font);color:var(--h-txt);letter-spacing:.5px}
+#bonkBar.ready{background:conic-gradient(var(--h-bonk),var(--h-bonk2),var(--h-bonk))!important;animation:bonkFab 1s ease-in-out infinite;box-shadow:0 0 0 6px rgba(255,181,71,.25),0 0 30px rgba(255,140,30,.7)!important}
+#bonkBar.ready::before{background:radial-gradient(circle at 50% 30%,#ffcf73,#ff8a1f)}
+#bonkBar.ready #bonkTxt{color:#2a1200!important}#bonkBar.ready #bonkTxt small{color:#2a1200}
+@keyframes bonkFab{50%{transform:scale(1.06)}}
+/* Habilidades: fichas redondeadas abajo a la izquierda */
+#skillBar{left:20px!important;bottom:24px!important;gap:8px!important}
+.sb-i{width:48px!important;height:48px!important;border-radius:16px!important;border:0!important;background:var(--h-surf)!important;box-shadow:var(--h-elev),inset 0 0 0 2px currentColor!important;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.sb-i{--c:var(--dv-cyan)}.sb-i.ofensiva{--c:var(--dv-org)}.sb-i.utilidad{--c:#5ee08a}
+.sb-i em{right:-5px!important;bottom:-5px!important;min-width:20px!important;height:20px!important;line-height:20px!important;border-radius:10px;font:900 11px var(--h-font)!important;
+  background:var(--c)!important;color:#0e1220!important;box-shadow:0 0 0 2px #0e1220}
+#hudKillsChip{display:none!important}
+.hud-lvl{min-width:24px!important;height:24px!important;right:-8px!important;bottom:-8px!important;font-size:12px!important}
+/* Avisos de evento y combo */
+#evHud{top:124px!important;border-radius:16px!important;border:0!important;background:var(--h-surf)!important;box-shadow:var(--h-elev),inset 0 0 0 1px rgba(124,242,156,.5)!important;
+  color:var(--h-txt)!important;font:700 13px var(--h-font)!important;padding:8px 16px!important;backdrop-filter:blur(12px)}
+#combo{border-radius:16px!important;font-family:var(--h-font)!important;box-shadow:var(--h-elev)!important}
+#bossbar{top:118px!important;height:14px!important;border-radius:8px;border:0!important;background:rgba(0,0,0,.45)!important;overflow:visible;box-shadow:var(--h-elev)!important}
+#bosshp{border-radius:8px;background:linear-gradient(90deg,#b05cff,#e48bff)!important}
+#bossbar::before{top:-18px!important;font:800 11px var(--h-font)!important;letter-spacing:2px!important;color:#e7c6ff!important}
+#bossbar::before{content:attr(data-label)!important}
+#bossbar{top:162px!important}
+
+
+/* Gacha: animación del Digihuevo (partículas PNG con máscara; el color sale de --pc) */
+.ga{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;background:radial-gradient(circle at 50% 46%,color-mix(in srgb,var(--pc) 26%,#0a1030) 0%,#050816 62%,#000 100%);transition:background .4s}
+.ga i,.ga-rays,.ga-sigil,.ga-glow,.ga-wave,.ga-bolt{pointer-events:none}
+.ga-rain{position:absolute;inset:0;opacity:.7}
+.ga-rain i{position:absolute;top:-40px;width:var(--s);height:var(--s);background:var(--pc);-webkit-mask:url(ui/gacha/star_04.png) center/contain no-repeat;mask:url(ui/gacha/star_04.png) center/contain no-repeat;animation:gaRain linear infinite}
+@keyframes gaRain{to{transform:translateY(110vh)}}
+.ga-rays{position:absolute;width:170vmax;height:170vmax;opacity:0;background:repeating-conic-gradient(from 0deg,color-mix(in srgb,var(--pc) 34%,transparent) 0 7deg,transparent 7deg 18deg);-webkit-mask:radial-gradient(circle,#000 0,#000 18%,transparent 62%);mask:radial-gradient(circle,#000 0,#000 18%,transparent 62%);animation:gaSpin 9s linear infinite;transition:opacity .5s}
+.ga.hot .ga-rays,.ga.legend .ga-rays{opacity:1}.ga.legend .ga-rays{animation-duration:3.5s}
+@keyframes gaSpin{to{transform:rotate(360deg)}}
+.ga-sigil{position:absolute;width:min(70vmin,520px);height:min(70vmin,520px);background:var(--pc);-webkit-mask:url(ui/gacha/magic_03.png) center/contain no-repeat;mask:url(ui/gacha/magic_03.png) center/contain no-repeat;opacity:.55;animation:gaSpin 14s linear infinite reverse}
+.ga-glow{position:absolute;width:min(56vmin,420px);height:min(56vmin,420px);background:var(--pc);-webkit-mask:url(ui/gacha/circle_05.png) center/contain no-repeat;mask:url(ui/gacha/circle_05.png) center/contain no-repeat;opacity:.55;animation:gaPulse 1.2s ease-in-out infinite}
+.ga.hot .ga-glow{opacity:.85}.ga.legend .ga-glow{opacity:1;animation-duration:.5s}
+@keyframes gaPulse{50%{transform:scale(1.12)}}
+.ga-egg{position:relative;z-index:2;width:min(30vmin,216px);aspect-ratio:48/60;animation:gaDrop .75s cubic-bezier(.3,1.5,.5,1) both}
+.ga-egg img{width:100%;height:100%;image-rendering:pixelated;filter:drop-shadow(0 0 18px var(--pc)) drop-shadow(0 10px 0 #0006)}
+.ga-egg.wob{animation:gaWob .55s ease-in-out}
+.ga.legend .ga-egg{animation:gaShake .09s linear infinite}
+@keyframes gaDrop{from{transform:translateY(-75vh) scale(.6)}to{transform:none}}
+@keyframes gaWob{20%{transform:rotate(-14deg)}45%{transform:rotate(11deg) translateY(-6px)}70%{transform:rotate(-6deg)}100%{transform:none}}
+@keyframes gaShake{25%{transform:translate(-3px,1px) rotate(-2deg)}75%{transform:translate(3px,-1px) rotate(2deg)}}
+.ga-bolt{position:absolute;z-index:1;width:min(40vmin,300px);height:min(60vmin,440px);background:#fff8c8;-webkit-mask:url(ui/gacha/spark_05.png) center/contain no-repeat;mask:url(ui/gacha/spark_05.png) center/contain no-repeat;opacity:0}
+.ga-bolt.b1{left:calc(50% - min(34vmin,250px))}.ga-bolt.b2{right:calc(50% - min(34vmin,250px));transform:scaleX(-1)}
+.ga.legend .ga-bolt{animation:gaBolt .35s steps(2) infinite}
+@keyframes gaBolt{0%{opacity:0}50%{opacity:1}}
+.ga-wave{position:absolute;z-index:3;width:120px;height:120px;background:var(--pc);-webkit-mask:url(ui/gacha/light_02.png) center/contain no-repeat;mask:url(ui/gacha/light_02.png) center/contain no-repeat;opacity:0}
+.ga-sparks{position:absolute;left:50%;top:50%;z-index:3}
+.ga-sparks i{position:absolute;left:0;top:0;width:var(--s);height:var(--s);margin:calc(var(--s)/-2);background:var(--pc);-webkit-mask:url(ui/gacha/star_06.png) center/contain no-repeat;mask:url(ui/gacha/star_06.png) center/contain no-repeat;opacity:0}
+.ga-flash{position:absolute;inset:0;z-index:4;background:#fff;opacity:0}
+.ga.burst .ga-egg{animation:gaPop .45s ease-in forwards}
+.ga.burst .ga-wave{animation:gaWave .8s ease-out forwards}
+.ga.burst .ga-sparks i{animation:gaSpark .9s cubic-bezier(.1,.8,.3,1) forwards}
+.ga.burst .ga-flash{animation:gaFlash .7s ease-out forwards}
+@keyframes gaPop{40%{transform:scale(1.25)}100%{transform:scale(1.6);opacity:0;filter:brightness(4)}}
+@keyframes gaWave{0%{opacity:1;transform:scale(.4)}100%{opacity:0;transform:scale(9)}}
+@keyframes gaSpark{0%{opacity:1;transform:translate(0,0) scale(.4)}70%{opacity:1}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1) rotate(160deg)}}
+@keyframes gaFlash{0%{opacity:0}25%{opacity:.95}100%{opacity:0}}
+.ga-txt{position:absolute;z-index:5;bottom:15vh;left:0;right:0;margin:0;text-align:center;font:900 clamp(20px,3.4vw,36px) 'Orbitron',system-ui,sans-serif;letter-spacing:2px;color:#fff;text-shadow:0 0 16px var(--pc),0 3px 0 #000}
+.ga.legend .ga-txt{color:#ffe27a;animation:gaPulse .5s infinite}
+.ga-n{position:absolute;z-index:5;bottom:10vh;left:0;right:0;margin:0;text-align:center;font:700 13px system-ui;color:#b9c9ea;opacity:.85}
+.ga .pa-skip{position:absolute;z-index:6;right:24px;bottom:24px}
+body:has(.ga) #topbar{display:none!important}
+/* Elección de mapa y dificultad */
+.ms{width:min(1120px,96vw);max-height:94vh;overflow:auto;padding:16px 20px;color:#e6f4ff;text-align:left}
+.ms-maps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:12px}
+.ms-card{appearance:none;cursor:pointer;display:flex;flex-direction:column;padding:0;border-radius:16px;overflow:hidden;border:3px solid #2d5f9c;background:#0a1d44;color:#fff;font:inherit;text-align:left;transition:transform .15s,border-color .15s,box-shadow .15s}
+.ms-card:hover{transform:translateY(-3px)}
+.ms-card.on{border-color:#7ff3ff;box-shadow:0 0 0 3px #7ff3ff55,0 0 26px #3de0ff88}
+.ms-art{position:relative;height:150px;background:var(--floor) 0 0/48px 48px repeat;image-rendering:pixelated;overflow:hidden}
+.ms-art::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,#0a1d44)}
+.ms-art em{position:absolute;left:10px;top:8px;z-index:2;padding:2px 9px;border-radius:99px;background:#0a1d44d9;border:1px solid #7ff3ff;font:900 11px system-ui;letter-spacing:2px;font-style:normal}
+.ms-deco{position:absolute;bottom:10px;width:64px;height:64px;image-rendering:pixelated;z-index:1}.ms-deco.d1{left:14px}.ms-deco.d2{left:70px;bottom:26px;width:48px;height:48px;opacity:.9}
+.ms-boss{position:absolute;right:8px;bottom:0;height:136px;max-width:60%;object-fit:contain;image-rendering:pixelated;z-index:1;filter:drop-shadow(0 4px 6px #000a)}
+.ms-txt{display:flex;flex-direction:column;gap:4px;padding:10px 14px 14px}
+.ms-txt b{font:900 italic 20px system-ui;text-shadow:0 2px 0 #020f30}.ms-txt small{color:#9fdcff;font-weight:700;font-size:12px}
+.ms-txt p{margin:2px 0;font-size:12.5px;line-height:1.35;color:#d9ecff;min-height:50px}
+.ms-tags{display:flex;flex-wrap:wrap;gap:5px}.ms-tags i{font-style:normal;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:99px;background:#ffffff14;border:1px solid #ffffff30}
+.ms-rec{font-size:11.5px;color:#ffe9a0;margin-top:4px}
+.ms-dsec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:14px;margin-top:14px;align-items:stretch}
+.ms-diffs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.ms-diff{appearance:none;cursor:pointer;border-radius:12px;border:2px solid color-mix(in srgb,var(--dc) 55%,transparent);background:#0a1d44;color:#fff;padding:10px;font:inherit;text-align:left;display:flex;flex-direction:column;gap:2px}
+.ms-diff b{font:900 16px system-ui;color:var(--dc)}.ms-diff small{font-size:11px;opacity:.85}
+.ms-diff.on{background:color-mix(in srgb,var(--dc) 22%,#0a1d44);border-color:var(--dc);box-shadow:0 0 16px color-mix(in srgb,var(--dc) 50%,transparent)}
+.ms-table{border-radius:12px;padding:10px 14px;background:#06143a;border:2px solid var(--dc)}
+.ms-table>b{font:900 17px system-ui;color:var(--dc);margin-right:8px}.ms-table>span{font-size:13px}
+.ms-table ul{list-style:none;margin:8px 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.ms-table li{font-size:12px;background:#ffffff0d;border-radius:8px;padding:5px 8px;display:flex;justify-content:space-between;gap:6px}.ms-table li em{font-style:normal;font-weight:900;color:var(--dc)}
+.ms-table small{font-size:11px;color:#9fb8d8;line-height:1.35;display:block}
+@media (max-width:760px){.ms{padding:10px}.ms-maps{grid-template-columns:1fr;gap:10px}.ms-art{height:110px}.ms-boss{height:104px}.ms-txt p{min-height:0}.ms-dsec{grid-template-columns:1fr}.ms-table ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Objetivo de la pantalla y botón para invocar al jefe de zona */
+#hudObj{margin-top:6px;font:700 12px var(--h-font);color:#bfe9ff;letter-spacing:.3px;text-align:center;white-space:nowrap}
+#hudObj:empty{display:none}
+#hudObj.hot{color:#7ff3ff;animation:objPulse 1.1s ease-in-out infinite}#hudObj.inf{color:#ff8a80}
+@keyframes objPulse{50%{opacity:.55}}
+#timer.inferno{color:#ff5252!important;text-shadow:0 0 12px #ff1744!important;animation:objPulse .6s infinite}
+#hudSummon{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);display:none;align-items:center;gap:10px;padding:8px 12px 8px 8px;border:0;border-radius:18px;cursor:pointer;z-index:6;
+  background:var(--h-surf,rgba(14,18,32,.82));box-shadow:var(--h-elev,0 6px 18px rgba(0,0,0,.4)),inset 0 0 0 2px #ff5a6e;color:#fff;font:inherit;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+#hudSummon img{width:36px;height:36px;image-rendering:pixelated}
+#hudSummon span{display:flex;flex-direction:column;text-align:left;line-height:1.15}
+#hudSummon b{font:900 13px var(--h-font,system-ui);letter-spacing:.5px}#hudSummon small{font:700 11px var(--h-font,system-ui);color:#ffb3bd}
+#hudSummon kbd{min-width:26px;height:26px;display:grid;place-items:center;border-radius:8px;background:#ff5a6e;color:#200;font:900 13px var(--h-font,system-ui)}
+#hudSummon:hover{filter:brightness(1.15)}
+@media (max-width:760px){#hudSummon{bottom:auto;top:96px;left:auto;right:10px;transform:none;padding:6px 8px 6px 6px}#hudSummon kbd,#hudSummon small{display:none}#hudSummon img{width:28px;height:28px}#hudObj{font-size:11px;white-space:normal;max-width:70vw}}
+@media (max-width:760px){
+  #hud{left:10px;top:12px}.hud-card{padding:7px 12px 7px 7px;gap:9px;border-radius:20px}
+  .hud-portrait:not([class*="fr-"]){width:46px;height:46px}.hud-lvl{min-width:20px!important;height:20px!important;font-size:10px!important;right:-6px!important;bottom:-6px!important;border-width:2px!important}.hud-main{min-width:0}.hud-hp{width:150px!important;height:13px!important}
+  .hud-name{font-size:14px!important}.hud-title{display:none}.hud-chips{display:none!important}
+  #hudTop{top:auto!important;bottom:14px;min-width:0!important;padding:6px 14px!important}#hudTop #timer{font-size:22px!important}#hudZone{display:none}
+  #minimap{width:92px!important;height:92px!important;top:12px!important;right:10px!important}
+  #bonkBar{width:78px!important;height:78px!important;right:14px!important;bottom:84px!important}
+  #xpTxt{top:80px!important;left:12px!important}#skillBar{left:12px!important;bottom:84px!important}.sb-i{width:40px!important;height:40px!important;border-radius:13px!important}
+  #evHud{top:110px!important;font-size:12px!important;white-space:normal!important;max-width:90vw;text-align:center}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -1838,16 +2017,18 @@ body:has(.tr11) #hudTop{display:none!important}
     <div class="hud-name" id="hudName">Gabumon</div>
     <div class="hud-title" id="hudTitle"></div>
     <div class="hud-hp"><div id="hp"></div><span id="hpTxt"></span></div>
-    <div class="hud-chips"><span class="chip">☠ <b id="hudKills">0</b></span><span class="chip" id="hudDash">Dash listo</span></div>
+    <div class="hud-chips"><span class="chip" id="hudKillsChip">☠ <b id="hudKills">0</b></span><span class="chip" id="hudDash">Dash listo</span></div>
   </div>
 </div></div>
 <div id="hudTop">
   <div id="hudZone"></div>
   <div id="timer">5:00</div>
   <div id="hudChips"></div>
+  <div id="hudObj"></div>
 </div>
+<button type="button" id="hudSummon" aria-label="Invocar al jefe (B)"><img src="ui/hud/jefe.png" alt=""><span><b>Invocar jefe</b><small id="hudSummonName"></small></span><kbd>B</kbd></button>
 <div id="zoneName" style="position:fixed;top:10px;left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e1f5fe;text-shadow:0 1px 3px #000;pointer-events:none"></div>
-<div id="xp"></div>
+<div id="xpTrack" style="display:none"></div><div id="xp"></div>
 <canvas id="edgeCv"></canvas>
 <div id="skillBar"></div>
 <div id="bonkBar" style="display:none"><div id="bonkFill"></div><span id="bonkTxt">BONK 0%</span></div>
@@ -1876,10 +2057,62 @@ const MAX_ENEMIES = 100;   // igual en calidad alta y baja: la calidad gráfica 
 const ARENA_R = 110;  // radio del escenario: el mapa tiene límite circular con montañas
 // Dos zonas: el bosque inicial y el pantano de datos (a partir de 300 s). El jefe final está al final de la zona 2.
 const ZONES = [
-  {name:'Bosque Inicial',   at:0,   fog:0xbcd9e8, sky:['#4d86c9', '#a9d4ee', '#d8efff'], tint:0xffffff, color:'#ffd54f'},
-  {name:'Pantano de Datos', at:600, fog:0x8c7cb8, sky:['#241b4a', '#6a4f9e', '#c59ad6'], tint:0xd8c6ff, color:'#ce93d8'}
+  {name:'Bosque Inicial',   at:0,   fog:0xbcd9e8, sky:['#4d86c9', '#a9d4ee', '#d8efff'], tint:0xffffff, color:'#ffd54f', biome:'bosque'},
+  {name:'Pantano de Datos', at:600, fog:0x8c7cb8, sky:['#241b4a', '#6a4f9e', '#c59ad6'], tint:0xd8c6ff, color:'#ce93d8', biome:'bosque'}
 ];
 const ZONE2_AT = ZONES[1].at;
+/* ---------- Mapas ----------
+   Mapa 1 (clásico): dos zonas por tiempo y Piedmon a los 20 minutos.
+   Mapas 2 y 3: dos pantallas unidas por un portal. El portal se abre al derrotar al jefe de la pantalla,
+   que se invoca cuando quieras (tecla B o botón) y siempre tiene la misma fuerza. Si pasas 20 minutos
+   en una pantalla empieza el Infierno: la dificultad se dispara hasta que caes.
+   El mapa 3 tiene un único jefe final: en la primera pantalla huye por el portal a mitad de vida
+   y en la segunda vuelve con la vida que le quedaba. */
+const AD = n => 'sprites/adventure/' + n + '.png';
+const MAPS = {
+  bosque: {n: 1, name: 'Bosque File', kind: 'clasico', zones: ZONES, minis: true, preview: ['textures/puny_hierba.png', 'sprites/deco/arbol.png', AD('piedmon')],
+    desc: 'El mapa de siempre: aguanta 20 minutos y derrota a Piedmon. Seis jefes menores por el camino.'},
+  desierto: {n: 2, name: 'Desierto de Datos', kind: 'portal', minis: true, preview: ['textures/arena_kenney.png', 'sprites/deco/kenney/cactus.png', AD('metaletemon')],
+    desc: 'Dunas y ruinas. Cada pantalla tiene su jefe: Scorpiomon abre el portal y MetalEtemon cierra el mapa.',
+    zones: [
+      {name: 'Dunas de Datos', biome: 'dunas', fog: 0xe9cf9a, sky: ['#e08a3c', '#f4c27a', '#fde6b8'], tint: 0xffd08a, color: '#ffb74d',
+        foes: {basic: [AD('gotsumon'), AD('kokatorimon')], fast: [AD('flymon'), AD('snimon')], tank: [AD('drimogemon'), AD('monochromon')], elite: [AD('tyrannomon')]},
+        boss: {name: 'Scorpiomon', sprite: AD('scorpiomon'), hp: 3200, dmg: 16, shots: 10, shotDmg: 8, gap: 2.5, col: '#ffb74d', sub: 'Guardián de las dunas'}},
+      {name: 'Ruinas del Faraón', biome: 'ruinas', fog: 0x9c7a6a, sky: ['#3b1f3f', '#9a4f5e', '#e0a070'], tint: 0xf0bf8c, color: '#ef9a9a',
+        foes: {basic: [AD('bakemon'), AD('pumpkinmon')], fast: [AD('phantomon'), AD('gazimon')], tank: [AD('ogremon'), AD('warumonzaemon')], elite: [AD('gigadramon'), AD('megadramon')]},
+        boss: {name: 'MetalEtemon', sprite: AD('metaletemon'), hp: 6000, dmg: 20, shots: 14, shotDmg: 10, gap: 2.2, col: '#ef9a9a', sub: 'Jefe final del Desierto de Datos', final: true}}
+    ]},
+  nevado: {n: 3, name: 'Montaña Helada', kind: 'portal', single: true, minis: false, preview: ['textures/nieve_kenney.png', 'sprites/deco/kenney/pino_nevado.png', AD('machinedramon')],
+    desc: 'Nieve y una fortaleza oscura. Sin jefes menores: solo Machinedramon, el único jefe final, que te espera en las dos pantallas.',
+    zones: [
+      {name: 'Valle Nevado', biome: 'nieve', fog: 0xe4eefa, sky: ['#7fa6d6', '#c4dcf2', '#f2f8ff'], tint: 0xffffff, color: '#81d4fa',
+        foes: {basic: [AD('snowbotamon'), AD('gotsumon')], fast: [AD('gazimon'), AD('kokatorimon')], tank: [AD('mojyamon'), AD('mammothmon')], elite: [AD('skullgreymon'), AD('darktyrannomon')]},
+        boss: {name: 'Machinedramon', sprite: AD('machinedramon'), hp: 9000, dmg: 22, shots: 16, shotDmg: 11, gap: 2.0, col: '#b0bec5', sub: 'El único jefe final de la Montaña Helada', retreatAt: 0.5}},
+      {name: 'Fortaleza Oscura', biome: 'fortaleza', fog: 0x3a2440, sky: ['#120818', '#3d1838', '#8a3a4a'], tint: 0xb8a8d8, color: '#ce93d8',
+        foes: {basic: [AD('bakemon'), AD('dokugumon')], fast: [AD('phantomon'), AD('snimon')], tank: [AD('darktyrannomon'), AD('warumonzaemon')], elite: [AD('megadramon'), AD('gigadramon')]},
+        boss: {name: 'Machinedramon', sprite: AD('machinedramon'), hp: 9000, dmg: 22, shots: 16, shotDmg: 11, gap: 2.0, col: '#b0bec5', sub: 'Vuelve con la vida que le quedaba', final: true, resume: true}}
+    ]}
+};
+const MAP_ORDER = ['bosque', 'desierto', 'nevado'];
+const SCREEN_LIMIT = 1200;   // 20 minutos en una misma pantalla: empieza el Infierno
+/* ---------- Dificultad ----------
+   Multiplicadores fijos de cada nivel sobre la base (vida y daño de enemigos y jefes menores, intervalo entre
+   apariciones y entre élites; menor = más enemigos), vida de los jefes de zona y premio de Bits y tickets.
+   Además, en todos los niveles la presión sube con el tiempo de partida (ver diffMul y spawnEnemy). */
+const DIFFS = {
+  facil:     {name: 'Fácil',     hp: 0.75, dmg: 0.7, spawn: 1.25, elite: 1.3,  boss: 0.75, reward: 0.75, col: '#7cf29c', d: 'Para aprender: enemigos más flojos y menos numerosos.'},
+  normal:    {name: 'Normal',    hp: 1,    dmg: 1,   spawn: 1,    elite: 1,    boss: 1,    reward: 1,    col: '#4fc3f7', d: 'La experiencia equilibrada del juego.'},
+  dificil:   {name: 'Difícil',   hp: 1.35, dmg: 1.3, spawn: 0.8,  elite: 0.8,  boss: 1.3,  reward: 1.5,  col: '#ffb74d', d: 'Más vida, más daño y más hordas. Premios ×1,5.'},
+  pesadilla: {name: 'Pesadilla', hp: 1.8,  dmg: 1.6, spawn: 0.65, elite: 0.65, boss: 1.7,  reward: 2.2,  col: '#ef5350', d: 'Solo para expertos. Premios ×2,2.'}
+};
+const DIFF_ORDER = ['facil', 'normal', 'dificil', 'pesadilla'];
+let runMap = MAPS[localStorage.getItem('digibonk3d-map')] ? localStorage.getItem('digibonk3d-map') : 'bosque';
+let runDiff = DIFFS[localStorage.getItem('digibonk3d-diff')] ? localStorage.getItem('digibonk3d-diff') : 'normal';
+const mapDef = () => MAPS[(g && g.map) || 'bosque'];
+const zonesOf = () => mapDef().zones;
+const zoneDef = (n = g ? g.zone : 1) => zonesOf()[n - 1];
+const isPortalMap = () => !!g && mapDef().kind === 'portal';
+const lvlDiff = () => DIFFS[(g && g.diff) || 'normal'];
 // Recorta un punto al círculo de radio m (para aparecer y moverse dentro del escenario)
 function clampArena(x, z, m){
   const r = Math.hypot(x, z);
@@ -2052,6 +2285,7 @@ terrainGeo.rotateX(-Math.PI/2);
 }
 terrainGeo.computeVertexNormals();
 // Color por zona: tierra en el claro central, bosque más oscuro hacia las montañas y variación suave
+let tintCenter = [1.05, 0.86, 0.6];   // color del claro central (tierra en el bosque; cambia con el bioma)
 function zoneTint(x, z){
   const r = Math.hypot(x, z);
   const dirt = 1 - smooth01((r - 14)/12);
@@ -2059,14 +2293,15 @@ function zoneTint(x, z){
   const n = 0.93 + 0.07*Math.sin(x*0.09)*Math.cos(z*0.07);
   const k = 1 - edgeDark*0.25;
   let R = n*k, G = n*(1 - edgeDark*0.15), B = n*(1 - edgeDark*0.2);
-  R = R*(1 - dirt) + 1.05*dirt; G = G*(1 - dirt) + 0.86*dirt; B = B*(1 - dirt) + 0.6*dirt;
+  R = R*(1 - dirt) + tintCenter[0]*dirt; G = G*(1 - dirt) + tintCenter[1]*dirt; B = B*(1 - dirt) + tintCenter[2]*dirt;
   return [R, G, B];
 }
-{
+function paintTerrain(){
   const pos = terrainGeo.attributes.position, col = new Float32Array(pos.count*3);
   for (let i = 0; i < pos.count; i++) col.set(zoneTint(pos.getX(i), pos.getZ(i)), i*3);
   terrainGeo.setAttribute('color', new THREE.BufferAttribute(col, 3));
 }
+paintTerrain();
 // Texturas de archivo (textures/*.png): se repiten sin costuras
 const loader = new THREE.TextureLoader();
 // Ajusta la repetición a la proporción real de la imagen para que no se deforme
@@ -2080,14 +2315,15 @@ function loadTex(path, rx, ry, pixel = false){
 }
 const floorMat = new THREE.MeshStandardMaterial({map: loadTex('textures/puny_hierba.png', 20, 20, true), roughness: 1, vertexColors: true});
 const floor = new THREE.Mesh(terrainGeo, floorMat);
+let pondWater = null, pondShore = null, mountMesh = null, wallMat = null;
 scene.add(floor);
 {
-  const water = new THREE.Mesh(new THREE.CircleGeometry(POND.r + 0.6, 48),   // encaja con la orilla
+  const water = pondWater = new THREE.Mesh(new THREE.CircleGeometry(POND.r + 0.6, 48),   // encaja con la orilla
     new THREE.MeshStandardMaterial({color: 0xffffff, map: loadTex('textures/agua_pixel.png', 3, 3, true), roughness: 0.15, metalness: 0.1, transparent: true, opacity: 0.92}));
   water.rotation.x = -Math.PI/2;
   water.position.set(POND.x, POND.water, POND.z);
   scene.add(water);
-  const shoreRing = new THREE.Mesh(new THREE.RingGeometry(POND.r + 0.5, POND.r + 1.6, 48),
+  const shoreRing = pondShore = new THREE.Mesh(new THREE.RingGeometry(POND.r + 0.5, POND.r + 1.6, 48),
     new THREE.MeshBasicMaterial({color: 0xcfe9d0, transparent: true, opacity: 0.55, depthWrite: false}));
   shoreRing.rotation.x = -Math.PI/2;
   shoreRing.position.set(POND.x, POND.water + 0.05, POND.z);
@@ -2120,7 +2356,7 @@ function buildMountains(){
   geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
   geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
   geo.computeVertexNormals();
-  const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({vertexColors: true, flatShading: true, roughness: 0.9, side: THREE.DoubleSide}));
+  const mesh = mountMesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({vertexColors: true, flatShading: true, roughness: 0.9, side: THREE.DoubleSide}));
   scene.add(mesh);
 }
 buildMountains();
@@ -2129,12 +2365,11 @@ buildMountains();
 function buildStoneWall(){
   const H = 4.5, R = ARENA_R - 0.6;
   const tex = loadTex('textures/piedra_pixel.png', 48, 1, true);
-  const wall = new THREE.Mesh(new THREE.CylinderGeometry(R, R, H, 180, 1, true),
-    new THREE.MeshStandardMaterial({map: tex, roughness: 1, side: THREE.DoubleSide}));
+  wallMat = new THREE.MeshStandardMaterial({map: tex, roughness: 1, side: THREE.DoubleSide});
+  const wall = new THREE.Mesh(new THREE.CylinderGeometry(R, R, H, 180, 1, true), wallMat);
   wall.position.y = -0.8 + H/2;   // la base queda bajo el suelo: no hay bordes visibles
   scene.add(wall);
-  const coping = new THREE.Mesh(new THREE.TorusGeometry(R, 0.6, 8, 180),
-    new THREE.MeshStandardMaterial({map: tex, roughness: 1}));
+  const coping = new THREE.Mesh(new THREE.TorusGeometry(R, 0.6, 8, 180), wallMat);
   coping.rotation.x = Math.PI/2; coping.position.y = -0.8 + H;
   scene.add(coping);
 }
@@ -2213,49 +2448,86 @@ function makeShadow(diameter){
 
 // ---------- Entorno: árboles, rocas y flores (texturas procedurales) ----------
 // Decoración 2D integrada en el 3D: sprites de pixel art que siempre miran a la cámara
+const decoTexCache = {};
 function decoTex(file){
-  const t = loader.load(file);
+  if (decoTexCache[file]) return decoTexCache[file];
+  const t = decoTexCache[file] = loader.load(file);
   t.magFilter = THREE.NearestFilter;
   t.colorSpace = THREE.SRGBColorSpace;
   return t;
 }
+// Portal entre pantallas (mapas 2 y 3): siempre en el mismo sitio, al norte del escenario
+const PORTAL = {x: 0, z: -(ARENA_R - 32), r: 3.2};
+function portalClear(x, z){ return Math.hypot(x - PORTAL.x, z - PORTAL.z) < 10; }
+const decoGroup = new THREE.Group();
+scene.add(decoGroup);
 function decoSprite(tex, w, h, x, y, z){
   const sp = new THREE.Sprite(new THREE.SpriteMaterial({map: tex, transparent: true, alphaTest: 0.5}));
   sp.scale.set(w, h, 1);
   sp.position.set(x, y + h/2, z);
-  scene.add(sp);
+  decoGroup.add(sp);
   return sp;
 }
-function buildEnvironment(){
-  const T = {
-    arbol: decoTex('sprites/deco/arbol.png'), arbolOtono: decoTex('sprites/deco/arbol_otono.png'),
-    roca: decoTex('sprites/deco/roca.png'), arbusto: decoTex('sprites/deco/arbusto.png'),
-    flor: decoTex('sprites/deco/flor.png')
-  };
+/* ---------- Biomas: suelo, muro, montañas, agua y decoración de cada pantalla ----------
+   Los biomas nuevos usan pixel art CC0 de Kenney (Tiny Town, Tiny Dungeon, Tiny Ski, Pixel Platformer
+   y Retro Textures Fantasy); ver textures/CREDITOS.txt. deco: [archivo, ancho, alto, peso, sombra] */
+const BIOMES = {
+  bosque: {floor: 'textures/puny_hierba.png', rep: 20, center: [1.05, 0.86, 0.6], wall: 'textures/piedra_pixel.png', mount: 0xffffff,
+    water: {map: 'textures/agua_pixel.png', color: 0xffffff, shore: 0xcfe9d0},
+    deco: [['sprites/deco/arbol.png', 0.75, 1, 36, 0.5, 5], ['sprites/deco/arbol_otono.png', 0.75, 1, 9, 0.5, 5], ['sprites/deco/roca.png', 1.3, 0.9, 20, 2.2, 1.4], ['sprites/deco/arbusto.png', 1.4, 1, 13, 0, 1.4], ['sprites/deco/flor.png', 0.8, 1.2, 22, 0, 1]]},
+  dunas: {floor: 'textures/arena_kenney.png', rep: 64, center: [1.08, 0.98, 0.82], wall: 'textures/muro_arena_kenney.png', mount: 0xf0c890,
+    water: {map: 'textures/agua_verde_kenney.png', color: 0xbff7e0, shore: 0xe9d9a0},
+    deco: [['sprites/deco/kenney/cactus.png', 1, 1, 34, 0.4, 2.7], ['sprites/deco/kenney/arbol_seco.png', 1, 1, 6, 0.5, 3.4], ['sprites/deco/kenney/arbol_cono.png', 1, 1, 4, 0.5, 3], ['sprites/deco/kenney/roca_gris.png', 1.2, 1, 22, 2, 1.5], ['sprites/deco/kenney/brote.png', 1, 1, 20, 0, 1.1], ['sprites/deco/kenney/cartel.png', 1, 1, 3, 0.4, 1.5]]},
+  ruinas: {floor: 'textures/baldosa_arena_kenney.png', rep: 56, center: [1.0, 0.9, 0.8], wall: 'textures/muro_arena_kenney.png', mount: 0xc9a27a,
+    water: {map: 'textures/agua_verde_kenney.png', color: 0x9fdcae, shore: 0xbfa77a},
+    deco: [['sprites/deco/kenney/pilar_estandarte.png', 1, 1.5, 14, 0.6, 3.6], ['sprites/deco/kenney/muro_ruina.png', 1, 1.2, 16, 0.8, 3.4], ['sprites/deco/kenney/muro_estatua.png', 1, 1.2, 8, 0.8, 3.4], ['sprites/deco/kenney/tumba_cruz.png', 1, 1, 14, 0.5, 1.6], ['sprites/deco/kenney/tumba.png', 1, 1, 14, 0.5, 1.6], ['sprites/deco/kenney/barril.png', 1, 1, 10, 0.5, 1.4], ['sprites/deco/kenney/cactus.png', 1, 1, 12, 0.4, 3]]},
+  nieve: {floor: 'textures/nieve_kenney.png', rep: 30, center: [0.96, 0.98, 1.04], wall: 'textures/piedra_pixel.png', mount: 0xdfe9ff,
+    water: {map: 'textures/agua_pixel.png', color: 0xe6f6ff, shore: 0xffffff},
+    deco: [['sprites/deco/kenney/pino_nevado.png', 1, 1, 30, 0.5, 5], ['sprites/deco/kenney/pino_nevado2.png', 1, 1, 18, 0.5, 4.4], ['sprites/deco/kenney/arbol_nevado.png', 1, 1, 10, 0.5, 4.4], ['sprites/deco/kenney/pino.png', 1, 1, 8, 0.5, 4.6], ['sprites/deco/kenney/roca_gris.png', 1.2, 1, 18, 2, 1.6], ['sprites/deco/kenney/muneco_nieve.png', 1, 1, 5, 0.4, 2], ['sprites/deco/kenney/pinguino.png', 1, 1, 3, 0.3, 1.4]]},
+  fortaleza: {floor: 'textures/piedra_oscura_kenney.png', rep: 56, center: [0.78, 0.7, 0.82], wall: 'textures/muro_piedra_kenney.png', mount: 0x6e5a7e,
+    water: {map: 'textures/agua_pixel.png', color: 0xff6a2a, shore: 0x5a2a1a, lava: true},
+    deco: [['sprites/deco/kenney/muro_calavera.png', 1, 1.2, 10, 0.8, 3.6], ['sprites/deco/kenney/pilar_estandarte.png', 1, 1.5, 14, 0.6, 3.8], ['sprites/deco/kenney/muro_ruina.png', 1, 1.2, 14, 0.8, 3.4], ['sprites/deco/kenney/tumba_cruz.png', 1, 1, 16, 0.5, 1.6], ['sprites/deco/kenney/tumba.png', 1, 1, 14, 0.5, 1.6], ['sprites/deco/kenney/seta_roja.png', 1, 1, 10, 0, 1.2], ['sprites/deco/kenney/roca_gris.png', 1.2, 1, 12, 2, 1.6]]}
+};
+const biomeTexCache = {};
+function biomeTex(path, rx, ry){ return biomeTexCache[path + rx + ':' + ry] || (biomeTexCache[path + rx + ':' + ry] = loadTex(path, rx, ry, true)); }
+let curBiome = null;
+function buildEnvironment(name = 'bosque'){
+  const B = BIOMES[name] || BIOMES.bosque;
+  curBiome = name;
+  // Vacía la decoración anterior (los materiales de cada sprite son propios; las texturas se reutilizan)
+  for (const o of [...decoGroup.children]){ decoGroup.remove(o); if (o.material && o.material !== shadowMat) o.material.dispose(); }
+  const T = B.deco.map(d => decoTex(d[0]));
+  const total = B.deco.reduce((a, d) => a + d[3], 0);
   for (let i = 0; i < Q.decor; i++){
-    const r = Math.random();
     const ang = Math.random()*Math.PI*2, rad = Math.sqrt(Math.random())*(ARENA_R - 2);
     const x0 = Math.cos(ang)*rad, z0 = Math.sin(ang)*rad;
     if (Math.hypot(x0, z0) < 22) continue;   // deja libre la zona de aparición
     if (pondWeight(x0, z0) > 0.01) continue;   // no pone decoración dentro del estanque
+    if (portalClear(x0, z0)) continue;         // ni encima del portal
     const gy = terrainH(x0, z0);
-    if (r < 0.45){                          // árboles
-      const h = 5 + Math.random()*2;
-      decoSprite(Math.random() < 0.2 ? T.arbolOtono : T.arbol, h*0.75, h, x0, gy, z0);
-      const sh = makeShadow(h*0.5); sh.position.set(x0, gy + 0.02, z0); scene.add(sh);
-    } else if (r < 0.65){                   // rocas
-      const sc = 1.1 + Math.random()*0.6;
-      decoSprite(T.roca, sc*1.3, sc*0.9, x0, gy, z0);
-      const sh = makeShadow(sc*2.2); sh.position.set(x0, gy + 0.02, z0); scene.add(sh);
-    } else if (r < 0.78){                   // arbustos
-      const sc = 1.2 + Math.random()*0.5;
-      decoSprite(T.arbusto, sc*1.4, sc, x0, gy, z0);
-    } else {                                // flores
-      decoSprite(T.flor, 0.8, 1.2, x0, gy, z0);
-    }
+    let r = Math.random()*total, j = 0;
+    while (j < B.deco.length - 1 && (r -= B.deco[j][3]) > 0) j++;
+    const [, kw, kh, , shad, size] = B.deco[j];
+    const h = size*(0.85 + Math.random()*0.35);
+    decoSprite(T[j], h*kw, h*kh, x0, gy, z0);
+    if (shad){ const sh = makeShadow(h*shad); sh.position.set(x0, gy + 0.02, z0); decoGroup.add(sh); }
   }
 }
-buildEnvironment();
+// Aplica un bioma al escenario: suelo, centro, muro, montañas, agua y decoración
+function applyBiome(name){
+  const B = BIOMES[name] || BIOMES.bosque;
+  if (curBiome === name) return;
+  floorMat.map = biomeTex(B.floor, B.rep, B.rep); floorMat.needsUpdate = true;
+  tintCenter = B.center; paintTerrain();
+  wallMat.map = biomeTex(B.wall, 48, 1); wallMat.needsUpdate = true;
+  mountMesh.material.color.set(B.mount);
+  pondWater.material.map = biomeTex(B.water.map, 3, 3); pondWater.material.color.set(B.water.color);
+  pondWater.material.emissive = new THREE.Color(B.water.lava ? 0x992200 : 0x000000);
+  pondWater.material.needsUpdate = true;
+  pondShore.material.color.set(B.water.shore);
+  buildEnvironment(name);
+}
+buildEnvironment('bosque');
 
 // ---------- Estado ----------
 let state = 'select';
@@ -2272,6 +2544,7 @@ addEventListener('popstate', () => {
     if (state === 'play') pauseGame();
   }
 });
+document.getElementById('hudSummon').onclick = e => { e.stopPropagation(); summonBoss(); };
 addEventListener('keydown', e => {
   const k = e.key.toLowerCase();
   audioInit();
@@ -2283,6 +2556,7 @@ addEventListener('keydown', e => {
   if (state === 'map'){ if (k === 'escape') closeMap(); return; }
   if (k === 'q' && state === 'play'){ bonkRelease(); return; }
   if (k === 'r' && state === 'play'){ triggerEmergency(); return; }
+  if (k === 'b' && state === 'play'){ summonBoss(); return; }
   if (state === 'help'){ if (k === 'escape') showSelect(); if (k === 'arrowright') tutoStep(1); if (k === 'arrowleft') tutoStep(-1); return; }
   if (state === 'gacha' || state === 'lab' || state === 'settings' || state === 'player' || state === 'collection'){ if (k === 'escape') showSelect(); return; }
   // Esc o P pausan y reanudan. Con el ratón bloqueado el navegador puede no entregar Esc:
@@ -2308,8 +2582,15 @@ addEventListener('keydown', e => {
     if (k.length === 1 && '123456789'.includes(k) && +k <= list.length && isUnlocked(list[+k-1])){ selectedKey = list[+k-1]; showPicker(); }
     else if (k === 'arrowleft') pickMove(-1);
     else if (k === 'arrowright') pickMove(1);
-    else if (k === 'enter') startGame(selectedKey);
+    else if (k === 'enter') showMapSelect();
     else if (k === 'escape') showSelect();
+  }
+  else if (state === 'mapsel'){
+    const i = MAP_ORDER.indexOf(runMap);
+    if (k === 'arrowleft' || k === 'arrowright'){ runMap = MAP_ORDER[(i + (k === 'arrowleft' ? -1 : 1) + MAP_ORDER.length) % MAP_ORDER.length]; showMapSelect(); }
+    else if (k === 'arrowup' || k === 'arrowdown'){ const j = DIFF_ORDER.indexOf(runDiff); runDiff = DIFF_ORDER[Math.max(0, Math.min(DIFF_ORDER.length - 1, j + (k === 'arrowup' ? -1 : 1)))]; showMapSelect(); }
+    else if (k === 'enter') startGame(selectedKey);
+    else if (k === 'escape') showPicker();
   }
   else if (state === 'levelup' && k.length === 1 && '123'.includes(k)) (g.upMode === 'ban' ? banishUp(+k-1) : pickUpgrade(+k-1));
   else if (state === 'levelup' && k === 'f') rerollUp();
@@ -2375,7 +2656,7 @@ function showPause(askQuit = false){
       <div class="pz-brand">DIGIVICE</div>
       <div class="pz-bezel"><div class="pz-lcd">
         <div class="pz-title">DIGIVICE · PAUSA</div>
-        <div class="pz-zone">${ZONES[(g ? g.zone : 1) - 1].name} · <span class="pz-st">● En línea</span></div>
+        <div class="pz-zone">${(g ? zoneDef() : ZONES[0]).name} · <span class="pz-st">● En línea</span></div>
         <button class="pz-close" id="pClose" aria-label="Cerrar menú de pausa">✕</button>
         <div class="pz-profile">
           <div class="pz-av">${animEl(sprite, 'pz-anim')}</div>
@@ -2453,7 +2734,7 @@ function setHud(v){
   const d = v ? '' : 'none';
   document.getElementById('menubg').style.display = 'none';
   document.getElementById('menuart').style.display = v ? 'none' : 'block';
-  for (const id of ['hud', 'hudTop', 'timer', 'xp', 'combo', 'bossbar', 'prompt', 'minimap']) document.getElementById(id).style.display = d;
+  for (const id of ['hud', 'hudTop', 'timer', 'xp', 'xpTrack', 'xpTxt', 'combo', 'bossbar', 'prompt', 'minimap', 'hudSummon']) document.getElementById(id).style.display = d;
   if (!v) document.getElementById('hurt').style.opacity = 0;
 }
 // Barra de estadística (0-100%)
@@ -2563,7 +2844,7 @@ function showCollection(){
   overlay.querySelectorAll('.cl4-skin.owned').forEach(b => b.onclick = () => { equipSkinAt(colKey, colStage, b.dataset.skin); showCollection(); });
 }
 // ---------- Barra superior fija en los menús: tarjeta, Bits, tickets, idioma, sonido, pantalla completa y ajustes ----------
-const TOP_STATES = ['select', 'gacha', 'lab', 'pick', 'player', 'settings', 'help', 'savecode', 'collection'];
+const TOP_STATES = ['select', 'gacha', 'lab', 'pick', 'mapsel', 'player', 'settings', 'help', 'savecode', 'collection'];
 function refreshTopbar(){
   const el = document.getElementById('topbar');
   const show = TOP_STATES.includes(state) && !overlay.classList.contains('hidden') && !overlay.querySelector('.pa,.pr3,.dvl2');
@@ -2636,6 +2917,7 @@ function bindMenuFX(){
   });
 }
 function showSelect(){
+  if (!localStorage.getItem('digibonk3d-gift')){ localStorage.setItem('digibonk3d-gift', '1'); addTickets('std', 10); setTimeout(() => { const m = document.getElementById('hmMsg'); if (m) m.textContent = '🎁 Regalo de bienvenida: 10 tickets para el gacha'; }, 300); }
   state = 'select';
   setHud(false);
   if (g){ scene.remove(world); world = new THREE.Group(); scene.add(world); g = null; }
@@ -2679,6 +2961,7 @@ function showSelect(){
           <div class="hm-grid">
             <button type="button" class="hm-art-tile" id="btnColl" aria-label="Digidex" style="--art:url(ui/botones/digidex.png)"></button>
             <button type="button" class="hm-art-tile" id="btnGacha" aria-label="Laboratorio" style="--art:url(ui/botones/laboratorio.png)"></button>
+            <button type="button" class="hm-art-tile hm-gacha" id="btnTesoros" aria-label="Gacha: ${usableTickets('std')} tickets"><img src="ui/gacha/huevo_l0.png" alt=""><b>Gacha</b>${usableTickets('std') ? `<em>${usableTickets('std')}</em>` : ''}</button>
             <button type="button" class="hm-art-tile" id="mLog" aria-label="Logros" style="--art:url(ui/botones/logros.png)"></button>
             <button type="button" class="hm-art-tile hm-soon" id="mRank" aria-label="Ranking. Próximamente" style="--art:url(ui/botones/ranking.png)"><span class="hm-badge">Pronto</span></button>
             <button type="button" class="hm-art-tile hm-soon" id="mBuild" aria-label="Build. Próximamente" style="--art:url(ui/botones/build.png)"><span class="hm-badge">Pronto</span></button>
@@ -2720,6 +3003,7 @@ function showSelect(){
   document.getElementById('btnColl').onclick=showCollection;
   document.getElementById('btnPlayer').onclick=showPlayer;
   document.getElementById('btnGacha').onclick=showLab;
+  document.getElementById('btnTesoros').onclick=()=>{ gxBanner = 'std'; showGacha(); };
   document.getElementById('btnHelp').onclick=showHelp;
   document.getElementById('btnAjustes').onclick=showSettings;
   // Botones del menú principal aún sin contenido: muestran un aviso breve en lugar de abrir nada
@@ -2771,6 +3055,8 @@ const TUTO = [
   {t:'Cofres', d:'Pulsa E junto a un cofre para abrirlo y recibir una mejora.', clip:'tutorial/cofre.webm'},
   {t:'Zonas', d:'El mapa tiene dos zonas. La segunda, el Pantano de Datos, empieza a los 10 minutos y trae enemigos más duros.', clip:'tutorial/zona.webm'},
   {t:'Jefe final', d:'Devimon, Etemon y Myotismon aparecen como jefes menores; al final llega Piedmon. Esquiva el anillo rojo antes de cada disparo.', clip:'tutorial/jefe.webm'},
+  {t:'Mapas y portal', d:'Tras elegir Digimon eliges mapa y dificultad. En los mapas 2 y 3 hay dos pantallas: pulsa B para invocar al jefe de la pantalla cuando quieras (siempre tiene la misma fuerza); al derrotarlo se abre el portal del norte. Si pasas 20 minutos en una pantalla empieza el Infierno y no se sobrevive.', clip:'tutorial/zona.webm'},
+  {t:'Dificultad y Supervivencia', d:'Fácil, Normal, Difícil y Pesadilla cambian la vida y el daño de los enemigos, las hordas, los jefes y los premios. Supervivencia no tiene jefe final: cada minuto llega una oleada y cada 5 oleadas un jefe menor.', clip:'tutorial/jefe.webm'},
   {t:'Colección y gacha', d:'La colección guarda tus skins por etapa, marcos y títulos. El gacha tiene un banner permanente y los promocionales, cada uno con sus tickets.', clip:'tutorial/coleccion.webm'}
 ];
 let tutoIdx = 0;
@@ -2809,7 +3095,7 @@ function showHelp(){
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
-  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc', 'digibonk3d-support'];
+  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift'];
 function makeSaveCode(){
   const data = {};
   for (const k of SAVE_KEYS){ const v = localStorage.getItem(k); if (v !== null) data[k] = v; }
@@ -3059,13 +3345,13 @@ function showPicker(tab){
         </aside>
       </div>
       <footer class="pk2-foot">
-        <button class="btn btn-primary pk-start" id="pkStart">¡Empezar! <small>(Enter)</small></button>
+        <button class="btn btn-primary pk-start" id="pkStart">Elegir mapa ➜ <small>(Enter)</small></button>
         <span class="pk-hint">1-8 elegir · ←→ cambiar · Enter empezar · Esc volver</span>
       </footer>
     </div>`);
   overlay.querySelectorAll('.pk2-tile:not(.lock)').forEach(b => {
     b.onclick = () => { selectedKey = b.dataset.pick; showPicker(); };
-    b.ondblclick = () => startGame(b.dataset.pick);
+    b.ondblclick = () => { selectedKey = b.dataset.pick; showMapSelect(); };
   });
   // La búsqueda filtra en el DOM sin redibujar; sus teclas no llegan al manejador global
   const search = document.getElementById('pkSearch');
@@ -3076,7 +3362,7 @@ function showPicker(tab){
   });
   overlay.querySelectorAll('.pk-tab').forEach(b => b.onclick = () => showPicker(b.dataset.tab));
   document.getElementById('pkBack').onclick = () => showSelect();
-  document.getElementById('pkStart').onclick = () => startGame(selectedKey);
+  document.getElementById('pkStart').onclick = () => showMapSelect();
   if (pickTab === 'personaje'){
     renderPickPreview(); bindSkinStrip(); renderSupportPick();
     overlay.querySelectorAll('.pk-stage').forEach(b => b.onclick = () => { pickStage = +b.dataset.stage; showPicker(); });
@@ -3162,6 +3448,43 @@ function pickMove(delta){
   showPicker();
 }
 
+/* ---------- Elección de mapa y dificultad (después de elegir Digimon) ---------- */
+const mapWins = () => loadJSON('digibonk3d-mapwins', {});
+function showMapSelect(){
+  state = 'mapsel';
+  setHud(false);
+  try { localStorage.setItem('digibonk3d-map', runMap); localStorage.setItem('digibonk3d-diff', runDiff); } catch(e){}
+  const surv = runMode === 'surv', wins = mapWins();
+  const pct = v => (v >= 1 ? '+' : '−') + Math.round(Math.abs(v - 1) * 100) + '%';
+  const cards = MAP_ORDER.map(id => {
+    const m = MAPS[id], [floorTx, decoPng, bossPng] = m.preview, won = (wins[id] || []);
+    const tags = m.kind === 'portal'
+      ? [`2 pantallas · portal`, m.single ? 'Un único jefe final' : 'Jefe en cada pantalla', 'Infierno a los 20 min por pantalla']
+      : ['2 zonas por tiempo', '6 jefes menores', 'Piedmon a los 20:00'];
+    const rec = surv ? `Mejor oleada: <b>${+(localStorage.getItem('digibonk3d-surv-wave-' + id) || 0) || '—'}</b>` : won.length ? `Superado en: <b>${won.map(d => DIFFS[d] ? DIFFS[d].name : d).join(', ')}</b>` : 'Aún sin superar';
+    return `<button type="button" class="ms-card${id === runMap ? ' on' : ''}" data-map="${id}" aria-pressed="${id === runMap}">
+      <span class="ms-art" style="--floor:url(${floorTx})"><img class="ms-deco d1" src="${decoPng}" alt=""><img class="ms-deco d2" src="${decoPng}" alt=""><img class="ms-boss" src="${bossPng}" alt=""><em>MAPA ${m.n}</em></span>
+      <span class="ms-txt"><b>${m.name}</b><small>${m.zones.map(z => z.name).join(' → ')}</small><p>${surv ? 'Supervivencia: sin jefe final, una oleada por minuto y un jefe menor cada 5 oleadas.' : m.desc}</p>
+      <span class="ms-tags">${tags.map(t => `<i>${t}</i>`).join('')}</span><span class="ms-rec">${rec}</span></span></button>`;
+  }).join('');
+  const d = DIFFS[runDiff];
+  const diffs = DIFF_ORDER.map(id => `<button type="button" class="ms-diff${id === runDiff ? ' on' : ''}" data-diff="${id}" style="--dc:${DIFFS[id].col}" aria-pressed="${id === runDiff}"><b>${DIFFS[id].name}</b><small>Premios ×${String(DIFFS[id].reward).replace('.', ',')}</small></button>`).join('');
+  showOverlay(`
+    <div class="picker-screen ms">
+      <header class="pk2-top"><button class="g-back" id="msBack">← Digimon</button><h2>${surv ? 'Supervivencia · elige mapa' : 'Elige mapa y dificultad'}</h2><span class="pk2-sub">${CHARS[selectedKey].name} · ←→ mapa · ↑↓ dificultad · Enter empezar</span></header>
+      <div class="ms-maps">${cards}</div>
+      <section class="ms-dsec"><div class="ms-diffs">${diffs}</div>
+        <div class="ms-table" style="--dc:${d.col}"><b>${d.name}</b><span>${d.d}</span>
+          <ul><li>Vida enemigos <em>${pct(d.hp)}</em></li><li>Daño enemigos <em>${pct(d.dmg)}</em></li><li>Enemigos <em>${pct(1 / d.spawn)}</em></li><li>Élites <em>${pct(1 / d.elite)}</em></li><li>Jefes de zona <em>${pct(d.boss)}</em></li><li>Bits y tickets <em>×${String(d.reward).replace('.', ',')}</em></li></ul>
+          <small>En todos los niveles la presión sube con el tiempo: más vida, daño y hordas hasta el minuto 10. En los mapas 2 y 3, a los 20 minutos en una pantalla empieza el Infierno.</small></div>
+      </section>
+      <footer class="pk2-foot"><button class="btn btn-primary pk-start" id="msStart">¡Empezar! <small>(Enter)</small></button><span class="pk-hint">${surv ? 'Supervivencia' : 'Partida'} en ${MAPS[runMap].name} · ${d.name}</span></footer>
+    </div>`);
+  overlay.querySelectorAll('.ms-card').forEach(b => b.onclick = () => { runMap = b.dataset.map; showMapSelect(); });
+  overlay.querySelectorAll('.ms-diff').forEach(b => b.onclick = () => { runDiff = b.dataset.diff; showMapSelect(); });
+  document.getElementById('msBack').onclick = () => showPicker();
+  document.getElementById('msStart').onclick = () => startGame(selectedKey);
+}
 function startGame(key){
   // El botón Jugar muestra el último Digimon con el que se jugó
   if (CHARS[key]) { selectedKey = key; try { localStorage.setItem('digibonk3d-last-choice', key); } catch(e){} }
@@ -3185,9 +3508,11 @@ function startGame(key){
     dash: 0, dashCd: 0, dir: {x:0, z:-1}, chests: [], chestT: 20, flash: '', flashT: 0,
     texts: [], nearChest: null, combo: 0, comboT: 0,
     boss: null, bossSpawned: false, bossDown: false, bossShotT: 0, eshots: [],
+    map: runMap, diff: runDiff, screenT: 0, inferno: false, portal: null, portalOpen: false, wave: 1, bossName: null,
     zone: 1, eliteT: 60, drops: [], bonk: 0, dashReady: true, sk: newSkillState(), skills: {}, tix: 0, dmgBy: {}, miniI: 0
   };
   applyZoneVisuals(1);
+  buildPortal();
   applyBalance(key);
   applySkinFx(key);
   applyLab();
@@ -3601,8 +3926,10 @@ function evoDmg(){ return 1; }
 // vida y daño de enemigos y minijefes, ritmo de aparición (menor = más enemigos) y tiempo entre élites
 const DIFF = {hp: 1.35, dmg: 1.35, spawn: 0.75, eliteT: 35, spawnMin: 0.22};
 // La dificultad sube poco a poco: al principio es la normal y llega a la del modo difícil en el minuto 10
-const diffMul = k => 1 + (DIFF[k] - 1) * Math.min(1, (g ? g.t : 0) / 600);
-const eliteGap = () => 45 + (DIFF.eliteT - 45) * Math.min(1, (g ? g.t : 0) / 600);
+const diffMul = k => (lvlDiff()[k] || 1) * (1 + (DIFF[k] - 1) * Math.min(1, (g ? g.t : 0) / 600)) * (k === 'spawn' ? 1 / infMul() : infMul());
+const eliteGap = () => (45 + (DIFF.eliteT - 45) * Math.min(1, (g ? g.t : 0) / 600)) * lvlDiff().elite / infMul();
+// Infierno: tras 20 minutos en la misma pantalla todo se multiplica sin parar (+100% cada 15 s)
+const infMul = () => (g && g.inferno) ? 1 + Math.max(0, g.screenT - SCREEN_LIMIT) / 15 : 1;
 // Tiempo que cuenta para la dificultad: igual que el tiempo real hasta el minuto 10 (la dificultad de siempre)
 // y después avanza a 0,3 para que el minuto 20 no sea imposible
 // En Supervivencia no hay jefe final: la dificultad no se suaviza tras el minuto 10
@@ -3618,7 +3945,7 @@ function spawnEnemy(forced){
   else if (t > 60 && r < (z2 ? 0.5 : 0.4)) kind = 'fast';
   const tt = diffT(t);
   const d = ENEMY[kind], k = 1 + tt/60 + (tt/200)*(tt/200);   // vida: igual que siempre hasta el minuto 10
-  const pool = ZONE_FOES[g.zone - 1][kind], sprite = pool ? pool[Math.floor(Math.random()*pool.length)] : d.sprite;
+  const pool = (zoneDef().foes || ZONE_FOES[g.zone - 1])[kind], sprite = pool ? pool[Math.floor(Math.random()*pool.length)] : d.sprite;
   const mesh = billboard(sprite, d.scale);
   mesh.position.y = d.scale/2;
   world.add(mesh);
@@ -3748,9 +4075,12 @@ function update(dt){
   resolveSolids(p, 0.5, p.y);   // los obstáculos del mapa bloquean al jugador
 
   // Avisos de fase: hordas a los 45 s y aviso del jefe 15 s antes
-  if (g.zone < 2 && g.t >= ZONE2_AT) setZone(2);
+  if (g.zone < 2 && g.t >= ZONE2_AT){ if (isPortalMap()){ if (g.mode === 'surv') enterScreen(2); } else setZone(2); }
   if (!g.hordeWarned && g.t >= 45){ g.hordeWarned = true; announce('¡HORDAS!', 'Más enemigos aparecen', '#ef5350'); }
-  if (g.mode !== 'surv' && !g.bossWarned && g.t >= BOSS_AT - 15){ g.bossWarned = true; announce('Algo se acerca…', 'Piedmon llega en 15 s', '#ce93d8'); }
+  if (g.mode !== 'surv' && !isPortalMap() && !g.bossWarned && g.t >= BOSS_AT - 15){ g.bossWarned = true; announce('Algo se acerca…', 'Piedmon llega en 15 s', '#ce93d8'); }
+  updateScreenClock(dt);
+  updatePortal(dt);
+  if (g.mode === 'surv') updateWaves();
 
   // Quedarse quieto: tras 2,5 s sin moverte, los enemigos salen más deprisa y más cerca
   const mvd = Math.hypot(g.p.x - (g.lastPx ?? g.p.x), g.p.z - (g.lastPz ?? g.p.z));
@@ -3770,7 +4100,7 @@ function update(dt){
   }
 
   // Minijefes en sus minutos
-  while (g.miniI < MINIS.length && g.t >= MINIS[g.miniI].at) spawnMini(MINIS[g.miniI++]);
+  while (g.mode !== 'surv' && mapDef().minis && g.miniI < MINIS.length && g.t >= MINIS[g.miniI].at) spawnMini(MINIS[g.miniI++]);
   // Fase extra: un jefe especial cada 40 s
   if (g.extraOn && !g.extraSpawned && g.t >= g.extraNext){ spawnSpecial(); g.extraSpawned = true; }
 
@@ -3797,7 +4127,7 @@ function update(dt){
     [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5);   // los enemigos también quedan dentro
     resolveSolids(e, e.r*0.8);                          // y no atraviesan casas ni vallas
     e.cd -= dt;
-    if (d < e.r + 0.8 && g.dash <= 0){ p.hp -= e.dmg * foeMul(e) * (p.armor || 1) * dt; shake = Math.max(shake, 0.12); }
+    if (d < e.r + 0.8 && g.dash <= 0){ p.hp -= e.dmg * foeMul(e) * (p.armor || 1) * (g.inferno && !e.boss ? Math.sqrt(infMul()) : 1) * dt; shake = Math.max(shake, 0.12); }
   }
 
   // Armas
@@ -3963,8 +4293,8 @@ function update(dt){
   g.texts = g.texts.filter(t => t.life > 0);
 
   // Jefe final: aparece a los 240 s y lanza anillos de proyectiles
-  if (g.mode !== 'surv' && !g.bossSpawned && g.t >= BOSS_AT){
-    g.bossSpawned = true;
+  if (g.mode !== 'surv' && !isPortalMap() && !g.bossSpawned && g.t >= BOSS_AT){
+    g.bossSpawned = true; g.bossName = 'Piedmon';
     const mesh = billboard('sprites/adventure/piedmon.png', 5.4);
     world.add(mesh);
     const shadow = makeShadow(5);
@@ -3987,17 +4317,27 @@ function update(dt){
       g.bossRing.material.opacity = 0.25 + 0.6*prog;
     }
     if (g.bossShotT <= 0){
-      g.bossShotT = 2.5;
+      const bd = g.boss.def || {};
+      g.bossShotT = bd.gap || 2.5;
       clearBossRing();
-      const b = g.boss;
-      for (let i = 0; i < 10; i++){
-        const an = i/10*Math.PI*2 + g.t;
+      const b = g.boss, ns = bd.shots || 10;
+      for (let i = 0; i < ns; i++){
+        const an = i/ns*Math.PI*2 + g.t;
         const shot = new THREE.Mesh(SPROJ_GEO, matFor(0xff1744));
         shot.position.set(b.x, 1 + terrainH(b.x, b.z), b.z);
         world.add(shot);
-        g.eshots.push({x: b.x, z: b.z, vx: Math.cos(an)*6, vz: Math.sin(an)*6, life: 4, mesh: shot, dmg: 8});
+        g.eshots.push({x: b.x, z: b.z, vx: Math.cos(an)*6, vz: Math.sin(an)*6, life: 4, mesh: shot, dmg: bd.shotDmg || 8});
       }
     }
+    // Mapa 3: el jefe único huye por el portal a mitad de vida en la primera pantalla
+    if (g.boss.def && g.boss.def.retreatAt && g.boss.hp > 0 && g.boss.hp <= g.boss.max * g.boss.def.retreatAt) bossRetreat();
+  } else if (g.boss && isPortalMap() && !g.bossDown){
+    // Jefe de zona derrotado: en la primera pantalla abre el portal; en la última, victoria
+    clearBossRing();
+    const def = g.boss.def || {};
+    g.boss = null;
+    if (def.final) g.bossDown = true;
+    else openPortal(def.name + ' derrotado');
   } else if (g.boss && !g.bossDown){
     g.bossDown = true;   // el jefe ha caído
     clearBossRing();
@@ -4057,6 +4397,7 @@ function drawEdgeMarkers(){
   if (state !== 'play' || !g) return;
   const targets = g.chests.filter(ch => !ch.open && !ch.gone).map(ch => ({x: ch.x, z: ch.z, col: '#ffd54f'}));
   if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
+  if (g.portal && g.portalOpen) targets.push({x: PORTAL.x, z: PORTAL.z, col: '#3de0ff'});
   if (g.ev) for (const n of g.ev.nodes || [{x: g.ev.foe.x, z: g.ev.foe.z}]) if (!n.done) targets.push({x: n.x, z: n.z, col: '#7cf29c'});
   for (const e of g.enemies) if (e.kind === 'elite' || e.kind === 'mini') targets.push({x: e.x, z: e.z, col: e.kind === 'mini' ? '#ce93d8' : '#ff7043'});
   const W = cv.width, H = cv.height, cx = W/2, cy = H/2;
@@ -4461,9 +4802,10 @@ function pickUpgrade(i){
 
 function endGame(win){
   state = 'end';
+  setHud(false); evHud(null); shrineHud(null);
   sfx(win ? 'victory' : 'defeat');
   const daily = loadDaily();
-  const raw = Math.floor((g.kills/2 + g.t/10) * labMul('bits') * 1.25 * (g.mode === 'surv' ? 1.5 : 1));   // +25% por el modificador semanal
+  const raw = Math.floor((g.kills/2 + g.t/10) * labMul('bits') * 1.25 * (g.mode === 'surv' ? 1.5 : 1) * lvlDiff().reward * (win && isPortalMap() ? 1.5 : 1));   // +25% por el modificador semanal
   const earned = Math.min(raw, Math.max(0, DAILY.runCap - daily.runBits));
   if (g.t >= 5) daily.runs += 1;
   daily.runBits += earned;
@@ -4473,7 +4815,9 @@ function endGame(win){
   if (g.t >= DAILY.runTixAt && g.tix < DAILY.runTix) g.tix = DAILY.runTix;
   saveDaily(daily);
   SAVE.bits = SAVE.bits + earned + bonus + (g.extraBits || 0);
+  g.tix = Math.round(g.tix * lvlDiff().reward);   // la dificultad también multiplica los tickets
   addTickets('std', g.tix);   // élites y jefe: monedero del permanente
+  if (g.mode === 'surv'){ const wk = 'digibonk3d-surv-wave-' + g.map; g.waveBest = (g.wave || 1) > +(localStorage.getItem(wk) || 0); if (g.waveBest) localStorage.setItem(wk, String(g.wave || 1)); }
   g.earned = earned + bonus + (g.extraBits || 0);
   g.bonus = bonus;
   g.unlocked = recordRun(g.ch.id, g.kills, g.t);
@@ -4483,6 +4827,7 @@ function endGame(win){
   g.encDone = checkEncargos();
   unlockMouse();
   saveRecord(win);
+  if (win && g.mode !== 'surv'){ const mw = mapWins(), l = mw[g.map] || (mw[g.map] = []); if (!l.includes(g.diff)) l.push(g.diff); localStorage.setItem('digibonk3d-mapwins', JSON.stringify(mw)); }
   // Resumen de la partida: cifras, daño por habilidad y recompensas
   const dmgRows = Object.entries(g.dmgBy).sort((a, b) => b[1] - a[1]).slice(0, 6);
   const dmgMax = dmgRows.length ? dmgRows[0][1] : 1;
@@ -4497,11 +4842,13 @@ function endGame(win){
   for (const d of g.newDigis) rewards.push(`<li>Digimon desbloqueado: <b>${d}</b></li>`);
   for (const e of g.encDone) rewards.push(`<li>Encargo cumplido: <b>${e}</b> · +${ENC_REWARD.bits} Bits y +${ENC_REWARD.tix} ticket</li>`);
   if (g.survBest) rewards.push(`<li>¡Nuevo récord de Supervivencia con ${g.ch.name}!</li>`);
+  if (g.waveBest) rewards.push(`<li>¡Nueva mejor oleada en ${mapDef().name}: <b>${g.wave}</b>!</li>`);
+  if (lvlDiff().reward !== 1) rewards.push(`<li>Dificultad ${lvlDiff().name}: premios ×${String(lvlDiff().reward).replace('.', ',')}</li>`);
   const endKey = g.ch.id;
   showOverlay(`
     <div class="end3 ${win ? 'win' : 'lose'}">
       <h1>${g.mode === 'surv' ? 'FIN DE LA SUPERVIVENCIA' : win ? '¡VICTORIA!' : 'HAS CAÍDO'}</h1>
-      <p class="end3-sub">${g.mode === 'surv' ? `Has aguantado ${fmtTime(Math.floor(g.t))} · récord con ${g.ch.name}: ${fmtTime(Math.floor(survBest(g.ch.id)))}` : win ? 'Piedmon ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Laboratorio`} · ${ZONES[g.zone - 1].name}</p>
+      <p class="end3-sub">${g.mode === 'surv' ? `Has aguantado ${fmtTime(Math.floor(g.t))} · récord con ${g.ch.name}: ${fmtTime(Math.floor(survBest(g.ch.id)))}` : win ? (g.bossName || 'Piedmon') + ' ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Laboratorio`} · ${mapDef().name} · ${zoneDef().name} · ${lvlDiff().name}${g.mode === 'surv' ? ' · Oleada ' + (g.wave || 1) : ''}</p>
       <div class="end3-cells">
         <span><b>${fmtTime(Math.floor(g.t))}</b>Tiempo</span><span><b>${g.p.lvl}</b>Nivel</span><span><b>${g.kills}</b>Bajas</span><span><b>${Object.keys(g.skills).length}</b>Habilidades</span>
       </div>
@@ -4582,7 +4929,8 @@ function announce(title, sub, color = '#ffd54f'){
 }
 // Colores de cada zona: niebla, cielo y tinte del suelo (sin reconstruir el mapa)
 function applyZoneVisuals(n){
-  const z = ZONES[n - 1];
+  const z = zoneDef(n);
+  applyBiome(z.biome || 'bosque');
   scene.fog.color.set(z.fog);
   const old = scene.background;
   scene.background = skyTexture(z.sky);
@@ -4597,8 +4945,161 @@ function setZone(n){
   applyZoneVisuals(n);
   shake = Math.max(shake, 0.4);
   sfx('evolve');
-  const z = ZONES[n - 1];
-  announce('Zona ' + n + ': ' + z.name, n === 2 ? 'Derrota al jefe final para ganar' : '', z.color);
+  const z = zoneDef(n);
+  announce('Zona ' + n + ': ' + z.name, g.mode === 'surv' ? 'Supervivencia: aguanta todo lo que puedas' : n === 2 ? 'Derrota al jefe final para ganar' : '', z.color);
+}
+/* ---------- Portal, jefes de zona, Infierno y oleadas ---------- */
+const portalTwirl = decoTex('ui/gacha/twirl_02.png');
+// Portal de piedra con un remolino. Cerrado: gris y con candado. Abierto: brilla y te lleva a la pantalla 2
+function buildPortal(){
+  g.portal = null;
+  if (!isPortalMap() || g.mode === 'surv' || g.zone !== 1) return;
+  const grp = new THREE.Group();
+  const y0 = terrainH(PORTAL.x, PORTAL.z);
+  grp.position.set(PORTAL.x, y0, PORTAL.z);
+  const stone = new THREE.Mesh(new THREE.TorusGeometry(2.7, 0.55, 10, 36), new THREE.MeshStandardMaterial({map: wallMat.map, roughness: 1, color: 0xb0b0c0}));
+  stone.position.y = 3.1;
+  grp.add(stone);
+  for (const sx of [-2.7, 2.7]){
+    const leg = new THREE.Mesh(new THREE.BoxGeometry(0.9, 1.4, 0.9), stone.material);
+    leg.position.set(sx, 0.5, 0); grp.add(leg);
+  }
+  const swirl = new THREE.Sprite(new THREE.SpriteMaterial({map: portalTwirl, color: 0x667080, transparent: true, opacity: 0.45, depthWrite: false, blending: THREE.AdditiveBlending}));
+  swirl.scale.set(5.2, 5.2, 1); swirl.position.y = 3.1; grp.add(swirl);
+  const lock = new THREE.Sprite(new THREE.SpriteMaterial({map: decoTex('ui/hud/candado.png'), transparent: true}));
+  lock.scale.set(1.3, 1.3, 1); lock.position.y = 6.9; grp.add(lock);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(PORTAL.r - 0.3, PORTAL.r + 0.3, 40), new THREE.MeshBasicMaterial({color: 0x777788, transparent: true, opacity: 0.5, depthWrite: false}));
+  ring.rotation.x = -Math.PI/2; ring.position.y = 0.08; grp.add(ring);
+  world.add(grp);
+  g.portal = {grp, swirl, lock, ring, stone};
+}
+function openPortal(title, sub){
+  g.portalOpen = true;
+  g.tix += 2;
+  if (g.portal){
+    g.portal.swirl.material.color.set(0x7ff3ff); g.portal.swirl.material.opacity = 0.95;
+    g.portal.ring.material.color.set(0x3de0ff); g.portal.ring.material.opacity = 0.85;
+    g.portal.stone.material.color.set(0xd8f6ff); g.portal.stone.material.emissive = new THREE.Color(0x0a6f88); g.portal.stone.material.needsUpdate = true;
+    const glow = new THREE.Sprite(new THREE.SpriteMaterial({map: decoTex('ui/gacha/light_02.png'), color: 0x3de0ff, transparent: true, opacity: 0.8, depthWrite: false, blending: THREE.AdditiveBlending}));
+    glow.scale.set(9, 9, 1); glow.position.y = 3.1; g.portal.grp.add(glow); g.portal.glow = glow;
+    g.portal.lock.visible = false;
+    spawnRing(PORTAL.x, PORTAL.z, 0x3de0ff, 8, 0.9);
+  }
+  sfx('victory');
+  announce(title, sub || 'El portal está abierto: ve al norte (flecha cian) · +2 tickets', '#3de0ff');
+}
+function updatePortal(dt){
+  const P = g.portal;
+  if (!P) return;
+  P.swirl.material.rotation -= dt * (g.portalOpen ? 3 : 0.6);
+  if (g.portalOpen){
+    const k = 1 + 0.06*Math.sin(g.t*5);
+    P.swirl.scale.set(5.2*k, 5.2*k, 1);
+    if (P.glow) P.glow.material.opacity = 0.55 + 0.3*Math.sin(g.t*3);
+    if (Math.hypot(g.p.x - PORTAL.x, g.p.z - PORTAL.z) < PORTAL.r) enterScreen(2);
+  }
+}
+// Cambio de pantalla: limpia la pantalla anterior, aplica el bioma nuevo y reinicia el reloj del Infierno
+function enterScreen(n){
+  if (g.zone >= n) return;
+  const fl = document.getElementById('flash');
+  fl.animate([{opacity: 1}, {opacity: 0}], {duration: 1100});
+  for (const e of g.enemies){ world.remove(e.mesh); world.remove(e.shadow); }
+  g.enemies = []; g.boss = null; g.bossSpawned = false; clearBossRing();
+  for (const s of g.eshots) world.remove(s.mesh); g.eshots = [];
+  // La experiencia que quedaba en el suelo se absorbe al cruzar
+  for (const gm of g.gems){ if (gm.mesh) world.remove(gm.mesh); if (!gm.heal) g.p.xp += gm.v * (g.labXp || 1); }
+  g.gems = [];
+  for (const c of g.chests) if (c.group) world.remove(c.group);
+  g.chests = [];
+  for (const sh of g.shrines || []) world.remove(sh.mesh);
+  if (g.ev) endMapEvent(false);
+  if (g.portal){ world.remove(g.portal.grp); g.portal = null; }
+  g.zone = n; g.screenT = 0; g.inferno = false; g.portalOpen = false; g.screenWarn = 0;
+  applyZoneVisuals(n);
+  initShrines();
+  g.p.x = 0; g.p.z = 0; g.p.y = 0; g.p.vy = 0;
+  g.spawnT = 3; g.eliteT = Math.max(g.eliteT, 30);
+  shake = Math.max(shake, 0.5);
+  sfx('evolve');
+  const z = zoneDef(n);
+  announce('Pantalla ' + n + ': ' + z.name, g.mode === 'surv' ? 'Supervivencia: el escenario cambia, la horda no' : z.boss ? 'Pulsa B para invocar a ' + z.boss.name + ' cuando estés listo' : '', z.color);
+}
+// Invoca al jefe de la pantalla cuando quieras: su fuerza no depende del tiempo ni de tu nivel
+function summonBoss(){
+  if (!isPortalMap() || g.mode === 'surv' || state !== 'play') return;
+  const def = zoneDef().boss;
+  if (!def) return;
+  if (g.boss && g.enemies.includes(g.boss)){ announce(def.name + ' ya está aquí', 'Derrótalo', def.col); return; }
+  if (g.portalOpen){ announce('El portal ya está abierto', 'Ve al norte para cruzarlo', '#3de0ff'); return; }
+  if (g.bossDown) return;
+  const max = def.hp * lvlDiff().boss;
+  const hp = def.resume && g.bossLeftHp ? g.bossLeftHp : max;
+  const a = Math.atan2(g.dir.z, g.dir.x);
+  const [x, z] = clampArena(g.p.x + Math.cos(a)*14, g.p.z + Math.sin(a)*14, ARENA_R - 4);
+  const mesh = billboard(def.sprite, 5.6);
+  world.add(mesh);
+  const shadow = makeShadow(5);
+  world.add(shadow);
+  g.boss = {kind: 'boss', boss: true, def, name: def.name, sprite: def.sprite, mesh, shadow, x, z, hp, max, spd: 2.3, r: 2.4, xp: 60, dmg: def.dmg * lvlDiff().dmg, cd: 0};
+  g.enemies.push(g.boss);
+  g.bossSpawned = true; g.bossName = def.name; g.bossShotT = 2.2;
+  spawnRing(x, z, 0xff1744, 9, 0.9); shake = Math.max(shake, 0.6);
+  sfx('boss');
+  announce('¡' + def.name.toUpperCase() + '!', def.resume && g.bossLeftHp ? 'Vuelve con ' + Math.round(hp / max * 100) + '% de vida' : def.sub, def.col);
+}
+// Mapa 3: el jefe único huye por el portal y espera al otro lado con la vida que le queda
+function bossRetreat(){
+  const b = g.boss;
+  g.bossLeftHp = b.hp;
+  spawnRing(b.x, b.z, 0xb0bec5, 8, 0.8);
+  world.remove(b.mesh); world.remove(b.shadow);
+  g.enemies = g.enemies.filter(e => e !== b);
+  g.boss = null; clearBossRing();
+  for (const s of g.eshots) s.life = 0;
+  openPortal('¡' + b.name + ' huye por el portal!', 'Síguelo: te espera al otro lado con la vida que le queda');
+}
+// Reloj de cada pantalla: a los 20 minutos empieza el Infierno y ya no hay forma de sobrevivir
+function updateScreenClock(dt){
+  if (!isPortalMap() || g.mode === 'surv') return;
+  g.screenT += dt;
+  const marks = [[900, 'Quedan 5 minutos', 'A los 20 minutos en esta pantalla empieza el Infierno'], [1080, 'Quedan 2 minutos', 'Derrota al jefe y cruza el portal'], [1170, '¡30 segundos!', 'El Infierno está a punto de empezar']];
+  while ((g.screenWarn || 0) < marks.length && g.screenT >= marks[g.screenWarn || 0][0]){ const m = marks[g.screenWarn || 0]; announce(m[1], m[2], '#ff7043'); g.screenWarn = (g.screenWarn || 0) + 1; }
+  if (g.screenT >= SCREEN_LIMIT){
+    if (!g.inferno){
+      g.inferno = true; g.revives = 0;
+      scene.fog.color.set(0x5a0a0a);
+      const old = scene.background; scene.background = skyTexture(['#1a0000', '#7a0d0d', '#ff3d00']); if (old && old.dispose) old.dispose();
+      floorMat.color.set(0xff8a80);
+      shake = Math.max(shake, 1); sfx('boss');
+      announce('¡INFIERNO!', '20 minutos en esta pantalla: la dificultad no deja de subir', '#ff1744');
+    }
+    // Corrupción: daño directo que crece cada segundo (no lo reduce la armadura)
+    g.p.hp -= (4 + (g.screenT - SCREEN_LIMIT) * 0.8) * dt;
+  }
+}
+// Supervivencia: una oleada por minuto; cada 5 oleadas, un jefe menor y un ticket
+function updateWaves(){
+  const w = 1 + Math.floor(g.t / 60);
+  if (w <= (g.wave || 1)) return;
+  g.wave = w;
+  const n = Math.min(MAX_ENEMIES - g.enemies.length, 6 + w*2);
+  for (let i = 0; i < n; i++) spawnEnemy(i < Math.floor(w/3) ? 'elite' : null);
+  if (w % 5 === 0){
+    spawnMini(MINIS[(w/5 - 1) % MINIS.length]);
+    g.tix++;
+    announce('Oleada ' + w, 'Un jefe menor se une a la horda · +1 ticket', '#ce93d8');
+  } else announce('Oleada ' + w, 'La horda se hace más fuerte', '#ef5350');
+}
+// Objetivo actual, para el HUD
+function hudObjective(){
+  if (g.mode === 'surv') return `Oleada ${g.wave || 1} · siguiente en ${Math.ceil(60 - g.t % 60)} s`;
+  if (!isPortalMap()) return g.bossSpawned ? 'Derrota a Piedmon' : 'Piedmon llega a los 20:00';
+  const def = zoneDef().boss;
+  if (g.inferno) return '¡Infierno! No hay salida';
+  if (g.portalOpen) return '¡Portal abierto! Ve al norte';
+  if (g.boss && g.enemies.includes(g.boss)) return `Derrota a ${def.name}` + (def.retreatAt ? ' (huye a mitad de vida)' : def.final ? ' para ganar' : ' para abrir el portal');
+  return `[B] Invocar a ${def.name}` + (def.final ? ' · jefe final' : ' · abre el portal');
 }
 // Aviso "E" flotando sobre el cofre cercano
 function updatePrompt(){
@@ -4615,28 +5116,40 @@ function updateHUD(){
   const p = g.p;
   document.getElementById('hp').style.width = (100*Math.max(0,p.hp)/p.maxHp) + '%';
   document.getElementById('xp').style.width = (100*p.xp/p.nextXp) + '%';
-  const left = g.mode === 'surv' ? g.t : Math.max(0, BOSS_AT - g.t);   // Supervivencia: tiempo aguantado
+  // Supervivencia: tiempo aguantado. Mapa 1: cuenta atrás hasta Piedmon. Mapas 2 y 3: tiempo antes del Infierno
+  const portalMap = isPortalMap() && g.mode !== 'surv';
+  const left = g.mode === 'surv' ? g.t : portalMap ? Math.max(0, SCREEN_LIMIT - g.screenT) : Math.max(0, BOSS_AT - g.t);
   const timerEl = document.getElementById('timer');
-  timerEl.textContent = g.bossSpawned ? 'JEFE' : `${Math.floor(left/60)}:${String(Math.floor(left%60)).padStart(2,'0')}`;
-  timerEl.classList.toggle('urgent', g.mode !== 'surv' && !g.bossSpawned && left < 30);
+  timerEl.textContent = g.inferno ? 'INFIERNO' : (g.bossSpawned && !portalMap) ? 'JEFE' : `${Math.floor(left/60)}:${String(Math.floor(left%60)).padStart(2,'0')}`;
+  timerEl.classList.toggle('urgent', g.mode !== 'surv' && !g.inferno && (portalMap ? left < 120 : !g.bossSpawned && left < 30));
+  timerEl.classList.toggle('inferno', !!g.inferno);
+  const obj = document.getElementById('hudObj'), objTxt = hudObjective();
+  if (obj.textContent !== objTxt) obj.textContent = objTxt;
+  obj.className = g.inferno ? 'inf' : g.portalOpen ? 'hot' : '';
+  const canSummon = portalMap && !g.portalOpen && !g.bossDown && !(g.boss && g.enemies.includes(g.boss)) && zoneDef().boss;
+  const sumEl = document.getElementById('hudSummon');
+  sumEl.style.display = canSummon ? 'flex' : 'none';
+  if (canSummon) document.getElementById('hudSummonName').textContent = zoneDef().boss.name + (g.bossLeftHp && zoneDef().boss.resume ? ' · ' + Math.round(g.bossLeftHp / (zoneDef().boss.hp * lvlDiff().boss) * 100) + '%' : '');
   document.getElementById('xpTxt').textContent = `Nivel ${p.lvl} · EXP ${Math.floor(p.xp)} / ${p.nextXp}`;
   document.getElementById('hpTxt').textContent = `${Math.ceil(Math.max(0, p.hp))} / ${p.maxHp}`;
   document.getElementById('hudName').textContent = stageName(g.ch.id, g.ch.evolved);
   // Zona actual, progreso de zonas y récord de tiempo (como en la barra superior de la referencia)
   const recMax = getRecords().reduce((a, r) => Math.max(a, r.t), 0);
-  document.getElementById('hudZone').textContent = `${ZONES[g.zone - 1].name} · Zona ${g.zone}/${ZONES.length}${recMax ? ' · Récord ' + fmtTime(recMax) : ''}`;
+  document.getElementById('hudZone').textContent = `${mapDef().name} · ${zoneDef().name} · ${g.mode === 'surv' ? 'Oleada ' + (g.wave || 1) : 'Pantalla ' + g.zone + '/' + zonesOf().length}`;
   // Contadores de la partida: bajas, tickets ganados y santuarios cargados (como la fila de la referencia)
   const shrinesDone = (g.shrines || []).filter(s => s.used).length;
-  document.getElementById('hudChips').innerHTML = `<span>☠ <b>${g.kills}</b></span><span>🎟 <b>${g.tix}</b></span><span>⛩ <b>${shrinesDone}/${(g.shrines || []).length}</b></span>`;
+  document.getElementById('hudChips').innerHTML = `<span>${HUD_IC.kills}<b>${g.kills}</b></span><span class="c-tix">${HUD_IC.tix}<b>${g.tix}</b></span><span class="c-shr">${HUD_IC.shr}<b>${shrinesDone}/${(g.shrines || []).length}</b></span>`;
+  document.querySelector('.hud-hp').classList.toggle('low', p.hp < p.maxHp*0.3);
   const tt = TITLES.find(t => t.id === extra.title);
   document.getElementById('hudTitle').textContent = tt ? tt.name : '';
   const zn = document.getElementById('zoneName');
-  if (zn.textContent !== ZONES[g.zone - 1].name) zn.textContent = ZONES[g.zone - 1].name;
+  if (zn.textContent !== zoneDef().name) zn.textContent = zoneDef().name;
   document.getElementById('hudPortrait').className = 'hud-portrait' + frameClass();
   document.getElementById('hudLvl').textContent = p.lvl;
+  const kc = document.getElementById('hudKillsChip'); if (!kc.dataset.ic){ kc.dataset.ic = 1; kc.innerHTML = HUD_IC.kills + '<b id="hudKills">0</b>'; }
   document.getElementById('hudKills').textContent = g.kills;
   const dash = document.getElementById('hudDash');
-  dash.textContent = g.dashCd > 0 ? `Dash ${g.dashCd.toFixed(1)} s` : 'Dash listo';
+  dash.innerHTML = HUD_IC.dash + (g.dashCd > 0 ? `Dash ${g.dashCd.toFixed(1)} s` : 'Dash listo');
   dash.classList.toggle('ready', g.dashCd <= 0);
   const dashReady = g.dashCd <= 0;
   if (dashReady && !g.dashReady && g.t > 1){
@@ -4653,7 +5166,8 @@ function updateHUD(){
   if (bf){
     bf.style.width = Math.min(100, g.bonk).toFixed(1) + '%';
     bbar.classList.toggle('ready', g.bonk >= 100);
-    document.getElementById('bonkTxt').textContent = g.bonk >= 100 ? 'BONK LISTO · pulsa Q' : `BONK ${Math.floor(g.bonk)}%`;
+    bbar.style.setProperty('--p', Math.min(100, g.bonk).toFixed(1));
+    document.getElementById('bonkTxt').innerHTML = g.bonk >= 100 ? 'BONK<small>pulsa Q</small>' : `BONK<small>${Math.floor(g.bonk)}%</small>`;
   }
   // Daño recibido: activa la viñeta roja (se desvanece en frame)
   if (g.lastHp !== undefined && p.hp < g.lastHp - 0.01){ hurtT = 0.45; sfx('hurt'); }
@@ -4666,6 +5180,8 @@ function updateHUD(){
   const bb = document.getElementById('bossbar');
   if (g.boss && g.enemies.includes(g.boss)){
     bb.style.display = 'block';
+    const bl = (g.boss.name || 'Piedmon').toUpperCase() + ' · ' + (g.boss.def ? (g.boss.def.final ? 'JEFE FINAL' : 'JEFE DE ZONA') : 'JEFE FINAL');
+    if (bb.dataset.label !== bl) bb.dataset.label = bl;
     document.getElementById('bosshp').style.width = (100*Math.max(0, g.boss.hp)/g.boss.max) + '%';
   } else bb.style.display = 'none';
 }
@@ -4854,9 +5370,12 @@ function drawWorldMap(cv, size){
   const u = size / 170;   // escala de los iconos según el tamaño del mapa
   c.clearRect(0, 0, size, size);
   c.fillStyle = '#4b5d72'; c.beginPath(); c.arc(R, R, R - 1, 0, Math.PI*2); c.fill();      // montañas
-  c.fillStyle = '#3f7d3f'; c.beginPath(); c.arc(R, R, ARENA_R*k, 0, Math.PI*2); c.fill();  // prado
-  c.fillStyle = '#2a7fb8'; c.beginPath(); c.arc(X(POND.x), Y(POND.z), POND.r*k, 0, Math.PI*2); c.fill();
+  const MC = {bosque: ['#3f7d3f', '#2a7fb8'], dunas: ['#c9a25a', '#3aa88a'], ruinas: ['#9a7a5a', '#3a8a5a'], nieve: ['#c8d8ea', '#8ac6ea'], fortaleza: ['#4a3a56', '#e0561a']}[curBiome] || ['#3f7d3f', '#2a7fb8'];
+  c.fillStyle = MC[0]; c.beginPath(); c.arc(R, R, ARENA_R*k, 0, Math.PI*2); c.fill();  // suelo del bioma
+  c.fillStyle = MC[1]; c.beginPath(); c.arc(X(POND.x), Y(POND.z), POND.r*k, 0, Math.PI*2); c.fill();
   if (!g) return;
+  // Portal: anillo gris (cerrado) o cian (abierto)
+  if (g.portal){ c.strokeStyle = g.portalOpen ? '#3de0ff' : '#9aa0b0'; c.lineWidth = 3*u; c.beginPath(); c.arc(X(PORTAL.x), Y(PORTAL.z), 6*u, 0, Math.PI*2); c.stroke(); }
   // Cofres sin abrir: icono de regalo
   c.font = `${Math.max(12, 14*u)}px system-ui`; c.textAlign = 'center'; c.textBaseline = 'middle';
   for (const ch of g.chests){
@@ -4871,7 +5390,7 @@ function drawWorldMap(cv, size){
   }
   // Jefe final
   if (g.boss && g.enemies.includes(g.boss)){
-    drawIcon(c, 'sprites/adventure/piedmon.png', X(g.boss.x), Y(g.boss.z), 26 * u);
+    drawIcon(c, g.boss.sprite || 'sprites/adventure/piedmon.png', X(g.boss.x), Y(g.boss.z), 26 * u);
   }
   // Jugador: el Digimon que estás usando
   const pc = X(g.p.x), py = Y(g.p.z);
@@ -5033,6 +5552,9 @@ function updateBossMechanics(dt){
   if (g.hazards) g.hazards = g.hazards.filter(h => h.t > 0);
 }
 
+// Iconos del HUD: pixel art PNG de Kenney (CC0) en ui/hud/
+const hudImg = f => `<img class="hic" src="ui/hud/${f}.png" alt="">`;
+const HUD_IC = {kills: hudImg('bajas'), tix: hudImg('ticket'), shr: hudImg('santuario'), dash: hudImg('dash'), boss: hudImg('jefe')};
 /* ---------- Eventos en el mapa (cada 200 s desde el minuto 2:30) ---------- */
 function evHud(text){
   let el = document.getElementById('evHud');
@@ -6091,29 +6613,62 @@ function doPulls(n){
   }
   playPullAnimation(results);
 }
-// Animación de tirada: el Digivice se carga, su luz adelanta la mejor rareza, estalla y reparte las cartas boca abajo
-function playPullAnimation(results){
+// Animación de tirada: un Digihuevo cae, se agrieta tres veces y su color adelanta la mejor rareza
+// (puede subir de rara a épica y de épica a legendaria en la última grieta). Al romperse reparte las cartas.
+// Partículas PNG del Particle Pack de Kenney (CC0) en ui/gacha/; huevo en pixel art hecho para el proyecto.
+function playPullAnimation(results, slow = 1){   // slow: solo para pruebas (alarga la animación)
   state = 'gacha';
   const rank = {c: 0, r: 1, e: 2, l: 3};
   const best = results.reduce((a, r) => rank[r.tier] > rank[a] ? r.tier : a, 'c');
+  const stages = [best === 'c' ? 'c' : 'r', rank[best] >= 2 ? 'e' : best === 'c' ? 'c' : 'r', best];
+  const rain = Array.from({length: 18}, (_, i) => `<i style="left:${(i*5.7 + Math.random()*4).toFixed(1)}%;animation-delay:${(Math.random()*1.6).toFixed(2)}s;animation-duration:${(1.1 + Math.random()*1.2).toFixed(2)}s;--s:${(10 + Math.random()*18).toFixed(0)}px"></i>`).join('');
+  const sparks = Array.from({length: 22}, (_, i) => { const a = i/22*Math.PI*2 + Math.random()*0.3, d = 180 + Math.random()*260; return `<i style="--x:${(Math.cos(a)*d).toFixed(0)}px;--y:${(Math.sin(a)*d).toFixed(0)}px;--s:${(18 + Math.random()*34).toFixed(0)}px;animation-delay:${(Math.random()*0.12).toFixed(2)}s"></i>`; }).join('');
   showOverlay(`
-    <div class="pa" style="--pc:${GX_TIER_COL[best]}">
-      <div class="pa-rays"></div>
-      <div class="pa-ring"></div><div class="pa-ring r2"></div>
-      <div class="pa-dv"><div class="pa-lcd"><i></i></div><b></b><b></b><b></b></div>
-      <div class="pa-flash"></div>
-      <p class="pa-txt">Conectando con el Digimundo…</p>
+    <div class="ga t-${stages[0]}" style="--pc:${GX_TIER_COL[stages[0]]}">
+      <div class="ga-rain">${rain}</div>
+      <div class="ga-rays"></div>
+      <div class="ga-sigil"></div>
+      <div class="ga-glow"></div>
+      <div class="ga-egg"><img id="gaEgg" src="ui/gacha/huevo_${stages[0]}0.png" alt="Digihuevo"></div>
+      <div class="ga-bolt b1"></div><div class="ga-bolt b2"></div>
+      <div class="ga-wave"></div>
+      <div class="ga-sparks">${sparks}</div>
+      <div class="ga-flash"></div>
+      <p class="ga-txt">Un Digihuevo llega desde el Digimundo…</p>
+      <p class="ga-n">${results.length > 1 ? results.length + ' tiradas' : '1 tirada'} · toca para saltar</p>
       <button class="mini-btn pa-skip" id="paSkip">Saltar</button>
     </div>`);
   let done = false;
-  const pa = overlay.querySelector('.pa');
-  const alive = () => !done && document.body.contains(pa);
-  const go = () => { if (done) return; done = true; showPullResults(results); };
-  document.getElementById('paSkip').onclick = go;
+  const ga = overlay.querySelector('.ga'), egg = document.getElementById('gaEgg'), txt = ga.querySelector('.ga-txt');
+  const timers = [];
+  const alive = () => !done && document.body.contains(ga);
+  const go = () => { if (done) return; done = true; timers.forEach(clearTimeout); showPullResults(results); };
+  document.getElementById('paSkip').onclick = e => { e.stopPropagation(); go(); };
+  ga.onclick = go;
+  const at = (ms, f) => timers.push(setTimeout(() => { if (alive()) f(); }, ms * slow));
+  const setTier = t => { ga.style.setProperty('--pc', GX_TIER_COL[t]); ga.className = 'ga t-' + t + (ga.classList.contains('hot') ? ' hot' : ''); };
+  const wobble = (n, t, msg) => {
+    setTier(t);
+    egg.src = `ui/gacha/huevo_${t}${n}.png`;
+    egg.parentElement.classList.remove('wob'); void egg.offsetWidth; egg.parentElement.classList.add('wob');
+    txt.textContent = msg;
+    sfx(n === 3 ? 'evolve' : 'ready');
+  };
   sfx('levelup');
-  setTimeout(() => { if (alive()){ pa.classList.add('charged'); sfx('ready'); pa.querySelector('.pa-txt').textContent = best === 'l' ? '¡¡SEÑAL LEGENDARIA!!' : best === 'e' ? '¡Señal épica!' : best === 'r' ? '¡Señal rara!' : 'Señal recibida'; } }, 1300);
-  setTimeout(() => { if (alive()){ pa.classList.add('burst'); sfx('evolve'); } }, 2300);
-  setTimeout(() => { if (alive()) go(); }, 2950);
+  at(850, () => wobble(1, stages[0], 'Se mueve…'));
+  at(1600, () => {
+    const up = stages[1] !== stages[0];
+    wobble(2, stages[1], up ? '¡Ha cambiado de color!' : '¡Se está agrietando!');
+    if (up){ ga.classList.add('hot'); document.getElementById('flash').animate([{opacity: .45}, {opacity: 0}], {duration: 350}); }
+  });
+  at(2350, () => {
+    const up = stages[2] !== stages[1];
+    wobble(3, stages[2], best === 'l' ? '¡¡SEÑAL LEGENDARIA!!' : best === 'e' ? '¡Señal épica!' : best === 'r' ? '¡Señal rara!' : '¡Ya sale!');
+    if (best === 'l'){ ga.classList.add('legend'); sfx('boss'); }
+    if (up) document.getElementById('flash').animate([{opacity: .6}, {opacity: 0}], {duration: 420});
+  });
+  at(3050, () => { ga.classList.add('burst'); sfx(best === 'l' ? 'victory' : 'chest'); });
+  at(best === 'l' ? 4000 : 3650, go);
 }
 function rewardIcon(r){
   if (r.type === 'skin') return animEl(spriteWith(r.key, r.st || 0, r.sk.id), 'rw-anim');
@@ -6542,7 +7097,7 @@ if (trainerName) showSelect(); else showRegister();
 if (new URLSearchParams(location.search).has('demo')){
   window.__dbk = {
     get g(){ return g; }, get state(){ return state; }, get scene(){ return scene; },
-    rollReward, grantReward, setBanner: b => { gxBanner = b; },
+    rollReward, grantReward, setBanner: b => { gxBanner = b; }, playPullAnimation,
     startGame, spawnEnemy, spawnMagnetDrop, setZone, showGacha, addSkill, upgradeChoices,
     // Datos de skins y personajes
     SKINS, EVO_LINE, CHARS, SEASONS, glitchPixels,
@@ -6553,7 +7108,7 @@ if (new URLSearchParams(location.search).has('demo')){
     rollTier,
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
-    spawnMini, MINIS, startMapEvent, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS,
+    spawnMini, MINIS, startMapEvent, summonBoss, enterScreen, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS,
     nearChest(){
       const p = g.p, a = p.dir ? Math.atan2(p.dir.z, p.dir.x) : 0;
       const [cx, cz] = clampArena(p.x + Math.cos(a)*3, p.z + Math.sin(a)*3, ARENA_R - 2);
