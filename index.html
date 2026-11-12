@@ -2160,7 +2160,7 @@ function tex(url){
 }
 // Hojas de animación (sprites/anim/<id>.png): 5 fotogramas en fila -> reposo 1, reposo 2, ataque 1, ataque 2, daño
 const ANIM_N = 5;
-const ANIM_IDS = new Set(["agumon", "agumon_0_galactico", "agumon_1_galactico", "agumon_2_galactico", "agumon_3_galactico", "agumon_0_holografica", "agumon_1_holografica", "agumon_2_holografica", "agumon_3_holografica", "leomon", "saberleomon", "hagurumon", "frigimon", "wizardmon", "andromon", "angemon", "angewomon", "bakemon", "birdramon", "biyomon", "darktyrannomon", "devimon", "etemon", "gabumon", "garudamon", "garurumon", "gatomon", "gazimon", "gigadramon", "gizamon", "gomamon", "greymon", "ikkakumon", "kabuterimon", "kuwagamon", "lillymon", "machinedramon", "magnaangemon", "mammothmon", "megadramon", "megakabuterimon", "meramon", "metalgarurumon", "metalgreymon", "metalseadramon", "monochromon", "myotismon", "numemon", "palmon", "patamon", "phantomon", "piedmon", "puppetmon", "raremon", "skullgreymon", "snimon", "tank", "tentomon", "togemon", "tyrannomon", "vegiemon", "wargreymon", "weregarurumon", "zudomon"]);
+const ANIM_IDS = new Set(["agumon", "agumon_0_variocolor", "agumon_1_variocolor", "agumon_2_variocolor", "agumon_3_variocolor", "agumon_0_festival", "agumon_1_festival", "agumon_2_festival", "agumon_3_festival", "agumon_0_lcd", "agumon_1_lcd", "agumon_2_lcd", "agumon_3_lcd", "agumon_0_reno", "agumon_1_reno", "agumon_2_reno", "agumon_3_reno", "agumon_0_galactico", "agumon_1_galactico", "agumon_2_galactico", "agumon_3_galactico", "agumon_0_holografica", "agumon_1_holografica", "agumon_2_holografica", "agumon_3_holografica", "leomon", "saberleomon", "hagurumon", "frigimon", "wizardmon", "andromon", "angemon", "angewomon", "bakemon", "birdramon", "biyomon", "darktyrannomon", "devimon", "etemon", "gabumon", "garudamon", "garurumon", "gatomon", "gazimon", "gigadramon", "gizamon", "gomamon", "greymon", "ikkakumon", "kabuterimon", "kuwagamon", "lillymon", "machinedramon", "magnaangemon", "mammothmon", "megadramon", "megakabuterimon", "meramon", "metalgarurumon", "metalgreymon", "metalseadramon", "monochromon", "myotismon", "numemon", "palmon", "patamon", "phantomon", "piedmon", "puppetmon", "raremon", "skullgreymon", "snimon", "tank", "tentomon", "togemon", "tyrannomon", "vegiemon", "wargreymon", "weregarurumon", "zudomon"]);
 function sheetOf(url){ const m = /([^\/]+)\.png$/.exec(url || ''); return m && ANIM_IDS.has(m[1]) ? `sprites/anim/${m[1]}.png` : null; }
 const animTexs = [];   // texturas compartidas (enemigos del mismo tipo marcan el paso a la vez)
 function animTex(url, own = false){
@@ -2673,7 +2673,7 @@ function showSelect(){
             <button type="button" class="hm-card hm-surv hm-art" id="mSurv" aria-label="Supervivencia: modo infinito"></button>
           </div>
           <div class="hm-row2">
-                    ${bannerOpen("navidadP") ? `<button class="db-event" id="rhEvent" type="button" aria-label="Edición Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><span class="db-event__txt" aria-hidden="true">Papá Noel y Reno · quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</span></button>` : `<button type="button" class="hm-card hm-event hm-soon" id="mEvent"><span class="hm-txt"><b>Evento</b><small>Próximamente</small></span></button>`}
+                    ${(bannerOpen("navidadP") || bannerOpen("navidadR")) ? `<button class="db-event" id="rhEvent" type="button" aria-label="Edición Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><span class="db-event__txt" aria-hidden="true">Papá Noel y Reno · quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</span></button>` : `<button type="button" class="hm-card hm-event hm-soon" id="mEvent"><span class="hm-txt"><b>Evento</b><small>Próximamente</small></span></button>`}
             <button type="button" class="hm-card hm-enc hm-art" id="mEnc" aria-label="Encargos: misiones diarias"></button>
           </div>
           <div class="hm-grid">
@@ -2716,7 +2716,7 @@ function showSelect(){
   // El botón Jugar siempre muestra el icono del compañero (no la skin equipada)
   if(!avatarIcon()) headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
   document.getElementById('playBtn').onclick=()=>{ runMode='normal'; showPicker('personaje'); };
-  const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { gxBanner = 'navidadP'; showGacha(); };
+  const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR'; showGacha(); };
   document.getElementById('btnColl').onclick=showCollection;
   document.getElementById('btnPlayer').onclick=showPlayer;
   document.getElementById('btnGacha').onclick=showLab;
@@ -5447,6 +5447,7 @@ const SKINS = [
   {id:'clasico',   name:'Clásico',    src:'base',   tier:'n', f:''},
   {id:'galactico', name:'Galáctico',  src:'banner', tier:'r', desc:'Skin galáctica del banner permanente (cambia cada semana)'},
   {id:'holografica', name:'Holográfica', src:'gacha', tier:'l', desc:'Gacha de Bits (banner permanente)'},
+  {id:'lcd',       name:'Digivice LCD', src:'logro', tier:'e', req:{kills:1000}, desc:'Logro: 1000 bajas con este Digimon'},
   {id:'festival',  name:'Papá Noel',  src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)'},
   {id:'reno',      name:'Reno',       src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)'},
   {id:'variocolor', name:'Variocolor', src:'shiny', tier:'l', hidden: true, desc:'Versión variocolor'}
@@ -5504,8 +5505,10 @@ function recordRun(key, kills, t){
   localStorage.setItem('digibonk3d-stats', JSON.stringify(all));
   const unlocked = [];
   for (const sk of SKINS){
-    if (sk.src === 'logro' && !ownsAt(key, 0, sk.id) && meetsReq(sk, st)){
-      grantSkinAt(key, 0, sk.id); unlocked.push(`${sk.name} (${CHARS[key].name})`);
+    if (sk.src === 'logro' && skinHasArt(key, 0, sk.id) && !ownsAt(key, 0, sk.id) && meetsReq(sk, st)){
+      // el logro da la skin en todas las etapas que tengan hoja
+      for (let s = 0; s < stageCount(key); s++) if (skinHasArt(key, s, sk.id)) grantSkinAt(key, s, sk.id);
+      unlocked.push(`${sk.name} (${CHARS[key].name})`);
     }
   }
   return unlocked;

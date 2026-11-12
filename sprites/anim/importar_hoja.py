@@ -40,6 +40,9 @@ def clean(mask, alpha, keep=0.02):
     if len(sizes) <= 1:
         return mask
     good = sizes >= sizes[1:].max() * keep
+    # trozos que tocan el borde izquierdo o derecho del hueco son de la pose vecina (salvo la zona mayor)
+    side = set(np.unique(np.concatenate([lab[:, 0], lab[:, -1]]))) - {0, int(np.argmax(sizes[1:]) + 1)}
+    for z in side: good[z] = False
     good[0] = False
     m = good[lab]
     # huecos: zonas vacías que no tocan el borde
@@ -52,10 +55,12 @@ def clean(mask, alpha, keep=0.02):
         if alpha[z].mean() >= 128: fill |= z
     return m | fill
 
-def peel(mask, rgb, steps):
-    """Quita desde fuera hacia dentro el halo rojo o magenta que deja el generador alrededor del contorno."""
+def peel(mask, rgb, steps, sat=0):
+    """Quita desde fuera hacia dentro el halo rojo o magenta que deja el generador alrededor del contorno.
+    Con sat > 0 quita en su lugar cualquier color más saturado que sat (para skins de pocos colores, como la LCD)."""
     r, g, b = rgb[..., 0], rgb[..., 1], rgb[..., 2]
-    halo = (r > 140) & (g < 0.45 * r) & ((b < 0.45 * r) | (b > 0.6 * r))
+    if sat: halo = rgb.max(2) - rgb.min(2) > sat
+    else: halo = (r > 140) & (g < 0.45 * r) & ((b < 0.45 * r) | (b > 0.6 * r))
     m = mask.copy()
     for _ in range(steps):
         out = ~m
@@ -73,6 +78,7 @@ def main():
     ap.add_argument('--abajo', type=float, help='margen inferior respecto al alto del fotograma (por defecto, el de la hoja actual)')
     ap.add_argument('--umbral', type=int, default=128, help='alfa mínima que cuenta como sprite (sube a 240 si hay fondo difuminado)')
     ap.add_argument('--pelar', type=int, default=0, help='px de halo rojo o magenta a quitar desde fuera (p. ej. 14)')
+    ap.add_argument('--pelar-sat', type=int, default=0, help='con --pelar, quita el halo por saturación (p. ej. 75 en la skin LCD)')
     ap.add_argument('--lado', type=int, default=256, help='lado del fotograma de salida')
     a = ap.parse_args()
     out = os.path.join(HERE, a.nombre + '.png')
@@ -90,7 +96,7 @@ def main():
         x0, x1 = round(i * W / N), round((i + 1) * W / N)
         s = src[:, x0:x1].copy()
         m = s[..., 3] >= a.umbral
-        if a.pelar: m = peel(m, s[..., :3], a.pelar)
+        if a.pelar: m = peel(m, s[..., :3], a.pelar, a.pelar_sat)
         m = clean(m, s[..., 3])
         s[..., 3] = np.where(m, 255, 0)
         slots.append(s)
