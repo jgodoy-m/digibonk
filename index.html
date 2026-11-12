@@ -2130,21 +2130,22 @@ const MAX_ENEMIES = 100;   // igual en calidad alta y baja: la calidad gráfica 
 const ARENA_R = 110;  // radio del escenario: el mapa tiene límite circular con montañas
 // Dos zonas: el bosque inicial y el pantano de datos (a partir de 300 s). El jefe final está al final de la zona 2.
 const ZONES = [
-  {name:'Bosque Inicial',   at:0,   fog:0xbcd9e8, sky:['#4d86c9', '#a9d4ee', '#d8efff'], tint:0xffffff, color:'#ffd54f', biome:'bosque'},
-  {name:'Pantano de Datos', at:600, fog:0x8c7cb8, sky:['#241b4a', '#6a4f9e', '#c59ad6'], tint:0xd8c6ff, color:'#ce93d8', biome:'bosque'}
+  {name:'Bosque Inicial',   at:0,   fog:0xbcd9e8, sky:['#4d86c9', '#a9d4ee', '#d8efff'], tint:0xffffff, color:'#ffd54f', biome:'bosque',
+    boss: {name: 'Andromon', sprite: 'sprites/adventure/andromon.png', hp: 3000, dmg: 15, shots: 10, shotDmg: 8, gap: 2.5, col: '#ffd54f', sub: 'Guardián del Bosque Inicial'}},
+  {name:'Pantano de Datos', at:600, fog:0x8c7cb8, sky:['#241b4a', '#6a4f9e', '#c59ad6'], tint:0xd8c6ff, color:'#ce93d8', biome:'bosque',
+    boss: {name: 'Piedmon', sprite: 'sprites/adventure/piedmon.png', hp: 6000, dmg: 20, shots: 12, shotDmg: 10, gap: 2.3, col: '#ce93d8', sub: 'Líder de los Dark Masters · jefe final', final: true}}
 ];
 const ZONE2_AT = ZONES[1].at;
 /* ---------- Mapas ----------
-   Mapa 1 (clásico): dos zonas por tiempo y Piedmon a los 20 minutos.
-   Mapas 2 y 3: dos pantallas unidas por un portal. El portal se abre al derrotar al jefe de la pantalla,
+   Los tres mapas tienen dos pantallas unidas por un portal. El portal se abre al derrotar al jefe de la pantalla,
    que se invoca cuando quieras (tecla B o botón) y siempre tiene la misma fuerza. Si pasas 20 minutos
    en una pantalla empieza el Infierno: la dificultad se dispara hasta que caes.
    El mapa 3 tiene un único jefe final: en la primera pantalla huye por el portal a mitad de vida
    y en la segunda vuelve con la vida que le quedaba. */
 const AD = n => 'sprites/adventure/' + n + '.png';
 const MAPS = {
-  bosque: {n: 1, name: 'Bosque File', kind: 'clasico', zones: ZONES, minis: true, preview: ['textures/mapa_hierba.png', 'sprites/deco/bosque/arbol.png', AD('piedmon')],
-    desc: 'El mapa de siempre: aguanta 20 minutos y derrota a Piedmon. Seis jefes menores por el camino.'},
+  bosque: {n: 1, name: 'Bosque File', kind: 'portal', zones: ZONES, minis: true, preview: ['textures/mapa_hierba.png', 'sprites/deco/bosque/arbol.png', AD('piedmon')],
+    desc: 'Bosque y Pantano de Datos. Andromon abre el portal y Piedmon es el jefe final. Seis jefes menores por el camino.'},
   desierto: {n: 2, name: 'Desierto de Datos', kind: 'portal', minis: true, preview: ['textures/mapa_arena.png', 'sprites/deco/desierto/cactus1.png', AD('metaletemon')],
     desc: 'Dunas y ruinas. Cada pantalla tiene su jefe: Scorpiomon abre el portal y MetalEtemon cierra el mapa.',
     zones: [
@@ -2529,7 +2530,7 @@ function decoTex(file){
   t.colorSpace = THREE.SRGBColorSpace;
   return t;
 }
-// Portal entre pantallas (mapas 2 y 3): siempre en el mismo sitio, al norte del escenario
+// Portal entre pantallas (todos los mapas): siempre en el mismo sitio, al norte del escenario
 const PORTAL = {x: 0, z: -(ARENA_R - 32), r: 3.2};
 function portalClear(x, z){ return Math.hypot(x - PORTAL.x, z - PORTAL.z) < 10; }
 const decoGroup = new THREE.Group();
@@ -2918,14 +2919,14 @@ let LANG = localStorage.getItem('digibonk3d-lang') === 'en' ? 'en' : 'es';
 const TXT = {
   es: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'Survivor 3D de Digimon, gratis en el navegador', boot:'DIGIVICE · ACCESO AL DIGIMUNDO', who:'Niño elegido, identifícate',
        saved:'Tu nombre se guarda en este navegador.', ph:'TU NOMBRE', enter:'ENTRAR AL DIGIMUNDO', guest:'Entrar como invitado (pruebas)', needName:'Escribe un nombre',
-       play:'JUGAR', playS:'Elige tu Digimon y sobrevive 20 minutos', gacha:'GACHA', gachaS:'Tiradas con Bits o tickets', player:'JUGADOR', playerS:'Tu tarjeta, marcos y títulos',
+       play:'JUGAR', playS:'Elige tu Digimon, mapa y dificultad', gacha:'GACHA', gachaS:'Tiradas con Bits o tickets', player:'JUGADOR', playerS:'Tu tarjeta, marcos y títulos',
        coll:'COLECCIÓN', collS:'Skins, marcos, títulos y evoluciones', help:'CÓMO JUGAR', helpS:'Tutorial con vídeos', set:'AJUSTES', setS:'Calidad, sonido y guardado', recs:'Tus récords', runs:'Partidas', best:'Mejor tiempo', lvl:'Mejor nivel',
        kills:'Bajas', none:'Todavía no hay partidas. ¡Empieza una!', partner:'Tu compañero', noTitle:'Sin título', guestTag:'invitado · pruebas',
        evEnds:'Termina en', evSkin:'Skins de Navidad como legendarias en el gacha', tipT:'Consejo', tip:'Los élites y el jefe sueltan tickets de tirada.', daily:'Misión diaria',
        legal:'Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon.'},
   en: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'A free 3D Digimon survivor in your browser', boot:'DIGIVICE · DIGITAL WORLD ACCESS', who:'DigiDestined, identify yourself',
        saved:'Your name is saved in this browser.', ph:'YOUR NAME', enter:'ENTER THE DIGITAL WORLD', guest:'Enter as guest (testing)', needName:'Type a name',
-       play:'PLAY', playS:'Pick your Digimon and survive 20 minutes', gacha:'GACHA', gachaS:'Pulls with Bits or tickets', player:'PLAYER', playerS:'Your card, frames and titles',
+       play:'PLAY', playS:'Pick your Digimon, map and difficulty', gacha:'GACHA', gachaS:'Pulls with Bits or tickets', player:'PLAYER', playerS:'Your card, frames and titles',
        coll:'COLLECTION', collS:'Skins, frames, titles and evolutions', help:'HOW TO PLAY', helpS:'Video tutorial', set:'SETTINGS', setS:'Quality, sound and save', recs:'Your records', runs:'Runs', best:'Best time', lvl:'Best level',
        kills:'Kills', none:'No runs yet. Start one!', partner:'Your partner', noTitle:'No title', guestTag:'guest · testing',
        evEnds:'Ends in', evSkin:'Christmas skins as legendaries in the gacha', tipT:'Tip', tip:'Elites and the boss drop pull tickets.', daily:'Daily mission',
@@ -3226,9 +3227,9 @@ const TUTO = [
   {t:'Esquiva con el dash', d:'Shift te lanza hacia delante. Durante el dash no recibes daño de contacto.', clip:'tutorial/dash.webm'},
   {t:'Experiencia y subida de nivel', d:'Recoge los orbes de experiencia. Al subir de nivel eliges una mejora entre tres.', clip:'tutorial/nivel.webm'},
   {t:'Cofres', d:'Pulsa E junto a un cofre para abrirlo y recibir una mejora.', clip:'tutorial/cofre.webm'},
-  {t:'Zonas', d:'El mapa tiene dos zonas. La segunda, el Pantano de Datos, empieza a los 10 minutos y trae enemigos más duros.', clip:'tutorial/zona.webm'},
-  {t:'Jefe final', d:'Devimon, Etemon y Myotismon aparecen como jefes menores; al final llega Piedmon. Esquiva el anillo rojo antes de cada disparo.', clip:'tutorial/jefe.webm'},
-  {t:'Mapas y portal', d:'Tras elegir Digimon eliges mapa y dificultad. En los mapas 2 y 3 hay dos pantallas: pulsa B para invocar al jefe de la pantalla cuando quieras (siempre tiene la misma fuerza); al derrotarlo se abre el portal del norte. Si pasas 20 minutos en una pantalla empieza el Infierno y no se sobrevive.', clip:'tutorial/zona.webm'},
+  {t:'Zonas', d:'Cada mapa tiene dos pantallas. En el Bosque File, tras el Bosque Inicial llega el Pantano de Datos, con enemigos más duros.', clip:'tutorial/zona.webm'},
+  {t:'Jefe final', d:'Devimon, Etemon y Myotismon aparecen como jefes menores; en el Bosque File, Piedmon es el jefe final de la segunda pantalla. Esquiva el anillo rojo antes de cada disparo.', clip:'tutorial/jefe.webm'},
+  {t:'Mapas y portal', d:'Tras elegir Digimon eliges mapa y dificultad. Todos los mapas tienen dos pantallas: pulsa B para invocar al jefe de la pantalla cuando quieras (siempre tiene la misma fuerza); al derrotarlo se abre el portal del norte. Si pasas 20 minutos en una pantalla empieza el Infierno y no se sobrevive.', clip:'tutorial/zona.webm'},
   {t:'Dificultad y Supervivencia', d:'Fácil, Normal, Difícil y Pesadilla cambian la vida y el daño de los enemigos, las hordas, los jefes y los premios. Supervivencia no tiene jefe final: cada minuto llega una oleada y cada 5 oleadas un jefe menor.', clip:'tutorial/jefe.webm'},
   {t:'Colección y gacha', d:'La colección guarda tus skins por etapa, marcos y títulos. El gacha tiene un banner permanente y los promocionales, cada uno con sus tickets.', clip:'tutorial/coleccion.webm'}
 ];
@@ -3649,7 +3650,7 @@ function showMapSelect(){
       <section class="ms-dsec"><div class="ms-diffs">${diffs}</div>
         <div class="ms-table" style="--dc:${d.col}"><b>${d.name}</b><span>${d.d}</span>
           <ul><li>Vida enemigos <em>${pct(d.hp)}</em></li><li>Daño enemigos <em>${pct(d.dmg)}</em></li><li>Enemigos <em>${pct(1 / d.spawn)}</em></li><li>Élites <em>${pct(1 / d.elite)}</em></li><li>Jefes de zona <em>${pct(d.boss)}</em></li><li>Bits y tickets <em>×${String(d.reward).replace('.', ',')}</em></li></ul>
-          <small>En todos los niveles la presión sube con el tiempo: más vida, daño y hordas hasta el minuto 10. En los mapas 2 y 3, a los 20 minutos en una pantalla empieza el Infierno.</small></div>
+          <small>En todos los niveles la presión sube con el tiempo: más vida, daño y hordas hasta el minuto 10. En todos los mapas, a los 20 minutos en una pantalla empieza el Infierno.</small></div>
       </section>
       <footer class="pk2-foot"><button class="btn btn-primary pk-start" id="msStart">¡Empezar! <small>(Enter)</small></button><span class="pk-hint">${surv ? 'Supervivencia' : 'Partida'} en ${MAPS[runMap].name} · ${d.name}</span></footer>
     </div>`);
@@ -5128,7 +5129,7 @@ function setZone(n){
 }
 /* ---------- Portal, jefes de zona, Infierno y oleadas ---------- */
 const portalTwirl = decoTex('ui/gacha/twirl_02.png');
-const PORTAL_ART = {desierto: {file: 'sprites/deco/desierto/portal.png', aspect: 1.43, h: 8}, nevado: {file: 'sprites/deco/nieve/portal.png', aspect: 1.32, h: 8}};
+const PORTAL_ART = {bosque: {file: 'sprites/deco/bosque/portal.png', aspect: 1.51, h: 8}, desierto: {file: 'sprites/deco/desierto/portal.png', aspect: 1.43, h: 8}, nevado: {file: 'sprites/deco/nieve/portal.png', aspect: 1.32, h: 8}};
 // Portal de piedra con un remolino. Cerrado: gris y con candado. Abierto: brilla y te lleva a la pantalla 2
 function buildPortal(){
   g.portal = null;
