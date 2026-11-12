@@ -6121,6 +6121,15 @@ const SKIN_BY_ID = Object.fromEntries(SKINS.map(sk => [sk.id, sk]));
 // Skins que se muestran a un Digimon: las ocultas (variocolor) solo aparecen cuando las tienes
 function loadJSON(k, def){ try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e){ return def; } }
 let skinsOwned = loadJSON('digibonk3d-skins', {});      // {personaje: ["id@etapa", ...]}  ("id" sin etapa = todas las etapas, datos antiguos)
+// El invitado de pruebas tiene todo: si se añaden skins nuevas después de entrar, se le dan al cargar
+if (localStorage.getItem('digibonk3d-guest') === '1'){
+  for (const key of SEASONS.adventure.chars){
+    const have = new Set(skinsOwned[key] || []);
+    for (const sk of SKINS) if (sk.id !== 'clasico') have.add(sk.id);
+    skinsOwned[key] = [...have];
+  }
+  localStorage.setItem('digibonk3d-skins', JSON.stringify(skinsOwned));
+}
 let skinEquipped = loadJSON('digibonk3d-equip', {});    // {personaje: id} (antiguo) o {"personaje@etapa": id}
 // Número de etapas de una línea (forma inicial + digievoluciones)
 const stageCount = key => (EVO_LINE[key] ? EVO_LINE[key].length : 0) + 1;
