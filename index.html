@@ -2143,9 +2143,9 @@ const ZONE2_AT = ZONES[1].at;
    y en la segunda vuelve con la vida que le quedaba. */
 const AD = n => 'sprites/adventure/' + n + '.png';
 const MAPS = {
-  bosque: {n: 1, name: 'Bosque File', kind: 'clasico', zones: ZONES, minis: true, preview: ['textures/puny_hierba.png', 'sprites/deco/arbol.png', AD('piedmon')],
+  bosque: {n: 1, name: 'Bosque File', kind: 'clasico', zones: ZONES, minis: true, preview: ['textures/mapa_hierba.png', 'sprites/deco/bosque/arbol.png', AD('piedmon')],
     desc: 'El mapa de siempre: aguanta 20 minutos y derrota a Piedmon. Seis jefes menores por el camino.'},
-  desierto: {n: 2, name: 'Desierto de Datos', kind: 'portal', minis: true, preview: ['textures/arena_kenney.png', 'sprites/deco/kenney/cactus.png', AD('metaletemon')],
+  desierto: {n: 2, name: 'Desierto de Datos', kind: 'portal', minis: true, preview: ['textures/mapa_arena.png', 'sprites/deco/desierto/cactus1.png', AD('metaletemon')],
     desc: 'Dunas y ruinas. Cada pantalla tiene su jefe: Scorpiomon abre el portal y MetalEtemon cierra el mapa.',
     zones: [
       {name: 'Dunas de Datos', biome: 'dunas', fog: 0xe9cf9a, sky: ['#e08a3c', '#f4c27a', '#fde6b8'], tint: 0xffd08a, color: '#ffb74d',
@@ -2155,7 +2155,7 @@ const MAPS = {
         foes: {basic: [AD('bakemon'), AD('pumpkinmon')], fast: [AD('phantomon'), AD('gazimon')], tank: [AD('ogremon'), AD('warumonzaemon')], elite: [AD('gigadramon'), AD('megadramon')]},
         boss: {name: 'MetalEtemon', sprite: AD('metaletemon'), hp: 6000, dmg: 20, shots: 14, shotDmg: 10, gap: 2.2, col: '#ef9a9a', sub: 'Jefe final del Desierto de Datos', final: true}}
     ]},
-  nevado: {n: 3, name: 'Montaña Helada', kind: 'portal', single: true, minis: false, preview: ['textures/nieve_kenney.png', 'sprites/deco/kenney/pino_nevado.png', AD('machinedramon')],
+  nevado: {n: 3, name: 'Montaña Helada', kind: 'portal', single: true, minis: false, preview: ['textures/mapa_nieve.png', 'sprites/deco/nieve/pino1.png', AD('machinedramon')],
     desc: 'Nieve y una fortaleza oscura. Sin jefes menores: solo Machinedramon, el único jefe final, que te espera en las dos pantallas.',
     zones: [
       {name: 'Valle Nevado', biome: 'nieve', fog: 0xe4eefa, sky: ['#7fa6d6', '#c4dcf2', '#f2f8ff'], tint: 0xffffff, color: '#81d4fa',
@@ -2386,7 +2386,7 @@ function loadTex(path, rx, ry, pixel = false){
   if (pixel) t.magFilter = THREE.NearestFilter;   // pixel art: bordes nítidos
   return t;
 }
-const floorMat = new THREE.MeshStandardMaterial({map: loadTex('textures/puny_hierba.png', 20, 20, true), roughness: 1, vertexColors: true});
+const floorMat = new THREE.MeshStandardMaterial({map: loadTex('textures/mapa_hierba.png', 80, 80, true), roughness: 1, vertexColors: true});
 const floor = new THREE.Mesh(terrainGeo, floorMat);
 let pondWater = null, pondShore = null, mountMesh = null, wallMat = null;
 scene.add(floor);
@@ -2545,21 +2545,21 @@ function decoSprite(tex, w, h, x, y, z){
    Los biomas nuevos usan pixel art CC0 de Kenney (Tiny Town, Tiny Dungeon, Tiny Ski, Pixel Platformer
    y Retro Textures Fantasy); ver textures/CREDITOS.txt. deco: [archivo, ancho, alto, peso, sombra] */
 const BIOMES = {
-  bosque: {floor: 'textures/puny_hierba.png', rep: 20, center: [1.05, 0.86, 0.6], wall: 'textures/piedra_pixel.png', mount: 0xffffff,
+  bosque: {floor: 'textures/mapa_hierba.png', rep: 80, center: [1.05, 0.86, 0.6], wall: 'textures/piedra_pixel.png', mount: 0xffffff,
     water: {map: 'textures/agua_pixel.png', color: 0xffffff, shore: 0xcfe9d0},
-    deco: [['sprites/deco/arbol.png', 0.75, 1, 36, 0.5, 5], ['sprites/deco/arbol_otono.png', 0.75, 1, 9, 0.5, 5], ['sprites/deco/roca.png', 1.3, 0.9, 20, 2.2, 1.4], ['sprites/deco/arbusto.png', 1.4, 1, 13, 0, 1.4], ['sprites/deco/flor.png', 0.8, 1.2, 22, 0, 1]]},
-  dunas: {floor: 'textures/arena_kenney.png', rep: 64, center: [1.08, 0.98, 0.82], wall: 'textures/muro_arena_kenney.png', mount: 0xf0c890,
+    deco: [['sprites/deco/bosque/arbol.png', 1.12, 1, 14.0, 1.1, 5.6], ['sprites/deco/bosque/arbol_flor.png', 1.04, 1, 5.0, 1.1, 5.6], ['sprites/deco/bosque/arbol_otono.png', 1.18, 1, 5.0, 1.1, 5.6], ['sprites/deco/bosque/arbol_azul.png', 1.09, 1, 4.0, 1.1, 5.6], ['sprites/deco/bosque/arbol_medio1.png', 0.77, 1, 7.0, 0.6, 4.2], ['sprites/deco/bosque/arbol_medio2.png', 0.83, 1, 7.0, 0.6, 4.2], ['sprites/deco/bosque/arbolito.png', 0.78, 1, 6.0, 0.4, 3], ['sprites/deco/bosque/arbusto1.png', 1.57, 1, 5.3, 0, 1.6], ['sprites/deco/bosque/arbusto2.png', 1.35, 1, 5.3, 0, 1.6], ['sprites/deco/bosque/arbusto3.png', 1.45, 1, 5.3, 0, 1.6], ['sprites/deco/bosque/arbusto_flor1.png', 1.49, 1, 3.3, 0, 1.6], ['sprites/deco/bosque/arbusto_flor2.png', 1.47, 1, 3.3, 0, 1.6], ['sprites/deco/bosque/arbusto_flor3.png', 1.39, 1, 3.3, 0, 1.6], ['sprites/deco/bosque/helecho1.png', 1.42, 1, 5.0, 0, 1.5], ['sprites/deco/bosque/helecho2.png', 1.12, 1, 5.0, 0, 1.5], ['sprites/deco/bosque/flores1.png', 1.58, 1, 5.5, 0, 0.9], ['sprites/deco/bosque/flores2.png', 1.59, 1, 5.5, 0, 0.9], ['sprites/deco/bosque/flores3.png', 1.06, 1, 5.5, 0, 0.9], ['sprites/deco/bosque/flores4.png', 1.15, 1, 5.5, 0, 0.9], ['sprites/deco/bosque/seta1.png', 1.42, 1, 2.0, 0, 1.1], ['sprites/deco/bosque/seta2.png', 1.24, 1, 2.0, 0, 1.1], ['sprites/deco/bosque/seta3.png', 1.24, 1, 2.0, 0, 1.1], ['sprites/deco/bosque/tocon1.png', 1.42, 1, 2.5, 0.6, 1.5], ['sprites/deco/bosque/tocon2.png', 1.28, 1, 2.5, 0.6, 1.5], ['sprites/deco/bosque/tronco.png', 2.89, 1, 3.0, 1.2, 1.2], ['sprites/deco/bosque/roca1.png', 1.45, 1, 4.0, 1.4, 1.3], ['sprites/deco/bosque/roca2.png', 1.48, 1, 4.0, 1.4, 1.3], ['sprites/deco/bosque/roca_grande1.png', 1.40, 1, 2.5, 2.4, 2.2], ['sprites/deco/bosque/roca_grande2.png', 1.64, 1, 2.5, 2.4, 2.2], ['sprites/deco/bosque/cristal.png', 1.03, 1, 3.0, 0.6, 1.8], ['sprites/deco/bosque/cartel.png', 0.78, 1, 1.5, 0.3, 1.8], ['sprites/deco/bosque/pilar.png', 0.57, 1, 2.0, 0.6, 3.6], ['sprites/deco/bosque/arco.png', 1.24, 1, 1.0, 1, 4.2], ['sprites/deco/bosque/ruina.png', 1.01, 1, 2.0, 0.8, 2.6], ['sprites/deco/bosque/altar.png', 1.00, 1, 1.0, 1, 2.2]]},
+  dunas: {floor: 'textures/mapa_arena.png', rep: 72, center: [1.08, 0.98, 0.82], wall: 'textures/muro_arena_kenney.png', mount: 0xf0c890,
     water: {map: 'textures/agua_verde_kenney.png', color: 0xbff7e0, shore: 0xe9d9a0},
-    deco: [['sprites/deco/kenney/cactus.png', 1, 1, 34, 0.4, 2.7], ['sprites/deco/kenney/arbol_seco.png', 1, 1, 6, 0.5, 3.4], ['sprites/deco/kenney/arbol_cono.png', 1, 1, 4, 0.5, 3], ['sprites/deco/kenney/roca_gris.png', 1.2, 1, 22, 2, 1.5], ['sprites/deco/kenney/brote.png', 1, 1, 20, 0, 1.1], ['sprites/deco/kenney/cartel.png', 1, 1, 3, 0.4, 1.5]]},
-  ruinas: {floor: 'textures/baldosa_arena_kenney.png', rep: 56, center: [1.0, 0.9, 0.8], wall: 'textures/muro_arena_kenney.png', mount: 0xc9a27a,
+    deco: [['sprites/deco/desierto/cactus1.png', 0.84, 1, 6.0, 0.4, 2.8], ['sprites/deco/desierto/cactus2.png', 0.86, 1, 6.0, 0.4, 2.8], ['sprites/deco/desierto/cactus3.png', 0.88, 1, 6.0, 0.4, 2.8], ['sprites/deco/desierto/cactus4.png', 1.13, 1, 6.0, 0.4, 2.8], ['sprites/deco/desierto/cactus_bola1.png', 1.32, 1, 4.0, 0.4, 1.4], ['sprites/deco/desierto/cactus_bola2.png', 1.54, 1, 4.0, 0.4, 1.4], ['sprites/deco/desierto/cactus_bola3.png', 0.75, 1, 4.0, 0.4, 1.4], ['sprites/deco/desierto/acacia1.png', 1.37, 1, 2.0, 1.3, 5.4], ['sprites/deco/desierto/acacia2.png', 1.39, 1, 2.0, 1.3, 5.4], ['sprites/deco/desierto/acacia_tech1.png', 1.30, 1, 1.5, 1.3, 5.4], ['sprites/deco/desierto/acacia_tech2.png', 1.27, 1, 1.5, 1.3, 5.4], ['sprites/deco/desierto/acacia_media1.png', 0.89, 1, 2.7, 0.7, 4], ['sprites/deco/desierto/acacia_media2.png', 0.86, 1, 2.7, 0.7, 4], ['sprites/deco/desierto/acacia_media3.png', 0.94, 1, 2.7, 0.7, 4], ['sprites/deco/desierto/arbol_muerto1.png', 0.90, 1, 2.7, 0, 2], ['sprites/deco/desierto/arbol_muerto2.png', 1.35, 1, 2.7, 0, 2], ['sprites/deco/desierto/arbol_muerto3.png', 1.19, 1, 2.7, 0, 2], ['sprites/deco/desierto/arbusto1.png', 1.54, 1, 4.0, 0, 1.5], ['sprites/deco/desierto/arbusto2.png', 1.57, 1, 4.0, 0, 1.5], ['sprites/deco/desierto/arbusto_flor1.png', 1.48, 1, 2.0, 0, 1.5], ['sprites/deco/desierto/arbusto_flor2.png', 1.35, 1, 2.0, 0, 1.5], ['sprites/deco/desierto/arbusto_flor3.png', 1.27, 1, 2.0, 0, 1.5], ['sprites/deco/desierto/planta1.png', 1.14, 1, 3.0, 0, 1.4], ['sprites/deco/desierto/planta2.png', 1.40, 1, 3.0, 0, 1.4], ['sprites/deco/desierto/pasto_seco1.png', 1.06, 1, 7.0, 0, 1], ['sprites/deco/desierto/pasto_seco2.png', 1.27, 1, 7.0, 0, 1], ['sprites/deco/desierto/huesos1.png', 2.12, 1, 2.0, 0.6, 1.4], ['sprites/deco/desierto/huesos2.png', 1.35, 1, 2.0, 0.6, 1.4], ['sprites/deco/desierto/roca1.png', 1.72, 1, 3.5, 1.4, 1.4], ['sprites/deco/desierto/roca2.png', 1.45, 1, 3.5, 1.4, 1.4], ['sprites/deco/desierto/roca3.png', 1.28, 1, 3.5, 1.4, 1.4], ['sprites/deco/desierto/roca4.png', 1.20, 1, 3.5, 1.4, 1.4], ['sprites/deco/desierto/roca_roja1.png', 1.61, 1, 3.3, 2.2, 2.4], ['sprites/deco/desierto/roca_roja2.png', 1.41, 1, 3.3, 2.2, 2.4], ['sprites/deco/desierto/roca_roja3.png', 1.43, 1, 3.3, 2.2, 2.4], ['sprites/deco/desierto/cristal1.png', 0.90, 1, 1.5, 0.6, 1.8], ['sprites/deco/desierto/cristal2.png', 0.72, 1, 1.5, 0.6, 1.8], ['sprites/deco/desierto/cartel1.png', 0.83, 1, 1.0, 0.3, 1.8], ['sprites/deco/desierto/cartel2.png', 0.72, 1, 1.0, 0.3, 1.8], ['sprites/deco/desierto/valla.png', 1.96, 1, 1.5, 0, 1.6]]},
+  ruinas: {floor: 'textures/mapa_losas_arena.png', rep: 110, center: [1.0, 0.9, 0.8], wall: 'textures/muro_arena_kenney.png', mount: 0xc9a27a,
     water: {map: 'textures/agua_verde_kenney.png', color: 0x9fdcae, shore: 0xbfa77a},
-    deco: [['sprites/deco/kenney/pilar_estandarte.png', 1, 1.5, 14, 0.6, 3.6], ['sprites/deco/kenney/muro_ruina.png', 1, 1.2, 16, 0.8, 3.4], ['sprites/deco/kenney/muro_estatua.png', 1, 1.2, 8, 0.8, 3.4], ['sprites/deco/kenney/tumba_cruz.png', 1, 1, 14, 0.5, 1.6], ['sprites/deco/kenney/tumba.png', 1, 1, 14, 0.5, 1.6], ['sprites/deco/kenney/barril.png', 1, 1, 10, 0.5, 1.4], ['sprites/deco/kenney/cactus.png', 1, 1, 12, 0.4, 3]]},
-  nieve: {floor: 'textures/nieve_kenney.png', rep: 30, center: [0.96, 0.98, 1.04], wall: 'textures/piedra_pixel.png', mount: 0xdfe9ff,
+    deco: [['sprites/deco/desierto/ruina_arena1.png', 1.77, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena2.png', 1.97, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena3.png', 1.87, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena4.png', 1.99, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena5.png', 1.64, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena6.png', 1.32, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena7.png', 1.19, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena8.png', 1.19, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/pilar1.png', 0.50, 1, 6.0, 0.6, 3.8], ['sprites/deco/desierto/pilar2.png', 0.48, 1, 6.0, 0.6, 3.8], ['sprites/deco/desierto/arco.png', 1.15, 1, 4.0, 1, 4.4], ['sprites/deco/desierto/ruina1.png', 0.78, 1, 5.0, 0.8, 3], ['sprites/deco/desierto/ruina2.png', 0.75, 1, 5.0, 0.8, 3], ['sprites/deco/desierto/escalera.png', 1.54, 1, 3.0, 0, 2.6], ['sprites/deco/desierto/altar.png', 1.00, 1, 3.0, 1, 2.4], ['sprites/deco/desierto/lapida.png', 0.89, 1, 6.0, 0.6, 2.2], ['sprites/deco/desierto/cactus1.png', 0.84, 1, 2.5, 0.4, 2.8], ['sprites/deco/desierto/cactus2.png', 0.86, 1, 2.5, 0.4, 2.8], ['sprites/deco/desierto/cactus3.png', 0.88, 1, 2.5, 0.4, 2.8], ['sprites/deco/desierto/cactus4.png', 1.13, 1, 2.5, 0.4, 2.8], ['sprites/deco/desierto/pasto_seco1.png', 1.06, 1, 6.0, 0, 1], ['sprites/deco/desierto/pasto_seco2.png', 1.27, 1, 6.0, 0, 1], ['sprites/deco/desierto/huesos1.png', 2.12, 1, 3.0, 0.6, 1.4], ['sprites/deco/desierto/huesos2.png', 1.35, 1, 3.0, 0.6, 1.4], ['sprites/deco/desierto/roca1.png', 1.72, 1, 2.0, 1.4, 1.4], ['sprites/deco/desierto/roca2.png', 1.45, 1, 2.0, 1.4, 1.4], ['sprites/deco/desierto/roca3.png', 1.28, 1, 2.0, 1.4, 1.4], ['sprites/deco/desierto/roca4.png', 1.20, 1, 2.0, 1.4, 1.4], ['sprites/deco/desierto/cristal1.png', 0.90, 1, 2.0, 0.6, 1.8], ['sprites/deco/desierto/cristal2.png', 0.72, 1, 2.0, 0.6, 1.8]]},
+  nieve: {floor: 'textures/mapa_nieve.png', rep: 80, center: [0.96, 0.98, 1.04], wall: 'textures/piedra_pixel.png', mount: 0xdfe9ff,
     water: {map: 'textures/agua_pixel.png', color: 0xe6f6ff, shore: 0xffffff},
-    deco: [['sprites/deco/kenney/pino_nevado.png', 1, 1, 30, 0.5, 5], ['sprites/deco/kenney/pino_nevado2.png', 1, 1, 18, 0.5, 4.4], ['sprites/deco/kenney/arbol_nevado.png', 1, 1, 10, 0.5, 4.4], ['sprites/deco/kenney/pino.png', 1, 1, 8, 0.5, 4.6], ['sprites/deco/kenney/roca_gris.png', 1.2, 1, 18, 2, 1.6], ['sprites/deco/kenney/muneco_nieve.png', 1, 1, 5, 0.4, 2], ['sprites/deco/kenney/pinguino.png', 1, 1, 3, 0.3, 1.4]]},
-  fortaleza: {floor: 'textures/piedra_oscura_kenney.png', rep: 56, center: [0.78, 0.7, 0.82], wall: 'textures/muro_piedra_kenney.png', mount: 0x6e5a7e,
+    deco: [['sprites/deco/nieve/pino1.png', 1.02, 1, 15.0, 1.1, 5.6], ['sprites/deco/nieve/pino2.png', 1.05, 1, 15.0, 1.1, 5.6], ['sprites/deco/nieve/pino_hielo.png', 1.02, 1, 8.0, 1.1, 5.6], ['sprites/deco/nieve/arbol_seco1.png', 0.88, 1, 4.0, 0.6, 5.5], ['sprites/deco/nieve/arbol_seco2.png', 0.94, 1, 4.0, 0.6, 5.5], ['sprites/deco/nieve/arbolito_seco1.png', 0.78, 1, 4.0, 0.4, 3], ['sprites/deco/nieve/arbolito_seco2.png', 0.74, 1, 4.0, 0.4, 3], ['sprites/deco/nieve/arbusto1.png', 1.62, 1, 4.7, 0, 1.6], ['sprites/deco/nieve/arbusto2.png', 1.52, 1, 4.7, 0, 1.6], ['sprites/deco/nieve/arbusto3.png', 1.57, 1, 4.7, 0, 1.6], ['sprites/deco/nieve/arbusto_bayas1.png', 1.47, 1, 3.0, 0, 1.6], ['sprites/deco/nieve/arbusto_bayas2.png', 1.43, 1, 3.0, 0, 1.6], ['sprites/deco/nieve/arbusto_hielo.png', 1.45, 1, 4.0, 0, 1.6], ['sprites/deco/nieve/planta_hielo1.png', 1.48, 1, 4.0, 0, 1.4], ['sprites/deco/nieve/planta_hielo2.png', 1.49, 1, 4.0, 0, 1.4], ['sprites/deco/nieve/flores1.png', 1.56, 1, 2.7, 0, 0.9], ['sprites/deco/nieve/flores2.png', 1.36, 1, 2.7, 0, 0.9], ['sprites/deco/nieve/flores3.png', 1.24, 1, 2.7, 0, 0.9], ['sprites/deco/nieve/flor_cristal.png', 1.19, 1, 4.0, 0, 1], ['sprites/deco/nieve/seta1.png', 1.40, 1, 1.7, 0, 1.2], ['sprites/deco/nieve/seta2.png', 1.34, 1, 1.7, 0, 1.2], ['sprites/deco/nieve/seta3.png', 1.30, 1, 1.7, 0, 1.2], ['sprites/deco/nieve/tocon1.png', 1.38, 1, 2.5, 0.6, 1.5], ['sprites/deco/nieve/tocon2.png', 1.30, 1, 2.5, 0.6, 1.5], ['sprites/deco/nieve/tronco.png', 2.62, 1, 3.0, 1.2, 1.2], ['sprites/deco/nieve/roca1.png', 1.65, 1, 3.3, 1.4, 1.4], ['sprites/deco/nieve/roca2.png', 1.46, 1, 3.3, 1.4, 1.4], ['sprites/deco/nieve/roca3.png', 1.43, 1, 3.3, 1.4, 1.4], ['sprites/deco/nieve/roca_grande1.png', 1.43, 1, 2.5, 2.4, 2.2], ['sprites/deco/nieve/roca_grande2.png', 1.65, 1, 2.5, 2.4, 2.2], ['sprites/deco/nieve/cristal1.png', 0.97, 1, 2.5, 0.6, 1.8], ['sprites/deco/nieve/cristal2.png', 1.38, 1, 2.5, 0.6, 1.8], ['sprites/deco/nieve/cartel.png', 0.68, 1, 1.5, 0.3, 1.8]]},
+  fortaleza: {floor: 'textures/mapa_adoquin_nieve.png', rep: 80, center: [0.78, 0.7, 0.82], wall: 'textures/muro_piedra_kenney.png', mount: 0x6e5a7e,
     water: {map: 'textures/agua_pixel.png', color: 0xff6a2a, shore: 0x5a2a1a, lava: true},
-    deco: [['sprites/deco/kenney/muro_calavera.png', 1, 1.2, 10, 0.8, 3.6], ['sprites/deco/kenney/pilar_estandarte.png', 1, 1.5, 14, 0.6, 3.8], ['sprites/deco/kenney/muro_ruina.png', 1, 1.2, 14, 0.8, 3.4], ['sprites/deco/kenney/tumba_cruz.png', 1, 1, 16, 0.5, 1.6], ['sprites/deco/kenney/tumba.png', 1, 1, 14, 0.5, 1.6], ['sprites/deco/kenney/seta_roja.png', 1, 1, 10, 0, 1.2], ['sprites/deco/kenney/roca_gris.png', 1.2, 1, 12, 2, 1.6]]}
+    deco: [['sprites/deco/nieve/muro.png', 1.78, 1, 10.0, 0, 3], ['sprites/deco/nieve/muro_estandarte.png', 1.57, 1, 8.0, 0, 3], ['sprites/deco/nieve/torre.png', 0.73, 1, 4.0, 1.6, 6], ['sprites/deco/nieve/valla_estandarte.png', 1.87, 1, 8.0, 0, 2], ['sprites/deco/nieve/pilar.png', 0.48, 1, 10.0, 0.6, 3.8], ['sprites/deco/nieve/pilar_tech.png', 0.66, 1, 6.0, 0.8, 3.2], ['sprites/deco/nieve/arco.png', 0.93, 1, 4.0, 1, 4.4], ['sprites/deco/nieve/ruina.png', 0.69, 1, 8.0, 0.8, 3], ['sprites/deco/nieve/altar.png', 1.00, 1, 3.0, 1, 2.4], ['sprites/deco/nieve/cristal1.png', 0.97, 1, 5.0, 0.6, 1.8], ['sprites/deco/nieve/cristal2.png', 1.38, 1, 5.0, 0.6, 1.8], ['sprites/deco/nieve/roca1.png', 1.65, 1, 3.3, 1.4, 1.4], ['sprites/deco/nieve/roca2.png', 1.46, 1, 3.3, 1.4, 1.4], ['sprites/deco/nieve/roca3.png', 1.43, 1, 3.3, 1.4, 1.4], ['sprites/deco/nieve/roca_grande1.png', 1.43, 1, 2.5, 2.4, 2.2], ['sprites/deco/nieve/roca_grande2.png', 1.65, 1, 2.5, 2.4, 2.2], ['sprites/deco/nieve/arbol_seco1.png', 0.88, 1, 2.5, 0.6, 5.5], ['sprites/deco/nieve/arbol_seco2.png', 0.94, 1, 2.5, 0.6, 5.5], ['sprites/deco/nieve/pino_hielo.png', 1.02, 1, 3.0, 1.1, 5.6]]}
 };
 const biomeTexCache = {};
 function biomeTex(path, rx, ry){ return biomeTexCache[path + rx + ':' + ry] || (biomeTexCache[path + rx + ':' + ry] = loadTex(path, rx, ry, true)); }
@@ -5128,6 +5128,7 @@ function setZone(n){
 }
 /* ---------- Portal, jefes de zona, Infierno y oleadas ---------- */
 const portalTwirl = decoTex('ui/gacha/twirl_02.png');
+const PORTAL_ART = {desierto: {file: 'sprites/deco/desierto/portal.png', aspect: 1.43, h: 8}, nevado: {file: 'sprites/deco/nieve/portal.png', aspect: 1.32, h: 8}};
 // Portal de piedra con un remolino. Cerrado: gris y con candado. Abierto: brilla y te lleva a la pantalla 2
 function buildPortal(){
   g.portal = null;
@@ -5135,17 +5136,15 @@ function buildPortal(){
   const grp = new THREE.Group();
   const y0 = terrainH(PORTAL.x, PORTAL.z);
   grp.position.set(PORTAL.x, y0, PORTAL.z);
-  const stone = new THREE.Mesh(new THREE.TorusGeometry(2.7, 0.55, 10, 36), new THREE.MeshStandardMaterial({map: wallMat.map, roughness: 1, color: 0xb0b0c0}));
-  stone.position.y = 3.1;
+  // Puerta dibujada del bioma (hojas de mapas de Jaime): apagada y gris hasta que se abre
+  const art = PORTAL_ART[g.map] || PORTAL_ART.desierto;
+  const stone = new THREE.Sprite(new THREE.SpriteMaterial({map: decoTex(art.file), transparent: true, alphaTest: 0.5, color: 0x737886}));
+  stone.scale.set(art.h*art.aspect, art.h, 1); stone.position.y = art.h/2;
   grp.add(stone);
-  for (const sx of [-2.7, 2.7]){
-    const leg = new THREE.Mesh(new THREE.BoxGeometry(0.9, 1.4, 0.9), stone.material);
-    leg.position.set(sx, 0.5, 0); grp.add(leg);
-  }
   const swirl = new THREE.Sprite(new THREE.SpriteMaterial({map: portalTwirl, color: 0x667080, transparent: true, opacity: 0.45, depthWrite: false, blending: THREE.AdditiveBlending}));
-  swirl.scale.set(5.2, 5.2, 1); swirl.position.y = 3.1; grp.add(swirl);
+  swirl.scale.set(3.6, 3.6, 1); swirl.position.set(0, 3.5, 1.6); grp.add(swirl);
   const lock = new THREE.Sprite(new THREE.SpriteMaterial({map: decoTex('ui/hud/candado.png'), transparent: true}));
-  lock.scale.set(1.3, 1.3, 1); lock.position.y = 6.9; grp.add(lock);
+  lock.scale.set(1.3, 1.3, 1); lock.position.set(0, 3.6, 1.8); grp.add(lock);
   const ring = new THREE.Mesh(new THREE.RingGeometry(PORTAL.r - 0.3, PORTAL.r + 0.3, 40), new THREE.MeshBasicMaterial({color: 0x777788, transparent: true, opacity: 0.5, depthWrite: false}));
   ring.rotation.x = -Math.PI/2; ring.position.y = 0.08; grp.add(ring);
   world.add(grp);
@@ -5157,9 +5156,9 @@ function openPortal(title, sub){
   if (g.portal){
     g.portal.swirl.material.color.set(0x7ff3ff); g.portal.swirl.material.opacity = 0.95;
     g.portal.ring.material.color.set(0x3de0ff); g.portal.ring.material.opacity = 0.85;
-    g.portal.stone.material.color.set(0xd8f6ff); g.portal.stone.material.emissive = new THREE.Color(0x0a6f88); g.portal.stone.material.needsUpdate = true;
+    g.portal.stone.material.color.set(0xffffff);
     const glow = new THREE.Sprite(new THREE.SpriteMaterial({map: decoTex('ui/gacha/light_02.png'), color: 0x3de0ff, transparent: true, opacity: 0.8, depthWrite: false, blending: THREE.AdditiveBlending}));
-    glow.scale.set(9, 9, 1); glow.position.y = 3.1; g.portal.grp.add(glow); g.portal.glow = glow;
+    glow.scale.set(9, 9, 1); glow.position.set(0, 3.5, 1.4); g.portal.grp.add(glow); g.portal.glow = glow;
     g.portal.lock.visible = false;
     spawnRing(PORTAL.x, PORTAL.z, 0x3de0ff, 8, 0.9);
   }
@@ -5172,7 +5171,7 @@ function updatePortal(dt){
   P.swirl.material.rotation -= dt * (g.portalOpen ? 3 : 0.6);
   if (g.portalOpen){
     const k = 1 + 0.06*Math.sin(g.t*5);
-    P.swirl.scale.set(5.2*k, 5.2*k, 1);
+    P.swirl.scale.set(3.6*k, 3.6*k, 1);
     if (P.glow) P.glow.material.opacity = 0.55 + 0.3*Math.sin(g.t*3);
     if (Math.hypot(g.p.x - PORTAL.x, g.p.z - PORTAL.z) < PORTAL.r) enterScreen(2);
   }
@@ -7333,7 +7332,7 @@ if (new URLSearchParams(location.search).has('demo')){
     rollTier,
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
-    spawnMini, MINIS, startMapEvent, summonBoss, enterScreen, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS,
+    spawnMini, MINIS, startMapEvent, summonBoss, openPortal, enterScreen, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS,
     // Simulación rápida sin dibujar (para medir el equilibrio): avanza sec segundos y elige la carta pick en cada subida
     sim(sec, pick = 0, move = false, god = false){
       const out = [];
