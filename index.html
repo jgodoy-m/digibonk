@@ -2212,17 +2212,17 @@ const ENEMY = {
 };
 // Mejoras al subir de nivel. k = categoría (color de la tarjeta), d = descripción
 const UPGRADES = [
-  {t:'Daño +20%',               k:'ofensiva', d:'Tus ataques hacen un 20% más de daño.',            f:p=>{p.dmg*=1.2;}},
-  {t:'Cadencia +15%',           k:'ofensiva', d:'Atacas un 15% más rápido.',                         f:p=>{p.cdMul*=0.85;}},
-  {t:'Velocidad +10%',          k:'defensiva',d:'Te mueves un 10% más deprisa.',                     f:p=>{p.speed*=1.1;}},
+  {t:'Daño +20%',               k:'ofensiva', d:'Tus ataques hacen un 20% más de daño.',            f:p=>{ const a = p.dmgAdd || 1; p.dmg *= (a + 0.2)/a; p.dmgAdd = a + 0.2; }},
+  {t:'Cadencia +15%',           k:'ofensiva', d:'Atacas un 15% más rápido.',                         f:p=>{ const a = p.spdAdd || 1; p.cdMul *= a/(a + 0.15); p.spdAdd = a + 0.15; }},
+  {t:'Velocidad +10%',          k:'defensiva',d:'Te mueves un 10% más deprisa.',                     f:p=>{ const a = p.movAdd || 1; p.speed *= (a + 0.1)/a; p.movAdd = a + 0.1; }},
   {t:'+25 vida máx. y cura',    k:'defensiva',d:'Sube tu vida máxima y te cura 25 puntos.',          f:p=>{p.maxHp+=25; p.hp+=25;}},
   {t:'Proyectil / cuchilla +1', k:'ofensiva', d:'Añade un proyectil o cuchilla más a tu ataque.',    f:p=>{p.count+=1;}},
-  {t:'Área +20%',               k:'ofensiva', d:'Tus ataques cubren un 20% más de área.',            f:p=>{p.area*=1.2;}},
+  {t:'Área +20%',               k:'ofensiva', d:'Tus ataques cubren un 20% más de área.',            f:p=>{ const a = p.areaAdd || 1; p.area *= (a + 0.2)/a; p.areaAdd = a + 0.2; }},
   {t:'Imán +50%',               k:'utilidad', d:'Recoges los orbes de experiencia desde mucho más lejos.', f:p=>{p.pickup*=1.5;}},
   {t:'Robo de vida',            k:'defensiva', d:'Recuperas 1 PS por cada enemigo derrotado.',        f:p=>{p.lifesteal=(p.lifesteal||0)+1;}},
   {t:'Dash −20% espera',        k:'utilidad', d:'El dash se recarga un 20% más rápido.',            f:p=>{p.dashMul=(p.dashMul||1)*0.8;}},
   {t:'Armadura +8%',            k:'defensiva', d:'Recibes un 8% menos de daño.',                    f:p=>{p.armor=(p.armor||1)*0.92;}},
-  {t:'Probabilidad crítica +8%', k:'ofensiva', d:'Más golpes críticos (naranjas).', f:p=>{p.critChance+=0.08;}},
+  {t:'Probabilidad crítica +8%', k:'ofensiva', d:'Más golpes críticos (naranjas).', f:p=>{p.critChance=Math.min(0.75, p.critChance+0.08);}},
   {t:'Daño crítico +25%',       k:'ofensiva', d:'Los críticos hacen un 25% más de daño.', f:p=>{p.critMul+=0.25;}}
 ];
 
@@ -3919,6 +3919,8 @@ function dist2(ax, az, bx, bz){ return Math.hypot(ax-bx, az-bz); }
 // Los enemigos siguen el poder del jugador: cada digievolución les da más vida y daño
 // Los enemigos nuevos solo ganan un 10% de vida por cada etapa (antes +25% vida y +10% daño: evolucionar no compensaba).
 // La evolución de emergencia no cuenta: es temporal.
+// Quedarse quieto: a partir de 2,5 s el daño por contacto sube hasta x2,5 en 5 s más
+function idleMul(){ const t = (g.idleT || 0) - 2.5; return t > 0 ? 1 + Math.min(1.5, t*0.3) : 1; }
 function evoStage(){ return g.emergT > 0 ? (g.emergPrev | 0) : (g.ch.evolved | 0); }
 function evoHp(){ return Math.pow(1.1, evoStage()); }
 function evoDmg(){ return 1; }
@@ -3944,7 +3946,7 @@ function spawnEnemy(forced){
   else if (t > 120 && r < (z2 ? 0.3 : 0.2)) kind = 'tank';
   else if (t > 60 && r < (z2 ? 0.5 : 0.4)) kind = 'fast';
   const tt = diffT(t);
-  const d = ENEMY[kind], k = 1 + tt/60 + (tt/200)*(tt/200);   // vida: igual que siempre hasta el minuto 10
+  const d = ENEMY[kind], k = 1 + tt/45 + (tt/170)*(tt/170);   // vida: igual que siempre hasta el minuto 10
   const pool = (zoneDef().foes || ZONE_FOES[g.zone - 1])[kind], sprite = pool ? pool[Math.floor(Math.random()*pool.length)] : d.sprite;
   const mesh = billboard(sprite, d.scale);
   mesh.position.y = d.scale/2;
@@ -4086,13 +4088,13 @@ function update(dt){
   const mvd = Math.hypot(g.p.x - (g.lastPx ?? g.p.x), g.p.z - (g.lastPz ?? g.p.z));
   g.idleT = mvd > 0.02 ? 0 : (g.idleT || 0) + dt;
   g.lastPx = g.p.x; g.lastPz = g.p.z;
-  if (g.idleT > 2.5 && !g.idleWarned){ g.idleWarned = true; announce('¡Muévete!', 'Los enemigos se acercan si te quedas quieto', '#ef5350'); }
+  if (g.idleT > 2.5 && !g.idleWarned){ g.idleWarned = true; announce('¡Muévete!', 'Quieto recibes cada vez más daño y te rodean', '#ef5350'); }
   if (g.idleT <= 2.5) g.idleWarned = false;
 
   // Aparición
   g.spawnT -= dt * (g.idleT > 2.5 ? 1.8 : 1);
   if (g.spawnT <= 0){
-    spawnEnemy();
+    if (g.enemies.length < MAX_ENEMIES) spawnEnemy();
     // Presión creciente: tras 45 s salen más enemigos por tanda (1 extra, +1 cada 90 s, máximo 3)
     const extra = g.t > 45 ? Math.min(3, 1 + Math.floor(diffT(g.t)/90)) : 0;
     for (let i = 0; i < extra && g.enemies.length < MAX_ENEMIES; i++) spawnEnemy();
@@ -4127,7 +4129,7 @@ function update(dt){
     [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5);   // los enemigos también quedan dentro
     resolveSolids(e, e.r*0.8);                          // y no atraviesan casas ni vallas
     e.cd -= dt;
-    if (d < e.r + 0.8 && g.dash <= 0){ p.hp -= e.dmg * foeMul(e) * (p.armor || 1) * (g.inferno && !e.boss ? Math.sqrt(infMul()) : 1) * dt; shake = Math.max(shake, 0.12); }
+    if (d < e.r + 0.8 && g.dash <= 0){ p.hp -= e.dmg * foeMul(e) * (p.armor || 1) * idleMul() * (g.inferno && !e.boss ? Math.sqrt(infMul()) : 1) * dt; shake = Math.max(shake, 0.12); }
   }
 
   // Armas
@@ -4195,7 +4197,7 @@ function update(dt){
   const dead = g.enemies.filter(e => e.hp <= 0);
   for (const e of dead){
     if (g.p.lifesteal && !(g.mod && g.mod.noHeal)) g.p.hp = Math.min(g.p.maxHp, g.p.hp + g.p.lifesteal);
-    g.gems.push({x:e.x, z:e.z, v:e.xp*(1 + g.t/400), heal: !(g.mod && g.mod.noHeal) && Math.random() < 0.10, mesh: null});   // las bajas valen más según avanza la partida
+    g.gems.push({x:e.x, z:e.z, v:e.xp*(1 + g.t/600), heal: !(g.mod && g.mod.noHeal) && Math.random() < 0.10, mesh: null});   // las bajas valen más según avanza la partida
     // 2% por baja, pero con enfriamiento de 45 s y un solo imán en el mapa a la vez
     if ((g.magnetT || 0) <= 0 && Math.random() < 0.02){ spawnMagnetDrop(e.x, e.z); g.magnetT = 45; }
     // Tickets de tirada: 25% de cada élite y 3 seguros del jefe
@@ -4363,7 +4365,7 @@ function update(dt){
   if (p.xp >= p.nextXp){
     p.xp -= p.nextXp;
     p.lvl++;
-    p.nextXp = Math.floor(10 + 4*(p.lvl - 1) + 0.35*(p.lvl - 1)*(p.lvl - 1));   // curva para 20 minutos: nivel 54 alcanzable hacia el minuto 19
+    p.nextXp = Math.floor(2*(10 + 4*(p.lvl - 1) + 0.9*(p.lvl - 1)*(p.lvl - 1)));   // curva para 20 minutos: evoluciones hacia los minutos 3-4, 8 y 13 (medido con __dbk.sim)
     g.choices = upgradeChoices();
     const evoAt = evoLevelFor(g.ch.id, g.ch.evolved | 0);
     if (evoAt && p.lvl >= evoAt && (g.ch.evolved | 0) < EVO_LINE[g.ch.id].length) digivolve();
@@ -7109,6 +7111,29 @@ if (new URLSearchParams(location.search).has('demo')){
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
     spawnMini, MINIS, startMapEvent, summonBoss, enterScreen, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS,
+    // Simulación rápida sin dibujar (para medir el equilibrio): avanza sec segundos y elige la carta pick en cada subida
+    sim(sec, pick = 0, move = false, god = false){
+      const out = [];
+      let t0 = g.t;
+      while (g && g.t - t0 < sec && state !== 'end'){
+        if (state === 'levelup'){
+          let i = pick;
+          if (pick < 0){   // jugador razonable: evolución > habilidad > daño/cadencia/proyectil > la primera
+            const c = g.choices, f = fn => c.findIndex(fn);
+            i = [f(x => x.evo), f(x => x.skill), f(x => /Daño \+|Cadencia|Proyectil/.test(x.t || '')), 0].find(v => v >= 0);
+          }
+          pickUpgrade(Math.min(i, g.choices.length - 1)); continue;
+        }
+        if (g.evoAnim){ animateEvo(5); continue; }
+        if (state === 'paused'){ state = 'play'; hideOverlay(); continue; }
+        if (state !== 'play') break;
+        if (move){ const a = g.t*0.4; [g.p.x, g.p.z] = clampArena(g.p.x + Math.cos(a)*g.p.speed*0.05, g.p.z + Math.sin(a)*g.p.speed*0.05, ARENA_R - 3); }
+        if (god) g.p.hp = g.p.maxHp;
+        update(0.05);
+        if (Math.floor(g.t) % 30 === 0 && Math.floor(g.t) !== Math.floor(g.t - 0.05)) out.push({t: Math.round(g.t), lvl: g.p.lvl, kills: g.kills, idle: +(g.idleT||0).toFixed(1), hp: Math.round(g.p.hp), max: g.p.maxHp, dmg: +g.p.dmg.toFixed(2), cd: +g.p.cdMul.toFixed(2), area: +g.p.area.toFixed(2), en: g.enemies.length, evo: g.ch.evolved | 0});
+      }
+      return {state, out};
+    },
     nearChest(){
       const p = g.p, a = p.dir ? Math.atan2(p.dir.z, p.dir.x) : 0;
       const [cx, cz] = clampArena(p.x + Math.cos(a)*3, p.z + Math.sin(a)*3, ARENA_R - 2);
