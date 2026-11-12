@@ -394,6 +394,8 @@ canvas{display:block}
 @keyframes lvIn{from{transform:translateY(60px) rotateY(70deg);opacity:0}to{transform:none;opacity:1}}
 .lv3-card:hover{transform:translateY(-12px);filter:brightness(1.25)}
 .lv3-key{position:absolute;left:12px;top:10px;width:26px;height:26px;line-height:26px;background:var(--cc);color:#06102b;font-weight:900}
+.lv3-card.rare{--cc:#c792ff;background:linear-gradient(180deg,rgba(124,77,255,.38),rgba(20,10,48,.92))}
+.lv3-pips.rare{color:#d1b3ff}
 .lv3-tag{position:absolute;left:48px;top:14px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cc)}
 .lv3-ic{font-size:74px;line-height:1;color:var(--cc);filter:drop-shadow(0 0 14px var(--cc))}
 .lv3-card b{font-size:18px;line-height:1.15}
@@ -1870,6 +1872,7 @@ import * as THREE from 'three';
 
 // Prototipo 3D estilo Megabonk. Sprites 2D de Digimon (base DMC) como billboards.
 const BOSS_AT = 1200; // segundos hasta el jefe final (20 minutos); ganas al derrotarlo
+const MAX_ENEMIES = 100;   // igual en calidad alta y baja: la calidad gráfica no cambia la dificultad
 const ARENA_R = 110;  // radio del escenario: el mapa tiene límite circular con montañas
 // Dos zonas: el bosque inicial y el pantano de datos (a partir de 300 s). El jefe final está al final de la zona 2.
 const ZONES = [
@@ -1943,8 +1946,8 @@ const CHARS = {
 };
 // Digievolución (se activa al llegar a este nivel)
 // Etapas de digievolución: se alcanzan a estos niveles (las que tenga cada línea en Digimon Adventure)
-const EVO_LEVELS = [18, 36, 54];   // nivel de cada evolución de una línea; las líneas con una sola evolución evolucionan al 40
-function evoLevelFor(key, idx){ return EVO_LINE[key] && EVO_LINE[key].length === 1 ? 40 : (EVO_LEVELS[idx] || 54); }
+const EVO_LEVELS = [15, 30, 45];   // nivel de cada evolución de una línea; las líneas con una sola evolución evolucionan al 30
+function evoLevelFor(key, idx){ return EVO_LINE[key] && EVO_LINE[key].length === 1 ? 30 : (EVO_LEVELS[idx] || 54); }
 const EVO_LINE = {
   agumon:   [{name:'Greymon',     sprite:'sprites/adventure/greymon.png'},   {name:'MetalGreymon',    sprite:'sprites/adventure/metalgreymon.png'},    {name:'WarGreymon',     sprite:'sprites/adventure/wargreymon.png'}],
   gabumon:  [{name:'Garurumon',   sprite:'sprites/adventure/garurumon.png'}, {name:'WereGarurumon',   sprite:'sprites/adventure/weregarurumon.png'},   {name:'MetalGarurumon', sprite:'sprites/adventure/metalgarurumon.png'}],
@@ -1982,7 +1985,10 @@ const UPGRADES = [
   {t:'+25 vida máx. y cura',    k:'defensiva',d:'Sube tu vida máxima y te cura 25 puntos.',          f:p=>{p.maxHp+=25; p.hp+=25;}},
   {t:'Proyectil / cuchilla +1', k:'ofensiva', d:'Añade un proyectil o cuchilla más a tu ataque.',    f:p=>{p.count+=1;}},
   {t:'Área +20%',               k:'ofensiva', d:'Tus ataques cubren un 20% más de área.',            f:p=>{p.area*=1.2;}},
-  {t:'Imán +30%',               k:'utilidad', d:'Recoges los orbes de experiencia desde más lejos.', f:p=>{p.pickup*=1.3;}},
+  {t:'Imán +50%',               k:'utilidad', d:'Recoges los orbes de experiencia desde mucho más lejos.', f:p=>{p.pickup*=1.5;}},
+  {t:'Robo de vida',            k:'defensiva', d:'Recuperas 1 PS por cada enemigo derrotado.',        f:p=>{p.lifesteal=(p.lifesteal||0)+1;}},
+  {t:'Dash −20% espera',        k:'utilidad', d:'El dash se recarga un 20% más rápido.',            f:p=>{p.dashMul=(p.dashMul||1)*0.8;}},
+  {t:'Armadura +8%',            k:'defensiva', d:'Recibes un 8% menos de daño.',                    f:p=>{p.armor=(p.armor||1)*0.92;}},
   {t:'Probabilidad crítica +8%', k:'ofensiva', d:'Más golpes críticos (naranjas).', f:p=>{p.critChance+=0.08;}},
   {t:'Daño crítico +25%',       k:'ofensiva', d:'Los críticos hacen un 25% más de daño.', f:p=>{p.critMul+=0.25;}}
 ];
@@ -1992,8 +1998,8 @@ const UPGRADES = [
 function qualityChoice(){ return localStorage.getItem('digibonk3d-quality') || 'auto'; }
 function autoIsLow(){ return (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4; }
 const QUALITY = {
-  alta: {dpr: 2, aa: true,  maxEnemies: 120, shadows: true,  decor: 500, minimapEvery: 2},
-  baja: {dpr: 1, aa: false, maxEnemies: 50,  shadows: false, decor: 175, minimapEvery: 4}
+  alta: {dpr: 2, aa: true,  shadows: true,  decor: 500, minimapEvery: 2},
+  baja: {dpr: 1, aa: false, shadows: false, decor: 175, minimapEvery: 4}
 };
 const Q = QUALITY[qualityChoice() === 'alta' || (qualityChoice() === 'auto' && !autoIsLow()) ? 'alta' : 'baja'];
 const renderer = new THREE.WebGLRenderer({antialias: Q.aa});
@@ -3255,12 +3261,12 @@ const ZONE_FOES = [
 ];
 // Minijefes en el orden de la serie; el último, Piedmon, es el jefe final (BOSS_AT)
 const MINIS = [
-  {at: 240, name: 'Devimon',        sprite: 'sprites/devimon.png',        hp: 300},
-  {at: 480, name: 'Etemon',         sprite: 'sprites/adventure/etemon.png',         hp: 340},
-  {at: 720, name: 'Myotismon',      sprite: 'sprites/adventure/myotismon.png',      hp: 380},
-  {at: 960, name: 'MetalSeadramon', sprite: 'sprites/adventure/metalseadramon.png', hp: 380},
-  {at: 1040, name: 'Puppetmon',      sprite: 'sprites/adventure/puppetmon.png',      hp: 380},
-  {at: 1120, name: 'Machinedramon',  sprite: 'sprites/adventure/machinedramon.png',  hp: 420}
+  {at: 180, name: 'Devimon',        sprite: 'sprites/devimon.png',        hp: 300},
+  {at: 360, name: 'Etemon',         sprite: 'sprites/adventure/etemon.png',         hp: 340},
+  {at: 540, name: 'Myotismon',      sprite: 'sprites/adventure/myotismon.png',      hp: 380},
+  {at: 720, name: 'MetalSeadramon', sprite: 'sprites/adventure/metalseadramon.png', hp: 380},
+  {at: 900, name: 'Puppetmon',      sprite: 'sprites/adventure/puppetmon.png',      hp: 380},
+  {at: 1080, name: 'Machinedramon',  sprite: 'sprites/adventure/machinedramon.png',  hp: 420}
 ];
 // Jefes especiales: los Digimon desbloqueados y sus variantes variocolor que tengas
 const SPECIAL_CHANCE = 0.10;   // probabilidad de que aparezca un jefe especial tras el jefe final
@@ -3571,7 +3577,7 @@ function spawnChestAt(x, z, gold){
 function tryDash(){
   if (!g || g.dashCd > 0 || g.dash > 0) return;
   g.dash = 0.18;   // segundos de dash (invulnerable)
-  g.dashCd = 2.5;  // cooldown
+  g.dashCd = 2.5*(g.p.dashMul || 1);  // cooldown
   g.dashUsed = true;
   // Esquiva perfecta: dash con un enemigo pegado o un proyectil del jefe a punto de dar
   const p = g.p;
@@ -3586,8 +3592,11 @@ function tryDash(){
 function dist2(ax, az, bx, bz){ return Math.hypot(ax-bx, az-bz); }
 
 // Los enemigos siguen el poder del jugador: cada digievolución les da más vida y daño
-function evoHp(){ return Math.pow(1.25, g.ch.evolved | 0); }
-function evoDmg(){ return Math.pow(1.1, g.ch.evolved | 0); }
+// Los enemigos nuevos solo ganan un 10% de vida por cada etapa (antes +25% vida y +10% daño: evolucionar no compensaba).
+// La evolución de emergencia no cuenta: es temporal.
+function evoStage(){ return g.emergT > 0 ? (g.emergPrev | 0) : (g.ch.evolved | 0); }
+function evoHp(){ return Math.pow(1.1, evoStage()); }
+function evoDmg(){ return 1; }
 // Dificultad de la partida (modo difícil, para jugadores experimentados). Multiplicadores sobre la base:
 // vida y daño de enemigos y minijefes, ritmo de aparición (menor = más enemigos) y tiempo entre élites
 const DIFF = {hp: 1.35, dmg: 1.35, spawn: 0.75, eliteT: 35, spawnMin: 0.22};
@@ -3756,7 +3765,7 @@ function update(dt){
     spawnEnemy();
     // Presión creciente: tras 45 s salen más enemigos por tanda (1 extra, +1 cada 90 s, máximo 3)
     const extra = g.t > 45 ? Math.min(3, 1 + Math.floor(diffT(g.t)/90)) : 0;
-    for (let i = 0; i < extra && g.enemies.length < Q.maxEnemies; i++) spawnEnemy();
+    for (let i = 0; i < extra && g.enemies.length < MAX_ENEMIES; i++) spawnEnemy();
     g.spawnT = Math.max(DIFF.spawnMin, (0.9 - diffT(g.t)/180) * diffMul('spawn')) * ((g.mod && g.mod.spawnMul) || 1);
   }
 
@@ -3788,7 +3797,7 @@ function update(dt){
     [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5);   // los enemigos también quedan dentro
     resolveSolids(e, e.r*0.8);                          // y no atraviesan casas ni vallas
     e.cd -= dt;
-    if (d < e.r + 0.8 && g.dash <= 0){ p.hp -= e.dmg * foeMul(e) * dt; shake = Math.max(shake, 0.12); }
+    if (d < e.r + 0.8 && g.dash <= 0){ p.hp -= e.dmg * foeMul(e) * (p.armor || 1) * dt; shake = Math.max(shake, 0.12); }
   }
 
   // Armas
@@ -3855,7 +3864,8 @@ function update(dt){
   // Muertes
   const dead = g.enemies.filter(e => e.hp <= 0);
   for (const e of dead){
-    g.gems.push({x:e.x, z:e.z, v:e.xp*(1 + g.t/400), heal: !(g.mod && g.mod.noHeal) && Math.random() < 0.06, mesh: null});   // las bajas valen más según avanza la partida
+    if (g.p.lifesteal && !(g.mod && g.mod.noHeal)) g.p.hp = Math.min(g.p.maxHp, g.p.hp + g.p.lifesteal);
+    g.gems.push({x:e.x, z:e.z, v:e.xp*(1 + g.t/400), heal: !(g.mod && g.mod.noHeal) && Math.random() < 0.10, mesh: null});   // las bajas valen más según avanza la partida
     // 2% por baja, pero con enfriamiento de 45 s y un solo imán en el mapa a la vez
     if ((g.magnetT || 0) <= 0 && Math.random() < 0.02){ spawnMagnetDrop(e.x, e.z); g.magnetT = 45; }
     // Tickets de tirada: 25% de cada élite y 3 seguros del jefe
@@ -4001,7 +4011,7 @@ function update(dt){
     s.x += s.vx*dt; s.z += s.vz*dt; s.life -= dt;
     s.mesh.position.set(s.x, 1 + terrainH(s.x, s.z), s.z);
     if (s.life > 0 && dist2(s.x, s.z, p.x, p.z) < 0.9 && g.dash <= 0){
-      p.hp -= s.dmg; s.life = 0; shake = Math.max(shake, 0.3);
+      p.hp -= s.dmg * (p.armor || 1); s.life = 0; shake = Math.max(shake, 0.3);
     }
   }
   g.eshots = g.eshots.filter(s => {
@@ -4107,7 +4117,8 @@ function upgradeChoices(){
     pool.push({t: `${s.name} · ${lv ? 'Nivel ' + (lv + 1) : 'Nueva'}`, name: s.name, skill: id, lv, k: s.k, d: s.d, f: () => addSkill(id)});
   }
   // Las cartas desterradas en esta partida no vuelven a salir
-  const picks = pool.filter(c => !upRes().banned.includes(upKey(c))).sort(() => Math.random() - 0.5).slice(0, 3);
+  const picks = pool.filter(c => !upRes().banned.includes(upKey(c))).sort(() => Math.random() - 0.5).slice(0, 3)
+    .map(c => !c.skill && Math.random() < 0.18 ? {...c, rare: true} : c);   // carta rara: la mejora pasiva cuenta doble
   const evo = g.chestPick ? [] : evoSkillCards();   // si hay una evolución disponible, ocupa la primera carta
   if (evo.length) picks[0] = evo[0];
   return picks;
@@ -4414,14 +4425,14 @@ function openUpgrades(){
     <div class="lv3">
       <div class="lv3-head"><h2 class="lv3-banner">${g.chestPick ? (g.chestPick.gold ? '¡Cofre dorado! Carta doble' : '¡Cofre abierto!') : `¡Nivel ${g.p.lvl}!`}</h2><p>${banMode ? 'Elige una carta para desterrarla' : 'Pulsa 1-3 o haz clic'}</p></div>
       <div class="lv3-row">${g.choices.map((c, i) => `
-        <button class="lv3-card ${c.k || 'utilidad'}${banMode ? ' ban' : ''}" data-up="${i}" style="animation-delay:${i*0.09}s">
+        <button class="lv3-card ${c.k || 'utilidad'}${c.rare ? ' rare' : ''}${banMode ? ' ban' : ''}" data-up="${i}" style="animation-delay:${i*0.09}s">
           <span class="lv3-key">${i + 1}</span>
           ${c.skill && !c.lv ? '<span class="lv3-new">NUEVO</span>' : ''}
-          <span class="lv3-tag">${c.evo ? '★ Evolución' : c.skill ? (c.lv ? 'Mejora' : 'Nueva habilidad') : cat[c.k] || 'Mejora'}</span>
+          <span class="lv3-tag">${c.evo ? '★ Evolución' : c.skill ? (c.lv ? 'Mejora' : 'Nueva habilidad') : (c.rare ? '◆ Rara · ' : '') + (cat[c.k] || 'Mejora')}</span>
           <span class="lv3-ic">${svgIcon(c.evo || c.skill || c.k)}</span>
           <b>${c.name || c.t}</b>
           <p>${c.d || ''}</p>
-          ${c.evo ? '<span class="lv3-pips pasiva">EVO · nivel 4</span>' : c.skill ? `<span class="lv3-pips">${[1, 2, 3].map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : '<span class="lv3-pips pasiva">Pasiva</span>'}
+          ${c.evo ? '<span class="lv3-pips pasiva">EVO · nivel 4</span>' : c.skill ? `<span class="lv3-pips">${[1, 2, 3].map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : (c.rare ? '<span class="lv3-pips pasiva rare">Rara · efecto doble</span>' : '<span class="lv3-pips pasiva">Pasiva</span>')}
         </button>`).join('')}</div>
       <div class="lv3-acts">
         <button class="lv3-act" id="upRer" ${r.rer > 0 ? '' : 'disabled'}>Refrescar (${r.rer}) <kbd>F</kbd></button>
@@ -4440,6 +4451,7 @@ function pickUpgrade(i){
   const ch = g.choices[i];
   ch.f(g.p);
   if (g.chestPick && g.chestPick.gold && !ch.evo) ch.f(g.p);
+  if (ch.rare) ch.f(g.p);
   if (!ch.skill && !ch.evo){ g.upTaken = g.upTaken || {}; g.upTaken[ch.t] = (g.upTaken[ch.t] || 0) + 1; }   // cofre dorado: la carta cuenta dos veces
   g.chestPick = null;
   hideOverlay();
@@ -5013,7 +5025,7 @@ function updateBossMechanics(dt){
       h.mesh.material.opacity = 0.2 + 0.5*(1 - h.t/h.t0);
       if (h.t <= 0){
         burst(h.x, h.z, '#ff1744');
-        if (inside && g.dash <= 0){ g.p.hp -= h.dmg; shake = Math.max(shake, 0.35); }
+        if (inside && g.dash <= 0){ g.p.hp -= h.dmg * (g.p.armor || 1); shake = Math.max(shake, 0.35); }
       }
     }
   }
@@ -5087,7 +5099,12 @@ function endMapEvent(ok){
 function updateMapEvent(dt){
   if (g.evT === undefined) g.evT = 150;
   if (!g.ev){
-    if (g.t >= g.evT && !g.bossSpawned){ g.evT = g.t + 200; startMapEvent(); }
+    if (g.t >= g.evT && !g.bossSpawned){
+      // Si un jefe llega o acaba de llegar (menos de 30 s), el evento espera
+      const near = MINIS.some(m => Math.abs(m.at - g.t) < 30) || (g.mode !== 'surv' && BOSS_AT - g.t < 30);
+      if (near){ g.evT = g.t + 10; return; }
+      g.evT = g.t + 200; startMapEvent();
+    }
     return;
   }
   const ev = g.ev, p = g.p;
@@ -5147,7 +5164,7 @@ function updateSupport(dt){
   if (!best) return;
   s.cd = 1.1 * p.cdMul;
   const d = bd || 1, c = CHARS[s.key];
-  fireProjectile(s.x, s.z, (best.x - s.x)/d*16, (best.z - s.z)/d*16, (c.dmg || 10) * 0.4 * p.dmg, 1.2, 0x80deea);
+  fireProjectile(s.x, s.z, (best.x - s.x)/d*16, (best.z - s.z)/d*16, (c.dmg || 10) * Math.min(0.5, 0.25 + 0.005*p.lvl) * p.dmg, 1.2, 0x80deea);
 }
 function renderSupportPick(){
   const host = document.getElementById('pkPreview'); if (!host) return;
