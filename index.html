@@ -1798,6 +1798,22 @@ body:has(.tr11) #hudTop{display:none!important}
 /* Subida de nivel en móvil: las cartas no quedan bajo el temporizador ni sobre la barra Bonk */
 @media (max-width:760px){#overlay:not(.menu-mode):has(>.lv3){--ui-top:104px;--ui-bot:16px;padding-top:var(--ui-top)}body:has(#overlay:not(.hidden)>.lv3) :is(#bonkBar,#xpTxt){visibility:hidden}}
 @media (max-width:760px){.pk2-starter .pk2-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#overlay:not(.menu-mode){--ui-top:16px;--ui-bot:16px}#overlay.has-top:not(.menu-mode){--ui-top:56px}.pl4 .pl4-wrap{padding:16px 12px!important}}
+
+/* Encargos y logros (ventanas del menú) */
+.enc-list{display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.enc-row{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(19,41,77,.65);border:1px solid #2c4a78;font-size:14px;line-height:1.35}
+.enc-row b{font-size:18px;text-align:center}
+.enc-row span{text-align:left}
+.ach-prog{display:flex;flex-direction:column;align-items:flex-end;gap:3px;font-style:normal}
+.enc-row small{color:#b9f6ca;font-weight:700;white-space:nowrap}
+.enc-row.done{border-color:#7cf29c;opacity:.85}
+.enc-row.done span{text-decoration:line-through}
+.enc-row.done span strong{text-decoration:none}
+.enc-note{font-size:12px;color:#9fb3d1;margin:6px 0 0}
+.ach-bar{display:inline-block;width:70px;height:6px;border-radius:3px;background:#22385e;overflow:hidden;vertical-align:middle}
+.ach-bar u{display:block;height:100%;background:#ffd54f}
+.ach-stats{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:#cdd5e6;margin-bottom:6px}
+.ach-stats b{color:#ffd54f;margin-left:4px}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2639,16 +2655,16 @@ function showSelect(){
           <h1 class="real-brand hm-brand"><img class="hm-logo" src="ui/logo_digibonk.webp" alt="DIGIBONK"><small>FAN GAME · DIGITAL WORLD</small></h1>
           <div class="hm-row1">
           <button type="button" id="playBtn" class="real-play" aria-label="Jugar con ${safeText(choice.name)}"><span class="real-device"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span class="real-play-txt"><b>JUGAR</b><small>Último compañero: ${safeText(choice.name)}</small></span><span class="real-arrow" aria-hidden="true">▶</span><span class="real-shine" aria-hidden="true"></span></button>
-            <button type="button" class="hm-card hm-surv hm-soon hm-art" id="mSurv" aria-label="Supervivencia: modo infinito. Próximamente"></button>
+            <button type="button" class="hm-card hm-surv hm-art" id="mSurv" aria-label="Supervivencia: modo infinito"></button>
           </div>
           <div class="hm-row2">
                     ${eventActive() ? `<button class="db-event" id="rhEvent" type="button" aria-label="Edición Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><span class="db-event__txt" aria-hidden="true">Papá Noel y Reno · quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</span></button>` : `<button type="button" class="hm-card hm-event hm-soon" id="mEvent"><span class="hm-txt"><b>Evento</b><small>Próximamente</small></span></button>`}
-            <button type="button" class="hm-card hm-enc hm-soon hm-art" id="mEnc" aria-label="Encargos: misiones. Próximamente"></button>
+            <button type="button" class="hm-card hm-enc hm-art" id="mEnc" aria-label="Encargos: misiones diarias"></button>
           </div>
           <div class="hm-grid">
             <button type="button" class="hm-art-tile" id="btnColl" aria-label="Digidex" style="--art:url(ui/botones/digidex.png)"></button>
             <button type="button" class="hm-art-tile" id="btnGacha" aria-label="Laboratorio" style="--art:url(ui/botones/laboratorio.png)"></button>
-            <button type="button" class="hm-art-tile hm-soon" id="mLog" aria-label="Logros. Próximamente" style="--art:url(ui/botones/logros.png)"><span class="hm-badge">Pronto</span></button>
+            <button type="button" class="hm-art-tile" id="mLog" aria-label="Logros" style="--art:url(ui/botones/logros.png)"></button>
             <button type="button" class="hm-art-tile hm-soon" id="mRank" aria-label="Ranking. Próximamente" style="--art:url(ui/botones/ranking.png)"><span class="hm-badge">Pronto</span></button>
             <button type="button" class="hm-art-tile hm-soon" id="mBuild" aria-label="Build. Próximamente" style="--art:url(ui/botones/build.png)"><span class="hm-badge">Pronto</span></button>
             <button type="button" class="hm-art-tile" id="btnPlayer" aria-label="Jugador" style="--art:url(ui/botones/jugador.png)"></button>
@@ -2667,7 +2683,7 @@ function showSelect(){
           <img class="rw-character rw-gabumon" src="ui/personaje_aprobado_gabumon.png" alt="">
         </div>
         <aside class="real-right" aria-label="Información del jugador">
-          <button type="button" class="real-panel" id="rhMission"><h2>▣ ${t('daily')}</h2><p>${safeText(dailyText())}</p><span class="real-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></span><p class="real-reward">${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits · +${DAILY.rewardTix} 🎟</p></button>
+          <button type="button" class="real-panel" id="rhMission"><h2>▣ ${t('daily')}</h2><p>${safeText(dailyText())}</p><span class="real-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></span><p class="real-reward">${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits · +${DAILY.rewardTix} 🎟</p><p class="real-reward">Semana: ${weeklyMod().name} · ${weeklyMod().d} (+25% Bits)</p></button>
           <button type="button" class="real-panel" id="rhRecords"><h2>🏆 ${t('recs')}</h2><div class="real-stats"><span>Mejor tiempo <b>${fmtTime(bestT)}</b></span><span>Mejor nivel <b>${bestL}</b></span><span>Bajas <b>${kills}</b></span></div></button>
         </aside>
         <footer class="real-legal">${t('legal')}</footer>
@@ -2684,7 +2700,7 @@ function showSelect(){
   // The equipped skin may have a unique appearance; if so, use that sprite's first frame.
   // El botón Jugar siempre muestra el icono del compañero (no la skin equipada)
   if(!avatarIcon()) headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
-  document.getElementById('playBtn').onclick=()=>showPicker('personaje');
+  document.getElementById('playBtn').onclick=()=>{ runMode='normal'; showPicker('personaje'); };
   const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { gxBanner = 'navidadP'; showGacha(); };
   document.getElementById('btnColl').onclick=showCollection;
   document.getElementById('btnPlayer').onclick=showPlayer;
@@ -2693,7 +2709,10 @@ function showSelect(){
   document.getElementById('btnAjustes').onclick=showSettings;
   // Botones del menú principal aún sin contenido: muestran un aviso breve en lugar de abrir nada
   const hmSoon=(msg)=>{const m=document.getElementById('hmMsg'); if(!m) return; m.textContent=msg||'Próximamente'; clearTimeout(m._t); m._t=setTimeout(()=>{m.textContent='';},1800);};
-  ['mSurv','mEnc','mEvent','mLog','mRank','mBuild'].forEach(id=>{const el=document.getElementById(id); if(el) el.onclick=()=>hmSoon('Próximamente');});
+  ['mEvent','mRank','mBuild'].forEach(id=>{const el=document.getElementById(id); if(el) el.onclick=()=>hmSoon('Próximamente');});
+  document.getElementById('mSurv').onclick=()=>{ runMode='surv'; showPicker('personaje'); };
+  document.getElementById('mEnc').onclick=showEncargos;
+  document.getElementById('mLog').onclick=showLogros;
   document.getElementById('mBug').onclick=()=>window.open('https://github.com/jgodoy-m/digibonk/issues','_blank','noopener');
   // Enlaces de Discord y X: rellenar cuando existan (vacío = aún no disponible)
   const HM_DISCORD_URL='', HM_X_URL='';
@@ -2775,7 +2794,7 @@ function showHelp(){
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
-  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab'];
+  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc'];
 function makeSaveCode(){
   const data = {};
   for (const k of SAVE_KEYS){ const v = localStorage.getItem(k); if (v !== null) data[k] = v; }
@@ -3013,7 +3032,7 @@ function showPicker(tab){
     <div class="picker-screen pk2">
       <header class="pk2-top">
         <button class="g-back" id="pkBack">← Volver</button>
-        <h2>Elige tu Digimon</h2>
+        <h2>${runMode === 'surv' ? 'Supervivencia · elige tu Digimon' : 'Elige tu Digimon'}</h2>
         <span class="pk2-sub">Temporada 1 · ${chars.length} Digimon · ${COMING_SOON.length} en preparación</span>
       </header>
       <div class="pk2-body">
@@ -3143,6 +3162,7 @@ function startGame(key){
   // Versión variocolor: 1 entre 8192 al empezar una partida; queda guardada como skin del Digimon
   if (Math.random() < 1 / 8192){ grantSkinAt(key, 0, 'variocolor'); equipSkinAt(key, 0, 'variocolor'); }
   g = {
+    mode: runMode,
     ch: {...c, id:key},
     p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:2.5, critChance:0.12, critMul:2},
     t: 0, kills: 0, enemies: [], shots: [], gems: [], blades: [],
@@ -3156,6 +3176,7 @@ function startGame(key){
   applyBalance(key);
   applySkinFx(key);
   applyLab();
+  applyWeekly();
   resolveSolids(g.p, 0.5);   // aparición aleatoria: fuera de los obstáculos
   g.playerMesh = billboard(spriteOf(key, false), 2.6, false);   // sprite propio: la digievolución cambia su textura
   world.add(g.playerMesh);
@@ -3481,12 +3502,26 @@ function bonkRelease(){
   spawnRing(p.x, p.z, 0xffd54f, 14, 0.5);
   screenFlash = 0.6;
   sfx('evolve');
-  announce('¡BONK!', 'Onda de choque', '#ffd54f');
+  g.bonks = (g.bonks || 0) + 1;
+  const fx = BONK_FX[g.ch.id];
+  if (fx){ fx.f(p); announce('¡BONK!', fx.name, '#ffd54f'); }
+  else announce('¡BONK!', 'Onda de choque', '#ffd54f');
 }
+// Efecto extra del Bonk según el compañero (además de la onda base)
+const BONK_FX = {
+  agumon:   {name: 'Llamarada en línea', f: p => { const dx = g.dir.x, dz = g.dir.z; for (const e of g.enemies){ const rx = e.x - p.x, rz = e.z - p.z, along = rx*dx + rz*dz; if (along > 0 && along < 32 && Math.abs(rx*dz - rz*dx) < 2.8){ e.hp -= 150; popText(e.x, e.z, 150, '#ff7043', 0.7); } } }},
+  gabumon:  {name: 'Aliento helado: enemigos congelados', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 18) e.frozenT = e.boss ? 1 : 3; }},
+  palmon:   {name: 'Lianas: enemigos atrapados', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 18) e.frozenT = e.boss ? 1.2 : 4; }},
+  biyomon:  {name: 'Espiral de fuego', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 20){ e.hp -= 60; popText(e.x, e.z, 60, '#ff7043', 0.6); } spawnRing(p.x, p.z, 0xff7043, 20, 0.6); }},
+  tentomon: {name: 'Descarga en cadena', f: p => { g.enemies.filter(e => dist2(e.x, e.z, p.x, p.z) < 30).sort((a, b) => dist2(a.x, a.z, p.x, p.z) - dist2(b.x, b.z, p.x, p.z)).slice(0, 12).forEach(e => { e.hp -= 120; popText(e.x, e.z, 120, '#40c4ff', 0.7); }); }},
+  gomamon:  {name: 'Marea: la horda sale despedida', f: p => { for (const e of g.enemies){ const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz) || 1; if (d < 20) [e.x, e.z] = clampArena(e.x + dx/d*10, e.z + dz/d*10, ARENA_R - 0.5); } }},
+  patamon:  {name: 'Aire curativo: +30% vida', f: p => { if (!(g.mod && g.mod.noHeal)) p.hp = Math.min(p.maxHp, p.hp + p.maxHp*0.3); }},
+  gatomon:  {name: 'Luz sagrada: críticos 5 s', f: () => { g.critT = 5; }}
+};
 let dmgSrc = 'base';   // qué ataque está golpeando (para el resumen de fin de partida)
 function hurt(e, dmg){
   // 12% de golpes críticos: doble daño, número naranja y sacudida ligera
-  const crit = Math.random() < g.p.critChance;
+  const crit = (g.critT || 0) > 0 || Math.random() < g.p.critChance;
   if (crit){ dmg *= g.p.critMul; shake = Math.max(shake, 0.2); }
   e.hp -= dmg;
   g.dmgBy[dmgSrc] = (g.dmgBy[dmgSrc] || 0) + dmg;
@@ -3495,20 +3530,44 @@ function hurt(e, dmg){
   sfx('hit');
 }
 
+// Cofres: abren una elección de 1 entre 3 cartas. Los dorados (élites y jefes menores) aplican la carta dos veces
 function openChest(c){
   if (!g || c.open) return;
   c.open = true; c.openT = 2;
   c.pivot.rotation.x = -1.5;
-  const up = UPGRADES[Math.floor(Math.random()*UPGRADES.length)];
-  up.f(g.p);
-  g.p.hp = Math.min(g.p.maxHp, g.p.hp + 15);
+  if (!(g.mod && g.mod.noHeal)) g.p.hp = Math.min(g.p.maxHp, g.p.hp + 15);
+  g.chestsOpened = (g.chestsOpened || 0) + 1;
   sfx('chest');
-  announce('Cofre abierto', `${up.t} · +15 vida`, '#7cf29c');
+  g.chestPick = {gold: !!c.gold};
+  g.choices = upgradeChoices();
+  openUpgrades();
+}
+function spawnChestAt(x, z, gold){
+  const [cx, cz] = clampArena(x, z, ARENA_R - 2);
+  const {group, pivot} = makeChest();
+  if (gold){
+    group.scale.setScalar(1.3);
+    const ring = new THREE.Mesh(new THREE.RingGeometry(0.75, 0.95, 32), new THREE.MeshBasicMaterial({color: 0xffd54f, transparent: true, opacity: 0.85, depthWrite: false}));
+    ring.rotation.x = -Math.PI/2; ring.position.y = 0.03; group.add(ring);
+  }
+  group.position.set(cx, terrainH(cx, cz), cz);
+  world.add(group);
+  g.chests.push({x: cx, z: cz, group, pivot, open: false, openT: 0, gone: false, gold: !!gold});
 }
 function tryDash(){
   if (!g || g.dashCd > 0 || g.dash > 0) return;
   g.dash = 0.18;   // segundos de dash (invulnerable)
   g.dashCd = 2.5;  // cooldown
+  g.dashUsed = true;
+  // Esquiva perfecta: dash con un enemigo pegado o un proyectil del jefe a punto de dar
+  const p = g.p;
+  const close = g.enemies.some(e => dist2(e.x, e.z, p.x, p.z) < e.r + 1.1) || g.eshots.some(s => dist2(s.x, s.z, p.x, p.z) < 2.2);
+  if (close && (g.perfectCd || 0) <= 0){
+    g.slowT = 1; g.perfectCd = 4;
+    addBonk(10);
+    popText(p.x, p.z, '¡Esquiva perfecta!', '#40c4ff', 1);
+    sfx('ready');
+  }
 }
 function dist2(ax, az, bx, bz){ return Math.hypot(ax-bx, az-bz); }
 
@@ -3523,12 +3582,15 @@ const diffMul = k => 1 + (DIFF[k] - 1) * Math.min(1, (g ? g.t : 0) / 600);
 const eliteGap = () => 45 + (DIFF.eliteT - 45) * Math.min(1, (g ? g.t : 0) / 600);
 // Tiempo que cuenta para la dificultad: igual que el tiempo real hasta el minuto 10 (la dificultad de siempre)
 // y después avanza a 0,3 para que el minuto 20 no sea imposible
-const diffT = t => t <= 600 ? t : 600 + (t - 600) * 0.3;
+// En Supervivencia no hay jefe final: la dificultad no se suaviza tras el minuto 10
+const diffT = t => (g && g.mode === 'surv') ? t : (t <= 600 ? t : 600 + (t - 600) * 0.3);
+let runMode = 'normal';   // 'normal' o 'surv' (lo elige el menú antes del selector)
 function spawnEnemy(forced){
   const t = g.t, r = Math.random(), a = Math.random()*Math.PI*2, R = (g.idleT || 0) > 2.5 ? 13 : 25;
   let kind = 'basic';
   const z2 = g.zone >= 2;   // la zona 2 trae más tanques y rápidos
   if (forced) kind = forced;
+  else if (g.mod && g.mod.fastOnly && t > 20) kind = 'fast';
   else if (t > 120 && r < (z2 ? 0.3 : 0.2)) kind = 'tank';
   else if (t > 60 && r < (z2 ? 0.5 : 0.4)) kind = 'fast';
   const tt = diffT(t);
@@ -3548,16 +3610,17 @@ function spawnEnemy(forced){
 
 // Santuarios: 6 por partida en el mapa. Al pasar por uno, un efecto para el resto de la partida (una sola vez)
 const SHRINE_TYPES = [
-  {name: 'Santuario de curación', col: 0x7cf29c, text: '+40 PS', apply: g => { g.p.hp = Math.min(g.p.maxHp, g.p.hp + 40); }},
+  {name: 'Santuario de curación', col: 0x7cf29c, text: '+40 PS', apply: g => { if (!(g.mod && g.mod.noHeal)) g.p.hp = Math.min(g.p.maxHp, g.p.hp + 40); }},
   {name: 'Santuario de poder', col: 0xff7043, text: '+10% daño', apply: g => { g.p.dmg *= 1.1; }},
   {name: 'Santuario veloz', col: 0x40c4ff, text: '+8% velocidad', apply: g => { g.p.speed *= 1.08; }},
   {name: 'Santuario de área', col: 0xce93d8, text: '+10% área', apply: g => { g.p.area *= 1.1; }},
-  {name: 'Santuario de tickets', col: 0xffd54f, text: '+1 ticket del permanente', apply: () => addTickets('std', 1)}
+  {name: 'Santuario de tickets', col: 0xffd54f, text: '+1 ticket del permanente', apply: () => addTickets('std', 1)},
+  {name: 'Santuario maldito', col: 0x8e24aa, text: '+25% daño · −20 vida máx.', apply: g => { g.p.dmg *= 1.25; g.p.maxHp = Math.max(30, g.p.maxHp - 20); g.p.hp = Math.min(g.p.hp, g.p.maxHp); }}
 ];
 function initShrines(){
   g.shrines = [];
   for (let i = 0; i < 3; i++){   // 3 santuarios por partida
-    const type = SHRINE_TYPES[i % SHRINE_TYPES.length];
+    const type = SHRINE_TYPES[Math.floor(Math.random()*SHRINE_TYPES.length)];   // tipo al azar entre todos
     const a = Math.random()*Math.PI*2, R = 22 + Math.random()*68;
     const [x, z] = clampArena(Math.cos(a)*R, Math.sin(a)*R, ARENA_R - 6);
     const mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.9, 2.2, 10), new THREE.MeshBasicMaterial({color: type.col}));
@@ -3590,7 +3653,7 @@ function updateShrines(dt){
   let charging = null;
   for (const sh of g.shrines){
     if (sh.used) continue;
-    const inside = dist2(sh.x, sh.z, g.p.x, g.p.z) < SHRINE_RANGE*SHRINE_RANGE;
+    const inside = dist2(sh.x, sh.z, g.p.x, g.p.z) < SHRINE_RANGE;   // dist2 ya es la distancia (no al cuadrado)
     sh.charge = Math.max(0, Math.min(SHRINE_CHARGE, (sh.charge || 0) + (inside ? dt : -dt*0.5)));
     sh.mesh.scale.y = 1 + 0.6 * (sh.charge / SHRINE_CHARGE);   // el santuario crece mientras se carga
     if (inside && sh.charge > 0 && !sh.used) charging = sh;
@@ -3664,7 +3727,7 @@ function update(dt){
   // Avisos de fase: hordas a los 45 s y aviso del jefe 15 s antes
   if (g.zone < 2 && g.t >= ZONE2_AT) setZone(2);
   if (!g.hordeWarned && g.t >= 45){ g.hordeWarned = true; announce('¡HORDAS!', 'Más enemigos aparecen', '#ef5350'); }
-  if (!g.bossWarned && g.t >= BOSS_AT - 15){ g.bossWarned = true; announce('Algo se acerca…', 'Piedmon llega en 15 s', '#ce93d8'); }
+  if (g.mode !== 'surv' && !g.bossWarned && g.t >= BOSS_AT - 15){ g.bossWarned = true; announce('Algo se acerca…', 'Piedmon llega en 15 s', '#ce93d8'); }
 
   // Quedarse quieto: tras 2,5 s sin moverte, los enemigos salen más deprisa y más cerca
   const mvd = Math.hypot(g.p.x - (g.lastPx ?? g.p.x), g.p.z - (g.lastPz ?? g.p.z));
@@ -3680,7 +3743,7 @@ function update(dt){
     // Presión creciente: tras 45 s salen más enemigos por tanda (1 extra, +1 cada 90 s, máximo 3)
     const extra = g.t > 45 ? Math.min(3, 1 + Math.floor(diffT(g.t)/90)) : 0;
     for (let i = 0; i < extra && g.enemies.length < Q.maxEnemies; i++) spawnEnemy();
-    g.spawnT = Math.max(DIFF.spawnMin, (0.9 - diffT(g.t)/180) * diffMul('spawn'));
+    g.spawnT = Math.max(DIFF.spawnMin, (0.9 - diffT(g.t)/180) * diffMul('spawn')) * ((g.mod && g.mod.spawnMul) || 1);
   }
 
   // Minijefes en sus minutos
@@ -3698,7 +3761,9 @@ function update(dt){
   }
 
   // Enemigos: persiguen y dañan por contacto
+  if (g.critT > 0) g.critT -= dt;
   for (const e of g.enemies){
+    if (e.frozenT > 0){ e.frozenT -= dt; continue; }   // congelado o atrapado por el Bonk: ni se mueve ni daña
     const dx = p.x - e.x, dz = p.z - e.z, d = Math.hypot(dx, dz) || 1;
     // Se paran a distancia de contacto (no se meten encima del jugador)
     if (d > e.r + 0.6){
@@ -3775,12 +3840,13 @@ function update(dt){
   // Muertes
   const dead = g.enemies.filter(e => e.hp <= 0);
   for (const e of dead){
-    g.gems.push({x:e.x, z:e.z, v:e.xp*(1 + g.t/400), heal: Math.random() < 0.06, mesh: null});   // las bajas valen más según avanza la partida
+    g.gems.push({x:e.x, z:e.z, v:e.xp*(1 + g.t/400), heal: !(g.mod && g.mod.noHeal) && Math.random() < 0.06, mesh: null});   // las bajas valen más según avanza la partida
     // 2% por baja, pero con enfriamiento de 45 s y un solo imán en el mapa a la vez
     if ((g.magnetT || 0) <= 0 && Math.random() < 0.02){ spawnMagnetDrop(e.x, e.z); g.magnetT = 45; }
     // Tickets de tirada: 25% de cada élite y 3 seguros del jefe
     if (e.kind === 'elite' && Math.random() < 0.25){ g.tix++; popText(e.x, e.z, '+1 ticket', '#3de0ff', 1); }
-    if (e.kind === 'mini'){ g.tix++; announce('¡' + e.name + ' derrotado!', '+1 ticket de tirada', '#3de0ff'); }
+    if (e.kind === 'mini'){ g.tix++; announce('¡' + e.name + ' derrotado!', '+1 ticket de tirada · cofre dorado', '#3de0ff'); spawnChestAt(e.x, e.z, true); if (!e.special) (g.minisKilled || (g.minisKilled = [])).push(e.name); }
+    if (e.kind === 'elite' && Math.random() < 0.3) spawnChestAt(e.x, e.z, true);   // 30% de las élites dejan un cofre dorado
     if (e.boss) g.tix += 3;
     world.remove(e.mesh);
     world.remove(e.shadow);
@@ -3867,7 +3933,7 @@ function update(dt){
   g.texts = g.texts.filter(t => t.life > 0);
 
   // Jefe final: aparece a los 240 s y lanza anillos de proyectiles
-  if (!g.bossSpawned && g.t >= BOSS_AT){
+  if (g.mode !== 'surv' && !g.bossSpawned && g.t >= BOSS_AT){
     g.bossSpawned = true;
     const mesh = billboard('sprites/adventure/piedmon.png', 5.4);
     world.add(mesh);
@@ -4032,7 +4098,7 @@ function rerollUp(){
 }
 function skipUp(){
   const r = upRes(); if (r.skip <= 0 || state !== 'levelup') return;
-  r.skip--; SAVE.bits = SAVE.bits + 15;
+  r.skip--; SAVE.bits = SAVE.bits + 15; g.chestPick = null;
   announce('+15 Bits', 'Carta saltada', '#ffd54f');
   hideOverlay(); lockMouse(); state = 'play';
 }
@@ -4322,7 +4388,7 @@ function openUpgrades(){
   const r = upRes(), banMode = g.upMode === 'ban';
   showOverlay(`
     <div class="lv3">
-      <div class="lv3-head"><h2 class="lv3-banner">¡Nivel ${g.p.lvl}!</h2><p>${banMode ? 'Elige una carta para desterrarla' : 'Pulsa 1-3 o haz clic'}</p></div>
+      <div class="lv3-head"><h2 class="lv3-banner">${g.chestPick ? (g.chestPick.gold ? '¡Cofre dorado! Carta doble' : '¡Cofre abierto!') : `¡Nivel ${g.p.lvl}!`}</h2><p>${banMode ? 'Elige una carta para desterrarla' : 'Pulsa 1-3 o haz clic'}</p></div>
       <div class="lv3-row">${g.choices.map((c, i) => `
         <button class="lv3-card ${c.k || 'utilidad'}${banMode ? ' ban' : ''}" data-up="${i}" style="animation-delay:${i*0.09}s">
           <span class="lv3-key">${i + 1}</span>
@@ -4348,6 +4414,8 @@ function openUpgrades(){
 function pickUpgrade(i){
   if (state !== 'levelup') return;
   g.choices[i].f(g.p);
+  if (g.chestPick && g.chestPick.gold) g.choices[i].f(g.p);   // cofre dorado: la carta cuenta dos veces
+  g.chestPick = null;
   hideOverlay();
   lockMouse();
   state = 'play';
@@ -4357,7 +4425,7 @@ function endGame(win){
   state = 'end';
   sfx(win ? 'victory' : 'defeat');
   const daily = loadDaily();
-  const raw = Math.floor((g.kills/2 + g.t/10) * labMul('bits'));
+  const raw = Math.floor((g.kills/2 + g.t/10) * labMul('bits') * 1.25 * (g.mode === 'surv' ? 1.5 : 1));   // +25% por el modificador semanal
   const earned = Math.min(raw, Math.max(0, DAILY.runCap - daily.runBits));
   if (g.t >= 5) daily.runs += 1;
   daily.runBits += earned;
@@ -4373,6 +4441,8 @@ function endGame(win){
   g.unlocked = recordRun(g.ch.id, g.kills, g.t);
   g.newTitles = checkAchievements(win);
   g.newDigis = checkUnlocks();
+  g.survBest = g.mode === 'surv' ? recordSurv(g.ch.id, g.t) : null;
+  g.encDone = checkEncargos();
   unlockMouse();
   saveRecord(win);
   // Resumen de la partida: cifras, daño por habilidad y recompensas
@@ -4385,11 +4455,13 @@ function endGame(win){
   for (const u of g.unlocked) rewards.push(`<li>Skin nueva: <b>${u}</b></li>`);
   for (const tl of g.newTitles) rewards.push(`<li>Título desbloqueado: <b>${tl.name}</b></li>`);
   for (const d of g.newDigis) rewards.push(`<li>Digimon desbloqueado: <b>${d}</b></li>`);
+  for (const e of g.encDone) rewards.push(`<li>Encargo cumplido: <b>${e}</b> · +${ENC_REWARD.bits} Bits y +${ENC_REWARD.tix} ticket</li>`);
+  if (g.survBest) rewards.push(`<li>¡Nuevo récord de Supervivencia con ${g.ch.name}!</li>`);
   const endKey = g.ch.id;
   showOverlay(`
     <div class="end3 ${win ? 'win' : 'lose'}">
-      <h1>${win ? '¡VICTORIA!' : 'HAS CAÍDO'}</h1>
-      <p class="end3-sub">${win ? 'Piedmon ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Laboratorio`} · ${ZONES[g.zone - 1].name}</p>
+      <h1>${g.mode === 'surv' ? 'FIN DE LA SUPERVIVENCIA' : win ? '¡VICTORIA!' : 'HAS CAÍDO'}</h1>
+      <p class="end3-sub">${g.mode === 'surv' ? `Has aguantado ${fmtTime(Math.floor(g.t))} · récord con ${g.ch.name}: ${fmtTime(Math.floor(survBest(g.ch.id)))}` : win ? 'Piedmon ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Laboratorio`} · ${ZONES[g.zone - 1].name}</p>
       <div class="end3-cells">
         <span><b>${fmtTime(Math.floor(g.t))}</b>Tiempo</span><span><b>${g.p.lvl}</b>Nivel</span><span><b>${g.kills}</b>Bajas</span><span><b>${Object.keys(g.skills).length}</b>Habilidades</span>
       </div>
@@ -4503,10 +4575,10 @@ function updateHUD(){
   const p = g.p;
   document.getElementById('hp').style.width = (100*Math.max(0,p.hp)/p.maxHp) + '%';
   document.getElementById('xp').style.width = (100*p.xp/p.nextXp) + '%';
-  const left = Math.max(0, BOSS_AT - g.t);
+  const left = g.mode === 'surv' ? g.t : Math.max(0, BOSS_AT - g.t);   // Supervivencia: tiempo aguantado
   const timerEl = document.getElementById('timer');
   timerEl.textContent = g.bossSpawned ? 'JEFE' : `${Math.floor(left/60)}:${String(Math.floor(left%60)).padStart(2,'0')}`;
-  timerEl.classList.toggle('urgent', !g.bossSpawned && left < 30);
+  timerEl.classList.toggle('urgent', g.mode !== 'surv' && !g.bossSpawned && left < 30);
   document.getElementById('xpTxt').textContent = `Nivel ${p.lvl} · EXP ${Math.floor(p.xp)} / ${p.nextXp}`;
   document.getElementById('hpTxt').textContent = `${Math.ceil(Math.max(0, p.hp))} / ${p.maxHp}`;
   document.getElementById('hudName').textContent = stageName(g.ch.id, g.ch.evolved);
@@ -4808,6 +4880,79 @@ function dailyText(){
   return d.claimed ? 'Misión diaria completada' : `Misión diaria: ${Math.min(d.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits y ${DAILY.rewardTix} tickets`;
 }
 
+
+/* ---------- Supervivencia: récord por Digimon ---------- */
+function survBest(k){ return loadJSON('digibonk3d-surv', {})[k] || 0; }
+function recordSurv(k, t){
+  const all = loadJSON('digibonk3d-surv', {});
+  if (t <= (all[k] || 0)) return false;
+  all[k] = Math.floor(t); localStorage.setItem('digibonk3d-surv', JSON.stringify(all));
+  return true;
+}
+/* ---------- Encargos: 3 al día, se cumplen dentro de una partida ---------- */
+const ENC_REWARD = {bits: 100, tix: 1};
+const ENC_TYPES = [
+  {id:'kills', ns:[200, 300, 400], t: n => `Derrota a ${n} enemigos en una partida`, ok: (n) => g.kills >= n},
+  {id:'nodash', ns:[5, 8, 10], t: n => `Llega al minuto ${n} sin usar el dash`, ok: (n) => !g.dashUsed && g.t >= n*60},
+  {id:'chests', ns:[3, 4, 5], t: n => `Abre ${n} cofres en una partida`, ok: (n) => (g.chestsOpened || 0) >= n},
+  {id:'bonk', ns:[2, 3, 4], t: n => `Usa el Bonk ${n} veces en una partida`, ok: (n) => (g.bonks || 0) >= n},
+  {id:'level', ns:[15, 20, 25], t: n => `Llega al nivel ${n}`, ok: (n) => g.p.lvl >= n},
+  {id:'mini', ns:[0, 1, 2], t: n => `Derrota a ${MINIS[n].name}`, ok: (n) => (g.minisKilled || []).includes(MINIS[n].name)},
+  {id:'with', ns:null, t: k => `Aguanta 10 minutos con ${CHARS[k].name}`, ok: (k) => g.ch.id === k && g.t >= 600}
+];
+// Generador con semilla del día: todos los jugadores ven los mismos encargos ese día
+function dayRng(){ let h = 2166136261; for (const ch of dayKey()) h = Math.imul(h ^ ch.charCodeAt(0), 16777619); return () => ((h = Math.imul(h ^ (h >>> 15), 2246822507) ^ Math.imul(h ^ (h >>> 13), 3266489909)) >>> 0) / 4294967296; }
+function loadEncargos(){
+  const st = loadJSON('digibonk3d-enc', null);
+  if (st && st.day === dayKey()) return st;
+  const rnd = dayRng(), types = [...ENC_TYPES].sort(() => rnd() - 0.5).slice(0, 3);
+  const opened = SEASONS.adventure.chars.filter(k => isUnlocked(k));
+  const list = types.map(tp => ({id: tp.id, n: tp.ns ? tp.ns[Math.floor(rnd()*tp.ns.length)] : opened[Math.floor(rnd()*opened.length)], done: false}));
+  const fresh = {day: dayKey(), list};
+  localStorage.setItem('digibonk3d-enc', JSON.stringify(fresh));
+  return fresh;
+}
+function encText(e){ const tp = ENC_TYPES.find(x => x.id === e.id); return tp ? tp.t(e.n) : e.id; }
+// Al terminar la partida: marca los encargos cumplidos y da la recompensa. Devuelve sus textos
+function checkEncargos(){
+  const st = loadEncargos(), won = [];
+  for (const e of st.list){
+    const tp = ENC_TYPES.find(x => x.id === e.id);
+    if (e.done || !tp || !tp.ok(e.n)) continue;
+    e.done = true; won.push(encText(e));
+    SAVE.bits = SAVE.bits + ENC_REWARD.bits; addTickets('std', ENC_REWARD.tix);
+  }
+  localStorage.setItem('digibonk3d-enc', JSON.stringify(st));
+  return won;
+}
+// Ventana del menú (mismo estilo que las de misión diaria y récords)
+function menuModal(title, content){
+  const host = document.getElementById('realModalHost'); if (!host) return;
+  const esc = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  host.innerHTML = `<div class="approved-info-scrim"><section class="approved-info-dialog" role="dialog" aria-modal="true" aria-label="${esc(title)}"><header><h2>${esc(title)}</h2><button type="button" id="realClose">✕</button></header>${content}<button type="button" id="realDone">Volver al menú</button></section></div>`;
+  const close = () => { host.innerHTML = ''; };
+  host.querySelector('#realClose').onclick = close; host.querySelector('#realDone').onclick = close;
+  host.querySelector('.approved-info-scrim').onclick = e => { if (e.target === e.currentTarget) close(); };
+  host.querySelector('#realClose').focus();
+}
+function showEncargos(){
+  const st = loadEncargos();
+  const rows = st.list.map(e => `<div class="enc-row${e.done ? ' done' : ''}"><b>${e.done ? '✓' : '○'}</b><span>${encText(e)}</span><small>+${ENC_REWARD.bits} Bits · +${ENC_REWARD.tix} 🎟</small></div>`).join('');
+  menuModal('Encargos de hoy', `<div class="enc-list">${rows}</div><p class="enc-note">Se cumplen dentro de una partida y se renuevan cada día. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d}</p>`);
+}
+function showLogros(){
+  const ach = loadAch();
+  const kills = sumStats('kills'), plays = sumStats('plays');
+  const best = Object.entries(loadJSON('digibonk3d-surv', {})).sort((a, b) => b[1] - a[1])[0];
+  const prog = {novato: [Math.min(1, ach.runs), 1], cazador: [Math.min(300, kills), 300], explorador: [ach.zone2 ? 1 : 0, 1], maestro: [ach.boss ? 1 : 0, 1]};
+  const rows = TITLES.filter(tl => !tl.weekly && !tl.seasonal).map(tl => {
+    const own = inv.titles.includes(tl.id), pr = prog[tl.id];
+    const bar = pr ? `<em class="ach-prog"><i class="ach-bar"><u style="width:${Math.round(pr[0]/pr[1]*100)}%"></u></i><small>${pr[0]}/${pr[1]}</small></em>` : '<em></em>';
+    return `<div class="enc-row${own ? ' done' : ''}"><b>${own ? '🏅' : '🔒'}</b><span><strong>${tl.name}</strong><br>${tl.how}</span>${bar}</div>`;
+  }).join('');
+  const stats = `<div class="ach-stats"><span>Partidas <b>${plays}</b></span><span>Bajas <b>${kills}</b></span><span>Supervivencia <b>${best ? fmtTime(best[1]) + ' · ' + CHARS[best[0]].name : '—'}</b></span></div>`;
+  menuModal('Logros', stats + `<div class="enc-list">${rows}</div>`);
+}
 /* ---------- Laboratorio: mejoras permanentes que se compran con Bits ---------- */
 // per = bonus por nivel (multiplicador sumado) · flat = bonus entero · costs = precio de cada nivel
 const LAB_COSTS = [150, 300, 500, 800, 1200];
@@ -4851,6 +4996,21 @@ function labRefund(){
   return back;
 }
 // Aplica el Laboratorio al empezar la partida (después de balance y skin)
+// Modificador de la semana: una regla distinta cada semana con +25% de Bits
+const WEEKLY_MODS = [
+  {id:'rapidos', name:'Semana veloz', d:'Solo aparecen enemigos rápidos.', apply: () => { g.mod.fastOnly = true; }},
+  {id:'sincura', name:'Sin curación', d:'No hay orbes, cofres ni santuarios que curen.', apply: () => { g.mod.noHeal = true; }},
+  {id:'bonk',    name:'Bonk turbo', d:'El medidor Bonk se carga el doble de rápido.', apply: () => { g.labBonk *= 2; }},
+  {id:'cristal', name:'Cañón de cristal', d:'Haces un 50% más de daño pero tienes un 40% menos de vida.', apply: () => { g.p.dmg *= 1.5; g.p.maxHp = Math.round(g.p.maxHp*0.6); g.p.hp = g.p.maxHp; }},
+  {id:'horda',   name:'Horda', d:'Aparecen enemigos un 40% más a menudo.', apply: () => { g.mod.spawnMul = 0.6; }}
+];
+function weeklyMod(){ const n = WEEKLY_MODS.length; return WEEKLY_MODS[((weekNum() % n) + n) % n]; }
+function applyWeekly(){
+  g.mod = {spawnMul: 1};
+  const m = weeklyMod();
+  m.apply();
+  g.mod.id = m.id;
+}
 function applyLab(){
   const p = g.p;
   p.maxHp = Math.round(p.maxHp * labMul('hp')); p.hp = p.maxHp;
@@ -5994,7 +6154,11 @@ function frame(now){
   const dt = Math.min(0.05, (now-last)/1000);
   last = now;
   if (state === 'play' && g){
-    if (!g.evoAnim) update(dt);   // durante la digievolución el mundo se detiene y solo corre la animación
+    // Esquiva perfecta: 1 s de cámara lenta (el reloj real sigue)
+    let sdt = dt;
+    if (g.slowT > 0){ g.slowT -= dt; sdt = dt*0.35; }
+    if (g.perfectCd > 0) g.perfectCd -= dt;
+    if (!g.evoAnim) update(sdt);   // durante la digievolución el mundo se detiene y solo corre la animación
     if (g){
       syncMeshes(); updateCamera(dt); updateHUD(); drawEdgeMarkers();
       if (g.aura){ g.aura.group.position.set(g.p.x, terrainH(g.p.x, g.p.z) + g.p.y, g.p.z); g.aura.update(g.t); }
