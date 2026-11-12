@@ -2002,6 +2002,7 @@ body:has(.ga) #topbar{display:none!important}
   #xpTxt{top:80px!important;left:12px!important}#skillBar{left:12px!important;bottom:84px!important}.sb-i{width:40px!important;height:40px!important;border-radius:13px!important}
   #evHud{top:110px!important;font-size:12px!important;white-space:normal!important;max-width:90vw;text-align:center}
 }
+#pimg.icon{width:100%!important;height:100%!important;border-radius:50%;object-fit:cover;image-rendering:auto}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -5176,8 +5177,11 @@ function updateHUD(){
   g.lastHp = p.hp;
   updatePrompt();
   const pimg = document.getElementById('pimg');
-  const hd = headUrl(spriteOf(g.ch.id, g.ch.evolved));
-  if (pimg.src !== hd) pimg.src = hd;
+  // Retrato: el icono redondo de siempre del Digimon (o el de su skin); si no hay, la cabeza del sprite
+  const ic = skinIconFor(g.ch.id, equippedAt(g.ch.id, 0)) || PLAYER_ICONS.find(x => x.id === g.ch.id);
+  const hd = ic ? ic.src : headUrl(spriteOf(g.ch.id, g.ch.evolved));
+  pimg.classList.toggle('icon', !!ic);
+  if (!pimg.src.endsWith(hd)) pimg.src = hd;
   document.getElementById('combo').textContent = g.combo >= 2 ? `x${g.combo}` : '';
   const bb = document.getElementById('bossbar');
   if (g.boss && g.enemies.includes(g.boss)){
