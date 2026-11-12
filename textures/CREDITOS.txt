@@ -6,3 +6,15 @@ Texturas que usa index.html:
 Las texturas CC0 de ambientCG (*_cc0.jpg) y las primeras texturas generadas por código
 (hierba.png, tierra.png, camino_piedra.png, roca.png, corteza.png, agua.png, etc.) y las del Pueblo (madera, tejado y camino) se retiraron
 porque el juego ya no las usaba. Siguen disponibles en el historial de git.
+
+Mapas 2 y 3 (Desierto de Datos y Montaña Helada), añadidos el 12/11/2026:
+- arena_kenney.png, baldosa_arena_kenney.png, piedra_oscura_kenney.png, muro_arena_kenney.png,
+  muro_piedra_kenney.png, agua_verde_kenney.png: "Retro Textures Fantasy" de Kenney (kenney.nl), CC0.
+- nieve_kenney.png: baldosa de nieve de "Tiny Ski" de Kenney, CC0.
+- sprites/deco/kenney/*.png: decoración de "Tiny Town", "Tiny Dungeon", "Tiny Ski" y "Pixel Platformer"
+  de Kenney, CC0 (ampliadas x4 sin suavizado).
+- ui/hud/*.png: iconos del HUD de "Tiny Dungeon" y "Tiny Battle" de Kenney, CC0.
+- ui/gacha/ (partículas star, light, magic, twirl, spark, circle): "Particle Pack" de Kenney, CC0.
+- ui/gacha/huevo_*.png: Digihuevo en pixel art generado dentro del proyecto (sin licencia externa).
+Fuente usada: copia de los packs de Kenney en github.com/shorepine/kenney. Licencia CC0 1.0:
+https://creativecommons.org/publicdomain/zero/1.0/ (no exige atribución; se deja por claridad).
