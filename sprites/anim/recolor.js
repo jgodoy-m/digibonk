@@ -18,6 +18,7 @@ const { chromium } = require('playwright');
     const load = src => new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => no(new Error(src)); im.src = src; });
     const res = [];
     for (const key of SEASONS.adventure.chars){
+      if (key === 'agumon' || key === 'gabumon') continue;   // sprites nuevos: sus skins se van a rehacer
       for (let st = 0; st <= EVO_LINE[key].length; st++){
         if (only.length && !only.includes(key + '_' + st)) continue;
         const base = name(st ? EVO_LINE[key][st - 1].sprite : CHARS[key].sprite);
