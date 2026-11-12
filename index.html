@@ -2031,6 +2031,43 @@ body.is-touch #skillBar{bottom:176px!important}
   #tJoy{width:120px;height:120px;margin:-60px 0 0 -60px;--home-b:118px}
   body.is-touch #skillBar{bottom:252px!important}
 }
+
+/* ===================== Assets del HUD de Jaime (ui/hud/*.webp) ===================== */
+.hic.art{width:20px!important;height:20px!important;image-rendering:auto!important;filter:drop-shadow(0 1px 1px rgba(0,0,0,.6))}
+.hud-chips .chip .hic.art,#hudChips .hic.art{margin:-3px 0}
+#hudChips .c-emb{color:#ffd77a}
+.hud-portrait:not([class*="fr-"]){overflow:visible!important;box-shadow:none!important;background:none!important}
+.hud-ring{position:absolute;pointer-events:none;z-index:2;max-width:none;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
+.hud-portrait .hud-lvl{z-index:3}
+#hud{left:26px!important;top:26px!important}.hud-card{padding-left:16px!important}.hud-main{margin-left:10px}
+#pimg{transition:transform .3s}
+#xpTxt{top:126px!important;left:26px!important}#hudEmb{top:156px;left:26px}
+@media (max-width:760px){#xpTxt{top:84px!important;left:12px!important}#hudEmb{top:110px;left:12px}}
+#hudEmb{position:fixed;left:18px;top:150px;display:flex;gap:4px;pointer-events:none;z-index:5}
+#hudEmb:empty{display:none}
+#hudEmb img{width:40px;height:auto;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5));animation:embIn .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes embIn{from{transform:scale(.2) rotate(-20deg);opacity:0}}
+.lv3-art{width:100%;max-width:200px;height:auto;margin:2px 0 4px;filter:drop-shadow(0 6px 12px rgba(0,0,0,.45));image-rendering:auto}
+.lv3-card.rare .lv3-art{filter:drop-shadow(0 0 14px #c792ff)}
+/* Bonk: botón dibujado; el anillo de progreso queda por fuera */
+#bonkBar{width:104px!important;height:104px!important}
+#bonkBar::before{inset:6px!important;background:url(ui/hud/bonk.webp) center/contain no-repeat!important;box-shadow:none!important;border-radius:0!important}
+#bonkBar.ready::before{background:url(ui/hud/bonk_listo.webp) center/contain no-repeat!important}
+#bonkTxt{top:auto!important;bottom:-20px!important;height:auto!important;flex-direction:row!important;gap:5px!important;font-size:11px!important;
+  padding:2px 9px;border-radius:9px;background:var(--h-surf);left:50%!important;right:auto!important;transform:translateX(-50%);white-space:nowrap;box-shadow:var(--h-elev)}
+#bonkTxt small{font-size:11px!important}
+#bonkBar.ready #bonkTxt{color:#2a1200!important;background:#ffcf73}
+/* Barra del jefe dibujada */
+#bossbar{width:min(560px,80vw)!important;height:auto!important;aspect-ratio:900/111;background:none!important;box-shadow:none!important;overflow:visible!important}
+#bossbar::after{content:"";position:absolute;inset:0;background:url(ui/hud/jefe_barra.webp) center/100% 100% no-repeat;pointer-events:none;z-index:2}
+#bosshp{position:absolute!important;left:12%;top:41%;height:38%!important;max-width:76%;border-radius:3px!important;z-index:1;
+  background:linear-gradient(180deg,#ff6b8a,#c2185b)!important;box-shadow:0 0 10px rgba(255,80,120,.6)}
+#bossbar::before{top:-16px!important}
+@media (max-width:760px){
+  #hudEmb{top:104px;left:10px}#hudEmb img{width:30px}
+  #bonkBar{width:84px!important;height:84px!important}
+  .lv3-art{max-width:120px}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2041,7 +2078,7 @@ body.is-touch #skillBar{bottom:176px!important}
 <canvas id="menubg" width="320" height="180"></canvas>
 <div id="menuart"><div class="stars"></div></div>
 <div id="hud"><div class="hud-card">
-  <div class="hud-portrait" id="hudPortrait"><img id="pimg" alt=""><span class="hud-lvl" id="hudLvl">1</span></div>
+  <div class="hud-portrait" id="hudPortrait"><img id="pimg" alt=""><img id="pring" class="hud-ring" alt=""><span class="hud-lvl" id="hudLvl">1</span></div>
   <div class="hud-main">
     <div class="hud-name" id="hudName">Gabumon</div>
     <div class="hud-title" id="hudTitle"></div>
@@ -2049,6 +2086,7 @@ body.is-touch #skillBar{bottom:176px!important}
     <div class="hud-chips"><span class="chip" id="hudKillsChip">☠ <b id="hudKills">0</b></span><span class="chip" id="hudDash">Dash listo</span></div>
   </div>
 </div></div>
+<div id="hudEmb"></div>
 <div id="hudTop">
   <div id="hudZone"></div>
   <div id="timer">5:00</div>
@@ -2869,7 +2907,7 @@ function setHud(v){
   const d = v ? '' : 'none';
   document.getElementById('menubg').style.display = 'none';
   document.getElementById('menuart').style.display = v ? 'none' : 'block';
-  for (const id of ['hud', 'hudTop', 'timer', 'xp', 'xpTrack', 'xpTxt', 'combo', 'bossbar', 'prompt', 'minimap', 'hudSummon']) document.getElementById(id).style.display = d;
+  for (const id of ['hud', 'hudTop', 'timer', 'xp', 'xpTrack', 'xpTxt', 'combo', 'bossbar', 'prompt', 'minimap', 'hudSummon', 'hudEmb']) document.getElementById(id).style.display = d;
   if (!v) document.getElementById('hurt').style.opacity = 0;
 }
 // Barra de estadística (0-100%)
@@ -4909,7 +4947,7 @@ function openUpgrades(){
           <span class="lv3-key">${i + 1}</span>
           ${c.skill && !c.lv ? '<span class="lv3-new">NUEVO</span>' : ''}
           <span class="lv3-tag">${c.evo ? '★ Evolución' : c.skill ? (c.lv ? 'Mejora' : 'Nueva habilidad') : (c.rare ? '◆ Rara · ' : '') + (cat[c.k] || 'Mejora')}</span>
-          <span class="lv3-ic">${svgIcon(c.evo || c.skill || c.k)}</span>
+          ${!c.skill && !c.evo && CARD_ART[c.t] ? `<img class="lv3-art" src="ui/hud/carta_${CARD_ART[c.t]}.webp" alt="">` : `<span class="lv3-ic">${svgIcon(c.evo || c.skill || c.k)}</span>`}
           <b>${c.name || c.t}</b>
           <p>${c.d || ''}</p>
           ${c.evo ? '<span class="lv3-pips pasiva">EVO · nivel 4</span>' : c.skill ? `<span class="lv3-pips">${[1, 2, 3].map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : (c.rare ? '<span class="lv3-pips pasiva rare">Rara · efecto doble</span>' : '<span class="lv3-pips pasiva">Pasiva</span>')}
@@ -5278,7 +5316,12 @@ function updateHUD(){
   document.getElementById('hudZone').textContent = `${mapDef().name} · ${zoneDef().name} · ${g.mode === 'surv' ? 'Oleada ' + (g.wave || 1) : 'Pantalla ' + g.zone + '/' + zonesOf().length}`;
   // Contadores de la partida: bajas, tickets ganados y santuarios cargados (como la fila de la referencia)
   const shrinesDone = (g.shrines || []).filter(s => s.used).length;
-  document.getElementById('hudChips').innerHTML = `<span>${HUD_IC.kills}<b>${g.kills}</b></span><span class="c-tix">${HUD_IC.tix}<b>${g.tix}</b></span><span class="c-shr">${HUD_IC.shr}<b>${shrinesDone}/${(g.shrines || []).length}</b></span>`;
+  const chipKey = [g.kills, g.tix, shrinesDone, (g.shrines || []).length, (g.emblems || []).length].join('|'), chipsEl = document.getElementById('hudChips');
+  if (chipsEl.dataset.k !== chipKey){
+    chipsEl.dataset.k = chipKey;
+    chipsEl.innerHTML = `<span>${HUD_IC.kills}<b>${g.kills}</b></span><span class="c-tix">${HUD_IC.tix}<b>${g.tix}</b></span><span class="c-shr">${HUD_IC.shr}<b>${shrinesDone}/${(g.shrines || []).length}</b></span><span class="c-emb">${HUD_IC.emb}<b>${(g.emblems || []).length}/${EMBLEMS.length}</b></span>`;
+  }
+  hudRing(); hudEmblems();
   document.querySelector('.hud-hp').classList.toggle('low', p.hp < p.maxHp*0.3);
   const tt = TITLES.find(t => t.id === extra.title);
   document.getElementById('hudTitle').textContent = tt ? tt.name : '';
@@ -5325,7 +5368,7 @@ function updateHUD(){
     bb.style.display = 'block';
     const bl = (g.boss.name || 'Piedmon').toUpperCase() + ' · ' + (g.boss.def ? (g.boss.def.final ? 'JEFE FINAL' : 'JEFE DE ZONA') : 'JEFE FINAL');
     if (bb.dataset.label !== bl) bb.dataset.label = bl;
-    document.getElementById('bosshp').style.width = (100*Math.max(0, g.boss.hp)/g.boss.max) + '%';
+    document.getElementById('bosshp').style.width = (76*Math.max(0, g.boss.hp)/g.boss.max) + '%';   // 76%: ancho del hueco de la barra dibujada
   } else bb.style.display = 'none';
 }
 
@@ -5697,7 +5740,36 @@ function updateBossMechanics(dt){
 
 // Iconos del HUD: pixel art PNG de Kenney (CC0) en ui/hud/
 const hudImg = f => `<img class="hic" src="ui/hud/${f}.png" alt="">`;
-const HUD_IC = {kills: hudImg('bajas'), tix: hudImg('ticket'), shr: hudImg('santuario'), dash: hudImg('dash'), boss: hudImg('jefe')};
+const hudArt = f => `<img class="hic art" src="ui/hud/${f}.webp" alt="">`;
+const HUD_IC = {kills: hudArt('ic_bajas'), tix: hudArt('ic_ticket'), shr: hudArt('ic_santuario'), dash: hudArt('ic_dash'), emb: hudArt('ic_emblema'), boss: hudImg('jefe')};
+// Aros del retrato por etapa: hueco interior (diámetro y centro, en px sobre 256) medido en cada imagen
+const HUD_RINGS = [{d: 177, x: 127, y: 127}, {d: 164, x: 127, y: 137}, {d: 155, x: 126, y: 130}, {d: 124, x: 127, y: 126}];
+// Ilustración de cada carta de mejora pasiva
+const CARD_ART = {'Daño +20%': 'dano', 'Cadencia +15%': 'cadencia', 'Velocidad +10%': 'velocidad', '+25 vida máx. y cura': 'vida', 'Proyectil / cuchilla +1': 'proyectil',
+  'Área +20%': 'area', 'Imán +50%': 'iman', 'Probabilidad crítica +8%': 'critico', 'Daño crítico +25%': 'dano_critico', 'Robo de vida': 'robo_vida', 'Dash −20% espera': 'dash', 'Armadura +8%': 'armadura'};
+function hudRing(){
+  const el = document.getElementById('pring'); if (!el) return;
+  const cosmetic = !!frameClass();
+  const st = Math.min(3, g.ch.evolved | 0), r = HUD_RINGS[st], h = r.d*0.94;   // el hueco tapa un poco el borde del icono
+  el.style.display = cosmetic ? 'none' : 'block';
+  if (cosmetic){ document.getElementById('pimg').style.transform = ''; el.dataset.st = ''; return; }
+  if (el.dataset.st === String(st)) return;
+  el.dataset.st = st;
+  el.src = `ui/hud/marco_${st}.webp`;
+  // El aro mide siempre 1,65 veces el retrato; el icono se encoge para caber en el hueco de cada aro
+  const W = 165;
+  el.style.width = el.style.height = W + '%';
+  el.style.left = (50 - r.x/256*W) + '%';
+  el.style.top = (50 - r.y/256*W) + '%';
+  document.getElementById('pimg').style.transform = `scale(${Math.min(1, W/100*h/256).toFixed(3)})`;
+}
+function hudEmblems(){
+  const el = document.getElementById('hudEmb'); if (!el) return;
+  const key = (g.emblems || []).join(',');
+  if (el.dataset.k === key) return;
+  el.dataset.k = key;
+  el.innerHTML = (g.emblems || []).map(id => `<img src="ui/hud/emb_${id}.webp" alt="" title="${(EMBLEMS.find(e => e.id === id) || {}).name || ''}">`).join('');
+}
 /* ---------- Eventos en el mapa (cada 200 s desde el minuto 2:30) ---------- */
 function evHud(text){
   let el = document.getElementById('evHud');
