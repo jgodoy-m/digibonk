@@ -45,8 +45,8 @@ def gradient_map(src, stops):
             px[x, y] = (cr, cg, cb, a)
     return im
 
-# La línea de Agumon tiene skins de Navidad dibujadas a mano: no se regeneran aquí
-SKIP = {"agumon"}
+# Las líneas de Agumon y Gabumon tienen sprites nuevos y sus skins se van a rehacer: no se generan aquí
+SKIP = {"agumon", "gabumon"}
 
 ONLY = set(filter(None, os.environ.get("ONLY", "").split(",")))
 
