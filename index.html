@@ -5683,8 +5683,15 @@ const PLAYER_ICONS = [
   {id:'agumon', name:'Agumon'}, {id:'gabumon', name:'Gabumon'}, {id:'biyomon', name:'Biyomon'}, {id:'tentomon', name:'Tentomon'},
   {id:'palmon', name:'Palmon'}, {id:'gomamon', name:'Gomamon'}, {id:'patamon', name:'Patamon'}, {id:'gatomon', name:'Gatomon'}
 ].map(x => ({...x, src: 'ui/jugador/' + x.id + '.png'}));
+// Iconos de skin: se desbloquean al tener la skin en alguna etapa (los de skins ocultas solo se ven al tenerlas)
+const SKIN_ICONS = [
+  {key:'agumon', skin:'galactico'}, {key:'agumon', skin:'festival'}, {key:'agumon', skin:'reno'}, {key:'agumon', skin:'variocolor'}
+].map(x => ({...x, id: x.key + '_' + x.skin, src: 'ui/jugador/' + x.key + '_' + x.skin + '.png'}));
+function skinIconName(ic){ const sk = SKINS.find(s => s.id === ic.skin); return CHARS[ic.key].name + ' ' + (sk ? sk.name : ic.skin); }
+function ownsSkinIcon(ic){ return ownsAnyStage(ic.key, ic.skin); }
+function skinIconFor(key, skin){ return SKIN_ICONS.find(x => x.key === key && x.skin === skin) || null; }
 function normAv(v){ return v || ''; }
-function avatarIcon(){ const id = normAv(localStorage.getItem('digibonk3d-avatar')); return AVATAR_KIDS.find(x => x.id === id) || PLAYER_ICONS.find(x => x.id === id) || null; }
+function avatarIcon(){ const id = normAv(localStorage.getItem('digibonk3d-avatar')); return AVATAR_KIDS.find(x => x.id === id) || PLAYER_ICONS.find(x => x.id === id) || SKIN_ICONS.find(x => x.id === id && ownsSkinIcon(x)) || null; }
 function avatarSrc(){ const ic = avatarIcon(); return ic ? ic.src : headUrl(spriteOf(avatarKey(), false)); }
 function avatarKey(){ const k = localStorage.getItem('digibonk3d-avatar'); return CHARS[k] ? k : selectedKey; }
 // Tarjeta de entrenador: una sola pantalla. Pasar el ratón previsualiza; clic equipa; el nombre se edita en la propia tarjeta
@@ -5788,7 +5795,8 @@ function openCustomizer(){
   const card = (sel, v, inner, locked, tier) => `<button type="button" class="cz-tile cz-t-${tier || 'c'}${sel ? ' sel' : ''}${locked ? ' locked' : ''}" ${locked ? 'disabled' : ''} data-v="${v}">${inner}${locked ? '<i class="cz-lock">🔒</i>' : ''}</button>`;
   const grid = () => {
     if (tab === 'av') return AVATAR_KIDS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av"><img src="${ic.src}" alt=""></span><b>${ic.name}</b>`, false, 'c')).join('');
-    if (tab === 'dg') return PLAYER_ICONS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av">${ic.src ? `<img src="${ic.src}" alt="">` : sprEl(spriteWith(ic.id, false, 'clasico'), 44)}</span><b>${ic.name}</b>`, false, 'c')).join('');
+    if (tab === 'dg') return PLAYER_ICONS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av">${ic.src ? `<img src="${ic.src}" alt="">` : sprEl(spriteWith(ic.id, false, 'clasico'), 44)}</span><b>${ic.name}</b>`, false, 'c')).join('')
+      + SKIN_ICONS.filter(ic => ownsSkinIcon(ic) || !(SKINS.find(s => s.id === ic.skin) || {}).hidden).map(ic => { const ok = ownsSkinIcon(ic); return card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av"><img src="${ic.src}" alt=""${ok ? '' : ' style="filter:grayscale(1) brightness(.45)"'}></span><b>${skinIconName(ic)}</b>`, !ok, ok ? 'r' : 'c'); }).join('');
     if (tab === 'frame') return [{id: '', name: 'Sin marco', tier: 'c'}, ...FRAMES.filter(f => !f.weekly && !f.seasonal)].map(f => {
       const ok = ownsFrame(f.id);
       return card(pFrame === f.id, 'fr:' + f.id, `<span class="cz-fr">${f.id ? `<span class="rw-frame fr-${f.id}"></span>` : '<span class="cz-none">∅</span>'}</span><b>${ok ? f.name : '???'}</b><small>${ok ? (f.id ? rar(f.tier) : 'Sin marco') : 'Gacha'}</small>`, !ok, ok ? f.tier : 'c');
@@ -5800,7 +5808,7 @@ function openCustomizer(){
     }).join('');
   };
   const preview = () => {
-    const ic = AVATAR_KIDS.find(x => x.id === pAv) || PLAYER_ICONS.find(x => x.id === pAv);
+    const ic = AVATAR_KIDS.find(x => x.id === pAv) || PLAYER_ICONS.find(x => x.id === pAv) || SKIN_ICONS.find(x => x.id === pAv);
     const img = ic ? ic.src : headUrl(spriteOf(avatarKey(), false));
     const t = pTitle ? TITLES.find(x => x.id === pTitle) : null;
     return `<div class="cz-prev"><div class="hud-portrait pf-av${pFrame ? ' fr-' + pFrame : ''}"><img src="${img}" alt=""></div><span class="cz-ttl">${t ? t.name : 'Sin título'}</span></div>`;
@@ -6183,7 +6191,7 @@ function showGacha(){
   const prevKey = trPrevIdx >= 0 ? chars[trPrevIdx] : fk;
   const skinId = prevKey === fk ? feat.id : 'clasico';
   const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const portrait = k => { const ic = PLAYER_ICONS.find(x => x.id === k); return ic ? ic.src : ''; };
+  const portrait = (k, sk) => { const ic = (sk && skinIconFor(k, sk)) || PLAYER_ICONS.find(x => x.id === k); return ic ? ic.src : ''; };
   const partner = {agumon:'tai', gabumon:'matt', biyomon:'sora', tentomon:'izzy', palmon:'mimi', gomamon:'joe', patamon:'tk', gatomon:'kari'}[prevKey] || '';
   const wallet = usableTickets(gxBanner);
   const frameOpts = FRAMES.filter(f => !f.weekly && !f.seasonal);
@@ -6200,7 +6208,7 @@ function showGacha(){
   ];
   const tile = r => `<button type="button" class="treasure-card tier-${r.tier}" data-info="${esc(r.name)}" data-tier="${r.tier}"><span class="tc-shine"></span><span class="tc-art">${r.icon}</span><strong>${esc(r.name)}</strong><small>${esc(TIER_NAME[r.tier])}</small></button>`;
   const featName = prevKey === fk ? `${CHARS[fk].name} ${FEATURED_NAME[feat.id]}` : `${CHARS[prevKey].name} · Vista previa`;
-  const grand = `<div class="tr11-grand"><div class="tr11-grand-inner"><div class="tr11-rays"></div><div class="tr11-digital-orbit"></div><div class="tr12-grand-portrait" aria-hidden="true">${portrait(prevKey) ? `<img src="${portrait(prevKey)}" alt="">` : ''}</div><div class="tr11-feature-art">${sprEl(spriteWith(prevKey, false, skinId), 164, 'tr11-hero-spr')}</div>${partner ? `<div class="tr12-partner" aria-hidden="true"><img src="ui/jugador/${partner}.png" alt=""></div>` : ''}<div class="tr11-grand-sub"><span>✦ PREMIO DESTACADO ✦</span><b>${esc(featName)}</b><small>La selección de personaje es solo una vista previa</small></div></div></div>`;
+  const grand = `<div class="tr11-grand"><div class="tr11-grand-inner"><div class="tr11-rays"></div><div class="tr11-digital-orbit"></div><div class="tr12-grand-portrait" aria-hidden="true">${portrait(prevKey, skinId) ? `<img src="${portrait(prevKey, skinId)}" alt="">` : ''}</div><div class="tr11-feature-art">${sprEl(spriteWith(prevKey, false, skinId), 164, 'tr11-hero-spr')}</div>${partner ? `<div class="tr12-partner" aria-hidden="true"><img src="ui/jugador/${partner}.png" alt=""></div>` : ''}<div class="tr11-grand-sub"><span>✦ PREMIO DESTACADO ✦</span><b>${esc(featName)}</b><small>La selección de personaje es solo una vista previa</small></div></div></div>`;
   const fighters = chars.map((k, i) => `<button type="button" class="tr11-fighter${i === trPrevIdx ? ' active' : ''}" data-index="${i}" aria-pressed="${i === trPrevIdx}"><span class="tr12-portrait">${portrait(k) ? `<img class="tr12-portrait-img" src="${portrait(k)}" alt="" loading="lazy">` : sprEl(spriteWith(k, false, 'clasico'), 48)}</span><span class="tr12-fighter-text"><b>${esc(CHARS[k].name)}</b><small>Vista previa</small></span></button>`).join('');
   const oddsRows = [['l', 5], ['e', 4], ['r', 3], ['c', 2]].map(([t, n]) => `<div class="gx2-odd"><i style="color:${GX_TIER_COL[t]}">${'★'.repeat(n)}</i><span>${esc(TIER_NAME[t])}</span><b>${TIER_ODDS[t].toFixed(2)}%</b></div>`).join('');
   const pity = pityCount(gxBanner), pityMax = pityAt(gxBanner);
