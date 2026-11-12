@@ -3082,19 +3082,12 @@ function showStarter(){
 // Filtro y búsqueda de la pantalla de selección
 let pickQuery = '';
 let pickStage = 0, pickStageFor = null;   // etapa de la línea que se previsualiza y se viste
-// Digimon en preparación: se ven en el selector como bloqueados hasta que estén terminados
+// Compañeros jugables en preparación: se ven en el selector como bloqueados hasta que estén terminados
 const COMING_SOON = [
   {name:'Leomon',       sprite:'sprites/adventure/leomon.png',      role:'Compañero · cuerpo a cuerpo'},
   {name:'Hagurumon',    sprite:'sprites/adventure/hagurumon.png',   role:'Compañero · torretas'},
   {name:'Frigimon',     sprite:'sprites/adventure/frigimon.png',    role:'Compañero · control'},
-  {name:'Wizardmon',    sprite:'sprites/adventure/wizardmon.png',   role:'Compañero · magia de área'},
-  {name:'Elecmon',      sprite:'sprites/adventure/elecmon.png',     role:'Encargado del Laboratorio'},
-  {name:'Piximon',      sprite:'sprites/adventure/piximon.png',     role:'Entrenador en el mapa'},
-  {name:'Numemon dorado', sprite:'sprites/numemon.png',             role:'Evento de caza', f:'sepia(1) saturate(4) hue-rotate(5deg) brightness(1.15)'},
-  {name:'Mekanorimon y Tankmon', sprite:'sprites/adventure/mekanorimon.png', role:'Enemigos de la zona 3'},
-  {name:'MetalEtemon',  sprite:'sprites/adventure/metaletemon.png', role:'Fase 2 de Etemon'},
-  {name:'VenomMyotismon', sprite:'sprites/adventure/venommyotismon.png', role:'Fase 2 de Myotismon'},
-  {name:'Apocalymon',   sprite:'sprites/adventure/apocalymon.png',  role:'Jefe secreto'}
+  {name:'Wizardmon',    sprite:'sprites/adventure/wizardmon.png',   role:'Compañero · magia de área'}
 ];
 function pickIsEvolved(k){ return !!loadJSON('digibonk3d-evo', {})[k]; }
 function pickProgress(){
