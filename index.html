@@ -2003,6 +2003,33 @@ body:has(.ga) #topbar{display:none!important}
   #evHud{top:110px!important;font-size:12px!important;white-space:normal!important;max-width:90vw;text-align:center}
 }
 #pimg.icon{width:100%!important;height:100%!important;border-radius:50%;object-fit:cover;image-rendering:auto}
+/* Controles táctiles (solo en pantallas táctiles, durante la partida) */
+#touchCtl{display:none}
+body.is-touch #touchCtl.on{display:block}
+#tZone{position:fixed;left:0;bottom:0;width:50vw;height:55vh;z-index:6;touch-action:none;-webkit-user-select:none;user-select:none}
+#tJoy{position:absolute;width:132px;height:132px;margin:-66px 0 0 -66px;border-radius:50%;pointer-events:none;
+  --home-b:22px;background:radial-gradient(circle,rgba(14,18,32,.15),rgba(14,18,32,.45));box-shadow:inset 0 0 0 2px rgba(255,255,255,.25),0 4px 16px rgba(0,0,0,.25);opacity:.75;transition:opacity .15s}
+#tJoy.act{opacity:1;transition:none}
+#tKnob{position:absolute;left:50%;top:50%;width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;
+  background:radial-gradient(circle at 50% 35%,#6aa8ff,#2c4f9e);box-shadow:0 0 0 3px rgba(255,255,255,.4),0 4px 10px rgba(0,0,0,.45)}
+.t-btn{position:fixed;z-index:7;display:grid;place-items:center;width:62px;height:62px;padding:0;border:0;border-radius:50%;touch-action:none;
+  -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;cursor:pointer;
+  background:rgba(14,18,32,.62);color:#fff;font:900 11px var(--h-font,system-ui);letter-spacing:.5px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.28),0 4px 14px rgba(0,0,0,.35)}
+.t-btn:active,.t-btn.down{transform:scale(.93);background:rgba(60,90,170,.8)}
+.t-btn.cd{opacity:.45}
+#tDash{right:140px;bottom:34px}
+#tJump{right:40px;bottom:140px}
+#tPause{width:42px;height:42px;top:16px;left:calc(50% + 145px);font-size:14px}
+body.is-touch #bonkBar{pointer-events:auto!important;touch-action:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+body.is-touch #prompt{pointer-events:auto;touch-action:manipulation;cursor:pointer;padding:9px 16px;z-index:8}
+body.is-touch #skillBar{bottom:176px!important}
+@media (max-width:760px){
+  #tDash{right:102px;bottom:118px;width:58px;height:58px}
+  #tJump{right:26px;bottom:176px;width:54px;height:54px}
+  #tPause{left:auto;right:112px;top:12px;width:38px;height:38px}
+  #tJoy{width:120px;height:120px;margin:-60px 0 0 -60px;--home-b:118px}
+  body.is-touch #skillBar{bottom:252px!important}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2033,6 +2060,12 @@ body:has(.ga) #topbar{display:none!important}
 <canvas id="edgeCv"></canvas>
 <div id="skillBar"></div>
 <div id="bonkBar" style="display:none"><div id="bonkFill"></div><span id="bonkTxt">BONK 0%</span></div>
+<div id="touchCtl">
+  <div id="tZone"><div id="tJoy"><div id="tKnob"></div></div></div>
+  <button type="button" class="t-btn" id="tDash" aria-label="Dash">DASH</button>
+  <button type="button" class="t-btn" id="tJump" aria-label="Saltar">SALTO</button>
+  <button type="button" class="t-btn" id="tPause" aria-label="Pausa">❚❚</button>
+</div>
 <div id="xpTxt"></div>
 <div id="overlay"></div>
 <div id="topbar"></div>
@@ -2601,12 +2634,91 @@ addEventListener('keydown', e => {
 });
 addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
 
+// ---------- Controles táctiles (móvil) ----------
+// Joystick flotante en la mitad izquierda (aparece donde se apoya el pulgar), botones de Dash y Salto,
+// el círculo de Bonk se puede tocar y el aviso del cofre también. En escritorio con ratón no se muestran.
+const tMove = {x: 0, z: 0, m: 0};
+function isTouchUI(){ return document.body.classList.contains('is-touch'); }
+if (matchMedia('(pointer:coarse)').matches) document.body.classList.add('is-touch');
+addEventListener('touchstart', () => document.body.classList.add('is-touch'), {passive: true, capture: true});
+// Si se vuelve a usar el ratón de verdad (portátil táctil), se esconden de nuevo
+addEventListener('pointermove', e => { if (e.pointerType === 'mouse' && (e.movementX || e.movementY) && !matchMedia('(pointer:coarse)').matches) document.body.classList.remove('is-touch'); }, {passive: true});
+const tZone = document.getElementById('tZone'), tJoy = document.getElementById('tJoy'), tKnob = document.getElementById('tKnob');
+let tJoyId = null, tJoyC = {x: 0, y: 0};
+function tJoyHome(){
+  const r = tZone.getBoundingClientRect();
+  const R = tJoy.offsetWidth / 2 || 60;
+  tJoy.style.left = (R + 22) + 'px';
+  tJoy.style.top = (r.height - R - (parseFloat(getComputedStyle(tJoy).getPropertyValue('--home-b')) || 22)) + 'px';
+  tKnob.style.transform = '';
+  tJoy.classList.remove('act');
+}
+function touchReset(){
+  tMove.x = tMove.z = tMove.m = 0;
+  tJoyId = null;
+  tJoyHome();
+  document.querySelectorAll('.t-btn.down').forEach(b => b.classList.remove('down'));
+}
+function tJoyMove(e){
+  const R = tJoy.offsetWidth / 2 || 60;
+  let dx = e.clientX - tJoyC.x, dy = e.clientY - tJoyC.y;
+  const d = Math.hypot(dx, dy), max = R * 0.75;
+  if (d > max){ dx *= max/d; dy *= max/d; }
+  tKnob.style.transform = `translate(${dx}px,${dy}px)`;
+  const m = Math.min(d, max) / max, dead = 0.15;
+  if (m < dead){ tMove.x = tMove.z = tMove.m = 0; return; }
+  tMove.x = dx / max; tMove.z = dy / max;
+  tMove.m = Math.min(1, (m - dead) / (1 - dead) * 1.2);
+}
+tZone.addEventListener('pointerdown', e => {
+  if (tJoyId !== null || state !== 'play') return;
+  e.preventDefault();
+  tJoyId = e.pointerId;
+  try { tZone.setPointerCapture(e.pointerId); } catch(err){}
+  const r = tZone.getBoundingClientRect();
+  tJoyC = {x: e.clientX, y: e.clientY};
+  tJoy.style.left = (e.clientX - r.left) + 'px';
+  tJoy.style.top = (e.clientY - r.top) + 'px';
+  tJoy.classList.add('act');
+  tJoyMove(e);
+  audioInit();
+});
+tZone.addEventListener('pointermove', e => { if (e.pointerId === tJoyId){ e.preventDefault(); tJoyMove(e); } });
+for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture']) tZone.addEventListener(ev, e => { if (e.pointerId === tJoyId) touchReset(); });
+// Botones: actúan al apoyar el dedo (sin esperar al "click", que en móvil llega tarde)
+function tBtn(id, fn){
+  const b = document.getElementById(id);
+  b.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); b.classList.add('down'); audioInit(); fn(); });
+  for (const ev of ['pointerup', 'pointercancel', 'pointerleave']) b.addEventListener(ev, () => b.classList.remove('down'));
+  b.addEventListener('contextmenu', e => e.preventDefault());
+}
+tBtn('tDash', () => { if (state === 'play') tryDash(); });
+tBtn('tJump', () => { if (state === 'play' && g && g.p.y === 0) g.p.vy = 11; });
+tBtn('tPause', () => { if (state === 'play') pauseGame(); });
+document.getElementById('bonkBar').addEventListener('pointerdown', e => {
+  if (!isTouchUI() || state !== 'play') return;
+  e.preventDefault(); bonkRelease();
+});
+document.getElementById('prompt').addEventListener('pointerdown', e => {
+  if (!isTouchUI() || state !== 'play' || !g || !g.nearChest) return;
+  e.preventDefault(); openChest(g.nearChest);
+});
+const touchCtlEl = document.getElementById('touchCtl'), tDashEl = document.getElementById('tDash');
+let tWasOn = false;
+function touchCtlSync(){
+  const on = state === 'play' && !!g && !g.evoAnim;
+  if (on !== tWasOn){ touchCtlEl.classList.toggle('on', on); tWasOn = on; if (!on) touchReset(); else tJoyHome(); }
+  if (on) tDashEl.classList.toggle('cd', g.dashCd > 0 || g.dash > 0);
+}
+addEventListener('resize', () => { if (tJoyId === null) tJoyHome(); });
+
 // ---------- Pausa ----------
 const pauseEl = document.getElementById('pause');
 function pauseGame(){
   if (state !== 'play' || !g) return;
   state = 'paused';
   for (const k in keys) keys[k] = false;   // que ninguna tecla quede "pulsada" al volver
+  touchReset();
   unlockMouse();
   showPause();
 }
@@ -4052,6 +4164,8 @@ function update(dt){
   if (keys['s'] || keys['arrowdown'])  mz += 1;
   if (keys['a'] || keys['arrowleft'])  mx -= 1;
   if (keys['d'] || keys['arrowright']) mx += 1;
+  let amt = 1;   // joystick táctil: velocidad proporcional a cuánto se empuja
+  if (!mx && !mz && tMove.m > 0){ mx = tMove.x; mz = tMove.z; amt = tMove.m; }
   g.dashCd = Math.max(0, g.dashCd - dt);
   if (g.dash > 0){
     g.dash -= dt;
@@ -4063,8 +4177,8 @@ function update(dt){
     const wx = mx*cy + mz*sy, wz = -mx*sy + mz*cy;
     const L = Math.hypot(wx, wz);
     const k = waterSlow(p.x, p.z) * (g.inSlow ? 0.5 : 1);   // estanque y zona de concierto de Etemon frenan
-    p.x += wx/L * p.speed * k * dt;
-    p.z += wz/L * p.speed * k * dt;
+    p.x += wx/L * p.speed * k * amt * dt;
+    p.z += wz/L * p.speed * k * amt * dt;
     g.dir = {x: wx/L, z: wz/L};
   }
   // Salto: gravedad simple
@@ -4889,6 +5003,7 @@ let camYaw = 0, camPitch = 0.9, camDist = 19.4;
 const canvasEl = renderer.domElement;
 // Algunos entornos (p. ej. paneles embebidos) rechazan el bloqueo: se ignora el error y el juego sigue
 function lockMouse(onFail){
+  if (isTouchUI() || !canvasEl.requestPointerLock) return;   // en móvil no hay ratón que capturar
   const r = canvasEl.requestPointerLock();
   if (r && r.catch) r.catch(() => { if (onFail) onFail(); });
 }
@@ -5113,7 +5228,7 @@ function updatePrompt(){
   el.style.display = 'block';
   el.style.left = ((v.x + 1) / 2 * innerWidth) + 'px';
   el.style.top = ((1 - v.y) / 2 * innerHeight) + 'px';
-  el.innerHTML = '<kbd>E</kbd>Abrir cofre';
+  el.innerHTML = isTouchUI() ? 'Toca para abrir el cofre' : '<kbd>E</kbd>Abrir cofre';
 }
 function updateHUD(){
   const p = g.p;
@@ -5170,7 +5285,7 @@ function updateHUD(){
     bf.style.width = Math.min(100, g.bonk).toFixed(1) + '%';
     bbar.classList.toggle('ready', g.bonk >= 100);
     bbar.style.setProperty('--p', Math.min(100, g.bonk).toFixed(1));
-    document.getElementById('bonkTxt').innerHTML = g.bonk >= 100 ? 'BONK<small>pulsa Q</small>' : `BONK<small>${Math.floor(g.bonk)}%</small>`;
+    document.getElementById('bonkTxt').innerHTML = g.bonk >= 100 ? (isTouchUI() ? 'BONK<small>¡toca!</small>' : 'BONK<small>pulsa Q</small>') : `BONK<small>${Math.floor(g.bonk)}%</small>`;
   }
   // Daño recibido: activa la viñeta roja (se desvanece en frame)
   if (g.lastHp !== undefined && p.hp < g.lastHp - 0.01){ hurtT = 0.45; sfx('hurt'); }
@@ -7070,6 +7185,7 @@ function frame(now){
       if (g.aura){ g.aura.group.position.set(g.p.x, terrainH(g.p.x, g.p.z) + g.p.y, g.p.z); g.aura.update(g.t); }
     }
   }
+  touchCtlSync();
   animateEvo(dt);
   updateFx(dt);
   updateWater(dt);
