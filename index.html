@@ -2076,9 +2076,9 @@ body.is-touch #skillBar{bottom:176px!important}
   --ps-hero:radial-gradient(60% 55% at 50% 55%,rgba(61,180,255,.22),transparent 72%),linear-gradient(180deg,#e9f2ff,#f7faff);
 }
 html[data-theme=oscuro] .ps{
-  --ps-bg:#071531; --ps-card:#0c1d42; --ps-sunk:#081734; --ps-line:#1b3666; --ps-line2:#25579a;
-  --ps-text:#eaf3ff; --ps-mute:#89a6cc; --ps-soft:#b7d0ee; --ps-acc:#3de0ff; --ps-acc2:#7fd0ff;
-  --ps-head:linear-gradient(90deg,#1554b8,#0c3a86); --ps-sel:#ffd23f; --ps-selbg:rgba(255,210,63,.12); --ps-shadow:none;
+  --ps-bg:transparent; --ps-card:var(--ui-card); --ps-sunk:rgba(4,16,46,.7); --ps-line:var(--ui-card-line); --ps-line2:#4a8fd6;
+  --ps-text:var(--ui-text); --ps-mute:var(--ui-muted); --ps-soft:#cfe4fa; --ps-acc:#3de0ff; --ps-acc2:#7fd0ff;
+  --ps-head:linear-gradient(90deg,#6ee2f4,#147fbf); --ps-sel:var(--ui-gold); --ps-selbg:rgba(255,213,79,.14); --ps-shadow:inset 0 2px #b9faff22;
   --ps-hero:radial-gradient(60% 55% at 50% 55%,rgba(61,224,255,.25),transparent 72%),linear-gradient(180deg,#0d2c66,#06143a);
 }
 #overlay:not(.menu-mode)>.picker-screen.ps{width:min(1480px,98vw)!important;height:calc(100dvh - var(--ui-top) - var(--ui-bot))!important;max-height:none!important;
@@ -2292,6 +2292,20 @@ html[data-theme=oscuro] .ps-type.bad .ps-lbl{color:#ff9a8a}
   .ps-foot{position:sticky;bottom:0;z-index:5;margin:0 -14px -16px;padding:12px 14px;background:linear-gradient(180deg,transparent,var(--ps-bg) 30%)}
   #overlay:not(.menu-mode) .ps-foot .ps-go{min-width:0;width:100%}
 }
+
+/* Tema oscuro = los colores de siempre de los menús: panel azul con borde cian, botón Volver original y títulos dorados */
+html[data-theme=oscuro] #overlay:not(.menu-mode)>.picker-screen.ps{background:linear-gradient(150deg,#256cbb 0%,#082f77 49%,#061c4c 100%)!important;border:3px solid #9aefff!important;border-radius:8px!important;
+  box-shadow:inset 0 3px #b5ffff76,0 8px 0 #03163d,0 0 22px #21afff7c!important;outline:2px solid #267dbb!important;outline-offset:3px}
+html[data-theme=oscuro] #overlay:not(.menu-mode) .ps .g-back{background:#06102b!important;color:#dff8ff!important;border:2px solid var(--dv-cyan)!important;border-radius:0!important;
+  clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px)!important;font:700 12px 'Orbitron',system-ui,sans-serif;letter-spacing:1px;box-shadow:none!important}
+html[data-theme=oscuro] #overlay:not(.menu-mode) .ps .g-back:hover{background:#12357a!important}
+html[data-theme=oscuro] #overlay .ps-top h2,html[data-theme=oscuro] #overlay .ps-id h3{color:var(--ui-gold)!important;text-shadow:0 2px 0 #06205c!important}
+html[data-theme=oscuro] .ps-hero{border:1px solid var(--ui-card-line)}
+html[data-theme=oscuro] .ps-tab.on{color:#fff;border-bottom-color:var(--ui-gold)}
+html[data-theme=oscuro] .ps-meter i{background:linear-gradient(90deg,#29b6f6,#80deea)}
+html[data-theme=oscuro] .ps-theme{background:rgba(4,16,46,.7)}
+html[data-theme=oscuro] .ps-theme button.on{background:linear-gradient(#ffe784,#ffad37);color:#372000}
+@media (max-width:760px){html[data-theme=oscuro] .ps-foot{background:linear-gradient(180deg,#061c4c00,#061c4cf2 30%)}}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
