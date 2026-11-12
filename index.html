@@ -5685,7 +5685,8 @@ const PLAYER_ICONS = [
 ].map(x => ({...x, src: 'ui/jugador/' + x.id + '.png'}));
 // Iconos de skin: se desbloquean al tener la skin en alguna etapa (los de skins ocultas solo se ven al tenerlas)
 const SKIN_ICONS = [
-  {key:'agumon', skin:'galactico'}, {key:'agumon', skin:'festival'}, {key:'agumon', skin:'reno'}, {key:'agumon', skin:'variocolor'}
+  {key:'agumon', skin:'galactico'}, {key:'agumon', skin:'festival'}, {key:'agumon', skin:'reno'}, {key:'agumon', skin:'variocolor'},
+  {key:'patamon', skin:'galactico'}, {key:'patamon', skin:'festival'}, {key:'patamon', skin:'reno'}, {key:'patamon', skin:'variocolor'}
 ].map(x => ({...x, id: x.key + '_' + x.skin, src: 'ui/jugador/' + x.key + '_' + x.skin + '.png'}));
 function skinIconName(ic){ const sk = SKINS.find(s => s.id === ic.skin); return CHARS[ic.key].name + ' ' + (sk ? sk.name : ic.skin); }
 function ownsSkinIcon(ic){ return ownsAnyStage(ic.key, ic.skin); }
