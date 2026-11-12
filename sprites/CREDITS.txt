@@ -1,9 +1,9 @@
 
 Sprites de Digimon (numemon, meramon, tank=Ogremon, skullgreymon, devimon): 'Digimon / Pendulum Color Mod Sprite Database' (https://dmc-sprite-database.vercel.app), sprites estilo Vital Bracelet recopilados por tero0x. Recortados y ampliados x4. La base no publica licencia; los diseños son de Bandai. Uso no comercial en este fan-game.
 
-sprites/adventure/: 120 Digimon de Digimon Adventure de la misma base (https://dmc-sprite-database.vercel.app). Autor y estilo de cada uno en sprites/adventure/indice.json (65 de tero0x en alta resolución; el resto, sprites de baja resolución de Bandai, tortoisehel, Ray y phrogmentado). Sin licencia publicada; diseños de Bandai. Uso no comercial.
+sprites/adventure/: 120 Digimon de Digimon Adventure de la misma base (https://dmc-sprite-database.vercel.app). Autor y estilo de cada uno en sprites/adventure/indice.json (60 de tero0x en alta resolución; el resto, sprites de baja resolución de Bandai, tortoisehel, Ray y phrogmentado). Sin licencia publicada; diseños de Bandai. Uso no comercial.
 
-Las 8 líneas jugables (Agumon, Gabumon, Biyomon, Tentomon, Palmon, Gomamon, Patamon y Gatomon, con todas sus digievoluciones), en sprites/anim/, sprites/adventure/ y ui/personaje_aprobado_*.png: hojas de 5 poses aportadas por Jaime (generadas con IA), convertidas con sprites/anim/importar_hoja.py. Sus skins están pendientes de rehacer: mientras no haya hoja de skin, el juego muestra el sprite base.
+Las 8 líneas jugables (Agumon, Gabumon, Biyomon, Tentomon, Palmon, Gomamon, Patamon y Gatomon, con todas sus digievoluciones), en sprites/anim/, sprites/adventure/ y ui/personaje_aprobado_*.png: hojas de 5 poses aportadas por Jaime (generadas con IA), convertidas con sprites/anim/importar_hoja.py. También Leomon, SaberLeomon, Hagurumon, Frigimon y Wizardmon (compañeros en preparación), con sus retratos en ui/jugador/. Sus skins están pendientes de rehacer: mientras no haya hoja de skin, el juego muestra el sprite base.
 
 sprites/anim/: hojas de animación (reposo, ataque y daño) montadas con los fotogramas de la misma base DMC. Las skins <digimon>_<etapa>_<skin>.png son recoloreados de esas hojas, generados con sprites/anim/recolor.js.
 
