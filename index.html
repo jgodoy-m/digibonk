@@ -1814,6 +1814,13 @@ body:has(.tr11) #hudTop{display:none!important}
 .ach-bar u{display:block;height:100%;background:#ffd54f}
 .ach-stats{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:#cdd5e6;margin-bottom:6px}
 .ach-stats b{color:#ffd54f;margin-left:4px}
+
+/* Digimon de apoyo (selector) */
+.sup-pick h3{margin:0 0 6px}
+.sup-row{display:flex;flex-wrap:wrap;gap:6px}
+.sup-btn{padding:5px 10px;border-radius:999px;border:1px solid #2c4a78;background:#0e1f3d;color:#cdd5e6;font:600 12px system-ui,sans-serif;cursor:pointer}
+.sup-btn.on{background:#ffd54f;color:#1b1300;border-color:#ffd54f}
+.sup-note{margin:6px 0 0;font-size:11px;color:#9fb3d1}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -2269,6 +2276,7 @@ addEventListener('keydown', e => {
   if (k === 'tab'){ e.preventDefault(); if (state === 'play') openMap(); else if (state === 'map') closeMap(); return; }
   if (state === 'map'){ if (k === 'escape') closeMap(); return; }
   if (k === 'q' && state === 'play'){ bonkRelease(); return; }
+  if (k === 'r' && state === 'play'){ triggerEmergency(); return; }
   if (state === 'help'){ if (k === 'escape') showSelect(); if (k === 'arrowright') tutoStep(1); if (k === 'arrowleft') tutoStep(-1); return; }
   if (state === 'gacha' || state === 'lab' || state === 'settings' || state === 'player' || state === 'collection'){ if (k === 'escape') showSelect(); return; }
   // Esc o P pausan y reanudan. Con el ratón bloqueado el navegador puede no entregar Esc:
@@ -2431,6 +2439,7 @@ let selectedKey = (() => { try { const k = localStorage.getItem('digibonk3d-last
 // Oculta/muestra el HUD de partida (el menú no debe mostrar barras ni temporizador)
 function setHud(v){
   { const shEl = document.getElementById('shrineHud'); if (shEl && !v) shEl.style.display = 'none'; }
+  if (!v) evHud(null);
   // Fuera de partida no se dibujan flechas de radar (así no quedan las de la última partida)
   if (!v){ const ec = document.getElementById('edgeCv'); if (ec){ const ectx = ec.getContext('2d'); ectx.clearRect(0, 0, ec.width, ec.height); } }
   const sb0 = document.getElementById('skillBar'); if (sb0){ sb0.style.display = v ? 'flex' : 'none'; if (!v) sb0.innerHTML = ''; }
@@ -2794,7 +2803,7 @@ function showHelp(){
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
-  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc'];
+  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc', 'digibonk3d-support'];
 function makeSaveCode(){
   const data = {};
   for (const k of SAVE_KEYS){ const v = localStorage.getItem(k); if (v !== null) data[k] = v; }
@@ -3063,7 +3072,7 @@ function showPicker(tab){
   document.getElementById('pkBack').onclick = () => showSelect();
   document.getElementById('pkStart').onclick = () => startGame(selectedKey);
   if (pickTab === 'personaje'){
-    renderPickPreview(); bindSkinStrip();
+    renderPickPreview(); bindSkinStrip(); renderSupportPick();
     overlay.querySelectorAll('.pk-stage').forEach(b => b.onclick = () => { pickStage = +b.dataset.stage; showPicker(); });
   }
 }
@@ -3102,7 +3111,7 @@ function renderPickPreview(){
         <small>#${String(idx).padStart(3, '0')} · Digimon</small>
         <h2>${stageName(k, pickStage)}</h2>
         <div class="pk2-tags">
-          <span>${ATTACK_NAME[c.kind] || c.kind}</span>
+          <span>${ATTACK_NAME[c.kind] || c.kind}</span><span title="Vacuna gana a Virus, Virus a Datos y Datos a Vacuna (+25% de daño)">${ATTR_NAME[ATTR_OF[k]] || ''}</span>
           <span>Partidas ${st.plays}</span>
           <span>Bajas ${st.kills}</span>
         </div>
@@ -3177,6 +3186,7 @@ function startGame(key){
   applySkinFx(key);
   applyLab();
   applyWeekly();
+  g.attr = ATTR_OF[key] || 'vac';
   resolveSolids(g.p, 0.5);   // aparición aleatoria: fuera de los obstáculos
   g.playerMesh = billboard(spriteOf(key, false), 2.6, false);   // sprite propio: la digievolución cambia su textura
   world.add(g.playerMesh);
@@ -3188,6 +3198,8 @@ function startGame(key){
     new THREE.MeshBasicMaterial({color: 0xfff176, transparent: true, opacity: 0.75, depthWrite: false}));
   g.hiRing.rotation.x = -Math.PI/2;
   g.sk.lastMine = {x: g.p.x, z: g.p.z};
+  initSupport();
+  evHud(null);
   world.add(g.hiRing);
   hideOverlay();
   hidePause();
@@ -3274,7 +3286,7 @@ function spawnSpecial(){
   const sp = clampArena(g.p.x + Math.cos(a)*24, g.p.z + Math.sin(a)*24, ARENA_R - 0.5);
   const hp = 900*(1 + (t - BOSS_AT)/120)*evoHp();
   const name = CHARS[pick.key].name;
-  g.enemies.push({kind: 'mini', special: true, name, sprite, mesh, shadow, x: sp[0], z: sp[1], hp: hp*diffMul('hp'), max: hp*diffMul('hp'), spd: 3.0, r: 1.9, xp: 120, dmg: 18*(1 + diffT(t)/300)*diffMul('dmg'), cd: 0});
+  g.enemies.push({kind: 'mini', special: true, attr: ATTR_OF[pick.key], name, sprite, mesh, shadow, x: sp[0], z: sp[1], hp: hp*diffMul('hp'), max: hp*diffMul('hp'), spd: 3.0, r: 1.9, xp: 120, dmg: 18*(1 + diffT(t)/300)*diffMul('dmg'), cd: 0});
   sfx('boss');
   announce('¡' + name.toUpperCase() + '!', 'Jefe especial', '#ffd54f');
 }
@@ -3522,6 +3534,8 @@ let dmgSrc = 'base';   // qué ataque está golpeando (para el resumen de fin de
 function hurt(e, dmg){
   // 12% de golpes críticos: doble daño, número naranja y sacudida ligera
   const crit = (g.critT || 0) > 0 || Math.random() < g.p.critChance;
+  if (BEATS[g.attr] === attrOf(e)) dmg *= ATTR_ADV;               // ventaja de atributo
+  dmg *= (g.evoSk && g.evoSk[dmgSrc]) || 1;                        // habilidad evolucionada
   if (crit){ dmg *= g.p.critMul; shake = Math.max(shake, 0.2); }
   e.hp -= dmg;
   g.dmgBy[dmgSrc] = (g.dmgBy[dmgSrc] || 0) + dmg;
@@ -3709,7 +3723,7 @@ function update(dt){
     const sy = Math.sin(camYaw), cy = Math.cos(camYaw);
     const wx = mx*cy + mz*sy, wz = -mx*sy + mz*cy;
     const L = Math.hypot(wx, wz);
-    const k = waterSlow(p.x, p.z);   // dentro del estanque se camina más despacio
+    const k = waterSlow(p.x, p.z) * (g.inSlow ? 0.5 : 1);   // estanque y zona de concierto de Etemon frenan
     p.x += wx/L * p.speed * k * dt;
     p.z += wz/L * p.speed * k * dt;
     g.dir = {x: wx/L, z: wz/L};
@@ -3765,6 +3779,7 @@ function update(dt){
   for (const e of g.enemies){
     if (e.frozenT > 0){ e.frozenT -= dt; continue; }   // congelado o atrapado por el Bonk: ni se mueve ni daña
     const dx = p.x - e.x, dz = p.z - e.z, d = Math.hypot(dx, dz) || 1;
+    if (e.golden){ [e.x, e.z] = clampArena(e.x - dx/d*e.spd*dt, e.z - dz/d*e.spd*dt, ARENA_R - 2); continue; }   // el Numemon dorado huye
     // Se paran a distancia de contacto (no se meten encima del jugador)
     if (d > e.r + 0.6){
       e.x += dx/d * e.spd * dt;
@@ -3773,7 +3788,7 @@ function update(dt){
     [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5);   // los enemigos también quedan dentro
     resolveSolids(e, e.r*0.8);                          // y no atraviesan casas ni vallas
     e.cd -= dt;
-    if (d < e.r + 0.8 && g.dash <= 0){ p.hp -= e.dmg * dt; shake = Math.max(shake, 0.12); }
+    if (d < e.r + 0.8 && g.dash <= 0){ p.hp -= e.dmg * foeMul(e) * dt; shake = Math.max(shake, 0.12); }
   }
 
   // Armas
@@ -3845,7 +3860,7 @@ function update(dt){
     if ((g.magnetT || 0) <= 0 && Math.random() < 0.02){ spawnMagnetDrop(e.x, e.z); g.magnetT = 45; }
     // Tickets de tirada: 25% de cada élite y 3 seguros del jefe
     if (e.kind === 'elite' && Math.random() < 0.25){ g.tix++; popText(e.x, e.z, '+1 ticket', '#3de0ff', 1); }
-    if (e.kind === 'mini'){ g.tix++; announce('¡' + e.name + ' derrotado!', '+1 ticket de tirada · cofre dorado', '#3de0ff'); spawnChestAt(e.x, e.z, true); if (!e.special) (g.minisKilled || (g.minisKilled = [])).push(e.name); }
+    if (e.kind === 'mini'){ g.tix++; announce('¡' + e.name + ' derrotado!', '+1 ticket de tirada · cofre dorado', '#3de0ff'); spawnChestAt(e.x, e.z, true); if (!e.special){ (g.minisKilled || (g.minisKilled = [])).push(e.name); grantEmblem(); } }
     if (e.kind === 'elite' && Math.random() < 0.3) spawnChestAt(e.x, e.z, true);   // 30% de las élites dejan un cofre dorado
     if (e.boss) g.tix += 3;
     world.remove(e.mesh);
@@ -3899,6 +3914,11 @@ function update(dt){
   g.gems = g.gems.filter(gm => !gm.taken);
 
   updateShrines(dt);
+  updateBossMechanics(dt);
+  updateMapEvent(dt);
+  updateSupport(dt);
+  updateEmergency(dt);
+  if (g.regen && !(g.mod && g.mod.noHeal)) p.hp = Math.min(p.maxHp, p.hp + g.regen*dt);
   // Cofres: aparecen cada 50 s (máximo 2 vivos) y dan una mejora aleatoria al pasar por encima
   g.chestT -= dt;
   g.magnetT = Math.max(0, (g.magnetT || 0) - dt);
@@ -4027,6 +4047,7 @@ function drawEdgeMarkers(){
   if (state !== 'play' || !g) return;
   const targets = g.chests.filter(ch => !ch.open && !ch.gone).map(ch => ({x: ch.x, z: ch.z, col: '#ffd54f'}));
   if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
+  if (g.ev) for (const n of g.ev.nodes || [{x: g.ev.foe.x, z: g.ev.foe.z}]) if (!n.done) targets.push({x: n.x, z: n.z, col: '#7cf29c'});
   for (const e of g.enemies) if (e.kind === 'elite' || e.kind === 'mini') targets.push({x: e.x, z: e.z, col: e.kind === 'mini' ? '#ce93d8' : '#ff7043'});
   const W = cv.width, H = cv.height, cx = W/2, cy = H/2;
   for (const t of targets){
@@ -4086,7 +4107,10 @@ function upgradeChoices(){
     pool.push({t: `${s.name} · ${lv ? 'Nivel ' + (lv + 1) : 'Nueva'}`, name: s.name, skill: id, lv, k: s.k, d: s.d, f: () => addSkill(id)});
   }
   // Las cartas desterradas en esta partida no vuelven a salir
-  return pool.filter(c => !upRes().banned.includes(upKey(c))).sort(() => Math.random() - 0.5).slice(0, 3);
+  const picks = pool.filter(c => !upRes().banned.includes(upKey(c))).sort(() => Math.random() - 0.5).slice(0, 3);
+  const evo = g.chestPick ? [] : evoSkillCards();   // si hay una evolución disponible, ocupa la primera carta
+  if (evo.length) picks[0] = evo[0];
+  return picks;
 }
 // Recursos de la subida de nivel por partida: refrescar 2, saltar 2, desterrar 1
 function upRes(){ return g.upRes || (g.upRes = {rer: 2, skip: 2, ban: 1, banned: []}); }
@@ -4393,11 +4417,11 @@ function openUpgrades(){
         <button class="lv3-card ${c.k || 'utilidad'}${banMode ? ' ban' : ''}" data-up="${i}" style="animation-delay:${i*0.09}s">
           <span class="lv3-key">${i + 1}</span>
           ${c.skill && !c.lv ? '<span class="lv3-new">NUEVO</span>' : ''}
-          <span class="lv3-tag">${c.skill ? (c.lv ? 'Mejora' : 'Nueva habilidad') : cat[c.k] || 'Mejora'}</span>
-          <span class="lv3-ic">${svgIcon(c.skill || c.k)}</span>
+          <span class="lv3-tag">${c.evo ? '★ Evolución' : c.skill ? (c.lv ? 'Mejora' : 'Nueva habilidad') : cat[c.k] || 'Mejora'}</span>
+          <span class="lv3-ic">${svgIcon(c.evo || c.skill || c.k)}</span>
           <b>${c.name || c.t}</b>
           <p>${c.d || ''}</p>
-          ${c.skill ? `<span class="lv3-pips">${[1, 2, 3].map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : '<span class="lv3-pips pasiva">Pasiva</span>'}
+          ${c.evo ? '<span class="lv3-pips pasiva">EVO · nivel 4</span>' : c.skill ? `<span class="lv3-pips">${[1, 2, 3].map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : '<span class="lv3-pips pasiva">Pasiva</span>'}
         </button>`).join('')}</div>
       <div class="lv3-acts">
         <button class="lv3-act" id="upRer" ${r.rer > 0 ? '' : 'disabled'}>Refrescar (${r.rer}) <kbd>F</kbd></button>
@@ -4413,8 +4437,10 @@ function openUpgrades(){
 
 function pickUpgrade(i){
   if (state !== 'levelup') return;
-  g.choices[i].f(g.p);
-  if (g.chestPick && g.chestPick.gold) g.choices[i].f(g.p);   // cofre dorado: la carta cuenta dos veces
+  const ch = g.choices[i];
+  ch.f(g.p);
+  if (g.chestPick && g.chestPick.gold && !ch.evo) ch.f(g.p);
+  if (!ch.skill && !ch.evo){ g.upTaken = g.upTaken || {}; g.upTaken[ch.t] = (g.upTaken[ch.t] || 0) + 1; }   // cofre dorado: la carta cuenta dos veces
   g.chestPick = null;
   hideOverlay();
   lockMouse();
@@ -4434,9 +4460,9 @@ function endGame(win){
   // Toda partida larga da al menos un ticket, aunque no caiga ningún jefe
   if (g.t >= DAILY.runTixAt && g.tix < DAILY.runTix) g.tix = DAILY.runTix;
   saveDaily(daily);
-  SAVE.bits = SAVE.bits + earned + bonus;
+  SAVE.bits = SAVE.bits + earned + bonus + (g.extraBits || 0);
   addTickets('std', g.tix);   // élites y jefe: monedero del permanente
-  g.earned = earned + bonus;
+  g.earned = earned + bonus + (g.extraBits || 0);
   g.bonus = bonus;
   g.unlocked = recordRun(g.ch.id, g.kills, g.t);
   g.newTitles = checkAchievements(win);
@@ -4449,7 +4475,9 @@ function endGame(win){
   const dmgRows = Object.entries(g.dmgBy).sort((a, b) => b[1] - a[1]).slice(0, 6);
   const dmgMax = dmgRows.length ? dmgRows[0][1] : 1;
   const dmgName = k => k === 'base' ? `Ataque de ${g.ch.name}` : (SKILLS[k] ? SKILLS[k].name : k);
-  const rewards = [`<li><b>+${g.earned - g.bonus}</b> Bits</li>`];
+  const rewards = [`<li><b>+${g.earned - g.bonus - (g.extraBits || 0)}</b> Bits</li>`];
+  if (g.extraBits) rewards.push(`<li><b>+${g.extraBits}</b> Bits de eventos del mapa</li>`);
+  if (g.emblems && g.emblems.length) rewards.push(`<li>Emblemas: <b>${g.emblems.length}/8</b></li>`);
   if (g.bonus) rewards.push(`<li><b>+${g.bonus}</b> Bits y <b>+${g.dailyTix}</b> tickets · misión diaria completada</li>`);
   if (g.tix) rewards.push(`<li><b>+${g.tix}</b> tickets de tirada</li>`);
   for (const u of g.unlocked) rewards.push(`<li>Skin nueva: <b>${u}</b></li>`);
@@ -4881,6 +4909,290 @@ function dailyText(){
 }
 
 
+
+/* ---------- Atributos: Vacuna gana a Virus, Virus a Datos y Datos a Vacuna ---------- */
+const ATTR_NAME = {vac: 'Vacuna', dat: 'Datos', vir: 'Virus'};
+const ATTR_OF = {agumon:'vac', gabumon:'dat', biyomon:'vac', tentomon:'vac', palmon:'dat', gomamon:'vac', patamon:'dat', gatomon:'vac', garurumon:'dat'};
+const FOE_ATTR = {numemon:'vir', gazimon:'vir', vegiemon:'vir', meramon:'dat', kuwagamon:'vir', tank:'vir', ogremon:'vir', monochromon:'dat', skullgreymon:'vir', andromon:'vac', bakemon:'vir', gizamon:'vir', raremon:'vir', phantomon:'vir', snimon:'vir', darktyrannomon:'vir', tyrannomon:'dat', megadramon:'vir', gigadramon:'vir', mammothmon:'vac', devimon:'vir', etemon:'vir', myotismon:'vir', metalseadramon:'dat', puppetmon:'vir', machinedramon:'vir', piedmon:'vir'};
+const BEATS = {vac: 'vir', vir: 'dat', dat: 'vac'};
+const ATTR_ADV = 1.25, ATTR_HURT = 1.15;   // daño con ventaja · daño recibido de un enemigo con ventaja
+function attrOf(e){
+  if (!e.attr){ const m = /([^\/]+)\.png$/.exec(e.sprite || ''); e.attr = (m && FOE_ATTR[m[1]]) || 'vir'; }
+  return e.attr;
+}
+// Multiplicador del daño que el enemigo e hace al jugador
+function foeMul(e){ return BEATS[attrOf(e)] === g.attr ? ATTR_HURT : 1; }
+
+/* ---------- Emblemas: cada jefe menor deja uno con un efecto para el resto de la partida ---------- */
+const EMBLEMS = [
+  {id:'valor',        name:'Emblema del Valor',        owner:'agumon',   text:'+15% daño',           f: k => { g.p.dmg *= 1 + 0.15*k; }},
+  {id:'amistad',      name:'Emblema de la Amistad',    owner:'gabumon',  text:'+1 proyectil',         f: k => { g.p.count += k; }},
+  {id:'amor',         name:'Emblema del Amor',         owner:'biyomon',  text:'Regenera 1 PS/s',      f: k => { g.regen = (g.regen || 0) + k; }},
+  {id:'conocimiento', name:'Emblema del Conocimiento', owner:'tentomon', text:'+15% experiencia',     f: k => { g.labXp = (g.labXp || 1) * (1 + 0.15*k); }},
+  {id:'pureza',       name:'Emblema de la Pureza',     owner:'palmon',   text:'+20% área',            f: k => { g.p.area *= 1 + 0.2*k; }},
+  {id:'sinceridad',   name:'Emblema de la Sinceridad', owner:'gomamon',  text:'+30 vida máx.',        f: k => { g.p.maxHp += 30*k; g.p.hp += 30*k; }},
+  {id:'esperanza',    name:'Emblema de la Esperanza',  owner:'patamon',  text:'+10% prob. crítica',   f: k => { g.p.critChance += 0.1*k; }},
+  {id:'luz',          name:'Emblema de la Luz',        owner:'gatomon',  text:'+15% cadencia',        f: k => { g.p.cdMul *= Math.pow(0.87, k); }}
+];
+function grantEmblem(){
+  g.emblems = g.emblems || [];
+  const left = EMBLEMS.filter(em => !g.emblems.includes(em.id));
+  if (!left.length) return;
+  // El emblema de tu compañero sale antes y vale el doble
+  const own = left.find(em => em.owner === g.ch.id);
+  const em = own && Math.random() < 0.4 ? own : left[Math.floor(Math.random()*left.length)];
+  const k = em.owner === g.ch.id ? 2 : 1;
+  em.f(k);
+  g.emblems.push(em.id);
+  setTimeout(() => { if (g) announce(em.name, em.text + (k > 1 ? ' ×2 (el de tu compañero)' : ''), '#ffd54f'); }, 1400);
+}
+
+/* ---------- Habilidades evolucionadas: habilidad a nivel 3 + su mejora pasiva ---------- */
+const EVO_SKILLS = {
+  espiral:  {need:'Proyectil / cuchilla +1',  name:'Espiral Galáctica'},
+  laser:    {need:'Cadencia +15%',            name:'Nova Láser'},
+  meteoro:  {need:'Área +20%',                name:'Lluvia Apocalíptica'},
+  mina:     {need:'Área +20%',                name:'Campo Minado'},
+  cuchilla: {need:'Daño crítico +25%',        name:'Cuchilla Fantasma'},
+  aura:     {need:'+25 vida máx. y cura',     name:'Aura Sagrada'},
+  tornado:  {need:'Velocidad +10%',           name:'Tornado Digital'},
+  pulso:    {need:'Probabilidad crítica +8%', name:'Onda Mega'}
+};
+function evoSkillCards(){
+  const out = [];
+  for (const [id, ev] of Object.entries(EVO_SKILLS)){
+    if ((g.skills[id] || 0) !== 3 || (g.evoSk && g.evoSk[id]) || !((g.upTaken || {})[ev.need] > 0)) continue;
+    out.push({t: 'EVO: ' + ev.name, name: ev.name, evo: id, k: 'ofensiva', d: `Evolución de ${SKILLS[id].name} (con ${ev.need}): nivel 4 y +50% de daño.`,
+      f: () => { g.skills[id] = 4; (g.evoSk || (g.evoSk = {}))[id] = 1.5; announce(ev.name + '!', 'Habilidad evolucionada', '#ffd54f'); }});
+  }
+  return out;
+}
+
+/* ---------- Mecánicas de los jefes menores ---------- */
+function addHazard(x, z, r, t, kind, dmg, color){
+  const mesh = new THREE.Mesh(new THREE.CircleGeometry(r, 32), new THREE.MeshBasicMaterial({color, transparent: true, opacity: kind === 'slow' ? 0.32 : 0.45, depthWrite: false}));
+  mesh.rotation.x = -Math.PI/2;
+  mesh.position.set(x, terrainH(x, z) + 0.06, z);
+  world.add(mesh);
+  (g.hazards || (g.hazards = [])).push({x, z, r, t, t0: t, kind, dmg, mesh});
+}
+function enemyShot(x, z, an, spd, dmg, color){
+  const shot = new THREE.Mesh(SPROJ_GEO, matFor(color));
+  shot.position.set(x, 1 + terrainH(x, z), z);
+  world.add(shot);
+  g.eshots.push({x, z, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4, mesh: shot, dmg});
+}
+const MINI_MECH = {
+  Devimon:        {cd: 6, f: e => { for (let i = 0; i < 5; i++){ spawnEnemy('basic'); const m = g.enemies[g.enemies.length - 1], a = i/5*Math.PI*2; [m.x, m.z] = clampArena(e.x + Math.cos(a)*3, e.z + Math.sin(a)*3, ARENA_R - 0.5); } popText(e.x, e.z, '¡Invocación!', '#ce93d8', 1); }},
+  Etemon:         {cd: 7, f: () => { addHazard(g.p.x, g.p.z, 4.5, 4, 'slow', 0, 0xab47bc); popText(g.p.x, g.p.z, '¡Concierto! Te frena', '#ce93d8', 1); }},
+  Myotismon:      {cd: 5, f: e => { const base = Math.atan2(g.p.z - e.z, g.p.x - e.x); for (let i = -2; i <= 2; i++) enemyShot(e.x, e.z, base + i*0.22, 9, 7, 0x7b1fa2); }},
+  MetalSeadramon: {cd: 6, f: e => { const a = Math.atan2(g.p.z - e.z, g.p.x - e.x); e.charge = {t: 0.9, wait: 0.6, dx: Math.cos(a), dz: Math.sin(a)}; popText(e.x, e.z, '¡Embestida!', '#40c4ff', 1); }},
+  Puppetmon:      {cd: 6, f: e => { const dx = e.x - g.p.x, dz = e.z - g.p.z, d = Math.hypot(dx, dz) || 1; if (d < 26 && g.dash <= 0){ [g.p.x, g.p.z] = clampArena(g.p.x + dx/d*Math.min(5, d - 3), g.p.z + dz/d*Math.min(5, d - 3), ARENA_R - 1); popText(g.p.x, g.p.z, '¡Hilos! Te atrae', '#ce93d8', 1); } }},
+  Machinedramon:  {cd: 5, f: e => { for (let i = 0; i < 3; i++){ const a = Math.random()*Math.PI*2, r = Math.random()*4; addHazard(g.p.x + Math.cos(a)*r, g.p.z + Math.sin(a)*r, 2.5, 1.1, 'bomb', 18*(1 + diffT(g.t)/300), 0xff1744); } }}
+};
+function updateBossMechanics(dt){
+  for (const e of g.enemies){
+    if (e.kind !== 'mini' || e.special || e.hp <= 0) continue;
+    const m = MINI_MECH[e.name];
+    if (!m) continue;
+    if (e.frozenT > 0) continue;
+    e.mt = (e.mt === undefined ? 3 : e.mt) - dt;
+    if (e.mt <= 0){ e.mt = m.cd; m.f(e); }
+    if (e.charge){
+      const c = e.charge;
+      if (c.wait > 0) c.wait -= dt;
+      else { c.t -= dt; [e.x, e.z] = clampArena(e.x + c.dx*16*dt, e.z + c.dz*16*dt, ARENA_R - 0.5); if (c.t <= 0) e.charge = null; }
+    }
+  }
+  g.inSlow = false;
+  for (const h of g.hazards || []){
+    h.t -= dt;
+    const inside = dist2(h.x, h.z, g.p.x, g.p.z) < h.r;
+    if (h.kind === 'slow'){ if (inside) g.inSlow = true; h.mesh.material.opacity = 0.32 * Math.min(1, h.t); }
+    else {
+      h.mesh.material.opacity = 0.2 + 0.5*(1 - h.t/h.t0);
+      if (h.t <= 0){
+        burst(h.x, h.z, '#ff1744');
+        if (inside && g.dash <= 0){ g.p.hp -= h.dmg; shake = Math.max(shake, 0.35); }
+      }
+    }
+  }
+  for (const h of (g.hazards || []).filter(h => h.t <= 0)) world.remove(h.mesh);
+  if (g.hazards) g.hazards = g.hazards.filter(h => h.t > 0);
+}
+
+/* ---------- Eventos en el mapa (cada 200 s desde el minuto 2:30) ---------- */
+function evHud(text){
+  let el = document.getElementById('evHud');
+  if (!el){
+    el = document.createElement('div'); el.id = 'evHud';
+    el.style.cssText = 'position:fixed;left:50%;top:118px;transform:translateX(-50%);padding:7px 14px;border-radius:10px;background:rgba(8,14,30,.9);border:2px solid #7cf29c;color:#eaffef;font:700 13px system-ui,sans-serif;z-index:9;pointer-events:none;white-space:nowrap';
+    document.body.appendChild(el);
+  }
+  el.style.display = text ? 'block' : 'none';
+  if (text) el.textContent = text;
+}
+function eventNode(x, z, col){
+  const mesh = new THREE.Mesh(new THREE.OctahedronGeometry(0.9), new THREE.MeshBasicMaterial({color: col}));
+  mesh.position.set(x, 1.4 + terrainH(x, z), z);
+  world.add(mesh);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(0.9, 1, 40), new THREE.MeshBasicMaterial({color: col, transparent: true, opacity: 0.7, depthWrite: false}));
+  ring.rotation.x = -Math.PI/2; ring.position.set(x, terrainH(x, z) + 0.05, z);
+  world.add(ring);
+  return {x, z, mesh, ring, prog: 0, done: false};
+}
+function nodeNear(dmin, dmax){
+  const a = Math.random()*Math.PI*2, r = dmin + Math.random()*(dmax - dmin);
+  return clampArena(g.p.x + Math.cos(a)*r, g.p.z + Math.sin(a)*r, ARENA_R - 6);
+}
+function startMapEvent(){
+  const kinds = ['defend', 'corrupt', 'golden'];
+  const kind = kinds[Math.floor(Math.random()*kinds.length)];
+  if (kind === 'defend'){
+    const [x, z] = nodeNear(18, 28);
+    const n = eventNode(x, z, 0x7cf29c); n.ring.scale.setScalar(6);
+    g.ev = {kind, t: 60, nodes: [n], spawnT: 0};
+    announce('Evento: defiende el nodo', 'Quédate junto al nodo verde 20 s', '#7cf29c');
+  } else if (kind === 'corrupt'){
+    g.ev = {kind, t: 60, nodes: [0, 1, 2].map(() => { const [x, z] = nodeNear(14, 32); const n = eventNode(x, z, 0xe040fb); n.ring.scale.setScalar(2.5); return n; })};
+    announce('Evento: datos corruptos', 'Rompe los 3 nodos morados (quédate encima)', '#e040fb');
+  } else {
+    const [x, z] = nodeNear(16, 22);
+    const mesh = billboard('sprites/numemon.png', 2.2, false);
+    mesh.material.color.set(0xffd54f);
+    world.add(mesh);
+    const shadow = makeShadow(1.8); world.add(shadow);
+    const hp = 220*(1 + diffT(g.t)/200);
+    const e = {kind: 'basic', golden: true, sprite: 'sprites/numemon.png', mesh, shadow, x, z, hp, max: hp, spd: 6.2, r: 0.9, xp: 30, dmg: 0, cd: 0, attr: 'vir'};
+    g.enemies.push(e);
+    g.ev = {kind, t: 30, foe: e};
+    announce('Evento: ¡Numemon dorado!', 'Atrápalo antes de 30 s: Bits y un ticket', '#ffd54f');
+  }
+  sfx('boss');
+}
+function endMapEvent(ok){
+  const ev = g.ev; g.ev = null; evHud(null);
+  for (const n of ev.nodes || []){ world.remove(n.mesh); world.remove(n.ring); }
+  if (ev.kind === 'golden'){
+    if (ok){ g.extraBits = (g.extraBits || 0) + 80; g.tix++; announce('¡Numemon dorado atrapado!', '+80 Bits y +1 ticket', '#ffd54f'); }
+    else { const e = ev.foe; e.gone = true; world.remove(e.mesh); world.remove(e.shadow); g.enemies = g.enemies.filter(x => x !== e); announce('El Numemon dorado ha huido', '', '#9e9e9e'); }
+    return;
+  }
+  if (!ok){ announce('Evento fallido', 'Se acabó el tiempo', '#ef5350'); return; }
+  const last = ev.nodes[ev.nodes.length - 1];
+  spawnChestAt(last.x, last.z, true);
+  if (ev.kind === 'corrupt'){ g.extraBits = (g.extraBits || 0) + 60; announce('¡Datos limpios!', '+60 Bits y un cofre dorado', '#e040fb'); }
+  else announce('¡Nodo defendido!', 'Un cofre dorado aparece en el nodo', '#7cf29c');
+}
+function updateMapEvent(dt){
+  if (g.evT === undefined) g.evT = 150;
+  if (!g.ev){
+    if (g.t >= g.evT && !g.bossSpawned){ g.evT = g.t + 200; startMapEvent(); }
+    return;
+  }
+  const ev = g.ev, p = g.p;
+  ev.t -= dt;
+  for (const n of ev.nodes || []) n.mesh.rotation.y += dt*2;
+  if (ev.kind === 'defend'){
+    const n = ev.nodes[0];
+    if (dist2(n.x, n.z, p.x, p.z) < 6) n.prog += dt;
+    ev.spawnT -= dt;
+    if (ev.spawnT <= 0){ ev.spawnT = 2; spawnEnemy(); const m = g.enemies[g.enemies.length - 1]; const a = Math.random()*Math.PI*2; [m.x, m.z] = clampArena(n.x + Math.cos(a)*12, n.z + Math.sin(a)*12, ARENA_R - 0.5); }
+    evHud(`Defiende el nodo: ${Math.min(20, n.prog).toFixed(0)}/20 s · quedan ${Math.ceil(ev.t)} s`);
+    if (n.prog >= 20) return endMapEvent(true);
+  } else if (ev.kind === 'corrupt'){
+    for (const n of ev.nodes){
+      if (n.done) continue;
+      if (dist2(n.x, n.z, p.x, p.z) < 2.5) n.prog += dt;
+      if (n.prog >= 1.5){ n.done = true; world.remove(n.mesh); world.remove(n.ring); burst(n.x, n.z, '#e040fb'); sfx('chest'); }
+    }
+    const done = ev.nodes.filter(n => n.done).length;
+    evHud(`Datos corruptos: ${done}/3 nodos · quedan ${Math.ceil(ev.t)} s`);
+    if (done === 3) return endMapEvent(true);
+  } else {
+    const e = ev.foe;
+    evHud(`Numemon dorado · quedan ${Math.ceil(ev.t)} s`);
+    if (e.hp <= 0) return endMapEvent(true);
+  }
+  if (ev.t <= 0) endMapEvent(false);
+}
+
+/* ---------- Digimon de apoyo: un segundo compañero que dispara al 40% ---------- */
+function supportKey(main){
+  const opened = SEASONS.adventure.chars.filter(k => isUnlocked(k) && k !== main);
+  const saved = localStorage.getItem('digibonk3d-support');
+  if (saved === 'none') return null;
+  return opened.includes(saved) ? saved : (opened[0] || null);
+}
+function initSupport(){
+  const k = supportKey(g.ch.id);
+  if (!k) return;
+  const mesh = billboard(spriteOf(k, false), 1.7, false);
+  world.add(mesh);
+  const shadow = makeShadow(1.1); world.add(shadow);
+  g.sup = {key: k, mesh, shadow, x: g.p.x - 1.5, z: g.p.z, cd: 1};
+}
+function updateSupport(dt){
+  const s = g.sup; if (!s) return;
+  const p = g.p, side = {x: -g.dir.z, z: g.dir.x};
+  const tx = p.x + side.x*1.8 - g.dir.x*0.8, tz = p.z + side.z*1.8 - g.dir.z*0.8;
+  s.x += (tx - s.x)*Math.min(1, dt*5); s.z += (tz - s.z)*Math.min(1, dt*5);
+  const gy = terrainH(s.x, s.z);
+  s.mesh.position.set(s.x, gy + 0.85 + Math.sin(g.t*6)*0.05, s.z);
+  s.shadow.position.set(s.x, gy + 0.02, s.z);
+  s.cd -= dt;
+  if (s.cd > 0) return;
+  let best = null, bd = 14;
+  for (const e of g.enemies){ const d = dist2(e.x, e.z, s.x, s.z); if (e.hp > 0 && d < bd){ bd = d; best = e; } }
+  if (!best) return;
+  s.cd = 1.1 * p.cdMul;
+  const d = bd || 1, c = CHARS[s.key];
+  fireProjectile(s.x, s.z, (best.x - s.x)/d*16, (best.z - s.z)/d*16, (c.dmg || 10) * 0.4 * p.dmg, 1.2, 0x80deea);
+}
+function renderSupportPick(){
+  const host = document.getElementById('pkPreview'); if (!host) return;
+  const opened = SEASONS.adventure.chars.filter(k => isUnlocked(k) && k !== selectedKey);
+  const cur = supportKey(selectedKey);
+  const box = document.createElement('div');
+  box.className = 'pk2-sec sup-pick';
+  box.innerHTML = `<h3>Digimon de apoyo</h3>${opened.length ? `<div class="sup-row">${['none', ...opened].map(k => `<button type="button" class="sup-btn${(k === 'none' ? !cur : k === cur) ? ' on' : ''}" data-sup="${k}">${k === 'none' ? 'Ninguno' : CHARS[k].name}</button>`).join('')}</div><p class="sup-note">Te acompaña y dispara al enemigo más cercano con el 40% de tu daño.</p>` : '<p class="sup-note">Desbloquea otro Digimon para llevarlo de apoyo.</p>'}`;
+  host.appendChild(box);
+  box.querySelectorAll('.sup-btn').forEach(b => b.onclick = () => { localStorage.setItem('digibonk3d-support', b.dataset.sup); showPicker(); });
+}
+
+/* ---------- Evolución de emergencia: una vez por partida por debajo del 20% de vida ---------- */
+function updateEmergency(dt){
+  const p = g.p, line = EVO_LINE[g.ch.id] || [];
+  if (!g.emergUsed && p.hp > 0 && p.hp < p.maxHp*0.2 && (g.ch.evolved | 0) < line.length && !g.evoAnim){
+    g.emergUsed = true; g.emergOffer = 6;
+    announce('¡Evolución de emergencia!', 'Pulsa R en los próximos 6 s', '#ff7043');
+  }
+  if (g.emergOffer > 0){ g.emergOffer -= dt; evHud(g.ev ? null : `Evolución de emergencia: pulsa R (${Math.ceil(g.emergOffer)} s)`); if (g.emergOffer <= 0 && !g.ev) evHud(null); }
+  if (g.emergT > 0){
+    g.emergT -= dt;
+    if (g.emergT <= 0) endEmergency();
+  }
+}
+function triggerEmergency(){
+  if (!g || !(g.emergOffer > 0) || g.evoAnim) return;
+  g.emergOffer = 0; if (!g.ev) evHud(null);
+  g.emergPrev = g.ch.evolved | 0;
+  digivolve();
+  g.emergT = 15;
+}
+function endEmergency(){
+  const prev = g.emergPrev, id = g.ch.id;
+  // Si mientras tanto llegaste al nivel de esa evolución, te la quedas
+  if (g.p.lvl >= evoLevelFor(id, prev)) return;
+  const st = g.ch.evolved | 0;
+  g.ch.evolved = prev;
+  g.p.dmg /= 1.2; g.p.area /= 1.05; g.p.maxHp -= 20; g.p.hp = Math.min(g.p.hp, g.p.maxHp);
+  if (st === 1) g.p.count -= 1;
+  g.playerMesh.material.map = animTex(spriteOf(id, prev), true);
+  g.playerMesh.material.needsUpdate = true;
+  spawnRing(g.p.x, g.p.z, 0xff7043);
+  announce('Fin de la evolución de emergencia', stageName(id, prev) + ' vuelve a su forma', '#ff7043');
+}
 /* ---------- Supervivencia: récord por Digimon ---------- */
 function survBest(k){ return loadJSON('digibonk3d-surv', {})[k] || 0; }
 function recordSurv(k, t){
@@ -6208,6 +6520,7 @@ if (new URLSearchParams(location.search).has('demo')){
     rollTier,
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
+    spawnMini, MINIS, startMapEvent, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS,
     nearChest(){
       const p = g.p, a = p.dir ? Math.atan2(p.dir.z, p.dir.x) : 0;
       const [cx, cz] = clampArena(p.x + Math.cos(a)*3, p.z + Math.sin(a)*3, ARENA_R - 2);
