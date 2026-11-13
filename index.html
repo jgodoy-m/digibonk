@@ -3158,6 +3158,26 @@ html.reduce-motion .logo-fx::after{display:none}
 #overlay :is(.settings,.help-box,.sc-box){width:min(720px,94vw)!important;max-width:none!important;box-sizing:border-box!important}
 #overlay .approved-info-dialog{width:min(520px,94vw)!important;box-sizing:border-box!important}
 @media(max-width:760px){#overlay .picker-screen.cl4,#overlay:not(.menu-mode)>.picker-screen.ms,#overlay .picker-screen.ms,#overlay .lab-screen{height:auto!important;max-height:none!important}}
+/* Nube y ranking por regiones */
+.cd-box .cd-status{min-height:1.2em;font-weight:700}
+.cd-in{padding:9px 12px;border-radius:10px;border:1px solid var(--m-line2,#3a6fc4);background:var(--m-sunk,#0a1428);color:var(--m-text,#e6f4ff);font:600 14px 'Nunito',system-ui,sans-serif;min-width:0;max-width:220px}
+.cd-form .set-seg-wrap{flex-wrap:wrap;justify-content:flex-end}
+.rk-box{width:min(760px,94vw)!important;max-height:92dvh;display:flex;flex-direction:column}
+.rk-filters{display:flex;flex-direction:column;gap:8px;margin:6px 0}
+.rk-filters .set-seg-wrap{flex-wrap:wrap}
+.rk-filters .set-seg{padding:6px 12px;font-size:13px}
+.rk-list{list-style:none;margin:6px 0 0;padding:0;overflow:auto;min-height:120px;flex:1}
+.rk-list li{display:grid;grid-template-columns:34px 36px 1fr auto;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid var(--m-line,#1e2a44)}
+.rk-list li em{font:900 16px 'Nunito',system-ui,sans-serif;font-style:normal;text-align:center;color:var(--m-mute,#9fd4ff)}
+.rk-list li.p1 em{color:#e0a800}.rk-list li.p2 em{color:#8f9bb0}.rk-list li.p3 em{color:#c07a3c}
+.rk-list li img{width:36px;height:36px;object-fit:contain;image-rendering:pixelated}
+.rk-list li span{min-width:0}.rk-list li span b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rk-list li small{display:block;font-size:12px;color:var(--m-mute,#9fd4ff)}
+.rk-list li strong{text-align:right;font:900 16px 'Nunito',system-ui,sans-serif}
+.rk-list li.me{background:color-mix(in srgb,var(--m-acc,#4e63e8) 14%,transparent);border-radius:10px}
+.rk-list li.rk-empty{display:block;text-align:center;color:var(--m-mute,#9fd4ff);padding:24px 8px}
+.approved-info-dialog #realRank{margin-right:8px}
+@media (max-width:760px){.cd-in{max-width:none;flex:1 1 100%}.rk-list li{grid-template-columns:26px 30px 1fr auto;gap:6px}.rk-list li img{width:30px;height:30px}}
 /* Guía «Cómo jugar»: capítulos, vídeo o captura a la izquierda, texto y teclas a la derecha */
 #overlay .help-box.gd{display:flex;flex-direction:column;gap:12px;padding:18px 22px 16px!important}
 #overlay .help-box.gd .set-head{display:flex;align-items:center;gap:12px;margin:0}
@@ -4039,6 +4059,7 @@ addEventListener('keydown', e => {
   // Esc cierra las ventanas del menú (Logros, Encargos, Récords…) antes que nada
   if (k === 'escape'){ const x = overlay.querySelector('.approved-info-scrim #realClose'); if (x){ x.click(); return; } }
   if (state === 'savecode'){ if (k === 'escape') showSettings(); return; }
+  if (state === 'cloud' || state === 'ranking'){ if (k === 'escape'){ const b = document.getElementById(state === 'cloud' ? 'cdBack' : 'rkBack'); if (b) b.click(); } return; }
   if (state === 'register') return;
   if (k === 'n'){ toggleMute(); return; }
   // Tab abre y cierra el mapa completo (la partida se queda parada mientras está abierto)
@@ -4430,7 +4451,7 @@ function showCollection(){
 }
 // ---------- Navegación con flechas y Enter en los menús ----------
 // Las flechas mueven el foco al botón más cercano en esa dirección; Enter pulsa el botón enfocado
-const MENU_NAV = ['select', 'gacha', 'lab', 'settings', 'player', 'collection', 'paused', 'end', 'levelup', 'savecode'];
+const MENU_NAV = ['select', 'gacha', 'lab', 'settings', 'player', 'collection', 'paused', 'end', 'levelup', 'savecode', 'cloud', 'ranking'];
 function menuNavRoot(){
   const pz = document.getElementById('pause');
   if (pz && !pz.classList.contains('hidden') && pz.firstElementChild) return pz;
@@ -4545,6 +4566,7 @@ function bindMenuFX(){
   });
 }
 function showSelect(){
+  if (typeof Cloud !== 'undefined' && Cloud.pending){ cloudShowConflict(); return; }
   if (!localStorage.getItem('digibonk3d-gift')){ localStorage.setItem('digibonk3d-gift', '1'); addTickets('std', 10); setTimeout(() => { const m = document.getElementById('hmMsg'); if (m) { m.textContent = '🎁 Regalo de bienvenida: 10 tickets para la Incubadora'; clearTimeout(m._t); m._t = setTimeout(() => { m.textContent = ''; }, 4500); } }, 300); }
   state = 'select';
   setHud(false);
@@ -4681,7 +4703,8 @@ function showSelect(){
       title=t('recs');
       content=recs.length?`<div class="approved-info-records">${recs.slice(0,10).map((r,i)=>`<div><b>${i+1}. ${safeText(r.name)}</b><span>${fmtTime(r.t)} · Nv. ${Number(r.lvl)||0} · ${Number(r.kills)||0} bajas</span></div>`).join('')}</div>`:`<p>${safeText(t('none'))}</p>`;
     }
-    host.innerHTML=`<div class="approved-info-scrim"><section class="approved-info-dialog" role="dialog" aria-modal="true" aria-label="${safeText(title)}"><header><h2>${safeText(title)}</h2><button type="button" id="realClose">✕</button></header>${content}<button type="button" id="realDone">Volver al menú</button></section></div>`;
+    host.innerHTML=`<div class="approved-info-scrim"><section class="approved-info-dialog" role="dialog" aria-modal="true" aria-label="${safeText(title)}"><header><h2>${safeText(title)}</h2><button type="button" id="realClose">✕</button></header>${content}${type==='records'?'<button type="button" id="realRank">Ranking por regiones</button>':''}<button type="button" id="realDone">Volver al menú</button></section></div>`;
+    { const rk=host.querySelector('#realRank'); if(rk) rk.onclick=()=>{host.innerHTML='';showRanking('select');}; }
     const close=()=>{host.innerHTML=''};
     host.querySelector('#realClose').onclick=close;host.querySelector('#realDone').onclick=close;
     host.querySelector('.approved-info-scrim').onclick=e=>{if(e.target===e.currentTarget)close()};
@@ -4788,11 +4811,17 @@ function showHelp(){
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
-  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme'];
-function makeSaveCode(){
+  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
+  'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly'];
+// También cuentan los contadores por banner (pity) y la mejor oleada de cada mapa
+const isSaveKey = k => SAVE_KEYS.includes(k) || /^digibonk3d-(pity|surv-wave)-[A-Za-z0-9_]{1,32}$/.test(k);
+function saveData(){
   const data = {};
-  for (const k of SAVE_KEYS){ const v = localStorage.getItem(k); if (v !== null) data[k] = v; }
-  return 'DBK1-' + btoa(unescape(encodeURIComponent(JSON.stringify({v: 1, data}))));
+  for (const k of Object.keys(localStorage).sort()) if (isSaveKey(k)) data[k] = localStorage.getItem(k);
+  return data;
+}
+function makeSaveCode(){
+  return 'DBK1-' + btoa(unescape(encodeURIComponent(JSON.stringify({v: 1, data: saveData()}))));
 }
 function readSaveCode(code){
   const t = (code || '').trim();
@@ -4802,11 +4831,10 @@ function readSaveCode(code){
   catch(e){ throw new Error('El código está incompleto o alterado'); }
   if (!obj || obj.v !== 1 || typeof obj.data !== 'object') throw new Error('Formato no válido');
   const out = {};
-  for (const k of SAVE_KEYS){
-    if (k in obj.data){
-      if (typeof obj.data[k] !== 'string') throw new Error('Dato no válido');
-      out[k] = obj.data[k];
-    }
+  for (const k of Object.keys(obj.data)){
+    if (!isSaveKey(k)) continue;
+    if (typeof obj.data[k] !== 'string') throw new Error('Dato no válido');
+    out[k] = obj.data[k];
   }
   if (!Object.keys(out).length) throw new Error('El código no contiene progreso');
   return out;
@@ -4851,6 +4879,296 @@ function showSaveCode(){
     location.reload();
   };
 }
+/* ---------- Nube: guardado automático entre dispositivos y ranking por regiones (Supabase) ---------- */
+// Pon aquí la URL del proyecto y la clave "anon public" (Supabase → Project Settings → API).
+// La clave anon es pública por diseño: la seguridad está en las reglas de supabase/schema.sql.
+// Vacío = nube apagada: el juego guarda solo en este navegador, como antes, y el código DBK1- sigue sirviendo.
+const CLOUD_CFG = {url: '', key: ''};
+const CLOUD_ON = !!(CLOUD_CFG.url && CLOUD_CFG.key);
+const REGIONS = {EU: 'Europa', NA: 'Norteamérica', LATAM: 'Latinoamérica', ASIA: 'Asia y Oriente Medio', OCE: 'Oceanía', AFR: 'África'};
+// La región se deduce de la zona horaria del navegador (sin pedir ubicación ni mirar la IP); el jugador puede cambiarla
+function guessRegion(){
+  let tz = ''; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch(e){}
+  if (/^Europe\/|^Atlantic\/(Canary|Madeira|Azores|Faroe|Reykjavik)/.test(tz)) return 'EU';
+  if (/^Africa\//.test(tz)) return 'AFR';
+  if (/^(Asia|Indian)\//.test(tz)) return 'ASIA';
+  if (/^(Australia|Pacific)\//.test(tz)) return tz === 'Pacific/Honolulu' ? 'NA' : 'OCE';
+  if (/^(US|Canada)\/|^America\/(New_York|Chicago|Denver|Los_Angeles|Phoenix|Anchorage|Juneau|Sitka|Nome|Adak|Yakutat|Metlakatla|Boise|Detroit|Indiana|Kentucky|North_Dakota|Menominee|Toronto|Montreal|Vancouver|Edmonton|Winnipeg|Regina|Swift_Current|Halifax|Glace_Bay|Moncton|Goose_Bay|St_Johns|Whitehorse|Dawson|Yellowknife|Inuvik|Iqaluit|Rankin_Inlet|Resolute|Cambridge_Bay|Creston|Fort_Nelson|Dawson_Creek|Atikokan|Thunder_Bay|Nipigon|Rainy_River|Pangnirtung)/.test(tz)) return 'NA';
+  if (/^America\//.test(tz)) return 'LATAM';
+  return 'EU';
+}
+// Estado de la nube en este navegador. No va en el código de guardado (lleva la sesión).
+const Cloud = {
+  st: (() => { try { return JSON.parse(localStorage.getItem('digibonk3d-cloud')) || {}; } catch(e){ return {}; } })(),
+  busy: false, msg: '', pending: null,
+  save(){ try { localStorage.setItem('digibonk3d-cloud', JSON.stringify(this.st)); } catch(e){} }
+};
+if (!REGIONS[Cloud.st.region]) Cloud.st.region = guessRegion();
+// El modo invitado es de pruebas (todo desbloqueado): no se sube ni entra en el ranking
+const cloudEnabled = () => CLOUD_ON && !!trainerName && !isGuest();
+const strHash = s => { let h = 5381; for (let i = 0; i < s.length; i++) h = (h * 33 ^ s.charCodeAt(i)) >>> 0; return h.toString(36) + ':' + s.length; };
+const cloudLocalHash = () => strHash(JSON.stringify(saveData()));
+function cloudSetMsg(m){ Cloud.msg = m; const el = document.getElementById('cdStatus'); if (el) el.textContent = m; }
+async function cloudFetch(path, {method = 'GET', body, auth = true} = {}){
+  const h = {apikey: CLOUD_CFG.key, 'Content-Type': 'application/json'};
+  if (auth){ await cloudSession(); h.Authorization = 'Bearer ' + Cloud.st.at; }
+  const r = await fetch(CLOUD_CFG.url.replace(/\/$/, '') + path, {method, headers: h, body: body === undefined ? undefined : JSON.stringify(body)});
+  const txt = await r.text(); let j = null; try { j = txt ? JSON.parse(txt) : null; } catch(e){}
+  if (!r.ok){
+    const e = new Error((j && (j.msg || j.message || j.error_description || j.error)) || ('HTTP ' + r.status));
+    e.status = r.status; e.code = j && (j.error_code || j.code); throw e;
+  }
+  return j;
+}
+const cloudRpc = (fn, args) => cloudFetch('/rest/v1/rpc/' + fn, {method: 'POST', body: args});
+function cloudAdopt(j){
+  Object.assign(Cloud.st, {at: j.access_token, rt: j.refresh_token, exp: Date.now() + ((j.expires_in || 3600) - 60) * 1000});
+  if (j.user){ Cloud.st.uid = j.user.id; Cloud.st.email = j.user.email || j.user.new_email || Cloud.st.email || ''; }
+  Cloud.save();
+}
+// Sesión: si no hay, se crea una cuenta anónima sin pedir nada. Con email vinculado, se recupera en otro dispositivo.
+let cloudSessP = null;
+function cloudSession(){
+  if (Cloud.st.at && Date.now() < Cloud.st.exp) return Promise.resolve();
+  if (cloudSessP) return cloudSessP;
+  cloudSessP = (async () => {
+    if (Cloud.st.rt){
+      try { cloudAdopt(await cloudFetch('/auth/v1/token?grant_type=refresh_token', {method: 'POST', body: {refresh_token: Cloud.st.rt}, auth: false})); return; }
+      catch(e){
+        if (!e.status || e.status >= 500) throw e;   // sin conexión: se reintenta más tarde
+        if (Cloud.st.email){ Object.assign(Cloud.st, {at: '', rt: '', exp: 0, expired: true}); Cloud.save(); throw new Error('Sesión caducada: vuelve a entrar con tu email'); }
+      }
+    }
+    if (Cloud.st.expired) throw new Error('Sesión caducada: vuelve a entrar con tu email');
+    cloudAdopt(await cloudFetch('/auth/v1/signup', {method: 'POST', body: {data: {}}, auth: false}));
+    Object.assign(Cloud.st, {rev: 0, hash: '', email: '', profile: ''}); Cloud.save();
+  })().finally(() => { cloudSessP = null; });
+  return cloudSessP;
+}
+async function cloudProfile(){
+  const want = trainerName + '|' + Cloud.st.region;
+  if (Cloud.st.profile === want) return;
+  await cloudRpc('set_profile', {p_name: trainerName, p_region: Cloud.st.region});
+  Cloud.st.profile = want; Cloud.save();
+}
+// Sustituye el progreso de este navegador por el de la nube y recarga
+function cloudApply(row){
+  Object.keys(localStorage).filter(isSaveKey).forEach(k => localStorage.removeItem(k));
+  for (const k of Object.keys(row.data || {})) if (isSaveKey(k) && typeof row.data[k] === 'string') localStorage.setItem(k, row.data[k]);
+  Object.assign(Cloud.st, {rev: row.rev, hash: cloudLocalHash(), syncedAt: Date.now(), profile: ''}); Cloud.save();
+  location.reload();
+}
+// Mira la nube: si otro dispositivo guardó algo más nuevo, lo carga; si los dos cambiaron, pregunta
+async function cloudPull(){
+  const rows = await cloudFetch('/rest/v1/saves?select=rev,data,updated_at&user_id=eq.' + encodeURIComponent(Cloud.st.uid));
+  const row = rows && rows[0];
+  if (!row){ Cloud.st.rev = 0; Cloud.save(); return 'empty'; }
+  if (row.rev === Cloud.st.rev) return 'same';
+  if (Cloud.st.hash && cloudLocalHash() === Cloud.st.hash){ cloudApply(row); return 'applied'; }
+  Cloud.pending = row;
+  if (state === 'select' || state === 'settings' || state === 'cloud') cloudShowConflict();
+  return 'conflict';
+}
+// Sube el progreso si ha cambiado desde la última vez
+async function cloudPush(force = false){
+  const data = saveData(), h = strHash(JSON.stringify(data));
+  if (!force && h === Cloud.st.hash) return;
+  const rev = await cloudRpc('put_save', {p_data: data, p_base_rev: Cloud.st.rev || 0, p_force: !!force});
+  if (rev === -1){ await cloudPull(); return; }
+  Object.assign(Cloud.st, {rev, hash: h, syncedAt: Date.now()}); Cloud.save();
+}
+async function cloudSync({pull = false, force = false} = {}){
+  if (!cloudEnabled() || Cloud.busy || Cloud.pending) return;
+  Cloud.busy = true;
+  try {
+    await cloudSession();
+    await cloudProfile();
+    if (pull || !Cloud.st.hash){ const r = await cloudPull(); if (r === 'applied' || r === 'conflict') return; }
+    await cloudPush(force);
+    await cloudFlushScores();
+    cloudSetMsg('Guardado en la nube ' + new Date(Cloud.st.syncedAt || Date.now()).toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'}));
+  } catch(e){ cloudSetMsg('Sin conexión con la nube: ' + e.message); }
+  finally { Cloud.busy = false; }
+}
+// Partidas pendientes de enviar al ranking (se guardan si no hay conexión y se envían luego)
+function cloudQueueScore(g){
+  if (!cloudEnabled() || Cloud.st.noRank || g.t < 30) return;
+  const q = Cloud.st.scores || [];
+  q.push({p_mode: g.mode === 'surv' ? 'surv' : 'normal', p_map: g.map, p_diff: g.diff, p_digimon: g.ch.id, p_t: Math.floor(g.t), p_kills: g.kills | 0, p_lvl: g.p.lvl | 0, p_wave: g.mode === 'surv' ? (g.wave || 1) : 0, p_win: !!g.win});
+  Cloud.st.scores = q.slice(-5); Cloud.save();
+}
+async function cloudFlushScores(){
+  const q = Cloud.st.scores || [];
+  while (q.length){
+    try { await cloudRpc('submit_score', q[0]); }
+    catch(e){ if (!e.status || e.status >= 500) throw e; }   // rechazada por el servidor (p. ej. imposible): se descarta
+    q.shift(); Cloud.st.scores = q; Cloud.save();
+  }
+}
+// Al terminar una partida: guarda, envía la puntuación y muestra el puesto en la pantalla final
+async function cloudAfterRun(win){
+  if (!cloudEnabled()) return;
+  const run = {mode: g.mode === 'surv' ? 'surv' : 'normal', map: g.map, diff: g.diff};
+  g.win = win; cloudQueueScore(g);
+  await cloudSync();
+  const el = document.getElementById('end3Rank');
+  if (!el || Cloud.st.noRank || Cloud.st.scores && Cloud.st.scores.length) return;
+  try {
+    const rows = await cloudRpc('get_leaderboard', {p_mode: run.mode, p_map: run.map, p_diff: run.diff, p_region: Cloud.st.region, p_limit: 1});
+    const me = (rows || []).find(r => r.me);
+    if (me && document.getElementById('end3Rank')) el.textContent = `Ranking de ${REGIONS[Cloud.st.region]}: tu mejor marca está en el puesto ${me.pos}`;
+  } catch(e){}
+}
+function cloudBoot(){
+  if (!cloudEnabled()) return;
+  cloudSync({pull: true});
+  setInterval(() => { if (state !== 'play' && state !== 'levelup') cloudSync(); }, 60000);
+  addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && state !== 'play') cloudSync(); });
+}
+// Resumen corto de un progreso para poder comparar
+function saveSummary(d){
+  const j = (k, def) => { try { return JSON.parse(d[k]) || def; } catch(e){ return def; } };
+  const bits = +(d['digibonk3d-bits'] || 0), digis = (j('digibonk3d-unlocked', [])).length, recs = j('digibonk3d-records', []);
+  const best = recs.reduce((a, r) => Math.max(a, r.t || 0), 0);
+  return `${bits.toLocaleString('es-ES')} Bits · ${digis || '—'} Digimon · mejor partida ${best ? fmtTime(best) : '—'}`;
+}
+function cloudShowConflict(){
+  const row = Cloud.pending; if (!row) return;
+  state = 'cloud';
+  setHud(false);
+  const when = new Date(row.updated_at).toLocaleString('es-ES', {dateStyle: 'medium', timeStyle: 'short'});
+  showOverlay(`
+    <div class="settings sc-box cd-box">
+      <header class="set-head"><h2>¿Qué progreso conservas?</h2></header>
+      <p class="sc-p">Tu cuenta tiene en la nube un progreso distinto del de este dispositivo. Elige uno; el otro se sustituye.</p>
+      <div class="set-row"><div><b>En la nube</b><small>Guardado el ${when}<br>${saveSummary(row.data || {})}</small></div><button class="mini-btn" id="cfCloud">Usar el de la nube</button></div>
+      <div class="set-row"><div><b>En este dispositivo</b><small>${saveSummary(saveData())}</small></div><button class="mini-btn" id="cfLocal">Usar este</button></div>
+    </div>`);
+  document.getElementById('cfCloud').onclick = () => cloudApply(row);
+  document.getElementById('cfLocal').onclick = async () => {
+    Cloud.pending = null; Cloud.st.rev = row.rev; Cloud.save();
+    showSelect();
+    Cloud.busy = true;
+    try { await cloudPush(true); cloudSetMsg('Guardado en la nube'); } catch(e){ cloudSetMsg('Sin conexión con la nube: ' + e.message); }
+    finally { Cloud.busy = false; }
+  };
+}
+// Pantalla "Nube y ranking" (desde Ajustes)
+let cdStep = null;   // {kind: 'link'|'login', email}
+function showCloud(){
+  state = 'cloud';
+  setHud(false);
+  const safe = v => String(v).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+  if (!CLOUD_ON){
+    showOverlay(`<div class="settings sc-box cd-box"><header class="set-head"><button class="g-back" id="cdBack">← Volver</button><h2>Nube y ranking</h2></header>
+      <p class="sc-p">El guardado en la nube y el ranking online aún no están activados en esta versión. Tu progreso se guarda en este navegador; para llevarlo a otro usa el código de guardado.</p></div>`);
+    document.getElementById('cdBack').onclick = () => showSettings();
+    return;
+  }
+  const guest = isGuest(), email = Cloud.st.email;
+  const acct = guest ? 'El modo invitado es de pruebas: no se guarda en la nube ni entra en el ranking.'
+    : email ? `Vinculada a <b>${safe(email)}</b>. Entra con ese email en otro dispositivo para seguir tu partida.`
+    : 'Cuenta anónima de este dispositivo. Vincula un email para no perderla y para jugar en otro dispositivo.';
+  const step = cdStep;
+  const emailForm = step ? `
+      <div class="set-row cd-form"><div><b>${step.kind === 'link' ? 'Vincular email' : 'Entrar con tu email'}</b><small>Te hemos enviado un código de 6 cifras a ${safe(step.email)}.</small></div>
+        <div class="set-seg-wrap"><input id="cdCode" class="cd-in" inputmode="numeric" maxlength="10" placeholder="Código" autocomplete="one-time-code"><button class="mini-btn" id="cdVerify">Confirmar</button><button class="mini-btn" id="cdCancel">Cancelar</button></div></div>`
+    : `
+      <div class="set-row cd-form"><div><b>${email ? 'Entrar con otro email' : 'Vincular email o entrar'}</b><small>${email ? 'Cambia a otra cuenta en este dispositivo.' : 'Vincular guarda esta partida en tu email. Si ya jugaste en otro dispositivo, entra con el email de allí.'}</small></div>
+        <div class="set-seg-wrap"><input id="cdEmail" class="cd-in" type="email" placeholder="tu@email.com" autocomplete="email">${email ? '' : '<button class="mini-btn" id="cdLink">Vincular</button>'}<button class="mini-btn" id="cdLogin">Entrar</button></div></div>`;
+  showOverlay(`
+    <div class="settings sc-box cd-box">
+      <header class="set-head"><button class="g-back" id="cdBack">← Volver</button><h2>Nube y ranking</h2></header>
+      <p class="sc-p">Tu progreso se guarda solo en la nube al acabar cada partida y cada minuto en los menús. ${acct}</p>
+      <p class="sc-p cd-status" id="cdStatus" aria-live="polite">${safe(Cloud.msg || '')}</p>
+      ${guest ? '' : `
+      <div class="set-row"><div><b>Guardar ahora</b><small>Sube el progreso de este dispositivo y comprueba si hay uno más nuevo.</small></div><button class="mini-btn" id="cdSync">Sincronizar</button></div>
+      <div class="set-row"><div><b>Región del ranking</b><small>Se ha elegido por la zona horaria de tu dispositivo.</small></div>
+        <select id="cdRegion" class="cd-in">${Object.entries(REGIONS).map(([k, n]) => `<option value="${k}"${Cloud.st.region === k ? ' selected' : ''}>${n}</option>`).join('')}</select></div>
+      <div class="set-row"><div><b>Aparecer en el ranking</b><small>Se publica tu nombre de entrenador, tu región y tus marcas.</small></div><button class="set-toggle${Cloud.st.noRank ? '' : ' on'}" id="cdRank">${Cloud.st.noRank ? 'No' : 'Sí'}</button></div>
+      ${emailForm}
+      ${email ? '<div class="set-row"><div><b>Cerrar sesión de la nube</b><small>Este dispositivo deja de guardar en tu cuenta. El progreso sigue aquí y en la nube.</small></div><button class="mini-btn" id="cdOut">Cerrar sesión</button></div>' : ''}`}
+      <div class="sc-row"><button class="mini-btn" id="cdBoard">Ver ranking</button></div>
+    </div>`);
+  const $ = id => document.getElementById(id);
+  $('cdBack').onclick = () => { cdStep = null; showSettings(); };
+  $('cdBoard').onclick = () => showRanking('cloud');
+  overlay.querySelectorAll('.cd-in').forEach(i => i.addEventListener('keydown', e => e.stopPropagation()));
+  if (guest) return;
+  $('cdSync').onclick = () => { cloudSetMsg('Sincronizando…'); cloudSync({pull: true}); };
+  $('cdRegion').onchange = e => { Cloud.st.region = e.target.value; Cloud.save(); cloudSync(); };
+  $('cdRank').onclick = () => { Cloud.st.noRank = !Cloud.st.noRank; Cloud.save(); showCloud(); };
+  const fail = e => cloudSetMsg('No se pudo: ' + e.message);
+  const sendCode = async kind => {
+    const em = ($('cdEmail').value || '').trim().toLowerCase();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){ cloudSetMsg('Escribe un email válido'); return; }
+    cloudSetMsg('Enviando código…');
+    try {
+      if (kind === 'link') await cloudFetch('/auth/v1/user', {method: 'PUT', body: {email: em}});
+      else await cloudFetch('/auth/v1/otp', {method: 'POST', body: {email: em, create_user: false}, auth: false});
+      cdStep = {kind, email: em}; Cloud.msg = ''; showCloud();
+    } catch(e){ fail(e.code === 'email_exists' ? new Error('ese email ya tiene cuenta: pulsa Entrar') : e); }
+  };
+  if ($('cdLink')) $('cdLink').onclick = () => sendCode('link');
+  if ($('cdLogin')) $('cdLogin').onclick = () => sendCode('login');
+  if ($('cdCancel')) $('cdCancel').onclick = () => { cdStep = null; showCloud(); };
+  if ($('cdVerify')) $('cdVerify').onclick = async () => {
+    const token = ($('cdCode').value || '').replace(/\s/g, '');
+    if (!token){ cloudSetMsg('Escribe el código del email'); return; }
+    cloudSetMsg('Comprobando…');
+    try {
+      const j = await cloudFetch('/auth/v1/verify', {method: 'POST', auth: false, body: {type: step.kind === 'link' ? 'email_change' : 'email', email: step.email, token}});
+      const prevUid = Cloud.st.uid;
+      cloudAdopt(j); Cloud.st.email = step.email; Cloud.st.expired = false;
+      if (Cloud.st.uid !== prevUid) Object.assign(Cloud.st, {rev: 0, hash: '', profile: ''});   // otra cuenta: hay que comparar con su progreso
+      Cloud.save(); cdStep = null;
+      Cloud.msg = step.kind === 'link' ? 'Email vinculado' : 'Sesión iniciada'; showCloud();
+      cloudSync({pull: true});
+    } catch(e){ fail(e); }
+  };
+  if ($('cdOut')) $('cdOut').onclick = async () => {
+    try { await cloudFetch('/auth/v1/logout', {method: 'POST'}); } catch(e){}
+    Cloud.st = {region: Cloud.st.region, noRank: Cloud.st.noRank}; Cloud.save(); Cloud.msg = 'Sesión cerrada'; showCloud();
+  };
+}
+// Ranking por regiones: mejor marca de cada jugador por modo, mapa y dificultad
+const Rk = {mode: 'normal', map: null, diff: 'normal', region: ''};
+async function showRanking(from){
+  if (from) Rk.from = from;
+  state = 'ranking';
+  setHud(false);
+  if (!Rk.map) Rk.map = runMap;
+  const safe = v => String(v).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+  const seg = (k, v, label) => `<button class="set-seg${Rk[k] === v ? ' on' : ''}" data-rk="${k}" data-v="${v}">${label}</button>`;
+  showOverlay(`
+    <div class="settings sc-box rk-box">
+      <header class="set-head"><button class="g-back" id="rkBack">← Volver</button><h2>Ranking</h2></header>
+      <div class="rk-filters">
+        <div class="set-seg-wrap">${seg('mode', 'normal', 'Clásico')}${seg('mode', 'surv', 'Supervivencia')}</div>
+        <div class="set-seg-wrap">${Object.keys(MAPS).map(k => seg('map', k, safe(MAPS[k].name))).join('')}</div>
+        ${Rk.mode === 'normal' ? `<div class="set-seg-wrap">${DIFF_ORDER.map(k => seg('diff', k, DIFFS[k].name)).join('')}</div>` : ''}
+        <div class="set-seg-wrap">${seg('region', '', 'Mundial')}${Object.entries(REGIONS).map(([k, n]) => seg('region', k, n)).join('')}</div>
+      </div>
+      <p class="sc-p">${Rk.mode === 'normal' ? 'Primero las victorias, de la más rápida a la más lenta; después, quien más aguantó.' : 'Más oleadas primero; a igualdad, más tiempo.'}</p>
+      <ol class="rk-list" id="rkList"><li class="rk-empty">${CLOUD_ON ? 'Cargando…' : 'El ranking online aún no está activado en esta versión.'}</li></ol>
+    </div>`);
+  document.getElementById('rkBack').onclick = () => Rk.from === 'cloud' ? showCloud() : showSelect();
+  overlay.querySelectorAll('[data-rk]').forEach(b => b.onclick = () => { Rk[b.dataset.rk] = b.dataset.v; showRanking(); });
+  if (!CLOUD_ON) return;
+  const want = JSON.stringify(Rk);
+  let rows;
+  try {
+    const args = {p_mode: Rk.mode, p_map: Rk.map, p_diff: Rk.diff, p_region: Rk.region || null, p_limit: 50};
+    rows = Cloud.st.at || (cloudEnabled() && !Cloud.st.expired) ? await cloudRpc('get_leaderboard', args)
+      : await fetch(CLOUD_CFG.url.replace(/\/$/, '') + '/rest/v1/rpc/get_leaderboard', {method: 'POST', headers: {apikey: CLOUD_CFG.key, 'Content-Type': 'application/json'}, body: JSON.stringify(args)}).then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)));
+  } catch(e){ rows = null; }
+  const ol = document.getElementById('rkList');
+  if (!ol || state !== 'ranking' || want !== JSON.stringify(Rk)) return;
+  if (!rows){ ol.innerHTML = '<li class="rk-empty">No se pudo cargar el ranking. Comprueba la conexión.</li>'; return; }
+  const res = r => Rk.mode === 'surv' ? `Oleada ${r.wave}<small>${fmtTime(r.t)}</small>` : r.win ? `${fmtTime(r.t)}<small>Victoria</small>` : `${fmtTime(r.t)}<small>Sin victoria</small>`;
+  ol.innerHTML = rows.map(r => `<li class="${r.me ? 'me ' : ''}${r.pos <= 3 ? 'top p' + r.pos : ''}"><em>${r.pos}</em><img src="${CHARS[r.digimon] ? charIcon(r.digimon) : ''}" alt="" onerror="this.style.visibility='hidden'"><span><b>${safe(r.name)}${r.me ? ' (tú)' : ''}</b><small>${REGIONS[r.region] || ''} · ${r.kills.toLocaleString('es-ES')} bajas · Nv ${r.lvl}</small></span><strong>${res(r)}</strong></li>`).join('')
+    || '<li class="rk-empty">Nadie ha entrado aún en este ranking. ¡Sé el primero!</li>';
+}
 // Ajustes: calidad gráfica, efectos de sonido y música
 function showSettings(){
   state = 'settings';
@@ -4892,6 +5210,10 @@ function showSettings(){
         <button class="mini-btn" id="btnSaveCode">Código de guardado</button>
       </div>
       <div class="set-row">
+        <div><b>Nube y ranking</b><small>${CLOUD_ON ? (isGuest() ? 'No disponible en modo invitado.' : Cloud.st.email ? 'Guardado en la nube con ' + Cloud.st.email.replace(/[<>&"]/g, '') + '.' : 'Guardado automático en la nube. Vincula un email para jugar en otro dispositivo.') : 'Próximamente: guardado en la nube y ranking por regiones.'}</small></div>
+        <button class="mini-btn" id="btnCloud">Nube y ranking</button>
+      </div>
+      <div class="set-row">
         <div><b>Cuenta</b><small>Cerrar sesión deja tu progreso guardado en este navegador. Eliminar la cuenta borra todo el progreso de este navegador.</small></div>
         <div class="set-seg-wrap"><button class="mini-btn" id="btnLogout">Cerrar sesión</button><button class="mini-btn danger" id="btnDelete">Eliminar cuenta</button></div>
       </div>
@@ -4910,6 +5232,7 @@ function showSettings(){
   overlay.querySelectorAll('.set-seg[data-scale]').forEach(b => b.onclick = () => { localStorage.setItem('digibonk3d-uiscale', b.dataset.scale); applyUiPrefs(); showSettings(); });
   document.getElementById('tMotion').onclick = () => { localStorage.setItem('digibonk3d-reducemotion', reduceMotion() ? '0' : '1'); applyUiPrefs(); showSettings(); };
   document.getElementById('btnSaveCode').onclick = () => showSaveCode();
+  document.getElementById('btnCloud').onclick = () => showCloud();
   // Cerrar sesión: vuelve a la pantalla de registro; el progreso sigue en este navegador
   document.getElementById('btnLogout').onclick = () => {
     localStorage.removeItem('digibonk3d-name');
@@ -4917,8 +5240,9 @@ function showSettings(){
     location.reload();
   };
   // Eliminar cuenta: borra todo lo guardado por el juego en este navegador
-  document.getElementById('btnDelete').onclick = () => {
-    if (!confirm(I18N.tr('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Bits, skins, colección, récords). No se puede deshacer.'))) return;
+  document.getElementById('btnDelete').onclick = async () => {
+    if (!confirm(Cloud.st.uid ? I18N.tr('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Bits, skins, colección, récords) y tu cuenta en la nube con tus puestos del ranking. No se puede deshacer.') : I18N.tr('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Bits, skins, colección, récords). No se puede deshacer.'))) return;
+    if (Cloud.st.uid && CLOUD_ON){ try { await cloudRpc('delete_my_data', {}); } catch(e){ if (!confirm(I18N.tr('No se pudo borrar la cuenta de la nube ({0}). ¿Borrar solo este navegador?'.replace('{0}', e.message)))) return; } }
     Object.keys(localStorage).filter(k => k.startsWith('digibonk3d-')).forEach(k => localStorage.removeItem(k));
     location.reload();
   };
@@ -6790,6 +7114,7 @@ function endGame(win){
     <div class="end3 ${win ? 'win' : 'lose'}">
       <div class="end3-top"><img class="end3-ic" src="${charIcon(g.ch.id)}" alt=""><h1>${g.mode === 'surv' ? 'FIN DE LA SUPERVIVENCIA' : win ? '¡VICTORIA!' : 'HAS CAÍDO'}</h1></div>
       <p class="end3-sub">${g.mode === 'surv' ? `Has aguantado ${fmtTime(Math.floor(g.t))} · récord con ${g.ch.name}: ${fmtTime(Math.floor(survBest(g.ch.id)))}` : win ? (g.bossName || 'Piedmon') + ' ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Laboratorio`} · ${mapDef().name} · ${zoneDef().name} · ${lvlDiff().name}${g.mode === 'surv' ? ' · Oleada ' + (g.wave || 1) : ''}</p>
+      <p class="end3-sub end3-rank" id="end3Rank" aria-live="polite"></p>
       <div class="end3-cells">
         <span><i>⏱</i><b>${fmtTime(Math.floor(g.t))}</b>Tiempo</span><span><i>⭐</i><b>${g.p.lvl}</b>Nivel</span><span><i>⚔</i><b>${g.kills}</b>Bajas</span><span><i>✦</i><b>${Object.keys(g.skills).length}</b>Habilidades</span>
         <span class="end3-gain"><i><img src="ui/hud/ic_bits.webp" alt=""></i><b>+${g.earned}</b>Bits ganados</span><span class="end3-gain"><i><img src="ui/hud/ic_ticket.webp" alt=""></i><b>+${(g.tix || 0) + g.encDone.length * ENC_REWARD.tix}</b>Tickets</span>
@@ -6806,6 +7131,7 @@ function endGame(win){
   document.getElementById('endAgain').onclick = () => startGame(endKey);
   document.getElementById('endMenu').onclick = () => showSelect();
   document.getElementById('endPick').onclick = () => showPicker();
+  cloudAfterRun(win);   // guarda en la nube y envía la marca al ranking (si la nube está activada)
 
 }
 
@@ -9306,6 +9632,7 @@ function frame(now){
 }
 buildSkins();
 if (trainerName) showSelect(); else showRegister();
+cloudBoot();
 // Modo demo (solo para grabar los vídeos del tutorial con ?demo=1): expone el estado y atajos de escena
 if (new URLSearchParams(location.search).has('demo')){
   window.__dbk = {

@@ -35,3 +35,7 @@ Luego abre `http://localhost:8765/` en el navegador.
 - Cada archivo de idioma es una lista «texto en español → traducción». Si falta una entrada, ese texto se ve en español. Las claves admiten huecos para números y nombres: `"Nivel {0}": "Level {0}"`.
 - Para ver qué falta en un idioma: en la consola, `I18N.missing = new Set()`, juega un rato y mira `[...I18N.missing]`.
 - Para añadir un idioma: copia `i18n/en.js` con el código nuevo, tradúcelo y añade el idioma a `LANGS` en `i18n/i18n.js`.
+
+## Nube y ranking
+
+Guardado en la nube entre dispositivos y ranking por regiones con Supabase. Está apagado hasta rellenar `CLOUD_CFG` en `index.html`; los pasos están en [`supabase/README.md`](supabase/README.md).
