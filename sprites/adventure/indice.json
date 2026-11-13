@@ -1,14 +1,4 @@
 {
- "botamon": {
-  "nombre": "Botamon",
-  "autor": "tero0x",
-  "estilo": "Hi-res"
- },
- "koromon": {
-  "nombre": "Koromon",
-  "autor": "tero0x",
-  "estilo": "Hi-res"
- },
  "agumon": {
   "nombre": "Agumon",
   "autor": "Jaime (generado con IA)",
@@ -34,16 +24,6 @@
   "autor": "tero0x",
   "estilo": "Hi-res"
  },
- "punimon": {
-  "nombre": "Punimon",
-  "autor": "tero0x",
-  "estilo": "Hi-res"
- },
- "tsunomon": {
-  "nombre": "Tsunomon",
-  "autor": "tero0x",
-  "estilo": "Hi-res"
- },
  "gabumon": {
   "nombre": "Gabumon",
   "autor": "Jaime (generado con IA)",
@@ -64,16 +44,6 @@
   "autor": "Jaime (generado con IA)",
   "estilo": "Nuevo 2026"
  },
- "nyokimon": {
-  "nombre": "Nyokimon",
-  "autor": "tero0x",
-  "estilo": "Hi-res"
- },
- "yokomon": {
-  "nombre": "Yokomon",
-  "autor": "tero0x",
-  "estilo": "Hi-res"
- },
  "biyomon": {
   "nombre": "Biyomon",
   "autor": "Jaime (generado con IA)",
@@ -88,16 +58,6 @@
   "nombre": "Garudamon",
   "autor": "Jaime (generado con IA)",
   "estilo": "Nuevo 2026"
- },
- "pabumon": {
-  "nombre": "Pabumon",
-  "autor": "tero0x",
-  "estilo": "Hi-res"
- },
- "motimon": {
-  "nombre": "Motimon",
-  "autor": "tero0x",
-  "estilo": "Hi-res"
  },
  "tentomon": {
   "nombre": "Tentomon",
@@ -114,16 +74,6 @@
   "autor": "Jaime (generado con IA)",
   "estilo": "Nuevo 2026"
  },
- "yuramon": {
-  "nombre": "Yuramon",
-  "autor": "tero0x",
-  "estilo": "Hi-res"
- },
- "tanemon": {
-  "nombre": "Tanemon",
-  "autor": "tero0x",
-  "estilo": "Hi-res"
- },
  "palmon": {
   "nombre": "Palmon",
   "autor": "Jaime (generado con IA)",
@@ -138,16 +88,6 @@
   "nombre": "Lillymon",
   "autor": "Jaime (generado con IA)",
   "estilo": "Nuevo 2026"
- },
- "pichimon": {
-  "nombre": "Pichimon",
-  "autor": "tero0x",
-  "estilo": "Hi-res"
- },
- "bukamon": {
-  "nombre": "Bukamon",
-  "autor": "tero0x",
-  "estilo": "Hi-res"
  },
  "gomamon": {
   "nombre": "Gomamon",
@@ -164,16 +104,6 @@
   "autor": "Jaime (generado con IA)",
   "estilo": "Nuevo 2026"
  },
- "poyomon": {
-  "nombre": "Poyomon",
-  "autor": "Bandai",
-  "estilo": "Dot"
- },
- "tokomon": {
-  "nombre": "Tokomon",
-  "autor": "Bandai",
-  "estilo": "Dot"
- },
  "patamon": {
   "nombre": "Patamon",
   "autor": "Jaime (generado con IA)",
@@ -188,16 +118,6 @@
   "nombre": "MagnaAngemon",
   "autor": "Jaime (generado con IA)",
   "estilo": "Nuevo 2026"
- },
- "snowbotamon": {
-  "nombre": "Yukimibotamon",
-  "autor": "tero0x",
-  "estilo": "Hi-res"
- },
- "nyaromon": {
-  "nombre": "Nyaromon",
-  "autor": "Bandai",
-  "estilo": "Dot"
  },
  "salamon": {
   "nombre": "Salamon",
