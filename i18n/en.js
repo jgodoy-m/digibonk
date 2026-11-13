@@ -1000,4 +1000,7 @@ I18N.add('en', {
   "Favorito": "Favourite",
   "Los favoritos salen siempre primero": "Favourites always come first",
   "1-9 elegir": "1-9 select",
+  "Recuperas 1 PS cada 3 enemigos derrotados.": "You recover 1 HP for every 3 defeated enemies.",
+  "¡Corrupción de datos!": "Data corruption!",
+  "Si sigues quieto pierdes vida cada segundo": "If you keep standing still you lose HP every second",
 });

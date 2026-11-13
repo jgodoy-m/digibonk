@@ -1013,4 +1013,7 @@ I18N.add('ru', {
   "Favorito": "Избранное",
   "Los favoritos salen siempre primero": "Избранные всегда идут первыми",
   "1-9 elegir": "1-9 выбор",
+  "Recuperas 1 PS cada 3 enemigos derrotados.": "Восстанавливаешь 1 ОЗ за каждых 3 побеждённых врагов.",
+  "¡Corrupción de datos!": "Порча данных!",
+  "Si sigues quieto pierdes vida cada segundo": "Если продолжишь стоять на месте, будешь терять здоровье каждую секунду",
 });

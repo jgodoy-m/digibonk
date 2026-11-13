@@ -1001,4 +1001,7 @@ I18N.add('de', {
   "Favorito": "Favorit",
   "Los favoritos salen siempre primero": "Favoriten stehen immer oben",
   "1-9 elegir": "1-9 wählen",
+  "Recuperas 1 PS cada 3 enemigos derrotados.": "Du erhältst 1 KP für je 3 besiegte Gegner zurück.",
+  "¡Corrupción de datos!": "Datenkorruption!",
+  "Si sigues quieto pierdes vida cada segundo": "Wenn du stehen bleibst, verlierst du jede Sekunde Leben",
 });

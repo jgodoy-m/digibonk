@@ -3566,7 +3566,7 @@ const UPGRADES = [
   {t:'Proyectil / cuchilla +1', k:'ofensiva', d:'Añade un proyectil o cuchilla más a tu ataque.',    f:p=>{p.count+=1;}},
   {t:'Área +20%',               k:'ofensiva', d:'Tus ataques cubren un 20% más de área.',            f:p=>{ const a = p.areaAdd || 1; p.area *= (a + 0.2)/a; p.areaAdd = a + 0.2; }},
   {t:'Imán +50%',               k:'utilidad', d:'Recoges los orbes de experiencia desde mucho más lejos.', f:p=>{p.pickup*=1.5;}},
-  {t:'Robo de vida',            k:'defensiva', d:'Recuperas 1 PS por cada enemigo derrotado.',        f:p=>{p.lifesteal=(p.lifesteal||0)+1;}},
+  {t:'Robo de vida',            k:'defensiva', d:'Recuperas 1 PS cada 3 enemigos derrotados.',       f:p=>{p.lifesteal=(p.lifesteal||0)+1/3;}},
   {t:'Dash −20% espera',        k:'utilidad', d:'El dash se recarga un 20% más rápido.',            f:p=>{p.dashMul=(p.dashMul||1)*0.8;}},
   {t:'Armadura +8%',            k:'defensiva', d:'Recibes un 8% menos de daño.',                    f:p=>{p.armor=(p.armor||1)*0.92;}},
   {t:'Probabilidad crítica +8%', k:'ofensiva', d:'Más golpes críticos (naranjas).', f:p=>{p.critChance=Math.min(0.75, p.critChance+0.08);}},
@@ -6209,9 +6209,9 @@ const eliteGap = () => (45 + (DIFF.eliteT - 45) * Math.min(1, (g ? g.t : 0) / 60
 // Infierno: tras 20 minutos en la misma pantalla todo se multiplica sin parar (+100% cada 15 s)
 const infMul = () => (g && g.inferno) ? 1 + Math.max(0, g.screenT - SCREEN_LIMIT) / 15 : 1;
 // Tiempo que cuenta para la dificultad: igual que el tiempo real hasta el minuto 10 (la dificultad de siempre)
-// y después avanza a 0,3 para que el minuto 20 no sea imposible
+// y después avanza a 0,6 (antes 0,3: del minuto 10 al 20 la partida se volvía más fácil)
 // En Supervivencia no hay jefe final: la dificultad no se suaviza tras el minuto 10
-const diffT = t => (g && g.mode === 'surv') ? t : (t <= 600 ? t : 600 + (t - 600) * 0.3);
+const diffT = t => (g && g.mode === 'surv') ? t : (t <= 600 ? t : 600 + (t - 600) * 0.6);
 let runMode = 'normal';   // 'normal' o 'surv' (lo elige el menú antes del selector)
 function spawnEnemy(forced){
   // Tope de enemigos para todas las fuentes (horda, élites, invocaciones, eventos); las élites tienen 20 de margen
@@ -6224,7 +6224,7 @@ function spawnEnemy(forced){
   else if (t > 120 && r < (z2 ? 0.3 : 0.2)) kind = 'tank';
   else if (t > 60 && r < (z2 ? 0.5 : 0.4)) kind = 'fast';
   const tt = diffT(t);
-  const d = ENEMY[kind], k = 1 + tt/45 + (tt/170)*(tt/170);   // vida: igual que siempre hasta el minuto 10
+  const d = ENEMY[kind], k = 1 + tt/45 + (tt/115)*(tt/115);   // vida: crece más deprisa a partir del minuto 5 (antes /170: a nivel 20 nada aguantaba)
   const pool = (zoneDef().foes || ZONE_FOES[g.zone - 1])[kind], sprite = pool ? pool[Math.floor(Math.random()*pool.length)] : d.sprite;
   const mesh = billboard(sprite, d.scale);
   mesh.position.y = d.scale/2;
@@ -6234,7 +6234,7 @@ function spawnEnemy(forced){
   world.add(shadow);
   const foe = {
     kind, sprite, mesh, shadow, x: sp[0], z: sp[1],
-    hp: d.hp*k*evoHp()*diffMul('hp'), max: d.hp*k*evoHp()*diffMul('hp'), spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300)*evoDmg()*diffMul('dmg'), cd: 0
+    hp: d.hp*k*evoHp()*diffMul('hp'), max: d.hp*k*evoHp()*diffMul('hp'), spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300 + (tt/600)*(tt/600))*evoDmg()*diffMul('dmg'), cd: 0
   };
   g.enemies.push(foe);
   return foe;
@@ -6372,10 +6372,19 @@ function update(dt){
 
   // Quedarse quieto: tras 2,5 s sin moverte, los enemigos salen más deprisa y más cerca
   const mvd = Math.hypot(g.p.x - (g.lastPx ?? g.p.x), g.p.z - (g.lastPz ?? g.p.z));
-  g.idleT = mvd > 0.02 ? 0 : (g.idleT || 0) + dt;
+  g.idleT = (mvd > 0.02 || mx || mz) ? 0 : (g.idleT || 0) + dt;   // empujar contra una pared también cuenta como moverse
   g.lastPx = g.p.x; g.lastPz = g.p.z;
   if (g.idleT > 2.5 && !g.idleWarned){ g.idleWarned = true; announce('¡Muévete!', 'Quieto recibes cada vez más daño y te rodean', '#ef5350'); }
   if (g.idleT <= 2.5) g.idleWarned = false;
+  // Corrupción de datos: tras 5 s quieto pierdes vida aunque nadie te toque (un ataque de área no te salva):
+  // 3% de la vida máxima por segundo, +3% cada 2 s, hasta el 15%. Sin armadura. Quedarse quieto mata en unos 15 s
+  if (g.idleT > 5 && !g.evoAnim){
+    const rate = Math.min(0.15, 0.03 + 0.03*Math.floor((g.idleT - 5)/2));
+    p.hp -= p.maxHp*rate*dt;
+    g.corrT = (g.corrT || 0) - dt;
+    if (g.corrT <= 0){ g.corrT = 1; popText(p.x, p.z, 'Corrupción', '#e040fb', 0.8); shake = Math.max(shake, 0.15); }
+    if (!g.corrWarned){ g.corrWarned = true; announce('¡Corrupción de datos!', 'Si sigues quieto pierdes vida cada segundo', '#e040fb'); }
+  } else if (g.idleT <= 5) g.corrWarned = false;
 
   // Aparición
   g.spawnT -= dt * (g.idleT > 2.5 ? 1.8 : 1);
@@ -6491,7 +6500,7 @@ function update(dt){
   const dead = g.enemies.filter(e => e.hp <= 0);
   for (const e of dead){
     if (g.p.lifesteal && !(g.mod && g.mod.noHeal)) g.p.hp = Math.min(g.p.maxHp, g.p.hp + g.p.lifesteal);
-    g.gems.push({x:e.x, z:e.z, v:e.xp*(1 + g.t/600), heal: !(g.mod && g.mod.noHeal) && Math.random() < 0.10, mesh: null});   // las bajas valen más según avanza la partida
+    g.gems.push({x:e.x, z:e.z, v:e.xp*(1 + g.t/600), heal: !(g.mod && g.mod.noHeal) && Math.random() < 0.05, mesh: null});   // las bajas valen más según avanza la partida
     // 2% por baja, pero con enfriamiento de 45 s y un solo imán en el mapa a la vez
     if ((g.magnetT || 0) <= 0 && Math.random() < 0.02){ spawnMagnetDrop(e.x, e.z); g.magnetT = 45; }
     // Tickets de tirada: 25% de cada élite y 3 seguros del jefe
@@ -6810,12 +6819,12 @@ function strongestIn(x, z, R){
   let best = null, bm = -1;
   for (const e of g.enemies){
     if (e.hp <= 0 || e.max <= bm) continue;
-    if (dist2(x, z, e.x, e.z) <= R*R){ best = e; bm = e.max; }
+    if (dist2(x, z, e.x, e.z) <= R){ best = e; bm = e.max; }
   }
   return best;
 }
 function nearestIn(x, z, R){
-  let best = null, bd = R*R;
+  let best = null, bd = R;
   for (const e of g.enemies){
     if (e.hp <= 0) continue;
     const d = dist2(x, z, e.x, e.z);
@@ -6853,8 +6862,8 @@ function updateSkills(dt){
     S.auraT -= dt;
     if (S.auraT <= 0){
       S.auraT = 0.3;
-      const dmg = (1.5 + 0.8*lv('aura')) * dm;
-      for (const e of g.enemies) if (e.hp > 0 && dist2(p.x, p.z, e.x, e.z) < (R + e.r)*(R + e.r)) hurt(e, dmg);
+      const dmg = (2.5 + 1.2*lv('aura')) * dm;
+      for (const e of g.enemies) if (e.hp > 0 && dist2(p.x, p.z, e.x, e.z) < R + e.r) hurt(e, dmg);
     }
   }
 
@@ -6875,7 +6884,7 @@ function updateSkills(dt){
         const dx = e.x - bx, dz = e.z - bz, d = Math.hypot(dx, dz);
         if (d < e.r + 0.9){
           if (!(e.tcd > 0)){ hurt(e, (3 + 1.5*lv('tornado')) * dm); e.tcd = 0.5; }
-          const push = 1.2/(d || 1); e.x += dx*push; e.z += dz*push;
+          const push = 0.6/(d || 1); e.x += dx*push; e.z += dz*push;
           [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5);
         }
       }
@@ -6891,7 +6900,7 @@ function updateSkills(dt){
     S.pulseT -= dt;
     if (S.pulseT <= 0){
       const L2 = lv('pulso');
-      S.pulseT = (3.2 - 0.4*L2) * cm;
+      S.pulseT = (4.2 - 0.4*L2) * cm;
       const R = (6.5 + 1.5*L2) * ar;
       spawnRing(p.x, p.z, 0x4fc3f7, R, 0.5);
       for (const e of g.enemies){
@@ -6899,7 +6908,7 @@ function updateSkills(dt){
         const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz);
         if (d < R + e.r){
           hurt(e, (6 + 2*L2) * dm);
-          const push = 5/(d || 1); e.x += dx*push; e.z += dz*push;
+          const push = (e.boss || e.kind === 'mini' ? 0 : 2.5)/(d || 1); e.x += dx*push; e.z += dz*push;
           [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5);
         }
       }
@@ -6967,20 +6976,20 @@ function updateSkills(dt){
   // Mina Digital: se deja una mina cada 2,2 m recorridos; explota al pisarla un enemigo
   if (lv('mina')){
     const L2 = lv('mina');
-    if (dist2(p.x, p.z, S.lastMine.x, S.lastMine.z) > 2.2*2.2 && S.mines.length < 14 + 4*L2){
+    if (dist2(p.x, p.z, S.lastMine.x, S.lastMine.z) > 2.2 && S.mines.length < 14 + 4*L2){
       dropMine(p.x, p.z, L2);
       S.lastMine = {x: p.x, z: p.z};
     }
     for (const m of S.mines){
       if (m.life <= 0) continue;
       m.life -= dt;
-      const trig = g.enemies.some(e => e.hp > 0 && dist2(m.x, m.z, e.x, e.z) < (e.r + 1.2)*(e.r + 1.2));
+      const trig = g.enemies.some(e => e.hp > 0 && dist2(m.x, m.z, e.x, e.z) < e.r + 1.2);
       if (m.life <= 0 || trig){
         const R = (2.6 + 0.6*m.lv) * ar;
         m.life = 0;
         spawnRing(m.x, m.z, 0xff7043, R, 0.45);
         burst(m.x, m.z, 0xff7043);
-        for (const e of g.enemies) if (e.hp > 0 && dist2(m.x, m.z, e.x, e.z) < (R + e.r)*(R + e.r)) hurt(e, (12 + 4*m.lv) * dm);
+        for (const e of g.enemies) if (e.hp > 0 && dist2(m.x, m.z, e.x, e.z) < R + e.r) hurt(e, (14 + 5*m.lv) * dm);
       }
     }
     S.mines = S.mines.filter(m => { if (m.life > 0) return true; world.remove(m.mesh); return false; });
@@ -6996,13 +7005,13 @@ function updateSkills(dt){
       for (let i = 0; i < L2 + 1; i++){
         const an = Math.random()*Math.PI*2, rr = Math.sqrt(Math.random())*13;
         const [mx, mz] = clampArena(p.x + Math.cos(an)*rr, p.z + Math.sin(an)*rr, ARENA_R - 2);
-        const R = 2.6 * ar;
+        const R = 3.2 * ar;
         const wm = new THREE.Mesh(RING_GEO, new THREE.MeshBasicMaterial({color: 0xff5252, transparent: true, opacity: 0.6, depthWrite: false}));
         wm.rotation.x = -Math.PI/2;
         wm.position.set(mx, terrainH(mx, mz) + 0.07, mz);
         wm.scale.setScalar(R);
         world.add(wm);
-        S.meteors.push({x: mx, z: mz, t: 0, R, mesh: wm, dmg: (10 + 3*L2) * dm});
+        S.meteors.push({x: mx, z: mz, t: 0, R, mesh: wm, dmg: (16 + 5*L2) * dm});
       }
     }
     for (const m of S.meteors){
@@ -7010,7 +7019,7 @@ function updateSkills(dt){
       m.mesh.material.opacity = 0.35 + 0.35*Math.sin(m.t*18);
       if (m.t >= 0.7 && !m.done){
         m.done = true;
-        for (const e of g.enemies) if (e.hp > 0 && dist2(m.x, m.z, e.x, e.z) < (m.R + e.r)*(m.R + e.r)) hurt(e, m.dmg);
+        for (const e of g.enemies) if (e.hp > 0 && dist2(m.x, m.z, e.x, e.z) < m.R + e.r) hurt(e, m.dmg);
         spawnRing(m.x, m.z, 0xff5252, m.R, 0.4);
         burst(m.x, m.z, 0xff5252);
       }
@@ -7034,7 +7043,7 @@ function updateSkills(dt){
     if (pr.life <= 0) continue;
     for (const e of g.enemies){
       if (e.hp <= 0 || pr.hit.has(e)) continue;
-      if (dist2(pr.x, pr.z, e.x, e.z) < (e.r + 0.3)*(e.r + 0.3)){
+      if (dist2(pr.x, pr.z, e.x, e.z) < e.r + 0.3){
         dmgSrc = pr.src; hurt(e, pr.dmg);
         pr.hit.add(e);
         if (--pr.pierce <= 0){ pr.life = 0; break; }
@@ -7887,7 +7896,7 @@ function updateFusions(dt){
       for (const e of g.enemies){
         if (e.hp <= 0) continue;
         const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz);
-        if (d < R + e.r){ hurt(e, 24 * dm); if (!e.boss){ const push = 4/(d || 1); e.x += dx*push; e.z += dz*push; [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5); } }
+        if (d < R + e.r){ hurt(e, 24 * dm); if (!e.boss){ const push = 2/(d || 1); e.x += dx*push; e.z += dz*push; [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5); } }
       }
     }
   }
@@ -9695,6 +9704,7 @@ if (new URLSearchParams(location.search).has('demo')){
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
     spawnMini, MINIS, startMapEvent, summonBoss, openPortal, enterScreen, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
+    stepUpdate: dt => update(dt), animateEvo,
     // Simulación rápida sin dibujar (para medir el equilibrio): avanza sec segundos y elige la carta pick en cada subida
     sim(sec, pick = 0, move = false, god = false){
       const out = [];
