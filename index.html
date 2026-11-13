@@ -3110,6 +3110,38 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
 #overlay :is(.settings,.help-box,.sc-box){width:min(720px,94vw)!important;max-width:none!important;box-sizing:border-box!important}
 #overlay .approved-info-dialog{width:min(520px,94vw)!important;box-sizing:border-box!important}
 @media(max-width:760px){#overlay .picker-screen.cl4,#overlay:not(.menu-mode)>.picker-screen.ms,#overlay .picker-screen.ms,#overlay .lab-screen{height:auto!important;max-height:none!important}}
+/* Guía «Cómo jugar»: capítulos, vídeo o captura a la izquierda, texto y teclas a la derecha */
+#overlay .help-box.gd{display:flex;flex-direction:column;gap:12px;padding:18px 22px 16px!important}
+#overlay .help-box.gd .set-head{display:flex;align-items:center;gap:12px;margin:0}
+#overlay .help-box.gd .gd-count{margin-left:auto;padding:4px 11px;border-radius:999px;background:var(--m-rowbg);color:var(--m-mute);font:800 13px 'Nunito',system-ui,sans-serif}
+#overlay .help-box.gd .gd-tabs{display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--m-sunk);border:1px solid var(--m-line)}
+#overlay .help-box.gd .gd-tabs button{flex:1;padding:7px 6px;border:0;border-radius:999px;background:none;color:var(--m-mute);font:800 13px 'Nunito',system-ui,sans-serif;cursor:pointer}
+#overlay .help-box.gd .gd-tabs button:hover{color:var(--m-text)}
+#overlay .help-box.gd .gd-tabs button.on{background:var(--m-tabon);color:var(--m-tabon-txt)}
+html[data-theme=oscuro] #overlay .help-box.gd .gd-tabs button.on{background:#3d4148;color:#fff}
+#overlay .help-box.gd .gd-stage{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;align-items:start;min-height:236px}
+#overlay .help-box.gd .gd-media{margin:0}
+#overlay .help-box.gd .tuto-video{display:block;width:100%;max-width:none;height:auto;aspect-ratio:16/9;margin:0;object-fit:cover;border-radius:14px;border:1px solid var(--m-cardline);background:var(--m-sunk);box-shadow:0 4px 14px rgba(0,0,0,.14)}
+#overlay:not(.menu-mode) .help-box.gd .gd-txt h3{margin:2px 0 6px!important;font:900 20px/1.2 'Nunito',system-ui,sans-serif!important;text-align:left}
+#overlay .help-box.gd .gd-txt p{margin:0 0 12px;font-size:14px;line-height:1.45;text-align:left;min-height:0;max-width:none}
+#overlay .help-box.gd .gd-keys{display:grid;gap:7px;margin:0;padding:0;list-style:none}
+#overlay .help-box.gd .gd-keys[hidden]{display:none}
+#overlay .help-box.gd .gd-keys li{display:flex;align-items:center;gap:10px;color:var(--m-soft);font-size:13px;font-weight:700}
+#overlay .help-box.gd .gd-keys kbd{flex:none;min-width:46px;padding:4px 9px;box-sizing:border-box;border-radius:9px;border:1px solid var(--m-line2);background:var(--m-btn);box-shadow:var(--m-pillsh);color:var(--m-text);font:900 12px 'Nunito',system-ui,sans-serif;text-align:center;white-space:nowrap}
+#overlay .help-box.gd .tuto-nav{margin:0}
+#overlay .help-box.gd .tuto-dots{gap:7px}
+#overlay .help-box.gd .tuto-dot{width:9px;height:9px;padding:0;border:0;cursor:pointer}
+#overlay .help-box.gd .gd-prev:disabled{opacity:.35;cursor:default}
+#overlay .help-box.gd .gd-next{min-width:128px;padding:10px 18px;border:0;border-radius:14px;background:var(--m-cta);box-shadow:0 3px 0 var(--m-cta-sh);color:#fff;font:900 14px 'Nunito',system-ui,sans-serif;cursor:pointer}
+#overlay .help-box.gd .gd-next:active{transform:translateY(2px);box-shadow:0 1px 0 var(--m-cta-sh)}
+#overlay .help-box.gd .gd-hint{margin:0;text-align:center;font-size:12px}
+@media(max-width:760px){
+  #overlay .help-box.gd{gap:10px;padding:14px 14px 12px!important}
+  #overlay .help-box.gd .gd-stage{grid-template-columns:1fr;gap:10px;min-height:0}
+  #overlay .help-box.gd .gd-tabs button{padding:7px 2px;font-size:12px}
+  #overlay .help-box.gd .gd-next{min-width:0;padding:10px 14px}
+  #overlay .help-box.gd .gd-count{display:none}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.js" } }
@@ -4535,51 +4567,90 @@ function showSelect(){
     draw('t'); }
   clearInterval(newsTimer);
 }
-// Ventana de controles: se abre con el botón "?" desde el inicio
-// Tutorial en carrusel: cada pantalla muestra un vídeo corto grabado del propio juego (tutorial/*.webm)
-const TUTO = [
-  {t:'Movimiento y cámara', d:'WASD para moverte. Ratón para girar la cámara y la rueda para acercarla.', clip:'tutorial/mover.webm'},
-  {t:'Ataque automático', d:'Tu Digimon ataca solo al enemigo más cercano. Tú te concentras en moverte y posicionarte.', clip:'tutorial/ataque.webm'},
-  {t:'Esquiva con el dash', d:'Shift te lanza hacia delante. Durante el dash no recibes daño de contacto.', clip:'tutorial/dash.webm'},
-  {t:'Experiencia y subida de nivel', d:'Recoge los orbes de experiencia. Al subir de nivel eliges una mejora entre tres.', clip:'tutorial/nivel.webm'},
-  {t:'Cofres', d:'Pulsa E junto a un cofre para abrirlo y recibir una mejora.', clip:'tutorial/cofre.webm'},
-  {t:'Zonas', d:'Cada mapa tiene dos pantallas. En el Bosque File, tras el Bosque Inicial llega el Pantano de Datos, con enemigos más duros.', clip:'tutorial/zona.webm'},
-  {t:'Jefe final', d:'Devimon, Etemon y Myotismon aparecen como jefes menores; en el Bosque File, Piedmon es el jefe final de la segunda pantalla. Esquiva el anillo rojo antes de cada disparo.', clip:'tutorial/jefe.webm'},
-  {t:'Mapas y portal', d:'Tras elegir Digimon eliges mapa y dificultad. Todos los mapas tienen dos pantallas: pulsa B para invocar al jefe de la pantalla cuando quieras (siempre tiene la misma fuerza); al derrotarlo se abre el portal del norte. Si pasas 20 minutos en una pantalla empieza el Infierno y no se sobrevive.', clip:'tutorial/zona.webm'},
-  {t:'Dificultad y Supervivencia', d:'Fácil, Normal, Difícil y Pesadilla cambian la vida y el daño de los enemigos, las hordas, los jefes y los premios. Supervivencia no tiene jefe final: cada minuto llega una oleada y cada 5 oleadas un jefe menor.', clip:'tutorial/jefe.webm'},
-  {t:'Colección e Incubadora', d:'La colección guarda tus skins por etapa, marcos y títulos. La Incubadora tiene un banner permanente y los promocionales, cada uno con sus tickets.', clip:'tutorial/coleccion.webm'}
+// Guía «Cómo jugar»: diez pantallas en cuatro capítulos. Cada una tiene un vídeo grabado del propio juego
+// (tutorial/*.webm) o una captura del menú en el tema activo (tutorial/*_claro.webp / *_oscuro.webp),
+// un texto corto y las teclas que usa. En pantallas táctiles se muestran los controles táctiles.
+// Teclas: k = teclado, tc = táctil (null = no aplica en táctil), d = qué hace
+const GUIDE_CH = ['Controles', 'Partida', 'Mapas', 'Menú'];
+const GUIDE = [
+  {ch: 0, t: 'Muévete y mira', clip: 'mover',
+    d: 'Tu Digimon va adonde le digas y la cámara le sigue. Gírala para ver qué se te acerca.',
+    keys: [{k: 'WASD', tc: 'Joystick', d: 'Moverte'}, {k: 'Ratón', tc: null, d: 'Girar la cámara'}, {k: 'Rueda', tc: null, d: 'Acercar o alejar'}, {k: 'Esc / P', tc: '❚❚', d: 'Pausa'}]},
+  {ch: 0, t: 'Ataca solo', clip: 'ataque',
+    d: 'No hay botón de ataque: tu Digimon dispara al enemigo más cercano. Tú te ocupas de moverte, esquivar y recoger la experiencia.',
+    keys: []},
+  {ch: 0, t: 'Dash y salto', clip: 'dash',
+    d: 'El dash te lanza hacia delante y mientras dura no recibes daño por contacto. Úsalo para salir de un cerco: tarda un poco en recargarse.',
+    keys: [{k: 'Shift', tc: 'DASH', d: 'Dash'}, {k: 'Espacio', tc: 'SALTO', d: 'Saltar'}]},
+  {ch: 1, t: 'Sube de nivel', clip: 'nivel',
+    d: 'Los enemigos sueltan orbes de experiencia. Al subir de nivel la partida se para y eliges una carta de tres: mejoras, habilidades nuevas o evoluciones.',
+    keys: [{k: '1 2 3', tc: 'Toca la carta', d: 'Elegir carta'}, {k: 'F', tc: 'Refrescar', d: 'Cartas nuevas (2 por partida)'}, {k: 'X', tc: 'Saltar', d: '+15 Bits sin elegir (2)'}, {k: 'Z', tc: 'Desterrar', d: 'Quitar una carta para siempre (1)'}]},
+  {ch: 1, t: 'Cofres y BONK', clip: 'cofre',
+    d: 'Abre los cofres para curarte y elegir una mejora. Cada baja carga el BONK: al 100 % suéltalo para dañar y empujar todo lo que te rodea y borrar los disparos del jefe.',
+    keys: [{k: 'E', tc: 'Toca el aviso', d: 'Abrir cofre'}, {k: 'Q', tc: 'Toca BONK', d: 'Soltar el BONK'}]},
+  {ch: 1, t: 'Digievoluciona', clip: 'evo',
+    d: 'Tu Digimon digievoluciona al subir de nivel (15, 30 y 45). Si tu vida baja del 20 %, una vez por partida puedes evolucionar de emergencia durante 15 s. Con dos habilidades al máximo salen cartas de fusión.',
+    keys: [{k: 'R', tc: 'EVO', d: 'Evolución de emergencia (tienes 6 s)'}]},
+  {ch: 2, t: 'Jefe y portal', clip: 'jefe',
+    d: 'Cada mapa tiene dos pantallas. Invoca al jefe cuando estés listo: al derrotarlo se abre el portal del norte. Si pasas 20 minutos en una pantalla empieza el Infierno. Atento a los eventos: nodos que defender, datos corruptos y Numemon dorados.',
+    keys: [{k: 'B', tc: 'Invocar jefe', d: 'Llamar al jefe'}, {k: 'Tab', tc: null, d: 'Mapa completo'}]},
+  {ch: 2, t: 'Mapas, dificultad y Supervivencia', img: 'mapas',
+    d: 'Después de elegir Digimon eliges mapa (Bosque File, Desierto de Datos o Montaña Helada) y dificultad. Cuanto más difícil, más premios: hasta ×2,2 Bits y tickets en Pesadilla. En Supervivencia no hay jefe final: llega una oleada por minuto y un jefe menor cada 5.',
+    keys: [{k: '← →', tc: null, d: 'Cambiar de mapa'}, {k: '↑ ↓', tc: null, d: 'Dificultad'}, {k: 'Enter', tc: null, d: 'Empezar'}]},
+  {ch: 3, t: 'El menú de inicio', img: 'menu',
+    d: 'Jugar empieza con tu último Digimon y Supervivencia es el modo infinito. Los encargos diarios, semanales y de evento dan premios, y el evento trae skins de temporada. Abajo tienes el Digidex, el laboratorio, los mapas, los logros, los récords y tu perfil.',
+    keys: []},
+  {ch: 3, t: 'Bits, Incubadora y laboratorio', img: 'lab',
+    d: 'Cada partida da Bits y a veces tickets. Con ellos tiras en la Incubadora para conseguir skins, marcos y títulos. En el laboratorio los Bits mejoran a todos tus Digimon para siempre. El Digidex guarda lo que has desbloqueado.',
+    keys: []}
 ];
 let tutoIdx = 0;
+const guideTouch = () => document.body.classList.contains('is-touch') || matchMedia('(pointer:coarse)').matches;
 function tutoShow(i){
-  tutoIdx = (i + TUTO.length) % TUTO.length;
-  const s = TUTO[tutoIdx];
-  const v = document.getElementById('tutoV');
-  if (v){ v.src = s.clip; v.load(); v.play().catch(() => {}); }
+  tutoIdx = Math.max(0, Math.min(GUIDE.length - 1, i));
+  const s = GUIDE[tutoIdx], touch = guideTouch();
+  const media = document.getElementById('gdMedia');
+  if (!media) return;
+  media.innerHTML = s.clip
+    ? `<video class="tuto-video" src="tutorial/${s.clip}.webm" muted loop playsinline autoplay aria-label="Vídeo: ${s.t}"></video>`
+    : `<img class="tuto-video" src="tutorial/${s.img}_${uiTheme()}.webp" alt="Captura: ${s.t}">`;
+  const v = media.querySelector('video'); if (v) v.play().catch(() => {});
   document.getElementById('tutoT').textContent = s.t;
   document.getElementById('tutoD').textContent = s.d;
-  document.getElementById('tutoDots').innerHTML = TUTO.map((_, j) => `<i class="tuto-dot${j === tutoIdx ? ' on' : ''}" data-i="${j}"></i>`).join('');
+  const keys = s.keys.filter(k => !touch || k.tc);
+  document.getElementById('gdKeys').innerHTML = keys.map(k => `<li><kbd>${touch ? k.tc : k.k}</kbd><span>${k.d}</span></li>`).join('');
+  document.getElementById('gdKeys').hidden = !keys.length;
+  document.getElementById('gdCount').textContent = `${tutoIdx + 1}/${GUIDE.length}`;
+  document.querySelectorAll('#gdTabs button').forEach(b => { const on = +b.dataset.ch === s.ch; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+  document.getElementById('tutoDots').innerHTML = GUIDE.map((g2, j) => `<button type="button" class="tuto-dot${j === tutoIdx ? ' on' : ''}" data-i="${j}" aria-label="Pantalla ${j + 1}: ${g2.t}"></button>`).join('');
   document.querySelectorAll('#tutoDots .tuto-dot').forEach(d => d.onclick = () => tutoShow(+d.dataset.i));
+  document.getElementById('tutoPrev').disabled = tutoIdx === 0;
+  const last = tutoIdx === GUIDE.length - 1;
+  document.getElementById('tutoNext').innerHTML = last ? '¡A jugar!' : 'Siguiente ▶';
 }
 function tutoStep(dir){ if (state === 'help') tutoShow(tutoIdx + dir); }
 function showHelp(){
   state = 'help';
+  const touch = guideTouch();
   showOverlay(`
-    <div class="help-box tuto">
-      <header class="set-head"><button class="g-back" id="helpBack">← Volver</button><h2>Cómo jugar</h2></header>
-      <div class="tuto-screen">
-        <video id="tutoV" class="tuto-video" muted loop playsinline autoplay></video>
-        <h3 id="tutoT"></h3><p id="tutoD"></p>
+    <div class="help-box tuto gd">
+      <header class="set-head"><button class="g-back" id="helpBack">← Volver</button><h2>Cómo jugar</h2><span class="gd-count" id="gdCount"></span></header>
+      <nav class="gd-tabs" id="gdTabs" role="tablist" aria-label="Capítulos">${GUIDE_CH.map((c, i) => `<button type="button" role="tab" data-ch="${i}">${c}</button>`).join('')}</nav>
+      <div class="gd-stage">
+        <figure class="gd-media" id="gdMedia"></figure>
+        <div class="gd-txt"><h3 id="tutoT"></h3><p id="tutoD"></p><ul class="gd-keys" id="gdKeys"></ul></div>
       </div>
       <div class="tuto-nav">
-        <button class="g-back" id="tutoPrev">◀</button>
+        <button class="g-back gd-prev" id="tutoPrev" aria-label="Pantalla anterior">◀</button>
         <div class="tuto-dots" id="tutoDots"></div>
-        <button class="g-back" id="tutoNext">▶</button>
+        <button class="gd-next" id="tutoNext"></button>
       </div>
-      <div class="muted">Flechas ← → cambian de pantalla · Esc vuelve</div>
+      ${touch ? '' : '<div class="muted gd-hint">← → cambian de pantalla · Esc vuelve</div>'}
     </div>`);
   document.getElementById('helpBack').onclick = () => showSelect();
   document.getElementById('tutoPrev').onclick = () => tutoStep(-1);
-  document.getElementById('tutoNext').onclick = () => tutoStep(1);
+  document.getElementById('tutoNext').onclick = () => tutoIdx === GUIDE.length - 1 ? showSelect() : tutoStep(1);
+  document.querySelectorAll('#gdTabs button').forEach(b => b.onclick = () => tutoShow(GUIDE.findIndex(x => x.ch === +b.dataset.ch)));
   tutoShow(0);
 }
 
@@ -8842,7 +8913,12 @@ initMenuBg();
 
 // ---------- Bucle ----------
 let last = performance.now(), animMs = 0;
+let demoSteps = null;   // solo con ?demo=1: si es un número, el juego avanza esos fotogramas de 40 ms y espera (grabar la guía)
 function frame(now){
+  if (demoSteps !== null){
+    if (demoSteps <= 0){ last = now; requestAnimationFrame(frame); return; }
+    demoSteps--; now = last + 40;
+  }
   const dt = Math.min(0.05, (now-last)/1000);
   last = now;
   if (state === 'play' && g){
@@ -8891,6 +8967,7 @@ if (new URLSearchParams(location.search).has('demo')){
   window.__dbk = {
     get g(){ return g; }, get state(){ return state; }, get scene(){ return scene; },
     rollReward, grantReward, setBanner: b => { gxBanner = b; }, playPullAnimation,
+    hold(on){ demoSteps = on ? 0 : null; }, step(n = 1){ demoSteps = n; }, get pending(){ return demoSteps; },
     startGame, spawnEnemy, spawnMagnetDrop, setZone, showGacha, addSkill, upgradeChoices,
     // Datos de skins y personajes
     SKINS, EVO_LINE, CHARS, SEASONS, glitchPixels,
