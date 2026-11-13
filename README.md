@@ -27,3 +27,7 @@ Luego abre `http://localhost:8765/` en el navegador.
 - En los tres mapas el jefe de cada pantalla se invoca cuando quieras (tecla B o botón) y siempre tiene la misma fuerza. Si pasas 20 minutos en una pantalla empieza el Infierno.
 - Supervivencia: cualquier mapa, una oleada por minuto y un jefe menor cada 5 oleadas.
 - Assets de ambientación de los mapas 2 y 3, iconos del HUD y partículas del gacha: Kenney, CC0 (ver `textures/CREDITOS.txt`).
+
+## Nube y ranking
+
+Guardado en la nube entre dispositivos y ranking por regiones con Supabase. Está apagado hasta rellenar `CLOUD_CFG` en `index.html`; los pasos están en [`supabase/README.md`](supabase/README.md).
