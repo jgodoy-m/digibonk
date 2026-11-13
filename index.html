@@ -2979,8 +2979,6 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
 #overlay .realhub.hb .nm-tiles .hb-tile i{transform:none!important;width:42px!important;height:42px!important;margin:0 0 5px!important;border-radius:12px!important;overflow:hidden;background:radial-gradient(circle at 50% 35%,#1d5fc4,#0a1a46 75%)!important;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--tc) 70%,#9aefff),0 2px 0 rgba(0,0,0,.18)}
 #overlay .realhub.hb .nm-tiles .hb-tile i::after{display:none!important}
 #overlay .realhub.hb .nm-tiles .hb-tile i img{transform:none!important;width:30px!important;height:30px!important;object-fit:contain;image-rendering:auto}
-#overlay .realhub.hb .nm-tiles .hb-tile i.nm-art img{width:100%!important;height:100%!important;object-fit:cover}
-#overlay .realhub.hb .nm-tiles .t3 i img{width:22px!important;height:28px!important;image-rendering:pixelated}
 #overlay .realhub.hb .nm-tiles .hb-tile b{font-size:12.5px!important}
 #overlay .realhub.hb .nm-tiles .hb-tile small{font-size:10.5px!important}
 #overlay .realhub.hb .nm-tiles .hb-tile:hover{transform:translateY(-3px)!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--tc) 45%,transparent),0 8px 20px color-mix(in srgb,var(--tc) 30%,rgba(0,0,0,.2))!important}
@@ -2988,6 +2986,18 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
 #overlay .realhub.hb .nm-tiles .hb-tile.hm-soon{border-bottom-color:var(--m-line2)!important}
 #overlay .realhub.hb .nm-tiles .hb-tile.hm-soon>*{opacity:.75!important;filter:grayscale(.85)!important}
 #overlay .realhub.hb .nm-tiles .hb-tile.hm-soon:hover{transform:none!important;box-shadow:none!important}
+#overlay .realhub.hb .nm-ic{display:block;width:24px;height:24px;object-fit:contain;flex:none;transform:none!important;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
+#overlay .realhub.hb :is(.hb-pill,.hb-ic,.hb-btn) .nm-ic{width:26px;height:26px}
+#overlay .realhub.hb .hb-btn .nm-ic{width:28px;height:28px;margin-left:-6px}
+#overlay .realhub.hb .hb-btn.hb-sq .nm-ic{margin:0;width:30px;height:30px}
+#overlay .realhub.hb .nm-stack .hb-mode>i{background:rgba(255,255,255,.2)!important}
+#overlay .realhub.hb .nm-stack .hb-mode>i .nm-ic{width:36px;height:36px}
+#overlay .realhub.hb .nm-q>i{background:none!important;width:40px!important;height:40px!important}
+#overlay .realhub.hb .nm-q>i .nm-ic{width:40px;height:40px}
+#overlay .realhub.hb .nm-event>i{background:rgba(255,255,255,.2)!important}
+#overlay .realhub.hb .nm-event>i .nm-ic{width:28px;height:28px}
+#overlay .realhub.hb .nm-tiles .hb-tile i{background:none!important;box-shadow:none!important;width:48px!important;height:48px!important;margin:0 0 3px!important;overflow:visible}
+#overlay .realhub.hb .nm-tiles .hb-tile i .nm-ic{width:48px!important;height:48px!important;object-fit:contain!important;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}
 #overlay .realhub.hb .hb-btn .nm-logo{width:20px;height:20px;flex:none}
 #overlay .realhub.hb .hb-x .nm-logo{width:16px;height:16px}
 @media(max-width:760px){
@@ -2996,10 +3006,12 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
   #overlay .realhub.hb .nm-stack{grid-column:1/-1;grid-template-columns:1fr 1fr!important;grid-template-rows:auto!important}
   #overlay .realhub.hb .nm-stack .hb-mode{padding:9px 10px!important;gap:8px!important}
   #overlay .realhub.hb .nm-stack .hb-mode>i{width:34px!important;height:34px!important}
+  #overlay .realhub.hb .nm-stack .hb-mode>i .nm-ic{width:30px;height:30px}
+  #overlay .realhub.hb .nm-q>i{display:grid!important;width:30px!important;height:30px!important}
+  #overlay .realhub.hb .nm-q>i .nm-ic{width:30px;height:30px}
   #overlay .realhub.hb .nm-stack .hb-mode b{font-size:14.5px!important}
   #overlay .realhub.hb .nm-stack .hb-mode small{font-size:10.5px!important;white-space:normal}
   #overlay .realhub.hb .nm-q{padding:9px 10px;gap:8px}
-  #overlay .realhub.hb .nm-q>i{display:none}
   #overlay .realhub.hb .nm-q b{font-size:13px}
   #overlay .realhub.hb .nm-rw{display:none}
   #overlay .realhub.hb .nm-tiles{grid-template-columns:repeat(3,minmax(0,1fr))!important}
@@ -4307,19 +4319,19 @@ function showSelect(){
       <div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><div class="rw-scenery-core"></div><div class="rw-aurora"></div><div class="rw-light"></div><div class="rw-water"></div><div class="rw-stars"></div></div>
       <header class="hb-top">
         <div class="hb-utils">
-          <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma">🌐 ${LANG.toUpperCase()}</button>
+          <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma"><img class="nm-ic" src="ui/hub/ic_idioma.webp" alt="">${LANG.toUpperCase()}</button>
           <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>
-          <button class="hb-pill hb-c1" type="button" id="hbGacha2" aria-label="Tesoros">🥚 Tesoros</button>
-          <button class="hb-pill hb-c2" type="button" id="hbLab2" aria-label="Laboratorio">🧪 Laboratorio</button>
+          <button class="hb-pill hb-c1" type="button" id="hbGacha2" aria-label="Tesoros"><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt="">Tesoros</button>
+          <button class="hb-pill hb-c2" type="button" id="hbLab2" aria-label="Laboratorio"><img class="nm-ic" src="ui/hub/ic_laboratorio.webp" alt="">Laboratorio</button>
         </div>
         <div class="hb-user" role="toolbar" aria-label="Jugador">
           <button type="button" class="hb-me" id="rhProfile"><span class="hud-portrait mini hm-pl-frame${extra.frame ? ' fr-' + extra.frame : ''}"><img id="rhProfileImg" src="${avatarSrc()}" alt=""></span><span><strong>${safeText(trainerName || 'Invitado')}</strong><small>${isGuest() ? t('guestTag') : (extra.title ? (TITLES.find(x => x.id === extra.title) || {}).name || '' : t('noTitle'))}</small></span></button>
           <span class="hb-chip" title="Bits"><img src="ui/hud/ic_bits.webp" alt="">${SAVE.bits.toLocaleString('es-ES')}</span>
           <span class="hb-chip" title="Tickets"><img src="ui/hud/ic_ticket.webp" alt="">${usableTickets('std')}</span>
           <span class="hb-chip" title="Digimon desbloqueados"><img src="ui/icons/digivice.png" alt="">${unlockedSet().size}/${Object.keys(CHARS).length}</span>
-          <button type="button" class="hb-ic" id="hmNews" aria-label="Noticias" title="Noticias">📰</button>
-          <button type="button" class="hb-ic" id="hmFriends" aria-label="Amigos" title="Amigos">👥</button>
-          <button type="button" class="hb-ic" id="hmMail" aria-label="Buzón" title="Buzón">✉</button>
+          <button type="button" class="hb-ic" id="hmNews" aria-label="Noticias" title="Noticias"><img class="nm-ic" src="ui/hub/ic_noticias.webp" alt=""></button>
+          <button type="button" class="hb-ic" id="hmFriends" aria-label="Amigos" title="Amigos"><img class="nm-ic" src="ui/hub/ic_amigos.webp" alt=""></button>
+          <button type="button" class="hb-ic" id="hmMail" aria-label="Buzón" title="Buzón"><img class="nm-ic" src="ui/hub/ic_buzon.webp" alt=""></button>
           <button type="button" class="hb-out" id="hmLogout">Cerrar sesión</button>
         </div>
       </header>
@@ -4333,27 +4345,27 @@ function showSelect(){
               <span class="nm-band"><span class="hb-dev"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span>Modo clásico · <b>${safeText(choice.name)}</b></span></span>
             </button>
             <div class="hb-stack nm-stack">
-              <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i>∞</i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
-              <button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Tesoros: ${usableTickets('std')} tickets disponibles"><i><img src="ui/gacha/huevo_l0.png" alt=""></i><span><b>Tesoros</b><small><em class="nm-tix">${usableTickets('std')}</em> tickets<span class="nm-long"> disponibles</span></small></span></button>
+              <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i><img class="nm-ic" src="ui/hub/ic_supervivencia.webp" alt=""></i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
+              <button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Tesoros: ${usableTickets('std')} tickets disponibles"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Tesoros</b><small><em class="nm-tix">${usableTickets('std')}</em> tickets<span class="nm-long"> disponibles</span></small></span></button>
             </div>
           </div>
           <div class="nm-quests" role="group" aria-label="Misiones y encargos">
-            <button type="button" class="nm-q" id="rhMission" aria-label="${safeText(dailyText())}"><i>☀</i><span><small>Misión diaria</small><b>${currentRuns}/${DAILY.runsGoal} partidas</b><span class="hb-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></span></span><em class="nm-rw">+${DAILY.reward} Bits</em></button>
-            <button type="button" class="nm-q" id="mEnc" aria-label="Encargos: ${encDone} de ${encList.length} hechos hoy"><i>📋</i><span><small>Encargos</small><b>${encDone}/${encList.length} hechos hoy</b><span class="hb-dots">${encList.map(e => `<u class="${e.done ? 'on' : ''}"></u>`).join('')}</span></span></button>
+            <button type="button" class="nm-q" id="rhMission" aria-label="${safeText(dailyText())}"><i><img class="nm-ic" src="ui/hub/ic_mision.webp" alt=""></i><span><small>Misión diaria</small><b>${currentRuns}/${DAILY.runsGoal} partidas</b><span class="hb-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></span></span><em class="nm-rw">+${DAILY.reward} Bits</em></button>
+            <button type="button" class="nm-q" id="mEnc" aria-label="Encargos: ${encDone} de ${encList.length} hechos hoy"><i><img class="nm-ic" src="ui/hub/ic_encargos.webp" alt=""></i><span><small>Encargos</small><b>${encDone}/${encList.length} hechos hoy</b><span class="hb-dots">${encList.map(e => `<u class="${e.done ? 'on' : ''}"></u>`).join('')}</span></span></button>
           </div>
-          ${(bannerOpen("navidadP") || bannerOpen("navidadR")) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i>🎄</i><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
+          ${(bannerOpen("navidadP") || bannerOpen("navidadR")) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
           <div class="hb-tiles nm-tiles">
-            <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex"><i><img src="ui/icons/digivice.png" alt=""></i><b>Digidex</b><small>${unlockedSet().size}/${Object.keys(CHARS).length}</small></button>
-            <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio"><i class="nm-art"><img src="ui/hub/ic_laboratorio.webp" alt=""></i><b>Laboratorio</b><small>${SAVE.bits.toLocaleString('es-ES')} Bits</small></button>
-            <button type="button" class="hb-tile t3" id="btnTesoros" aria-label="Gacha: ${usableTickets('std')} tickets"><i><img src="ui/gacha/huevo_l0.png" alt=""></i><b>Gacha</b><small>${usableTickets('std')} tickets</small></button>
-            <button type="button" class="hb-tile t4" id="mLog" aria-label="Logros"><i><img src="ui/hud/ic_emblema.webp" alt=""></i><b>Logros</b><small>${achOwned}/${achAll}</small></button>
-            <button type="button" class="hb-tile t5 hm-soon" id="mRank" title="Próximamente" aria-label="Ranking: próximamente"><i class="nm-art"><img src="ui/hub/ic_ranking.webp" alt=""></i><b>Ranking</b><small>Próximamente</small></button>
-            <button type="button" class="hb-tile t7" id="btnPlayer" aria-label="Jugador"><i class="nm-art"><img src="ui/hub/ic_jugador.webp" alt=""></i><b>Jugador</b><small>Tu ficha</small></button>
+            <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex"><i><img class="nm-ic" src="ui/hub/ic_digidex.webp" alt=""></i><b>Digidex</b><small>${unlockedSet().size}/${Object.keys(CHARS).length}</small></button>
+            <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio"><i><img class="nm-ic" src="ui/hub/ic_laboratorio.webp" alt=""></i><b>Laboratorio</b><small>${SAVE.bits.toLocaleString('es-ES')} Bits</small></button>
+            <button type="button" class="hb-tile t3" id="btnTesoros" aria-label="Gacha: ${usableTickets('std')} tickets"><i><img class="nm-ic" src="ui/hub/ic_gacha.webp" alt=""></i><b>Gacha</b><small>${usableTickets('std')} tickets</small></button>
+            <button type="button" class="hb-tile t4" id="mLog" aria-label="Logros"><i><img class="nm-ic" src="ui/hub/ic_logros.webp" alt=""></i><b>Logros</b><small>${achOwned}/${achAll}</small></button>
+            <button type="button" class="hb-tile t5 hm-soon" id="mRank" title="Próximamente" aria-label="Ranking: próximamente"><i><img class="nm-ic" src="ui/hub/ic_ranking.webp" alt=""></i><b>Ranking</b><small>Próximamente</small></button>
+            <button type="button" class="hb-tile t7" id="btnPlayer" aria-label="Jugador"><i><img class="nm-ic" src="ui/hub/ic_jugador.webp" alt=""></i><b>Jugador</b><small>Tu ficha</small></button>
           </div>
           <nav class="hb-bar" aria-label="Enlaces y ajustes">
-            <button type="button" class="hb-btn" id="btnAjustes"><i>⚙</i>Ajustes</button>
-            <button type="button" class="hb-btn" id="btnHelp"><i>💡</i>Guía</button>
-            <button type="button" class="hb-btn hb-sq" id="mBug" aria-label="Reportar bugs" title="Reportar bugs"><i>🐞</i></button>
+            <button type="button" class="hb-btn" id="btnAjustes"><img class="nm-ic" src="ui/hub/ic_ajustes.webp" alt="">Ajustes</button>
+            <button type="button" class="hb-btn" id="btnHelp"><img class="nm-ic" src="ui/hub/ic_guia.webp" alt="">Guía</button>
+            <button type="button" class="hb-btn hb-sq" id="mBug" aria-label="Reportar bugs" title="Reportar bugs"><img class="nm-ic" src="ui/hub/ic_bugs.webp" alt=""></button>
             <button type="button" class="hb-btn hb-discord" id="mDiscord"><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>Discord</button>
             <button type="button" class="hb-btn hb-x" id="mX"><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg>Digibonk</button>
           </nav>
