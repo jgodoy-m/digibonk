@@ -2037,6 +2037,21 @@ body.is-touch #touchCtl.on{display:block}
 #tDash{right:140px;bottom:34px}
 #tJump{right:40px;bottom:140px}
 #tPause{width:42px;height:42px;top:16px;left:calc(50% + 145px);font-size:14px}
+/* Aviso para girar el móvil: solo en pantallas táctiles en vertical y durante la partida */
+#rotateHint{display:none;position:fixed;inset:0;z-index:60;place-items:center;background:rgba(6,12,30,.92);color:#fff;text-align:center;font-family:'Nunito',system-ui,sans-serif}
+#rotateHint div{display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px}
+#rotateHint b{font-size:64px;line-height:1;animation:rotHint 1.6s ease-in-out infinite}
+#rotateHint strong{font-size:22px;font-weight:900}
+#rotateHint span{font-size:14px;font-weight:700;opacity:.8}
+@keyframes rotHint{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(90deg)}}
+@media (orientation:portrait) and (pointer:coarse){body.playing #rotateHint{display:grid}}
+/* Móvil en horizontal: menú más compacto */
+@media (orientation:landscape) and (max-height:500px){
+  #overlay .realhub.hb .hb-brand img{height:64px!important;width:auto!important;max-width:60vw!important}
+  #overlay .realhub.hb .hb-top{padding-top:6px!important}
+  #overlay .realhub.hb .hb-main{padding-top:4px!important}
+}
+
 #tEvo{display:none;right:236px;bottom:34px;background:radial-gradient(circle at 50% 35%,#ffb04a,#e2541a);box-shadow:0 0 0 3px rgba(255,255,255,.55),0 0 18px rgba(255,140,40,.8);animation:tEvoPulse 1s ease-in-out infinite}
 #tEvo.show{display:grid}
 @keyframes tEvoPulse{50%{transform:scale(1.08)}}
@@ -3130,6 +3145,38 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
 .rk-list li.rk-empty{display:block;text-align:center;color:var(--m-mute,#9fd4ff);padding:24px 8px}
 .approved-info-dialog #realRank{margin-right:8px}
 @media (max-width:760px){.cd-in{max-width:none;flex:1 1 100%}.rk-list li{grid-template-columns:26px 30px 1fr auto;gap:6px}.rk-list li img{width:30px;height:30px}}
+/* Guía «Cómo jugar»: capítulos, vídeo o captura a la izquierda, texto y teclas a la derecha */
+#overlay .help-box.gd{display:flex;flex-direction:column;gap:12px;padding:18px 22px 16px!important}
+#overlay .help-box.gd .set-head{display:flex;align-items:center;gap:12px;margin:0}
+#overlay .help-box.gd .gd-count{margin-left:auto;padding:4px 11px;border-radius:999px;background:var(--m-rowbg);color:var(--m-mute);font:800 13px 'Nunito',system-ui,sans-serif}
+#overlay .help-box.gd .gd-tabs{display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--m-sunk);border:1px solid var(--m-line)}
+#overlay .help-box.gd .gd-tabs button{flex:1;padding:7px 6px;border:0;border-radius:999px;background:none;color:var(--m-mute);font:800 13px 'Nunito',system-ui,sans-serif;cursor:pointer}
+#overlay .help-box.gd .gd-tabs button:hover{color:var(--m-text)}
+#overlay .help-box.gd .gd-tabs button.on{background:var(--m-tabon);color:var(--m-tabon-txt)}
+html[data-theme=oscuro] #overlay .help-box.gd .gd-tabs button.on{background:#3d4148;color:#fff}
+#overlay .help-box.gd .gd-stage{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;align-items:start;min-height:236px}
+#overlay .help-box.gd .gd-media{margin:0}
+#overlay .help-box.gd .tuto-video{display:block;width:100%;max-width:none;height:auto;aspect-ratio:16/9;margin:0;object-fit:cover;border-radius:14px;border:1px solid var(--m-cardline);background:var(--m-sunk);box-shadow:0 4px 14px rgba(0,0,0,.14)}
+#overlay:not(.menu-mode) .help-box.gd .gd-txt h3{margin:2px 0 6px!important;font:900 20px/1.2 'Nunito',system-ui,sans-serif!important;text-align:left}
+#overlay .help-box.gd .gd-txt p{margin:0 0 12px;font-size:14px;line-height:1.45;text-align:left;min-height:0;max-width:none}
+#overlay .help-box.gd .gd-keys{display:grid;gap:7px;margin:0;padding:0;list-style:none}
+#overlay .help-box.gd .gd-keys[hidden]{display:none}
+#overlay .help-box.gd .gd-keys li{display:flex;align-items:center;gap:10px;color:var(--m-soft);font-size:13px;font-weight:700}
+#overlay .help-box.gd .gd-keys kbd{flex:none;min-width:46px;padding:4px 9px;box-sizing:border-box;border-radius:9px;border:1px solid var(--m-line2);background:var(--m-btn);box-shadow:var(--m-pillsh);color:var(--m-text);font:900 12px 'Nunito',system-ui,sans-serif;text-align:center;white-space:nowrap}
+#overlay .help-box.gd .tuto-nav{margin:0}
+#overlay .help-box.gd .tuto-dots{gap:7px}
+#overlay .help-box.gd .tuto-dot{width:9px;height:9px;padding:0;border:0;cursor:pointer}
+#overlay .help-box.gd .gd-prev:disabled{opacity:.35;cursor:default}
+#overlay .help-box.gd .gd-next{min-width:128px;padding:10px 18px;border:0;border-radius:14px;background:var(--m-cta);box-shadow:0 3px 0 var(--m-cta-sh);color:#fff;font:900 14px 'Nunito',system-ui,sans-serif;cursor:pointer}
+#overlay .help-box.gd .gd-next:active{transform:translateY(2px);box-shadow:0 1px 0 var(--m-cta-sh)}
+#overlay .help-box.gd .gd-hint{margin:0;text-align:center;font-size:12px}
+@media(max-width:760px){
+  #overlay .help-box.gd{gap:10px;padding:14px 14px 12px!important}
+  #overlay .help-box.gd .gd-stage{grid-template-columns:1fr;gap:10px;min-height:0}
+  #overlay .help-box.gd .gd-tabs button{padding:7px 2px;font-size:12px}
+  #overlay .help-box.gd .gd-next{min-width:0;padding:10px 14px}
+  #overlay .help-box.gd .gd-count{display:none}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.js" } }
@@ -3161,6 +3208,7 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
 <canvas id="edgeCv"></canvas>
 <div id="skillBar"></div>
 <div id="bonkBar" style="display:none"><div id="bonkFill"></div><span id="bonkTxt">BONK 0%</span></div>
+<div id="rotateHint" aria-live="polite"><div><b>⟳</b><strong>Gira el móvil</strong><span>DigiBonk se juega en horizontal</span></div></div>
 <div id="touchCtl">
   <div id="tZone"><div id="tJoy"><div id="tKnob"></div></div></div>
   <button type="button" class="t-btn" id="tDash" aria-label="Dash">DASH</button>
@@ -3672,6 +3720,9 @@ function decoTex(file){
 }
 // Portal entre pantallas (todos los mapas): siempre en el mismo sitio, al norte del escenario
 const PORTAL = {x: 0, z: -(ARENA_R - 32), r: 3.2};
+const SUMMON_R = 16;   // el jefe solo se invoca junto al portal
+function nearPortal(){ return !!g && Math.hypot(g.p.x - PORTAL.x, g.p.z - PORTAL.z) < SUMMON_R; }
+function canSummonBoss(){ return !!g && isPortalMap() && g.mode !== 'surv' && !g.portalOpen && !g.bossDown && !(g.boss && g.enemies.includes(g.boss)) && !!zoneDef().boss; }
 function portalClear(x, z){ return Math.hypot(x - PORTAL.x, z - PORTAL.z) < 10; }
 const decoGroup = new THREE.Group();
 scene.add(decoGroup);
@@ -4028,6 +4079,7 @@ const touchCtlEl = document.getElementById('touchCtl'), tDashEl = document.getEl
 let tWasOn = false;
 function touchCtlSync(){
   const on = state === 'play' && !!g && !g.evoAnim;
+  document.body.classList.toggle('playing', state === 'play' || state === 'levelup' || state === 'paused');
   if (on !== tWasOn){ touchCtlEl.classList.toggle('on', on); tWasOn = on; if (!on) touchReset(); else tJoyHome(); }
   if (on) tDashEl.classList.toggle('cd', g.dashCd > 0 || g.dash > 0);
   tEvoEl.classList.toggle('show', on && g.emergOffer > 0);
@@ -4466,8 +4518,8 @@ function showSelect(){
           <nav class="hb-bar" aria-label="Enlaces y ajustes">
             <button type="button" class="hb-btn" id="btnAjustes" aria-label="Ajustes"><img class="nm-ic" src="ui/hub/ic_ajustes.webp" alt=""><span class="nm-lbl">Ajustes</span></button>
             <button type="button" class="hb-btn" id="btnHelp" aria-label="Guía"><img class="nm-ic" src="ui/hub/ic_guia.webp" alt=""><span class="nm-lbl">Guía</span></button>
-            <button type="button" class="hb-btn" id="mBug" aria-label="Reportar bugs" title="Reportar bugs"><img class="nm-ic" src="ui/hub/ic_bugs.webp" alt=""><span class="nm-lbl">Bugs</span></button>
-            <button type="button" class="hb-btn hb-kofi" id="mKofi" aria-label="Apoya al creador en Ko-fi" title="Apoya al creador en Ko-fi"><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.351 2.715c-2.7 0-4.986.025-6.83.26C2.078 3.285 0 5.154 0 8.61c0 3.506.182 6.13 1.585 8.493 1.584 2.701 4.233 4.182 7.662 4.182h.83c4.209 0 6.494-2.234 7.637-4a9.5 9.5 0 0 0 1.091-2.338C21.792 14.688 24 12.22 24 9.208v-.415c0-3.247-2.13-5.507-5.792-5.87-1.558-.156-2.65-.208-6.857-.208m0 1.947c4.208 0 5.09.052 6.571.182 2.624.311 4.13 1.584 4.13 4v.39c0 2.156-1.792 3.844-3.87 3.844h-.935l-.156.649c-.208 1.013-.597 1.818-1.039 2.546-.909 1.428-2.545 3.064-5.922 3.064h-.805c-2.571 0-4.831-.883-6.078-3.195-1.09-2-1.298-4.155-1.298-7.506 0-2.181.857-3.402 3.012-3.714 1.533-.233 3.559-.26 6.39-.26m6.547 2.287c-.416 0-.65.234-.65.546v2.935c0 .311.234.545.65.545 1.324 0 2.051-.754 2.051-2s-.727-2.026-2.052-2.026m-10.39.182c-1.818 0-3.013 1.48-3.013 3.142 0 1.533.858 2.857 1.949 3.897.727.701 1.87 1.429 2.649 1.896a1.47 1.47 0 0 0 1.507 0c.78-.467 1.922-1.195 2.623-1.896 1.117-1.039 1.974-2.364 1.974-3.897 0-1.662-1.247-3.142-3.039-3.142-1.065 0-1.792.545-2.338 1.298-.493-.753-1.246-1.298-2.312-1.298"/></svg>Apoyar</button>
+            <button type="button" class="hb-btn" id="mBug" aria-label="Reportar bugs en Discord" title="Reportar bugs en Discord"><img class="nm-ic" src="ui/hub/ic_bugs.webp" alt=""><span class="nm-lbl">Bugs</span></button>
+            <button type="button" class="hb-btn hb-kofi" id="mKofi" aria-label="Ayuda a mantener los servidores en Ko-fi" title="Ayuda a mantener los servidores en Ko-fi"><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.351 2.715c-2.7 0-4.986.025-6.83.26C2.078 3.285 0 5.154 0 8.61c0 3.506.182 6.13 1.585 8.493 1.584 2.701 4.233 4.182 7.662 4.182h.83c4.209 0 6.494-2.234 7.637-4a9.5 9.5 0 0 0 1.091-2.338C21.792 14.688 24 12.22 24 9.208v-.415c0-3.247-2.13-5.507-5.792-5.87-1.558-.156-2.65-.208-6.857-.208m0 1.947c4.208 0 5.09.052 6.571.182 2.624.311 4.13 1.584 4.13 4v.39c0 2.156-1.792 3.844-3.87 3.844h-.935l-.156.649c-.208 1.013-.597 1.818-1.039 2.546-.909 1.428-2.545 3.064-5.922 3.064h-.805c-2.571 0-4.831-.883-6.078-3.195-1.09-2-1.298-4.155-1.298-7.506 0-2.181.857-3.402 3.012-3.714 1.533-.233 3.559-.26 6.39-.26m6.547 2.287c-.416 0-.65.234-.65.546v2.935c0 .311.234.545.65.545 1.324 0 2.051-.754 2.051-2s-.727-2.026-2.052-2.026m-10.39.182c-1.818 0-3.013 1.48-3.013 3.142 0 1.533.858 2.857 1.949 3.897.727.701 1.87 1.429 2.649 1.896a1.47 1.47 0 0 0 1.507 0c.78-.467 1.922-1.195 2.623-1.896 1.117-1.039 1.974-2.364 1.974-3.897 0-1.662-1.247-3.142-3.039-3.142-1.065 0-1.792.545-2.338 1.298-.493-.753-1.246-1.298-2.312-1.298"/></svg>Apoyar</button>
             <button type="button" class="hb-btn hb-sq hb-discord" id="mDiscord" aria-label="Discord" title="Discord"><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></button>
             <button type="button" class="hb-btn hb-sq hb-x" id="mX" aria-label="Digibonk en X" title="Digibonk en X"><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg></button>
           </nav>
@@ -4515,13 +4567,16 @@ function showSelect(){
   document.getElementById('mEnc').onclick=showEncargos;
   document.getElementById('mLog').onclick=showLogros;
   document.getElementById('mBug').onclick=()=>{
-    // Abre un informe ya rellenado con lo que suele hacer falta para reproducir el fallo
-    const body=`**Qué pasó**\n\n\n**Qué esperabas**\n\n\n**Cómo repetirlo**\n1. \n\n---\nNavegador: ${navigator.userAgent}\nPantalla: ${innerWidth}×${innerHeight}\nTáctil: ${isTouchUI() ? 'sí' : 'no'}\nDigimon: ${selectedKey} · Mapa: ${runMap}`;
-    window.open('https://github.com/jgodoy-m/digibonk/issues/new?title=' + encodeURIComponent('Bug: ') + '&body=' + encodeURIComponent(body),'_blank','noopener');
+    // Los bugs se reportan en el canal de Discord: copiamos una plantilla con los datos útiles y abrimos el canal
+    const body=`Qué pasó:\nQué esperabas:\nCómo repetirlo:\n---\nNavegador: ${navigator.userAgent}\nPantalla: ${innerWidth}×${innerHeight} · Táctil: ${isTouchUI() ? 'sí' : 'no'}\nDigimon: ${selectedKey} · Mapa: ${runMap}`;
+    try { navigator.clipboard && navigator.clipboard.writeText(body).catch(()=>{}); } catch(e){}
+    const url=HM_DISCORD_BUGS_URL||HM_DISCORD_URL;
+    if (url){ window.open(url,'_blank','noopener'); hmSoon('Plantilla del bug copiada: pégala en Discord'); }
+    else hmSoon('Bugs: canal de Discord próximamente');
   };
   document.getElementById('mKofi').onclick=()=>HM_KOFI_URL?window.open(HM_KOFI_URL,'_blank','noopener'):hmSoon('Ko-fi: próximamente');
   // Enlaces de Discord y X: rellenar cuando existan (vacío = aún no disponible)
-  const HM_DISCORD_URL='', HM_X_URL='', HM_KOFI_URL='';   // pon aquí los enlaces cuando existan
+  const HM_DISCORD_URL='', HM_DISCORD_BUGS_URL='', HM_X_URL='', HM_KOFI_URL='';   // pon aquí los enlaces cuando existan
   document.getElementById('mDiscord').onclick=()=>HM_DISCORD_URL?window.open(HM_DISCORD_URL,'_blank','noopener'):hmSoon('Discord: próximamente');
   document.getElementById('mX').onclick=()=>HM_X_URL?window.open(HM_X_URL,'_blank','noopener'):hmSoon('X: próximamente');
   document.getElementById('hmLogout').onclick=()=>{localStorage.removeItem('digibonk3d-name');localStorage.removeItem('digibonk3d-guest');location.reload();};
@@ -4558,51 +4613,90 @@ function showSelect(){
     draw('t'); }
   clearInterval(newsTimer);
 }
-// Ventana de controles: se abre con el botón "?" desde el inicio
-// Tutorial en carrusel: cada pantalla muestra un vídeo corto grabado del propio juego (tutorial/*.webm)
-const TUTO = [
-  {t:'Movimiento y cámara', d:'WASD para moverte. Ratón para girar la cámara y la rueda para acercarla.', clip:'tutorial/mover.webm'},
-  {t:'Ataque automático', d:'Tu Digimon ataca solo al enemigo más cercano. Tú te concentras en moverte y posicionarte.', clip:'tutorial/ataque.webm'},
-  {t:'Esquiva con el dash', d:'Shift te lanza hacia delante. Durante el dash no recibes daño de contacto.', clip:'tutorial/dash.webm'},
-  {t:'Experiencia y subida de nivel', d:'Recoge los orbes de experiencia. Al subir de nivel eliges una mejora entre tres.', clip:'tutorial/nivel.webm'},
-  {t:'Cofres', d:'Pulsa E junto a un cofre para abrirlo y recibir una mejora.', clip:'tutorial/cofre.webm'},
-  {t:'Zonas', d:'Cada mapa tiene dos pantallas. En el Bosque File, tras el Bosque Inicial llega el Pantano de Datos, con enemigos más duros.', clip:'tutorial/zona.webm'},
-  {t:'Jefe final', d:'Devimon, Etemon y Myotismon aparecen como jefes menores; en el Bosque File, Piedmon es el jefe final de la segunda pantalla. Esquiva el anillo rojo antes de cada disparo.', clip:'tutorial/jefe.webm'},
-  {t:'Mapas y portal', d:'Tras elegir Digimon eliges mapa y dificultad. Todos los mapas tienen dos pantallas: pulsa B para invocar al jefe de la pantalla cuando quieras (siempre tiene la misma fuerza); al derrotarlo se abre el portal del norte. Si pasas 20 minutos en una pantalla empieza el Infierno y no se sobrevive.', clip:'tutorial/zona.webm'},
-  {t:'Dificultad y Supervivencia', d:'Fácil, Normal, Difícil y Pesadilla cambian la vida y el daño de los enemigos, las hordas, los jefes y los premios. Supervivencia no tiene jefe final: cada minuto llega una oleada y cada 5 oleadas un jefe menor.', clip:'tutorial/jefe.webm'},
-  {t:'Colección e Incubadora', d:'La colección guarda tus skins por etapa, marcos y títulos. La Incubadora tiene un banner permanente y los promocionales, cada uno con sus tickets.', clip:'tutorial/coleccion.webm'}
+// Guía «Cómo jugar»: diez pantallas en cuatro capítulos. Cada una tiene un vídeo grabado del propio juego
+// (tutorial/*.webm) o una captura del menú en el tema activo (tutorial/*_claro.webp / *_oscuro.webp),
+// un texto corto y las teclas que usa. En pantallas táctiles se muestran los controles táctiles.
+// Teclas: k = teclado, tc = táctil (null = no aplica en táctil), d = qué hace
+const GUIDE_CH = ['Controles', 'Partida', 'Mapas', 'Menú'];
+const GUIDE = [
+  {ch: 0, t: 'Muévete y mira', clip: 'mover',
+    d: 'Tu Digimon va adonde le digas y la cámara le sigue. Gírala para ver qué se te acerca.',
+    keys: [{k: 'WASD', tc: 'Joystick', d: 'Moverte'}, {k: 'Ratón', tc: null, d: 'Girar la cámara'}, {k: 'Rueda', tc: null, d: 'Acercar o alejar'}, {k: 'Esc / P', tc: '❚❚', d: 'Pausa'}]},
+  {ch: 0, t: 'Ataca solo', clip: 'ataque',
+    d: 'No hay botón de ataque: tu Digimon dispara al enemigo más cercano. Tú te ocupas de moverte, esquivar y recoger la experiencia.',
+    keys: []},
+  {ch: 0, t: 'Dash y salto', clip: 'dash',
+    d: 'El dash te lanza hacia delante y mientras dura no recibes daño por contacto. Úsalo para salir de un cerco: tarda un poco en recargarse.',
+    keys: [{k: 'Shift', tc: 'DASH', d: 'Dash'}, {k: 'Espacio', tc: 'SALTO', d: 'Saltar'}]},
+  {ch: 1, t: 'Sube de nivel', clip: 'nivel',
+    d: 'Los enemigos sueltan orbes de experiencia. Al subir de nivel la partida se para y eliges una carta de tres: mejoras, habilidades nuevas o evoluciones.',
+    keys: [{k: '1 2 3', tc: 'Toca la carta', d: 'Elegir carta'}, {k: 'F', tc: 'Refrescar', d: 'Cartas nuevas (2 por partida)'}, {k: 'X', tc: 'Saltar', d: '+15 Bits sin elegir (2)'}, {k: 'Z', tc: 'Desterrar', d: 'Quitar una carta para siempre (1)'}]},
+  {ch: 1, t: 'Cofres y BONK', clip: 'cofre',
+    d: 'Abre los cofres para curarte y elegir una mejora. Cada baja carga el BONK: al 100 % suéltalo para dañar y empujar todo lo que te rodea y borrar los disparos del jefe.',
+    keys: [{k: 'E', tc: 'Toca el aviso', d: 'Abrir cofre'}, {k: 'Q', tc: 'Toca BONK', d: 'Soltar el BONK'}]},
+  {ch: 1, t: 'Digievoluciona', clip: 'evo',
+    d: 'Tu Digimon digievoluciona al subir de nivel (15, 30 y 45). Si tu vida baja del 20 %, una vez por partida puedes evolucionar de emergencia durante 15 s. Con dos habilidades al máximo salen cartas de fusión.',
+    keys: [{k: 'R', tc: 'EVO', d: 'Evolución de emergencia (tienes 6 s)'}]},
+  {ch: 2, t: 'Jefe y portal', clip: 'jefe',
+    d: 'Cada mapa tiene dos pantallas. Cuando estés listo, ve al portal del norte (el minimapa lo marca) e invoca allí al jefe: al derrotarlo se abre el portal. Si pasas 20 minutos en una pantalla empieza el Infierno. Atento a los eventos: nodos que defender, datos corruptos y Numemon dorados.',
+    keys: [{k: 'B', tc: 'Invocar jefe', d: 'Llamar al jefe junto al portal'}, {k: 'Tab', tc: null, d: 'Mapa completo'}]},
+  {ch: 2, t: 'Mapas, dificultad y Supervivencia', img: 'mapas',
+    d: 'Después de elegir Digimon eliges mapa (Bosque File, Desierto de Datos o Montaña Helada) y dificultad. Cuanto más difícil, más premios: hasta ×2,2 Bits y tickets en Pesadilla. En Supervivencia no hay jefe final: llega una oleada por minuto y un jefe menor cada 5.',
+    keys: [{k: '← →', tc: null, d: 'Cambiar de mapa'}, {k: '↑ ↓', tc: null, d: 'Dificultad'}, {k: 'Enter', tc: null, d: 'Empezar'}]},
+  {ch: 3, t: 'El menú de inicio', img: 'menu',
+    d: 'Jugar empieza con tu último Digimon y Supervivencia es el modo infinito. Los encargos diarios, semanales y de evento dan premios, y el evento trae skins de temporada. Abajo tienes el Digidex, el laboratorio, los mapas, los logros, los récords y tu perfil.',
+    keys: []},
+  {ch: 3, t: 'Bits, Incubadora y laboratorio', img: 'lab',
+    d: 'Cada partida da Bits y a veces tickets. Con ellos tiras en la Incubadora para conseguir skins, marcos y títulos. En el laboratorio los Bits mejoran a todos tus Digimon para siempre. El Digidex guarda lo que has desbloqueado.',
+    keys: []}
 ];
 let tutoIdx = 0;
+const guideTouch = () => document.body.classList.contains('is-touch') || matchMedia('(pointer:coarse)').matches;
 function tutoShow(i){
-  tutoIdx = (i + TUTO.length) % TUTO.length;
-  const s = TUTO[tutoIdx];
-  const v = document.getElementById('tutoV');
-  if (v){ v.src = s.clip; v.load(); v.play().catch(() => {}); }
+  tutoIdx = Math.max(0, Math.min(GUIDE.length - 1, i));
+  const s = GUIDE[tutoIdx], touch = guideTouch();
+  const media = document.getElementById('gdMedia');
+  if (!media) return;
+  media.innerHTML = s.clip
+    ? `<video class="tuto-video" src="tutorial/${s.clip}.webm" muted loop playsinline autoplay aria-label="Vídeo: ${s.t}"></video>`
+    : `<img class="tuto-video" src="tutorial/${s.img}_${uiTheme()}.webp" alt="Captura: ${s.t}">`;
+  const v = media.querySelector('video'); if (v) v.play().catch(() => {});
   document.getElementById('tutoT').textContent = s.t;
   document.getElementById('tutoD').textContent = s.d;
-  document.getElementById('tutoDots').innerHTML = TUTO.map((_, j) => `<i class="tuto-dot${j === tutoIdx ? ' on' : ''}" data-i="${j}"></i>`).join('');
+  const keys = s.keys.filter(k => !touch || k.tc);
+  document.getElementById('gdKeys').innerHTML = keys.map(k => `<li><kbd>${touch ? k.tc : k.k}</kbd><span>${k.d}</span></li>`).join('');
+  document.getElementById('gdKeys').hidden = !keys.length;
+  document.getElementById('gdCount').textContent = `${tutoIdx + 1}/${GUIDE.length}`;
+  document.querySelectorAll('#gdTabs button').forEach(b => { const on = +b.dataset.ch === s.ch; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+  document.getElementById('tutoDots').innerHTML = GUIDE.map((g2, j) => `<button type="button" class="tuto-dot${j === tutoIdx ? ' on' : ''}" data-i="${j}" aria-label="Pantalla ${j + 1}: ${g2.t}"></button>`).join('');
   document.querySelectorAll('#tutoDots .tuto-dot').forEach(d => d.onclick = () => tutoShow(+d.dataset.i));
+  document.getElementById('tutoPrev').disabled = tutoIdx === 0;
+  const last = tutoIdx === GUIDE.length - 1;
+  document.getElementById('tutoNext').innerHTML = last ? '¡A jugar!' : 'Siguiente ▶';
 }
 function tutoStep(dir){ if (state === 'help') tutoShow(tutoIdx + dir); }
 function showHelp(){
   state = 'help';
+  const touch = guideTouch();
   showOverlay(`
-    <div class="help-box tuto">
-      <header class="set-head"><button class="g-back" id="helpBack">← Volver</button><h2>Cómo jugar</h2></header>
-      <div class="tuto-screen">
-        <video id="tutoV" class="tuto-video" muted loop playsinline autoplay></video>
-        <h3 id="tutoT"></h3><p id="tutoD"></p>
+    <div class="help-box tuto gd">
+      <header class="set-head"><button class="g-back" id="helpBack">← Volver</button><h2>Cómo jugar</h2><span class="gd-count" id="gdCount"></span></header>
+      <nav class="gd-tabs" id="gdTabs" role="tablist" aria-label="Capítulos">${GUIDE_CH.map((c, i) => `<button type="button" role="tab" data-ch="${i}">${c}</button>`).join('')}</nav>
+      <div class="gd-stage">
+        <figure class="gd-media" id="gdMedia"></figure>
+        <div class="gd-txt"><h3 id="tutoT"></h3><p id="tutoD"></p><ul class="gd-keys" id="gdKeys"></ul></div>
       </div>
       <div class="tuto-nav">
-        <button class="g-back" id="tutoPrev">◀</button>
+        <button class="g-back gd-prev" id="tutoPrev" aria-label="Pantalla anterior">◀</button>
         <div class="tuto-dots" id="tutoDots"></div>
-        <button class="g-back" id="tutoNext">▶</button>
+        <button class="gd-next" id="tutoNext"></button>
       </div>
-      <div class="muted">Flechas ← → cambian de pantalla · Esc vuelve</div>
+      ${touch ? '' : '<div class="muted gd-hint">← → cambian de pantalla · Esc vuelve</div>'}
     </div>`);
   document.getElementById('helpBack').onclick = () => showSelect();
   document.getElementById('tutoPrev').onclick = () => tutoStep(-1);
-  document.getElementById('tutoNext').onclick = () => tutoStep(1);
+  document.getElementById('tutoNext').onclick = () => tutoIdx === GUIDE.length - 1 ? showSelect() : tutoStep(1);
+  document.querySelectorAll('#gdTabs button').forEach(b => b.onclick = () => tutoShow(GUIDE.findIndex(x => x.ch === +b.dataset.ch)));
   tutoShow(0);
 }
 
@@ -5406,7 +5500,17 @@ function showMapSelect(){
   document.getElementById('msBack').onclick = () => showPicker();
   document.getElementById('msStart').onclick = () => startGame(selectedKey);
 }
+// Móvil: se juega en horizontal. Al empezar, intenta pantalla completa y bloquear la orientación (Android);
+// si el móvil sigue en vertical, un aviso pide girarlo mientras dure la partida
+function lockLandscape(){
+  if (!isTouchUI() && !matchMedia('(pointer:coarse)').matches) return;
+  try {
+    const go = () => { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); };
+    if (!document.fullscreenElement && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().then(go).catch(go); else go();
+  } catch(e){}
+}
 function startGame(key){
+  lockLandscape();
   // El botón Jugar muestra el último Digimon con el que se jugó
   if (CHARS[key]) { selectedKey = key; try { localStorage.setItem('digibonk3d-last-choice', key); } catch(e){} }
   // El botón de volver del navegador no saca de la partida: queda una entrada de historial que lo absorbe
@@ -6328,7 +6432,7 @@ function drawEdgeMarkers(){
   if (state !== 'play' || !g) return;
   const targets = g.chests.filter(ch => !ch.open && !ch.gone).map(ch => ({x: ch.x, z: ch.z, col: '#ffd54f'}));
   if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
-  if (g.portal && g.portalOpen) targets.push({x: PORTAL.x, z: PORTAL.z, col: '#3de0ff'});
+  if (g.portal && (g.portalOpen || canSummonBoss())) targets.push({x: PORTAL.x, z: PORTAL.z, col: '#3de0ff'});
   if (g.ev) for (const n of g.ev.nodes || [{x: g.ev.foe.x, z: g.ev.foe.z}]) if (!n.done) targets.push({x: n.x, z: n.z, col: '#7cf29c'});
   for (const e of g.enemies) if (e.kind === 'elite' || e.kind === 'mini') targets.push({x: e.x, z: e.z, col: e.kind === 'mini' ? '#ce93d8' : '#ff7043'});
   const W = cv.width, H = cv.height, cx = W/2, cy = H/2;
@@ -6995,10 +7099,12 @@ function summonBoss(){
   if (g.boss && g.enemies.includes(g.boss)){ announce(def.name + ' ya está aquí', 'Derrótalo', def.col); return; }
   if (g.portalOpen){ announce('El portal ya está abierto', 'Ve al norte para cruzarlo', '#3de0ff'); return; }
   if (g.bossDown) return;
+  if (!nearPortal()){ announce('Ve al portal', 'Invoca a ' + def.name + ' junto al portal del norte', '#3de0ff'); return; }
   const max = def.hp * lvlDiff().boss;
   const hp = def.resume && g.bossLeftHp ? g.bossLeftHp : max;
-  const a = Math.atan2(g.dir.z, g.dir.x);
-  const [x, z] = clampArena(g.p.x + Math.cos(a)*14, g.p.z + Math.sin(a)*14, ARENA_R - 4);
+  // Aparece delante del portal, entre el portal y el jugador
+  const away = Math.atan2(g.p.z - PORTAL.z, g.p.x - PORTAL.x);
+  const [x, z] = clampArena(PORTAL.x + Math.cos(away)*7, PORTAL.z + Math.sin(away)*7, ARENA_R - 4);
   const mesh = billboard(def.sprite, 5.6);
   world.add(mesh);
   const shadow = makeShadow(5);
@@ -7061,7 +7167,8 @@ function hudObjective(){
   if (g.inferno) return '¡Infierno! No hay salida';
   if (g.portalOpen) return '¡Portal abierto! Ve al norte';
   if (g.boss && g.enemies.includes(g.boss)) return `Derrota a ${def.name}` + (def.retreatAt ? ' (huye a mitad de vida)' : def.final ? ' para ganar' : ' para abrir el portal');
-  return `[B] Invocar a ${def.name}` + (def.final ? ' · jefe final' : ' · abre el portal');
+  if (!nearPortal()) return `Ve al portal del norte para invocar a ${def.name}`;
+  return `${isTouchUI() ? '' : '[B] '}Invoca a ${def.name}` + (def.final ? ' · jefe final' : ' · abre el portal');
 }
 // Aviso "E" flotando sobre el cofre cercano
 function updatePrompt(){
@@ -7088,7 +7195,7 @@ function updateHUD(){
   const obj = document.getElementById('hudObj'), objTxt = hudObjective();
   if (obj.textContent !== objTxt) obj.textContent = objTxt;
   obj.className = g.inferno ? 'inf' : g.portalOpen ? 'hot' : '';
-  const canSummon = portalMap && !g.portalOpen && !g.bossDown && !(g.boss && g.enemies.includes(g.boss)) && zoneDef().boss;
+  const canSummon = portalMap && canSummonBoss() && nearPortal();
   const sumEl = document.getElementById('hudSummon');
   sumEl.style.display = canSummon ? 'flex' : 'none';
   if (canSummon) document.getElementById('hudSummonName').textContent = zoneDef().boss.name + (g.bossLeftHp && zoneDef().boss.resume ? ' · ' + Math.round(g.bossLeftHp / (zoneDef().boss.hp * lvlDiff().boss) * 100) + '%' : '');
@@ -9168,7 +9275,12 @@ initMenuBg();
 
 // ---------- Bucle ----------
 let last = performance.now(), animMs = 0;
+let demoSteps = null;   // solo con ?demo=1: si es un número, el juego avanza esos fotogramas de 40 ms y espera (grabar la guía)
 function frame(now){
+  if (demoSteps !== null){
+    if (demoSteps <= 0){ last = now; requestAnimationFrame(frame); return; }
+    demoSteps--; now = last + 40;
+  }
   const dt = Math.min(0.05, (now-last)/1000);
   last = now;
   if (state === 'play' && g){
@@ -9218,6 +9330,7 @@ if (new URLSearchParams(location.search).has('demo')){
   window.__dbk = {
     get g(){ return g; }, get state(){ return state; }, get scene(){ return scene; },
     rollReward, grantReward, setBanner: b => { gxBanner = b; }, playPullAnimation,
+    hold(on){ demoSteps = on ? 0 : null; }, step(n = 1){ demoSteps = n; }, get pending(){ return demoSteps; },
     startGame, spawnEnemy, spawnMagnetDrop, setZone, showGacha, addSkill, upgradeChoices,
     // Datos de skins y personajes
     SKINS, EVO_LINE, CHARS, SEASONS, glitchPixels,
