@@ -2916,6 +2916,12 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
   #overlay .realhub.hb .hb-brand img{height:auto!important;max-width:72vw}
   #overlay .realhub.hb .hb-ver{margin-bottom:8px!important}
 }
+/* Mismo tamaño para todos los paneles: grandes (Colección, Laboratorio, Mapa) y medianos (Ajustes, Guía, Código) */
+#overlay .picker-screen.cl4,#overlay:not(.menu-mode)>.picker-screen.ms,#overlay .picker-screen.ms,#overlay .lab-screen{width:min(1080px,94vw)!important;max-width:none!important;height:min(780px,calc(100vh - 60px))!important;max-height:none!important;box-sizing:border-box!important;overflow-y:auto}
+#overlay .picker-screen.cl4{overflow:hidden}
+#overlay :is(.settings,.help-box,.sc-box){width:min(720px,94vw)!important;max-width:none!important;box-sizing:border-box!important}
+#overlay .approved-info-dialog{width:min(520px,94vw)!important;box-sizing:border-box!important}
+@media(max-width:760px){#overlay .picker-screen.cl4,#overlay:not(.menu-mode)>.picker-screen.ms,#overlay .picker-screen.ms,#overlay .lab-screen{height:auto!important;max-height:none!important}}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -4113,7 +4119,8 @@ function menuNav(k, e){
   return true;
 }
 // ---------- Barra superior fija en los menús: tarjeta, Bits, tickets, idioma, sonido, pantalla completa y ajustes ----------
-const TOP_STATES = ['select', 'gacha', 'lab', 'pick', 'mapsel', 'player', 'settings', 'help', 'savecode', 'collection'];
+// Bits, tickets y perfil solo se ven en el menú de inicio (que lleva su propia barra); el resto de pantallas no la muestran
+const TOP_STATES = [];
 function refreshTopbar(){
   const el = document.getElementById('topbar');
   const show = TOP_STATES.includes(state) && !overlay.classList.contains('hidden') && !overlay.querySelector('.pa,.pr3,.dvl2');
