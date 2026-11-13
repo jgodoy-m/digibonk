@@ -2707,6 +2707,26 @@ html[data-theme=oscuro] .pz2-keys kbd{color:#16171a}
 body:has(#overlay :is(.ps,.ms,.pk2-starter,.lab-screen)) #topbar .tb-id{display:none!important}
 @media(max-width:1200px){html[lang] body #topbar .tb-id{display:none!important}}
 #overlay:not(.menu-mode)>.picker-screen.ps{margin-top:-14px!important}
+/* ---------- Fin de partida: resumen en tarjetas y botones grandes ---------- */
+body:has(#overlay .end3) #hudSummon{display:none!important}
+#overlay .end3 .end3-top{display:flex;flex-direction:column;align-items:center;gap:0}
+#overlay .end3 .end3-top h1{margin-top:-14px!important;position:relative;z-index:1}
+@media(max-width:600px){#overlay .end3 .end3-top h1{font-size:30px!important;padding:6px 20px!important}}
+#overlay .end3 .end3-ic{width:76px;height:76px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 4px var(--m-cardline),0 5px 0 var(--m-line2)}
+#overlay .end3.lose .end3-ic{filter:grayscale(.7)}
+#overlay .end3 .end3-cells{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:10px!important}
+#overlay .end3 .end3-cells span{display:flex!important;flex-direction:column;align-items:center;gap:1px;padding:8px 6px!important}
+#overlay .end3 .end3-cells i{font-style:normal;font-size:18px;line-height:1;height:24px;display:grid;place-items:center}
+#overlay .end3 .end3-cells i img{width:24px;height:24px;object-fit:contain}
+#overlay .end3 .end3-cells .end3-gain{background:color-mix(in srgb,var(--m-gold) 14%,var(--m-sunk))!important;border-color:color-mix(in srgb,var(--m-gold) 45%,transparent)!important}
+#overlay .end3 .end3-cells .end3-gain b{color:var(--m-gold)!important}
+#overlay .end3 .end3-act2{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+#overlay .end3 .end3-go{display:inline-flex;align-items:center;gap:10px;height:56px;padding:0 34px;border:0;border-radius:999px;background:var(--m-cta);color:#fff;font:900 20px 'Nunito',sans-serif;text-shadow:0 2px 0 var(--m-cta-sh);box-shadow:0 5px 0 var(--m-cta-sh);cursor:pointer;transition:transform .12s}
+#overlay .end3 .end3-pill{display:inline-flex;align-items:center;gap:8px;height:56px;padding:0 24px;border-radius:999px;border:1px solid var(--m-cardline);background:var(--m-btn);color:var(--m-text);font:900 16px 'Nunito',sans-serif;box-shadow:var(--m-btnsh);cursor:pointer;transition:transform .12s}
+#overlay .end3 :is(.end3-go,.end3-pill):hover{transform:translateY(-2px)}
+#overlay .end3 :is(.end3-go,.end3-pill) kbd{font:800 11px 'Nunito',sans-serif;padding:2px 7px;border-radius:6px;background:var(--m-text);color:var(--m-card);text-shadow:none}
+#overlay .end3 .end3-go kbd{background:#fff;color:#c45200}
+@media(max-width:600px){#overlay .end3 .end3-go{width:100%;justify-content:center}#overlay .end3 .end3-pill{flex:1;justify-content:center;padding:0 12px;font-size:14px}#overlay .end3 .end3-ic{width:54px;height:54px}}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -3522,7 +3542,9 @@ addEventListener('keydown', e => {
   else if (state === 'levelup' && k === 'f') rerollUp();
   else if (state === 'levelup' && k === 'x') skipUp();
   else if (state === 'levelup' && k === 'z') toggleBanish();
-  else if (state === 'end' && (k === 'enter' || k === 'r')) showSelect();
+  else if (state === 'end' && (k === 'enter' || k === 'r')) startGame(g ? g.ch.id : selectedKey);
+  else if (state === 'end' && k === 'm') showSelect();
+  else if (state === 'end' && k === 'c') showPicker();
 });
 addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
 
@@ -4491,7 +4513,7 @@ function renderPickPreview(){
   const row = (label, val) => `<div class="ps-row"><span>${label}</span><b>${val}</b></div>`;
   el.innerHTML = `
     <div class="ps-hero">
-      ${pickStage ? animEl(spriteOf(k, pickStage), 'ps-hero-img') : `<img class="ps-hero-ic" src="${charIcon(k)}" alt="">`}
+      ${animEl(spriteOf(k, pickStage), 'ps-hero-img')}
       <span class="ps-hero-tag">${stageName(k, pickStage)}</span>
     </div>
     <div class="ps-id">
@@ -4500,7 +4522,7 @@ function renderPickPreview(){
       <div><span class="ps-attr a-${at}" title="Vacuna gana a Virus, Virus a Datos y Datos a Vacuna">${ATTR_ICON[at] || ''} ${ATTR_NAME[at] || ''}</span></div>
       <div class="ps-lbl">Evoluciona durante la partida</div>
       <div class="ps-evo">
-        <button type="button" class="ps-node pk-stage${pickStage === 0 ? ' on' : ''}" data-stage="0" title="${c.name}"><img class="ps-node-ic" src="${charIcon(k)}" alt=""></button>
+        <button type="button" class="ps-node pk-stage${pickStage === 0 ? ' on' : ''}" data-stage="0" title="${c.name}">${sprEl(spriteOf(k, 0), 46)}</button>
         ${EVO_LINE[k].map((e, i) => `<span class="ps-arrow">Nv. ${evoLevelFor(k, i)}<i>›</i></span><button type="button" class="ps-node pk-stage${pickStage === i + 1 ? ' on' : ''}" data-stage="${i + 1}" title="${e.name}">${sprEl(spriteOf(k, i + 1), 46)}</button>`).join('')}
       </div>
       <div class="ps-wins"><span class="ps-lbl">Victorias</span>${DIFF_ORDER.map(d => `<span class="${wins[d] ? 'on' : ''}" style="--dc:${DIFFS[d].col}" title="${wins[d] ? wins[d] + ' victorias' : 'Sin victorias'} en ${DIFFS[d].name}">${DIFFS[d].name}${wins[d] ? ' ' + wins[d] : ''}</span>`).join('')}</div>
@@ -5969,10 +5991,11 @@ function endGame(win){
   const endKey = g.ch.id;
   showOverlay(`
     <div class="end3 ${win ? 'win' : 'lose'}">
-      <h1>${g.mode === 'surv' ? 'FIN DE LA SUPERVIVENCIA' : win ? '¡VICTORIA!' : 'HAS CAÍDO'}</h1>
+      <div class="end3-top"><img class="end3-ic" src="${charIcon(g.ch.id)}" alt=""><h1>${g.mode === 'surv' ? 'FIN DE LA SUPERVIVENCIA' : win ? '¡VICTORIA!' : 'HAS CAÍDO'}</h1></div>
       <p class="end3-sub">${g.mode === 'surv' ? `Has aguantado ${fmtTime(Math.floor(g.t))} · récord con ${g.ch.name}: ${fmtTime(Math.floor(survBest(g.ch.id)))}` : win ? (g.bossName || 'Piedmon') + ' ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Laboratorio`} · ${mapDef().name} · ${zoneDef().name} · ${lvlDiff().name}${g.mode === 'surv' ? ' · Oleada ' + (g.wave || 1) : ''}</p>
       <div class="end3-cells">
-        <span><b>${fmtTime(Math.floor(g.t))}</b>Tiempo</span><span><b>${g.p.lvl}</b>Nivel</span><span><b>${g.kills}</b>Bajas</span><span><b>${Object.keys(g.skills).length}</b>Habilidades</span>
+        <span><i>⏱</i><b>${fmtTime(Math.floor(g.t))}</b>Tiempo</span><span><i>⭐</i><b>${g.p.lvl}</b>Nivel</span><span><i>⚔</i><b>${g.kills}</b>Bajas</span><span><i>✦</i><b>${Object.keys(g.skills).length}</b>Habilidades</span>
+        <span class="end3-gain"><i><img src="ui/hud/ic_bits.webp" alt=""></i><b>+${g.earned}</b>Bits ganados</span><span class="end3-gain"><i><img src="ui/hud/ic_ticket.webp" alt=""></i><b>+${(g.tix || 0) + g.encDone.length * ENC_REWARD.tix}</b>Tickets</span>
       </div>
       <div class="end3-cols">
         <section><h3>Daño por ataque</h3>
@@ -5980,11 +6003,12 @@ function endGame(win){
         </section>
         <section><h3>Recompensas</h3><ul class="end3-rw">${rewards.join('')}</ul></section>
       </div>
-      <div class="end3-act"><button class="g-btn" id="endAgain">Otra partida</button><button class="mini-btn" id="endMenu">Menú (Enter)</button></div>
+      <div class="end3-act2"><button class="end3-go" id="endAgain">↻ Otra vez <kbd>Enter</kbd></button><button class="end3-pill" id="endPick">Cambiar Digimon <kbd>C</kbd></button><button class="end3-pill" id="endMenu">Menú <kbd>M</kbd></button></div>
     </div>`);
   overlay.onclick = null;
   document.getElementById('endAgain').onclick = () => startGame(endKey);
   document.getElementById('endMenu').onclick = () => showSelect();
+  document.getElementById('endPick').onclick = () => showPicker();
 
 }
 
