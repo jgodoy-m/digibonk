@@ -817,7 +817,7 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .real-world{background:#082655!important;z-index:-1!important}
 .real-world .rw-scenery{
   position:absolute!important;inset:0!important;
-  background-image:url('ui/mundo_digital_solo_escenario.jpg')!important;
+  background-image:var(--fondo-hub)!important;
   background-size:cover!important;background-position:center 43%!important;
   filter:saturate(1.15) contrast(1.02)!important;
   transform:none!important;animation:none!important;opacity:1!important;
@@ -941,12 +941,13 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 }
 .realhub .real-device img{image-rendering:pixelated!important}
 #overlay.menu-mode:has(.realhub) .real-world .rw-scenery {
- background-image:url('ui/escenario_referencia_con_personajes.jpg')!important;
+ background-image:var(--fondo-hub)!important;
  background-size:cover!important; background-position:center center!important;
  animation:none!important;transform:none!important;filter:none!important;
 }
 .realhub .real-scene .rw-character{display:none!important}
-.realhub .real-world::before{background:linear-gradient(90deg,rgba(0,13,39,.33),transparent 38%,transparent 75%,rgba(0,12,36,.10))!important}
+/* Velo de lectura: oscurece la columna del menú (izquierda), la barra de arriba y la tarjeta de récords; deja limpio el centro */
+.realhub .real-world::before{background:linear-gradient(90deg,rgba(0,13,39,.46),rgba(0,13,39,.22) 30%,transparent 44%,transparent 72%,rgba(0,12,36,.26)),linear-gradient(180deg,rgba(0,12,36,.34),transparent 13%,transparent 86%,rgba(0,12,36,.30))!important}
 .realhub .rw-aurora{mix-blend-mode:screen!important}
 .realhub .rw-water{mix-blend-mode:screen!important}
 .realhub .real-legal{isolation:isolate!important;z-index:9!important}
@@ -958,7 +959,7 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 }
 .realhub .real-world .rw-scenery{
   animation:none!important;transform:none!important;
-  background-image:url('ui/escenario_referencia_con_personajes.jpg')!important;
+  background-image:var(--fondo-hub)!important;
   background-position:center!important;background-size:cover!important;
 }
 .realhub .real-world::after{
@@ -1748,8 +1749,14 @@ body:has(.tr11) #hudTop{display:none!important}
 }
 /* ===== Sistema común de pantallas: mismo fondo, marco, cabecera, botones y márgenes en todos los menús ===== */
 :root{--ui-panel:linear-gradient(150deg,#256cbb 0%,#082f77 49%,#061c4c 100%);--ui-line:#9aefff;--ui-card:rgba(6,24,64,.82);--ui-card-line:#2f6fb3;--ui-text:#eaf6ff;--ui-muted:#a9c6e6;--ui-gold:#ffd54f;--ui-top:28px;--ui-bot:28px;--ui-radius:10px}
-/* Fondo de los menús: escenario limpio del Digimundo, desenfocado y oscurecido (la imagen anterior tenía un formulario dibujado) */
-#menuart{background:#061433 url('ui/mundo_digital_solo_escenario.jpg') center/cover no-repeat;filter:blur(4px) brightness(.5) saturate(1.1);transform:scale(1.06)}
+/* Fondos de pantalla en un solo sitio. Para cambiar el fondo basta con sustituir estos archivos (o estas rutas):
+   --fondo-menus: detrás de Ajustes, Elegir Digimon, Colección, Laboratorio y Ficha (se ve desenfocado y oscurecido).
+   --fondo-hub: imagen fija del menú de inicio; se ve si el vídeo no carga y como primer fotograma.
+   Composición pensada para el menú de inicio: la columna izquierda (~40 %) y la tarjeta de récords (derecha, ~22 %) tapan el fondo;
+   el centro-derecha es lo único que queda a la vista, así que el motivo principal debe ir ahí. */
+:root{--fondo-menus:url('ui/fondo_menus.webp');--fondo-hub:url('ui/fondo_menus.webp')}
+/* Fondo de los menús: escenario limpio del Digimundo, desenfocado y oscurecido */
+#menuart{background:#061433 var(--fondo-menus) center/cover no-repeat;filter:blur(4px) brightness(.5) saturate(1.1);transform:scale(1.06)}
 /* Márgenes iguales arriba y abajo: la barra superior reserva su hueco y el panel nunca toca los bordes */
 #overlay:not(.menu-mode){box-sizing:border-box;padding:var(--ui-top) 16px var(--ui-bot);justify-content:safe center;overflow-y:auto}
 #overlay.has-top:not(.menu-mode){--ui-top:76px;padding-top:var(--ui-top)}
@@ -1779,7 +1786,7 @@ body:has(.tr11) #hudTop{display:none!important}
 .lab-foot{align-items:center;margin-top:16px}
 .lab-foot .g-btn{margin:0}
 /* Ficha de jugador con la paleta Digivice (antes gris Nord, distinta del resto) */
-.pl4 .real-world{background:#061433 url('ui/mundo_digital_solo_escenario.jpg') center/cover no-repeat!important;filter:blur(4px) brightness(.5) saturate(1.1)!important;transform:scale(1.06)}
+.pl4 .real-world{background:#061433 var(--fondo-menus) center/cover no-repeat!important;filter:blur(4px) brightness(.5) saturate(1.1)!important;transform:scale(1.06)}
 .pl4 .pl5-hero,.pl4 .pl4-stat,.pl4 .pl5-panel{background:var(--ui-panel)!important;border:2px solid var(--ui-line)!important;border-radius:var(--ui-radius)!important;box-shadow:inset 0 2px #b5ffff55,0 5px 0 #03163d!important}
 .pl4 .pl4-stat{background:var(--ui-card)!important;border-color:var(--ui-card-line)!important;box-shadow:inset 0 1px #b5ffff33!important}
 .pl4 .pl4-banner b{font-family:'Orbitron',system-ui,sans-serif!important;text-transform:uppercase;letter-spacing:1px;color:#fff!important}
