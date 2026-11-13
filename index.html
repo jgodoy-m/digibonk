@@ -2632,6 +2632,81 @@ html[lang] body #topbar .tb-id .hud-portrait{width:26px;height:26px}}
   #overlay:not(.menu-mode) .lab-top .lab-head{flex:1 1 100%!important;flex-wrap:nowrap!important;gap:10px!important}
   #overlay:not(.menu-mode) .lab-top .lab-host{width:44px!important;height:44px!important;flex:none}
 }
+/* Iconos en selección y colección */
+.ps-hero-ic{width:78%;aspect-ratio:1;border-radius:50%;object-fit:cover;box-shadow:0 0 0 4px #fff,0 6px 0 rgba(0,0,0,.18);margin-bottom:22px}
+.ps-node-ic{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.ps-ic-spr{background:var(--m-tilesel)}
+.ps-ic-spr .anim{width:88%!important;height:88%!important}
+.cl4-skin .ps-ic{width:84px;max-width:84px;margin:0 auto 6px}
+.cl4-item .cl4-ic{width:44px;max-width:44px;flex:none;box-shadow:0 0 0 2px var(--m-cardline)}
+.cl4-item.lock .cl4-ic img{filter:grayscale(1) brightness(.45)}
+/* ---------- Registro y pausa con el estilo de los menús ---------- */
+#overlay:has(.rg){background:radial-gradient(ellipse 60% 70% at 30% 50%,rgba(78,99,232,.35),transparent 70%),radial-gradient(ellipse 40% 50% at 80% 45%,rgba(255,138,30,.2),transparent 70%),#0e1222!important}
+html[data-theme=oscuro] #overlay:has(.rg){background:radial-gradient(ellipse 60% 70% at 30% 50%,rgba(78,99,232,.18),transparent 70%),#121316!important}
+.rg{font-family:'Nunito',system-ui,sans-serif!important;color:var(--m-text)}
+.rg-pill{height:42px;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 18px;border-radius:999px;border:1px solid var(--m-cardline);background:var(--m-btn);color:var(--m-text);font:800 14px 'Nunito',system-ui,sans-serif;box-shadow:var(--m-btnsh);cursor:pointer;transition:transform .12s}
+.rg-pill:hover{transform:translateY(-2px)}
+.rg-lang{position:absolute;top:16px;right:18px;z-index:3}
+.rg-scene{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:20px}
+.rg-logo{width:min(520px,80%);height:auto;filter:drop-shadow(0 6px 0 rgba(0,0,0,.3))}
+.rg-tag{font:900 13px 'Nunito',sans-serif;letter-spacing:.18em;color:#fff;padding:6px 14px;border-radius:999px;background:var(--m-banner);box-shadow:0 3px 0 var(--m-banner-sh)}
+.rg-pitch{margin:0;color:#e9edff;font-weight:700;font-size:16px}
+.rg-duo{display:flex;gap:30px;margin-top:10px}
+.rg-duo .anim{width:170px;height:170px;filter:drop-shadow(0 8px 0 rgba(0,0,0,.25));animation:animIdle .8s steps(1) infinite,pvBob 1.8s ease-in-out infinite}
+.rg-duo .anim.flip{transform:scaleX(-1)}
+.rg-side{display:grid;place-items:center;padding:20px}
+.rg-card{width:min(430px,92vw);box-sizing:border-box;display:flex;flex-direction:column;gap:12px;padding:0 26px 26px;border-radius:24px;background:var(--m-card);border:1px solid var(--m-cardline);box-shadow:var(--m-shadow)}
+.rg-banner{margin:-18px auto 4px;padding:10px 26px;border-radius:14px;background:var(--m-banner);box-shadow:0 4px 0 var(--m-banner-sh);transform:skewX(-6deg)}
+#overlay .rg-banner h2{margin:0;transform:skewX(6deg);font:900 20px "Nunito",sans-serif!important;color:var(--m-banner-txt)!important;text-shadow:0 2px 0 rgba(0,0,0,.2)!important;-webkit-text-fill-color:currentColor!important;background:none!important;text-align:center}
+.rg-boot{margin:0;font:900 11px 'Nunito',sans-serif;letter-spacing:.14em;color:var(--m-acc);text-align:center}
+.rg-saved{margin:0;font-weight:700;font-size:13px;color:var(--m-mute);text-align:center}
+.rg-input{height:50px;box-sizing:border-box;padding:0 20px;border-radius:999px;border:2px solid var(--m-line2);background:var(--m-sunk);color:var(--m-text);font:800 17px 'Nunito',sans-serif;text-align:center;outline:none}
+.rg-input:focus{border-color:var(--m-sel);box-shadow:0 0 0 4px var(--m-selbg)}
+.rg-go,.pz2-go{display:flex;align-items:center;justify-content:center;gap:10px;height:54px;border:0;border-radius:999px;background:var(--m-cta);color:#fff;font:900 18px 'Nunito',sans-serif;text-shadow:0 2px 0 var(--m-cta-sh);box-shadow:0 5px 0 var(--m-cta-sh);cursor:pointer;transition:transform .12s}
+.rg-go:hover,.pz2-go:hover{transform:translateY(-2px)}
+.rg-go kbd,.pz2-go kbd{font:800 11px 'Nunito',sans-serif;padding:2px 7px;border-radius:6px;background:#fff;color:#c45200;text-shadow:none}
+.rg-or{display:flex;align-items:center;gap:10px;color:var(--m-mute);font-weight:800;font-size:12px}
+.rg-or::before,.rg-or::after{content:'';flex:1;height:1px;background:var(--m-line)}
+.rg-guest{width:100%}
+@media (max-width:1000px),(max-height:620px){.rg{grid-template-columns:1fr!important;height:auto!important;min-height:100vh;padding:60px 0 30px}.rg-duo .anim{width:110px;height:110px}.rg-logo{width:min(360px,80%)}}
+#pause:has(.pz2){background:var(--m-scrim)!important;backdrop-filter:blur(3px)}
+.pz2{width:min(560px,94vw);max-height:94vh;overflow:auto;box-sizing:border-box;display:flex;flex-direction:column;gap:14px;padding:0 22px 20px;border-radius:24px;background:var(--m-card);border:1px solid var(--m-cardline);box-shadow:var(--m-shadow);color:var(--m-text);font-family:'Nunito',system-ui,sans-serif}
+.pz2-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.pz2-banner{display:flex;align-items:baseline;gap:10px;margin-top:-1px;padding:10px 22px;border-radius:0 0 14px 14px;background:var(--m-banner);box-shadow:0 4px 0 var(--m-banner-sh)}
+.pz2-banner h2{margin:0;font:900 22px 'Orbitron',system-ui,sans-serif;color:var(--m-banner-txt);letter-spacing:1px}
+.pz2-banner small{color:var(--m-banner-txt);opacity:.85;font-weight:800;font-size:12px}
+.pz2-x{margin-top:12px;width:38px;height:38px;border-radius:50%;border:1px solid var(--m-cardline);background:var(--m-btn);color:var(--m-text);font:900 15px 'Nunito',sans-serif;box-shadow:var(--m-btnsh);cursor:pointer}
+.pz2-profile{display:flex;gap:16px;align-items:center;padding:12px;border-radius:18px;background:var(--m-sunk)}
+.pz2-av{flex:none;width:104px;height:104px;border-radius:50%;display:grid;place-items:center;background:var(--m-hero);box-shadow:0 0 0 3px var(--m-cardline)}
+.pz2-av .anim{width:92px;height:92px}
+.pz2-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.pz2-name{font-size:20px;font-weight:900}
+.pz2-quote{color:var(--m-mute);font-weight:700;font-style:italic}
+.pz2-lbl{display:flex;justify-content:space-between;font-size:11.5px;font-weight:800;color:var(--m-soft);margin-top:4px}
+.pz2-bar{height:9px;border-radius:5px;background:var(--m-line);overflow:hidden}
+.pz2-bar i{display:block;height:100%;border-radius:5px;background:var(--m-meter)}
+.pz2-bar.hp i{background:linear-gradient(90deg,#3fd47d,#1d9a57)}
+.pz2-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pz2-stats div{padding:10px 4px;border-radius:14px;background:var(--m-sunk);text-align:center}
+.pz2-stats b{display:block;font-size:19px;font-weight:900;font-variant-numeric:tabular-nums}
+.pz2-stats small{font-size:11px;font-weight:800;color:var(--m-mute)}
+.pz2-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pz2-btns .pz2-go{grid-column:1/-1}
+.pz2-pill{height:44px;border-radius:999px;border:1px solid var(--m-cardline);background:var(--m-btn);color:var(--m-text);font:900 15px 'Nunito',sans-serif;box-shadow:var(--m-btnsh);cursor:pointer;transition:transform .12s}
+.pz2-pill:hover,.pz2-x:hover{transform:translateY(-2px)}
+.pz2-danger{color:var(--m-bad)}
+.pz2-confirm{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:16px;border:2px solid color-mix(in srgb,var(--m-bad) 50%,transparent);text-align:center}
+.pz2-confirm b{font-size:17px;color:var(--m-bad)}
+.pz2-confirm p{margin:0;color:var(--m-mute);font-weight:700}
+.pz2-keys{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;font-size:12px;font-weight:700;color:var(--m-mute)}
+.pz2-keys span{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;background:var(--m-sunk)}
+.pz2-keys kbd{font:800 10px 'Nunito',sans-serif;padding:1px 6px;border-radius:5px;background:var(--m-text);color:var(--m-card)}
+html[data-theme=oscuro] .pz2-keys kbd{color:#16171a}
+@media (max-width:520px){.pz2{padding:0 14px 14px}.pz2-av{width:76px;height:76px}.pz2-av .anim{width:66px;height:66px}.pz2-stats b{font-size:16px}}
+/* En los paneles con poco sitio la barra superior va sin la tarjeta del usuario */
+body:has(#overlay :is(.ps,.ms,.pk2-starter,.lab-screen)) #topbar .tb-id{display:none!important}
+@media(max-width:1200px){html[lang] body #topbar .tb-id{display:none!important}}
+#overlay:not(.menu-mode)>.picker-screen.ps{margin-top:-14px!important}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -3568,55 +3643,44 @@ function showPause(askQuit = false){
   const evoPct = evoMax ? 100 : Math.min(100, g.p.lvl / evoNext * 100);
   const evoTxt = evoMax ? 'Forma final alcanzada' : `Siguiente digievolución · Nv ${g.p.lvl}/${evoNext}`;
   const actions = askQuit ? `
-    <div class="pz-confirm">
-      <div class="pz-warn">¿Desconectar del Digital World?</div>
-      <p>La partida se perderá y no se guardará en los récords.</p>
-      <div class="pz-btns">
-        <button class="pz-btn pz-primary" id="pBack">Volver a la batalla</button>
-        <button class="pz-btn pz-danger" id="pQuit">Desconectar</button>
+    <div class="pz2-confirm">
+      <b>¿Abandonar la partida?</b>
+      <p>Se perderá y no contará para los récords.</p>
+      <div class="pz2-btns">
+        <button class="pz2-go" id="pBack">Volver a la batalla</button>
+        <button class="pz2-pill pz2-danger" id="pQuit">Abandonar</button>
       </div>
     </div>` : `
-    <div class="pz-btns">
-      <button class="pz-btn pz-primary" id="pResume">Volver a la batalla<small>(Continuar)</small></button>
-      <button class="pz-btn" id="pRestart">Reboot<small>(Reiniciar)</small></button>
-      <button class="pz-btn pz-danger" id="pQuitAsk">Desconectar<small>(Abandonar)</small></button>
+    <div class="pz2-btns">
+      <button class="pz2-go" id="pResume">▶ Volver a la batalla<kbd>Esc</kbd></button>
+      <button class="pz2-pill" id="pRestart">↻ Reiniciar</button>
+      <button class="pz2-pill pz2-danger" id="pQuitAsk">Abandonar</button>
     </div>`;
   pauseEl.innerHTML = `
-    <div class="pz-device" role="dialog" aria-modal="true" aria-label="Menú de pausa Digivice">
-      <div class="pz-brand">DIGIVICE</div>
-      <div class="pz-bezel"><div class="pz-lcd">
-        <div class="pz-title">DIGIVICE · PAUSA</div>
-        <div class="pz-zone">${(g ? zoneDef() : ZONES[0]).name} · <span class="pz-st">● En línea</span></div>
-        <button class="pz-close" id="pClose" aria-label="Cerrar menú de pausa">✕</button>
-        <div class="pz-profile">
-          <div class="pz-av">${animEl(sprite, 'pz-anim')}</div>
-          <div>
-            <div class="pz-name">${name}</div>
-            <div class="pz-quote">${PAUSE_LINE[c.id] || ''}</div>
-            <div class="pz-lbl"><span>PS</span><span>${Math.ceil(g.p.hp)} / ${g.p.maxHp}</span></div>
-            <div class="pz-bar"><i style="width:${hpPct}%"></i></div>
-            <div class="pz-lbl"><span>${evoTxt}</span><span>EXP ${Math.round(expPct)}%</span></div>
-            <div class="pz-bar evo"><i style="width:${evoPct}%"></i></div>
-          </div>
+    <div class="pz2" role="dialog" aria-modal="true" aria-label="Menú de pausa">
+      <header class="pz2-head"><div class="pz2-banner"><h2>Pausa</h2><small>${(g ? zoneDef() : ZONES[0]).name}</small></div><button class="pz2-x" id="pClose" aria-label="Cerrar menú de pausa">✕</button></header>
+      <div class="pz2-profile">
+        <div class="pz2-av">${animEl(sprite, 'pz-anim')}</div>
+        <div class="pz2-info">
+          <b class="pz2-name">${name}</b>
+          <small class="pz2-quote">${PAUSE_LINE[c.id] || ''}</small>
+          <div class="pz2-lbl"><span>PS</span><span>${Math.ceil(g.p.hp)} / ${g.p.maxHp}</span></div>
+          <div class="pz2-bar hp"><i style="width:${hpPct}%"></i></div>
+          <div class="pz2-lbl"><span>${evoTxt}</span><span>EXP ${Math.round(expPct)}%</span></div>
+          <div class="pz2-bar"><i style="width:${evoPct}%"></i></div>
         </div>
-        <div class="pz-stats">
-          <div><small>Tiempo de viaje</small><b>${fmtTime(Math.floor(g.t))}</b></div>
-          <div><small>Bajas</small><b>${g.kills}</b></div>
-          <div><small>Nivel</small><b>${g.p.lvl}</b></div>
-          <div><small>Ataque</small><b>x${g.p.dmg.toFixed(2)}</b></div>
-        </div>
-        ${actions}
-        <div class="pz-keys">
-          <span><i class="kbd">Esc</i>/<i class="kbd">P</i> pausa</span>
-          <span><i class="kbd">WASD</i> mover</span>
-          <span><i class="kbd">Espacio</i> saltar</span>
-          <span><i class="kbd">Shift</i> dash</span>
-          <span><i class="kbd">E</i> cofres</span>
-          <span><i class="kbd">Tab</i> mapa</span>
-          <span><i class="kbd">N</i> sonido</span>
-          <span><i class="kbd">Ratón</i> cámara</span>
-        </div>
-      </div></div>
+      </div>
+      <div class="pz2-stats">
+        <div><b>${fmtTime(Math.floor(g.t))}</b><small>Tiempo</small></div>
+        <div><b>${g.kills}</b><small>Bajas</small></div>
+        <div><b>${g.p.lvl}</b><small>Nivel</small></div>
+        <div><b>x${g.p.dmg.toFixed(2)}</b><small>Ataque</small></div>
+      </div>
+      ${actions}
+      <div class="pz2-keys">
+        <span><kbd>Esc</kbd> pausa</span><span><kbd>WASD</kbd> mover</span><span><kbd>Espacio</kbd> saltar</span><span><kbd>Shift</kbd> dash</span>
+        <span><kbd>E</kbd> cofres</span><span><kbd>Tab</kbd> mapa</span><span><kbd>N</kbd> sonido</span><span><kbd>R</kbd> evolucionar</span>
+      </div>
     </div>`;
   pauseEl.classList.remove('hidden');
   const on = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = fn; };
@@ -3727,7 +3791,7 @@ function showCollection(){
   // Progreso global: skins de cada etapa, una evolución por Digimon, marcos y títulos
   let have = 0, total = 0;
   for (const k of chars){
-    for (let st = 0; st < stageCount(k); st++) for (const sk of visibleSkinsAt(k, st)){ total++; if (ownsAt(k, st, sk.id)) have++; }
+    for (const sk of lineSkins(k)){ total++; if (ownsAt(k, 0, sk.id)) have++; }
     total++; if (evolvedUnlocked(k)) have++;
   }
   total += FRAMES.length + TITLES.length;
@@ -3747,9 +3811,9 @@ function showCollection(){
     const list = chars.map(k => {
       const open = isUnlocked(k);
       let own = 0, all = 0;
-      for (let st = 0; st < stageCount(k); st++) for (const sk of visibleSkinsAt(k, st)){ all++; if (ownsAt(k, st, sk.id)) own++; }
+      for (const sk of lineSkins(k)){ all++; if (ownsAt(k, 0, sk.id)) own++; }
       return `<button class="cl4-item${k === colKey ? ' sel' : ''}${open ? '' : ' lock'}" data-k="${k}" ${open ? '' : 'disabled'}>
-        ${sprEl(spriteOf(k, false), 48)}
+        <span class="ps-ic cl4-ic"><img src="${open ? charIcon(k) : 'ui/jugador/' + k + '.png'}" alt=""></span>
         <span><b>${open ? CHARS[k].name : '???'}</b><small>${open ? own + ' skins' : unlockHow(k)}</small></span></button>`;
     }).join('');
     const k = colKey, open = isUnlocked(k);
@@ -3762,10 +3826,10 @@ function showCollection(){
       if (colStage >= n) colStage = 0;
       const st = colStage, eq = equippedAt(k, st);
       const evoRow = stages.map((x, i) => `${i ? '<span>➜</span>' : ''}<div class="cl4-st${x.on ? '' : ' off'}${i === st ? ' sel' : ''}" data-st="${i}">${sprEl(spriteWith(k, i, equippedAt(k, i)), 48)}<small>${x.on ? x.name : '???'}</small></div>`).join('');
-      const cards = visibleSkinsAt(k, st).filter(sk => ownsAt(k, st, sk.id)).map(sk => {
-        const has = ownsAt(k, st, sk.id), on = eq === sk.id;
+      const cards = lineSkins(k).filter(sk => ownsAt(k, 0, sk.id)).map(sk => {
+        const has = ownsAt(k, 0, sk.id), on = eq === sk.id;
         return `<button class="cl4-skin${has ? ' owned' : ' locked'}${on ? ' eq' : ''}" data-skin="${sk.id}" ${has ? '' : 'disabled'}>
-          ${sprEl(spriteWith(k, st, sk.id), 72)}
+          ${skinThumb(k, sk)}
           <b>${has ? sk.name : '???'}</b><small>${has ? (on ? 'Equipada' : 'Pulsa para equipar') : howTo(k, sk)}</small></button>`;
       }).join('');
       detail = `
@@ -3777,7 +3841,7 @@ function showCollection(){
             <div class="cl4-evo">${evoRow}</div>
           </div>
         </div>
-        <h4>Skins · ${stageName(k, st)}</h4>
+        <h4>Skins · toda la línea de ${CHARS[k].name}</h4>
         <div class="cl4-skins">${cards}</div>`;
     }
     body = `<div class="cl4-body"><aside class="cl4-list">${list}</aside><section class="cl4-detail">${detail}</section></div>`;
@@ -3792,7 +3856,7 @@ function showCollection(){
   overlay.querySelectorAll('.cl4-tab').forEach(b => b.onclick = () => { colTab = b.dataset.t; showCollection(); });
   overlay.querySelectorAll('.cl4-item:not(.lock)').forEach(b => b.onclick = () => { colKey = b.dataset.k; showCollection(); });
   overlay.querySelectorAll('.cl4-st:not(.off)').forEach(b => b.onclick = () => { colStage = +b.dataset.st; showCollection(); });
-  overlay.querySelectorAll('.cl4-skin.owned').forEach(b => b.onclick = () => { equipSkinAt(colKey, colStage, b.dataset.skin); showCollection(); });
+  overlay.querySelectorAll('.cl4-skin.owned').forEach(b => b.onclick = () => { equipSkinAt(colKey, 0, b.dataset.skin); showCollection(); });
 }
 // ---------- Barra superior fija en los menús: tarjeta, Bits, tickets, idioma, sonido, pantalla completa y ajustes ----------
 const TOP_STATES = ['select', 'gacha', 'lab', 'pick', 'mapsel', 'player', 'settings', 'help', 'savecode', 'collection'];
@@ -4376,12 +4440,12 @@ function renderRoster(){
   if (!el) return;
   const k = selectedKey, chars = SEASONS.adventure.chars;
   if (rosterTab === 'vestidor'){
-    const s = pickStage, owned = ownedSkinsAt(k, s), eq = equippedAt(k, s);
-    const list = visibleSkinsAt(k, s).filter(sk => owned.includes(sk.id));
-    el.innerHTML = `<div class="ps-lbl">${stageName(k, s)} · cambia de etapa en la línea evolutiva</div>
-      <div class="ps-grid">${list.map(sk => `<button type="button" class="ps-tile${eq === sk.id ? ' sel' : ''}" data-skin="${sk.id}" title="${sk.name}">${animEl(spriteWith(k, s, sk.id), 'ps-face')}<b>${sk.name}</b></button>`).join('')}</div>
+    const owned = ownedSkinsAt(k, 0), eq = equippedAt(k, 0);
+    const list = lineSkins(k).filter(sk => owned.includes(sk.id));
+    el.innerHTML = `<div class="ps-lbl">La skin se aplica a toda la línea de ${CHARS[k].name}</div>
+      <div class="ps-grid">${list.map(sk => `<button type="button" class="ps-tile${eq === sk.id ? ' sel' : ''}" data-skin="${sk.id}" title="${sk.name}">${skinThumb(k, sk)}<b>${sk.name}</b></button>`).join('')}</div>
       ${list.length <= 1 ? '<p class="ps-note">Consigue skins en Tesoros y con logros.</p>' : ''}`;
-    el.querySelectorAll('[data-skin]').forEach(b => b.onclick = () => { equipSkinAt(k, s, b.dataset.skin); showPicker(); });
+    el.querySelectorAll('[data-skin]').forEach(b => b.onclick = () => { equipSkinAt(k, 0, b.dataset.skin); showPicker(); });
     return;
   }
   if (rosterTab === 'apoyo'){
@@ -4395,7 +4459,7 @@ function renderRoster(){
     const open = isUnlocked(id);
     return `<button type="button" class="ps-tile${id === k ? ' sel' : ''}${open ? '' : ' lock'}" ${open ? `data-pick="${id}"` : 'disabled'} data-name="${open ? CHARS[id].name.toLowerCase() : '???'}" title="${open ? CHARS[id].name : unlockHow(id)}">
       <span class="ps-key">${i + 1}</span>${open && pickIsEvolved(id) ? '<span class="ps-evo-dot" title="Ya ha evolucionado"></span>' : ''}
-      <span class="ps-ic"><img src="ui/jugador/${id}.png" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
+      <span class="ps-ic"><img src="${open ? charIcon(id) : 'ui/jugador/' + id + '.png'}" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
     </button>`;
   }).join('');
   const soon = COMING_SOON.map(c => `<span class="ps-tile soon" title="${c.name} · ${c.role} · Próximamente"><span class="ps-lock">🔒</span><span class="ps-ic"><img src="ui/jugador/${c.name.toLowerCase()}.png" alt="" loading="lazy"></span><b>Pronto</b></span>`).join('');
@@ -4427,7 +4491,7 @@ function renderPickPreview(){
   const row = (label, val) => `<div class="ps-row"><span>${label}</span><b>${val}</b></div>`;
   el.innerHTML = `
     <div class="ps-hero">
-      ${animEl(spriteOf(k, pickStage), 'ps-hero-img')}
+      ${pickStage ? animEl(spriteOf(k, pickStage), 'ps-hero-img') : `<img class="ps-hero-ic" src="${charIcon(k)}" alt="">`}
       <span class="ps-hero-tag">${stageName(k, pickStage)}</span>
     </div>
     <div class="ps-id">
@@ -4436,7 +4500,7 @@ function renderPickPreview(){
       <div><span class="ps-attr a-${at}" title="Vacuna gana a Virus, Virus a Datos y Datos a Vacuna">${ATTR_ICON[at] || ''} ${ATTR_NAME[at] || ''}</span></div>
       <div class="ps-lbl">Evoluciona durante la partida</div>
       <div class="ps-evo">
-        <button type="button" class="ps-node pk-stage${pickStage === 0 ? ' on' : ''}" data-stage="0" title="${c.name}">${sprEl(spriteOf(k, 0), 46)}</button>
+        <button type="button" class="ps-node pk-stage${pickStage === 0 ? ' on' : ''}" data-stage="0" title="${c.name}"><img class="ps-node-ic" src="${charIcon(k)}" alt=""></button>
         ${EVO_LINE[k].map((e, i) => `<span class="ps-arrow">Nv. ${evoLevelFor(k, i)}<i>›</i></span><button type="button" class="ps-node pk-stage${pickStage === i + 1 ? ' on' : ''}" data-stage="${i + 1}" title="${e.name}">${sprEl(spriteOf(k, i + 1), 46)}</button>`).join('')}
       </div>
       <div class="ps-wins"><span class="ps-lbl">Victorias</span>${DIFF_ORDER.map(d => `<span class="${wins[d] ? 'on' : ''}" style="--dc:${DIFFS[d].col}" title="${wins[d] ? wins[d] + ' victorias' : 'Sin victorias'} en ${DIFFS[d].name}">${DIFFS[d].name}${wins[d] ? ' ' + wins[d] : ''}</span>`).join('')}</div>
@@ -7082,20 +7146,20 @@ function ownedSkinsAt(key, st){
   const out = ['clasico'];
   for (const e of (skinsOwned[key] || [])){
     const at = e.indexOf('@');
-    if (at < 0) out.push(e);
-    else if (+e.slice(at + 1) === st) out.push(e.slice(0, at));
+    out.push(at < 0 ? e : e.slice(0, at));   // una skin vale para toda la línea evolutiva
   }
   return [...new Set(out)];
 }
 function ownsAt(key, st, id){ return id === 'clasico' || ownedSkinsAt(key, st).includes(id); }
 // Skin equipada en una etapa; sin elección propia usa la antigua (que vale para todas)
 function equippedAt(key, st){
-  const id = skinEquipped[key + '@' + st] || skinEquipped[key] || 'clasico';
+  const id = skinEquipped[key] || skinEquipped[key + '@0'] || 'clasico';
   return ownsAt(key, st, id) ? id : 'clasico';
 }
 function equipSkinAt(key, st, id){
   if (!ownsAt(key, st, id)) return;
-  skinEquipped[key + '@' + st] = id;
+  skinEquipped[key] = id;
+  for (const k of Object.keys(skinEquipped)) if (k.startsWith(key + '@')) delete skinEquipped[k];
   localStorage.setItem('digibonk3d-equip', JSON.stringify(skinEquipped));
 }
 function grantSkinAt(key, st, id){
@@ -7108,6 +7172,12 @@ function ownsAnyStage(key, id){ for (let st = 0; st < stageCount(key); st++) if 
 // Skins que se muestran en una etapa: las ocultas (variocolor) solo cuando se tienen
 // Una skin solo existe para un Digimon y etapa si tiene su hoja dibujada (sprites/anim/<digimon>_<etapa>_<skin>.png)
 function skinHasArt(key, st, id){ return id === 'clasico' || ANIM_IDS.has(`${key}_${st}_${id}`); }
+// Skins de una línea entera: las que tienen hoja en alguna etapa
+function skinLineArt(key, id){ for (let st = 0; st < stageCount(key); st++) if (skinHasArt(key, st, id)) return st; return -1; }
+function lineSkins(key){ return SKINS.filter(sk => skinLineArt(key, sk.id) >= 0 && (!sk.hidden || ownsAt(key, 0, sk.id))); }
+// Icono redondo de un Digimon con su skin (si la skin no tiene icono, el del Digimon)
+function charIcon(key, skin = equippedAt(key, 0)){ const ic = skinIconFor(key, skin); return ic ? ic.src : 'ui/jugador/' + key + '.png'; }
+function skinThumb(key, sk){ const ic = skinIconFor(key, sk.id); if (ic || sk.id === 'clasico') return `<span class="ps-ic"><img src="${ic ? ic.src : 'ui/jugador/' + key + '.png'}" alt=""></span>`; const st = Math.max(0, skinLineArt(key, sk.id)); return `<span class="ps-ic ps-ic-spr">${animEl(spriteWith(key, st, sk.id), 'ps-face')}</span>`; }
 function visibleSkinsAt(key, st){ return SKINS.filter(sk => skinHasArt(key, st, sk.id) && (!sk.hidden || ownsAt(key, st, sk.id))); }
 // Se llama al terminar cada partida: actualiza el progreso y devuelve las skins nuevas
 function statsOf(key){ return loadJSON('digibonk3d-stats', {})[key] || {plays:0, kills:0}; }
@@ -7245,27 +7315,24 @@ function showRegister(){
   setHud(false);
   const bits = Array.from({length: 14}, (_, i) => `<i style="left:${(i*37) % 100}%;animation-delay:${(i*0.53) % 5}s;animation-duration:${4 + i % 4}s"></i>`).join('');
   showOverlay(`
-    <div class="dvl2">
-      <button class="tb-btn dvl-lang" id="regLang">${LANG.toUpperCase()}</button>
-      <section class="dvl-scene">
-        <div class="dvl-bits">${bits}</div>
-        <div class="dvl-logo"><span>DIGI</span>BONK</div>
-        <div class="dvl-tag">${t('tag')}</div>
-        <p class="dvl-pitch">${t('pitch')}</p>
-        <div class="dvl-duo"><i class="m4-pad"></i>${animEl('sprites/adventure/agumon.png', 'flip')}${animEl('sprites/adventure/gabumon.png')}</div>
+    <div class="dvl2 rg">
+      <button class="rg-pill rg-lang" id="regLang">🌐 ${LANG.toUpperCase()}</button>
+      <section class="rg-scene">
+        <img class="rg-logo" src="ui/logo_digibonk.webp" alt="DIGIBONK">
+        <div class="rg-tag">${t('tag')}</div>
+        <p class="rg-pitch">${t('pitch')}</p>
+        <div class="rg-duo">${animEl(spriteOf('agumon', 0), 'flip')}${animEl(spriteOf('gabumon', 0))}</div>
       </section>
-      <section class="dvl">
-        <div class="dvl-device">
-          <i class="dvl-ant"></i><i class="dvl-btn b1"></i><i class="dvl-btn b2"></i><i class="dvl-btn b3"></i>
-          <div class="dvl-bezel"><div class="dvl-screen">
-            <div class="dvl-boot">${t('boot')}</div>
-            <h2>${t('who')}</h2>
-            <p>${t('saved')}</p>
-            <input id="regName" maxlength="16" placeholder="${t('ph')}" autocomplete="off">
-            <button class="dvl-go" id="regGo">${t('enter')}</button>
-          </div></div>
+      <section class="rg-side">
+        <div class="rg-card">
+          <div class="rg-banner"><h2>${t('who')}</h2></div>
+          <p class="rg-boot">${t('boot')}</p>
+          <p class="rg-saved">${t('saved')}</p>
+          <input id="regName" class="rg-input" maxlength="16" placeholder="${t('ph')}" autocomplete="off">
+          <button class="rg-go" id="regGo">${t('enter')}<kbd>Enter</kbd></button>
+          <div class="rg-or"><span>o</span></div>
+          <button class="rg-pill rg-guest" id="regGuest">${t('guest')}</button>
         </div>
-        <button class="dvl-guest" id="regGuest">${t('guest')}</button>
       </section>
     </div>`);
   document.getElementById('regLang').onclick = toggleLang;
@@ -7567,7 +7634,7 @@ function bannerPool(bn = gxBanner){
   const b = BANNERS[bn];
   const out = [];
   // solo entran las skins que ya tienen hoja dibujada
-  const add = (key, times, sk) => { for (let t = 0; t < times; t++) for (let st = 0; st < stageCount(key); st++) if (skinHasArt(key, st, sk.id)) out.push({key, st, sk}); };
+  const add = (key, times, sk) => { const st = skinLineArt(key, sk.id); if (st >= 0) for (let t = 0; t < times; t++) out.push({key, st, sk}); };
   const all = () => { for (const sk of b.skins.map(id => SKIN_BY_ID[id])) for (const key of SEASONS.adventure.chars) add(key, 1, sk); };
   if (b.weekly){
     const chars = SEASONS.adventure.chars, i = weeklyIndex();
