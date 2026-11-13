@@ -2775,6 +2775,24 @@ body:has(#overlay .end3) #hudSummon{display:none!important}
 #overlay>:is(.settings,.help-box,.lab-screen,.cl4,.end3),.approved-info-scrim .approved-info-dialog,#pause .pz2{zoom:var(--ui-scale,1)}
 html.reduce-motion *:not(.anim){animation:none!important;transition:none!important}
 html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
+/* Logo animado: entrada con rebote, brillo cian que respira y un destello que lo cruza cada pocos segundos.
+   El destello usa el propio logo como máscara, así que solo pasa por encima de las letras. */
+.logo-fx{position:relative;display:inline-block;line-height:0;animation:logo-in .7s cubic-bezier(.2,1.5,.4,1) both}
+.logo-fx>img{animation:logo-glow 3.6s ease-in-out .7s infinite alternate}
+.logo-fx::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.85) 48%,rgba(190,250,255,.9) 52%,transparent 62%) no-repeat;
+  background-size:250% 100%;background-position:130% 0;mix-blend-mode:screen;
+  -webkit-mask:url('ui/logo_digibonk.webp') center/100% 100% no-repeat;mask:url('ui/logo_digibonk.webp') center/100% 100% no-repeat;
+  animation:logo-shine 5s ease-in-out 1.2s infinite}
+.logo-fx-rg{width:min(520px,80%)}
+.logo-fx-rg>.rg-logo{width:100%}
+@media (max-width:1000px),(max-height:620px){.logo-fx-rg{width:min(360px,80%)}}
+@keyframes logo-in{0%{opacity:0;transform:translateY(-10px) scale(.88)}100%{opacity:1;transform:none}}
+@keyframes logo-glow{from{filter:drop-shadow(0 4px 0 rgba(0,0,0,.25)) drop-shadow(0 0 4px rgba(90,230,255,.25))}to{filter:drop-shadow(0 4px 0 rgba(0,0,0,.25)) drop-shadow(0 0 16px rgba(90,230,255,.65))}}
+@keyframes logo-shine{0%{background-position:130% 0}30%,100%{background-position:-30% 0}}
+html.reduce-motion .logo-fx,html.reduce-motion .logo-fx>img{animation:none!important}
+html.reduce-motion .logo-fx::after{display:none}
+@media (prefers-reduced-motion:reduce){.logo-fx,.logo-fx>img{animation:none!important}.logo-fx::after{display:none}}
 .set-vol{display:flex;align-items:center;gap:10px}
 .set-range{-webkit-appearance:none;appearance:none;width:150px;height:8px;border-radius:5px;background:var(--m-line);outline:none;cursor:pointer}
 .set-range::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--m-cta);box-shadow:0 2px 0 var(--m-cta-sh);border:2px solid #fff}
@@ -4468,7 +4486,7 @@ function showSelect(){
       </header>
       <section class="hb-main">
         <div class="hb-left">
-          <h1 class="hb-brand"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"><span class="hb-ver">BETA</span></h1>
+          <h1 class="hb-brand"><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span><span class="hb-ver">BETA</span></h1>
           <div class="hb-modes nm-modes">
             <button type="button" id="playBtn" class="hb-play nm-play" aria-label="Jugar con ${safeText(choice.name)}">
               <span class="hb-play-txt"><b>Jugar</b></span>
@@ -8051,7 +8069,7 @@ function showRegister(){
     <div class="dvl2 rg">
       <button class="rg-pill rg-lang" id="regLang">🌐 ${LANG.toUpperCase()}</button>
       <section class="rg-scene">
-        <img class="rg-logo" src="ui/logo_digibonk.webp" alt="DIGIBONK">
+        <span class="logo-fx logo-fx-rg"><img class="rg-logo" src="ui/logo_digibonk.webp" alt="DIGIBONK"></span>
         <div class="rg-tag">${t('tag')}</div>
         <p class="rg-pitch">${t('pitch')}</p>
         <div class="rg-duo">${animEl(spriteOf('agumon', 0), 'flip')}${animEl(spriteOf('gabumon', 0))}</div>
