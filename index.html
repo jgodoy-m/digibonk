@@ -3205,7 +3205,30 @@ html[data-theme=oscuro] #overlay .help-box.gd .gd-tabs button.on{background:#3d4
   #hudTop{max-width:36vw}#hudObj{display:none!important}#hudChips{zoom:.68}
 }
 /* En pantallas táctiles no hay teclado: fuera las pistas de teclas */
-body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act button,.pz2) kbd,body.is-touch .lv3-key{display:none!important}
+body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch .lv3-key{display:none!important}
+/* Fin de partida: cabe en pantallas bajas (1280×720, móvil en horizontal) */
+#overlay .end3{max-height:calc(100dvh - 16px);overflow-y:auto;box-sizing:border-box}
+@media (max-height:820px){
+  #overlay .end3{padding:14px 22px!important}
+  #overlay .end3 .end3-ic{width:52px!important;height:52px!important}
+  #overlay .end3 h1{font-size:28px!important;margin:4px 0!important}
+  #overlay .end3 .end3-sub{margin:6px 0 10px!important}
+  #overlay .end3 .end3-cells>span{padding:5px 6px!important}
+  #overlay .end3 .end3-cells>span i{font-size:14px!important;height:18px!important}
+  #overlay .end3 .end3-cells>span b{font-size:21px!important}
+  #overlay .end3 .end3-act2{margin-top:10px!important}
+}
+/* Los botones del fin de partida siempre a la vista aunque el resumen sea largo */
+#overlay .end3 .end3-act2{position:sticky;bottom:-14px;z-index:2;background:var(--m-card,#fff);padding:8px 0 4px;margin-bottom:-4px}
+@media (orientation:landscape) and (max-height:500px){
+  #overlay .end3{padding:10px 16px!important}
+  #overlay .end3 .end3-ic{width:40px!important;height:40px!important}
+  #overlay .end3 h1{font-size:22px!important}
+  #overlay .end3 .end3-cells{grid-template-columns:repeat(6,1fr)!important;gap:6px!important;margin-bottom:6px!important}
+  #overlay .end3 .end3-cells>span b{font-size:17px!important}
+  #overlay .end3 .end3-cols{grid-template-columns:1fr 1fr!important;gap:10px!important}
+  #overlay .end3 .end3-act2 button{padding:7px 14px!important;font-size:13px!important}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.js" } }
@@ -3978,6 +4001,8 @@ document.getElementById('hudSummon').onclick = e => { e.stopPropagation(); summo
 addEventListener('keydown', e => {
   const k = e.key.toLowerCase();
   audioInit();
+  // Esc cierra las ventanas del menú (Logros, Encargos, Récords…) antes que nada
+  if (k === 'escape'){ const x = overlay.querySelector('.approved-info-scrim #realClose'); if (x){ x.click(); return; } }
   if (state === 'savecode'){ if (k === 'escape') showSettings(); return; }
   if (state === 'register') return;
   if (k === 'n'){ toggleMute(); return; }
@@ -8087,6 +8112,8 @@ function unlockAllForTesting(){
   localStorage.setItem('digibonk3d-name', 'Invitado');
   localStorage.setItem('digibonk3d-guest', '1');
 }
+// El modo invitado (todo desbloqueado) es solo para pruebas: aparece con ?test o ?demo en la dirección
+const TEST_MODE = /[?&](test|demo)\b/.test(location.search);
 const isGuest = () => localStorage.getItem('digibonk3d-guest') === '1';
 
 /* ---------- Entrenador: nombre elegido al registrarse ---------- */
@@ -8115,8 +8142,8 @@ function showRegister(){
           <p class="rg-saved">${t('saved')}</p>
           <input id="regName" class="rg-input" maxlength="16" placeholder="${t('ph')}" autocomplete="off">
           <button class="rg-go" id="regGo">${t('enter')}<kbd>Enter</kbd></button>
-          <div class="rg-or"><span>o</span></div>
-          <button class="rg-pill rg-guest" id="regGuest">${t('guest')}</button>
+          ${TEST_MODE ? `<div class="rg-or"><span>o</span></div>
+          <button class="rg-pill rg-guest" id="regGuest">${t('guest')}</button>` : ''}
         </div>
       </section>
     </div>`);
@@ -8128,7 +8155,7 @@ function showRegister(){
     if (localStorage.getItem('digibonk3d-unlocked')) showSelect(); else showStarter();
   };
   document.getElementById('regGo').onclick = go;
-  document.getElementById('regGuest').onclick = () => {
+  if (TEST_MODE) document.getElementById('regGuest').onclick = () => {
     unlockAllForTesting();
     location.reload();
   };
