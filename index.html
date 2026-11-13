@@ -2727,6 +2727,24 @@ body:has(#overlay .end3) #hudSummon{display:none!important}
 #overlay .end3 :is(.end3-go,.end3-pill) kbd{font:800 11px 'Nunito',sans-serif;padding:2px 7px;border-radius:6px;background:var(--m-text);color:var(--m-card);text-shadow:none}
 #overlay .end3 .end3-go kbd{background:#fff;color:#c45200}
 @media(max-width:600px){#overlay .end3 .end3-go{width:100%;justify-content:center}#overlay .end3 .end3-pill{flex:1;justify-content:center;padding:0 12px;font-size:14px}#overlay .end3 .end3-ic{width:54px;height:54px}}
+/* ---------- Animación al elegir, transición al mapa y accesibilidad ---------- */
+@keyframes psPop{0%{transform:scale(1)}35%{transform:scale(1.16) translateY(-4px)}65%{transform:scale(.96)}100%{transform:scale(1)}}
+@keyframes psHeroIn{0%{transform:translateY(10px) scale(.9);opacity:.3}100%{transform:none;opacity:1}}
+.ps-ic.pop{animation:psPop .38s ease-out}
+.ps-hero .pop{animation:psHeroIn .3s ease-out,animIdle .8s steps(1) infinite!important}
+@keyframes msIn{0%{opacity:0;transform:translateX(60px)}100%{opacity:1;transform:none}}
+@keyframes psIn{0%{opacity:0;transform:translateX(-40px)}100%{opacity:1;transform:none}}
+#overlay:not(.redraw)>.picker-screen.ms{animation:msIn .32s cubic-bezier(.2,.8,.2,1)!important}
+#overlay:not(.redraw)>.picker-screen.ps{animation:psIn .28s cubic-bezier(.2,.8,.2,1)!important}
+#overlay>:is(.settings,.help-box,.lab-screen,.cl4,.end3),.approved-info-scrim .approved-info-dialog,#pause .pz2{zoom:var(--ui-scale,1)}
+html.reduce-motion *:not(.anim){animation:none!important;transition:none!important}
+html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
+.set-vol{display:flex;align-items:center;gap:10px}
+.set-range{-webkit-appearance:none;appearance:none;width:150px;height:8px;border-radius:5px;background:var(--m-line);outline:none;cursor:pointer}
+.set-range::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--m-cta);box-shadow:0 2px 0 var(--m-cta-sh);border:2px solid #fff}
+.set-range::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#ff8a1e;border:2px solid #fff}
+@media(max-width:600px){.set-vol{flex-wrap:wrap;justify-content:flex-end}.set-range{width:120px}}
+#overlay button:focus-visible,#pause button:focus-visible,#overlay [role=button]:focus-visible{outline:3px solid var(--m-sel)!important;outline-offset:3px!important}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -3503,6 +3521,7 @@ addEventListener('keydown', e => {
   if (k === 'q' && state === 'play'){ bonkRelease(); return; }
   if (k === 'r' && state === 'play'){ triggerEmergency(); return; }
   if (k === 'b' && state === 'play'){ summonBoss(); return; }
+  if (MENU_NAV.includes(state) && menuNav(k, e)) return;
   if (state === 'help'){ if (k === 'escape') showSelect(); if (k === 'arrowright') tutoStep(1); if (k === 'arrowleft') tutoStep(-1); return; }
   if (state === 'gacha' || state === 'lab' || state === 'settings' || state === 'player' || state === 'collection'){ if (k === 'escape') showSelect(); return; }
   // Esc o P pausan y reanudan. Con el ratón bloqueado el navegador puede no entregar Esc:
@@ -3880,6 +3899,48 @@ function showCollection(){
   overlay.querySelectorAll('.cl4-st:not(.off)').forEach(b => b.onclick = () => { colStage = +b.dataset.st; showCollection(); });
   overlay.querySelectorAll('.cl4-skin.owned').forEach(b => b.onclick = () => { equipSkinAt(colKey, 0, b.dataset.skin); showCollection(); });
 }
+// ---------- Navegación con flechas y Enter en los menús ----------
+// Las flechas mueven el foco al botón más cercano en esa dirección; Enter pulsa el botón enfocado
+const MENU_NAV = ['select', 'gacha', 'lab', 'settings', 'player', 'collection', 'paused', 'end', 'levelup', 'savecode'];
+function menuNavRoot(){
+  const pz = document.getElementById('pause');
+  if (pz && !pz.classList.contains('hidden') && pz.firstElementChild) return pz;
+  return overlay.querySelector('.approved-info-scrim') || overlay;
+}
+function menuNav(k, e){
+  const dirs = {arrowup: [0, -1], arrowdown: [0, 1], arrowleft: [-1, 0], arrowright: [1, 0]};
+  const root = menuNavRoot(), act = document.activeElement;
+  if (k === 'enter'){
+    if (act && act !== document.body && root.contains(act) && act.matches('button,[role=button]')){ e.preventDefault(); act.click(); return true; }
+    return false;
+  }
+  const d = dirs[k];
+  if (!d) return false;
+  if (act && act.matches && act.matches('input[type=range]')) return false;
+  const list = [...root.querySelectorAll('button:not([disabled]),[role=button],a[href]')].filter(b => { const r = b.getBoundingClientRect(); return r.width > 4 && r.height > 4 && r.bottom > 0 && r.top < innerHeight && getComputedStyle(b).visibility !== 'hidden'; });
+  if (!list.length) return false;
+  e.preventDefault();
+  if (!act || !list.includes(act)){
+    const first = root.querySelector('#playBtn,#pResume,#endAgain,.pz2-go') || list[0];
+    first.focus({preventScroll: false});
+    return true;
+  }
+  const c = r => [r.left + r.width / 2, r.top + r.height / 2];
+  const [ax, ay] = c(act.getBoundingClientRect());
+  let best = null, bestS = Infinity;
+  for (const b of list){
+    if (b === act) continue;
+    const [bx, by] = c(b.getBoundingClientRect());
+    const dx = bx - ax, dy = by - ay;
+    const along = dx * d[0] + dy * d[1];
+    if (along <= 4) continue;
+    const across = Math.abs(dx * d[1]) + Math.abs(dy * d[0]);
+    const sc = along + across * 2.2;
+    if (sc < bestS){ bestS = sc; best = b; }
+  }
+  if (best){ best.focus(); best.scrollIntoView({block: 'nearest', inline: 'nearest'}); }
+  return true;
+}
 // ---------- Barra superior fija en los menús: tarjeta, Bits, tickets, idioma, sonido, pantalla completa y ajustes ----------
 const TOP_STATES = ['select', 'gacha', 'lab', 'pick', 'mapsel', 'player', 'settings', 'help', 'savecode', 'collection'];
 function refreshTopbar(){
@@ -4153,7 +4214,7 @@ function showHelp(){
 }
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
-const SAVE_KEYS = ['digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
+const SAVE_KEYS = ['digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
   'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme'];
 function makeSaveCode(){
   const data = {};
@@ -4239,11 +4300,19 @@ function showSettings(){
       </div>
       <div class="set-row">
         <div><b>Efectos de sonido</b><small>Golpes, cofres, subidas de nivel. También con la tecla N.</small></div>
-        <button class="set-toggle${Sfx.muted ? '' : ' on'}" id="tSfx">${Sfx.muted ? 'Silenciado' : 'Activado'}</button>
+        <div class="set-vol"><input type="range" class="set-range" id="vSfx" min="0" max="100" step="5" value="${Math.round(Sfx.vol * 100)}" aria-label="Volumen de efectos"><button class="set-toggle${Sfx.muted ? '' : ' on'}" id="tSfx">${Sfx.muted ? 'Silenciado' : 'Activado'}</button></div>
       </div>
       <div class="set-row">
         <div><b>Música</b><small>Ambiente suave en los menús y en la partida.</small></div>
-        <button class="set-toggle${Music.on ? ' on' : ''}" id="tMusic">${Music.on ? 'Activada' : 'Silenciada'}</button>
+        <div class="set-vol"><input type="range" class="set-range" id="vMusic" min="0" max="100" step="5" value="${Math.round(Music.vol * 100)}" aria-label="Volumen de la música"><button class="set-toggle${Music.on ? ' on' : ''}" id="tMusic">${Music.on ? 'Activada' : 'Silenciada'}</button></div>
+      </div>
+      <div class="set-row">
+        <div><b>Tamaño del texto</b><small>Agranda los paneles y ventanas de los menús.</small></div>
+        <div class="set-seg-wrap">${UI_SCALES.map(([v, n]) => `<button class="set-seg${uiScale() === v ? ' on' : ''}" data-scale="${v}">${n}</button>`).join('')}</div>
+      </div>
+      <div class="set-row">
+        <div><b>Reducir animaciones</b><small>Quita transiciones y movimientos de los menús.</small></div>
+        <button class="set-toggle${reduceMotion() ? ' on' : ''}" id="tMotion">${reduceMotion() ? 'Activado' : 'Desactivado'}</button>
       </div>
       <div class="set-row">
         <div><b>Progreso</b><small>Exporta tu progreso a un código para usarlo en otro navegador.</small></div>
@@ -4262,6 +4331,11 @@ function showSettings(){
     location.reload();
   });
   document.getElementById('tSfx').onclick = () => { toggleMute(true); showSettings(); };
+  const vs = document.getElementById('vSfx'); vs.oninput = () => setSfxVol(vs.value / 100); vs.onchange = () => sfx('uiClick');
+  const vm = document.getElementById('vMusic'); vm.oninput = () => setMusicVol(vm.value / 100);
+  [vs, vm].forEach(r => r.addEventListener('keydown', e => e.stopPropagation()));
+  overlay.querySelectorAll('.set-seg[data-scale]').forEach(b => b.onclick = () => { localStorage.setItem('digibonk3d-uiscale', b.dataset.scale); applyUiPrefs(); showSettings(); });
+  document.getElementById('tMotion').onclick = () => { localStorage.setItem('digibonk3d-reducemotion', reduceMotion() ? '0' : '1'); applyUiPrefs(); showSettings(); };
   document.getElementById('btnSaveCode').onclick = () => showSaveCode();
   // Cerrar sesión: vuelve a la pantalla de registro; el progreso sigue en este navegador
   document.getElementById('btnLogout').onclick = () => {
@@ -4372,6 +4446,12 @@ function pickProgress(){
 const uiTheme = () => localStorage.getItem('digibonk3d-theme') === 'oscuro' ? 'oscuro' : 'claro';
 function setUiTheme(t){ try { localStorage.setItem('digibonk3d-theme', t); } catch(e){} document.documentElement.dataset.theme = t; }
 document.documentElement.dataset.theme = uiTheme();
+// Accesibilidad: tamaño del texto de los paneles y reducir animaciones
+const UI_SCALES = [['1', 'Normal'], ['1.1', 'Grande'], ['1.2', 'Muy grande']];
+const uiScale = () => { const v = localStorage.getItem('digibonk3d-uiscale'); return UI_SCALES.some(x => x[0] === v) ? v : '1'; };
+const reduceMotion = () => localStorage.getItem('digibonk3d-reducemotion') === '1';
+function applyUiPrefs(){ const r = document.documentElement; r.style.setProperty('--ui-scale', uiScale()); r.classList.toggle('reduce-motion', reduceMotion()); }
+applyUiPrefs();
 // Pestaña de la columna derecha del selector (plantel, vestidor o apoyo)
 let rosterTab = 'todos';
 const fmtN = (v, d = 1) => (+(+v).toFixed(d)).toLocaleString('es-ES');
@@ -4457,6 +4537,14 @@ function showPicker(tab){
   renderRoster();
 }
 // Columna derecha: plantel (con búsqueda), vestidor o Digimon de apoyo
+// Al elegir: el icono rebota y suena una nota corta
+function popPick(){
+  const t = document.querySelector('#pkRoster .ps-tile.sel .ps-ic');
+  if (t){ t.classList.remove('pop'); void t.offsetWidth; t.classList.add('pop'); }
+  const h = document.querySelector('.ps-hero .anim, .ps-hero img');
+  if (h){ h.classList.remove('pop'); void h.offsetWidth; h.classList.add('pop'); }
+  sfx('pick');
+}
 function renderRoster(){
   const el = document.getElementById('pkRoster');
   if (!el) return;
@@ -4489,7 +4577,7 @@ function renderRoster(){
     <div class="ps-grid" id="pkGrid">${tiles}${soon}</div>
     <p class="ps-note">1-8 elegir · ←→ cambiar · doble clic para empezar</p>`;
   el.querySelectorAll('.ps-tile[data-pick]').forEach(b => {
-    b.onclick = () => { selectedKey = b.dataset.pick; showPicker(); };
+    b.onclick = () => { selectedKey = b.dataset.pick; showPicker(); popPick(); };
     b.ondblclick = () => { selectedKey = b.dataset.pick; showMapSelect(); };
   });
   // La búsqueda filtra en el DOM sin redibujar; sus teclas no llegan al manejador global
@@ -6341,7 +6429,9 @@ function updateHUD(){
 }
 
 /* ---------- Música: tema original de aventura (sintetizado, sin archivos ni melodías existentes) ---------- */
-const Music = {on: localStorage.getItem('digibonk3d-music') !== '0', nodes: null};
+const Music = {on: localStorage.getItem('digibonk3d-music') !== '0', nodes: null, vol: Math.min(1, Math.max(0, +(localStorage.getItem('digibonk3d-musvol') ?? 1)))};
+function setMusicVol(v){ Music.vol = v; localStorage.setItem('digibonk3d-musvol', String(v)); if (Music.file) Music.file.volume = 0.5 * v; if (Music.nodes && Sfx.ctx) Music.nodes.out.gain.setTargetAtTime(0.32 * v, Sfx.ctx.currentTime, 0.1); }
+function setSfxVol(v){ Sfx.vol = v; localStorage.setItem('digibonk3d-sfxvol', String(v)); if (Sfx.master) Sfx.master.gain.value = Sfx.muted ? 0 : 0.5 * v; }
 // Melodía propia en la menor/do mayor: 8 compases de corcheas (MIDI, null = silencio)
 const TUNE_BPM = 150;
 const TUNE_LEAD = [
@@ -6357,7 +6447,7 @@ function musicStart(){
   if (!Music.file){
     Music.file = new Audio(MUSIC_FILE);
     Music.file.loop = true;
-    Music.file.volume = 0.5;
+    Music.file.volume = 0.5 * Music.vol;
     Music.file.onerror = () => { Music.file = null; if (Music.on && !Music.nodes) musicSynth(); };
   }
   Music.file.muted = Sfx.muted;
@@ -6375,7 +6465,7 @@ function musicSynth(stopOnly){
   const out = c.createGain(); out.gain.value = 0;
   const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 3200;
   lp.connect(out); out.connect(c.destination);
-  out.gain.setTargetAtTime(0.32, c.currentTime, 0.6);
+  out.gain.setTargetAtTime(0.32 * Music.vol, c.currentTime, 0.6);
   const eighth = 60 / TUNE_BPM / 2;
   const nodes = {out, stopped: false, timer: null};
   const tone = (m, t, dur, type, vol) => {
@@ -6430,14 +6520,14 @@ function musicSynthStop(){
 }
 
 /* ---------- Sonido: efectos sintetizados con Web Audio (sin archivos) ---------- */
-const Sfx = {ctx:null, master:null, muted: localStorage.getItem('digibonk3d-sfx') === '0', last:{}, noiseBuf:null};
+const Sfx = {ctx:null, master:null, muted: localStorage.getItem('digibonk3d-sfx') === '0', last:{}, noiseBuf:null, vol: Math.min(1, Math.max(0, +(localStorage.getItem('digibonk3d-sfxvol') ?? 1)))};
 function audioInit(){
   if (Sfx.ctx){ if (Sfx.ctx.state === 'suspended') Sfx.ctx.resume(); return; }
   const AC = window.AudioContext || window.webkitAudioContext;
   if (!AC) return;
   Sfx.ctx = new AC();
   Sfx.master = Sfx.ctx.createGain();
-  Sfx.master.gain.value = Sfx.muted ? 0 : 0.5;
+  Sfx.master.gain.value = Sfx.muted ? 0 : 0.5 * Sfx.vol;
   Sfx.master.connect(Sfx.ctx.destination);
   if (Music.on) musicStart();
   const len = Math.floor(Sfx.ctx.sampleRate * 0.5);
@@ -6484,6 +6574,7 @@ function sfx(name){
     case 'chest':   [523,659,784,1046].forEach((f,i) => tone(f, .16, 'triangle', .18, null, i*.07)); break;
     case 'uiHover': tone(1320, .03, 'square', .018); break;
     case 'uiClick': tone(880, .05, 'square', .04, 1320); break;
+    case 'pick':    tone(660, .07, 'triangle', .10); tone(990, .12, 'triangle', .10, null, .06); break;
     case 'ready':   tone(1568, .10, 'square', .05); tone(2349, .16, 'triangle', .06, null, .07); break;
     case 'levelup': [440,554,660,880].forEach((f,i) => tone(f, .18, 'square', .07, null, i*.08)); break;
     case 'evolve':  tone(220, 1.0, 'sawtooth', .10, 880); [523,659,784].forEach((f,i) => tone(f, .5, 'triangle', .14, null, .6 + i*.1)); break;
@@ -6495,7 +6586,7 @@ function sfx(name){
 function toggleMute(silent){
   Sfx.muted = !Sfx.muted;
   localStorage.setItem('digibonk3d-sfx', Sfx.muted ? '0' : '1');
-  if (Sfx.master) Sfx.master.gain.value = Sfx.muted ? 0 : 0.5;
+  if (Sfx.master) Sfx.master.gain.value = Sfx.muted ? 0 : 0.5 * Sfx.vol;
   if (Music.file) Music.file.muted = Sfx.muted;
   if (!silent) announce(Sfx.muted ? 'Sonido desactivado' : 'Sonido activado', 'N para cambiarlo', '#7fd0ff');
 }
