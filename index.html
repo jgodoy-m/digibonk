@@ -2750,6 +2750,37 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
 #overlay .lv3-card.fusion .lv3-tag{background:var(--m-cta)!important;color:#fff!important}
 #overlay .lv3-card.fusion .lv3-ic{display:inline-flex;gap:4px}
 .sb-fus{display:grid;place-items:center;font:900 20px 'Nunito',sans-serif;color:#fff;background:linear-gradient(180deg,#ffc24f,#ef6400)!important;box-shadow:0 0 12px rgba(255,138,30,.6)}
+/* ---------- Formas de los menús: esquinas asimétricas, botones de color en diagonal y cabeceras en ángulo ---------- */
+:root{--sh-big:30px 10px 30px 10px;--sh-mid:22px 7px 22px 7px;--sh-sm:16px 5px 16px 5px;--sh-skew:-8deg}
+/* Tarjetas grandes */
+.ps-card,.rg-card,.pz2,#overlay .end3,
+#overlay:not(.menu-mode)>:is(.picker-screen.cl4,.picker-screen.ms,.pk2-starter,.settings,.help-box,.lab-screen),
+.approved-info-scrim .approved-info-dialog,
+#overlay .realhub.hb .hb-side,.pl4 :is(.pl5-hero,.pl5-panel),.tr11 :is(.tr11-loot-board,.tr11-side){border-radius:var(--sh-big)!important}
+/* Tarjetas medianas y paneles internos */
+.ps-panel,.ps-hero,#overlay .realhub.hb :is(.hb-enc,.hb-tile),.pz2-profile,#overlay .end3 .end3-cells span,.cl4-skin,.cl4-item,.ms-card,.lab-card,.pl4 .pl4-stat,
+#overlay .realhub.hb .hb-mission,.pz2-stats div,#overlay .realhub.hb .hb-stats span{border-radius:var(--sh-mid)!important}
+.ps-atk,.ps-pill,.ps-row,#overlay .realhub.hb .hb-top5 li,.pz2-confirm{border-radius:var(--sh-sm)!important}
+/* Cabeceras de panel con el final cortado en ángulo */
+.ps-ph,.pl4 .pl5-panel>h3,#overlay .realhub.hb .hb-side-h{clip-path:polygon(0 0,100% 0,100% 40%,calc(100% - 26px) 100%,0 100%)}
+#overlay .realhub.hb .hb-side-h{padding-right:34px}
+/* Botones de color en diagonal (el texto se endereza) */
+#overlay .realhub.hb :is(.hb-play,.hb-mode,.hb-event),.rg-go,.pz2-go,#overlay .end3 .end3-go,#overlay:not(.menu-mode) .ps-go{transform:skewX(var(--sh-skew))!important;border-radius:var(--sh-mid)!important}
+#overlay .realhub.hb :is(.hb-play,.hb-mode,.hb-event)>*,.rg-go>*,.pz2-go>*,#overlay .end3 .end3-go>*,#overlay:not(.menu-mode) .ps-go>*{transform:skewX(calc(-1 * var(--sh-skew)))}
+#overlay .realhub.hb :is(.hb-play,.hb-mode,.hb-event):hover,.rg-go:hover,.pz2-go:hover,#overlay .end3 .end3-go:hover,#overlay:not(.menu-mode) .ps-go:hover{transform:skewX(var(--sh-skew)) translateY(-3px)!important}
+#overlay .realhub.hb :is(.hb-play,.hb-mode,.hb-event):active,.rg-go:active,.pz2-go:active,#overlay .end3 .end3-go:active,#overlay:not(.menu-mode) .ps-go:active{transform:skewX(var(--sh-skew)) translateY(1px)!important}
+#overlay .realhub.hb .hb-play .hb-dev{transform:skewX(8deg)}
+#overlay .realhub.hb .hb-new{transform:skewX(8deg)}
+/* Iconos de los botones del inicio en rombo */
+#overlay .realhub.hb .hb-tile i{border-radius:14px!important;transform:rotate(45deg);width:44px!important;height:44px!important;margin:4px 0 6px}
+#overlay .realhub.hb .hb-tile i>*,#overlay .realhub.hb .hb-tile i img{transform:rotate(-45deg)}
+#overlay .realhub.hb .hb-tile i{font-size:0}
+#overlay .realhub.hb .hb-tile i::after{content:attr(data-e);font-size:24px;transform:rotate(-45deg)}
+/* Cartel del título: punta a la derecha */
+.ps-tile:not(:has(.ps-ic)){border-radius:var(--sh-mid)!important}
+#overlay .realhub.hb :is(.hb-modes,.hb-row2){column-gap:20px!important}
+#overlay .realhub.hb .hb-modes{padding:0 6px}
+#overlay .realhub.hb .hb-row2{padding:0 6px}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -4078,12 +4109,12 @@ function showSelect(){
           </div>
           <div class="hb-tiles">
             <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex"><i><img src="ui/icons/digivice.png" alt=""></i><b>Digidex</b><small>${unlockedSet().size}/${Object.keys(CHARS).length}</small></button>
-            <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio"><i>🧪</i><b>Laboratorio</b><small>${SAVE.bits.toLocaleString('es-ES')} Bits</small></button>
+            <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio"><i data-e="🧪"></i><b>Laboratorio</b><small>${SAVE.bits.toLocaleString('es-ES')} Bits</small></button>
             <button type="button" class="hb-tile t3" id="btnTesoros" aria-label="Gacha: ${usableTickets('std')} tickets"><i><img src="ui/gacha/huevo_l0.png" alt=""></i><b>Gacha</b><small>${usableTickets('std')} tickets</small></button>
-            <button type="button" class="hb-tile t4" id="mLog" aria-label="Logros"><i>🏆</i><b>Logros</b><small>${achOwned}/${achAll}</small></button>
-            <button type="button" class="hb-tile t5 hm-soon" id="mRank" aria-label="Ranking. Próximamente"><i>🥇</i><b>Ranking</b><small>Pronto</small></button>
-            <button type="button" class="hb-tile t6 hm-soon" id="mBuild" aria-label="Build. Próximamente"><i>🔧</i><b>Builds</b><small>Pronto</small></button>
-            <button type="button" class="hb-tile t7" id="btnPlayer" aria-label="Jugador"><i>🪪</i><span><b>Jugador</b><small>Tu ficha</small></span></button>
+            <button type="button" class="hb-tile t4" id="mLog" aria-label="Logros"><i data-e="🏆"></i><b>Logros</b><small>${achOwned}/${achAll}</small></button>
+            <button type="button" class="hb-tile t5 hm-soon" id="mRank" aria-label="Ranking. Próximamente"><i data-e="🥇"></i><b>Ranking</b><small>Pronto</small></button>
+            <button type="button" class="hb-tile t6 hm-soon" id="mBuild" aria-label="Build. Próximamente"><i data-e="🔧"></i><b>Builds</b><small>Pronto</small></button>
+            <button type="button" class="hb-tile t7" id="btnPlayer" aria-label="Jugador"><i data-e="🪪"></i><span><b>Jugador</b><small>Tu ficha</small></span></button>
           </div>
           <nav class="hb-bar" aria-label="Enlaces y ajustes">
             <button type="button" class="hb-btn" id="btnAjustes"><i>⚙</i>Ajustes</button>
