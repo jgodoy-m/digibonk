@@ -3274,7 +3274,7 @@ const MAPS = {
     desc: 'Nieve y una fortaleza oscura. Sin jefes menores: solo Machinedramon, el único jefe final, que te espera en las dos pantallas.',
     zones: [
       {name: 'Valle Nevado', biome: 'nieve', fog: 0xe4eefa, sky: ['#7fa6d6', '#c4dcf2', '#f2f8ff'], tint: 0xffffff, color: '#81d4fa',
-        foes: {basic: [AD('snowbotamon'), AD('gotsumon')], fast: [AD('gazimon'), AD('kokatorimon')], tank: [AD('mojyamon'), AD('mammothmon')], elite: [AD('skullgreymon'), AD('darktyrannomon')]},
+        foes: {basic: [AD('gotsumon'), AD('otamamon')], fast: [AD('gazimon'), AD('kokatorimon')], tank: [AD('mojyamon'), AD('mammothmon')], elite: [AD('skullgreymon'), AD('darktyrannomon')]},
         boss: {name: 'Machinedramon', sprite: AD('machinedramon'), hp: 9000, dmg: 22, shots: 16, shotDmg: 11, gap: 2.0, col: '#b0bec5', sub: 'El único jefe final de la Montaña Helada', retreatAt: 0.5}},
       {name: 'Fortaleza Oscura', biome: 'fortaleza', fog: 0x3a2440, sky: ['#120818', '#3d1838', '#8a3a4a'], tint: 0xb8a8d8, color: '#ce93d8',
         foes: {basic: [AD('bakemon'), AD('dokugumon')], fast: [AD('phantomon'), AD('snimon')], tank: [AD('darktyrannomon'), AD('warumonzaemon')], elite: [AD('megadramon'), AD('gigadramon')]},
@@ -3401,20 +3401,32 @@ const EVO_LINE = {
   gomamon:  [{name:'Ikkakumon',   sprite:'sprites/adventure/ikkakumon.png'}, {name:'Zudomon',         sprite:'sprites/adventure/zudomon.png'}],
   patamon:  [{name:'Angemon',     sprite:'sprites/adventure/angemon.png'},   {name:'MagnaAngemon',    sprite:'sprites/adventure/magnaangemon.png'}],
   biyomon:  [{name:'Birdramon',   sprite:'sprites/adventure/birdramon.png'}, {name:'Garudamon',       sprite:'sprites/adventure/garudamon.png'}],
-  tentomon: [{name:'Kabuterimon', sprite:'sprites/adventure/kabuterimon.png'},    {name:'MegaKabuterimon', sprite:'sprites/adventure/megakabuterimon.png'}]
+  tentomon: [{name:'Kabuterimon', sprite:'sprites/adventure/kabuterimon.png'},    {name:'MegaKabuterimon', sprite:'sprites/adventure/megakabuterimon.png'}],
+  leomon:   [{name:'SaberLeomon', sprite:'sprites/adventure/saberleomon.png'}],
+  // Sin evolución: Hagurumon (Guardromon/Andromon no tienen hoja con el estilo nuevo), Frigimon y Wizardmon
+  hagurumon:[],
+  frigimon: [],
+  wizardmon:[]
 };
 // Primera etapa de cada línea (colección y menús)
 // Nombre y sprite del Digimon en la etapa st (0 = forma inicial)
 const stageName = (key, st) => st ? EVO_LINE[key][st - 1].name : CHARS[key].name;
 // Personajes de la temporada 1
 const SEASONS = {
-  adventure: {name:'Digimon Adventure', chars:['agumon','gabumon','biyomon','tentomon','palmon','gomamon','patamon','gatomon']}
+  adventure: {name:'Digimon Adventure', chars:['agumon','gabumon','biyomon','tentomon','palmon','gomamon','patamon','gatomon','leomon','hagurumon','frigimon','wizardmon']}
 };
 Object.assign(CHARS, {
   gomamon: {name:'Gomamon', desc:'Burbujas al enemigo más cercano', sprite:'sprites/adventure/gomamon.png', kind:'shot', cd:0.92, dmg: 11},
   patamon: {name:'Patamon', desc:'Ráfagas rápidas al enemigo más cercano', sprite:'sprites/adventure/patamon.png', kind:'shot', cd:0.58, dmg:7},
-  biyomon: {name:'Biyomon', desc:'Ráfaga de viento al enemigo más cercano', sprite:'sprites/adventure/biyomon.png', kind:'shot', cd:1.17, dmg:14}
+  biyomon: {name:'Biyomon', desc:'Ráfaga de viento al enemigo más cercano', sprite:'sprites/adventure/biyomon.png', kind:'shot', cd:1.17, dmg:14},
+  // Compañeros que no son de los niños elegidos: cada uno estrena un tipo de ataque propio
+  leomon:    {name:'Leomon',    desc:'Puño de la Bestia: golpe en abanico hacia donde miras', sprite:'sprites/adventure/leomon.png',    kind:'melee',  cd:0.6, dmg:30},
+  hagurumon: {name:'Hagurumon', desc:'Deja torretas de engranaje que disparan solas',         sprite:'sprites/adventure/hagurumon.png', kind:'turret', cd:2.6, dmg:7},
+  frigimon:  {name:'Frigimon',  desc:'Ventisca alrededor: daña y frena a los enemigos',        sprite:'sprites/adventure/frigimon.png',  kind:'frost',  cd:1.6, dmg:9},
+  wizardmon: {name:'Wizardmon', desc:'Círculos mágicos que estallan bajo los enemigos',        sprite:'sprites/adventure/wizardmon.png', kind:'zone',   cd:1.4, dmg:16}
 });
+// Compañeros iniciales: solo los de los niños elegidos (el resto se desbloquea jugando)
+const STARTERS = ['agumon','gabumon','biyomon','tentomon','palmon','gomamon','patamon','gatomon'];
 const ENEMY = {
   basic: {sprite:'sprites/numemon.png', hp:22, spd:3.2, r:0.9, scale:1.8, xp:2, dmg:5},
   fast:  {sprite:'sprites/meramon.png', hp:14, spd:6.0, r:0.6, scale:1.4, xp:3, dmg:4},
@@ -4091,7 +4103,11 @@ const PAUSE_LINE = {
   gatomon: '¡Mis garras están listas!',
   gomamon: '¡A por otra ola de burbujas!',
   patamon: '¡A volar otra vez!',
-  biyomon: '¡Ráfaga de viento lista!'
+  biyomon: '¡Ráfaga de viento lista!',
+  leomon:  '¡El Puño de la Bestia no se rinde!',
+  hagurumon: '¡Los engranajes siguen girando!',
+  frigimon: '¡Que nieve un poco más!',
+  wizardmon: '¡Un truco más y ganamos!'
 };
 let pauseConfirm = false;   // true mientras se muestra la confirmación de desconexión
 function showPause(askQuit = false){
@@ -4215,7 +4231,7 @@ function setHud(v){
   if (!v) document.getElementById('hurt').style.opacity = 0;
 }
 // Barra de estadística (0-100%)
-const ATTACK_NAME = {shot:'Disparo dirigido', ring:'Onda circular', orbit:'Órbita defensiva'};
+const ATTACK_NAME = {shot:'Disparo dirigido', ring:'Onda circular', orbit:'Órbita defensiva', melee:'Golpe cuerpo a cuerpo', turret:'Torretas', frost:'Ventisca de control', zone:'Magia de área'};
 
 // ---------- Idioma: los textos se escriben en español y i18n/i18n.js los traduce en pantalla al idioma elegido ----------
 let LANG = window.I18N ? I18N.lang : 'es';
@@ -4830,7 +4846,11 @@ const UNLOCK = {
   patamon:  {how: 'Logro: completar 10 partidas', ok: () => sumStats('plays') >= 10},
   biyomon:  {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05},
   tentomon: {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05},
-  gatomon:  {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05}
+  gatomon:  {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05},
+  leomon:   {how: 'Logro: 1.000 bajas en total', ok: () => sumStats('kills') >= 1000},
+  hagurumon:{how: 'Logro: completar 25 partidas', ok: () => sumStats('plays') >= 25},
+  frigimon: {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05},
+  wizardmon:{how: 'Logro: tener a Gatomon', ok: () => isUnlocked('gatomon')}
 };
 function sumStats(field){ return Object.values(loadJSON('digibonk3d-stats', {})).reduce((a, x) => a + (x[field] || 0), 0); }
 // Texto de cómo se consigue un Digimon bloqueado (los iniciales no tienen regla propia)
@@ -4858,7 +4878,7 @@ function showStarter(){
   setHud(false);
   let pick = 'agumon';
   const draw = () => {
-    const grid = SEASONS.adventure.chars.map(k => `
+    const grid = STARTERS.map(k => `
       <button class="pk2-tile${k === pick ? ' sel' : ''}" data-st="${k}">
         ${animEl(spriteOf(k, false), 'pk2-face')}
         <b>${CHARS[k].name}</b><small>${ATTACK_NAME[CHARS[k].kind] || ''}</small>
@@ -4891,12 +4911,24 @@ function showStarter(){
 let pickQuery = '';
 let pickStage = 0, pickStageFor = null;   // etapa de la línea que se previsualiza y se viste
 // Compañeros jugables en preparación: se ven en el selector como bloqueados hasta que estén terminados
+// Resto de Digimon de Adventure (sin bebés): se ven bloqueados con su nombre hasta que tengan hoja y jugabilidad
 const COMING_SOON = [
-  {name:'Leomon',       sprite:'sprites/adventure/leomon.png',      role:'Compañero · cuerpo a cuerpo'},
-  {name:'Hagurumon',    sprite:'sprites/adventure/hagurumon.png',   role:'Compañero · torretas'},
-  {name:'Frigimon',     sprite:'sprites/adventure/frigimon.png',    role:'Compañero · control'},
-  {name:'Wizardmon',    sprite:'sprites/adventure/wizardmon.png',   role:'Compañero · magia de área'}
-];
+  ['skullgreymon','SkullGreymon'], ['salamon','Salamon'], ['devimon','Devimon'], ['etemon','Etemon'], ['metaletemon','MetalEtemon'],
+  ['myotismon','Myotismon'], ['venommyotismon','VenomMyotismon'], ['demidevimon','DemiDevimon'], ['metalseadramon','MetalSeadramon'],
+  ['puppetmon','Puppetmon'], ['machinedramon','Machinedramon'], ['piedmon','Piedmon'], ['apocalymon','Apocalymon'], ['ladydevimon','LadyDevimon'],
+  ['ogremon','Ogremon'], ['kuwagamon','Kuwagamon'], ['shellmon','Shellmon'], ['seadramon','Seadramon'], ['meramon','Meramon'], ['andromon','Andromon'],
+  ['monzaemon','Monzaemon'], ['numemon','Numemon'], ['unimon','Unimon'], ['centarumon','Centarumon'], ['mojyamon','Mojyamon'], ['bakemon','Bakemon'],
+  ['elecmon','Elecmon'], ['whamon','Whamon'], ['gazimon','Gazimon'], ['tyrannomon','Tyrannomon'], ['monochromon','Monochromon'],
+  ['drimogemon','Drimogemon'], ['sukamon','Sukamon'], ['chuumon','Chuumon'], ['piximon','Piximon'], ['gekomon','Gekomon'],
+  ['shogungekomon','ShogunGekomon'], ['otamamon','Otamamon'], ['vegiemon','Vegiemon'], ['digitamamon','Digitamamon'], ['tuskmon','Tuskmon'],
+  ['kokatorimon','Kokatorimon'], ['nanomon','Datamon'], ['gesomon','Gesomon'], ['raremon','Raremon'], ['mammothmon','Mammothmon'],
+  ['darktyrannomon','DarkTyrannomon'], ['phantomon','Phantomon'], ['gizamon','Gizamon'], ['megaseadramon','MegaSeadramon'],
+  ['scorpiomon','Scorpiomon'], ['divermon','Divermon'], ['kiwimon','Kiwimon'], ['cherrymon','Cherrymon'], ['garbagemon','Garbagemon'],
+  ['deramon','Deramon'], ['floramon','Floramon'], ['mushroomon','Mushroomon'], ['redvegiemon','RedVegiemon'], ['blossomon','Blossomon'],
+  ['mekanorimon','Mekanorimon'], ['tankmon','Tankmon'], ['megadramon','Megadramon'], ['gigadramon','Gigadramon'], ['warumonzaemon','WaruMonzaemon'],
+  ['pumpkinmon','Pumpkinmon'], ['gotsumon','Gotsumon'], ['dokugumon','Dokugumon'], ['flymon','Flymon'], ['snimon','Snimon'], ['tortomon','Tortomon'],
+  ['guardromon','Guardromon'], ['giromon','Giromon'], ['ebidramon','Ebidramon']
+].map(([id, name]) => ({id, name}));
 function pickIsEvolved(k){ return !!loadJSON('digibonk3d-evo', {})[k]; }
 function pickProgress(){
   const chars = SEASONS.adventure.chars;
@@ -4937,6 +4969,10 @@ function baseFacts(c){
   const dmg = fmtN(c.dmg);
   if (c.kind === 'ring') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Proyectiles', 6], ['Alcance', '8 m']];
   if (c.kind === 'orbit') return [['Daño', dmg], ['Golpe cada', '0,35 s'], ['Cuchillas', 2], ['Radio', '2,2 m']];
+  if (c.kind === 'melee') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Abanico', '140°'], ['Alcance', '4,5 m']];
+  if (c.kind === 'turret') return [['Daño', dmg], ['Torreta cada', fmtN(c.cd, 2) + ' s'], ['Torretas', 2], ['Dura', '8 s']];
+  if (c.kind === 'frost') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Frena', '−50% 2 s'], ['Radio', '6 m']];
+  if (c.kind === 'zone') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Círculos', 1], ['Radio', '3 m']];
   return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Proyectiles', 1], ['Alcance', '22 m']];
 }
 const chipsHtml = facts => `<div class="ps-chips">${facts.map(([k, v]) => `<span><small>${k}</small><b>${v}</b></span>`).join('')}</div>`;
@@ -4950,7 +4986,7 @@ function recordCharRun(key, win, diff, kills, lvl){
   try { localStorage.setItem('digibonk3d-stats', JSON.stringify(all)); } catch(e){}
 }
 const SKILL_ICON = {aura: '◎', tornado: '✦', pulso: '◉', espiral: '➹', cuchilla: '✧', laser: '⚡', mina: '✹', meteoro: '☄'};
-const KIND_ICON = {shot: '➹', ring: '◉', orbit: '✧'};
+const KIND_ICON = {shot: '➹', ring: '◉', orbit: '✧', melee: '✊', turret: '⚙', frost: '❄', zone: '✦'};
 function showPicker(tab){
   if (tab) pickTab = tab === 'skins' ? 'personaje' : tab;
   if (pickStageFor !== selectedKey){ pickStage = 0; pickStageFor = selectedKey; }
@@ -5027,7 +5063,7 @@ function renderRoster(){
       <span class="ps-ic"><img src="${open ? charIcon(id) : 'ui/jugador/' + id + '.png'}" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
     </button>`;
   }).join('');
-  const soon = COMING_SOON.map(c => `<span class="ps-tile soon" title="${c.name} · ${c.role} · Próximamente"><span class="ps-lock">🔒</span><span class="ps-ic"><img src="ui/jugador/${c.name.toLowerCase()}.png" alt="" loading="lazy"></span><b>Pronto</b></span>`).join('');
+  const soon = COMING_SOON.map(c => `<span class="ps-tile soon" data-name="${c.name.toLowerCase()}" title="${c.name} · Próximamente"><span class="ps-lock">🔒</span><span class="ps-ic"><img src="${AD(c.id)}" alt="" loading="lazy"></span><b>${c.name}</b></span>`).join('');
   el.innerHTML = `<input class="ps-search" id="pkSearch" placeholder="Buscar por nombre..." value="${pickQuery}" maxlength="20">
     <div class="ps-grid" id="pkGrid">${tiles}${soon}</div>
     <p class="ps-note">1-8 elegir · ←→ cambiar · doble clic para empezar</p>`;
@@ -5050,8 +5086,8 @@ function renderPickPreview(){
   const idx = SEASONS.adventure.chars.indexOf(k) + 1, at = ATTR_OF[k], emb = EMBLEMS.find(e => e.owner === k);
   const wins = st.wins || {};
   const hp = Math.round(b.hp * labMul('hp')), dmg = c.dmg * b.dmgMul * labMul('dmg'), spd = b.speed * labMul('speed');
-  const rate = c.kind === 'orbit' ? 1 / 0.35 : c.kind === 'ring' ? 6 / c.cd : 1 / c.cd;
-  const reach = c.kind === 'ring' ? 8 : c.kind === 'orbit' ? 2.2 : 22;
+  const rate = c.kind === 'orbit' ? 1 / 0.35 : c.kind === 'ring' ? 6 / c.cd : c.kind === 'melee' ? 3 / c.cd : c.kind === 'turret' ? 1 / 0.7 * 2 : c.kind === 'frost' ? 4 / c.cd : 1.5 / c.cd;
+  const reach = c.kind === 'ring' ? 8 : c.kind === 'orbit' ? 2.2 : c.kind === 'melee' ? 4.5 : c.kind === 'turret' ? 12 : c.kind === 'frost' ? 6 : c.kind === 'zone' ? 16 : 22;
   const bar = (label, val, max, shown) => `<div class="ps-bar"><span>${label}</span><div class="ps-meter"><i style="width:${Math.max(6, Math.min(100, Math.round(val / max * 100)))}%"></i></div><b>${shown}</b></div>`;
   const row = (label, val) => `<div class="ps-row"><span>${label}</span><b>${val}</b></div>`;
   el.innerHTML = `
@@ -5063,7 +5099,7 @@ function renderPickPreview(){
       <div class="ps-idline"><span class="ps-lbl">#${String(idx).padStart(3, '0')} · ${ATTACK_NAME[c.kind] || c.kind}</span>${emb ? `<span class="ps-emb" title="${emb.name}: ${emb.text}">${emb.name}</span>` : ''}</div>
       <h3>${c.name}</h3>
       <div><span class="ps-attr a-${at}" title="Vacuna gana a Virus, Virus a Datos y Datos a Vacuna">${ATTR_ICON[at] || ''} ${ATTR_NAME[at] || ''}</span></div>
-      <div class="ps-lbl">Evoluciona durante la partida</div>
+      <div class="ps-lbl">${(EVO_LINE[k] || []).length ? 'Evoluciona durante la partida' : 'No evoluciona: más vida de base'}</div>
       <div class="ps-evo">
         <button type="button" class="ps-node pk-stage${pickStage === 0 ? ' on' : ''}" data-stage="0" title="${c.name}">${sprEl(spriteOf(k, 0), 46)}</button>
         ${EVO_LINE[k].map((e, i) => `<span class="ps-arrow">Nv. ${evoLevelFor(k, i)}<i>›</i></span><button type="button" class="ps-node pk-stage${pickStage === i + 1 ? ' on' : ''}" data-stage="${i + 1}" title="${e.name}">${sprEl(spriteOf(k, i + 1), 46)}</button>`).join('')}
@@ -5195,7 +5231,7 @@ function startGame(key){
     mode: runMode,
     ch: {...c, id:key},
     p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:2.5, critChance:0.12, critMul:2},
-    t: 0, kills: 0, enemies: [], shots: [], gems: [], blades: [],
+    t: 0, kills: 0, enemies: [], shots: [], gems: [], blades: [], turrets: [], zones: [],
     wCd: 0, spawnT: 0, orbitA: 0, choices: [],
     dash: 0, dashCd: 0, dir: {x:0, z:-1}, chests: [], chestT: 20, flash: '', flashT: 0,
     texts: [], nearChest: null, combo: 0, comboT: 0,
@@ -5551,8 +5587,93 @@ const BONK_FX = {
   tentomon: {name: 'Descarga en cadena', f: p => { g.enemies.filter(e => dist2(e.x, e.z, p.x, p.z) < 30).sort((a, b) => dist2(a.x, a.z, p.x, p.z) - dist2(b.x, b.z, p.x, p.z)).slice(0, 12).forEach(e => { e.hp -= 120; popText(e.x, e.z, 120, '#40c4ff', 0.7); }); }},
   gomamon:  {name: 'Marea: la horda sale despedida', f: p => { for (const e of g.enemies){ const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz) || 1; if (d < 20) [e.x, e.z] = clampArena(e.x + dx/d*10, e.z + dz/d*10, ARENA_R - 0.5); } }},
   patamon:  {name: 'Aire curativo: +30% vida', f: p => { if (!(g.mod && g.mod.noHeal)) p.hp = Math.min(p.maxHp, p.hp + p.maxHp*0.3); }},
-  gatomon:  {name: 'Luz sagrada: críticos 5 s', f: () => { g.critT = 5; }}
+  gatomon:  {name: 'Luz sagrada: críticos 5 s', f: () => { g.critT = 5; }},
+  leomon:   {name: 'Rugido: golpe enorme alrededor', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 12){ e.hp -= 200; popText(e.x, e.z, 200, '#ffb74d', 0.7); } spawnRing(p.x, p.z, 0xffb74d, 12, 0.5); }},
+  hagurumon:{name: 'Fábrica: 3 torretas extra', f: p => { for (let i = 0; i < 3; i++){ const a = i/3*Math.PI*2; placeTurret(p.x + Math.cos(a)*2.5, p.z + Math.sin(a)*2.5, true); } }},
+  frigimon: {name: 'Ventisca: todo congelado', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 24) e.frozenT = e.boss ? 1.5 : 5; spawnRing(p.x, p.z, 0x81d4fa, 24, 0.8); }},
+  wizardmon:{name: 'Lluvia de truenos', f: p => { g.enemies.filter(e => dist2(e.x, e.z, p.x, p.z) < 24).slice(0, 10).forEach(e => castZone(e.x, e.z, 0.25, 3.2, 90)); }}
 };
+/* ---------- Ataques de Leomon (melee), Hagurumon (turret), Frigimon (frost) y Wizardmon (zone) ---------- */
+const TURRET_GEO = new THREE.CylinderGeometry(0.45, 0.6, 0.9, 8), TURRET_MAT = new THREE.MeshLambertMaterial({color: 0x9e9e9e});
+function placeTurret(x, z, extra){
+  [x, z] = clampArena(x, z, ARENA_R - 1);
+  const mesh = new THREE.Mesh(TURRET_GEO, TURRET_MAT);
+  mesh.position.set(x, 0.45 + terrainH(x, z), z);
+  world.add(mesh);
+  g.turrets.push({x, z, t: 8, cd: 0.2, mesh, extra});
+  // Como máximo proyectiles + 1 torretas propias a la vez (las del Bonk no cuentan): se quita la más vieja
+  const own = g.turrets.filter(t => !t.extra);
+  if (own.length > g.p.count + 1){ const old = own[0]; old.t = 0; }
+  spawnRing(x, z, 0xbdbdbd, 1.4, 0.35);
+}
+function castZone(x, z, delay, r, dmg){
+  const mesh = new THREE.Mesh(new THREE.RingGeometry(r*0.85, r, 28), new THREE.MeshBasicMaterial({color: 0xb388ff, transparent: true, opacity: 0.55, depthWrite: false}));
+  mesh.rotation.x = -Math.PI/2;
+  mesh.position.set(x, terrainH(x, z) + 0.07, z);
+  world.add(mesh);
+  g.zones.push({x, z, t: delay, r, dmg, mesh});
+}
+function updateKindAttacks(dt){
+  const p = g.p, ch = g.ch;
+  if (ch.kind === 'melee' && g.wCd <= 0 && g.enemies.length){
+    // Golpe en abanico hacia donde mira el Digimon; el abanico se abre con cada proyectil extra
+    let hit = 0;
+    const R = 4.5*p.area, half = Math.min(Math.PI, (70 + 20*(p.count - 1)) * Math.PI/180);
+    // Si no hay nadie delante, se gira hacia el enemigo más cercano dentro del alcance
+    let dx = g.dir.x, dz = g.dir.z;
+    const near = g.enemies.reduce((b, e) => { const d = dist2(e.x, e.z, p.x, p.z); return d < b.d ? {e, d} : b; }, {e: null, d: R + 1});
+    if (near.e && !g.enemies.some(e => { const rx = e.x - p.x, rz = e.z - p.z, d = Math.hypot(rx, rz); return d < R + e.r && (rx*dx + rz*dz) / (d || 1) > Math.cos(half); })){
+      dx = (near.e.x - p.x) / (near.d || 1); dz = (near.e.z - p.z) / (near.d || 1);
+    }
+    for (const e of g.enemies){
+      const rx = e.x - p.x, rz = e.z - p.z, d = Math.hypot(rx, rz) || 1;
+      if (e.hp > 0 && d < R + e.r && (rx*dx + rz*dz)/d > Math.cos(half)){
+        hurt(e, ch.dmg*p.dmg); hit++;
+        if (!e.boss) [e.x, e.z] = clampArena(e.x + rx/d*0.3, e.z + rz/d*0.3, ARENA_R - 0.5);   // pequeño empujón
+      }
+    }
+    if (hit || near.e){ g.wCd = ch.cd * p.cdMul; g.atkT = 0.26; spawnRing(p.x + dx*R*0.55, p.z + dz*R*0.55, 0xffb74d, R*0.6, 0.25); }
+  }
+  if (ch.kind === 'turret' && g.wCd <= 0){
+    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    placeTurret(p.x - g.dir.x*1.2, p.z - g.dir.z*1.2, false);
+  }
+  if (ch.kind === 'frost' && g.wCd <= 0){
+    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    const R = 6*p.area;
+    for (const e of g.enemies){
+      if (e.hp > 0 && dist2(e.x, e.z, p.x, p.z) < R + e.r){ hurt(e, ch.dmg*p.dmg); e.slowT = 2 + 0.3*(p.count - 1); }
+    }
+    spawnRing(p.x, p.z, 0x81d4fa, R, 0.5);
+  }
+  if (ch.kind === 'zone' && g.wCd <= 0 && g.enemies.length){
+    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    const near = g.enemies.filter(e => e.hp > 0 && dist2(e.x, e.z, p.x, p.z) < 16).sort(() => Math.random() - 0.5);
+    for (let i = 0; i < Math.min(p.count, near.length); i++) castZone(near[i].x, near[i].z, 0.5, 3*p.area, ch.dmg*p.dmg);
+  }
+  // Torretas: disparan al enemigo más cercano y desaparecen a los 8 s
+  for (const t of g.turrets){
+    t.t -= dt; t.cd -= dt;
+    t.mesh.rotation.y += dt*4;
+    if (t.cd > 0) continue;
+    let best = null, bd = 12;
+    for (const e of g.enemies){ const d = dist2(e.x, e.z, t.x, t.z); if (e.hp > 0 && d < bd){ bd = d; best = e; } }
+    if (!best) continue;
+    t.cd = 0.7 * p.cdMul;
+    const d = bd || 1;
+    fireProjectile(t.x, t.z, (best.x - t.x)/d*15, (best.z - t.z)/d*15, ch.dmg*p.dmg, 1, 0xffd54f);
+  }
+  g.turrets = g.turrets.filter(t => { if (t.t > 0) return true; world.remove(t.mesh); return false; });
+  // Círculos mágicos: estallan al acabar su cuenta atrás
+  for (const z of g.zones){
+    z.t -= dt;
+    z.mesh.material.opacity = 0.35 + 0.4*Math.abs(Math.sin(g.t*14));
+    if (z.t > 0) continue;
+    for (const e of g.enemies) if (e.hp > 0 && dist2(e.x, e.z, z.x, z.z) < z.r + e.r) hurt(e, z.dmg);
+    spawnRing(z.x, z.z, 0xb388ff, z.r, 0.35);
+  }
+  g.zones = g.zones.filter(z => { if (z.t > 0) return true; world.remove(z.mesh); return false; });
+}
 let dmgSrc = 'base';   // qué ataque está golpeando (para el resumen de fin de partida)
 function hurt(e, dmg){
   // 12% de golpes críticos: doble daño, número naranja y sacudida ligera
@@ -5822,8 +5943,9 @@ function update(dt){
     if (e.wild){ if (!e.weak && d < 14) [e.x, e.z] = clampArena(e.x - dx/d*e.spd*dt, e.z - dz/d*e.spd*dt, ARENA_R - 2); continue; }   // el salvaje huye hasta quedar debilitado
     // Se paran a distancia de contacto (no se meten encima del jugador)
     if (d > e.r + 0.6){
-      e.x += dx/d * e.spd * dt;
-      e.z += dz/d * e.spd * dt;
+      const spd = e.slowT > 0 ? (e.slowT -= dt, e.spd*0.5) : e.spd;   // frenado por la ventisca de Frigimon
+      e.x += dx/d * spd * dt;
+      e.z += dz/d * spd * dt;
     }
     [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5);   // los enemigos también quedan dentro
     resolveSolids(e, e.r*0.8);                          // y no atraviesan casas ni vallas
@@ -5890,6 +6012,7 @@ function update(dt){
     g.blades = [];
   }
 
+  updateKindAttacks(dt);
   updateSkills(dt);
 
   // Digimon salvaje: no muere, se queda debilitado al 20% para poder capturarlo
@@ -6151,7 +6274,11 @@ const CHAR_SKILLS = {
   gomamon:  ['pulso', 'tornado', 'espiral', 'mina'],
   patamon:  ['aura', 'meteoro', 'pulso', 'laser'],
   biyomon:  ['meteoro', 'espiral', 'cuchilla', 'aura'],
-  tentomon: ['laser', 'mina', 'meteoro', 'tornado']
+  tentomon: ['laser', 'mina', 'meteoro', 'tornado'],
+  leomon:   ['espiral', 'tornado', 'pulso', 'cuchilla'],
+  hagurumon:['mina', 'laser', 'meteoro', 'aura'],
+  frigimon: ['aura', 'pulso', 'mina', 'tornado'],
+  wizardmon:['meteoro', 'laser', 'espiral', 'aura']
 };
 function addSkill(id){ g.skills[id] = Math.min(SKILL_MAX, (g.skills[id] || 0) + 1); }
 // Opciones del nivel: mejoras base + ataques de este Digimon (máximo SKILL_SLOTS distintos por partida)
@@ -7198,7 +7325,7 @@ function dailyText(){
 
 /* ---------- Atributos: Vacuna gana a Virus, Virus a Datos y Datos a Vacuna ---------- */
 const ATTR_NAME = {vac: 'Vacuna', dat: 'Datos', vir: 'Virus'};
-const ATTR_OF = {agumon:'vac', gabumon:'dat', biyomon:'vac', tentomon:'vac', palmon:'dat', gomamon:'vac', patamon:'dat', gatomon:'vac', garurumon:'dat'};
+const ATTR_OF = {agumon:'vac', gabumon:'dat', biyomon:'vac', tentomon:'vac', palmon:'dat', gomamon:'vac', patamon:'dat', gatomon:'vac', garurumon:'dat', leomon:'vac', hagurumon:'vir', frigimon:'vac', wizardmon:'dat'};
 const FOE_ATTR = {numemon:'vir', gazimon:'vir', vegiemon:'vir', meramon:'dat', kuwagamon:'vir', tank:'vir', ogremon:'vir', monochromon:'dat', skullgreymon:'vir', andromon:'vac', bakemon:'vir', gizamon:'vir', raremon:'vir', phantomon:'vir', snimon:'vir', darktyrannomon:'vir', tyrannomon:'dat', megadramon:'vir', gigadramon:'vir', mammothmon:'vac', devimon:'vir', etemon:'vir', myotismon:'vir', metalseadramon:'dat', puppetmon:'vir', machinedramon:'vir', piedmon:'vir'};
 const BEATS = {vac: 'vir', vir: 'dat', dat: 'vac'};
 const ATTR_ADV = 1.25, ATTR_HURT = 1.15;   // daño con ventaja · daño recibido de un enemigo con ventaja
@@ -8175,7 +8302,8 @@ const AVATAR_KIDS = [
 ].map(x => ({...x, src: 'ui/jugador/' + x.id + '.png'}));
 const PLAYER_ICONS = [
   {id:'agumon', name:'Agumon'}, {id:'gabumon', name:'Gabumon'}, {id:'biyomon', name:'Biyomon'}, {id:'tentomon', name:'Tentomon'},
-  {id:'palmon', name:'Palmon'}, {id:'gomamon', name:'Gomamon'}, {id:'patamon', name:'Patamon'}, {id:'gatomon', name:'Gatomon'}
+  {id:'palmon', name:'Palmon'}, {id:'gomamon', name:'Gomamon'}, {id:'patamon', name:'Patamon'}, {id:'gatomon', name:'Gatomon'},
+  {id:'leomon', name:'Leomon'}, {id:'hagurumon', name:'Hagurumon'}, {id:'frigimon', name:'Frigimon'}, {id:'wizardmon', name:'Wizardmon'}
 ].map(x => ({...x, src: 'ui/jugador/' + x.id + '.png'}));
 // Iconos de skin: se desbloquean al tener la skin en alguna etapa (los de skins ocultas solo se ven al tenerlas)
 const SKIN_ICONS = [
@@ -8862,7 +8990,11 @@ const BALANCE = {
   gabumon: {hp:100, speed:6.0, dmgMul:1.00, why:'Onda en círculo: hay que colocarse entre enemigos'},
   gatomon: {hp:100,  speed:6.0, dmgMul:1.00, why:'Garras giratorias: hay que mantenerse en movimiento'},
   biyomon: {hp:100,  speed:6.0, dmgMul:1.00, why:'Disparo dirigido de cadencia media'},
-  patamon: {hp:100,  speed:6.0, dmgMul:1.00, why:'Ataque dirigido: la clave es colocarse bien'}
+  patamon: {hp:100,  speed:6.0, dmgMul:1.00, why:'Ataque dirigido: la clave es colocarse bien'},
+  leomon:  {hp:120,  speed:6.0, dmgMul:1.00, why:'Cuerpo a cuerpo: más vida porque pelea pegado a la horda'},
+  hagurumon:{hp:110, speed:5.6, dmgMul:1.00, why:'Torretas fijas: hay que llevar a la horda hacia ellas; no evoluciona'},
+  frigimon:{hp:130,  speed:5.4, dmgMul:1.00, why:'Lento y resistente; no evoluciona, así que tiene más vida de base'},
+  wizardmon:{hp:85,  speed:6.2, dmgMul:1.10, why:'Frágil, sin evolución: daño en área algo mayor'}
 };
 function applyBalance(key){
   const b = BALANCE[key];
