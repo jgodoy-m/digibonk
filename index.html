@@ -2596,6 +2596,42 @@ html[lang] body #topbar :is(.tb-id,.tb-chip,.tb-btn){height:32px!important;font-
 html[lang] body #topbar .tb-btn{width:32px!important}
 html[lang] body #topbar .tb-chip{padding:0 8px!important}
 html[lang] body #topbar .tb-id .hud-portrait{width:26px;height:26px}}
+/* Plantel con iconos redondos de cada Digimon */
+.ps-grid:has(.ps-ic){grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.ps-tile:has(.ps-ic){aspect-ratio:auto;justify-content:flex-start;gap:5px;padding:8px 2px 7px;border:0;background:transparent;box-shadow:none;color:var(--m-text)}
+.ps-tile:has(.ps-ic):hover{filter:none}
+.ps-tile:has(.ps-ic):hover .ps-ic{transform:translateY(-3px)}
+.ps-ic{position:relative;display:grid;place-items:center;width:100%;max-width:76px;aspect-ratio:1;border-radius:50%;overflow:hidden;background:var(--m-sunk);box-shadow:0 0 0 3px var(--m-cardline),0 4px 0 var(--m-line2);transition:transform .12s,box-shadow .12s}
+.ps-ic img{width:100%;height:100%;object-fit:cover;image-rendering:auto!important;filter:none!important}
+.ps-tile:has(.ps-ic) b{color:var(--m-text);text-shadow:none;font-size:12px}
+.ps-tile.sel:has(.ps-ic){background:transparent;box-shadow:none}
+.ps-tile.sel .ps-ic{box-shadow:0 0 0 4px var(--m-sel),0 0 0 8px var(--m-selbg),0 5px 0 var(--m-cta-sh)}
+.ps-tile.sel:has(.ps-ic) b{color:var(--m-sel)}
+.ps-tile.lock .ps-ic img,.ps-tile.soon .ps-ic img{filter:grayscale(1) brightness(.45)!important;width:100%!important;height:100%!important}
+.ps-tile.soon:has(.ps-ic){opacity:1}
+.ps-tile.soon:has(.ps-ic) b,.ps-tile.lock:has(.ps-ic) b{color:var(--m-mute)}
+.ps-tile:has(.ps-ic) .ps-key{position:absolute;top:4px;left:4px;z-index:2;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:999px;background:var(--m-btn);color:var(--m-text);font:900 10px/18px 'Nunito',system-ui,sans-serif;text-align:center;box-shadow:var(--m-pillsh)}
+.ps-tile:has(.ps-ic) .ps-evo-dot{position:absolute;top:6px;right:8px;z-index:2}
+.ps-tile:has(.ps-ic) .ps-lock{position:absolute;top:28%;left:50%;transform:translate(-50%,-50%);z-index:2;font-size:20px}
+.ps-ic.ps-none{font:900 26px 'Nunito',sans-serif;color:var(--m-mute)}
+@media(max-width:760px){.ps-grid:has(.ps-ic){grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.ps-ic{max-width:64px}}
+/* Arreglos de iconos */
+.approved-info-dialog .enc-row.ach-row>b{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--m-line);font-size:17px}
+.approved-info-dialog .enc-row.ach-row.got>b{background:color-mix(in srgb,var(--m-gold) 22%,transparent)}
+.approved-info-dialog .enc-row.ach-row:not(.got){opacity:.8}
+.approved-info-dialog .enc-row.ach-row{grid-template-columns:34px 1fr auto!important}
+.ach-got{font:900 12px 'Nunito',system-ui,sans-serif;font-style:normal;color:var(--m-good);white-space:nowrap}
+@media (max-width:700px){
+  .tr11 .treasure-card .tc-art{transform:none!important;margin:0!important;height:52px!important;font-size:34px!important}
+  .tr11 .treasure-card .tc-art svg{width:40px!important;height:40px!important}
+  .tr11 .treasure-card .tc-art .rw-item,.tr11 .treasure-card .tc-art .rw-title{font-size:32px!important}
+  .tr11 .treasure-card .tc-art .rw-frame{width:44px!important;height:44px!important}
+  .tr11 .treasure-card .tc-art img{max-width:48px!important;max-height:48px!important}
+}
+@media (max-width:640px){
+  #overlay:not(.menu-mode) .lab-top .lab-head{flex:1 1 100%!important;flex-wrap:nowrap!important;gap:10px!important}
+  #overlay:not(.menu-mode) .lab-top .lab-host{width:44px!important;height:44px!important;flex:none}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -4351,7 +4387,7 @@ function renderRoster(){
   if (rosterTab === 'apoyo'){
     const opened = chars.filter(o => isUnlocked(o) && o !== k), cur = supportKey(k);
     el.innerHTML = `<div class="ps-lbl">Te acompaña y dispara al más cercano con el 40% de tu daño</div>
-      <div class="ps-grid">${['none', ...opened].map(o => `<button type="button" class="ps-tile${(o === 'none' ? !cur : o === cur) ? ' sel' : ''}" data-sup="${o}">${o === 'none' ? '<span class="ps-none">—</span>' : animEl(spriteOf(o, 0), 'ps-face')}<b>${o === 'none' ? 'Ninguno' : CHARS[o].name}</b></button>`).join('')}</div>`;
+      <div class="ps-grid">${['none', ...opened].map(o => `<button type="button" class="ps-tile${(o === 'none' ? !cur : o === cur) ? ' sel' : ''}" data-sup="${o}">${o === 'none' ? '<span class="ps-ic ps-none">—</span>' : `<span class="ps-ic"><img src="ui/jugador/${o}.png" alt="" loading="lazy"></span>`}<b>${o === 'none' ? 'Ninguno' : CHARS[o].name}</b></button>`).join('')}</div>`;
     el.querySelectorAll('[data-sup]').forEach(b => b.onclick = () => { localStorage.setItem('digibonk3d-support', b.dataset.sup); showPicker(); });
     return;
   }
@@ -4359,10 +4395,10 @@ function renderRoster(){
     const open = isUnlocked(id);
     return `<button type="button" class="ps-tile${id === k ? ' sel' : ''}${open ? '' : ' lock'}" ${open ? `data-pick="${id}"` : 'disabled'} data-name="${open ? CHARS[id].name.toLowerCase() : '???'}" title="${open ? CHARS[id].name : unlockHow(id)}">
       <span class="ps-key">${i + 1}</span>${open && pickIsEvolved(id) ? '<span class="ps-evo-dot" title="Ya ha evolucionado"></span>' : ''}
-      ${animEl(spriteOf(id, false), 'ps-face')}<b>${open ? CHARS[id].name : '???'}</b>
+      <span class="ps-ic"><img src="ui/jugador/${id}.png" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
     </button>`;
   }).join('');
-  const soon = COMING_SOON.map(c => `<span class="ps-tile soon" title="${c.name} · ${c.role} · Próximamente"><span class="ps-lock">🔒</span><img src="${c.sprite}" alt=""><b>???</b></span>`).join('');
+  const soon = COMING_SOON.map(c => `<span class="ps-tile soon" title="${c.name} · ${c.role} · Próximamente"><span class="ps-lock">🔒</span><span class="ps-ic"><img src="ui/jugador/${c.name.toLowerCase()}.png" alt="" loading="lazy"></span><b>Pronto</b></span>`).join('');
   el.innerHTML = `<input class="ps-search" id="pkSearch" placeholder="Buscar por nombre..." value="${pickQuery}" maxlength="20">
     <div class="ps-grid" id="pkGrid">${tiles}${soon}</div>
     <p class="ps-note">1-8 elegir · ←→ cambiar · doble clic para empezar</p>`;
@@ -6850,7 +6886,7 @@ function showLogros(){
   const rows = TITLES.filter(tl => !tl.weekly && !tl.seasonal).map(tl => {
     const own = inv.titles.includes(tl.id), pr = prog[tl.id];
     const bar = pr ? `<em class="ach-prog"><i class="ach-bar"><u style="width:${Math.round(pr[0]/pr[1]*100)}%"></u></i><small>${pr[0]}/${pr[1]}</small></em>` : '<em></em>';
-    return `<div class="enc-row${own ? ' done' : ''}"><b>${own ? '🏅' : '🔒'}</b><span><strong>${tl.name}</strong><br>${tl.how}</span>${bar}</div>`;
+    return `<div class="enc-row ach-row${own ? ' got' : ''}"><b>${own ? '🏅' : '🔒'}</b><span><strong>${tl.name}</strong><br>${tl.how}</span>${own ? '<em class="ach-got">✓ Conseguido</em>' : bar}</div>`;
   }).join('');
   const stats = `<div class="ach-stats"><span>Partidas <b>${plays}</b></span><span>Bajas <b>${kills}</b></span><span>Supervivencia <b>${best ? fmtTime(best[1]) + ' · ' + CHARS[best[0]].name : '—'}</b></span></div>`;
   menuModal('Logros', stats + `<div class="enc-list">${rows}</div>`);
