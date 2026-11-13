@@ -4131,10 +4131,14 @@ addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
 // el círculo de Bonk se puede tocar y el aviso del cofre también. En escritorio con ratón no se muestran.
 const tMove = {x: 0, z: 0, m: 0};
 function isTouchUI(){ return document.body.classList.contains('is-touch'); }
-if (matchMedia('(pointer:coarse)').matches) document.body.classList.add('is-touch');
+// Tablets: el iPad con iPadOS se presenta como "Macintosh" y, con teclado o trackpad, deja de cumplir pointer:coarse.
+// Por eso se mira también any-pointer:coarse y el número de puntos táctiles, y en tablets/móviles nunca se esconden.
+const touchOS = /iPad|iPhone|iPod|Android/i.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+if (touchOS || matchMedia('(pointer:coarse)').matches || matchMedia('(any-pointer:coarse)').matches) document.body.classList.add('is-touch');
 addEventListener('touchstart', () => document.body.classList.add('is-touch'), {passive: true, capture: true});
-// Si se vuelve a usar el ratón de verdad (portátil táctil), se esconden de nuevo
-addEventListener('pointermove', e => { if (e.pointerType === 'mouse' && (e.movementX || e.movementY) && !matchMedia('(pointer:coarse)').matches) document.body.classList.remove('is-touch'); }, {passive: true});
+addEventListener('pointerdown', e => { if (e.pointerType === 'touch' || e.pointerType === 'pen') document.body.classList.add('is-touch'); }, {passive: true, capture: true});
+// Si se vuelve a usar el ratón de verdad (portátil táctil), se esconden de nuevo; en tablets y móviles se quedan
+addEventListener('pointermove', e => { if (!touchOS && e.pointerType === 'mouse' && (e.movementX || e.movementY) && !matchMedia('(pointer:coarse)').matches) document.body.classList.remove('is-touch'); }, {passive: true});
 const tZone = document.getElementById('tZone'), tJoy = document.getElementById('tJoy'), tKnob = document.getElementById('tKnob');
 let tJoyId = null, tJoyC = {x: 0, y: 0};
 function tJoyHome(){
