@@ -3232,6 +3232,12 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 /* Avisos del menú (regalo, próximamente…): arriba en el centro, sin tapar botones; en vertical pueden ocupar dos líneas */
 #overlay .realhub.hb .hm-msg:not(:empty){top:14px!important;bottom:auto!important;white-space:normal!important;text-align:center}
 @media (orientation:portrait) and (max-width:760px){#overlay .realhub.hb .hm-msg:not(:empty){top:auto!important;bottom:18px!important;width:max-content;max-width:calc(100vw - 32px)!important}}
+/* Móvil en horizontal: el menú se desplaza en vez de encogerse hasta que los botones sean diminutos */
+@media (orientation:landscape) and (max-height:500px){
+  body.is-touch #overlay.menu-mode:has(.realhub:not(.pl4)){overflow-y:auto!important;-webkit-overflow-scrolling:touch}
+  body.is-touch #overlay.menu-mode .realhub:not(.pl4){height:auto!important;min-height:100%!important;overflow:visible!important}
+  #overlay .realhub.hb .hm-msg:not(:empty){top:58px!important}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.js" } }
@@ -4600,7 +4606,7 @@ function showSelect(){
     </main>`);
   overlay.classList.add('menu-mode');
   // Menú sin scroll: si la ventana es más baja que el diseño, se reduce para que entre entero
-  const fitHub = () => { const hub = document.querySelector('#overlay.menu-mode .realhub:not(.pl4)'); if (!hub) return; hub.style.zoom = '1'; if (innerWidth <= 760) return; hub.style.zoom = String(Math.min(1, innerHeight / hub.scrollHeight)); };
+  const fitHub = () => { const hub = document.querySelector('#overlay.menu-mode .realhub:not(.pl4)'); if (!hub) return; hub.style.zoom = '1'; if (innerWidth <= 760) return; hub.style.zoom = String(Math.min(1, Math.max(isTouchUI() ? 0.8 : 0, innerHeight / hub.scrollHeight))); };   // en táctil no se encoge tanto que los botones queden diminutos: mejor desplazarse
   fitHub(); if (!window.__hmFitBound){ window.__hmFitBound = true; addEventListener('resize', () => { if (document.querySelector('#overlay.menu-mode .realhub:not(.pl4)')) fitHub(); }); }
   // Always start with a valid still portrait: no animation strip flashes in the Digivice.
   const playPortrait = document.getElementById('rhPlayPortrait');
