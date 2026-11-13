@@ -2932,6 +2932,172 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
   #overlay .realhub.hb .hb-brand img{height:auto!important;max-width:72vw}
   #overlay .realhub.hb .hb-ver{margin-bottom:8px!important}
 }
+/* Menú de inicio reorganizado: Jugar protagonista, modos compactos, misiones en una tarjeta, evento compacto y seis accesos con el mismo sistema */
+#overlay .realhub.hb .hb-left{gap:12px!important}
+#overlay .realhub.hb .hb-ver{margin-bottom:16px!important}
+#overlay .realhub.hb :is(.hb-c1,.hb-c2){background:var(--m-card)!important;color:var(--m-text)!important;border-color:var(--m-cardline)!important;box-shadow:var(--m-pillsh),0 4px 14px rgba(0,0,0,.12)!important}
+#overlay .realhub.hb .nm-modes{display:grid!important;grid-template-columns:1.45fr 1fr!important;gap:10px!important;padding:0!important;align-items:stretch}
+#overlay .realhub.hb .nm-play{display:block!important;min-height:156px!important;padding:14px 18px 48px!important}
+#overlay .realhub.hb .nm-play .hb-play-txt{max-width:56%!important}
+#overlay .realhub.hb .nm-play .hb-play-txt b{font-size:clamp(36px,3vw,50px)!important;letter-spacing:.01em}
+#overlay .realhub.hb .nm-play .hb-play-face{right:8px!important;bottom:34px!important;top:0!important;height:auto!important;width:46%!important;place-items:end center!important}
+#overlay .realhub.hb .nm-play .hb-play-face>*{width:clamp(112px,8.5vw,140px)!important;height:clamp(112px,8.5vw,140px)!important}
+#overlay .realhub.hb .nm-band{position:absolute!important;left:0;right:0;bottom:0;z-index:2;height:38px;display:flex;align-items:center;gap:8px;padding:0 14px 0 10px;background:rgba(80,24,0,.28);font:800 13px/1 'Nunito',sans-serif;white-space:nowrap;overflow:hidden}
+#overlay .realhub.hb .nm-band b{font-weight:900}
+#overlay .realhub.hb .nm-band .hb-dev{position:relative!important;left:auto!important;top:auto!important;width:28px!important;height:28px!important;flex:none;box-shadow:0 0 0 2px rgba(255,255,255,.7)!important}
+#overlay .realhub.hb .nm-stack{display:grid!important;grid-template-rows:1fr 1fr!important;gap:10px!important}
+#overlay .realhub.hb .nm-stack .hb-mode{padding:10px 12px!important;gap:10px!important;min-height:0}
+#overlay .realhub.hb .nm-stack .hb-mode>i{width:40px!important;height:40px!important;font-size:22px!important;border-radius:50%!important}
+#overlay .realhub.hb .nm-stack .hb-mode>i img{width:24px;height:30px;object-fit:contain;image-rendering:pixelated}
+#overlay .realhub.hb .nm-stack .hb-mode b{font-size:16px!important}
+#overlay .realhub.hb .nm-stack .hb-mode small{font-size:11.5px!important;white-space:nowrap}
+#overlay .realhub.hb .nm-tix{font-style:normal;font-weight:900;display:inline-block;min-width:18px;padding:1px 6px;margin-right:2px;border-radius:999px;background:rgba(255,255,255,.55);text-align:center}
+#overlay .realhub.hb .nm-quests{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--m-cardline);border-radius:var(--sh-mid,18px);background:var(--m-card);box-shadow:var(--m-pillsh),0 6px 18px rgba(0,0,0,.12);overflow:hidden}
+#overlay .realhub.hb .nm-q{display:flex;align-items:center;gap:10px;min-width:0;padding:10px 12px;border:0;background:transparent;color:var(--m-text);text-align:left;cursor:pointer;font-family:'Nunito',sans-serif;transition:background .15s}
+#overlay .realhub.hb .nm-q+.nm-q{border-left:1px solid var(--m-line)}
+#overlay .realhub.hb .nm-q:hover{background:var(--m-sunk)}
+#overlay .realhub.hb .nm-q>i{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:17px;background:color-mix(in srgb,#e2476b 16%,transparent)}
+#overlay .realhub.hb .nm-q+.nm-q>i{background:color-mix(in srgb,#12b4c8 18%,transparent)}
+#overlay .realhub.hb .nm-q>span{flex:1;min-width:0}
+#overlay .realhub.hb .nm-q small{display:block;font-size:10.5px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--m-mute)}
+#overlay .realhub.hb .nm-q b{display:block;font-size:14px;font-weight:900;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#overlay .realhub.hb .nm-q .hb-meter{display:block;height:6px;margin-top:5px;border-radius:3px;background:var(--m-line);overflow:hidden}
+#overlay .realhub.hb .nm-q .hb-meter i{display:block;height:100%;border-radius:3px;background:#e2476b}
+#overlay .realhub.hb .nm-q .hb-dots{margin-top:5px}
+#overlay .realhub.hb .nm-q .hb-dots u.on{background:#12b4c8}
+#overlay .realhub.hb .nm-rw{flex:none;font:900 11px/1 'Nunito',sans-serif;font-style:normal;padding:5px 8px;border-radius:999px;background:var(--m-sunk);color:var(--m-gold)}
+#overlay .realhub.hb .nm-event{display:flex!important;align-items:center;gap:10px!important;min-height:0;padding:6px 8px 6px 6px!important;border-radius:999px!important;background:linear-gradient(90deg,#6c3fe0,#b8378e)!important;box-shadow:0 3px 0 #3f2287,0 6px 16px rgba(0,0,0,.18)!important;color:#fff}
+#overlay .realhub.hb .nm-event::after{display:none!important}
+#overlay .realhub.hb .nm-event>i{width:30px!important;height:30px!important;border-radius:50%!important;font-size:16px!important}
+#overlay .realhub.hb .nm-event>span{flex:1;min-width:0;display:flex;align-items:baseline;gap:8px;white-space:nowrap;overflow:hidden}
+#overlay .realhub.hb .nm-event small{margin:0!important;font-size:10.5px!important;letter-spacing:.08em;opacity:.85}
+#overlay .realhub.hb .nm-event b{font-size:14px!important;overflow:hidden;text-overflow:ellipsis}
+#overlay .realhub.hb .nm-event>em{flex:none;font:900 12px/1 'Nunito',sans-serif;font-style:normal;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.25)}
+#overlay .realhub.hb .nm-event.hm-soon{background:var(--m-sunk)!important;color:var(--m-mute)!important;box-shadow:none!important}
+#overlay .realhub.hb .nm-tiles{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important}
+#overlay .realhub.hb .nm-tiles .hb-tile{padding:8px 4px 7px!important;gap:1px!important;border:1px solid var(--m-cardline)!important;border-bottom:3px solid var(--tc)!important;transition:transform .14s,box-shadow .14s!important}
+#overlay .realhub.hb .nm-tiles .hb-tile i{transform:none!important;width:42px!important;height:42px!important;margin:0 0 5px!important;border-radius:12px!important;overflow:hidden;background:radial-gradient(circle at 50% 35%,#1d5fc4,#0a1a46 75%)!important;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--tc) 70%,#9aefff),0 2px 0 rgba(0,0,0,.18)}
+#overlay .realhub.hb .nm-tiles .hb-tile i::after{display:none!important}
+#overlay .realhub.hb .nm-tiles .hb-tile i img{transform:none!important;width:30px!important;height:30px!important;object-fit:contain;image-rendering:auto}
+#overlay .realhub.hb .nm-tiles .hb-tile b{font-size:12.5px!important}
+#overlay .realhub.hb .nm-tiles .hb-tile small{font-size:10.5px!important}
+#overlay .realhub.hb .nm-tiles .hb-tile:hover{transform:translateY(-3px)!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--tc) 45%,transparent),0 8px 20px color-mix(in srgb,var(--tc) 30%,rgba(0,0,0,.2))!important}
+#overlay .realhub.hb .nm-tiles .hb-tile:active{transform:translateY(1px) scale(.97)!important;box-shadow:0 2px 8px rgba(0,0,0,.15)!important}
+#overlay .realhub.hb .nm-tiles .hb-tile.hm-soon{border-bottom-color:var(--m-line2)!important}
+#overlay .realhub.hb .nm-tiles .hb-tile.hm-soon>*{opacity:.75!important;filter:grayscale(.85)!important}
+#overlay .realhub.hb .nm-tiles .hb-tile.hm-soon:hover{transform:none!important;box-shadow:none!important}
+#overlay .realhub.hb .nm-ic{display:block;width:24px;height:24px;object-fit:contain;flex:none;transform:none!important;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
+#overlay .realhub.hb :is(.hb-pill,.hb-ic,.hb-btn) .nm-ic{width:26px;height:26px}
+#overlay .realhub.hb .hb-btn .nm-ic{width:28px;height:28px;margin-left:-6px}
+#overlay .realhub.hb .hb-btn.hb-sq .nm-ic{margin:0;width:30px;height:30px}
+#overlay .realhub.hb .nm-stack .hb-mode>i{background:rgba(255,255,255,.2)!important}
+#overlay .realhub.hb .nm-stack .hb-mode>i .nm-ic{width:36px;height:36px}
+#overlay .realhub.hb .nm-q>i{background:none!important;width:40px!important;height:40px!important}
+#overlay .realhub.hb .nm-q>i .nm-ic{width:40px;height:40px}
+#overlay .realhub.hb .nm-event>i{background:rgba(255,255,255,.2)!important}
+#overlay .realhub.hb .nm-event>i .nm-ic{width:28px;height:28px}
+#overlay .realhub.hb .nm-tiles .hb-tile i{background:none!important;box-shadow:none!important;width:48px!important;height:48px!important;margin:0 0 3px!important;overflow:visible}
+#overlay .realhub.hb .nm-tiles .hb-tile i .nm-ic{width:48px!important;height:48px!important;object-fit:contain!important;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}
+#overlay .realhub.hb .hb-btn .nm-logo{width:20px;height:20px;flex:none}
+#overlay .realhub.hb .hb-x .nm-logo{width:16px;height:16px}
+@media(max-width:760px){
+  #overlay .realhub.hb .nm-modes{grid-template-columns:1fr 1fr!important}
+  #overlay .realhub.hb .nm-play{grid-column:1/-1;min-height:150px!important}
+  #overlay .realhub.hb .nm-stack{grid-column:1/-1;grid-template-columns:1fr 1fr!important;grid-template-rows:auto!important}
+  #overlay .realhub.hb .nm-stack .hb-mode{padding:9px 10px!important;gap:8px!important}
+  #overlay .realhub.hb .nm-stack .hb-mode>i{width:34px!important;height:34px!important}
+  #overlay .realhub.hb .nm-stack .hb-mode>i .nm-ic{width:30px;height:30px}
+  #overlay .realhub.hb .nm-q>i{display:grid!important;width:30px!important;height:30px!important}
+  #overlay .realhub.hb .nm-q>i .nm-ic{width:30px;height:30px}
+  #overlay .realhub.hb .nm-stack .hb-mode b{font-size:14.5px!important}
+  #overlay .realhub.hb .nm-stack .hb-mode small{font-size:10.5px!important;white-space:normal}
+  #overlay .realhub.hb .nm-q{padding:9px 10px;gap:8px}
+  #overlay .realhub.hb .nm-q b{font-size:13px}
+  #overlay .realhub.hb .nm-rw{display:none}
+  #overlay .realhub.hb .nm-tiles{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile{padding:8px 4px 7px!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile b{font-size:12.5px!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile small{font-size:10.5px!important}
+  #overlay .realhub.hb .nm-long{display:none}
+}
+/* Mejoras del menú de inicio: BETA pegado al logo, Jugar más vivo, barra inferior neutra y avisos flotantes */
+#overlay .realhub.hb .hb-brand{position:relative;display:inline-flex!important;align-self:flex-start;width:max-content;max-width:100%}
+#overlay .realhub.hb .hb-ver{position:absolute;right:-10px;bottom:2px;margin:0!important;transform:rotate(-4deg)}
+#overlay .realhub.hb .nm-play .hb-play-face{width:52%!important;right:0!important;bottom:38px!important;top:auto!important;height:calc(100% - 38px)!important;overflow:visible;display:flex!important;align-items:flex-end!important;justify-content:center!important;place-items:unset!important}
+#overlay .realhub.hb .nm-play .hb-play-face::before{content:'';position:absolute;left:50%;bottom:4%;width:78%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,244,214,.75),rgba(255,214,140,.25) 45%,transparent 70%);pointer-events:none}
+#overlay .realhub.hb .nm-play .hb-play-face>*{position:absolute!important;left:0;right:0;bottom:-5px;margin:0 auto!important;width:clamp(140px,11vw,180px)!important;height:clamp(140px,11vw,180px)!important;transform-origin:50% 100%}
+#overlay .realhub.hb .nm-play:hover .hb-play-face>*{animation:nm-breathe 1.6s ease-in-out infinite}
+@keyframes nm-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05,1.07)}}
+@media(prefers-reduced-motion:reduce){#overlay .realhub.hb .nm-play:hover .hb-play-face>*{animation:none}}
+#overlay .realhub.hb .nm-dot{position:absolute;top:8px;right:8px;width:10px;height:10px;border-radius:50%;background:var(--m-bad);box-shadow:0 0 0 2px var(--m-card)}
+#overlay .realhub.hb :is(.hb-discord,.hb-x){background:var(--m-card)!important;border-color:var(--m-cardline)!important;box-shadow:var(--m-pillsh),0 4px 14px rgba(0,0,0,.12)!important}
+#overlay .realhub.hb .hb-discord{color:#5865f2!important}
+#overlay .realhub.hb .hb-x{color:var(--m-text)!important}
+#overlay .realhub.hb :is(.hb-discord,.hb-x) .nm-logo{width:20px!important;height:20px!important}
+#overlay .realhub.hb .hm-msg{position:fixed!important;left:50%;bottom:34px;transform:translateX(-50%);z-index:40;max-width:calc(100vw - 32px);box-sizing:border-box;padding:10px 18px!important;font-size:14px!important;box-shadow:0 8px 24px rgba(0,0,0,.3)!important;animation:nm-toast .25s ease-out}
+@keyframes nm-toast{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+@media(max-width:760px){
+  #overlay .realhub.hb .hb-brand{align-self:center}
+  #overlay .realhub.hb .hb-ver{right:-6px;bottom:-2px}
+  #overlay .realhub.hb .hb-bar{flex-wrap:nowrap!important;justify-content:center;gap:6px!important}
+  #overlay .realhub.hb .hb-bar .hb-btn:not(.hb-sq){padding:0 10px 0 8px!important}
+  #overlay .realhub.hb .hb-bar .hb-btn .nm-ic{margin-left:0}
+  #overlay .realhub.hb #mBug .nm-lbl{display:none}
+  #overlay .realhub.hb #mBug{width:40px;padding:0!important;justify-content:center}
+  #overlay .realhub.hb .nm-play .hb-play-face>*{width:132px!important;height:132px!important}
+  #overlay .realhub.hb .hm-msg{bottom:18px;font-size:13px!important;white-space:nowrap}
+}
+#overlay .realhub.hb .hb-me{height:40px!important;padding:0 14px 0 4px!important}
+#overlay .realhub.hb .hb-me .hud-portrait{width:32px!important;height:32px!important}
+#overlay .realhub.hb .hb-me strong{font-size:13px!important;line-height:1.1}
+#overlay .realhub.hb .hb-me small{font-size:10.5px!important;line-height:1.1}
+/* Encargos: tarjeta única en el menú y ventana con paneles diarios, semanales y de evento */
+#overlay .realhub.hb .nm-encard{display:flex!important;align-items:center;gap:12px;width:100%;padding:10px 14px;color:var(--m-text);text-align:left;cursor:pointer;font-family:'Nunito',sans-serif;transition:transform .14s,box-shadow .14s}
+#overlay .realhub.hb .nm-encard:hover{transform:translateY(-2px)}
+#overlay .realhub.hb .nm-encard>i{flex:none;width:44px;height:44px;display:grid;place-items:center}
+#overlay .realhub.hb .nm-encard>i .nm-ic{width:44px;height:44px}
+#overlay .realhub.hb .nm-eh{flex:none;min-width:0}
+#overlay .realhub.hb .nm-eh b{display:block;font-size:16px;font-weight:900;line-height:1.1}
+#overlay .realhub.hb .nm-eh small{display:block;font-size:11px;font-weight:700;color:var(--m-mute)}
+#overlay .realhub.hb .nm-eqs{flex:1;display:flex;gap:8px;min-width:0;justify-content:flex-end}
+#overlay .realhub.hb .nm-eq{flex:1;max-width:96px;min-width:0;padding:6px 8px;border-radius:10px;background:var(--m-sunk)}
+#overlay .realhub.hb .nm-eq small{display:block;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--m-mute)}
+#overlay .realhub.hb .nm-eq b{display:block;font-size:14px;font-weight:900;font-variant-numeric:tabular-nums}
+#overlay .realhub.hb .nm-eq .hb-meter{display:block;height:5px;margin-top:3px;border-radius:3px;background:var(--m-line);overflow:hidden}
+#overlay .realhub.hb .nm-eq .hb-meter i{display:block;height:100%;border-radius:3px}
+#overlay .realhub.hb .nm-eq.q-d .hb-meter i{background:#e2476b}
+#overlay .realhub.hb .nm-eq.q-w .hb-meter i{background:#12b4c8}
+#overlay .realhub.hb .nm-eq.q-e .hb-meter i{background:#8b4fe6}
+#overlay .approved-info-dialog.eq-dialog,.approved-info-dialog.eq-dialog{width:min(1040px,94vw)!important;max-width:none!important;max-height:calc(100vh - 40px);overflow-y:auto}
+.eq-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:6px 0 4px}
+.eq-grid.eq-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.eq-panel{--qc:#e2476b;display:flex;flex-direction:column;border:1px solid var(--m-line);border-top:4px solid var(--qc);border-radius:16px;background:var(--m-sunk);overflow:hidden;text-align:left}
+.eq-panel.eq-week{--qc:#12b4c8}
+.eq-panel.eq-ev{--qc:#8b4fe6;background:linear-gradient(180deg,color-mix(in srgb,#8b4fe6 12%,var(--m-sunk)),var(--m-sunk) 40%)}
+.eq-panel>header{display:flex;align-items:center;gap:10px;padding:12px 14px 10px}
+.eq-panel>header img{width:46px;height:46px;object-fit:contain;flex:none}
+.eq-panel>header span{flex:1;min-width:0}
+.eq-panel>header b{display:block;font:900 19px/1.1 'Nunito',sans-serif;color:var(--m-text)}
+.eq-panel>header small{display:block;font:700 11.5px/1.3 'Nunito',sans-serif;color:var(--m-mute)}
+.eq-panel>header em{flex:none;font:900 14px/1 'Nunito',sans-serif;font-style:normal;padding:6px 10px;border-radius:999px;background:color-mix(in srgb,var(--qc) 18%,transparent);color:var(--m-text)}
+.eq-rows{display:flex;flex-direction:column;gap:6px;padding:0 10px 12px}
+.eq-row{display:grid;grid-template-columns:22px 1fr;gap:4px 8px;align-items:start;padding:9px 10px;border-radius:12px;background:var(--m-card);border:1px solid var(--m-line);color:var(--m-text)}
+.eq-row>b{width:20px;height:20px;margin-top:1px;border-radius:50%;border:2px solid var(--m-line2,var(--m-line));display:grid;place-items:center;font-size:12px;box-sizing:border-box}
+.eq-row.done>b{background:var(--qc);border-color:var(--qc);color:#fff}
+.eq-row>span{min-width:0}
+.eq-t{display:block;font:800 13.5px/1.3 'Nunito',sans-serif}
+.eq-row.done .eq-t{opacity:.6;text-decoration:line-through}
+.eq-bar{display:block;height:6px;margin-top:6px;border-radius:3px;background:var(--m-line);overflow:hidden}
+.eq-bar i{display:block;height:100%;border-radius:3px;background:var(--qc)}
+.eq-row>span small{display:block;margin-top:3px;font:800 11px/1 'Nunito',sans-serif;color:var(--m-mute);font-variant-numeric:tabular-nums}
+.eq-row>em{grid-column:2;font:800 11.5px/1.2 'Nunito',sans-serif;font-style:normal;color:var(--m-gold)}
+@media(max-width:900px){.eq-grid,.eq-grid.eq-two{grid-template-columns:1fr}}
+@media(max-width:760px){
+  #overlay .realhub.hb .nm-encard{flex-wrap:wrap;gap:8px 10px;padding:10px 12px}
+  #overlay .realhub.hb .nm-encard>i,#overlay .realhub.hb .nm-encard>i .nm-ic{width:34px;height:34px}
+  #overlay .realhub.hb .nm-eqs{flex-basis:100%;justify-content:stretch}
+  #overlay .realhub.hb .nm-eq{max-width:none}
+}
 /* Mismo tamaño para todos los paneles: grandes (Colección, Laboratorio, Mapa) y medianos (Ajustes, Guía, Código) */
 #overlay .picker-screen.cl4,#overlay:not(.menu-mode)>.picker-screen.ms,#overlay .picker-screen.ms,#overlay .lab-screen{width:min(1080px,94vw)!important;max-width:none!important;height:min(780px,calc(100vh - 60px))!important;max-height:none!important;box-sizing:border-box!important;overflow-y:auto}
 #overlay .picker-screen.cl4{overflow:hidden}
@@ -3997,7 +4163,7 @@ const TXT = {
        play:'JUGAR', playS:'Elige tu Digimon, mapa y dificultad', gacha:'GACHA', gachaS:'Tiradas con Bits o tickets', player:'JUGADOR', playerS:'Tu tarjeta, marcos y títulos',
        coll:'COLECCIÓN', collS:'Skins, marcos, títulos y evoluciones', help:'CÓMO JUGAR', helpS:'Tutorial con vídeos', set:'AJUSTES', setS:'Calidad, sonido y guardado', recs:'Tus récords', runs:'Partidas', best:'Mejor tiempo', lvl:'Mejor nivel',
        kills:'Bajas', none:'Todavía no hay partidas. ¡Empieza una!', partner:'Tu compañero', noTitle:'Sin título', guestTag:'invitado · pruebas',
-       evEnds:'Termina en', evSkin:'Skins de Navidad como legendarias en el gacha', tipT:'Consejo', tip:'Los élites y el jefe sueltan tickets de tirada.', daily:'Misión diaria',
+       evEnds:'Termina en', evSkin:'Skins de Navidad como legendarias en la Incubadora', tipT:'Consejo', tip:'Los élites y el jefe sueltan tickets de tirada.', daily:'Misión diaria',
        legal:'Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon.'},
   en: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'A free 3D Digimon survivor in your browser', boot:'DIGIVICE · DIGITAL WORLD ACCESS', who:'DigiDestined, identify yourself',
        saved:'Your name is saved in this browser.', ph:'YOUR NAME', enter:'ENTER THE DIGITAL WORLD', guest:'Enter as guest (testing)', needName:'Type a name',
@@ -4037,7 +4203,7 @@ function showCollection(){
   let body;
   if (colTab === 'otros'){
     const frames = FRAMES.map(f => { const ok = inv.frames.includes(f.id);
-      return `<div class="cl4-card${ok ? ' ok' : ' locked'}"><div class="rw-frame${f.id ? ' fr-' + f.id : ''}"></div><b>${ok ? f.name : '???'}</b><small>${ok ? TIER_NAME[f.tier] : 'Gacha'}</small></div>`; }).join('');
+      return `<div class="cl4-card${ok ? ' ok' : ' locked'}"><div class="rw-frame${f.id ? ' fr-' + f.id : ''}"></div><b>${ok ? f.name : '???'}</b><small>${ok ? TIER_NAME[f.tier] : 'Incubadora'}</small></div>`; }).join('');
     const titles = TITLES.map(tl => { const ok = inv.titles.includes(tl.id);
       return `<div class="cl4-card${ok ? ' ok' : ' locked'}"><span class="cl-medal">${svgIcon('utilidad')}</span><b>${ok ? tl.name : '???'}</b><small>${ok ? TIER_NAME[tl.tier] : tl.how}</small></div>`; }).join('');
     body = `<div class="cl4-other"><h3>Marcos</h3><div class="cl4-cards">${frames}</div><h3>Títulos</h3><div class="cl4-cards">${titles}</div></div>`;
@@ -4209,7 +4375,7 @@ function bindMenuFX(){
   });
 }
 function showSelect(){
-  if (!localStorage.getItem('digibonk3d-gift')){ localStorage.setItem('digibonk3d-gift', '1'); addTickets('std', 10); setTimeout(() => { const m = document.getElementById('hmMsg'); if (m) m.textContent = '🎁 Regalo de bienvenida: 10 tickets para el gacha'; }, 300); }
+  if (!localStorage.getItem('digibonk3d-gift')){ localStorage.setItem('digibonk3d-gift', '1'); addTickets('std', 10); setTimeout(() => { const m = document.getElementById('hmMsg'); if (m) { m.textContent = '🎁 Regalo de bienvenida: 10 tickets para la Incubadora'; clearTimeout(m._t); m._t = setTimeout(() => { m.textContent = ''; }, 4500); } }, 300); }
   state = 'select';
   setHud(false);
   if (g){ scene.remove(world); world = new THREE.Group(); scene.add(world); g = null; }
@@ -4224,64 +4390,54 @@ function showSelect(){
   const safeText = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const choice = CHARS[selectedKey] || CHARS.agumon;
   const dbEvDays = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
-  const encList = loadEncargos().list, encDone = encList.filter(e => e.done).length;
+  const qs = questSummary();
+  const labReady = LAB.filter(u => labLv(u.id) < labMax(u) && labCosts(u)[labLv(u.id)] <= SAVE.bits).length;
   const achAll = TITLES.filter(tl => !tl.weekly && !tl.seasonal).length, achOwned = TITLES.filter(tl => !tl.weekly && !tl.seasonal && inv.titles.includes(tl.id)).length;
   showOverlay(`
     <main class="realhub hb" aria-label="Menú principal Digibonk">
       <div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><div class="rw-scenery-core"></div><div class="rw-aurora"></div><div class="rw-light"></div><div class="rw-water"></div><div class="rw-stars"></div></div>
       <header class="hb-top">
         <div class="hb-utils">
-          <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma">🌐 ${LANG.toUpperCase()}</button>
+          <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma"><img class="nm-ic" src="ui/hub/ic_idioma.webp" alt="">${LANG.toUpperCase()}</button>
           <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>
-          <button class="hb-pill hb-c1" type="button" id="hbGacha2" aria-label="Tesoros">🥚 Tesoros</button>
-          <button class="hb-pill hb-c2" type="button" id="hbLab2" aria-label="Laboratorio">🧪 Laboratorio</button>
         </div>
         <div class="hb-user" role="toolbar" aria-label="Jugador">
           <button type="button" class="hb-me" id="rhProfile"><span class="hud-portrait mini hm-pl-frame${extra.frame ? ' fr-' + extra.frame : ''}"><img id="rhProfileImg" src="${avatarSrc()}" alt=""></span><span><strong>${safeText(trainerName || 'Invitado')}</strong><small>${isGuest() ? t('guestTag') : (extra.title ? (TITLES.find(x => x.id === extra.title) || {}).name || '' : t('noTitle'))}</small></span></button>
           <span class="hb-chip" title="Bits"><img src="ui/hud/ic_bits.webp" alt="">${SAVE.bits.toLocaleString('es-ES')}</span>
           <span class="hb-chip" title="Tickets"><img src="ui/hud/ic_ticket.webp" alt="">${usableTickets('std')}</span>
-          <span class="hb-chip" title="Digimon desbloqueados"><img src="ui/icons/digivice.png" alt="">${unlockedSet().size}/${Object.keys(CHARS).length}</span>
-          <button type="button" class="hb-ic" id="hmNews" aria-label="Noticias" title="Noticias">📰</button>
-          <button type="button" class="hb-ic" id="hmFriends" aria-label="Amigos" title="Amigos">👥</button>
-          <button type="button" class="hb-ic" id="hmMail" aria-label="Buzón" title="Buzón">✉</button>
           <button type="button" class="hb-out" id="hmLogout">Cerrar sesión</button>
         </div>
       </header>
       <section class="hb-main">
         <div class="hb-left">
           <h1 class="hb-brand"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"><span class="hb-ver">BETA</span></h1>
-          <div class="hb-modes">
-            <button type="button" id="playBtn" class="hb-play" aria-label="Jugar con ${safeText(choice.name)}">
-              <span class="hb-dev"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span>
-              <span class="hb-play-txt"><b>Jugar</b><small>Modo clásico<br>${safeText(choice.name)}</small></span>
+          <div class="hb-modes nm-modes">
+            <button type="button" id="playBtn" class="hb-play nm-play" aria-label="Jugar con ${safeText(choice.name)}">
+              <span class="hb-play-txt"><b>Jugar</b></span>
               <span class="hb-play-face">${animEl(spriteOf(selectedKey, false), 'hb-face')}</span>
+              <span class="nm-band"><span class="hb-dev"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span>Modo clásico · <b>${safeText(choice.name)}</b></span></span>
             </button>
-            <div class="hb-stack">
-              <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i>∞</i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
-              <button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Tesoros"><i>🥚</i><span><b>Tesoros</b><small>${usableTickets('std')} tickets</small></span>${usableTickets('std') ? '<em class="hb-new">' + usableTickets('std') + '</em>' : ''}</button>
+            <div class="hb-stack nm-stack">
+              <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i><img class="nm-ic" src="ui/hub/ic_supervivencia.webp" alt=""></i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
+              <button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Incubadora: ${usableTickets('std')} tickets disponibles"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Incubadora</b><small><em class="nm-tix">${usableTickets('std')}</em> tickets<span class="nm-long"> disponibles</span></small></span></button>
             </div>
-            <button type="button" class="hb-mode hb-tall m-daily" id="rhMission" aria-label="${safeText(dailyText())}"><i>☀</i><span><small>Misión diaria</small><b>${currentRuns}/${DAILY.runsGoal} partidas</b></span><span class="hb-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></span><em class="hb-rw">+${DAILY.reward} Bits</em></button>
           </div>
-          <div class="hb-row2">
-            ${(bannerOpen("navidadP") || bannerOpen("navidadR")) ? `<button class="hb-event" id="rhEvent" type="button" aria-label="Edición Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i>🎄</i><span><small>¡Evento! Termina en ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</small><b>Edición Digimon · Papá Noel y Reno</b></span></button>` : `<button type="button" class="hb-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
-            <button type="button" class="hb-enc" id="mEnc" aria-label="Encargos: misiones diarias"><i>📋</i><span><b>Encargos</b><span class="hb-dots">${encList.map(e => `<u class="${e.done ? 'on' : ''}"></u>`).join('')}</span><small>${encDone}/${encList.length} hechos hoy</small></span></button>
-          </div>
-          <div class="hb-tiles">
-            <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex"><i><img src="ui/icons/digivice.png" alt=""></i><b>Digidex</b><small>${unlockedSet().size}/${Object.keys(CHARS).length}</small></button>
-            <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio"><i data-e="🧪"></i><b>Laboratorio</b><small>${SAVE.bits.toLocaleString('es-ES')} Bits</small></button>
-            <button type="button" class="hb-tile t3" id="btnTesoros" aria-label="Gacha: ${usableTickets('std')} tickets"><i><img src="ui/gacha/huevo_l0.png" alt=""></i><b>Gacha</b><small>${usableTickets('std')} tickets</small></button>
-            <button type="button" class="hb-tile t4" id="mLog" aria-label="Logros"><i data-e="🏆"></i><b>Logros</b><small>${achOwned}/${achAll}</small></button>
-            
-            
-            <button type="button" class="hb-tile t5 hm-soon" id="mRank" title="Próximamente" aria-label="Ranking: próximamente"><i data-e="🥇"></i><b>Ranking</b><small>Pronto</small></button>
-            <button type="button" class="hb-tile t7" id="btnPlayer" aria-label="Jugador"><i data-e="🪪"></i><span><b>Jugador</b><small>Tu ficha</small></span></button>
+          <button type="button" class="nm-quests nm-encard" id="mEnc" aria-label="Encargos: hoy ${qs.day.done} de ${qs.day.all}, semana ${qs.week.done} de ${qs.week.all}${qs.ev ? ', evento ' + qs.ev.done + ' de ' + qs.ev.all : ''}"><i><img class="nm-ic" src="ui/hub/ic_encargos.webp" alt=""></i><span class="nm-eh"><b>Encargos</b><small>${qs.ev ? 'Diarios, semanales y de evento' : 'Diarios y semanales'}</small></span><span class="nm-eqs">${[['Hoy', qs.day, 'q-d'], ['Semana', qs.week, 'q-w'], ...(qs.ev ? [['Evento', qs.ev, 'q-e']] : [])].map(([n, q, c]) => `<span class="nm-eq ${c}"><small>${n}</small><b>${q.done}/${q.all}</b><span class="hb-meter"><i style="width:${Math.round(q.done / q.all * 100)}%"></i></span></span>`).join('')}</span></button>
+          ${(bannerOpen("navidadP") || bannerOpen("navidadR")) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
+          <div class="hb-tiles nm-tiles">
+            <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex: ${unlockedSet().size} de ${Object.keys(CHARS).length} Digimon"><i><img class="nm-ic" src="ui/hub/ic_digidex.webp" alt=""></i><b>Digidex</b><small>${unlockedSet().size}/${Object.keys(CHARS).length} Digimon</small></button>
+            <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio${labReady ? ': ' + labReady + ' mejoras disponibles' : ''}"><i><img class="nm-ic" src="ui/hub/ic_laboratorio.webp" alt=""></i><b>Laboratorio</b><small>${labReady ? labReady + (labReady === 1 ? ' mejora' : ' mejoras') : 'Mejoras'}</small>${labReady ? '<em class="nm-dot" aria-hidden="true"></em>' : ''}</button>
+            <button type="button" class="hb-tile t3" id="mMaps" aria-label="Mapas: ${safeText(MAPS[runMap].name)}"><i><img class="nm-ic" src="ui/hub/ic_mapas.webp" alt=""></i><b>Mapas</b><small>${safeText(MAPS[runMap].name)}</small></button>
+            <button type="button" class="hb-tile t4" id="mLog" aria-label="Logros: ${achOwned} de ${achAll}"><i><img class="nm-ic" src="ui/hub/ic_logros.webp" alt=""></i><b>Logros</b><small>${achOwned}/${achAll}</small></button>
+            <button type="button" class="hb-tile t5" id="mRecs" aria-label="Récords"><i><img class="nm-ic" src="ui/hub/ic_ranking.webp" alt=""></i><b>Récords</b><small>${recs.length ? 'Mejor ' + fmtTime(bestT) : 'Sin partidas'}</small></button>
+            <button type="button" class="hb-tile t7" id="btnPlayer" aria-label="Jugador"><i><img class="nm-ic" src="ui/hub/ic_jugador.webp" alt=""></i><b>Jugador</b><small>Perfil y marcos</small></button>
           </div>
           <nav class="hb-bar" aria-label="Enlaces y ajustes">
-            <button type="button" class="hb-btn" id="btnAjustes"><i>⚙</i>Ajustes</button>
-            <button type="button" class="hb-btn" id="btnHelp"><i>💡</i>Guía</button>
-            <button type="button" class="hb-btn hb-sq" id="mBug" aria-label="Reportar bugs" title="Reportar bugs"><i>🐞</i></button>
-            <button type="button" class="hb-btn hb-discord" id="mDiscord"><i>💬</i>Discord</button>
-            <button type="button" class="hb-btn hb-x" id="mX"><i>𝕏</i>Digibonk</button>
+            <button type="button" class="hb-btn" id="btnAjustes"><img class="nm-ic" src="ui/hub/ic_ajustes.webp" alt="">Ajustes</button>
+            <button type="button" class="hb-btn" id="btnHelp"><img class="nm-ic" src="ui/hub/ic_guia.webp" alt="">Guía</button>
+            <button type="button" class="hb-btn" id="mBug" aria-label="Reportar bugs" title="Reportar bugs"><img class="nm-ic" src="ui/hub/ic_bugs.webp" alt=""><span class="nm-lbl">Bugs</span></button>
+            <button type="button" class="hb-btn hb-sq hb-discord" id="mDiscord" aria-label="Discord" title="Discord"><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></button>
+            <button type="button" class="hb-btn hb-sq hb-x" id="mX" aria-label="Digibonk en X" title="Digibonk en X"><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg></button>
           </nav>
           <p class="hm-msg" id="hmMsg" aria-live="polite"></p>
         </div>
@@ -4306,16 +4462,16 @@ function showSelect(){
   fitHub(); if (!window.__hmFitBound){ window.__hmFitBound = true; addEventListener('resize', () => { if (document.querySelector('#overlay.menu-mode .realhub:not(.pl4)')) fitHub(); }); }
   // Always start with a valid still portrait: no animation strip flashes in the Digivice.
   const playPortrait = document.getElementById('rhPlayPortrait');
-  if (playPortrait) { const pk = CHARS[selectedKey] ? selectedKey : 'agumon'; const pic = PLAYER_ICONS.find(x => x.id === pk); if (pic && pic.src) playPortrait.src = pic.src; else menuPlayPortrait(spriteOf(pk, false), d => { playPortrait.src = d; }); }
+  if (playPortrait) { const pk = CHARS[selectedKey] ? selectedKey : 'agumon'; const pic = charIcon(pk); if (pic) playPortrait.src = pic; else menuPlayPortrait(spriteOf(pk, false), d => { playPortrait.src = d; }); }
   // The equipped skin may have a unique appearance; if so, use that sprite's first frame.
   // El botón Jugar siempre muestra el icono del compañero (no la skin equipada)
-  if(!avatarIcon()) headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
+  if(!avatarIcon() && !PLAYER_ICONS.some(x => x.id === avatarKey())) headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
   document.getElementById('playBtn').onclick=()=>{ runMode='normal'; showPicker('personaje'); };
   const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR'; showGacha(); };
   document.getElementById('btnColl').onclick=showCollection;
   document.getElementById('btnPlayer').onclick=showPlayer;
   document.getElementById('btnGacha').onclick=showLab;
-  document.getElementById('btnTesoros').onclick=()=>{ gxBanner = 'std'; showGacha(); };
+  document.getElementById('mMaps').onclick=()=>{ runMode='normal'; showMapSelect(); };
   ['hbGacha2','hbGacha3'].forEach(id => { const el = document.getElementById(id); if (el) el.onclick = () => { gxBanner = 'std'; showGacha(); }; });
   { const el = document.getElementById('hbLab2'); if (el) el.onclick = showLab; }
   document.getElementById('btnHelp').onclick=showHelp;
@@ -4331,9 +4487,6 @@ function showSelect(){
   const HM_DISCORD_URL='', HM_X_URL='';
   document.getElementById('mDiscord').onclick=()=>HM_DISCORD_URL?window.open(HM_DISCORD_URL,'_blank','noopener'):hmSoon('Discord: próximamente');
   document.getElementById('mX').onclick=()=>HM_X_URL?window.open(HM_X_URL,'_blank','noopener'):hmSoon('X: próximamente');
-  document.getElementById('hmNews').onclick=()=>hmSoon('Noticias: próximamente');
-  document.getElementById('hmFriends').onclick=()=>hmSoon('Amigos: próximamente');
-  document.getElementById('hmMail').onclick=()=>hmSoon('Buzón: próximamente');
   document.getElementById('hmLogout').onclick=()=>{localStorage.removeItem('digibonk3d-name');localStorage.removeItem('digibonk3d-guest');location.reload();};
   document.getElementById('rhProfile').onclick=showPlayer;
   document.getElementById('rhLang').onclick=toggleLang;
@@ -4355,8 +4508,8 @@ function showSelect(){
     host.querySelector('.approved-info-scrim').onclick=e=>{if(e.target===e.currentTarget)close()};
     host.querySelector('#realClose').focus();
   };
-  document.getElementById('rhMission').onclick=()=>openInfo('mission');
   document.getElementById('rhRecords').onclick=()=>openInfo('records');
+  document.getElementById('mRecs').onclick=()=>openInfo('records');
   { const ol = document.getElementById('hbRank'), tabs = document.querySelectorAll('.hb-tabs button');
     const recKey = r => r.key || Object.keys(CHARS).find(k => CHARS[k].name === r.name || (EVO_LINE[k] || []).some(e => e.name === r.name)) || 'agumon';
     const val = (r, k) => k === 't' ? fmtTime(r.t) : k === 'lvl' ? 'Nv ' + (r.lvl || 1) : (r.kills || 0).toLocaleString('es-ES');
@@ -4379,7 +4532,7 @@ const TUTO = [
   {t:'Jefe final', d:'Devimon, Etemon y Myotismon aparecen como jefes menores; en el Bosque File, Piedmon es el jefe final de la segunda pantalla. Esquiva el anillo rojo antes de cada disparo.', clip:'tutorial/jefe.webm'},
   {t:'Mapas y portal', d:'Tras elegir Digimon eliges mapa y dificultad. Todos los mapas tienen dos pantallas: pulsa B para invocar al jefe de la pantalla cuando quieras (siempre tiene la misma fuerza); al derrotarlo se abre el portal del norte. Si pasas 20 minutos en una pantalla empieza el Infierno y no se sobrevive.', clip:'tutorial/zona.webm'},
   {t:'Dificultad y Supervivencia', d:'Fácil, Normal, Difícil y Pesadilla cambian la vida y el daño de los enemigos, las hordas, los jefes y los premios. Supervivencia no tiene jefe final: cada minuto llega una oleada y cada 5 oleadas un jefe menor.', clip:'tutorial/jefe.webm'},
-  {t:'Colección y gacha', d:'La colección guarda tus skins por etapa, marcos y títulos. El gacha tiene un banner permanente y los promocionales, cada uno con sus tickets.', clip:'tutorial/coleccion.webm'}
+  {t:'Colección e Incubadora', d:'La colección guarda tus skins por etapa, marcos y títulos. La Incubadora tiene un banner permanente y los promocionales, cada uno con sus tickets.', clip:'tutorial/coleccion.webm'}
 ];
 let tutoIdx = 0;
 function tutoShow(i){
@@ -4756,7 +4909,7 @@ function renderRoster(){
     const list = lineSkins(k).filter(sk => owned.includes(sk.id));
     el.innerHTML = `<div class="ps-lbl">La skin se aplica a toda la línea de ${CHARS[k].name}</div>
       <div class="ps-grid">${list.map(sk => `<button type="button" class="ps-tile${eq === sk.id ? ' sel' : ''}" data-skin="${sk.id}" title="${sk.name}">${skinThumb(k, sk)}<b>${sk.name}</b></button>`).join('')}</div>
-      ${list.length <= 1 ? '<p class="ps-note">Consigue skins en Tesoros y con logros.</p>' : ''}`;
+      ${list.length <= 1 ? '<p class="ps-note">Consigue skins en la Incubadora y con logros.</p>' : ''}`;
     el.querySelectorAll('[data-skin]').forEach(b => b.onclick = () => { equipSkinAt(k, 0, b.dataset.skin); showPicker(); });
     return;
   }
@@ -6267,6 +6420,7 @@ function endGame(win){
   g.newDigis = checkUnlocks();
   g.survBest = g.mode === 'surv' ? recordSurv(g.ch.id, g.t) : null;
   g.encDone = checkEncargos();
+  g.questDone = checkLongQuests(win);
   unlockMouse();
   saveRecord(win);
   recordCharRun(g.ch.id, win && g.mode !== 'surv', g.diff, g.kills, g.p.lvl);
@@ -6283,6 +6437,7 @@ function endGame(win){
   for (const u of g.unlocked) rewards.push(`<li>Skin nueva: <b>${u}</b></li>`);
   for (const tl of g.newTitles) rewards.push(`<li>Título desbloqueado: <b>${tl.name}</b></li>`);
   for (const d of g.newDigis) rewards.push(`<li>Digimon desbloqueado: <b>${d}</b></li>`);
+  for (const q of (g.questDone || [])) rewards.push(`<li>Encargo cumplido: <b>${q.t}</b> · +${q.bits} Bits y +${q.tix} tickets</li>`);
   for (const e of g.encDone) rewards.push(`<li>Encargo cumplido: <b>${e}</b> · +${ENC_REWARD.bits} Bits y +${ENC_REWARD.tix} ticket</li>`);
   if (g.survBest) rewards.push(`<li>¡Nuevo récord de Supervivencia con ${g.ch.name}!</li>`);
   if (g.waveBest) rewards.push(`<li>¡Nueva mejor oleada en ${mapDef().name}: <b>${g.wave}</b>!</li>`);
@@ -7337,10 +7492,66 @@ function menuModal(title, content){
   host.querySelector('.approved-info-scrim').onclick = e => { if (e.target === e.currentTarget) close(); };
   host.querySelector('#realClose').focus();
 }
+// Encargos semanales y de evento: sus contadores se acumulan entre partidas
+const WEEK_QUESTS = [
+  {id:'runs',  goal:15,   t:'Juega 15 partidas',                   bits:400, tix:3},
+  {id:'kills', goal:3000, t:'Derrota a 3.000 enemigos',            bits:400, tix:3},
+  {id:'wins',  goal:1,    t:'Gana una partida en cualquier mapa',  bits:500, tix:5}
+];
+const EVENT_QUESTS = [
+  {id:'runs',  goal:10,   t:'Juega 10 partidas durante el evento', bits:300, tix:3},
+  {id:'kills', goal:5000, t:'Derrota a 5.000 enemigos',            bits:500, tix:5},
+  {id:'wins',  goal:3,    t:'Gana 3 partidas',                     bits:800, tix:8}
+];
+function weekQuestState(){ const w = weekNum(), st = loadJSON('digibonk3d-wq', null); return st && st.week === w ? st : {week: w, runs: 0, kills: 0, wins: 0, done: []}; }
+function eventQuestState(){ const k = EVENT.name + '-' + EVENT.start, st = loadJSON('digibonk3d-evq', null); return st && st.ev === k ? st : {ev: k, runs: 0, kills: 0, wins: 0, done: []}; }
+// Al terminar la partida: suma a los contadores y paga los encargos largos cumplidos. Devuelve {t, bits, tix}
+function checkLongQuests(win){
+  const won = [];
+  const run = (st, list, key) => {
+    if (g.t >= 5) st.runs += 1;
+    st.kills += g.kills || 0;
+    if (win && g.mode !== 'surv') st.wins += 1;
+    for (const q of list){
+      if (st.done.includes(q.id) || (st[q.id] || 0) < q.goal) continue;
+      st.done.push(q.id); won.push(q);
+      SAVE.bits = SAVE.bits + q.bits; addTickets('std', q.tix);
+    }
+    localStorage.setItem(key, JSON.stringify(st));
+  };
+  run(weekQuestState(), WEEK_QUESTS, 'digibonk3d-wq');
+  if (eventActive()) run(eventQuestState(), EVENT_QUESTS, 'digibonk3d-evq');
+  return won;
+}
+// Resumen para la tarjeta del menú: hechos/total de hoy, de la semana y del evento
+function questSummary(){
+  const d = loadDaily(), enc = loadEncargos().list, wk = weekState(), wq = weekQuestState();
+  const day = {done: (d.claimed || d.runs >= DAILY.runsGoal ? 1 : 0) + enc.filter(e => e.done).length, all: 1 + enc.length};
+  const week = {done: (wk.claimed ? 1 : 0) + wq.done.length, all: 1 + WEEK_QUESTS.length};
+  const ev = eventActive() ? {done: eventQuestState().done.length, all: EVENT_QUESTS.length} : null;
+  return {day, week, ev};
+}
+// Ventana de encargos: tres paneles grandes (diarios, semanales y de evento si hay uno activo)
 function showEncargos(){
-  const st = loadEncargos();
-  const rows = st.list.map(e => `<div class="enc-row${e.done ? ' done' : ''}"><b>${e.done ? '✓' : '○'}</b><span>${encText(e)}</span><small>+${ENC_REWARD.bits} Bits · +${ENC_REWARD.tix} 🎟</small></div>`).join('');
-  menuModal('Encargos de hoy', `<div class="enc-list">${rows}</div><p class="enc-note">Se cumplen dentro de una partida y se renuevan cada día. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d}</p>`);
+  const d = loadDaily(), enc = loadEncargos(), wk = weekState(), wq = weekQuestState(), ev = eventActive() ? eventQuestState() : null;
+  const fmt = n => Number(n).toLocaleString('es-ES');
+  const rw = (b, t) => `${b ? '+' + fmt(b) + ' Bits · ' : ''}+${t} ${t === 1 ? 'ticket' : 'tickets'}`;
+  const row = (done, txt, prog, goal, reward) => `<div class="eq-row${done ? ' done' : ''}"><b aria-hidden="true">${done ? '✓' : ''}</b><span><span class="eq-t">${txt}</span>${goal > 1 ? `<span class="eq-bar"><i style="width:${Math.round(Math.min(prog, goal) / goal * 100)}%"></i></span><small>${fmt(Math.min(prog, goal))}/${fmt(goal)}</small>` : ''}</span><em>${reward}</em></div>`;
+  const panel = (cls, icon, title, sub, rows, done, all) => `<section class="eq-panel ${cls}"><header><img src="ui/hub/${icon}.webp" alt=""><span><b>${title}</b><small>${sub}</small></span><em>${done}/${all}</em></header><div class="eq-rows">${rows.join('')}</div></section>`;
+  const dayDone = d.claimed || d.runs >= DAILY.runsGoal;
+  const dayRows = [row(dayDone, `Juega ${DAILY.runsGoal} partidas`, d.runs, DAILY.runsGoal, rw(DAILY.reward, DAILY.rewardTix)), ...enc.list.map(e => row(e.done, encText(e), e.done ? 1 : 0, 1, rw(ENC_REWARD.bits, ENC_REWARD.tix)))];
+  const weekRows = [row(wk.claimed, `Haz ${WEEK_PULLS} tiradas en la Incubadora`, wk.pulls, WEEK_PULLS, rw(0, 1)), ...WEEK_QUESTS.map(q => row(wq.done.includes(q.id), q.t, wq[q.id] || 0, q.goal, rw(q.bits, q.tix)))];
+  const days = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
+  const parts = [
+    panel('eq-day', 'ic_mision', 'Diarios', 'Se renuevan cada día', dayRows, dayRows.filter(r => r.includes(' done"')).length, dayRows.length),
+    panel('eq-week', 'ic_encargos', 'Semanales', `Se renuevan cada lunes · ${weeklyMod().name}`, weekRows, weekRows.filter(r => r.includes(' done"')).length, weekRows.length)
+  ];
+  if (ev){
+    const evRows = EVENT_QUESTS.map(q => row(ev.done.includes(q.id), q.t, ev[q.id] || 0, q.goal, rw(q.bits, q.tix)));
+    parts.push(panel('eq-ev', 'ic_evento', 'Evento', `${EVENT.name} · quedan ${days} ${days === 1 ? 'día' : 'días'}`, evRows, ev.done.length, evRows.length));
+  }
+  menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios y los semanales se cumplen al terminar cada partida. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d}</p>`);
+  const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('eq-dialog');
 }
 function showLogros(){
   const ach = loadAch();
@@ -7778,7 +7989,7 @@ function ownsSkinIcon(ic){ return ownsAnyStage(ic.key, ic.skin); }
 function skinIconFor(key, skin){ return SKIN_ICONS.find(x => x.key === key && x.skin === skin) || null; }
 function normAv(v){ return v || ''; }
 function avatarIcon(){ const id = normAv(localStorage.getItem('digibonk3d-avatar')); return AVATAR_KIDS.find(x => x.id === id) || PLAYER_ICONS.find(x => x.id === id) || SKIN_ICONS.find(x => x.id === id && ownsSkinIcon(x)) || null; }
-function avatarSrc(){ const ic = avatarIcon(); return ic ? ic.src : headUrl(spriteOf(avatarKey(), false)); }
+function avatarSrc(){ const ic = avatarIcon(); if (ic) return ic.src; return PLAYER_ICONS.some(x => x.id === avatarKey()) ? charIcon(avatarKey()) : headUrl(spriteOf(avatarKey(), false)); }
 function avatarKey(){ const k = localStorage.getItem('digibonk3d-avatar'); return CHARS[k] ? k : selectedKey; }
 // Tarjeta de entrenador: una sola pantalla. Pasar el ratón previsualiza; clic equipa; el nombre se edita en la propia tarjeta
 function showPlayer(){
@@ -8282,7 +8493,7 @@ function showPullResults(results){
 function howTo(key, sk){
   if (sk.src === 'base') return '';
   if (!sk.req) return sk.desc || '';
-  if (sk.src === 'gacha') return 'Legendaria del gacha';
+  if (sk.src === 'gacha') return 'Legendaria de la Incubadora';
   if (sk.src === 'evento') return eventActive() ? 'Solo en el banner de evento' : 'Evento terminado';
   if (sk.src === 'shiny') return '1 entre 8192 al empezar una partida';
   const st = statsOf(key);
@@ -8333,7 +8544,7 @@ function showGacha(){
   const pity = pityCount(gxBanner), pityMax = pityAt(gxBanner);
   showOverlay(`<main class="tr11" id="trRoot">
   <div class="tr11-ambient" aria-hidden="true"><div class="tr11-aurora"></div><div class="tr11-sun"></div><div class="tr11-twink"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
-  <header class="tr11-head"><button type="button" class="tr11-return" id="trBack">← <span>Volver</span></button><div class="tr11-title"><span class="tr11-title-coin">✦</span><div><h1>Tesoros</h1><small>Ruleta de recompensas digitales</small></div></div><button type="button" id="trOdds" class="tr11-chrome">ⓘ Probabilidades</button><div class="tr11-wallet" aria-label="Tickets del banner"><span>🎟</span> <b>${wallet}</b><span>Tickets</span></div></header>
+  <header class="tr11-head"><button type="button" class="tr11-return" id="trBack">← <span>Volver</span></button><div class="tr11-title"><span class="tr11-title-coin">✦</span><div><h1>Incubadora</h1><small>Eclosiona Digi-huevos con tus tickets</small></div></div><button type="button" id="trOdds" class="tr11-chrome">ⓘ Probabilidades</button><div class="tr11-wallet" aria-label="Tickets del banner"><span>🎟</span> <b>${wallet}</b><span>Tickets</span></div></header>
   <div class="tr11-banner-tabs" role="group" aria-label="Banners de Gacha">${keys.map(k => `<button type="button" class="tr11-banner-tab ${k === gxBanner ? 'chosen' : ''}" data-banner="${k}" aria-pressed="${k === gxBanner}"><span>${esc(k === 'std' ? BANNERS[k].name : BANNERS[k].sub.replace(/ · .*$/, '').replace(/^Skin /, 'Navidad · '))}</span></button>`).join('')}</div>
   <div class="tr11-fighters" role="group" aria-label="Vista previa de Digimon (no cambia las probabilidades)">${fighters}</div>
   <div class="tr11-grid">
