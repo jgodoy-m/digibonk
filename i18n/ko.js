@@ -1014,4 +1014,7 @@ I18N.add('ko', {
   "Favorito": "즐겨찾기",
   "Los favoritos salen siempre primero": "즐겨찾기는 항상 맨 앞에 표시",
   "1-9 elegir": "1-9 선택",
+  "Recuperas 1 PS cada 3 enemigos derrotados.": "적을 3마리 쓰러뜨릴 때마다 HP를 1 회복한다.",
+  "¡Corrupción de datos!": "데이터 손상!",
+  "Si sigues quieto pierdes vida cada segundo": "계속 멈춰 있으면 매초 체력이 줄어든다",
 });

@@ -1015,4 +1015,7 @@ I18N.add('zh', {
   "Favorito": "收藏",
   "Los favoritos salen siempre primero": "收藏的总是排在最前",
   "1-9 elegir": "1-9 选择",
+  "Recuperas 1 PS cada 3 enemigos derrotados.": "每击败3个敌人恢复1点生命。",
+  "¡Corrupción de datos!": "数据损坏！",
+  "Si sigues quieto pierdes vida cada segundo": "继续站着不动会每秒损失生命",
 });

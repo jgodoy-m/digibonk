@@ -1008,4 +1008,7 @@ I18N.add('tr', {
   "Favorito": "Favori",
   "Los favoritos salen siempre primero": "Favoriler her zaman en üstte",
   "1-9 elegir": "1-9 seç",
+  "Recuperas 1 PS cada 3 enemigos derrotados.": "Her 3 düşman yendiğinde 1 can kazanırsın.",
+  "¡Corrupción de datos!": "Veri bozulması!",
+  "Si sigues quieto pierdes vida cada segundo": "Kıpırdamadan durursan her saniye can kaybedersin",
 });

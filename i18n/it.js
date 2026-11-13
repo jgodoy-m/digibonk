@@ -1003,4 +1003,7 @@ I18N.add('it', {
   "Favorito": "Preferito",
   "Los favoritos salen siempre primero": "I preferiti sono sempre in cima",
   "1-9 elegir": "1-9 scegli",
+  "Recuperas 1 PS cada 3 enemigos derrotados.": "Recuperi 1 PS ogni 3 nemici sconfitti.",
+  "¡Corrupción de datos!": "Corruzione dei dati!",
+  "Si sigues quieto pierdes vida cada segundo": "Se resti fermo perdi vita ogni secondo",
 });

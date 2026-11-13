@@ -1015,4 +1015,7 @@ I18N.add('ja', {
   "Favorito": "お気に入り",
   "Los favoritos salen siempre primero": "お気に入りは常に先頭に表示",
   "1-9 elegir": "1-9で選択",
+  "Recuperas 1 PS cada 3 enemigos derrotados.": "敵を3体倒すごとにHPが1回復する。",
+  "¡Corrupción de datos!": "データ破損！",
+  "Si sigues quieto pierdes vida cada segundo": "止まったままだと毎秒HPが減っていく",
 });

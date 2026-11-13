@@ -1007,4 +1007,7 @@ I18N.add('pl', {
   "Favorito": "Ulubiony",
   "Los favoritos salen siempre primero": "Ulubione są zawsze na górze",
   "1-9 elegir": "1-9 wybierz",
+  "Recuperas 1 PS cada 3 enemigos derrotados.": "Odzyskujesz 1 PŻ za każdych 3 pokonanych wrogów.",
+  "¡Corrupción de datos!": "Uszkodzenie danych!",
+  "Si sigues quieto pierdes vida cada segundo": "Jeśli dalej stoisz w miejscu, co sekundę tracisz życie",
 });
