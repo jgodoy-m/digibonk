@@ -3274,7 +3274,7 @@ const MAPS = {
     desc: 'Nieve y una fortaleza oscura. Sin jefes menores: solo Machinedramon, el único jefe final, que te espera en las dos pantallas.',
     zones: [
       {name: 'Valle Nevado', biome: 'nieve', fog: 0xe4eefa, sky: ['#7fa6d6', '#c4dcf2', '#f2f8ff'], tint: 0xffffff, color: '#81d4fa',
-        foes: {basic: [AD('snowbotamon'), AD('gotsumon')], fast: [AD('gazimon'), AD('kokatorimon')], tank: [AD('mojyamon'), AD('mammothmon')], elite: [AD('skullgreymon'), AD('darktyrannomon')]},
+        foes: {basic: [AD('gotsumon'), AD('otamamon')], fast: [AD('gazimon'), AD('kokatorimon')], tank: [AD('mojyamon'), AD('mammothmon')], elite: [AD('skullgreymon'), AD('darktyrannomon')]},
         boss: {name: 'Machinedramon', sprite: AD('machinedramon'), hp: 9000, dmg: 22, shots: 16, shotDmg: 11, gap: 2.0, col: '#b0bec5', sub: 'El único jefe final de la Montaña Helada', retreatAt: 0.5}},
       {name: 'Fortaleza Oscura', biome: 'fortaleza', fog: 0x3a2440, sky: ['#120818', '#3d1838', '#8a3a4a'], tint: 0xb8a8d8, color: '#ce93d8',
         foes: {basic: [AD('bakemon'), AD('dokugumon')], fast: [AD('phantomon'), AD('snimon')], tank: [AD('darktyrannomon'), AD('warumonzaemon')], elite: [AD('megadramon'), AD('gigadramon')]},
@@ -4911,8 +4911,24 @@ function showStarter(){
 let pickQuery = '';
 let pickStage = 0, pickStageFor = null;   // etapa de la línea que se previsualiza y se viste
 // Compañeros jugables en preparación: se ven en el selector como bloqueados hasta que estén terminados
-// (vacío: Leomon, Hagurumon, Frigimon y Wizardmon ya son jugables)
-const COMING_SOON = [];
+// Resto de Digimon de Adventure (sin bebés): se ven bloqueados con su nombre hasta que tengan hoja y jugabilidad
+const COMING_SOON = [
+  ['skullgreymon','SkullGreymon'], ['salamon','Salamon'], ['devimon','Devimon'], ['etemon','Etemon'], ['metaletemon','MetalEtemon'],
+  ['myotismon','Myotismon'], ['venommyotismon','VenomMyotismon'], ['demidevimon','DemiDevimon'], ['metalseadramon','MetalSeadramon'],
+  ['puppetmon','Puppetmon'], ['machinedramon','Machinedramon'], ['piedmon','Piedmon'], ['apocalymon','Apocalymon'], ['ladydevimon','LadyDevimon'],
+  ['ogremon','Ogremon'], ['kuwagamon','Kuwagamon'], ['shellmon','Shellmon'], ['seadramon','Seadramon'], ['meramon','Meramon'], ['andromon','Andromon'],
+  ['monzaemon','Monzaemon'], ['numemon','Numemon'], ['unimon','Unimon'], ['centarumon','Centarumon'], ['mojyamon','Mojyamon'], ['bakemon','Bakemon'],
+  ['elecmon','Elecmon'], ['whamon','Whamon'], ['gazimon','Gazimon'], ['tyrannomon','Tyrannomon'], ['monochromon','Monochromon'],
+  ['drimogemon','Drimogemon'], ['sukamon','Sukamon'], ['chuumon','Chuumon'], ['piximon','Piximon'], ['gekomon','Gekomon'],
+  ['shogungekomon','ShogunGekomon'], ['otamamon','Otamamon'], ['vegiemon','Vegiemon'], ['digitamamon','Digitamamon'], ['tuskmon','Tuskmon'],
+  ['kokatorimon','Kokatorimon'], ['nanomon','Datamon'], ['gesomon','Gesomon'], ['raremon','Raremon'], ['mammothmon','Mammothmon'],
+  ['darktyrannomon','DarkTyrannomon'], ['phantomon','Phantomon'], ['gizamon','Gizamon'], ['megaseadramon','MegaSeadramon'],
+  ['scorpiomon','Scorpiomon'], ['divermon','Divermon'], ['kiwimon','Kiwimon'], ['cherrymon','Cherrymon'], ['garbagemon','Garbagemon'],
+  ['deramon','Deramon'], ['floramon','Floramon'], ['mushroomon','Mushroomon'], ['redvegiemon','RedVegiemon'], ['blossomon','Blossomon'],
+  ['mekanorimon','Mekanorimon'], ['tankmon','Tankmon'], ['megadramon','Megadramon'], ['gigadramon','Gigadramon'], ['warumonzaemon','WaruMonzaemon'],
+  ['pumpkinmon','Pumpkinmon'], ['gotsumon','Gotsumon'], ['dokugumon','Dokugumon'], ['flymon','Flymon'], ['snimon','Snimon'], ['tortomon','Tortomon'],
+  ['guardromon','Guardromon'], ['giromon','Giromon'], ['ebidramon','Ebidramon']
+].map(([id, name]) => ({id, name}));
 function pickIsEvolved(k){ return !!loadJSON('digibonk3d-evo', {})[k]; }
 function pickProgress(){
   const chars = SEASONS.adventure.chars;
@@ -5047,7 +5063,7 @@ function renderRoster(){
       <span class="ps-ic"><img src="${open ? charIcon(id) : 'ui/jugador/' + id + '.png'}" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
     </button>`;
   }).join('');
-  const soon = COMING_SOON.map(c => `<span class="ps-tile soon" title="${c.name} · ${c.role} · Próximamente"><span class="ps-lock">🔒</span><span class="ps-ic"><img src="ui/jugador/${c.name.toLowerCase()}.png" alt="" loading="lazy"></span><b>Pronto</b></span>`).join('');
+  const soon = COMING_SOON.map(c => `<span class="ps-tile soon" data-name="${c.name.toLowerCase()}" title="${c.name} · Próximamente"><span class="ps-lock">🔒</span><span class="ps-ic"><img src="${AD(c.id)}" alt="" loading="lazy"></span><b>${c.name}</b></span>`).join('');
   el.innerHTML = `<input class="ps-search" id="pkSearch" placeholder="Buscar por nombre..." value="${pickQuery}" maxlength="20">
     <div class="ps-grid" id="pkGrid">${tiles}${soon}</div>
     <p class="ps-note">1-8 elegir · ←→ cambiar · doble clic para empezar</p>`;
