@@ -3,9 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Digibonk</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<title>DigiBonk · Survivor 3D de Digimon gratis en el navegador</title>
+<meta name="description" content="Fan-game gratuito: elige a tu Digimon, sobrevive a la horda, digievoluciona y derrota a los jefes. Se juega en el navegador, en ordenador y en móvil.">
+<meta name="theme-color" content="#081d4d">
+<link rel="icon" type="image/png" sizes="32x32" href="ui/icono_32.png">
+<link rel="apple-touch-icon" href="ui/icono_180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<!-- Vista previa al compartir el enlace (Discord, X, WhatsApp). Cuando el juego tenga dirección fija, pon la URL completa en og:image y og:url -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="DigiBonk">
+<meta property="og:description" content="Survivor 3D de Digimon, gratis en el navegador. Fan-game no oficial.">
+<meta property="og:image" content="ui/compartir.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>
 html,body{margin:0;height:100%;overflow:hidden;background:#0b0f1a;font-family:system-ui,sans-serif;color:#fff}
 canvas{display:block}
@@ -3240,7 +3250,7 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 }
 </style>
 <script type="importmap">
-{ "imports": { "three": "./vendor/three.module.js" } }
+{ "imports": { "three": "./vendor/three.module.min.js" } }
 </script>
 </head>
 <body>
@@ -4360,7 +4370,7 @@ function showCollection(){
       let own = 0, all = 0;
       for (const sk of lineSkins(k)){ all++; if (ownsAt(k, 0, sk.id)) own++; }
       return `<button class="cl4-item${k === colKey ? ' sel' : ''}${open ? '' : ' lock'}" data-k="${k}" ${open ? '' : 'disabled'}>
-        <span class="ps-ic cl4-ic"><img src="${open ? charIcon(k) : 'ui/jugador/' + k + '.png'}" alt=""></span>
+        <span class="ps-ic cl4-ic"><img src="${open ? charIcon(k) : 'ui/jugador/' + k + '.webp'}" alt=""></span>
         <span><b>${open ? CHARS[k].name : '???'}</b><small>${open ? own + ' skins' : unlockHow(k)}</small></span></button>`;
     }).join('');
     const k = colKey, open = isUnlocked(k);
@@ -5110,7 +5120,7 @@ function renderRoster(){
   if (rosterTab === 'apoyo'){
     const opened = chars.filter(o => isUnlocked(o) && o !== k), cur = supportKey(k);
     el.innerHTML = `<div class="ps-lbl">Te acompaña y dispara al más cercano con el 40% de tu daño</div>
-      <div class="ps-grid">${['none', ...opened].map(o => `<button type="button" class="ps-tile${(o === 'none' ? !cur : o === cur) ? ' sel' : ''}" data-sup="${o}">${o === 'none' ? '<span class="ps-ic ps-none">—</span>' : `<span class="ps-ic"><img src="ui/jugador/${o}.png" alt="" loading="lazy"></span>`}<b>${o === 'none' ? 'Ninguno' : CHARS[o].name}</b></button>`).join('')}</div>`;
+      <div class="ps-grid">${['none', ...opened].map(o => `<button type="button" class="ps-tile${(o === 'none' ? !cur : o === cur) ? ' sel' : ''}" data-sup="${o}">${o === 'none' ? '<span class="ps-ic ps-none">—</span>' : `<span class="ps-ic"><img src="ui/jugador/${o}.webp" alt="" loading="lazy"></span>`}<b>${o === 'none' ? 'Ninguno' : CHARS[o].name}</b></button>`).join('')}</div>`;
     el.querySelectorAll('[data-sup]').forEach(b => b.onclick = () => { localStorage.setItem('digibonk3d-support', b.dataset.sup); showPicker(); });
     return;
   }
@@ -5118,10 +5128,10 @@ function renderRoster(){
     const open = isUnlocked(id);
     return `<button type="button" class="ps-tile${id === k ? ' sel' : ''}${open ? '' : ' lock'}" ${open ? `data-pick="${id}"` : 'disabled'} data-name="${open ? CHARS[id].name.toLowerCase() : '???'}" title="${open ? CHARS[id].name : unlockHow(id)}">
       <span class="ps-key">${i + 1}</span>${open && pickIsEvolved(id) ? '<span class="ps-evo-dot" title="Ya ha evolucionado"></span>' : ''}
-      <span class="ps-ic"><img src="${open ? charIcon(id) : 'ui/jugador/' + id + '.png'}" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
+      <span class="ps-ic"><img src="${open ? charIcon(id) : 'ui/jugador/' + id + '.webp'}" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
     </button>`;
   }).join('');
-  const soon = COMING_SOON.map(c => `<span class="ps-tile soon" title="${c.name} · ${c.role} · Próximamente"><span class="ps-lock">🔒</span><span class="ps-ic"><img src="ui/jugador/${c.name.toLowerCase()}.png" alt="" loading="lazy"></span><b>Pronto</b></span>`).join('');
+  const soon = COMING_SOON.map(c => `<span class="ps-tile soon" title="${c.name} · ${c.role} · Próximamente"><span class="ps-lock">🔒</span><span class="ps-ic"><img src="ui/jugador/${c.name.toLowerCase()}.webp" alt="" loading="lazy"></span><b>Pronto</b></span>`).join('');
   el.innerHTML = `<input class="ps-search" id="pkSearch" placeholder="Buscar por nombre..." value="${pickQuery}" maxlength="20">
     <div class="ps-grid" id="pkGrid">${tiles}${soon}</div>
     <p class="ps-note">1-8 elegir · ←→ cambiar · doble clic para empezar</p>`;
@@ -8001,8 +8011,8 @@ function skinHasArt(key, st, id){ return id === 'clasico' || ANIM_IDS.has(`${key
 function skinLineArt(key, id){ for (let st = 0; st < stageCount(key); st++) if (skinHasArt(key, st, id)) return st; return -1; }
 function lineSkins(key){ return SKINS.filter(sk => skinLineArt(key, sk.id) >= 0 && (!sk.hidden || ownsAt(key, 0, sk.id))); }
 // Icono redondo de un Digimon con su skin (si la skin no tiene icono, el del Digimon)
-function charIcon(key, skin = equippedAt(key, 0)){ const ic = skinIconFor(key, skin); return ic ? ic.src : 'ui/jugador/' + key + '.png'; }
-function skinThumb(key, sk){ const ic = skinIconFor(key, sk.id); if (ic || sk.id === 'clasico') return `<span class="ps-ic"><img src="${ic ? ic.src : 'ui/jugador/' + key + '.png'}" alt=""></span>`; const st = Math.max(0, skinLineArt(key, sk.id)); return `<span class="ps-ic ps-ic-spr">${animEl(spriteWith(key, st, sk.id), 'ps-face')}</span>`; }
+function charIcon(key, skin = equippedAt(key, 0)){ const ic = skinIconFor(key, skin); return ic ? ic.src : 'ui/jugador/' + key + '.webp'; }
+function skinThumb(key, sk){ const ic = skinIconFor(key, sk.id); if (ic || sk.id === 'clasico') return `<span class="ps-ic"><img src="${ic ? ic.src : 'ui/jugador/' + key + '.webp'}" alt=""></span>`; const st = Math.max(0, skinLineArt(key, sk.id)); return `<span class="ps-ic ps-ic-spr">${animEl(spriteWith(key, st, sk.id), 'ps-face')}</span>`; }
 function visibleSkinsAt(key, st){ return SKINS.filter(sk => skinHasArt(key, st, sk.id) && (!sk.hidden || ownsAt(key, st, sk.id))); }
 // Se llama al terminar cada partida: actualiza el progreso y devuelve las skins nuevas
 function statsOf(key){ return loadJSON('digibonk3d-stats', {})[key] || {plays:0, kills:0}; }
@@ -8192,16 +8202,16 @@ function evolvedUnlocked(key){ return !!loadJSON('digibonk3d-evo', {})[key]; }
 const AVATAR_KIDS = [
   {id:'tai', name:'Tai'}, {id:'matt', name:'Matt'}, {id:'sora', name:'Sora'}, {id:'izzy', name:'Izzy'},
   {id:'mimi', name:'Mimi'}, {id:'joe', name:'Joe'}, {id:'tk', name:'T.K.'}, {id:'kari', name:'Kari'}
-].map(x => ({...x, src: 'ui/jugador/' + x.id + '.png'}));
+].map(x => ({...x, src: 'ui/jugador/' + x.id + '.webp'}));
 const PLAYER_ICONS = [
   {id:'agumon', name:'Agumon'}, {id:'gabumon', name:'Gabumon'}, {id:'biyomon', name:'Biyomon'}, {id:'tentomon', name:'Tentomon'},
   {id:'palmon', name:'Palmon'}, {id:'gomamon', name:'Gomamon'}, {id:'patamon', name:'Patamon'}, {id:'gatomon', name:'Gatomon'}
-].map(x => ({...x, src: 'ui/jugador/' + x.id + '.png'}));
+].map(x => ({...x, src: 'ui/jugador/' + x.id + '.webp'}));
 // Iconos de skin: se desbloquean al tener la skin en alguna etapa (los de skins ocultas solo se ven al tenerlas)
 const SKIN_ICONS = [
   {key:'agumon', skin:'galactico'}, {key:'agumon', skin:'festival'}, {key:'agumon', skin:'reno'}, {key:'agumon', skin:'variocolor'},
   {key:'patamon', skin:'galactico'}, {key:'patamon', skin:'festival'}, {key:'patamon', skin:'reno'}, {key:'patamon', skin:'variocolor'}
-].map(x => ({...x, id: x.key + '_' + x.skin, src: 'ui/jugador/' + x.key + '_' + x.skin + '.png'}));
+].map(x => ({...x, id: x.key + '_' + x.skin, src: 'ui/jugador/' + x.key + '_' + x.skin + '.webp'}));
 function skinIconName(ic){ const sk = SKINS.find(s => s.id === ic.skin); return CHARS[ic.key].name + ' ' + (sk ? sk.name : ic.skin); }
 function ownsSkinIcon(ic){ return ownsAnyStage(ic.key, ic.skin); }
 function skinIconFor(key, skin){ return SKIN_ICONS.find(x => x.key === key && x.skin === skin) || null; }
@@ -8756,7 +8766,7 @@ function showGacha(){
   ];
   const tile = r => `<button type="button" class="treasure-card tier-${r.tier}" data-info="${esc(r.name)}" data-tier="${r.tier}"><span class="tc-shine"></span><span class="tc-art">${r.icon}</span><strong>${esc(r.name)}</strong><small>${esc(TIER_NAME[r.tier])}</small></button>`;
   const featName = prevKey === fk ? `${CHARS[fk].name} ${FEATURED_NAME[feat.id]}` : `${CHARS[prevKey].name} · Vista previa`;
-  const grand = `<div class="tr11-grand"><div class="tr11-grand-inner"><div class="tr11-rays"></div><div class="tr11-digital-orbit"></div><div class="tr12-grand-portrait" aria-hidden="true">${portrait(prevKey, skinId) ? `<img src="${portrait(prevKey, skinId)}" alt="">` : ''}</div><div class="tr11-feature-art">${sprEl(spriteWith(prevKey, false, skinId), 164, 'tr11-hero-spr')}</div>${partner ? `<div class="tr12-partner" aria-hidden="true"><img src="ui/jugador/${partner}.png" alt=""></div>` : ''}<div class="tr11-grand-sub"><span>✦ PREMIO DESTACADO ✦</span><b>${esc(featName)}</b><small>La selección de personaje es solo una vista previa</small></div></div></div>`;
+  const grand = `<div class="tr11-grand"><div class="tr11-grand-inner"><div class="tr11-rays"></div><div class="tr11-digital-orbit"></div><div class="tr12-grand-portrait" aria-hidden="true">${portrait(prevKey, skinId) ? `<img src="${portrait(prevKey, skinId)}" alt="">` : ''}</div><div class="tr11-feature-art">${sprEl(spriteWith(prevKey, false, skinId), 164, 'tr11-hero-spr')}</div>${partner ? `<div class="tr12-partner" aria-hidden="true"><img src="ui/jugador/${partner}.webp" alt=""></div>` : ''}<div class="tr11-grand-sub"><span>✦ PREMIO DESTACADO ✦</span><b>${esc(featName)}</b><small>La selección de personaje es solo una vista previa</small></div></div></div>`;
   const fighters = chars.map((k, i) => `<button type="button" class="tr11-fighter${i === trPrevIdx ? ' active' : ''}" data-index="${i}" aria-pressed="${i === trPrevIdx}"><span class="tr12-portrait">${portrait(k) ? `<img class="tr12-portrait-img" src="${portrait(k)}" alt="" loading="lazy">` : sprEl(spriteWith(k, false, 'clasico'), 48)}</span><span class="tr12-fighter-text"><b>${esc(CHARS[k].name)}</b><small>Vista previa</small></span></button>`).join('');
   const oddsRows = [['l', 5], ['e', 4], ['r', 3], ['c', 2]].map(([t, n]) => `<div class="gx2-odd"><i style="color:${GX_TIER_COL[t]}">${'★'.repeat(n)}</i><span>${esc(TIER_NAME[t])}</span><b>${TIER_ODDS[t].toFixed(2)}%</b></div>`).join('');
   const pity = pityCount(gxBanner), pityMax = pityAt(gxBanner);
