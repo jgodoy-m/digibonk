@@ -3684,6 +3684,9 @@ function decoTex(file){
 }
 // Portal entre pantallas (todos los mapas): siempre en el mismo sitio, al norte del escenario
 const PORTAL = {x: 0, z: -(ARENA_R - 32), r: 3.2};
+const SUMMON_R = 16;   // el jefe solo se invoca junto al portal
+function nearPortal(){ return !!g && Math.hypot(g.p.x - PORTAL.x, g.p.z - PORTAL.z) < SUMMON_R; }
+function canSummonBoss(){ return !!g && isPortalMap() && g.mode !== 'surv' && !g.portalOpen && !g.bossDown && !(g.boss && g.enemies.includes(g.boss)) && !!zoneDef().boss; }
 function portalClear(x, z){ return Math.hypot(x - PORTAL.x, z - PORTAL.z) < 10; }
 const decoGroup = new THREE.Group();
 scene.add(decoGroup);
@@ -6075,7 +6078,7 @@ function drawEdgeMarkers(){
   if (state !== 'play' || !g) return;
   const targets = g.chests.filter(ch => !ch.open && !ch.gone).map(ch => ({x: ch.x, z: ch.z, col: '#ffd54f'}));
   if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
-  if (g.portal && g.portalOpen) targets.push({x: PORTAL.x, z: PORTAL.z, col: '#3de0ff'});
+  if (g.portal && (g.portalOpen || canSummonBoss())) targets.push({x: PORTAL.x, z: PORTAL.z, col: '#3de0ff'});
   if (g.ev) for (const n of g.ev.nodes || [{x: g.ev.foe.x, z: g.ev.foe.z}]) if (!n.done) targets.push({x: n.x, z: n.z, col: '#7cf29c'});
   for (const e of g.enemies) if (e.kind === 'elite' || e.kind === 'mini') targets.push({x: e.x, z: e.z, col: e.kind === 'mini' ? '#ce93d8' : '#ff7043'});
   const W = cv.width, H = cv.height, cx = W/2, cy = H/2;
@@ -6740,10 +6743,12 @@ function summonBoss(){
   if (g.boss && g.enemies.includes(g.boss)){ announce(def.name + ' ya está aquí', 'Derrótalo', def.col); return; }
   if (g.portalOpen){ announce('El portal ya está abierto', 'Ve al norte para cruzarlo', '#3de0ff'); return; }
   if (g.bossDown) return;
+  if (!nearPortal()){ announce('Ve al portal', 'Invoca a ' + def.name + ' junto al portal del norte', '#3de0ff'); return; }
   const max = def.hp * lvlDiff().boss;
   const hp = def.resume && g.bossLeftHp ? g.bossLeftHp : max;
-  const a = Math.atan2(g.dir.z, g.dir.x);
-  const [x, z] = clampArena(g.p.x + Math.cos(a)*14, g.p.z + Math.sin(a)*14, ARENA_R - 4);
+  // Aparece delante del portal, entre el portal y el jugador
+  const away = Math.atan2(g.p.z - PORTAL.z, g.p.x - PORTAL.x);
+  const [x, z] = clampArena(PORTAL.x + Math.cos(away)*7, PORTAL.z + Math.sin(away)*7, ARENA_R - 4);
   const mesh = billboard(def.sprite, 5.6);
   world.add(mesh);
   const shadow = makeShadow(5);
@@ -6806,7 +6811,8 @@ function hudObjective(){
   if (g.inferno) return '¡Infierno! No hay salida';
   if (g.portalOpen) return '¡Portal abierto! Ve al norte';
   if (g.boss && g.enemies.includes(g.boss)) return `Derrota a ${def.name}` + (def.retreatAt ? ' (huye a mitad de vida)' : def.final ? ' para ganar' : ' para abrir el portal');
-  return `[B] Invocar a ${def.name}` + (def.final ? ' · jefe final' : ' · abre el portal');
+  if (!nearPortal()) return `Ve al portal del norte para invocar a ${def.name}`;
+  return `${isTouchUI() ? '' : '[B] '}Invoca a ${def.name}` + (def.final ? ' · jefe final' : ' · abre el portal');
 }
 // Aviso "E" flotando sobre el cofre cercano
 function updatePrompt(){
@@ -6833,7 +6839,7 @@ function updateHUD(){
   const obj = document.getElementById('hudObj'), objTxt = hudObjective();
   if (obj.textContent !== objTxt) obj.textContent = objTxt;
   obj.className = g.inferno ? 'inf' : g.portalOpen ? 'hot' : '';
-  const canSummon = portalMap && !g.portalOpen && !g.bossDown && !(g.boss && g.enemies.includes(g.boss)) && zoneDef().boss;
+  const canSummon = portalMap && canSummonBoss() && nearPortal();
   const sumEl = document.getElementById('hudSummon');
   sumEl.style.display = canSummon ? 'flex' : 'none';
   if (canSummon) document.getElementById('hudSummonName').textContent = zoneDef().boss.name + (g.bossLeftHp && zoneDef().boss.resume ? ' · ' + Math.round(g.bossLeftHp / (zoneDef().boss.hp * lvlDiff().boss) * 100) + '%' : '');
