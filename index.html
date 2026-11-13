@@ -2037,6 +2037,21 @@ body.is-touch #touchCtl.on{display:block}
 #tDash{right:140px;bottom:34px}
 #tJump{right:40px;bottom:140px}
 #tPause{width:42px;height:42px;top:16px;left:calc(50% + 145px);font-size:14px}
+/* Aviso para girar el móvil: solo en pantallas táctiles en vertical y durante la partida */
+#rotateHint{display:none;position:fixed;inset:0;z-index:60;place-items:center;background:rgba(6,12,30,.92);color:#fff;text-align:center;font-family:'Nunito',system-ui,sans-serif}
+#rotateHint div{display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px}
+#rotateHint b{font-size:64px;line-height:1;animation:rotHint 1.6s ease-in-out infinite}
+#rotateHint strong{font-size:22px;font-weight:900}
+#rotateHint span{font-size:14px;font-weight:700;opacity:.8}
+@keyframes rotHint{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(90deg)}}
+@media (orientation:portrait) and (pointer:coarse){body.playing #rotateHint{display:grid}}
+/* Móvil en horizontal: menú más compacto */
+@media (orientation:landscape) and (max-height:500px){
+  #overlay .realhub.hb .hb-brand img{height:64px!important;width:auto!important;max-width:60vw!important}
+  #overlay .realhub.hb .hb-top{padding-top:6px!important}
+  #overlay .realhub.hb .hb-main{padding-top:4px!important}
+}
+
 #tEvo{display:none;right:236px;bottom:34px;background:radial-gradient(circle at 50% 35%,#ffb04a,#e2541a);box-shadow:0 0 0 3px rgba(255,255,255,.55),0 0 18px rgba(255,140,40,.8);animation:tEvoPulse 1s ease-in-out infinite}
 #tEvo.show{display:grid}
 @keyframes tEvoPulse{50%{transform:scale(1.08)}}
@@ -3173,6 +3188,7 @@ html[data-theme=oscuro] #overlay .help-box.gd .gd-tabs button.on{background:#3d4
 <canvas id="edgeCv"></canvas>
 <div id="skillBar"></div>
 <div id="bonkBar" style="display:none"><div id="bonkFill"></div><span id="bonkTxt">BONK 0%</span></div>
+<div id="rotateHint" aria-live="polite"><div><b>⟳</b><strong>Gira el móvil</strong><span>DigiBonk se juega en horizontal</span></div></div>
 <div id="touchCtl">
   <div id="tZone"><div id="tJoy"><div id="tKnob"></div></div></div>
   <button type="button" class="t-btn" id="tDash" aria-label="Dash">DASH</button>
@@ -3684,6 +3700,9 @@ function decoTex(file){
 }
 // Portal entre pantallas (todos los mapas): siempre en el mismo sitio, al norte del escenario
 const PORTAL = {x: 0, z: -(ARENA_R - 32), r: 3.2};
+const SUMMON_R = 16;   // el jefe solo se invoca junto al portal
+function nearPortal(){ return !!g && Math.hypot(g.p.x - PORTAL.x, g.p.z - PORTAL.z) < SUMMON_R; }
+function canSummonBoss(){ return !!g && isPortalMap() && g.mode !== 'surv' && !g.portalOpen && !g.bossDown && !(g.boss && g.enemies.includes(g.boss)) && !!zoneDef().boss; }
 function portalClear(x, z){ return Math.hypot(x - PORTAL.x, z - PORTAL.z) < 10; }
 const decoGroup = new THREE.Group();
 scene.add(decoGroup);
@@ -4039,6 +4058,7 @@ const touchCtlEl = document.getElementById('touchCtl'), tDashEl = document.getEl
 let tWasOn = false;
 function touchCtlSync(){
   const on = state === 'play' && !!g && !g.evoAnim;
+  document.body.classList.toggle('playing', state === 'play' || state === 'levelup' || state === 'paused');
   if (on !== tWasOn){ touchCtlEl.classList.toggle('on', on); tWasOn = on; if (!on) touchReset(); else tJoyHome(); }
   if (on) tDashEl.classList.toggle('cd', g.dashCd > 0 || g.dash > 0);
   tEvoEl.classList.toggle('show', on && g.emergOffer > 0);
@@ -4476,8 +4496,8 @@ function showSelect(){
           <nav class="hb-bar" aria-label="Enlaces y ajustes">
             <button type="button" class="hb-btn" id="btnAjustes" aria-label="Ajustes"><img class="nm-ic" src="ui/hub/ic_ajustes.webp" alt=""><span class="nm-lbl">Ajustes</span></button>
             <button type="button" class="hb-btn" id="btnHelp" aria-label="Guía"><img class="nm-ic" src="ui/hub/ic_guia.webp" alt=""><span class="nm-lbl">Guía</span></button>
-            <button type="button" class="hb-btn" id="mBug" aria-label="Reportar bugs" title="Reportar bugs"><img class="nm-ic" src="ui/hub/ic_bugs.webp" alt=""><span class="nm-lbl">Bugs</span></button>
-            <button type="button" class="hb-btn hb-kofi" id="mKofi" aria-label="Apoya al creador en Ko-fi" title="Apoya al creador en Ko-fi"><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.351 2.715c-2.7 0-4.986.025-6.83.26C2.078 3.285 0 5.154 0 8.61c0 3.506.182 6.13 1.585 8.493 1.584 2.701 4.233 4.182 7.662 4.182h.83c4.209 0 6.494-2.234 7.637-4a9.5 9.5 0 0 0 1.091-2.338C21.792 14.688 24 12.22 24 9.208v-.415c0-3.247-2.13-5.507-5.792-5.87-1.558-.156-2.65-.208-6.857-.208m0 1.947c4.208 0 5.09.052 6.571.182 2.624.311 4.13 1.584 4.13 4v.39c0 2.156-1.792 3.844-3.87 3.844h-.935l-.156.649c-.208 1.013-.597 1.818-1.039 2.546-.909 1.428-2.545 3.064-5.922 3.064h-.805c-2.571 0-4.831-.883-6.078-3.195-1.09-2-1.298-4.155-1.298-7.506 0-2.181.857-3.402 3.012-3.714 1.533-.233 3.559-.26 6.39-.26m6.547 2.287c-.416 0-.65.234-.65.546v2.935c0 .311.234.545.65.545 1.324 0 2.051-.754 2.051-2s-.727-2.026-2.052-2.026m-10.39.182c-1.818 0-3.013 1.48-3.013 3.142 0 1.533.858 2.857 1.949 3.897.727.701 1.87 1.429 2.649 1.896a1.47 1.47 0 0 0 1.507 0c.78-.467 1.922-1.195 2.623-1.896 1.117-1.039 1.974-2.364 1.974-3.897 0-1.662-1.247-3.142-3.039-3.142-1.065 0-1.792.545-2.338 1.298-.493-.753-1.246-1.298-2.312-1.298"/></svg>Apoyar</button>
+            <button type="button" class="hb-btn" id="mBug" aria-label="Reportar bugs en Discord" title="Reportar bugs en Discord"><img class="nm-ic" src="ui/hub/ic_bugs.webp" alt=""><span class="nm-lbl">Bugs</span></button>
+            <button type="button" class="hb-btn hb-kofi" id="mKofi" aria-label="Ayuda a mantener los servidores en Ko-fi" title="Ayuda a mantener los servidores en Ko-fi"><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.351 2.715c-2.7 0-4.986.025-6.83.26C2.078 3.285 0 5.154 0 8.61c0 3.506.182 6.13 1.585 8.493 1.584 2.701 4.233 4.182 7.662 4.182h.83c4.209 0 6.494-2.234 7.637-4a9.5 9.5 0 0 0 1.091-2.338C21.792 14.688 24 12.22 24 9.208v-.415c0-3.247-2.13-5.507-5.792-5.87-1.558-.156-2.65-.208-6.857-.208m0 1.947c4.208 0 5.09.052 6.571.182 2.624.311 4.13 1.584 4.13 4v.39c0 2.156-1.792 3.844-3.87 3.844h-.935l-.156.649c-.208 1.013-.597 1.818-1.039 2.546-.909 1.428-2.545 3.064-5.922 3.064h-.805c-2.571 0-4.831-.883-6.078-3.195-1.09-2-1.298-4.155-1.298-7.506 0-2.181.857-3.402 3.012-3.714 1.533-.233 3.559-.26 6.39-.26m6.547 2.287c-.416 0-.65.234-.65.546v2.935c0 .311.234.545.65.545 1.324 0 2.051-.754 2.051-2s-.727-2.026-2.052-2.026m-10.39.182c-1.818 0-3.013 1.48-3.013 3.142 0 1.533.858 2.857 1.949 3.897.727.701 1.87 1.429 2.649 1.896a1.47 1.47 0 0 0 1.507 0c.78-.467 1.922-1.195 2.623-1.896 1.117-1.039 1.974-2.364 1.974-3.897 0-1.662-1.247-3.142-3.039-3.142-1.065 0-1.792.545-2.338 1.298-.493-.753-1.246-1.298-2.312-1.298"/></svg>Apoyar</button>
             <button type="button" class="hb-btn hb-sq hb-discord" id="mDiscord" aria-label="Discord" title="Discord"><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></button>
             <button type="button" class="hb-btn hb-sq hb-x" id="mX" aria-label="Digibonk en X" title="Digibonk en X"><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg></button>
           </nav>
@@ -4525,13 +4545,16 @@ function showSelect(){
   document.getElementById('mEnc').onclick=showEncargos;
   document.getElementById('mLog').onclick=showLogros;
   document.getElementById('mBug').onclick=()=>{
-    // Abre un informe ya rellenado con lo que suele hacer falta para reproducir el fallo
-    const body=`**Qué pasó**\n\n\n**Qué esperabas**\n\n\n**Cómo repetirlo**\n1. \n\n---\nNavegador: ${navigator.userAgent}\nPantalla: ${innerWidth}×${innerHeight}\nTáctil: ${isTouchUI() ? 'sí' : 'no'}\nDigimon: ${selectedKey} · Mapa: ${runMap}`;
-    window.open('https://github.com/jgodoy-m/digibonk/issues/new?title=' + encodeURIComponent('Bug: ') + '&body=' + encodeURIComponent(body),'_blank','noopener');
+    // Los bugs se reportan en el canal de Discord: copiamos una plantilla con los datos útiles y abrimos el canal
+    const body=`Qué pasó:\nQué esperabas:\nCómo repetirlo:\n---\nNavegador: ${navigator.userAgent}\nPantalla: ${innerWidth}×${innerHeight} · Táctil: ${isTouchUI() ? 'sí' : 'no'}\nDigimon: ${selectedKey} · Mapa: ${runMap}`;
+    try { navigator.clipboard && navigator.clipboard.writeText(body).catch(()=>{}); } catch(e){}
+    const url=HM_DISCORD_BUGS_URL||HM_DISCORD_URL;
+    if (url){ window.open(url,'_blank','noopener'); hmSoon('Plantilla del bug copiada: pégala en Discord'); }
+    else hmSoon('Bugs: canal de Discord próximamente');
   };
   document.getElementById('mKofi').onclick=()=>HM_KOFI_URL?window.open(HM_KOFI_URL,'_blank','noopener'):hmSoon('Ko-fi: próximamente');
   // Enlaces de Discord y X: rellenar cuando existan (vacío = aún no disponible)
-  const HM_DISCORD_URL='', HM_X_URL='', HM_KOFI_URL='';   // pon aquí los enlaces cuando existan
+  const HM_DISCORD_URL='', HM_DISCORD_BUGS_URL='', HM_X_URL='', HM_KOFI_URL='';   // pon aquí los enlaces cuando existan
   document.getElementById('mDiscord').onclick=()=>HM_DISCORD_URL?window.open(HM_DISCORD_URL,'_blank','noopener'):hmSoon('Discord: próximamente');
   document.getElementById('mX').onclick=()=>HM_X_URL?window.open(HM_X_URL,'_blank','noopener'):hmSoon('X: próximamente');
   document.getElementById('hmLogout').onclick=()=>{localStorage.removeItem('digibonk3d-name');localStorage.removeItem('digibonk3d-guest');location.reload();};
@@ -4592,8 +4615,8 @@ const GUIDE = [
     d: 'Tu Digimon digievoluciona al subir de nivel (15, 30 y 45). Si tu vida baja del 20 %, una vez por partida puedes evolucionar de emergencia durante 15 s. Con dos habilidades al máximo salen cartas de fusión.',
     keys: [{k: 'R', tc: 'EVO', d: 'Evolución de emergencia (tienes 6 s)'}]},
   {ch: 2, t: 'Jefe y portal', clip: 'jefe',
-    d: 'Cada mapa tiene dos pantallas. Invoca al jefe cuando estés listo: al derrotarlo se abre el portal del norte. Si pasas 20 minutos en una pantalla empieza el Infierno. Atento a los eventos: nodos que defender, datos corruptos y Numemon dorados.',
-    keys: [{k: 'B', tc: 'Invocar jefe', d: 'Llamar al jefe'}, {k: 'Tab', tc: null, d: 'Mapa completo'}]},
+    d: 'Cada mapa tiene dos pantallas. Cuando estés listo, ve al portal del norte (el minimapa lo marca) e invoca allí al jefe: al derrotarlo se abre el portal. Si pasas 20 minutos en una pantalla empieza el Infierno. Atento a los eventos: nodos que defender, datos corruptos y Numemon dorados.',
+    keys: [{k: 'B', tc: 'Invocar jefe', d: 'Llamar al jefe junto al portal'}, {k: 'Tab', tc: null, d: 'Mapa completo'}]},
   {ch: 2, t: 'Mapas, dificultad y Supervivencia', img: 'mapas',
     d: 'Después de elegir Digimon eliges mapa (Bosque File, Desierto de Datos o Montaña Helada) y dificultad. Cuanto más difícil, más premios: hasta ×2,2 Bits y tickets en Pesadilla. En Supervivencia no hay jefe final: llega una oleada por minuto y un jefe menor cada 5.',
     keys: [{k: '← →', tc: null, d: 'Cambiar de mapa'}, {k: '↑ ↓', tc: null, d: 'Dificultad'}, {k: 'Enter', tc: null, d: 'Empezar'}]},
@@ -5153,7 +5176,17 @@ function showMapSelect(){
   document.getElementById('msBack').onclick = () => showPicker();
   document.getElementById('msStart').onclick = () => startGame(selectedKey);
 }
+// Móvil: se juega en horizontal. Al empezar, intenta pantalla completa y bloquear la orientación (Android);
+// si el móvil sigue en vertical, un aviso pide girarlo mientras dure la partida
+function lockLandscape(){
+  if (!isTouchUI() && !matchMedia('(pointer:coarse)').matches) return;
+  try {
+    const go = () => { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); };
+    if (!document.fullscreenElement && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().then(go).catch(go); else go();
+  } catch(e){}
+}
 function startGame(key){
+  lockLandscape();
   // El botón Jugar muestra el último Digimon con el que se jugó
   if (CHARS[key]) { selectedKey = key; try { localStorage.setItem('digibonk3d-last-choice', key); } catch(e){} }
   // El botón de volver del navegador no saca de la partida: queda una entrada de historial que lo absorbe
@@ -6075,7 +6108,7 @@ function drawEdgeMarkers(){
   if (state !== 'play' || !g) return;
   const targets = g.chests.filter(ch => !ch.open && !ch.gone).map(ch => ({x: ch.x, z: ch.z, col: '#ffd54f'}));
   if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
-  if (g.portal && g.portalOpen) targets.push({x: PORTAL.x, z: PORTAL.z, col: '#3de0ff'});
+  if (g.portal && (g.portalOpen || canSummonBoss())) targets.push({x: PORTAL.x, z: PORTAL.z, col: '#3de0ff'});
   if (g.ev) for (const n of g.ev.nodes || [{x: g.ev.foe.x, z: g.ev.foe.z}]) if (!n.done) targets.push({x: n.x, z: n.z, col: '#7cf29c'});
   for (const e of g.enemies) if (e.kind === 'elite' || e.kind === 'mini') targets.push({x: e.x, z: e.z, col: e.kind === 'mini' ? '#ce93d8' : '#ff7043'});
   const W = cv.width, H = cv.height, cx = W/2, cy = H/2;
@@ -6740,10 +6773,12 @@ function summonBoss(){
   if (g.boss && g.enemies.includes(g.boss)){ announce(def.name + ' ya está aquí', 'Derrótalo', def.col); return; }
   if (g.portalOpen){ announce('El portal ya está abierto', 'Ve al norte para cruzarlo', '#3de0ff'); return; }
   if (g.bossDown) return;
+  if (!nearPortal()){ announce('Ve al portal', 'Invoca a ' + def.name + ' junto al portal del norte', '#3de0ff'); return; }
   const max = def.hp * lvlDiff().boss;
   const hp = def.resume && g.bossLeftHp ? g.bossLeftHp : max;
-  const a = Math.atan2(g.dir.z, g.dir.x);
-  const [x, z] = clampArena(g.p.x + Math.cos(a)*14, g.p.z + Math.sin(a)*14, ARENA_R - 4);
+  // Aparece delante del portal, entre el portal y el jugador
+  const away = Math.atan2(g.p.z - PORTAL.z, g.p.x - PORTAL.x);
+  const [x, z] = clampArena(PORTAL.x + Math.cos(away)*7, PORTAL.z + Math.sin(away)*7, ARENA_R - 4);
   const mesh = billboard(def.sprite, 5.6);
   world.add(mesh);
   const shadow = makeShadow(5);
@@ -6806,7 +6841,8 @@ function hudObjective(){
   if (g.inferno) return '¡Infierno! No hay salida';
   if (g.portalOpen) return '¡Portal abierto! Ve al norte';
   if (g.boss && g.enemies.includes(g.boss)) return `Derrota a ${def.name}` + (def.retreatAt ? ' (huye a mitad de vida)' : def.final ? ' para ganar' : ' para abrir el portal');
-  return `[B] Invocar a ${def.name}` + (def.final ? ' · jefe final' : ' · abre el portal');
+  if (!nearPortal()) return `Ve al portal del norte para invocar a ${def.name}`;
+  return `${isTouchUI() ? '' : '[B] '}Invoca a ${def.name}` + (def.final ? ' · jefe final' : ' · abre el portal');
 }
 // Aviso "E" flotando sobre el cofre cercano
 function updatePrompt(){
@@ -6833,7 +6869,7 @@ function updateHUD(){
   const obj = document.getElementById('hudObj'), objTxt = hudObjective();
   if (obj.textContent !== objTxt) obj.textContent = objTxt;
   obj.className = g.inferno ? 'inf' : g.portalOpen ? 'hot' : '';
-  const canSummon = portalMap && !g.portalOpen && !g.bossDown && !(g.boss && g.enemies.includes(g.boss)) && zoneDef().boss;
+  const canSummon = portalMap && canSummonBoss() && nearPortal();
   const sumEl = document.getElementById('hudSummon');
   sumEl.style.display = canSummon ? 'flex' : 'none';
   if (canSummon) document.getElementById('hudSummonName').textContent = zoneDef().boss.name + (g.bossLeftHp && zoneDef().boss.resume ? ' · ' + Math.round(g.bossLeftHp / (zoneDef().boss.hp * lvlDiff().boss) * 100) + '%' : '');

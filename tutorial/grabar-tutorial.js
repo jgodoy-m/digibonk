@@ -63,7 +63,7 @@ async function shot(p, name){
 }
 async function newCtx(b, theme){
   const ctx = await b.newContext({viewport: {width: 960, height: 540}});
-  await ctx.addInitScript(t => { localStorage.setItem('digibonk3d-name', 'Ana'); localStorage.setItem('digibonk3d-quality', 'alta'); localStorage.setItem('digibonk3d-theme', t); }, theme);
+  await ctx.addInitScript(t => { localStorage.setItem('digibonk3d-name', 'Ana'); localStorage.setItem('digibonk3d-quality', 'alta'); localStorage.setItem('digibonk3d-theme', t); localStorage.setItem('digibonk3d-gift', '1'); }, theme);
   return ctx;
 }
 (async () => {
