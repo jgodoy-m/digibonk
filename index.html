@@ -2781,6 +2781,24 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
 #overlay .realhub.hb :is(.hb-modes,.hb-row2){column-gap:20px!important}
 #overlay .realhub.hb .hb-modes{padding:0 6px}
 #overlay .realhub.hb .hb-row2{padding:0 6px}
+/* Inicio: tarjetas rectas y alineadas; la forma viene de las esquinas y de una franja diagonal */
+#overlay .realhub.hb :is(.hb-play,.hb-mode,.hb-event),#overlay .realhub.hb :is(.hb-play,.hb-mode,.hb-event):is(:hover,:active){transform:none!important}
+#overlay .realhub.hb :is(.hb-play,.hb-mode,.hb-event):hover{transform:translateY(-3px)!important}
+#overlay .realhub.hb :is(.hb-play,.hb-mode,.hb-event)>*,#overlay .realhub.hb .hb-play .hb-dev,#overlay .realhub.hb .hb-new{transform:none!important}
+#overlay .realhub.hb :is(.hb-modes,.hb-row2){column-gap:12px!important;padding:0!important}
+#overlay .realhub.hb :is(.hb-play,.hb-mode,.hb-event){position:relative;overflow:hidden}
+#overlay .realhub.hb :is(.hb-play,.hb-mode,.hb-event)::after{content:'';position:absolute;top:-20%;bottom:-20%;right:14%;width:22%;background:rgba(255,255,255,.14);transform:skewX(-18deg);pointer-events:none}
+#overlay .realhub.hb .hb-play::after{right:30%;width:16%}
+#overlay .realhub.hb .hb-play>*,#overlay .realhub.hb .hb-mode>*,#overlay .realhub.hb .hb-event>*{position:relative;z-index:1}
+#overlay .realhub.hb .hb-play .hb-dev,#overlay .realhub.hb .hb-play .hb-play-face{position:absolute!important}
+#overlay .realhub.hb .hb-new{position:absolute!important;z-index:2}
+#overlay .realhub.hb .hb-mode.m-gacha{overflow:visible}
+#overlay .realhub.hb .hb-mode.m-gacha::after{display:none}
+/* Botones "Pronto": opacos, con el contenido apagado */
+#overlay .realhub.hb .hb-tile.hm-soon{opacity:1!important;filter:none!important;background:var(--m-sunk)!important;border-bottom-color:var(--m-line2)!important;box-shadow:none!important}
+#overlay .realhub.hb .hb-tile.hm-soon>*{opacity:.55;filter:grayscale(1)}
+/* Jugador ocupa dos huecos pero con el mismo alto que el resto */
+#overlay .realhub.hb .hb-tiles .t7{justify-content:center}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
