@@ -3023,9 +3023,9 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
 /* Mejoras del menú de inicio: BETA pegado al logo, Jugar más vivo, barra inferior neutra y avisos flotantes */
 #overlay .realhub.hb .hb-brand{position:relative;display:inline-flex!important;align-self:flex-start;width:max-content;max-width:100%}
 #overlay .realhub.hb .hb-ver{position:absolute;right:-10px;bottom:2px;margin:0!important;transform:rotate(-4deg)}
-#overlay .realhub.hb .nm-play .hb-play-face{width:52%!important;right:0!important}
+#overlay .realhub.hb .nm-play .hb-play-face{width:52%!important;right:0!important;bottom:38px!important;top:auto!important;height:calc(100% - 38px)!important;overflow:visible;display:flex!important;align-items:flex-end!important;justify-content:center!important;place-items:unset!important}
 #overlay .realhub.hb .nm-play .hb-play-face::before{content:'';position:absolute;left:50%;bottom:4%;width:78%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,244,214,.75),rgba(255,214,140,.25) 45%,transparent 70%);pointer-events:none}
-#overlay .realhub.hb .nm-play .hb-play-face>*{position:relative;width:clamp(140px,11vw,180px)!important;height:clamp(140px,11vw,180px)!important;transform-origin:50% 100%}
+#overlay .realhub.hb .nm-play .hb-play-face>*{position:absolute!important;left:0;right:0;bottom:-5px;margin:0 auto!important;width:clamp(140px,11vw,180px)!important;height:clamp(140px,11vw,180px)!important;transform-origin:50% 100%}
 #overlay .realhub.hb .nm-play:hover .hb-play-face>*{animation:nm-breathe 1.6s ease-in-out infinite}
 @keyframes nm-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05,1.07)}}
 @media(prefers-reduced-motion:reduce){#overlay .realhub.hb .nm-play:hover .hb-play-face>*{animation:none}}
@@ -3046,6 +3046,57 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
   #overlay .realhub.hb #mBug{width:40px;padding:0!important;justify-content:center}
   #overlay .realhub.hb .nm-play .hb-play-face>*{width:132px!important;height:132px!important}
   #overlay .realhub.hb .hm-msg{bottom:18px;font-size:13px!important;white-space:nowrap}
+}
+#overlay .realhub.hb .hb-me{height:40px!important;padding:0 14px 0 4px!important}
+#overlay .realhub.hb .hb-me .hud-portrait{width:32px!important;height:32px!important}
+#overlay .realhub.hb .hb-me strong{font-size:13px!important;line-height:1.1}
+#overlay .realhub.hb .hb-me small{font-size:10.5px!important;line-height:1.1}
+/* Encargos: tarjeta única en el menú y ventana con paneles diarios, semanales y de evento */
+#overlay .realhub.hb .nm-encard{display:flex!important;align-items:center;gap:12px;width:100%;padding:10px 14px;color:var(--m-text);text-align:left;cursor:pointer;font-family:'Nunito',sans-serif;transition:transform .14s,box-shadow .14s}
+#overlay .realhub.hb .nm-encard:hover{transform:translateY(-2px)}
+#overlay .realhub.hb .nm-encard>i{flex:none;width:44px;height:44px;display:grid;place-items:center}
+#overlay .realhub.hb .nm-encard>i .nm-ic{width:44px;height:44px}
+#overlay .realhub.hb .nm-eh{flex:none;min-width:0}
+#overlay .realhub.hb .nm-eh b{display:block;font-size:16px;font-weight:900;line-height:1.1}
+#overlay .realhub.hb .nm-eh small{display:block;font-size:11px;font-weight:700;color:var(--m-mute)}
+#overlay .realhub.hb .nm-eqs{flex:1;display:flex;gap:8px;min-width:0;justify-content:flex-end}
+#overlay .realhub.hb .nm-eq{flex:1;max-width:96px;min-width:0;padding:6px 8px;border-radius:10px;background:var(--m-sunk)}
+#overlay .realhub.hb .nm-eq small{display:block;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--m-mute)}
+#overlay .realhub.hb .nm-eq b{display:block;font-size:14px;font-weight:900;font-variant-numeric:tabular-nums}
+#overlay .realhub.hb .nm-eq .hb-meter{display:block;height:5px;margin-top:3px;border-radius:3px;background:var(--m-line);overflow:hidden}
+#overlay .realhub.hb .nm-eq .hb-meter i{display:block;height:100%;border-radius:3px}
+#overlay .realhub.hb .nm-eq.q-d .hb-meter i{background:#e2476b}
+#overlay .realhub.hb .nm-eq.q-w .hb-meter i{background:#12b4c8}
+#overlay .realhub.hb .nm-eq.q-e .hb-meter i{background:#8b4fe6}
+#overlay .approved-info-dialog.eq-dialog,.approved-info-dialog.eq-dialog{width:min(1040px,94vw)!important;max-width:none!important;max-height:calc(100vh - 40px);overflow-y:auto}
+.eq-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:6px 0 4px}
+.eq-grid.eq-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.eq-panel{--qc:#e2476b;display:flex;flex-direction:column;border:1px solid var(--m-line);border-top:4px solid var(--qc);border-radius:16px;background:var(--m-sunk);overflow:hidden;text-align:left}
+.eq-panel.eq-week{--qc:#12b4c8}
+.eq-panel.eq-ev{--qc:#8b4fe6;background:linear-gradient(180deg,color-mix(in srgb,#8b4fe6 12%,var(--m-sunk)),var(--m-sunk) 40%)}
+.eq-panel>header{display:flex;align-items:center;gap:10px;padding:12px 14px 10px}
+.eq-panel>header img{width:46px;height:46px;object-fit:contain;flex:none}
+.eq-panel>header span{flex:1;min-width:0}
+.eq-panel>header b{display:block;font:900 19px/1.1 'Nunito',sans-serif;color:var(--m-text)}
+.eq-panel>header small{display:block;font:700 11.5px/1.3 'Nunito',sans-serif;color:var(--m-mute)}
+.eq-panel>header em{flex:none;font:900 14px/1 'Nunito',sans-serif;font-style:normal;padding:6px 10px;border-radius:999px;background:color-mix(in srgb,var(--qc) 18%,transparent);color:var(--m-text)}
+.eq-rows{display:flex;flex-direction:column;gap:6px;padding:0 10px 12px}
+.eq-row{display:grid;grid-template-columns:22px 1fr;gap:4px 8px;align-items:start;padding:9px 10px;border-radius:12px;background:var(--m-card);border:1px solid var(--m-line);color:var(--m-text)}
+.eq-row>b{width:20px;height:20px;margin-top:1px;border-radius:50%;border:2px solid var(--m-line2,var(--m-line));display:grid;place-items:center;font-size:12px;box-sizing:border-box}
+.eq-row.done>b{background:var(--qc);border-color:var(--qc);color:#fff}
+.eq-row>span{min-width:0}
+.eq-t{display:block;font:800 13.5px/1.3 'Nunito',sans-serif}
+.eq-row.done .eq-t{opacity:.6;text-decoration:line-through}
+.eq-bar{display:block;height:6px;margin-top:6px;border-radius:3px;background:var(--m-line);overflow:hidden}
+.eq-bar i{display:block;height:100%;border-radius:3px;background:var(--qc)}
+.eq-row>span small{display:block;margin-top:3px;font:800 11px/1 'Nunito',sans-serif;color:var(--m-mute);font-variant-numeric:tabular-nums}
+.eq-row>em{grid-column:2;font:800 11.5px/1.2 'Nunito',sans-serif;font-style:normal;color:var(--m-gold)}
+@media(max-width:900px){.eq-grid,.eq-grid.eq-two{grid-template-columns:1fr}}
+@media(max-width:760px){
+  #overlay .realhub.hb .nm-encard{flex-wrap:wrap;gap:8px 10px;padding:10px 12px}
+  #overlay .realhub.hb .nm-encard>i,#overlay .realhub.hb .nm-encard>i .nm-ic{width:34px;height:34px}
+  #overlay .realhub.hb .nm-eqs{flex-basis:100%;justify-content:stretch}
+  #overlay .realhub.hb .nm-eq{max-width:none}
 }
 /* Mismo tamaño para todos los paneles: grandes (Colección, Laboratorio, Mapa) y medianos (Ajustes, Guía, Código) */
 #overlay .picker-screen.cl4,#overlay:not(.menu-mode)>.picker-screen.ms,#overlay .picker-screen.ms,#overlay .lab-screen{width:min(1080px,94vw)!important;max-width:none!important;height:min(780px,calc(100vh - 60px))!important;max-height:none!important;box-sizing:border-box!important;overflow-y:auto}
@@ -4339,7 +4390,7 @@ function showSelect(){
   const safeText = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const choice = CHARS[selectedKey] || CHARS.agumon;
   const dbEvDays = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
-  const encList = loadEncargos().list, encDone = encList.filter(e => e.done).length;
+  const qs = questSummary();
   const labReady = LAB.filter(u => labLv(u.id) < labMax(u) && labCosts(u)[labLv(u.id)] <= SAVE.bits).length;
   const achAll = TITLES.filter(tl => !tl.weekly && !tl.seasonal).length, achOwned = TITLES.filter(tl => !tl.weekly && !tl.seasonal && inv.titles.includes(tl.id)).length;
   showOverlay(`
@@ -4371,10 +4422,7 @@ function showSelect(){
               <button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Incubadora: ${usableTickets('std')} tickets disponibles"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Incubadora</b><small><em class="nm-tix">${usableTickets('std')}</em> tickets<span class="nm-long"> disponibles</span></small></span></button>
             </div>
           </div>
-          <div class="nm-quests" role="group" aria-label="Misiones y encargos">
-            <button type="button" class="nm-q" id="rhMission" aria-label="${safeText(dailyText())}"><i><img class="nm-ic" src="ui/hub/ic_mision.webp" alt=""></i><span><small>Misión diaria</small><b>${currentRuns}/${DAILY.runsGoal} partidas</b><span class="hb-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></span></span><em class="nm-rw">+${DAILY.reward} Bits</em></button>
-            <button type="button" class="nm-q" id="mEnc" aria-label="Encargos: ${encDone} de ${encList.length} hechos hoy"><i><img class="nm-ic" src="ui/hub/ic_encargos.webp" alt=""></i><span><small>Encargos</small><b>${encDone}/${encList.length} hechos hoy</b><span class="hb-dots">${encList.map(e => `<u class="${e.done ? 'on' : ''}"></u>`).join('')}</span></span></button>
-          </div>
+          <button type="button" class="nm-quests nm-encard" id="mEnc" aria-label="Encargos: hoy ${qs.day.done} de ${qs.day.all}, semana ${qs.week.done} de ${qs.week.all}${qs.ev ? ', evento ' + qs.ev.done + ' de ' + qs.ev.all : ''}"><i><img class="nm-ic" src="ui/hub/ic_encargos.webp" alt=""></i><span class="nm-eh"><b>Encargos</b><small>${qs.ev ? 'Diarios, semanales y de evento' : 'Diarios y semanales'}</small></span><span class="nm-eqs">${[['Hoy', qs.day, 'q-d'], ['Semana', qs.week, 'q-w'], ...(qs.ev ? [['Evento', qs.ev, 'q-e']] : [])].map(([n, q, c]) => `<span class="nm-eq ${c}"><small>${n}</small><b>${q.done}/${q.all}</b><span class="hb-meter"><i style="width:${Math.round(q.done / q.all * 100)}%"></i></span></span>`).join('')}</span></button>
           ${(bannerOpen("navidadP") || bannerOpen("navidadR")) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
           <div class="hb-tiles nm-tiles">
             <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex: ${unlockedSet().size} de ${Object.keys(CHARS).length} Digimon"><i><img class="nm-ic" src="ui/hub/ic_digidex.webp" alt=""></i><b>Digidex</b><small>${unlockedSet().size}/${Object.keys(CHARS).length} Digimon</small></button>
@@ -4414,10 +4462,10 @@ function showSelect(){
   fitHub(); if (!window.__hmFitBound){ window.__hmFitBound = true; addEventListener('resize', () => { if (document.querySelector('#overlay.menu-mode .realhub:not(.pl4)')) fitHub(); }); }
   // Always start with a valid still portrait: no animation strip flashes in the Digivice.
   const playPortrait = document.getElementById('rhPlayPortrait');
-  if (playPortrait) { const pk = CHARS[selectedKey] ? selectedKey : 'agumon'; const pic = PLAYER_ICONS.find(x => x.id === pk); if (pic && pic.src) playPortrait.src = pic.src; else menuPlayPortrait(spriteOf(pk, false), d => { playPortrait.src = d; }); }
+  if (playPortrait) { const pk = CHARS[selectedKey] ? selectedKey : 'agumon'; const pic = charIcon(pk); if (pic) playPortrait.src = pic; else menuPlayPortrait(spriteOf(pk, false), d => { playPortrait.src = d; }); }
   // The equipped skin may have a unique appearance; if so, use that sprite's first frame.
   // El botón Jugar siempre muestra el icono del compañero (no la skin equipada)
-  if(!avatarIcon()) headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
+  if(!avatarIcon() && !PLAYER_ICONS.some(x => x.id === avatarKey())) headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
   document.getElementById('playBtn').onclick=()=>{ runMode='normal'; showPicker('personaje'); };
   const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR'; showGacha(); };
   document.getElementById('btnColl').onclick=showCollection;
@@ -4460,7 +4508,6 @@ function showSelect(){
     host.querySelector('.approved-info-scrim').onclick=e=>{if(e.target===e.currentTarget)close()};
     host.querySelector('#realClose').focus();
   };
-  document.getElementById('rhMission').onclick=()=>openInfo('mission');
   document.getElementById('rhRecords').onclick=()=>openInfo('records');
   document.getElementById('mRecs').onclick=()=>openInfo('records');
   { const ol = document.getElementById('hbRank'), tabs = document.querySelectorAll('.hb-tabs button');
@@ -6373,6 +6420,7 @@ function endGame(win){
   g.newDigis = checkUnlocks();
   g.survBest = g.mode === 'surv' ? recordSurv(g.ch.id, g.t) : null;
   g.encDone = checkEncargos();
+  g.questDone = checkLongQuests(win);
   unlockMouse();
   saveRecord(win);
   recordCharRun(g.ch.id, win && g.mode !== 'surv', g.diff, g.kills, g.p.lvl);
@@ -6389,6 +6437,7 @@ function endGame(win){
   for (const u of g.unlocked) rewards.push(`<li>Skin nueva: <b>${u}</b></li>`);
   for (const tl of g.newTitles) rewards.push(`<li>Título desbloqueado: <b>${tl.name}</b></li>`);
   for (const d of g.newDigis) rewards.push(`<li>Digimon desbloqueado: <b>${d}</b></li>`);
+  for (const q of (g.questDone || [])) rewards.push(`<li>Encargo cumplido: <b>${q.t}</b> · +${q.bits} Bits y +${q.tix} tickets</li>`);
   for (const e of g.encDone) rewards.push(`<li>Encargo cumplido: <b>${e}</b> · +${ENC_REWARD.bits} Bits y +${ENC_REWARD.tix} ticket</li>`);
   if (g.survBest) rewards.push(`<li>¡Nuevo récord de Supervivencia con ${g.ch.name}!</li>`);
   if (g.waveBest) rewards.push(`<li>¡Nueva mejor oleada en ${mapDef().name}: <b>${g.wave}</b>!</li>`);
@@ -7443,10 +7492,66 @@ function menuModal(title, content){
   host.querySelector('.approved-info-scrim').onclick = e => { if (e.target === e.currentTarget) close(); };
   host.querySelector('#realClose').focus();
 }
+// Encargos semanales y de evento: sus contadores se acumulan entre partidas
+const WEEK_QUESTS = [
+  {id:'runs',  goal:15,   t:'Juega 15 partidas',                   bits:400, tix:3},
+  {id:'kills', goal:3000, t:'Derrota a 3.000 enemigos',            bits:400, tix:3},
+  {id:'wins',  goal:1,    t:'Gana una partida en cualquier mapa',  bits:500, tix:5}
+];
+const EVENT_QUESTS = [
+  {id:'runs',  goal:10,   t:'Juega 10 partidas durante el evento', bits:300, tix:3},
+  {id:'kills', goal:5000, t:'Derrota a 5.000 enemigos',            bits:500, tix:5},
+  {id:'wins',  goal:3,    t:'Gana 3 partidas',                     bits:800, tix:8}
+];
+function weekQuestState(){ const w = weekNum(), st = loadJSON('digibonk3d-wq', null); return st && st.week === w ? st : {week: w, runs: 0, kills: 0, wins: 0, done: []}; }
+function eventQuestState(){ const k = EVENT.name + '-' + EVENT.start, st = loadJSON('digibonk3d-evq', null); return st && st.ev === k ? st : {ev: k, runs: 0, kills: 0, wins: 0, done: []}; }
+// Al terminar la partida: suma a los contadores y paga los encargos largos cumplidos. Devuelve {t, bits, tix}
+function checkLongQuests(win){
+  const won = [];
+  const run = (st, list, key) => {
+    if (g.t >= 5) st.runs += 1;
+    st.kills += g.kills || 0;
+    if (win && g.mode !== 'surv') st.wins += 1;
+    for (const q of list){
+      if (st.done.includes(q.id) || (st[q.id] || 0) < q.goal) continue;
+      st.done.push(q.id); won.push(q);
+      SAVE.bits = SAVE.bits + q.bits; addTickets('std', q.tix);
+    }
+    localStorage.setItem(key, JSON.stringify(st));
+  };
+  run(weekQuestState(), WEEK_QUESTS, 'digibonk3d-wq');
+  if (eventActive()) run(eventQuestState(), EVENT_QUESTS, 'digibonk3d-evq');
+  return won;
+}
+// Resumen para la tarjeta del menú: hechos/total de hoy, de la semana y del evento
+function questSummary(){
+  const d = loadDaily(), enc = loadEncargos().list, wk = weekState(), wq = weekQuestState();
+  const day = {done: (d.claimed || d.runs >= DAILY.runsGoal ? 1 : 0) + enc.filter(e => e.done).length, all: 1 + enc.length};
+  const week = {done: (wk.claimed ? 1 : 0) + wq.done.length, all: 1 + WEEK_QUESTS.length};
+  const ev = eventActive() ? {done: eventQuestState().done.length, all: EVENT_QUESTS.length} : null;
+  return {day, week, ev};
+}
+// Ventana de encargos: tres paneles grandes (diarios, semanales y de evento si hay uno activo)
 function showEncargos(){
-  const st = loadEncargos();
-  const rows = st.list.map(e => `<div class="enc-row${e.done ? ' done' : ''}"><b>${e.done ? '✓' : '○'}</b><span>${encText(e)}</span><small>+${ENC_REWARD.bits} Bits · +${ENC_REWARD.tix} 🎟</small></div>`).join('');
-  menuModal('Encargos de hoy', `<div class="enc-list">${rows}</div><p class="enc-note">Se cumplen dentro de una partida y se renuevan cada día. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d}</p>`);
+  const d = loadDaily(), enc = loadEncargos(), wk = weekState(), wq = weekQuestState(), ev = eventActive() ? eventQuestState() : null;
+  const fmt = n => Number(n).toLocaleString('es-ES');
+  const rw = (b, t) => `${b ? '+' + fmt(b) + ' Bits · ' : ''}+${t} ${t === 1 ? 'ticket' : 'tickets'}`;
+  const row = (done, txt, prog, goal, reward) => `<div class="eq-row${done ? ' done' : ''}"><b aria-hidden="true">${done ? '✓' : ''}</b><span><span class="eq-t">${txt}</span>${goal > 1 ? `<span class="eq-bar"><i style="width:${Math.round(Math.min(prog, goal) / goal * 100)}%"></i></span><small>${fmt(Math.min(prog, goal))}/${fmt(goal)}</small>` : ''}</span><em>${reward}</em></div>`;
+  const panel = (cls, icon, title, sub, rows, done, all) => `<section class="eq-panel ${cls}"><header><img src="ui/hub/${icon}.webp" alt=""><span><b>${title}</b><small>${sub}</small></span><em>${done}/${all}</em></header><div class="eq-rows">${rows.join('')}</div></section>`;
+  const dayDone = d.claimed || d.runs >= DAILY.runsGoal;
+  const dayRows = [row(dayDone, `Juega ${DAILY.runsGoal} partidas`, d.runs, DAILY.runsGoal, rw(DAILY.reward, DAILY.rewardTix)), ...enc.list.map(e => row(e.done, encText(e), e.done ? 1 : 0, 1, rw(ENC_REWARD.bits, ENC_REWARD.tix)))];
+  const weekRows = [row(wk.claimed, `Haz ${WEEK_PULLS} tiradas en la Incubadora`, wk.pulls, WEEK_PULLS, rw(0, 1)), ...WEEK_QUESTS.map(q => row(wq.done.includes(q.id), q.t, wq[q.id] || 0, q.goal, rw(q.bits, q.tix)))];
+  const days = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
+  const parts = [
+    panel('eq-day', 'ic_mision', 'Diarios', 'Se renuevan cada día', dayRows, dayRows.filter(r => r.includes(' done"')).length, dayRows.length),
+    panel('eq-week', 'ic_encargos', 'Semanales', `Se renuevan cada lunes · ${weeklyMod().name}`, weekRows, weekRows.filter(r => r.includes(' done"')).length, weekRows.length)
+  ];
+  if (ev){
+    const evRows = EVENT_QUESTS.map(q => row(ev.done.includes(q.id), q.t, ev[q.id] || 0, q.goal, rw(q.bits, q.tix)));
+    parts.push(panel('eq-ev', 'ic_evento', 'Evento', `${EVENT.name} · quedan ${days} ${days === 1 ? 'día' : 'días'}`, evRows, ev.done.length, evRows.length));
+  }
+  menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios y los semanales se cumplen al terminar cada partida. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d}</p>`);
+  const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('eq-dialog');
 }
 function showLogros(){
   const ach = loadAch();
@@ -7884,7 +7989,7 @@ function ownsSkinIcon(ic){ return ownsAnyStage(ic.key, ic.skin); }
 function skinIconFor(key, skin){ return SKIN_ICONS.find(x => x.key === key && x.skin === skin) || null; }
 function normAv(v){ return v || ''; }
 function avatarIcon(){ const id = normAv(localStorage.getItem('digibonk3d-avatar')); return AVATAR_KIDS.find(x => x.id === id) || PLAYER_ICONS.find(x => x.id === id) || SKIN_ICONS.find(x => x.id === id && ownsSkinIcon(x)) || null; }
-function avatarSrc(){ const ic = avatarIcon(); return ic ? ic.src : headUrl(spriteOf(avatarKey(), false)); }
+function avatarSrc(){ const ic = avatarIcon(); if (ic) return ic.src; return PLAYER_ICONS.some(x => x.id === avatarKey()) ? charIcon(avatarKey()) : headUrl(spriteOf(avatarKey(), false)); }
 function avatarKey(){ const k = localStorage.getItem('digibonk3d-avatar'); return CHARS[k] ? k : selectedKey; }
 // Tarjeta de entrenador: una sola pantalla. Pasar el ratón previsualiza; clic equipa; el nombre se edita en la propia tarjeta
 function showPlayer(){
