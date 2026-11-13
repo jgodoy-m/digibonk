@@ -2632,6 +2632,14 @@ html[lang] body #topbar .tb-id .hud-portrait{width:26px;height:26px}}
   #overlay:not(.menu-mode) .lab-top .lab-head{flex:1 1 100%!important;flex-wrap:nowrap!important;gap:10px!important}
   #overlay:not(.menu-mode) .lab-top .lab-host{width:44px!important;height:44px!important;flex:none}
 }
+/* Iconos en selección y colección */
+.ps-hero-ic{width:78%;aspect-ratio:1;border-radius:50%;object-fit:cover;box-shadow:0 0 0 4px #fff,0 6px 0 rgba(0,0,0,.18);margin-bottom:22px}
+.ps-node-ic{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.ps-ic-spr{background:var(--m-tilesel)}
+.ps-ic-spr .anim{width:88%!important;height:88%!important}
+.cl4-skin .ps-ic{width:84px;max-width:84px;margin:0 auto 6px}
+.cl4-item .cl4-ic{width:44px;max-width:44px;flex:none;box-shadow:0 0 0 2px var(--m-cardline)}
+.cl4-item.lock .cl4-ic img{filter:grayscale(1) brightness(.45)}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -3727,7 +3735,7 @@ function showCollection(){
   // Progreso global: skins de cada etapa, una evolución por Digimon, marcos y títulos
   let have = 0, total = 0;
   for (const k of chars){
-    for (let st = 0; st < stageCount(k); st++) for (const sk of visibleSkinsAt(k, st)){ total++; if (ownsAt(k, st, sk.id)) have++; }
+    for (const sk of lineSkins(k)){ total++; if (ownsAt(k, 0, sk.id)) have++; }
     total++; if (evolvedUnlocked(k)) have++;
   }
   total += FRAMES.length + TITLES.length;
@@ -3747,9 +3755,9 @@ function showCollection(){
     const list = chars.map(k => {
       const open = isUnlocked(k);
       let own = 0, all = 0;
-      for (let st = 0; st < stageCount(k); st++) for (const sk of visibleSkinsAt(k, st)){ all++; if (ownsAt(k, st, sk.id)) own++; }
+      for (const sk of lineSkins(k)){ all++; if (ownsAt(k, 0, sk.id)) own++; }
       return `<button class="cl4-item${k === colKey ? ' sel' : ''}${open ? '' : ' lock'}" data-k="${k}" ${open ? '' : 'disabled'}>
-        ${sprEl(spriteOf(k, false), 48)}
+        <span class="ps-ic cl4-ic"><img src="${open ? charIcon(k) : 'ui/jugador/' + k + '.png'}" alt=""></span>
         <span><b>${open ? CHARS[k].name : '???'}</b><small>${open ? own + ' skins' : unlockHow(k)}</small></span></button>`;
     }).join('');
     const k = colKey, open = isUnlocked(k);
@@ -3762,10 +3770,10 @@ function showCollection(){
       if (colStage >= n) colStage = 0;
       const st = colStage, eq = equippedAt(k, st);
       const evoRow = stages.map((x, i) => `${i ? '<span>➜</span>' : ''}<div class="cl4-st${x.on ? '' : ' off'}${i === st ? ' sel' : ''}" data-st="${i}">${sprEl(spriteWith(k, i, equippedAt(k, i)), 48)}<small>${x.on ? x.name : '???'}</small></div>`).join('');
-      const cards = visibleSkinsAt(k, st).filter(sk => ownsAt(k, st, sk.id)).map(sk => {
-        const has = ownsAt(k, st, sk.id), on = eq === sk.id;
+      const cards = lineSkins(k).filter(sk => ownsAt(k, 0, sk.id)).map(sk => {
+        const has = ownsAt(k, 0, sk.id), on = eq === sk.id;
         return `<button class="cl4-skin${has ? ' owned' : ' locked'}${on ? ' eq' : ''}" data-skin="${sk.id}" ${has ? '' : 'disabled'}>
-          ${sprEl(spriteWith(k, st, sk.id), 72)}
+          ${skinThumb(k, sk)}
           <b>${has ? sk.name : '???'}</b><small>${has ? (on ? 'Equipada' : 'Pulsa para equipar') : howTo(k, sk)}</small></button>`;
       }).join('');
       detail = `
@@ -3777,7 +3785,7 @@ function showCollection(){
             <div class="cl4-evo">${evoRow}</div>
           </div>
         </div>
-        <h4>Skins · ${stageName(k, st)}</h4>
+        <h4>Skins · toda la línea de ${CHARS[k].name}</h4>
         <div class="cl4-skins">${cards}</div>`;
     }
     body = `<div class="cl4-body"><aside class="cl4-list">${list}</aside><section class="cl4-detail">${detail}</section></div>`;
@@ -3792,7 +3800,7 @@ function showCollection(){
   overlay.querySelectorAll('.cl4-tab').forEach(b => b.onclick = () => { colTab = b.dataset.t; showCollection(); });
   overlay.querySelectorAll('.cl4-item:not(.lock)').forEach(b => b.onclick = () => { colKey = b.dataset.k; showCollection(); });
   overlay.querySelectorAll('.cl4-st:not(.off)').forEach(b => b.onclick = () => { colStage = +b.dataset.st; showCollection(); });
-  overlay.querySelectorAll('.cl4-skin.owned').forEach(b => b.onclick = () => { equipSkinAt(colKey, colStage, b.dataset.skin); showCollection(); });
+  overlay.querySelectorAll('.cl4-skin.owned').forEach(b => b.onclick = () => { equipSkinAt(colKey, 0, b.dataset.skin); showCollection(); });
 }
 // ---------- Barra superior fija en los menús: tarjeta, Bits, tickets, idioma, sonido, pantalla completa y ajustes ----------
 const TOP_STATES = ['select', 'gacha', 'lab', 'pick', 'mapsel', 'player', 'settings', 'help', 'savecode', 'collection'];
@@ -4376,12 +4384,12 @@ function renderRoster(){
   if (!el) return;
   const k = selectedKey, chars = SEASONS.adventure.chars;
   if (rosterTab === 'vestidor'){
-    const s = pickStage, owned = ownedSkinsAt(k, s), eq = equippedAt(k, s);
-    const list = visibleSkinsAt(k, s).filter(sk => owned.includes(sk.id));
-    el.innerHTML = `<div class="ps-lbl">${stageName(k, s)} · cambia de etapa en la línea evolutiva</div>
-      <div class="ps-grid">${list.map(sk => `<button type="button" class="ps-tile${eq === sk.id ? ' sel' : ''}" data-skin="${sk.id}" title="${sk.name}">${animEl(spriteWith(k, s, sk.id), 'ps-face')}<b>${sk.name}</b></button>`).join('')}</div>
+    const owned = ownedSkinsAt(k, 0), eq = equippedAt(k, 0);
+    const list = lineSkins(k).filter(sk => owned.includes(sk.id));
+    el.innerHTML = `<div class="ps-lbl">La skin se aplica a toda la línea de ${CHARS[k].name}</div>
+      <div class="ps-grid">${list.map(sk => `<button type="button" class="ps-tile${eq === sk.id ? ' sel' : ''}" data-skin="${sk.id}" title="${sk.name}">${skinThumb(k, sk)}<b>${sk.name}</b></button>`).join('')}</div>
       ${list.length <= 1 ? '<p class="ps-note">Consigue skins en Tesoros y con logros.</p>' : ''}`;
-    el.querySelectorAll('[data-skin]').forEach(b => b.onclick = () => { equipSkinAt(k, s, b.dataset.skin); showPicker(); });
+    el.querySelectorAll('[data-skin]').forEach(b => b.onclick = () => { equipSkinAt(k, 0, b.dataset.skin); showPicker(); });
     return;
   }
   if (rosterTab === 'apoyo'){
@@ -4395,7 +4403,7 @@ function renderRoster(){
     const open = isUnlocked(id);
     return `<button type="button" class="ps-tile${id === k ? ' sel' : ''}${open ? '' : ' lock'}" ${open ? `data-pick="${id}"` : 'disabled'} data-name="${open ? CHARS[id].name.toLowerCase() : '???'}" title="${open ? CHARS[id].name : unlockHow(id)}">
       <span class="ps-key">${i + 1}</span>${open && pickIsEvolved(id) ? '<span class="ps-evo-dot" title="Ya ha evolucionado"></span>' : ''}
-      <span class="ps-ic"><img src="ui/jugador/${id}.png" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
+      <span class="ps-ic"><img src="${open ? charIcon(id) : 'ui/jugador/' + id + '.png'}" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
     </button>`;
   }).join('');
   const soon = COMING_SOON.map(c => `<span class="ps-tile soon" title="${c.name} · ${c.role} · Próximamente"><span class="ps-lock">🔒</span><span class="ps-ic"><img src="ui/jugador/${c.name.toLowerCase()}.png" alt="" loading="lazy"></span><b>Pronto</b></span>`).join('');
@@ -4427,7 +4435,7 @@ function renderPickPreview(){
   const row = (label, val) => `<div class="ps-row"><span>${label}</span><b>${val}</b></div>`;
   el.innerHTML = `
     <div class="ps-hero">
-      ${animEl(spriteOf(k, pickStage), 'ps-hero-img')}
+      ${pickStage ? animEl(spriteOf(k, pickStage), 'ps-hero-img') : `<img class="ps-hero-ic" src="${charIcon(k)}" alt="">`}
       <span class="ps-hero-tag">${stageName(k, pickStage)}</span>
     </div>
     <div class="ps-id">
@@ -4436,7 +4444,7 @@ function renderPickPreview(){
       <div><span class="ps-attr a-${at}" title="Vacuna gana a Virus, Virus a Datos y Datos a Vacuna">${ATTR_ICON[at] || ''} ${ATTR_NAME[at] || ''}</span></div>
       <div class="ps-lbl">Evoluciona durante la partida</div>
       <div class="ps-evo">
-        <button type="button" class="ps-node pk-stage${pickStage === 0 ? ' on' : ''}" data-stage="0" title="${c.name}">${sprEl(spriteOf(k, 0), 46)}</button>
+        <button type="button" class="ps-node pk-stage${pickStage === 0 ? ' on' : ''}" data-stage="0" title="${c.name}"><img class="ps-node-ic" src="${charIcon(k)}" alt=""></button>
         ${EVO_LINE[k].map((e, i) => `<span class="ps-arrow">Nv. ${evoLevelFor(k, i)}<i>›</i></span><button type="button" class="ps-node pk-stage${pickStage === i + 1 ? ' on' : ''}" data-stage="${i + 1}" title="${e.name}">${sprEl(spriteOf(k, i + 1), 46)}</button>`).join('')}
       </div>
       <div class="ps-wins"><span class="ps-lbl">Victorias</span>${DIFF_ORDER.map(d => `<span class="${wins[d] ? 'on' : ''}" style="--dc:${DIFFS[d].col}" title="${wins[d] ? wins[d] + ' victorias' : 'Sin victorias'} en ${DIFFS[d].name}">${DIFFS[d].name}${wins[d] ? ' ' + wins[d] : ''}</span>`).join('')}</div>
@@ -7082,20 +7090,20 @@ function ownedSkinsAt(key, st){
   const out = ['clasico'];
   for (const e of (skinsOwned[key] || [])){
     const at = e.indexOf('@');
-    if (at < 0) out.push(e);
-    else if (+e.slice(at + 1) === st) out.push(e.slice(0, at));
+    out.push(at < 0 ? e : e.slice(0, at));   // una skin vale para toda la línea evolutiva
   }
   return [...new Set(out)];
 }
 function ownsAt(key, st, id){ return id === 'clasico' || ownedSkinsAt(key, st).includes(id); }
 // Skin equipada en una etapa; sin elección propia usa la antigua (que vale para todas)
 function equippedAt(key, st){
-  const id = skinEquipped[key + '@' + st] || skinEquipped[key] || 'clasico';
+  const id = skinEquipped[key] || skinEquipped[key + '@0'] || 'clasico';
   return ownsAt(key, st, id) ? id : 'clasico';
 }
 function equipSkinAt(key, st, id){
   if (!ownsAt(key, st, id)) return;
-  skinEquipped[key + '@' + st] = id;
+  skinEquipped[key] = id;
+  for (const k of Object.keys(skinEquipped)) if (k.startsWith(key + '@')) delete skinEquipped[k];
   localStorage.setItem('digibonk3d-equip', JSON.stringify(skinEquipped));
 }
 function grantSkinAt(key, st, id){
@@ -7108,6 +7116,12 @@ function ownsAnyStage(key, id){ for (let st = 0; st < stageCount(key); st++) if 
 // Skins que se muestran en una etapa: las ocultas (variocolor) solo cuando se tienen
 // Una skin solo existe para un Digimon y etapa si tiene su hoja dibujada (sprites/anim/<digimon>_<etapa>_<skin>.png)
 function skinHasArt(key, st, id){ return id === 'clasico' || ANIM_IDS.has(`${key}_${st}_${id}`); }
+// Skins de una línea entera: las que tienen hoja en alguna etapa
+function skinLineArt(key, id){ for (let st = 0; st < stageCount(key); st++) if (skinHasArt(key, st, id)) return st; return -1; }
+function lineSkins(key){ return SKINS.filter(sk => skinLineArt(key, sk.id) >= 0 && (!sk.hidden || ownsAt(key, 0, sk.id))); }
+// Icono redondo de un Digimon con su skin (si la skin no tiene icono, el del Digimon)
+function charIcon(key, skin = equippedAt(key, 0)){ const ic = skinIconFor(key, skin); return ic ? ic.src : 'ui/jugador/' + key + '.png'; }
+function skinThumb(key, sk){ const ic = skinIconFor(key, sk.id); if (ic || sk.id === 'clasico') return `<span class="ps-ic"><img src="${ic ? ic.src : 'ui/jugador/' + key + '.png'}" alt=""></span>`; const st = Math.max(0, skinLineArt(key, sk.id)); return `<span class="ps-ic ps-ic-spr">${animEl(spriteWith(key, st, sk.id), 'ps-face')}</span>`; }
 function visibleSkinsAt(key, st){ return SKINS.filter(sk => skinHasArt(key, st, sk.id) && (!sk.hidden || ownsAt(key, st, sk.id))); }
 // Se llama al terminar cada partida: actualiza el progreso y devuelve las skins nuevas
 function statsOf(key){ return loadJSON('digibonk3d-stats', {})[key] || {plays:0, kills:0}; }
@@ -7567,7 +7581,7 @@ function bannerPool(bn = gxBanner){
   const b = BANNERS[bn];
   const out = [];
   // solo entran las skins que ya tienen hoja dibujada
-  const add = (key, times, sk) => { for (let t = 0; t < times; t++) for (let st = 0; st < stageCount(key); st++) if (skinHasArt(key, st, sk.id)) out.push({key, st, sk}); };
+  const add = (key, times, sk) => { const st = skinLineArt(key, sk.id); if (st >= 0) for (let t = 0; t < times; t++) out.push({key, st, sk}); };
   const all = () => { for (const sk of b.skins.map(id => SKIN_BY_ID[id])) for (const key of SEASONS.adventure.chars) add(key, 1, sk); };
   if (b.weekly){
     const chars = SEASONS.adventure.chars, i = weeklyIndex();
