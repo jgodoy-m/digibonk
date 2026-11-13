@@ -6389,11 +6389,13 @@ function update(dt){
   // Aparición
   g.spawnT -= dt * (g.idleT > 2.5 ? 1.8 : 1);
   if (g.spawnT <= 0){
-    if (g.enemies.length < MAX_ENEMIES) spawnEnemy();
-    // Presión creciente: tras 45 s salen más enemigos por tanda (1 extra, +1 cada 90 s, máximo 3)
-    const extra = g.t > 45 ? Math.min(3, 1 + Math.floor(diffT(g.t)/90)) : 0;
-    for (let i = 0; i < extra && g.enemies.length < MAX_ENEMIES; i++) spawnEnemy();
-    g.spawnT = Math.max(DIFF.spawnMin, (0.9 - diffT(g.t)/180) * diffMul('spawn')) * ((g.mod && g.mod.spawnMul) || 1);
+    // Horda máxima en pantalla: 40 al empezar y sube hasta MAX_ENEMIES en el minuto 5 (antes eran 100 desde el minuto 2)
+    const cap = g.mode === 'surv' ? MAX_ENEMIES : Math.min(MAX_ENEMIES, 40 + g.t/5);
+    if (g.enemies.length < cap) spawnEnemy();
+    // Presión creciente: tras 45 s salen más enemigos por tanda (1 extra, +1 cada 120 s, máximo 3)
+    const extra = g.t > 45 ? Math.min(3, 1 + Math.floor(diffT(g.t)/120)) : 0;
+    for (let i = 0; i < extra && g.enemies.length < cap; i++) spawnEnemy();
+    g.spawnT = Math.max(DIFF.spawnMin, (1.1 - diffT(g.t)/300) * diffMul('spawn')) * ((g.mod && g.mod.spawnMul) || 1);
   }
 
   // Minijefes en sus minutos
@@ -6444,7 +6446,7 @@ function update(dt){
     const n = 6*p.count, off = Math.random()*Math.PI*2;
     for (let i = 0; i < n; i++){
       const an = off + i/n*Math.PI*2;
-      fireProjectile(p.x, p.z, Math.cos(an)*9, Math.sin(an)*9, ch.dmg*p.dmg, 0.9, 0x4fc3f7);
+      fireProjectile(p.x, p.z, Math.cos(an)*9, Math.sin(an)*9, ch.dmg*p.dmg, 1.1, 0x4fc3f7);   // alcance 10 m (antes 8)
     }
   }
 
@@ -6467,7 +6469,7 @@ function update(dt){
   // Cuchillas orbitales
   if (ch.kind === 'orbit'){
     g.orbitA += dt*3.2;
-    const n = p.count + 1, R = 2.2*p.area;
+    const n = p.count + 1, R = 2.8*p.area;
     while (g.blades.length < n){
       const m = new THREE.Mesh(new THREE.SphereGeometry(0.35, 10, 10), new THREE.MeshBasicMaterial({color:0xa5d6a7}));
       world.add(m); g.blades.push(m);
@@ -6479,7 +6481,7 @@ function update(dt){
       g.blades[i].position.set(bx, 0.9 + terrainH(bx, bz), bz);
       for (const e of g.enemies){
         if (e.cd <= 0 && dist2(bx, bz, e.x, e.z) < e.r + 0.5){
-          hurt(e, ch.dmg*p.dmg); e.cd = 0.35;
+          hurt(e, ch.dmg*p.dmg); e.cd = 0.3;
         }
       }
     }
@@ -6500,7 +6502,7 @@ function update(dt){
   const dead = g.enemies.filter(e => e.hp <= 0);
   for (const e of dead){
     if (g.p.lifesteal && !(g.mod && g.mod.noHeal)) g.p.hp = Math.min(g.p.maxHp, g.p.hp + g.p.lifesteal);
-    g.gems.push({x:e.x, z:e.z, v:e.xp*(1 + g.t/600), heal: !(g.mod && g.mod.noHeal) && Math.random() < 0.05, mesh: null});   // las bajas valen más según avanza la partida
+    g.gems.push({x:e.x, z:e.z, v:e.xp*(1 + g.t/600), heal: !(g.mod && g.mod.noHeal) && Math.random() < 0.07, mesh: null});   // las bajas valen más según avanza la partida
     // 2% por baja, pero con enfriamiento de 45 s y un solo imán en el mapa a la vez
     if ((g.magnetT || 0) <= 0 && Math.random() < 0.02){ spawnMagnetDrop(e.x, e.z); g.magnetT = 45; }
     // Tickets de tirada: 25% de cada élite y 3 seguros del jefe
@@ -6851,7 +6853,7 @@ function updateSkills(dt){
   dmgSrc = 'aura';
   // Aura de Datos: anillo que daña a los enemigos que entran
   if (lv('aura')){
-    const R = (2.6 + 0.9*lv('aura')) * ar;
+    const R = (3.2 + 1.0*lv('aura')) * ar;
     if (!S.aura){
       S.aura = new THREE.Mesh(RING_GEO, new THREE.MeshBasicMaterial({color: 0x4fc3f7, transparent: true, opacity: 0.4, depthWrite: false}));
       S.aura.rotation.x = -Math.PI/2;
@@ -6862,7 +6864,7 @@ function updateSkills(dt){
     S.auraT -= dt;
     if (S.auraT <= 0){
       S.auraT = 0.3;
-      const dmg = (2.5 + 1.2*lv('aura')) * dm;
+      const dmg = (3 + 1.5*lv('aura')) * dm;
       for (const e of g.enemies) if (e.hp > 0 && dist2(p.x, p.z, e.x, e.z) < R + e.r) hurt(e, dmg);
     }
   }
