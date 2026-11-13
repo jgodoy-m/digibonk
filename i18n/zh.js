@@ -952,3 +952,29 @@ I18N.add('zh', {
   "Gira el móvil": "请横屏",
   "DigiBonk se juega en horizontal": "DigiBonk 需横屏游玩"
 });
+
+// Digimon de apoyo en partida (digihuevos y captura)
+I18N.add('zh', {
+  "¡Un digihuevo!": "数码蛋！",
+  "Tócalo para abrirlo: dentro hay un Digimon de apoyo (flecha amarilla)": "触碰即可打开：里面有一只支援数码宝贝（黄色箭头）",
+  "¡{0} se une a ti!": "{0}加入了你！",
+  "Digimon de apoyo {0}/{1}": "支援数码宝贝 {0}/{1}",
+  "evoluciona cada {0} niveles": "每{0}级进化一次",
+  "¡{0} digievoluciona!": "{0}进化了！",
+  "Tu apoyo ahora es {0}": "你的支援现在是{0}",
+  "Evento: ¡{0} salvaje!": "事件：野生的{0}！",
+  "Debilítalo y quédate a su lado 2 s para capturarlo": "削弱它并在它身边停留2秒即可捕获",
+  "{0} ha escapado": "{0}逃走了",
+  "Otra vez será": "下次再来吧",
+  "Captura a {0}": "捕获{0}",
+  "quédate a su lado {0}/2 s": "待在它身边 {0}/2秒",
+  "quedan {0} s": "剩余{0}秒",
+  "{0} salvaje": "野生的{0}",
+  "debilítalo": "削弱它",
+  "¡Debilitado! Acércate": "已削弱！靠近它",
+  "Apoyo: {0}": "支援：{0}"
+});
+I18N.add('zh', {
+  "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "捕获{0}：待在它身边 {1}/2秒 · 剩余{2}秒",
+  "{0} salvaje: debilítalo · quedan {1} s": "野生的{0}：削弱它 · 剩余{1}秒"
+});

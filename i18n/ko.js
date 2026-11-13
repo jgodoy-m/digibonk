@@ -951,3 +951,29 @@ I18N.add('ko', {
   "Gira el móvil": "휴대폰을 돌려 주세요",
   "DigiBonk se juega en horizontal": "DigiBonk는 가로 화면으로 플레이합니다"
 });
+
+// Digimon de apoyo en partida (digihuevos y captura)
+I18N.add('ko', {
+  "¡Un digihuevo!": "디지타마다!",
+  "Tócalo para abrirlo: dentro hay un Digimon de apoyo (flecha amarilla)": "터치해서 열어 보세요: 안에 서포트 디지몬이 있어요(노란 화살표)",
+  "¡{0} se une a ti!": "{0}이(가) 동료가 되었다!",
+  "Digimon de apoyo {0}/{1}": "서포트 디지몬 {0}/{1}",
+  "evoluciona cada {0} niveles": "{0}레벨마다 진화",
+  "¡{0} digievoluciona!": "{0} 진화!",
+  "Tu apoyo ahora es {0}": "이제 서포트는 {0}",
+  "Evento: ¡{0} salvaje!": "이벤트: 야생 {0}!",
+  "Debilítalo y quédate a su lado 2 s para capturarlo": "약하게 만든 뒤 2초 동안 곁에 있으면 포획",
+  "{0} ha escapado": "{0}이(가) 도망쳤다",
+  "Otra vez será": "다음 기회에",
+  "Captura a {0}": "{0} 포획",
+  "quédate a su lado {0}/2 s": "곁에 있기 {0}/2초",
+  "quedan {0} s": "{0}초 남음",
+  "{0} salvaje": "야생 {0}",
+  "debilítalo": "약하게 만드세요",
+  "¡Debilitado! Acércate": "약해졌다! 다가가세요",
+  "Apoyo: {0}": "서포트: {0}"
+});
+I18N.add('ko', {
+  "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "{0} 포획: 곁에 있기 {1}/2초 · {2}초 남음",
+  "{0} salvaje: debilítalo · quedan {1} s": "야생 {0}: 약하게 만드세요 · {1}초 남음"
+});
