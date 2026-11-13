@@ -1751,12 +1751,21 @@ body:has(.tr11) #hudTop{display:none!important}
 :root{--ui-panel:linear-gradient(150deg,#256cbb 0%,#082f77 49%,#061c4c 100%);--ui-line:#9aefff;--ui-card:rgba(6,24,64,.82);--ui-card-line:#2f6fb3;--ui-text:#eaf6ff;--ui-muted:#a9c6e6;--ui-gold:#ffd54f;--ui-top:28px;--ui-bot:28px;--ui-radius:10px}
 /* Fondos de pantalla en un solo sitio. Para cambiar el fondo basta con sustituir estos archivos (o estas rutas):
    --fondo-menus: detrás de Ajustes, Elegir Digimon, Colección, Laboratorio y Ficha (se ve desenfocado y oscurecido).
-   --fondo-hub: imagen fija del menú de inicio; se ve si el vídeo no carga y como primer fotograma.
+   --fondo-hub: menú de inicio y registro (imagen fija, ya no hay vídeo).
    Composición pensada para el menú de inicio: la columna izquierda (~40 %) y la tarjeta de récords (derecha, ~22 %) tapan el fondo;
    el centro-derecha es lo único que queda a la vista, así que el motivo principal debe ir ahí. */
-:root{--fondo-menus:url('ui/fondo_menus.webp');--fondo-hub:url('ui/fondo_menus.webp')}
+:root{--fondo-menus:url('ui/fondo_inicio.webp');--fondo-hub:url('ui/fondo_inicio.webp')}
+@media(max-aspect-ratio:4/5){:root{--fondo-menus:url('ui/fondo_inicio_movil.webp');--fondo-hub:url('ui/fondo_inicio_movil.webp')}}
+/* Inicio en escritorio: la tarjeta de récords tapa la derecha, así que el escenario se amplía un poco y se ancla a la derecha para que el portal quede en el hueco central */
+@media(min-aspect-ratio:16/10) and (min-width:1100px){
+#overlay.menu-mode:has(.realhub) .real-world .rw-scenery,.realhub .real-world .rw-scenery{background-size:125% auto!important;background-position:100% 72%!important}
+}
+@media(max-aspect-ratio:16/10),(max-width:1099px){.realhub .real-world::after{display:none!important}}
+/* Registro: el mismo escenario, con un velo para que el logo y la tarjeta se lean */
+.dvl2.rg{isolation:isolate}
+.dvl2.rg::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(3,10,32,.55),rgba(3,10,32,.2) 55%,rgba(3,10,32,.45)),#061433 var(--fondo-hub) center/cover no-repeat}
 /* Fondo de los menús: escenario limpio del Digimundo, desenfocado y oscurecido */
-#menuart{background:#061433 var(--fondo-menus) center/cover no-repeat;filter:blur(4px) brightness(.5) saturate(1.1);transform:scale(1.06)}
+#menuart{background:#061433 var(--fondo-menus) center/cover no-repeat;filter:blur(4px) brightness(.68) saturate(1.1);transform:scale(1.06)}
 /* Márgenes iguales arriba y abajo: la barra superior reserva su hueco y el panel nunca toca los bordes */
 #overlay:not(.menu-mode){box-sizing:border-box;padding:var(--ui-top) 16px var(--ui-bot);justify-content:safe center;overflow-y:auto}
 #overlay.has-top:not(.menu-mode){--ui-top:76px;padding-top:var(--ui-top)}
@@ -1786,7 +1795,7 @@ body:has(.tr11) #hudTop{display:none!important}
 .lab-foot{align-items:center;margin-top:16px}
 .lab-foot .g-btn{margin:0}
 /* Ficha de jugador con la paleta Digivice (antes gris Nord, distinta del resto) */
-.pl4 .real-world{background:#061433 var(--fondo-menus) center/cover no-repeat!important;filter:blur(4px) brightness(.5) saturate(1.1)!important;transform:scale(1.06)}
+.pl4 .real-world{background:#061433 var(--fondo-menus) center/cover no-repeat!important;filter:blur(4px) brightness(.68) saturate(1.1)!important;transform:scale(1.06)}
 .pl4 .pl5-hero,.pl4 .pl4-stat,.pl4 .pl5-panel{background:var(--ui-panel)!important;border:2px solid var(--ui-line)!important;border-radius:var(--ui-radius)!important;box-shadow:inset 0 2px #b5ffff55,0 5px 0 #03163d!important}
 .pl4 .pl4-stat{background:var(--ui-card)!important;border-color:var(--ui-card-line)!important;box-shadow:inset 0 1px #b5ffff33!important}
 .pl4 .pl4-banner b{font-family:'Orbitron',system-ui,sans-serif!important;text-transform:uppercase;letter-spacing:1px;color:#fff!important}
@@ -4219,7 +4228,7 @@ function showSelect(){
   const achAll = TITLES.filter(tl => !tl.weekly && !tl.seasonal).length, achOwned = TITLES.filter(tl => !tl.weekly && !tl.seasonal && inv.titles.includes(tl.id)).length;
   showOverlay(`
     <main class="realhub hb" aria-label="Menú principal Digibonk">
-      <div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><video class="rw-video" autoplay muted loop playsinline preload="auto" disablepictureinpicture><source src="ui/menu_video.webm" type="video/webm"><source src="ui/menu_video.mp4" type="video/mp4"></video><div class="rw-scenery-core"></div><div class="rw-aurora"></div><div class="rw-light"></div><div class="rw-water"></div><div class="rw-stars"></div></div>
+      <div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><div class="rw-scenery-core"></div><div class="rw-aurora"></div><div class="rw-light"></div><div class="rw-water"></div><div class="rw-stars"></div></div>
       <header class="hb-top">
         <div class="hb-utils">
           <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma">🌐 ${LANG.toUpperCase()}</button>
@@ -7807,7 +7816,7 @@ function showPlayer(){
   const companion = CHARS[selectedKey] ? `<span>Compañero: ${esc12(CHARS[selectedKey].name)}</span>` : '';
   const recList = recs.slice(0, 4).map(r => `<div class="pl5-rec"><span class="pl5-acc${r.win ? ' win' : ''}"></span><span class="pl5-rn"><b>${esc12(r.name)}</b><small>${r.win ? 'Victoria' : 'Derrota'}</small></span><span class="pl5-rv">${r.kills} bajas</span><span class="pl5-rv">Nv. ${r.lvl}</span><span class="pl5-rt">${fmtTime(r.t)}</span></div>`).join('') || '<p class="pl4-empty">Aún no hay partidas. Juega una para ver tus récords.</p>';
   showOverlay(`
-    <main class="realhub pl4" aria-label="Ficha de entrenador"><div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><video class="rw-video" autoplay muted loop playsinline preload="auto" disablepictureinpicture><source src="ui/menu_video.webm" type="video/webm"><source src="ui/menu_video.mp4" type="video/mp4"></video></div><div class="pl4-wrap">
+    <main class="realhub pl4" aria-label="Ficha de entrenador"><div class="real-world" aria-hidden="true"><div class="rw-scenery"></div></div><div class="pl4-wrap">
       <header class="pl4-top"><button class="g-back" id="plBack"><kbd>Esc</kbd> Volver</button>
         <div class="pl4-banner"><b>Ficha de entrenador</b><small>Tu tarjeta, tus estadísticas y tus logros</small></div>
         <button type="button" class="pl5-share" disabled title="Próximamente">Compartir mi ficha</button></header>
