@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" translate="no">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DigiBonk · Survivor 3D de Digimon gratis en el navegador</title>
+<script src="i18n/i18n.js"></script>
 <meta name="description" content="Fan-game gratuito: elige a tu Digimon, sobrevive a la horda, digievoluciona y derrota a los jefes. Se juega en el navegador, en ordenador y en móvil.">
 <meta name="theme-color" content="#081d4d">
 <link rel="icon" type="image/png" sizes="32x32" href="ui/icono_32.png">
@@ -2090,6 +2091,10 @@ body.is-touch #skillBar{bottom:176px!important}
 @media (max-width:760px){#xpTxt{top:84px!important;left:12px!important}#hudEmb{top:110px;left:12px}}
 #hudEmb{position:fixed;left:18px;top:150px;display:flex;gap:4px;pointer-events:none;z-index:5}
 #hudEmb:empty{display:none}
+#hudEmb .hud-sup{position:relative;width:40px;height:40px;border-radius:50%;box-shadow:0 0 0 2px #7cf29c,0 2px 6px rgba(0,0,0,.5);background:#0e1220;margin-right:2px}
+#hudEmb .hud-sup img{width:100%;height:100%;border-radius:50%;object-fit:cover;animation:none}
+#hudEmb .hud-sup i{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);font-style:normal;font-size:9px;color:#ffd54f;text-shadow:0 1px 2px #000;white-space:nowrap}
+@media (max-width:760px){#hudEmb .hud-sup{width:30px;height:30px}}
 #hudEmb img{width:40px;height:auto;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5));animation:embIn .5s cubic-bezier(.2,1.6,.4,1)}
 @keyframes embIn{from{transform:scale(.2) rotate(-20deg);opacity:0}}
 .lv3-art{width:100%;max-width:200px;height:auto;margin:2px 0 4px;filter:drop-shadow(0 6px 12px rgba(0,0,0,.45));image-rendering:auto}
@@ -2784,6 +2789,24 @@ body:has(#overlay .end3) #hudSummon{display:none!important}
 #overlay>:is(.settings,.help-box,.lab-screen,.cl4,.end3),.approved-info-scrim .approved-info-dialog,#pause .pz2{zoom:var(--ui-scale,1)}
 html.reduce-motion *:not(.anim){animation:none!important;transition:none!important}
 html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
+/* Logo animado: entrada con rebote, brillo cian que respira y un destello que lo cruza cada pocos segundos.
+   El destello usa el propio logo como máscara, así que solo pasa por encima de las letras. */
+.logo-fx{position:relative;display:inline-block;line-height:0;animation:logo-in .7s cubic-bezier(.2,1.5,.4,1) both}
+.logo-fx>img{animation:logo-glow 3.6s ease-in-out .7s infinite alternate}
+.logo-fx::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.85) 48%,rgba(190,250,255,.9) 52%,transparent 62%) no-repeat;
+  background-size:250% 100%;background-position:130% 0;mix-blend-mode:screen;
+  -webkit-mask:url('ui/logo_digibonk.webp') center/100% 100% no-repeat;mask:url('ui/logo_digibonk.webp') center/100% 100% no-repeat;
+  animation:logo-shine 5s ease-in-out 1.2s infinite}
+.logo-fx-rg{width:min(520px,80%)}
+.logo-fx-rg>.rg-logo{width:100%}
+@media (max-width:1000px),(max-height:620px){.logo-fx-rg{width:min(360px,80%)}}
+@keyframes logo-in{0%{opacity:0;transform:translateY(-10px) scale(.88)}100%{opacity:1;transform:none}}
+@keyframes logo-glow{from{filter:drop-shadow(0 4px 0 rgba(0,0,0,.25)) drop-shadow(0 0 4px rgba(90,230,255,.25))}to{filter:drop-shadow(0 4px 0 rgba(0,0,0,.25)) drop-shadow(0 0 16px rgba(90,230,255,.65))}}
+@keyframes logo-shine{0%{background-position:130% 0}30%,100%{background-position:-30% 0}}
+html.reduce-motion .logo-fx,html.reduce-motion .logo-fx>img{animation:none!important}
+html.reduce-motion .logo-fx::after{display:none}
+@media (prefers-reduced-motion:reduce){.logo-fx,.logo-fx>img{animation:none!important}.logo-fx::after{display:none}}
 .set-vol{display:flex;align-items:center;gap:10px}
 .set-range{-webkit-appearance:none;appearance:none;width:150px;height:8px;border-radius:5px;background:var(--m-line);outline:none;cursor:pointer}
 .set-range::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--m-cta);box-shadow:0 2px 0 var(--m-cta-sh);border:2px solid #fff}
@@ -3378,7 +3401,7 @@ const sqDist = (x, z) => Math.max(Math.abs(x), Math.abs(z));   // distancia "cua
 const smooth01 = t => { t = Math.min(1, Math.max(0, t)); return t*t*(3 - 2*t); };
 // Estanque al suroeste: cuenca plana con agua; se funde con el terreno alrededor
 const POND = {x: -38, z: 22, r: 6, water: -0.35, bed: -0.9};
-// Lagos de orilla irregular (rx/rz: radios; s: forma). El segundo lo cruza un puente de este a oeste
+// Lagos de orilla irregular (rx/rz: radios; s: forma)
 const PONDS = [{x: -38, z: 22, rx: 8, rz: 6.5, s: 0.4}, {x: 54, z: -22, rx: 6, rz: 12, s: 1.7}, {x: 22, z: 66, rx: 10, rz: 7, s: 2.9}];
 const pondEdge = (P, a) => 1 + 0.12*Math.sin(3*a + P.s) + 0.07*Math.sin(5*a + P.s*2);
 // Distancia aproximada (en unidades) desde la orilla: negativa dentro del lago
@@ -3386,10 +3409,7 @@ function pondDist(P, x, z){
   const dx = (x - P.x)/P.rx, dz = (z - P.z)/P.rz;
   return (Math.hypot(dx, dz)/pondEdge(P, Math.atan2(dz, dx)) - 1)*Math.min(P.rx, P.rz);
 }
-const BRIDGE = (() => { const P = PONDS[1], half = P.rx*1.25 + 2.5; return {x0: P.x - half, x1: P.x + half, z: P.z, hw: 1.7}; })();
-const onBridge = (x, z) => Math.abs(z - BRIDGE.z) < BRIDGE.hw && x > BRIDGE.x0 && x < BRIDGE.x1;
 function pondWeight(x, z){
-  if (onBridge(x, z)) return 0;
   let w = 0;
   for (const P of PONDS) w = Math.max(w, 1 - smooth01(pondDist(P, x, z)/3));
   return w;
@@ -3421,11 +3441,6 @@ function terrainH(x, z){
   const hn = base*(1 - near) + shore*near;
   const t = smooth01(d/1.6);
   let h = POND.bed*(1 - t) + hn*t;
-  // Bajo el puente hay un terraplén a ras de orilla: se camina por encima del agua
-  if (x > BRIDGE.x0 - 2 && x < BRIDGE.x1 + 2){
-    const k = (1 - smooth01((Math.abs(z - BRIDGE.z) - BRIDGE.hw)/1.2))*(1 - smooth01((Math.max(BRIDGE.x0 - x, x - BRIDGE.x1))/2));
-    h = h*(1 - k) + (POND.water + 0.45)*k;   // a nivel: el puente queda siempre por encima del suelo
-  }
   return h;
 }
 // Hitboxes: círculos y segmentos (por si se añaden obstáculos al mapa)
@@ -3866,10 +3881,7 @@ function buildLayout(name, B){
     return pts;
   };
   for (const P of L.plazas) L.paths.push(wobble(0, 0, P.x, P.z, 5));
-  // Al puente: el camino llega a cada extremo y sigue al otro lado; nunca pasa por debajo
-  L.paths.push(wobble(0, 0, BRIDGE.x0 + 1.5, BRIDGE.z, 4));
-  L.paths.push(wobble(BRIDGE.x1 - 1.5, BRIDGE.z, ARENA_R - 12, BRIDGE.z + 14, 3));
-  for (const i of [0, 2]){ const P = PONDS[i], d = Math.hypot(P.x, P.z), k = 1 - (Math.max(P.rx, P.rz) + 3)/d; L.paths.push(wobble(0, 0, P.x*k, P.z*k, 3)); }
+  for (const i of [0, 1, 2]){ const P = PONDS[i], d = Math.hypot(P.x, P.z), k = 1 - (Math.max(P.rx, P.rz) + 3)/d; L.paths.push(wobble(0, 0, P.x*k, P.z*k, 3)); }
   // Máscara: canal rojo = camino, verde = losas (con un poco de desenfoque para bordes suaves)
   const c = maskCanvas.getContext('2d'), N = MASK_N, S = TERRAIN_SIZE, px = v => (v + S/2)/S*N;
   c.globalCompositeOperation = 'source-over'; c.filter = 'none';
@@ -3914,16 +3926,6 @@ function propSprite(set, name, x, z, scale = 1, shadow = 0){
   decoSprite(decoTex('sprites/deco/' + key + '.png'), h*ar, h, x, gy, z);
   if (shadow){ const sh = makeShadow(h*ar*shadow); sh.position.set(x, gy + 0.02, z); decoGroup.add(sh); }
 }
-// Puente plano sobre el lago (se camina por encima: el terreno de debajo es un terraplén)
-let bridgeMesh = null;
-function placeBridge(set){
-  if (bridgeMesh){ scene.remove(bridgeMesh); bridgeMesh.material.dispose(); }
-  const len = BRIDGE.x1 - BRIDGE.x0 + 1, ar = DECO_AR[set + '/puente'] || 2.6;
-  bridgeMesh = new THREE.Mesh(new THREE.PlaneGeometry(len, len/ar), new THREE.MeshStandardMaterial({map: decoTex('sprites/deco/' + set + '/puente.png'), transparent: true, alphaTest: 0.5, roughness: 1}));
-  bridgeMesh.rotation.x = -Math.PI/2;
-  bridgeMesh.position.set((BRIDGE.x0 + BRIDGE.x1)/2, POND.water + 0.5, BRIDGE.z - 0.3);
-  scene.add(bridgeMesh);
-}
 const biomeTexCache = {};
 function biomeTex(path, rx, ry){ return biomeTexCache[path + rx + ':' + ry] || (biomeTexCache[path + rx + ':' + ry] = loadTex(path, rx, ry, true)); }
 let curBiome = null;
@@ -3937,7 +3939,6 @@ function buildEnvironment(name = 'bosque'){
   // Suelo por capas y disposición del mapa
   floorU.uPathTex.value = biomeTex(B.path, 1, 1); floorU.uStoneTex.value = biomeTex(B.stone, 1, 1); floorU.uRockTex.value = biomeTex(B.rock, 1, 1);
   layout = buildLayout(name, B);
-  placeBridge(B.set);
   const rnd = seededRng(name + '-deco'), set = B.set;
   // Plazas: arco o torre al fondo, altar en el centro, columnas o muros en corro y restos sueltos
   for (const P of layout.plazas){
@@ -4312,8 +4313,8 @@ function setHud(v){
 // Barra de estadística (0-100%)
 const ATTACK_NAME = {shot:'Disparo dirigido', ring:'Onda circular', orbit:'Órbita defensiva'};
 
-// ---------- Idioma (ES/EN) de login, menú principal y barra superior; el resto del juego sigue en español ----------
-let LANG = localStorage.getItem('digibonk3d-lang') === 'en' ? 'en' : 'es';
+// ---------- Idioma: los textos se escriben en español y i18n/i18n.js los traduce en pantalla al idioma elegido ----------
+let LANG = window.I18N ? I18N.lang : 'es';
 const TXT = {
   es: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'Survivor 3D de Digimon, gratis en el navegador', boot:'DIGIVICE · ACCESO AL DIGIMUNDO', who:'Niño elegido, identifícate',
        saved:'Tu nombre se guarda en este navegador.', ph:'TU NOMBRE', enter:'ENTRAR AL DIGIMUNDO', guest:'Entrar como invitado (pruebas)', needName:'Escribe un nombre',
@@ -4321,20 +4322,16 @@ const TXT = {
        coll:'COLECCIÓN', collS:'Skins, marcos, títulos y evoluciones', help:'CÓMO JUGAR', helpS:'Tutorial con vídeos', set:'AJUSTES', setS:'Calidad, sonido y guardado', recs:'Tus récords', runs:'Partidas', best:'Mejor tiempo', lvl:'Mejor nivel',
        kills:'Bajas', none:'Todavía no hay partidas. ¡Empieza una!', partner:'Tu compañero', noTitle:'Sin título', guestTag:'invitado · pruebas',
        evEnds:'Termina en', evSkin:'Skins de Navidad como legendarias en la Incubadora', tipT:'Consejo', tip:'Los élites y el jefe sueltan tickets de tirada.', daily:'Misión diaria',
-       legal:'Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon.'},
-  en: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'A free 3D Digimon survivor in your browser', boot:'DIGIVICE · DIGITAL WORLD ACCESS', who:'DigiDestined, identify yourself',
-       saved:'Your name is saved in this browser.', ph:'YOUR NAME', enter:'ENTER THE DIGITAL WORLD', guest:'Enter as guest (testing)', needName:'Type a name',
-       play:'PLAY', playS:'Pick your Digimon, map and difficulty', gacha:'GACHA', gachaS:'Pulls with Bits or tickets', player:'PLAYER', playerS:'Your card, frames and titles',
-       coll:'COLLECTION', collS:'Skins, frames, titles and evolutions', help:'HOW TO PLAY', helpS:'Video tutorial', set:'SETTINGS', setS:'Quality, sound and save', recs:'Your records', runs:'Runs', best:'Best time', lvl:'Best level',
-       kills:'Kills', none:'No runs yet. Start one!', partner:'Your partner', noTitle:'No title', guestTag:'guest · testing',
-       evEnds:'Ends in', evSkin:'Christmas skins as legendaries in the gacha', tipT:'Tip', tip:'Elites and the boss drop pull tickets.', daily:'Daily mission',
-       legal:'Unofficial, free, non-profit fan game. Not affiliated with Bandai, Toei Animation or the Digimon rights holders.'}
+       legal:'Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon.'}
 };
-const t = k => TXT[LANG][k] || TXT.es[k] || k;
+const t = k => TXT.es[k] || k;
+// Abre el selector de idiomas; al elegir, i18n.js retraduce la pantalla y aquí se rehace la actual para el código del botón
 function toggleLang(){
-  LANG = LANG === 'es' ? 'en' : 'es';
-  localStorage.setItem('digibonk3d-lang', LANG);
-  if (state === 'register') showRegister(); else if (state === 'select') showSelect(); else refreshTopbar();
+  if (!window.I18N) return;
+  I18N.openPicker(code => {
+    LANG = code;
+    if (state === 'register') showRegister(); else if (state === 'select') showSelect(); else refreshTopbar();
+  });
 }
 // Colección: todo lo que se puede conseguir, con porcentaje de completado (solo consulta)
 // Colección: lista de Digimon a la izquierda, etapas y skins de cada etapa a la derecha; marcos y títulos en otra pestaña
@@ -4567,7 +4564,7 @@ function showSelect(){
       </header>
       <section class="hb-main">
         <div class="hb-left">
-          <h1 class="hb-brand"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"><span class="hb-ver">BETA</span></h1>
+          <h1 class="hb-brand"><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span><span class="hb-ver">BETA</span></h1>
           <div class="hb-modes nm-modes">
             <button type="button" id="playBtn" class="hb-play nm-play" aria-label="Jugar con ${safeText(choice.name)}">
               <span class="hb-play-txt"><b>Jugar</b></span>
@@ -4905,7 +4902,7 @@ function showSettings(){
   };
   // Eliminar cuenta: borra todo lo guardado por el juego en este navegador
   document.getElementById('btnDelete').onclick = () => {
-    if (!confirm('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Bits, skins, colección, récords). No se puede deshacer.')) return;
+    if (!confirm(I18N.tr('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Bits, skins, colección, récords). No se puede deshacer.'))) return;
     Object.keys(localStorage).filter(k => k.startsWith('digibonk3d-')).forEach(k => localStorage.removeItem(k));
     location.reload();
   };
@@ -5082,7 +5079,7 @@ function showPicker(tab){
           </footer>
         </main>
         <aside class="ps-card ps-roster">
-          <nav class="ps-seg">${[['todos', 'Todos'], ['vestidor', 'Vestidor'], ['apoyo', 'Apoyo']].map(([id, n]) => `<button type="button" class="${rosterTab === id ? 'on' : ''}" data-rt="${id}">${n}</button>`).join('')}</nav>
+          <nav class="ps-seg">${[['todos', 'Todos'], ['vestidor', 'Vestidor']].map(([id, n]) => `<button type="button" class="${rosterTab === id ? 'on' : ''}" data-rt="${id}">${n}</button>`).join('')}</nav>
           <div class="ps-roster-in" id="pkRoster"></div>
           <div class="ps-prog"><span class="ps-lbl">Progreso</span><div class="ps-meter"><i style="width:${Math.round(pr.done / pr.total * 100)}%"></i></div><b>${pr.done}/${pr.total}</b></div>
         </aside>
@@ -5117,13 +5114,7 @@ function renderRoster(){
     el.querySelectorAll('[data-skin]').forEach(b => b.onclick = () => { equipSkinAt(k, 0, b.dataset.skin); showPicker(); });
     return;
   }
-  if (rosterTab === 'apoyo'){
-    const opened = chars.filter(o => isUnlocked(o) && o !== k), cur = supportKey(k);
-    el.innerHTML = `<div class="ps-lbl">Te acompaña y dispara al más cercano con el 40% de tu daño</div>
-      <div class="ps-grid">${['none', ...opened].map(o => `<button type="button" class="ps-tile${(o === 'none' ? !cur : o === cur) ? ' sel' : ''}" data-sup="${o}">${o === 'none' ? '<span class="ps-ic ps-none">—</span>' : `<span class="ps-ic"><img src="ui/jugador/${o}.webp" alt="" loading="lazy"></span>`}<b>${o === 'none' ? 'Ninguno' : CHARS[o].name}</b></button>`).join('')}</div>`;
-    el.querySelectorAll('[data-sup]').forEach(b => b.onclick = () => { localStorage.setItem('digibonk3d-support', b.dataset.sup); showPicker(); });
-    return;
-  }
+  if (rosterTab === 'apoyo') rosterTab = 'todos';
   const tiles = chars.map((id, i) => {
     const open = isUnlocked(id);
     return `<button type="button" class="ps-tile${id === k ? ' sel' : ''}${open ? '' : ' lock'}" ${open ? `data-pick="${id}"` : 'disabled'} data-name="${open ? CHARS[id].name.toLowerCase() : '???'}" title="${open ? CHARS[id].name : unlockHow(id)}">
@@ -5927,6 +5918,7 @@ function update(dt){
     if (e.frozenT > 0){ e.frozenT -= dt; continue; }   // congelado o atrapado por el Bonk: ni se mueve ni daña
     const dx = p.x - e.x, dz = p.z - e.z, d = Math.hypot(dx, dz) || 1;
     if (e.golden){ [e.x, e.z] = clampArena(e.x - dx/d*e.spd*dt, e.z - dz/d*e.spd*dt, ARENA_R - 2); continue; }   // el Numemon dorado huye
+    if (e.wild){ if (!e.weak && d < 14) [e.x, e.z] = clampArena(e.x - dx/d*e.spd*dt, e.z - dz/d*e.spd*dt, ARENA_R - 2); continue; }   // el salvaje huye hasta quedar debilitado
     // Se paran a distancia de contacto (no se meten encima del jugador)
     if (d > e.r + 0.6){
       e.x += dx/d * e.spd * dt;
@@ -5999,6 +5991,11 @@ function update(dt){
 
   updateSkills(dt);
 
+  // Digimon salvaje: no muere, se queda debilitado al 20% para poder capturarlo
+  for (const e of g.enemies) if (e.wild && e.hp < e.max*0.2){
+    e.hp = e.max*0.2;
+    if (!e.weak){ e.weak = true; e.mesh.material.color.set(0xa9c4ff); popText(e.x, e.z, '¡Debilitado! Acércate', '#7cf29c', 1); }
+  }
   // Muertes
   const dead = g.enemies.filter(e => e.hp <= 0);
   for (const e of dead){
@@ -6209,6 +6206,7 @@ function drawEdgeMarkers(){
   if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
   if (g.portal && (g.portalOpen || canSummonBoss())) targets.push({x: PORTAL.x, z: PORTAL.z, col: '#3de0ff'});
   if (g.ev) for (const n of g.ev.nodes || [{x: g.ev.foe.x, z: g.ev.foe.z}]) if (!n.done) targets.push({x: n.x, z: n.z, col: '#7cf29c'});
+  for (const e of g.eggs || []) targets.push({x: e.x, z: e.z, col: '#ffd54f'});
   for (const e of g.enemies) if (e.kind === 'elite' || e.kind === 'mini') targets.push({x: e.x, z: e.z, col: e.kind === 'mini' ? '#ce93d8' : '#ff7043'});
   const W = cv.width, H = cv.height, cx = W/2, cy = H/2;
   for (const t of targets){
@@ -7022,9 +7020,9 @@ function updateHUD(){
   updatePrompt();
   const pimg = document.getElementById('pimg');
   // Retrato: el icono redondo de siempre del Digimon (o el de su skin); si no hay, la cabeza del sprite
-  const ic = skinIconFor(g.ch.id, equippedAt(g.ch.id, 0)) || PLAYER_ICONS.find(x => x.id === g.ch.id);
-  const hd = ic ? ic.src : headUrl(spriteOf(g.ch.id, g.ch.evolved));
-  pimg.classList.toggle('icon', !!ic);
+  // Retrato: el mismo icono que en la selección de personaje, sin marco
+  const hd = charIcon(g.ch.id);
+  pimg.classList.add('icon');
   if (!pimg.src.endsWith(hd)) pimg.src = hd;
   document.getElementById('combo').textContent = g.combo >= 2 ? `x${g.combo}` : '';
   const bb = document.getElementById('bossbar');
@@ -7237,6 +7235,7 @@ function drawWorldMap(cv, size){
     if (ch.open) continue;
     c.fillText('🎁', X(ch.x), Y(ch.z));
   }
+  for (const e of g.eggs || []) c.fillText('🥚', X(e.x), Y(e.z));
   // Enemigos: su propio sprite, en miniatura
   for (const e of g.enemies){
     if (e.boss) continue;
@@ -7471,6 +7470,7 @@ const CARD_ART = {'Daño +20%': 'dano', 'Cadencia +15%': 'cadencia', 'Velocidad 
   'Área +20%': 'area', 'Imán +50%': 'iman', 'Probabilidad crítica +8%': 'critico', 'Daño crítico +25%': 'dano_critico', 'Robo de vida': 'robo_vida', 'Dash −20% espera': 'dash', 'Armadura +8%': 'armadura'};
 function hudRing(){
   const el = document.getElementById('pring'); if (!el) return;
+  el.style.display = 'none'; return;   // sin aro: el retrato es sólo el icono del selector
   const cosmetic = !!frameClass();
   const st = Math.min(3, g.ch.evolved | 0), r = HUD_RINGS[st], h = r.d*0.94;   // el hueco tapa un poco el borde del icono
   el.style.display = cosmetic ? 'none' : 'block';
@@ -7487,10 +7487,10 @@ function hudRing(){
 }
 function hudEmblems(){
   const el = document.getElementById('hudEmb'); if (!el) return;
-  const key = (g.emblems || []).join(',');
+  const key = (g.emblems || []).join(',') + '|' + (g.sups || []).map(s => s.key + s.st).join(',');
   if (el.dataset.k === key) return;
   el.dataset.k = key;
-  el.innerHTML = (g.emblems || []).map(id => `<img src="ui/hud/emb_${id}.webp" alt="" title="${(EMBLEMS.find(e => e.id === id) || {}).name || ''}">`).join('');
+  el.innerHTML = (g.sups || []).map(s => `<span class="hud-sup" title="Apoyo: ${supName(s)}"><img src="${charIcon(s.key)}" alt="">${s.st ? `<i>${'★'.repeat(s.st)}</i>` : ''}</span>`).join('') + (g.emblems || []).map(id => `<img src="ui/hud/emb_${id}.webp" alt="" title="${(EMBLEMS.find(e => e.id === id) || {}).name || ''}">`).join('');
 }
 /* ---------- Eventos en el mapa (cada 200 s desde el minuto 2:30) ---------- */
 function evHud(text){
@@ -7518,6 +7518,7 @@ function nodeNear(dmin, dmax){
 }
 function startMapEvent(){
   const kinds = ['defend', 'corrupt', 'golden'];
+  if (supFree() > 0) kinds.push('capture', 'capture');   // Digimon salvaje: más probable mientras te falte apoyo
   const kind = kinds[Math.floor(Math.random()*kinds.length)];
   if (kind === 'defend'){
     const [x, z] = nodeNear(18, 28);
@@ -7527,6 +7528,17 @@ function startMapEvent(){
   } else if (kind === 'corrupt'){
     g.ev = {kind, t: 60, nodes: [0, 1, 2].map(() => { const [x, z] = nodeNear(14, 32); const n = eventNode(x, z, 0xe040fb); n.ring.scale.setScalar(2.5); return n; })};
     announce('Evento: datos corruptos', 'Rompe los 3 nodos morados (quédate encima)', '#e040fb');
+  } else if (kind === 'capture'){
+    const pool = supPool(), k = pool[Math.floor(Math.random()*pool.length)];
+    const [x, z] = nodeNear(16, 22);
+    const mesh = billboard(spriteOf(k, 0), 2, false);
+    world.add(mesh);
+    const shadow = makeShadow(1.6); world.add(shadow);
+    const hp = 260*(1 + diffT(g.t)/200);
+    const e = {kind: 'basic', wild: k, sprite: spriteOf(k, 0), mesh, shadow, x, z, hp, max: hp, spd: 4.2, r: 0.9, xp: 0, dmg: 0, cd: 0, attr: ATTR_OF[k] || 'vac'};
+    g.enemies.push(e);
+    g.ev = {kind, t: 50, foe: e, prog: 0};
+    announce('Evento: ¡' + CHARS[k].name + ' salvaje!', 'Debilítalo y quédate a su lado 2 s para capturarlo', '#7cf29c');
   } else {
     const [x, z] = nodeNear(16, 22);
     const mesh = billboard('sprites/numemon.png', 2.2, false);
@@ -7544,6 +7556,12 @@ function startMapEvent(){
 function endMapEvent(ok){
   const ev = g.ev; g.ev = null; evHud(null);
   for (const n of ev.nodes || []){ world.remove(n.mesh); world.remove(n.ring); }
+  if (ev.kind === 'capture'){
+    const e = ev.foe; e.gone = true; world.remove(e.mesh); world.remove(e.shadow); g.enemies = g.enemies.filter(x => x !== e);
+    if (ok) addSupport(e.wild, e.x, e.z);
+    else announce(CHARS[e.wild].name + ' ha escapado', 'Otra vez será', '#9e9e9e');
+    return;
+  }
   if (ev.kind === 'golden'){
     if (ok){ g.extraBits = (g.extraBits || 0) + 80; g.tix++; announce('¡Numemon dorado atrapado!', '+80 Bits y +1 ticket', '#ffd54f'); }
     else { const e = ev.foe; e.gone = true; world.remove(e.mesh); world.remove(e.shadow); g.enemies = g.enemies.filter(x => x !== e); announce('El Numemon dorado ha huido', '', '#9e9e9e'); }
@@ -7585,6 +7603,11 @@ function updateMapEvent(dt){
     const done = ev.nodes.filter(n => n.done).length;
     evHud(`Datos corruptos: ${done}/3 nodos · quedan ${Math.ceil(ev.t)} s`);
     if (done === 3) return endMapEvent(true);
+  } else if (ev.kind === 'capture'){
+    const e = ev.foe, nm = CHARS[e.wild].name;
+    if (e.weak && dist2(e.x, e.z, p.x, p.z) < 2.6) ev.prog += dt;
+    evHud(e.weak ? `Captura a ${nm}: quédate a su lado ${Math.min(2, ev.prog).toFixed(1)}/2 s · quedan ${Math.ceil(ev.t)} s` : `${nm} salvaje: debilítalo · quedan ${Math.ceil(ev.t)} s`);
+    if (ev.prog >= 2) return endMapEvent(true);
   } else {
     const e = ev.foe;
     evHud(`Numemon dorado · quedan ${Math.ceil(ev.t)} s`);
@@ -7593,37 +7616,87 @@ function updateMapEvent(dt){
   if (ev.t <= 0) endMapEvent(false);
 }
 
-/* ---------- Digimon de apoyo: un segundo compañero que dispara al 40% ---------- */
-function supportKey(main){
-  const opened = SEASONS.adventure.chars.filter(k => isUnlocked(k) && k !== main);
-  const saved = localStorage.getItem('digibonk3d-support');
-  if (saved === 'none') return null;
-  return opened.includes(saved) ? saved : (opened[0] || null);
-}
-function initSupport(){
-  const k = supportKey(g.ch.id);
-  if (!k) return;
-  const mesh = billboard(spriteOf(k, false), 1.7, false);
+/* ---------- Digimon de apoyo: hasta 2 por partida, al azar entre todos los jugables ----------
+   Salen de digihuevos que aparecen por el mapa o se capturan en el evento "Digimon salvaje".
+   Evolucionan contigo: una etapa cada 8 niveles desde que se unen. */
+const SUP_MAX = 2, SUP_EVO_LVLS = 8;
+function supPool(){ return SEASONS.adventure.chars.filter(k => CHARS[k] && k !== g.ch.id && !g.sups.some(s => s.key === k)); }
+function supFree(){ return SUP_MAX - g.sups.length - g.eggs.length - (g.ev && g.ev.kind === 'capture' ? 1 : 0); }
+function addSupport(k, x = g.p.x, z = g.p.z){
+  if (!k || g.sups.length >= SUP_MAX) return;
+  const mesh = billboard(spriteOf(k, 0), 1.7, false);
   world.add(mesh);
   const shadow = makeShadow(1.1); world.add(shadow);
-  g.sup = {key: k, mesh, shadow, x: g.p.x - 1.5, z: g.p.z, cd: 1};
+  g.sups.push({key: k, st: 0, joinLvl: g.p.lvl, mesh, shadow, x, z, cd: 1});
+  spawnRing(x, z, 0x7cf29c, 6, 0.8); burst(x, z, '#7cf29c');
+  sfx('victory');
+  announce('¡' + CHARS[k].name + ' se une a ti!', `Digimon de apoyo ${g.sups.length}/${SUP_MAX} · evoluciona cada ${SUP_EVO_LVLS} niveles`, '#7cf29c');
+}
+function supEvolve(s){
+  const line = EVO_LINE[s.key] || [];
+  const want = Math.min(line.length, Math.floor((g.p.lvl - s.joinLvl)/SUP_EVO_LVLS));
+  if (want <= s.st) return;
+  s.st = want;
+  s.mesh.material.map = animTex(spriteOf(s.key, s.st), true); s.mesh.material.needsUpdate = true;
+  const sc = 1.7*(1 + 0.18*s.st); s.mesh.scale.set(sc, sc, 1);
+  spawnRing(s.x, s.z, 0xffd54f); burst(s.x, s.z, '#ffd54f');
+  sfx('evolve');
+  announce('¡' + CHARS[s.key].name + ' digievoluciona!', 'Tu apoyo ahora es ' + line[s.st - 1].name, '#ffd54f');
+}
+function supName(s){ return s.st ? EVO_LINE[s.key][s.st - 1].name : CHARS[s.key].name; }
+function initSupport(){ g.sups = []; g.eggs = []; g.eggT = 100; }
+/* Digihuevos: el primero al 1:40 y luego cada ~5,5 min mientras quede hueco. Tócalo para abrirlo */
+function spawnEgg(){
+  const [x, z] = nodeNear(14, 22);
+  const mesh = billboard('ui/gacha/huevo_c0.png', 1.9, false);
+  world.add(mesh);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(1.3, 1.6, 32), new THREE.MeshBasicMaterial({color: 0xffd54f, transparent: true, opacity: 0.7, depthWrite: false}));
+  ring.rotation.x = -Math.PI/2; world.add(ring);
+  const shadow = makeShadow(1.3); world.add(shadow);
+  g.eggs.push({x, z, mesh, ring, shadow, hatch: 0});
+  announce('¡Un digihuevo!', 'Tócalo para abrirlo: dentro hay un Digimon de apoyo (flecha amarilla)', '#ffd54f');
+  sfx('chest');
+}
+function updateEggs(dt){
+  if (g.t >= g.eggT){ g.eggT = g.t + 330; if (supFree() > 0) spawnEgg(); }
+  for (const e of g.eggs){
+    const gy = terrainH(e.x, e.z);
+    e.ring.position.set(e.x, gy + 0.06, e.z); e.shadow.position.set(e.x, gy + 0.02, e.z);
+    if (!e.hatch && dist2(e.x, e.z, g.p.x, g.p.z) < 1.8){ e.hatch = 0.001; sfx('chest'); }
+    if (e.hatch){
+      e.hatch += dt;
+      const f = Math.min(3, 1 + Math.floor(e.hatch/0.45));
+      e.mesh.material.map = tex('ui/gacha/huevo_c' + f + '.png');
+      e.mesh.position.set(e.x + Math.sin(e.hatch*40)*0.08, gy + 0.95, e.z);
+      if (e.hatch >= 1.4){
+        e.done = true; world.remove(e.mesh); world.remove(e.ring); world.remove(e.shadow);
+        const pool = supPool();
+        addSupport(pool[Math.floor(Math.random()*pool.length)], e.x, e.z);
+      }
+    } else e.mesh.position.set(e.x, gy + 0.95 + Math.sin(g.t*3)*0.12, e.z);
+  }
+  g.eggs = g.eggs.filter(e => !e.done);
 }
 function updateSupport(dt){
-  const s = g.sup; if (!s) return;
-  const p = g.p, side = {x: -g.dir.z, z: g.dir.x};
-  const tx = p.x + side.x*1.8 - g.dir.x*0.8, tz = p.z + side.z*1.8 - g.dir.z*0.8;
-  s.x += (tx - s.x)*Math.min(1, dt*5); s.z += (tz - s.z)*Math.min(1, dt*5);
-  const gy = terrainH(s.x, s.z);
-  s.mesh.position.set(s.x, gy + 0.85 + Math.sin(g.t*6)*0.05, s.z);
-  s.shadow.position.set(s.x, gy + 0.02, s.z);
-  s.cd -= dt;
-  if (s.cd > 0) return;
-  let best = null, bd = 14;
-  for (const e of g.enemies){ const d = dist2(e.x, e.z, s.x, s.z); if (e.hp > 0 && d < bd){ bd = d; best = e; } }
-  if (!best) return;
-  s.cd = 1.1 * p.cdMul;
-  const d = bd || 1, c = CHARS[s.key];
-  fireProjectile(s.x, s.z, (best.x - s.x)/d*16, (best.z - s.z)/d*16, (c.dmg || 10) * Math.min(0.5, 0.25 + 0.005*p.lvl) * p.dmg, 1.2, 0x80deea);
+  updateEggs(dt);
+  const p = g.p;
+  g.sups.forEach((s, i) => {
+    supEvolve(s);
+    const sk = i ? -1 : 1, side = {x: -g.dir.z*sk, z: g.dir.x*sk};
+    const tx = p.x + side.x*1.8 - g.dir.x*0.8, tz = p.z + side.z*1.8 - g.dir.z*0.8;
+    s.x += (tx - s.x)*Math.min(1, dt*5); s.z += (tz - s.z)*Math.min(1, dt*5);
+    const gy = terrainH(s.x, s.z), hh = s.mesh.scale.y/2;
+    s.mesh.position.set(s.x, gy + hh + Math.sin(g.t*6 + i)*0.05, s.z);
+    s.shadow.position.set(s.x, gy + 0.02, s.z);
+    s.cd -= dt;
+    if (s.cd > 0) return;
+    let best = null, bd = 14;
+    for (const e of g.enemies){ const d = dist2(e.x, e.z, s.x, s.z); if (e.hp > 0 && !e.wild && d < bd){ bd = d; best = e; } }
+    if (!best) return;
+    s.cd = 1.1 * p.cdMul;
+    const d = bd || 1, c = CHARS[s.key];
+    fireProjectile(s.x, s.z, (best.x - s.x)/d*16, (best.z - s.z)/d*16, (c.dmg || 10) * Math.min(0.5, 0.25 + 0.005*p.lvl) * p.dmg * (1 + 0.35*s.st), 1.2 + 0.2*s.st, s.st ? 0xffd54f : 0x80deea);
+  });
 }
 
 /* ---------- Evolución de emergencia: una vez por partida por debajo del 20% de vida ---------- */
@@ -8157,7 +8230,7 @@ function showRegister(){
     <div class="dvl2 rg">
       <button class="rg-pill rg-lang" id="regLang">🌐 ${LANG.toUpperCase()}</button>
       <section class="rg-scene">
-        <img class="rg-logo" src="ui/logo_digibonk.webp" alt="DIGIBONK">
+        <span class="logo-fx logo-fx-rg"><img class="rg-logo" src="ui/logo_digibonk.webp" alt="DIGIBONK"></span>
         <div class="rg-tag">${t('tag')}</div>
         <p class="rg-pitch">${t('pitch')}</p>
         <div class="rg-duo">${animEl(spriteOf('agumon', 0), 'flip')}${animEl(spriteOf('gabumon', 0))}</div>
