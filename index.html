@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" translate="no">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Digibonk</title>
+<script src="i18n/i18n.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -4198,8 +4199,8 @@ function setHud(v){
 // Barra de estadística (0-100%)
 const ATTACK_NAME = {shot:'Disparo dirigido', ring:'Onda circular', orbit:'Órbita defensiva'};
 
-// ---------- Idioma (ES/EN) de login, menú principal y barra superior; el resto del juego sigue en español ----------
-let LANG = localStorage.getItem('digibonk3d-lang') === 'en' ? 'en' : 'es';
+// ---------- Idioma: los textos se escriben en español y i18n/i18n.js los traduce en pantalla al idioma elegido ----------
+let LANG = window.I18N ? I18N.lang : 'es';
 const TXT = {
   es: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'Survivor 3D de Digimon, gratis en el navegador', boot:'DIGIVICE · ACCESO AL DIGIMUNDO', who:'Niño elegido, identifícate',
        saved:'Tu nombre se guarda en este navegador.', ph:'TU NOMBRE', enter:'ENTRAR AL DIGIMUNDO', guest:'Entrar como invitado (pruebas)', needName:'Escribe un nombre',
@@ -4207,20 +4208,16 @@ const TXT = {
        coll:'COLECCIÓN', collS:'Skins, marcos, títulos y evoluciones', help:'CÓMO JUGAR', helpS:'Tutorial con vídeos', set:'AJUSTES', setS:'Calidad, sonido y guardado', recs:'Tus récords', runs:'Partidas', best:'Mejor tiempo', lvl:'Mejor nivel',
        kills:'Bajas', none:'Todavía no hay partidas. ¡Empieza una!', partner:'Tu compañero', noTitle:'Sin título', guestTag:'invitado · pruebas',
        evEnds:'Termina en', evSkin:'Skins de Navidad como legendarias en la Incubadora', tipT:'Consejo', tip:'Los élites y el jefe sueltan tickets de tirada.', daily:'Misión diaria',
-       legal:'Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon.'},
-  en: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'A free 3D Digimon survivor in your browser', boot:'DIGIVICE · DIGITAL WORLD ACCESS', who:'DigiDestined, identify yourself',
-       saved:'Your name is saved in this browser.', ph:'YOUR NAME', enter:'ENTER THE DIGITAL WORLD', guest:'Enter as guest (testing)', needName:'Type a name',
-       play:'PLAY', playS:'Pick your Digimon, map and difficulty', gacha:'GACHA', gachaS:'Pulls with Bits or tickets', player:'PLAYER', playerS:'Your card, frames and titles',
-       coll:'COLLECTION', collS:'Skins, frames, titles and evolutions', help:'HOW TO PLAY', helpS:'Video tutorial', set:'SETTINGS', setS:'Quality, sound and save', recs:'Your records', runs:'Runs', best:'Best time', lvl:'Best level',
-       kills:'Kills', none:'No runs yet. Start one!', partner:'Your partner', noTitle:'No title', guestTag:'guest · testing',
-       evEnds:'Ends in', evSkin:'Christmas skins as legendaries in the gacha', tipT:'Tip', tip:'Elites and the boss drop pull tickets.', daily:'Daily mission',
-       legal:'Unofficial, free, non-profit fan game. Not affiliated with Bandai, Toei Animation or the Digimon rights holders.'}
+       legal:'Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon.'}
 };
-const t = k => TXT[LANG][k] || TXT.es[k] || k;
+const t = k => TXT.es[k] || k;
+// Abre el selector de idiomas; al elegir, i18n.js retraduce la pantalla y aquí se rehace la actual para el código del botón
 function toggleLang(){
-  LANG = LANG === 'es' ? 'en' : 'es';
-  localStorage.setItem('digibonk3d-lang', LANG);
-  if (state === 'register') showRegister(); else if (state === 'select') showSelect(); else refreshTopbar();
+  if (!window.I18N) return;
+  I18N.openPicker(code => {
+    LANG = code;
+    if (state === 'register') showRegister(); else if (state === 'select') showSelect(); else refreshTopbar();
+  });
 }
 // Colección: todo lo que se puede conseguir, con porcentaje de completado (solo consulta)
 // Colección: lista de Digimon a la izquierda, etapas y skins de cada etapa a la derecha; marcos y títulos en otra pestaña
@@ -4791,7 +4788,7 @@ function showSettings(){
   };
   // Eliminar cuenta: borra todo lo guardado por el juego en este navegador
   document.getElementById('btnDelete').onclick = () => {
-    if (!confirm('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Bits, skins, colección, récords). No se puede deshacer.')) return;
+    if (!confirm(I18N.tr('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Bits, skins, colección, récords). No se puede deshacer.'))) return;
     Object.keys(localStorage).filter(k => k.startsWith('digibonk3d-')).forEach(k => localStorage.removeItem(k));
     location.reload();
   };
