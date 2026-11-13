@@ -2841,6 +2841,81 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
   #overlay .realhub.hb .hb-tile i img{width:22px!important;height:22px!important}
   #overlay .realhub.hb .hb-btn{height:36px!important;padding:0 11px!important;font-size:13px!important}
 }
+/* Inicio estilo "tarjetas grandes + mucha escena": columna izquierda estrecha, Jugar con borde blanco, misión alta y tabla de récords */
+#overlay .realhub.hb .hb-main{grid-template-columns:minmax(580px,36%) minmax(0,1fr) minmax(290px,330px)!important;align-items:center!important;padding:10px clamp(20px,3vw,56px) 44px!important}
+#overlay .realhub.hb .hb-left{gap:14px!important}
+#overlay .realhub.hb .hb-brand img{height:clamp(84px,13vh,132px)!important}
+#overlay .realhub.hb .hb-ver{margin-bottom:22px!important;background:var(--m-cta)!important;color:#fff!important;border:0!important;box-shadow:0 3px 0 var(--m-cta-sh)}
+#overlay .realhub.hb .hb-modes{grid-template-columns:1.62fr 1fr .78fr!important;column-gap:10px!important;align-items:stretch}
+#overlay .realhub.hb .hb-play{flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:14px;min-height:132px!important;padding:12px 16px!important;border:4px solid #fff!important;border-radius:22px 8px 22px 8px!important;box-shadow:0 0 0 2px var(--m-cta-sh),0 7px 0 var(--m-cta-sh),0 14px 28px rgba(0,0,0,.28)!important}
+#overlay .realhub.hb .hb-play .hb-dev{position:relative!important;left:auto!important;top:auto!important;width:66px!important;height:66px!important;flex:none;box-shadow:0 4px 0 rgba(0,0,0,.2),inset 0 -4px 0 rgba(0,0,0,.08)}
+#overlay .realhub.hb .hb-play-txt{max-width:calc(76% - 80px)}
+#overlay .realhub.hb .hb-play-txt small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#overlay .realhub.hb .hb-rank span{text-align:left}
+#overlay .realhub.hb .hb-play-txt b{font-size:clamp(32px,2.6vw,42px)!important}
+#overlay .realhub.hb .hb-play-txt small{font-size:12.5px!important;line-height:1.25}
+#overlay .realhub.hb .hb-play-face{right:2px!important;bottom:4px!important;width:28%!important;height:92%!important;place-items:center!important}
+#overlay .realhub.hb .hb-play-face>*{width:clamp(90px,7vw,118px)!important;height:clamp(90px,7vw,118px)!important}
+#overlay .realhub.hb .hb-stack{gap:10px!important}
+#overlay .realhub.hb .hb-stack .hb-mode{padding:8px 10px!important;gap:8px!important;border-radius:16px 6px 16px 6px!important}
+#overlay .realhub.hb .hb-stack .hb-mode>i{width:32px!important;height:32px!important;font-size:17px!important;border-radius:50%!important}
+#overlay .realhub.hb .hb-stack .hb-mode b{font-size:14px!important}
+#overlay .realhub.hb .hb-stack .hb-mode small{font-size:11px!important}
+#overlay .realhub.hb .hb-tall{flex-direction:column!important;justify-content:center;align-items:center!important;text-align:center!important;gap:6px!important;padding:10px 8px!important;border-radius:16px 6px 16px 6px!important;background:linear-gradient(160deg,#ff5f8f,#d8266a 60%,#a5124f);box-shadow:0 5px 0 #7d0d3b,0 10px 22px rgba(0,0,0,.22)}
+#overlay .realhub.hb .hb-tall>i{width:46px!important;height:46px!important;border-radius:50%!important;font-size:24px!important;background:rgba(255,255,255,.25)!important;box-shadow:inset 0 0 0 3px rgba(255,255,255,.45)}
+#overlay .realhub.hb .hb-tall small{font-size:10.5px!important;text-transform:uppercase;letter-spacing:.06em;margin:0!important}
+#overlay .realhub.hb .hb-tall b{font-size:14px!important}
+#overlay .realhub.hb .hb-tall .hb-meter{width:86%;height:6px;background:rgba(0,0,0,.25)}
+#overlay .realhub.hb .hb-tall .hb-meter i{display:block;width:auto;height:100%;border-radius:3px;background:#fff;font-size:0}
+#overlay .realhub.hb .hb-tall .hb-rw{font:900 10.5px/1.2 'Nunito',sans-serif;font-style:normal;padding:3px 7px;border-radius:999px;background:rgba(0,0,0,.2)}
+#overlay .realhub.hb .hb-row2{grid-template-columns:1.25fr 1fr!important;column-gap:10px!important}
+#overlay .realhub.hb .hb-tiles{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:9px!important}
+#overlay .realhub.hb .hb-tile{padding:10px 2px 8px!important;border-bottom-width:4px!important}
+#overlay .realhub.hb .hb-tiles .t5{--tc:#f0a020}
+#overlay .realhub.hb .hb-bar{flex-wrap:nowrap!important}
+#overlay .realhub.hb .hb-bar .hb-btn{flex:none}
+/* Tabla de récords */
+#overlay .realhub.hb .hb-lb{gap:10px!important;padding-bottom:14px!important}
+#overlay .realhub.hb .hb-lb .hb-side-h{background:var(--m-cta)!important;padding:14px 34px 14px 16px!important}
+#overlay .realhub.hb .hb-lb .hb-side-h b{font-size:19px!important;text-shadow:0 2px 0 var(--m-cta-sh)}
+#overlay .realhub.hb .hb-tabs{display:flex;gap:4px;margin:0 12px;padding:4px;border-radius:999px;background:var(--m-sunk)}
+#overlay .realhub.hb .hb-tabs button{flex:1;height:32px;border:0;border-radius:999px;background:transparent;color:var(--m-mute);font:900 12.5px/1 'Nunito',sans-serif;cursor:pointer}
+#overlay .realhub.hb .hb-tabs button.on{background:var(--m-card);color:var(--m-text);box-shadow:0 2px 6px rgba(0,0,0,.15)}
+#overlay .realhub.hb .hb-lbrow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 12px}
+#overlay .realhub.hb .hb-lbrow span{padding:7px 4px;border-radius:12px;background:var(--m-sunk);text-align:center}
+#overlay .realhub.hb .hb-lbrow b{display:block;font-size:16px;font-weight:900;font-variant-numeric:tabular-nums}
+#overlay .realhub.hb .hb-lbrow small{display:block;font-size:10px;font-weight:800;color:var(--m-mute)}
+#overlay .realhub.hb .hb-rank{list-style:none;margin:0 12px;padding:0;display:flex;flex-direction:column;gap:5px}
+#overlay .realhub.hb .hb-rank li{display:flex;align-items:center;gap:9px;padding:5px 9px;border-radius:12px;background:var(--m-rowbg)}
+#overlay .realhub.hb .hb-rank em{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:900 11px/1 'Nunito',sans-serif;font-style:normal;background:var(--m-tabon);color:var(--m-tabon-txt)}
+#overlay .realhub.hb .hb-rank img{flex:none;width:28px;height:28px;border-radius:50%;object-fit:cover;background:var(--m-sunk)}
+#overlay .realhub.hb .hb-rank span{flex:1;min-width:0}
+#overlay .realhub.hb .hb-rank b{display:block;font-size:13px;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#overlay .realhub.hb .hb-rank span small{display:block;font-size:10.5px;font-weight:700;color:var(--m-mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#overlay .realhub.hb .hb-rank strong{text-align:right;font:900 14px/1 'Nunito',sans-serif;font-variant-numeric:tabular-nums}
+#overlay .realhub.hb .hb-rank strong small{display:block;font-size:9.5px;font-weight:800;color:var(--m-mute);margin-top:2px}
+#overlay .realhub.hb .hb-rank li.top{padding:9px 10px;border:2px solid #ffd37a;background:linear-gradient(90deg,rgba(255,194,79,.22),rgba(255,194,79,.06))}
+#overlay .realhub.hb .hb-rank li.p2{border-color:#cfd8e6;background:linear-gradient(90deg,rgba(180,195,220,.25),rgba(180,195,220,.06))}
+#overlay .realhub.hb .hb-rank li.p3{border-color:#f0b08a;background:linear-gradient(90deg,rgba(240,165,107,.22),rgba(240,165,107,.06))}
+#overlay .realhub.hb .hb-rank li.top img{width:44px;height:44px;box-shadow:0 0 0 3px #fff}
+#overlay .realhub.hb .hb-rank li.top b{font-size:15px}
+#overlay .realhub.hb .hb-rank li.top strong{font-size:19px}
+#overlay .realhub.hb .hb-rank li.p1 em{background:#ffc24f;color:#5a3500}
+#overlay .realhub.hb .hb-rank li.p2 em{background:#cfd8e6;color:#2a3550}
+#overlay .realhub.hb .hb-rank li.p3 em{background:#f0a56b;color:#5a2600}
+#overlay .realhub.hb .hb-rank .hb-empty{justify-content:center;font-size:13px;font-weight:700;color:var(--m-mute);padding:16px 10px}
+#overlay .realhub.hb .hb-lb .hb-all{margin:2px 12px 0!important;background:linear-gradient(180deg,#5b8cff,#3a5fe0)!important;color:#fff!important;box-shadow:0 4px 0 #23409e}
+@media(max-width:1100px){#overlay .realhub.hb .hb-main{grid-template-columns:minmax(0,1.3fr) minmax(260px,1fr)!important}}
+@media(max-width:760px){
+  #overlay .realhub.hb .hb-modes{grid-template-columns:1fr .62fr!important;row-gap:10px!important}
+  #overlay .realhub.hb .hb-play{grid-column:1/-1}
+  #overlay .realhub.hb .hb-stack{grid-template-columns:1fr!important;grid-template-rows:1fr 1fr!important}
+  #overlay .realhub.hb .hb-row2{grid-template-columns:1fr!important;row-gap:10px!important}
+  #overlay .realhub.hb .hb-tiles{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #overlay .realhub.hb .hb-bar{flex-wrap:wrap!important}
+  #overlay .realhub.hb .hb-brand img{height:auto!important;max-width:72vw}
+  #overlay .realhub.hb .hb-ver{margin-bottom:8px!important}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -3868,7 +3943,7 @@ function getRecords(){
 }
 function saveRecord(win){
   const list = getRecords();
-  list.push({name: stageName(g.ch.id, g.ch.evolved), t: Math.floor(g.t), kills: g.kills, lvl: g.p.lvl, win});
+  list.push({name: stageName(g.ch.id, g.ch.evolved), key: g.ch.id, t: Math.floor(g.t), kills: g.kills, lvl: g.p.lvl, win});
   list.sort((a, b) => b.t - a.t || b.kills - a.kills);
   try { localStorage.setItem('digibonk3d-records', JSON.stringify(list.slice(0, 10))); } catch(e){}
 }
@@ -4155,13 +4230,14 @@ function showSelect(){
           <div class="hb-modes">
             <button type="button" id="playBtn" class="hb-play" aria-label="Jugar con ${safeText(choice.name)}">
               <span class="hb-dev"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span>
-              <span class="hb-play-txt"><b>Jugar</b><small>Modo clásico · ${safeText(choice.name)}</small></span>
+              <span class="hb-play-txt"><b>Jugar</b><small>Modo clásico<br>${safeText(choice.name)}</small></span>
               <span class="hb-play-face">${animEl(spriteOf(selectedKey, false), 'hb-face')}</span>
             </button>
             <div class="hb-stack">
               <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i>∞</i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
               <button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Tesoros"><i>🥚</i><span><b>Tesoros</b><small>${usableTickets('std')} tickets</small></span>${usableTickets('std') ? '<em class="hb-new">' + usableTickets('std') + '</em>' : ''}</button>
             </div>
+            <button type="button" class="hb-mode hb-tall m-daily" id="rhMission" aria-label="${safeText(dailyText())}"><i>☀</i><span><small>Misión diaria</small><b>${currentRuns}/${DAILY.runsGoal} partidas</b></span><span class="hb-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></span><em class="hb-rw">+${DAILY.reward} Bits</em></button>
           </div>
           <div class="hb-row2">
             ${(bannerOpen("navidadP") || bannerOpen("navidadR")) ? `<button class="hb-event" id="rhEvent" type="button" aria-label="Edición Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i>🎄</i><span><small>¡Evento! Termina en ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</small><b>Edición Digimon · Papá Noel y Reno</b></span></button>` : `<button type="button" class="hb-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
@@ -4174,13 +4250,12 @@ function showSelect(){
             <button type="button" class="hb-tile t4" id="mLog" aria-label="Logros"><i data-e="🏆"></i><b>Logros</b><small>${achOwned}/${achAll}</small></button>
             
             
+            <button type="button" class="hb-tile t5 hm-soon" id="mRank" title="Próximamente" aria-label="Ranking: próximamente"><i data-e="🥇"></i><b>Ranking</b><small>Pronto</small></button>
             <button type="button" class="hb-tile t7" id="btnPlayer" aria-label="Jugador"><i data-e="🪪"></i><span><b>Jugador</b><small>Tu ficha</small></span></button>
           </div>
           <nav class="hb-bar" aria-label="Enlaces y ajustes">
             <button type="button" class="hb-btn" id="btnAjustes"><i>⚙</i>Ajustes</button>
             <button type="button" class="hb-btn" id="btnHelp"><i>💡</i>Guía</button>
-            <button type="button" class="hb-btn hm-soon" id="mRank" title="Próximamente"><i>🥇</i>Ranking</button>
-            <button type="button" class="hb-btn hm-soon" id="mBuild" title="Próximamente"><i>🔧</i>Builds</button>
             <button type="button" class="hb-btn hb-sq" id="mBug" aria-label="Reportar bugs" title="Reportar bugs"><i>🐞</i></button>
             <button type="button" class="hb-btn hb-discord" id="mDiscord"><i>💬</i>Discord</button>
             <button type="button" class="hb-btn hb-x" id="mX"><i>𝕏</i>Digibonk</button>
@@ -4191,13 +4266,11 @@ function showSelect(){
           <img class="rw-character rw-agumon" src="ui/personaje_aprobado_agumon.png" alt="">
           <img class="rw-character rw-gabumon" src="ui/personaje_aprobado_gabumon.png" alt="">
         </div>
-        <aside class="hb-side" aria-label="Información del jugador">
-          <div class="hb-side-h"><i>▣</i><span><b>${t('daily')}</b><small>${currentRuns}/${DAILY.runsGoal} partidas hoy</small></span></div>
-          <button type="button" class="hb-mission" id="rhMission"><p>${safeText(dailyText())}</p><span class="hb-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></span><small>+${DAILY.reward} Bits · +${DAILY.rewardTix} tickets</small></button>
-          <div class="hb-lbl">Tus récords</div>
-          <div class="hb-stats"><span><b>${fmtTime(bestT)}</b><small>Mejor tiempo</small></span><span><b>${bestL}</b><small>Mejor nivel</small></span><span><b>${kills}</b><small>Bajas</small></span></div>
-          <div class="hb-lbl">Mejores partidas</div>
-          <ol class="hb-top5">${recs.slice(0, 5).map((r, i) => `<li><em>${i + 1}</em><span><b>${safeText(r.name)}</b><small>Nivel ${r.lvl || 1} · ${r.kills} bajas${r.win ? ' · victoria' : ''}</small></span><strong>${fmtTime(r.t)}</strong></li>`).join('') || '<li class="hb-empty">Todavía no hay partidas. ¡Empieza una!</li>'}</ol>
+        <aside class="hb-side hb-lb" aria-label="Tus récords">
+          <div class="hb-side-h"><i>🏆</i><span><b>Tus récords</b><small>${recs.length ? recs.length + ' partidas guardadas' : 'Juega para entrar en la tabla'}</small></span></div>
+          <div class="hb-tabs" role="tablist"><button type="button" role="tab" class="on" data-k="t">⏱ Tiempo</button><button type="button" role="tab" data-k="lvl">⭐ Nivel</button><button type="button" role="tab" data-k="kills">💥 Bajas</button></div>
+          <div class="hb-lbrow"><span><b>${fmtTime(bestT)}</b><small>Mejor tiempo</small></span><span><b>${bestL}</b><small>Mejor nivel</small></span><span><b>${kills.toLocaleString('es-ES')}</b><small>Bajas totales</small></span></div>
+          <ol class="hb-rank" id="hbRank"></ol>
           <button type="button" class="hb-all" id="rhRecords">Ver todos los récords</button>
         </aside>
         <footer class="hb-legal">${t('legal')}</footer>
@@ -4261,6 +4334,14 @@ function showSelect(){
   };
   document.getElementById('rhMission').onclick=()=>openInfo('mission');
   document.getElementById('rhRecords').onclick=()=>openInfo('records');
+  { const ol = document.getElementById('hbRank'), tabs = document.querySelectorAll('.hb-tabs button');
+    const recKey = r => r.key || Object.keys(CHARS).find(k => CHARS[k].name === r.name || (EVO_LINE[k] || []).some(e => e.name === r.name)) || 'agumon';
+    const val = (r, k) => k === 't' ? fmtTime(r.t) : k === 'lvl' ? 'Nv ' + (r.lvl || 1) : (r.kills || 0).toLocaleString('es-ES');
+    const unit = k => k === 't' ? 'tiempo' : k === 'lvl' ? 'nivel' : 'bajas';
+    const draw = k => { const list = recs.slice().sort((a, b) => (b[k] || 0) - (a[k] || 0) || b.t - a.t).slice(0, 7);
+      ol.innerHTML = list.map((r, i) => `<li class="${i < 3 ? 'top p' + (i + 1) : ''}"><em>${i + 1}</em><img src="${charIcon(recKey(r))}" alt="" onerror="this.style.visibility='hidden'"><span><b>${safeText(r.name)}</b><small>${r.win ? 'Victoria' : 'Nivel ' + (r.lvl || 1)} · ${r.kills} bajas</small></span><strong>${val(r, k)}<small>${unit(k)}</small></strong></li>`).join('') || '<li class="hb-empty">Todavía no hay partidas. ¡Empieza una!</li>'; };
+    tabs.forEach(b => b.onclick = () => { tabs.forEach(x => x.classList.toggle('on', x === b)); draw(b.dataset.k); });
+    draw('t'); }
   clearInterval(newsTimer);
 }
 // Ventana de controles: se abre con el botón "?" desde el inicio
