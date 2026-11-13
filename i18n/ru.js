@@ -950,3 +950,29 @@ I18N.add('ru', {
   "Gira el móvil": "Поверни телефон",
   "DigiBonk se juega en horizontal": "В DigiBonk играют в горизонтальном режиме"
 });
+
+// Digimon de apoyo en partida (digihuevos y captura)
+I18N.add('ru', {
+  "¡Un digihuevo!": "Дигияйцо!",
+  "Tócalo para abrirlo: dentro hay un Digimon de apoyo (flecha amarilla)": "Коснись, чтобы открыть: внутри Дигимон поддержки (жёлтая стрелка)",
+  "¡{0} se une a ti!": "{0} присоединяется к тебе!",
+  "Digimon de apoyo {0}/{1}": "Дигимон поддержки {0}/{1}",
+  "evoluciona cada {0} niveles": "эволюционирует каждые {0} уровней",
+  "¡{0} digievoluciona!": "{0} дигиэволюционирует!",
+  "Tu apoyo ahora es {0}": "Теперь твоя поддержка — {0}",
+  "Evento: ¡{0} salvaje!": "Событие: дикий {0}!",
+  "Debilítalo y quédate a su lado 2 s para capturarlo": "Ослабь его и стой рядом 2 с, чтобы поймать",
+  "{0} ha escapado": "{0} сбежал",
+  "Otra vez será": "В другой раз",
+  "Captura a {0}": "Поймай {0}",
+  "quédate a su lado {0}/2 s": "стой рядом {0}/2 с",
+  "quedan {0} s": "осталось {0} с",
+  "{0} salvaje": "Дикий {0}",
+  "debilítalo": "ослабь его",
+  "¡Debilitado! Acércate": "Ослаблен! Подойди",
+  "Apoyo: {0}": "Поддержка: {0}"
+});
+I18N.add('ru', {
+  "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "Поймай {0}: стой рядом {1}/2 с · осталось {2} с",
+  "{0} salvaje: debilítalo · quedan {1} s": "Дикий {0}: ослабь его · осталось {1} с"
+});

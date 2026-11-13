@@ -938,3 +938,29 @@ I18N.add('fr', {
   "Gira el móvil": "Tourne ton téléphone",
   "DigiBonk se juega en horizontal": "DigiBonk se joue à l'horizontale"
 });
+
+// Digimon de apoyo en partida (digihuevos y captura)
+I18N.add('fr', {
+  "¡Un digihuevo!": "Un Digi-Œuf !",
+  "Tócalo para abrirlo: dentro hay un Digimon de apoyo (flecha amarilla)": "Touche-le pour l'ouvrir : un Digimon de soutien est dedans (flèche jaune)",
+  "¡{0} se une a ti!": "{0} te rejoint !",
+  "Digimon de apoyo {0}/{1}": "Digimon de soutien {0}/{1}",
+  "evoluciona cada {0} niveles": "évolue tous les {0} niveaux",
+  "¡{0} digievoluciona!": "{0} digivolue !",
+  "Tu apoyo ahora es {0}": "Ton soutien est maintenant {0}",
+  "Evento: ¡{0} salvaje!": "Événement : {0} sauvage !",
+  "Debilítalo y quédate a su lado 2 s para capturarlo": "Affaiblis-le et reste à côté 2 s pour le capturer",
+  "{0} ha escapado": "{0} s'est échappé",
+  "Otra vez será": "Ce sera pour la prochaine fois",
+  "Captura a {0}": "Capture {0}",
+  "quédate a su lado {0}/2 s": "reste à côté {0}/2 s",
+  "quedan {0} s": "encore {0} s",
+  "{0} salvaje": "{0} sauvage",
+  "debilítalo": "affaiblis-le",
+  "¡Debilitado! Acércate": "Affaibli ! Approche-toi",
+  "Apoyo: {0}": "Soutien : {0}"
+});
+I18N.add('fr', {
+  "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "Capture {0} : reste à côté {1}/2 s · encore {2} s",
+  "{0} salvaje: debilítalo · quedan {1} s": "{0} sauvage : affaiblis-le · encore {1} s"
+});

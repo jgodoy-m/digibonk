@@ -952,3 +952,29 @@ I18N.add('ja', {
   "Gira el móvil": "スマホを横にしてね",
   "DigiBonk se juega en horizontal": "DigiBonkは横画面で遊びます"
 });
+
+// Digimon de apoyo en partida (digihuevos y captura)
+I18N.add('ja', {
+  "¡Un digihuevo!": "デジタマだ！",
+  "Tócalo para abrirlo: dentro hay un Digimon de apoyo (flecha amarilla)": "タッチして開けよう：中にサポートデジモンがいる（黄色の矢印）",
+  "¡{0} se une a ti!": "{0}が仲間になった！",
+  "Digimon de apoyo {0}/{1}": "サポートデジモン {0}/{1}",
+  "evoluciona cada {0} niveles": "{0}レベルごとに進化",
+  "¡{0} digievoluciona!": "{0}が進化！",
+  "Tu apoyo ahora es {0}": "サポートが{0}になった",
+  "Evento: ¡{0} salvaje!": "イベント：野生の{0}！",
+  "Debilítalo y quédate a su lado 2 s para capturarlo": "弱らせてから2秒そばにいると捕まえられる",
+  "{0} ha escapado": "{0}は逃げてしまった",
+  "Otra vez será": "また今度",
+  "Captura a {0}": "{0}を捕まえよう",
+  "quédate a su lado {0}/2 s": "そばにいる {0}/2秒",
+  "quedan {0} s": "残り{0}秒",
+  "{0} salvaje": "野生の{0}",
+  "debilítalo": "弱らせよう",
+  "¡Debilitado! Acércate": "弱った！近づこう",
+  "Apoyo: {0}": "サポート：{0}"
+});
+I18N.add('ja', {
+  "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "{0}を捕まえよう：そばにいる {1}/2秒 · 残り{2}秒",
+  "{0} salvaje: debilítalo · quedan {1} s": "野生の{0}：弱らせよう · 残り{1}秒"
+});

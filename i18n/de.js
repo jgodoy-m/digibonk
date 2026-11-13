@@ -938,3 +938,29 @@ I18N.add('de', {
   "Gira el móvil": "Dreh dein Handy",
   "DigiBonk se juega en horizontal": "DigiBonk wird im Querformat gespielt"
 });
+
+// Digimon de apoyo en partida (digihuevos y captura)
+I18N.add('de', {
+  "¡Un digihuevo!": "Ein Digi-Ei!",
+  "Tócalo para abrirlo: dentro hay un Digimon de apoyo (flecha amarilla)": "Berühre es, um es zu öffnen: Darin ist ein Hilfs-Digimon (gelber Pfeil)",
+  "¡{0} se une a ti!": "{0} schließt sich dir an!",
+  "Digimon de apoyo {0}/{1}": "Hilfs-Digimon {0}/{1}",
+  "evoluciona cada {0} niveles": "digitiert alle {0} Stufen",
+  "¡{0} digievoluciona!": "{0} digitiert!",
+  "Tu apoyo ahora es {0}": "Deine Hilfe ist jetzt {0}",
+  "Evento: ¡{0} salvaje!": "Ereignis: wildes {0}!",
+  "Debilítalo y quédate a su lado 2 s para capturarlo": "Schwäche es und bleib 2 s neben ihm, um es zu fangen",
+  "{0} ha escapado": "{0} ist entkommen",
+  "Otra vez será": "Vielleicht beim nächsten Mal",
+  "Captura a {0}": "Fange {0}",
+  "quédate a su lado {0}/2 s": "bleib neben ihm {0}/2 s",
+  "quedan {0} s": "noch {0} s",
+  "{0} salvaje": "Wildes {0}",
+  "debilítalo": "schwäche es",
+  "¡Debilitado! Acércate": "Geschwächt! Komm näher",
+  "Apoyo: {0}": "Hilfe: {0}"
+});
+I18N.add('de', {
+  "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "Fange {0}: bleib neben ihm {1}/2 s · noch {2} s",
+  "{0} salvaje: debilítalo · quedan {1} s": "Wildes {0}: schwäche es · noch {1} s"
+});

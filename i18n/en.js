@@ -937,3 +937,29 @@ I18N.add('en', {
   "Gira el móvil": "Turn your phone",
   "DigiBonk se juega en horizontal": "DigiBonk is played in landscape"
 });
+
+// Digimon de apoyo en partida (digihuevos y captura)
+I18N.add('en', {
+  "¡Un digihuevo!": "A Digi-Egg!",
+  "Tócalo para abrirlo: dentro hay un Digimon de apoyo (flecha amarilla)": "Touch it to open it: a support Digimon is inside (yellow arrow)",
+  "¡{0} se une a ti!": "{0} joins you!",
+  "Digimon de apoyo {0}/{1}": "Support Digimon {0}/{1}",
+  "evoluciona cada {0} niveles": "evolves every {0} levels",
+  "¡{0} digievoluciona!": "{0} digivolves!",
+  "Tu apoyo ahora es {0}": "Your support is now {0}",
+  "Evento: ¡{0} salvaje!": "Event: wild {0}!",
+  "Debilítalo y quédate a su lado 2 s para capturarlo": "Weaken it and stay next to it for 2 s to capture it",
+  "{0} ha escapado": "{0} got away",
+  "Otra vez será": "Maybe next time",
+  "Captura a {0}": "Capture {0}",
+  "quédate a su lado {0}/2 s": "stay next to it {0}/2 s",
+  "quedan {0} s": "{0} s left",
+  "{0} salvaje": "Wild {0}",
+  "debilítalo": "weaken it",
+  "¡Debilitado! Acércate": "Weakened! Get close",
+  "Apoyo: {0}": "Support: {0}"
+});
+I18N.add('en', {
+  "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "Capture {0}: stay next to it {1}/2 s · {2} s left",
+  "{0} salvaje: debilítalo · quedan {1} s": "Wild {0}: weaken it · {1} s left"
+});

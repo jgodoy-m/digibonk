@@ -945,3 +945,29 @@ I18N.add('tr', {
   "Gira el móvil": "Telefonunu çevir",
   "DigiBonk se juega en horizontal": "DigiBonk yatay oynanır"
 });
+
+// Digimon de apoyo en partida (digihuevos y captura)
+I18N.add('tr', {
+  "¡Un digihuevo!": "Bir Digi-Yumurta!",
+  "Tócalo para abrirlo: dentro hay un Digimon de apoyo (flecha amarilla)": "Açmak için dokun: içinde bir destek Digimon'u var (sarı ok)",
+  "¡{0} se une a ti!": "{0} sana katıldı!",
+  "Digimon de apoyo {0}/{1}": "Destek Digimon'u {0}/{1}",
+  "evoluciona cada {0} niveles": "her {0} seviyede evrimleşir",
+  "¡{0} digievoluciona!": "{0} digievrimleşiyor!",
+  "Tu apoyo ahora es {0}": "Desteğin artık {0}",
+  "Evento: ¡{0} salvaje!": "Etkinlik: vahşi {0}!",
+  "Debilítalo y quédate a su lado 2 s para capturarlo": "Zayıflat ve yakalamak için 2 sn yanında kal",
+  "{0} ha escapado": "{0} kaçtı",
+  "Otra vez será": "Bir dahaki sefere",
+  "Captura a {0}": "{0} yakala",
+  "quédate a su lado {0}/2 s": "yanında kal {0}/2 sn",
+  "quedan {0} s": "{0} sn kaldı",
+  "{0} salvaje": "Vahşi {0}",
+  "debilítalo": "zayıflat",
+  "¡Debilitado! Acércate": "Zayıfladı! Yaklaş",
+  "Apoyo: {0}": "Destek: {0}"
+});
+I18N.add('tr', {
+  "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "{0} yakala: yanında kal {1}/2 sn · {2} sn kaldı",
+  "{0} salvaje: debilítalo · quedan {1} s": "Vahşi {0}: zayıflat · {1} sn kaldı"
+});
