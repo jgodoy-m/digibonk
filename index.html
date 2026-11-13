@@ -3157,6 +3157,55 @@ html[data-theme=oscuro] #overlay .help-box.gd .gd-tabs button.on{background:#3d4
   #overlay .help-box.gd .gd-next{min-width:0;padding:10px 14px}
   #overlay .help-box.gd .gd-count{display:none}
 }
+/* ===== Móvil en horizontal durante la partida: HUD compacto y subida de nivel en fila ===== */
+@media (orientation:landscape) and (max-height:500px){
+  #hud{left:10px!important;top:8px!important}
+  .hud-card{padding:6px 10px 6px 6px!important;gap:8px!important;border-radius:16px!important}
+  .hud-portrait:not([class*="fr-"]){width:42px!important;height:42px!important}
+  .hud-lvl{min-width:18px!important;height:18px!important;font-size:10px!important;right:-6px!important;bottom:-6px!important}
+  .hud-main{min-width:0!important}.hud-hp{width:130px!important;height:12px!important}
+  .hud-name{font-size:13px!important}.hud-title{display:none!important}.hud-chips{display:none!important}
+  #xpTxt{top:68px!important;left:10px!important;font-size:11px!important}
+  #hudTop{top:6px!important;bottom:auto!important;padding:4px 12px 5px!important;min-width:0!important;max-width:44vw;gap:2px!important;border-radius:14px!important}
+  #hudTop #timer{font-size:19px!important}
+  #hudZone{display:none!important}
+  #hudChips{zoom:.78}
+  #hudObj{font-size:11px!important;white-space:normal!important;text-align:center}
+  #minimap{width:80px!important;height:80px!important;top:8px!important;right:8px!important}
+  #tPause{top:8px!important;right:98px!important;left:auto!important;width:36px!important;height:36px!important}
+  #tDash{right:100px!important;bottom:20px!important;width:56px!important;height:56px!important}
+  #tJump{right:22px!important;bottom:112px!important;width:52px!important;height:52px!important}
+  #tEvo{right:168px!important;bottom:24px!important;width:52px!important;height:52px!important}
+  #bonkBar{width:70px!important;height:70px!important;right:20px!important;bottom:22px!important}
+  #hudSummon{top:96px!important;bottom:auto!important;left:auto!important;right:8px!important;transform:none!important;padding:5px 8px 5px 5px!important}
+  #hudSummon kbd,#hudSummon small{display:none!important}#hudSummon img{width:26px!important;height:26px!important}
+  #skillBar{left:10px!important;top:92px!important;bottom:auto!important}.sb-i{width:32px!important;height:32px!important;border-radius:10px!important}
+  #evHud{top:58px!important;font-size:11px!important;max-width:44vw;white-space:normal!important;text-align:center}
+  #tJoy{width:108px;height:108px;margin:-54px 0 0 -54px}
+  #combo{top:auto!important;bottom:20px!important;right:auto!important;left:50%!important;transform:translateX(-50%);font-size:22px!important}
+  /* Subida de nivel: tres cartas en fila, todo dentro de la pantalla */
+  #overlay:not(.menu-mode):has(>.lv3){padding:6px 8px!important;--ui-top:6px;--ui-bot:6px}
+  #overlay .lv3{gap:6px!important;max-height:100%}
+  #overlay .lv3-head h2,#overlay .lv3-banner{font-size:19px!important;padding:2px 14px!important;margin:0!important}
+  #overlay .lv3-head p{display:none}
+  #overlay .lv3-row{flex-direction:row!important;gap:8px!important}
+  #overlay .lv3-card{width:min(31vw,250px)!important;height:auto!important;max-height:calc(100dvh - 96px);padding:28px 10px 10px!important;gap:4px!important;overflow:hidden}
+  #overlay .lv3-art{max-width:100%!important;max-height:min(24dvh,96px)!important;width:auto!important;margin:0!important}
+  #overlay .lv3-ic{font-size:28px!important}
+  #overlay .lv3-card b{font-size:14px!important}
+  #overlay .lv3-card p{font-size:11.5px!important;line-height:1.3!important}
+  #overlay .lv3-tag{top:9px!important;font-size:9px!important}
+  #overlay .lv3-acts{margin-top:2px!important;gap:8px!important}
+  #overlay .lv3-act{padding:7px 12px!important;font-size:12px!important}
+  body:has(#overlay:not(.hidden)>.lv3) :is(#hud,#hudTop,#bonkBar,#xpTxt,#minimap,#hudSummon,#skillBar,#tPause){visibility:hidden!important}
+}
+/* Móviles pequeños en horizontal (iPhone SE): el objetivo y la barra de vida no caben juntos */
+@media (orientation:landscape) and (max-height:500px) and (max-width:700px){
+  .hud-hp{width:96px!important}.hud-name{font-size:12px!important}
+  #hudTop{max-width:36vw}#hudObj{display:none!important}#hudChips{zoom:.68}
+}
+/* En pantallas táctiles no hay teclado: fuera las pistas de teclas */
+body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act button,.pz2) kbd,body.is-touch .lv3-key{display:none!important}
 </style>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.js" } }
