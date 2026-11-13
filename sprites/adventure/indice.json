@@ -1,0 +1,602 @@
+{
+ "botamon": {
+  "nombre": "Botamon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "koromon": {
+  "nombre": "Koromon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "agumon": {
+  "nombre": "Agumon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "greymon": {
+  "nombre": "Greymon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "metalgreymon": {
+  "nombre": "MetalGreymon (Vaccine)",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "wargreymon": {
+  "nombre": "WarGreymon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "skullgreymon": {
+  "nombre": "SkullGreymon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "punimon": {
+  "nombre": "Punimon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "tsunomon": {
+  "nombre": "Tsunomon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "gabumon": {
+  "nombre": "Gabumon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "garurumon": {
+  "nombre": "Garurumon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "weregarurumon": {
+  "nombre": "WereGarurumon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "metalgarurumon": {
+  "nombre": "MetalGarurumon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "nyokimon": {
+  "nombre": "Nyokimon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "yokomon": {
+  "nombre": "Yokomon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "biyomon": {
+  "nombre": "Biyomon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "birdramon": {
+  "nombre": "Birdramon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "garudamon": {
+  "nombre": "Garudamon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "pabumon": {
+  "nombre": "Pabumon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "motimon": {
+  "nombre": "Motimon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "tentomon": {
+  "nombre": "Tentomon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "kabuterimon": {
+  "nombre": "Kabuterimon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "megakabuterimon": {
+  "nombre": "MegaKabuterimon (Red)",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "yuramon": {
+  "nombre": "Yuramon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "tanemon": {
+  "nombre": "Tanemon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "palmon": {
+  "nombre": "Palmon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "togemon": {
+  "nombre": "Togemon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "lillymon": {
+  "nombre": "Lillymon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "pichimon": {
+  "nombre": "Pichimon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "bukamon": {
+  "nombre": "Bukamon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "gomamon": {
+  "nombre": "Gomamon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "ikkakumon": {
+  "nombre": "Ikkakumon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "zudomon": {
+  "nombre": "Zudomon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "poyomon": {
+  "nombre": "Poyomon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "tokomon": {
+  "nombre": "Tokomon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "patamon": {
+  "nombre": "Patamon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "angemon": {
+  "nombre": "Angemon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "magnaangemon": {
+  "nombre": "MagnaAngemon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "snowbotamon": {
+  "nombre": "Yukimibotamon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "nyaromon": {
+  "nombre": "Nyaromon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "salamon": {
+  "nombre": "Salamon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "gatomon": {
+  "nombre": "Gatomon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "angewomon": {
+  "nombre": "Angewomon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "devimon": {
+  "nombre": "Devimon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "etemon": {
+  "nombre": "Etemon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "metaletemon": {
+  "nombre": "MetalEtemon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "myotismon": {
+  "nombre": "Myotismon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "venommyotismon": {
+  "nombre": "VenomMyotismon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "demidevimon": {
+  "nombre": "DemiDevimon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "metalseadramon": {
+  "nombre": "MetalSeadramon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "puppetmon": {
+  "nombre": "Puppetmon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "machinedramon": {
+  "nombre": "Machinedramon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "piedmon": {
+  "nombre": "Piedmon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "apocalymon": {
+  "nombre": "Apocalymon",
+  "autor": "tortoisehel",
+  "estilo": "Dot"
+ },
+ "ladydevimon": {
+  "nombre": "LadyDevimon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "leomon": {
+  "nombre": "Leomon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "ogremon": {
+  "nombre": "Ogremon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "kuwagamon": {
+  "nombre": "Kuwagamon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "shellmon": {
+  "nombre": "Shellmon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "seadramon": {
+  "nombre": "Seadramon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "meramon": {
+  "nombre": "Meramon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "andromon": {
+  "nombre": "Andromon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "monzaemon": {
+  "nombre": "Monzaemon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "numemon": {
+  "nombre": "Numemon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "unimon": {
+  "nombre": "Unimon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "centarumon": {
+  "nombre": "Centarumon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "frigimon": {
+  "nombre": "Frigimon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "mojyamon": {
+  "nombre": "Mojyamon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "bakemon": {
+  "nombre": "Bakemon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "elecmon": {
+  "nombre": "Elecmon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "whamon": {
+  "nombre": "Whamon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "gazimon": {
+  "nombre": "Gazimon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "tyrannomon": {
+  "nombre": "Tyrannomon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "monochromon": {
+  "nombre": "Monochromon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "drimogemon": {
+  "nombre": "Drimogemon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "sukamon": {
+  "nombre": "Sukamon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "chuumon": {
+  "nombre": "Chuumon",
+  "autor": "Ray",
+  "estilo": "Dot"
+ },
+ "piximon": {
+  "nombre": "Piximon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "gekomon": {
+  "nombre": "Gekomon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "shogungekomon": {
+  "nombre": "ShogunGekomon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "otamamon": {
+  "nombre": "Otamamon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "vegiemon": {
+  "nombre": "Vegiemon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "digitamamon": {
+  "nombre": "Digitamamon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "tuskmon": {
+  "nombre": "Tuskmon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "kokatorimon": {
+  "nombre": "Kokatorimon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "nanomon": {
+  "nombre": "Datamon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "wizardmon": {
+  "nombre": "Wizardmon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "gesomon": {
+  "nombre": "Gesomon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "raremon": {
+  "nombre": "Raremon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "mammothmon": {
+  "nombre": "Mammothmon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "darktyrannomon": {
+  "nombre": "DarkTyrannomon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "phantomon": {
+  "nombre": "Phantomon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "gizamon": {
+  "nombre": "Gizamon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "megaseadramon": {
+  "nombre": "MegaSeadramon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "scorpiomon": {
+  "nombre": "Scorpiomon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "divermon": {
+  "nombre": "Divermon",
+  "autor": "phrogmentado",
+  "estilo": "Dot"
+ },
+ "kiwimon": {
+  "nombre": "Kiwimon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "cherrymon": {
+  "nombre": "Cherrymon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "garbagemon": {
+  "nombre": "Garbagemon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "deramon": {
+  "nombre": "Deramon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "floramon": {
+  "nombre": "Floramon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "mushroomon": {
+  "nombre": "Mushroomon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "redvegiemon": {
+  "nombre": "RedVegiemon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "blossomon": {
+  "nombre": "Blossomon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "mekanorimon": {
+  "nombre": "Mekanorimon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "tankmon": {
+  "nombre": "Tankmon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "megadramon": {
+  "nombre": "Megadramon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "gigadramon": {
+  "nombre": "Gigadramon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "warumonzaemon": {
+  "nombre": "WaruMonzaemon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "saberleomon": {
+  "nombre": "SaberLeomon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "pumpkinmon": {
+  "nombre": "Pumpkinmon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "gotsumon": {
+  "nombre": "Gotsumon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "dokugumon": {
+  "nombre": "Dokugumon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "flymon": {
+  "nombre": "Flymon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "snimon": {
+  "nombre": "Snimon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "tortomon": {
+  "nombre": "Tortomon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "hagurumon": {
+  "nombre": "Hagurumon",
+  "autor": "Jaime (generado con IA)",
+  "estilo": "Nuevo 2026"
+ },
+ "guardromon": {
+  "nombre": "Guardromon",
+  "autor": "Bandai",
+  "estilo": "Dot"
+ },
+ "giromon": {
+  "nombre": "Giromon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ },
+ "ebidramon": {
+  "nombre": "Ebidramon",
+  "autor": "tero0x",
+  "estilo": "Hi-res"
+ }
+}
