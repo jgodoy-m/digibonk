@@ -2932,6 +2932,80 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
   #overlay .realhub.hb .hb-brand img{height:auto!important;max-width:72vw}
   #overlay .realhub.hb .hb-ver{margin-bottom:8px!important}
 }
+/* Menú de inicio reorganizado: Jugar protagonista, modos compactos, misiones en una tarjeta, evento compacto y seis accesos con el mismo sistema */
+#overlay .realhub.hb .hb-left{gap:12px!important}
+#overlay .realhub.hb .hb-ver{margin-bottom:16px!important}
+#overlay .realhub.hb :is(.hb-c1,.hb-c2){background:var(--m-card)!important;color:var(--m-text)!important;border-color:var(--m-cardline)!important;box-shadow:var(--m-pillsh),0 4px 14px rgba(0,0,0,.12)!important}
+#overlay .realhub.hb .nm-modes{display:grid!important;grid-template-columns:1.45fr 1fr!important;gap:10px!important;padding:0!important;align-items:stretch}
+#overlay .realhub.hb .nm-play{display:block!important;min-height:156px!important;padding:14px 18px 48px!important}
+#overlay .realhub.hb .nm-play .hb-play-txt{max-width:56%!important}
+#overlay .realhub.hb .nm-play .hb-play-txt b{font-size:clamp(36px,3vw,50px)!important;letter-spacing:.01em}
+#overlay .realhub.hb .nm-play .hb-play-face{right:8px!important;bottom:34px!important;top:0!important;height:auto!important;width:46%!important;place-items:end center!important}
+#overlay .realhub.hb .nm-play .hb-play-face>*{width:clamp(112px,8.5vw,140px)!important;height:clamp(112px,8.5vw,140px)!important}
+#overlay .realhub.hb .nm-band{position:absolute!important;left:0;right:0;bottom:0;z-index:2;height:38px;display:flex;align-items:center;gap:8px;padding:0 14px 0 10px;background:rgba(80,24,0,.28);font:800 13px/1 'Nunito',sans-serif;white-space:nowrap;overflow:hidden}
+#overlay .realhub.hb .nm-band b{font-weight:900}
+#overlay .realhub.hb .nm-band .hb-dev{position:relative!important;left:auto!important;top:auto!important;width:28px!important;height:28px!important;flex:none;box-shadow:0 0 0 2px rgba(255,255,255,.7)!important}
+#overlay .realhub.hb .nm-stack{display:grid!important;grid-template-rows:1fr 1fr!important;gap:10px!important}
+#overlay .realhub.hb .nm-stack .hb-mode{padding:10px 12px!important;gap:10px!important;min-height:0}
+#overlay .realhub.hb .nm-stack .hb-mode>i{width:40px!important;height:40px!important;font-size:22px!important;border-radius:50%!important}
+#overlay .realhub.hb .nm-stack .hb-mode>i img{width:24px;height:30px;object-fit:contain;image-rendering:pixelated}
+#overlay .realhub.hb .nm-stack .hb-mode b{font-size:16px!important}
+#overlay .realhub.hb .nm-stack .hb-mode small{font-size:11.5px!important;white-space:nowrap}
+#overlay .realhub.hb .nm-tix{font-style:normal;font-weight:900;display:inline-block;min-width:18px;padding:1px 6px;margin-right:2px;border-radius:999px;background:rgba(255,255,255,.55);text-align:center}
+#overlay .realhub.hb .nm-quests{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--m-cardline);border-radius:var(--sh-mid,18px);background:var(--m-card);box-shadow:var(--m-pillsh),0 6px 18px rgba(0,0,0,.12);overflow:hidden}
+#overlay .realhub.hb .nm-q{display:flex;align-items:center;gap:10px;min-width:0;padding:10px 12px;border:0;background:transparent;color:var(--m-text);text-align:left;cursor:pointer;font-family:'Nunito',sans-serif;transition:background .15s}
+#overlay .realhub.hb .nm-q+.nm-q{border-left:1px solid var(--m-line)}
+#overlay .realhub.hb .nm-q:hover{background:var(--m-sunk)}
+#overlay .realhub.hb .nm-q>i{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:17px;background:color-mix(in srgb,#e2476b 16%,transparent)}
+#overlay .realhub.hb .nm-q+.nm-q>i{background:color-mix(in srgb,#12b4c8 18%,transparent)}
+#overlay .realhub.hb .nm-q>span{flex:1;min-width:0}
+#overlay .realhub.hb .nm-q small{display:block;font-size:10.5px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--m-mute)}
+#overlay .realhub.hb .nm-q b{display:block;font-size:14px;font-weight:900;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#overlay .realhub.hb .nm-q .hb-meter{display:block;height:6px;margin-top:5px;border-radius:3px;background:var(--m-line);overflow:hidden}
+#overlay .realhub.hb .nm-q .hb-meter i{display:block;height:100%;border-radius:3px;background:#e2476b}
+#overlay .realhub.hb .nm-q .hb-dots{margin-top:5px}
+#overlay .realhub.hb .nm-q .hb-dots u.on{background:#12b4c8}
+#overlay .realhub.hb .nm-rw{flex:none;font:900 11px/1 'Nunito',sans-serif;font-style:normal;padding:5px 8px;border-radius:999px;background:var(--m-sunk);color:var(--m-gold)}
+#overlay .realhub.hb .nm-event{display:flex!important;align-items:center;gap:10px!important;min-height:0;padding:6px 8px 6px 6px!important;border-radius:999px!important;background:linear-gradient(90deg,#6c3fe0,#b8378e)!important;box-shadow:0 3px 0 #3f2287,0 6px 16px rgba(0,0,0,.18)!important;color:#fff}
+#overlay .realhub.hb .nm-event::after{display:none!important}
+#overlay .realhub.hb .nm-event>i{width:30px!important;height:30px!important;border-radius:50%!important;font-size:16px!important}
+#overlay .realhub.hb .nm-event>span{flex:1;min-width:0;display:flex;align-items:baseline;gap:8px;white-space:nowrap;overflow:hidden}
+#overlay .realhub.hb .nm-event small{margin:0!important;font-size:10.5px!important;letter-spacing:.08em;opacity:.85}
+#overlay .realhub.hb .nm-event b{font-size:14px!important;overflow:hidden;text-overflow:ellipsis}
+#overlay .realhub.hb .nm-event>em{flex:none;font:900 12px/1 'Nunito',sans-serif;font-style:normal;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.25)}
+#overlay .realhub.hb .nm-event.hm-soon{background:var(--m-sunk)!important;color:var(--m-mute)!important;box-shadow:none!important}
+#overlay .realhub.hb .nm-tiles{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important}
+#overlay .realhub.hb .nm-tiles .hb-tile{padding:8px 4px 7px!important;gap:1px!important;border:1px solid var(--m-cardline)!important;border-bottom:3px solid var(--tc)!important;transition:transform .14s,box-shadow .14s!important}
+#overlay .realhub.hb .nm-tiles .hb-tile i{transform:none!important;width:42px!important;height:42px!important;margin:0 0 5px!important;border-radius:12px!important;overflow:hidden;background:radial-gradient(circle at 50% 35%,#1d5fc4,#0a1a46 75%)!important;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--tc) 70%,#9aefff),0 2px 0 rgba(0,0,0,.18)}
+#overlay .realhub.hb .nm-tiles .hb-tile i::after{display:none!important}
+#overlay .realhub.hb .nm-tiles .hb-tile i img{transform:none!important;width:30px!important;height:30px!important;object-fit:contain;image-rendering:auto}
+#overlay .realhub.hb .nm-tiles .hb-tile i.nm-art img{width:100%!important;height:100%!important;object-fit:cover}
+#overlay .realhub.hb .nm-tiles .t3 i img{width:22px!important;height:28px!important;image-rendering:pixelated}
+#overlay .realhub.hb .nm-tiles .hb-tile b{font-size:12.5px!important}
+#overlay .realhub.hb .nm-tiles .hb-tile small{font-size:10.5px!important}
+#overlay .realhub.hb .nm-tiles .hb-tile:hover{transform:translateY(-3px)!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--tc) 45%,transparent),0 8px 20px color-mix(in srgb,var(--tc) 30%,rgba(0,0,0,.2))!important}
+#overlay .realhub.hb .nm-tiles .hb-tile:active{transform:translateY(1px) scale(.97)!important;box-shadow:0 2px 8px rgba(0,0,0,.15)!important}
+#overlay .realhub.hb .nm-tiles .hb-tile.hm-soon{border-bottom-color:var(--m-line2)!important}
+#overlay .realhub.hb .nm-tiles .hb-tile.hm-soon>*{opacity:.75!important;filter:grayscale(.85)!important}
+#overlay .realhub.hb .nm-tiles .hb-tile.hm-soon:hover{transform:none!important;box-shadow:none!important}
+@media(max-width:760px){
+  #overlay .realhub.hb .nm-modes{grid-template-columns:1fr 1fr!important}
+  #overlay .realhub.hb .nm-play{grid-column:1/-1;min-height:150px!important}
+  #overlay .realhub.hb .nm-stack{grid-column:1/-1;grid-template-columns:1fr 1fr!important;grid-template-rows:auto!important}
+  #overlay .realhub.hb .nm-stack .hb-mode{padding:9px 10px!important;gap:8px!important}
+  #overlay .realhub.hb .nm-stack .hb-mode>i{width:34px!important;height:34px!important}
+  #overlay .realhub.hb .nm-stack .hb-mode b{font-size:14.5px!important}
+  #overlay .realhub.hb .nm-stack .hb-mode small{font-size:10.5px!important;white-space:normal}
+  #overlay .realhub.hb .nm-q{padding:9px 10px;gap:8px}
+  #overlay .realhub.hb .nm-q>i{display:none}
+  #overlay .realhub.hb .nm-q b{font-size:13px}
+  #overlay .realhub.hb .nm-rw{display:none}
+  #overlay .realhub.hb .nm-tiles{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile{padding:8px 4px 7px!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile b{font-size:12.5px!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile small{font-size:10.5px!important}
+  #overlay .realhub.hb .nm-long{display:none}
+}
 /* Mismo tamaño para todos los paneles: grandes (Colección, Laboratorio, Mapa) y medianos (Ajustes, Guía, Código) */
 #overlay .picker-screen.cl4,#overlay:not(.menu-mode)>.picker-screen.ms,#overlay .picker-screen.ms,#overlay .lab-screen{width:min(1080px,94vw)!important;max-width:none!important;height:min(780px,calc(100vh - 60px))!important;max-height:none!important;box-sizing:border-box!important;overflow-y:auto}
 #overlay .picker-screen.cl4{overflow:hidden}
@@ -4250,31 +4324,29 @@ function showSelect(){
       <section class="hb-main">
         <div class="hb-left">
           <h1 class="hb-brand"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"><span class="hb-ver">BETA</span></h1>
-          <div class="hb-modes">
-            <button type="button" id="playBtn" class="hb-play" aria-label="Jugar con ${safeText(choice.name)}">
-              <span class="hb-dev"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span>
-              <span class="hb-play-txt"><b>Jugar</b><small>Modo clásico<br>${safeText(choice.name)}</small></span>
+          <div class="hb-modes nm-modes">
+            <button type="button" id="playBtn" class="hb-play nm-play" aria-label="Jugar con ${safeText(choice.name)}">
+              <span class="hb-play-txt"><b>Jugar</b></span>
               <span class="hb-play-face">${animEl(spriteOf(selectedKey, false), 'hb-face')}</span>
+              <span class="nm-band"><span class="hb-dev"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span>Modo clásico · <b>${safeText(choice.name)}</b></span></span>
             </button>
-            <div class="hb-stack">
+            <div class="hb-stack nm-stack">
               <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i>∞</i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
-              <button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Tesoros"><i>🥚</i><span><b>Tesoros</b><small>${usableTickets('std')} tickets</small></span>${usableTickets('std') ? '<em class="hb-new">' + usableTickets('std') + '</em>' : ''}</button>
+              <button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Tesoros: ${usableTickets('std')} tickets disponibles"><i><img src="ui/gacha/huevo_l0.png" alt=""></i><span><b>Tesoros</b><small><em class="nm-tix">${usableTickets('std')}</em> tickets<span class="nm-long"> disponibles</span></small></span></button>
             </div>
-            <button type="button" class="hb-mode hb-tall m-daily" id="rhMission" aria-label="${safeText(dailyText())}"><i>☀</i><span><small>Misión diaria</small><b>${currentRuns}/${DAILY.runsGoal} partidas</b></span><span class="hb-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></span><em class="hb-rw">+${DAILY.reward} Bits</em></button>
           </div>
-          <div class="hb-row2">
-            ${(bannerOpen("navidadP") || bannerOpen("navidadR")) ? `<button class="hb-event" id="rhEvent" type="button" aria-label="Edición Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i>🎄</i><span><small>¡Evento! Termina en ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</small><b>Edición Digimon · Papá Noel y Reno</b></span></button>` : `<button type="button" class="hb-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
-            <button type="button" class="hb-enc" id="mEnc" aria-label="Encargos: misiones diarias"><i>📋</i><span><b>Encargos</b><span class="hb-dots">${encList.map(e => `<u class="${e.done ? 'on' : ''}"></u>`).join('')}</span><small>${encDone}/${encList.length} hechos hoy</small></span></button>
+          <div class="nm-quests" role="group" aria-label="Misiones y encargos">
+            <button type="button" class="nm-q" id="rhMission" aria-label="${safeText(dailyText())}"><i>☀</i><span><small>Misión diaria</small><b>${currentRuns}/${DAILY.runsGoal} partidas</b><span class="hb-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></span></span><em class="nm-rw">+${DAILY.reward} Bits</em></button>
+            <button type="button" class="nm-q" id="mEnc" aria-label="Encargos: ${encDone} de ${encList.length} hechos hoy"><i>📋</i><span><small>Encargos</small><b>${encDone}/${encList.length} hechos hoy</b><span class="hb-dots">${encList.map(e => `<u class="${e.done ? 'on' : ''}"></u>`).join('')}</span></span></button>
           </div>
-          <div class="hb-tiles">
+          ${(bannerOpen("navidadP") || bannerOpen("navidadR")) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i>🎄</i><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
+          <div class="hb-tiles nm-tiles">
             <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex"><i><img src="ui/icons/digivice.png" alt=""></i><b>Digidex</b><small>${unlockedSet().size}/${Object.keys(CHARS).length}</small></button>
-            <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio"><i data-e="🧪"></i><b>Laboratorio</b><small>${SAVE.bits.toLocaleString('es-ES')} Bits</small></button>
+            <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio"><i class="nm-art"><img src="ui/hub/ic_laboratorio.webp" alt=""></i><b>Laboratorio</b><small>${SAVE.bits.toLocaleString('es-ES')} Bits</small></button>
             <button type="button" class="hb-tile t3" id="btnTesoros" aria-label="Gacha: ${usableTickets('std')} tickets"><i><img src="ui/gacha/huevo_l0.png" alt=""></i><b>Gacha</b><small>${usableTickets('std')} tickets</small></button>
-            <button type="button" class="hb-tile t4" id="mLog" aria-label="Logros"><i data-e="🏆"></i><b>Logros</b><small>${achOwned}/${achAll}</small></button>
-            
-            
-            <button type="button" class="hb-tile t5 hm-soon" id="mRank" title="Próximamente" aria-label="Ranking: próximamente"><i data-e="🥇"></i><b>Ranking</b><small>Pronto</small></button>
-            <button type="button" class="hb-tile t7" id="btnPlayer" aria-label="Jugador"><i data-e="🪪"></i><span><b>Jugador</b><small>Tu ficha</small></span></button>
+            <button type="button" class="hb-tile t4" id="mLog" aria-label="Logros"><i><img src="ui/hud/ic_emblema.webp" alt=""></i><b>Logros</b><small>${achOwned}/${achAll}</small></button>
+            <button type="button" class="hb-tile t5 hm-soon" id="mRank" title="Próximamente" aria-label="Ranking: próximamente"><i class="nm-art"><img src="ui/hub/ic_ranking.webp" alt=""></i><b>Ranking</b><small>Próximamente</small></button>
+            <button type="button" class="hb-tile t7" id="btnPlayer" aria-label="Jugador"><i class="nm-art"><img src="ui/hub/ic_jugador.webp" alt=""></i><b>Jugador</b><small>Tu ficha</small></button>
           </div>
           <nav class="hb-bar" aria-label="Enlaces y ajustes">
             <button type="button" class="hb-btn" id="btnAjustes"><i>⚙</i>Ajustes</button>
