@@ -2278,6 +2278,18 @@ html[data-theme=oscuro] .ps-atk.k-utilidad{background:rgba(79,214,142,.08);borde
 .anim.ps-face{width:72%;height:auto;aspect-ratio:1;background-size:500% 100%;background-position:0 50%}
 .ps-none{display:grid;place-items:center;width:72%;aspect-ratio:1;color:#cfe4fa;font-size:22px}
 .ps-key{position:absolute;top:4px;left:7px;font:900 10px 'Nunito',system-ui,sans-serif;color:#cfe4fa}
+.ps-find{display:flex;gap:8px;align-items:center}
+.ps-find .ps-search{flex:1;min-width:0}
+.ps-sort{flex:none;max-width:42%;padding:8px 10px;border-radius:99px;border:1px solid var(--ps-line2);background:var(--ps-sunk);color:var(--ps-text);font:800 12.5px 'Nunito',system-ui,sans-serif;cursor:pointer}
+.ps-sort:focus{outline:none;border-color:var(--ps-acc)}
+.ps-fav{position:absolute;top:2px;right:2px;z-index:3;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;font:900 15px/1 'Nunito',system-ui,sans-serif;color:var(--m-mute,#8a93a6);cursor:pointer;opacity:.75}
+.ps-fav:hover{opacity:1;color:#ffb21e}
+.ps-fav.on{color:#ffb21e;opacity:1;text-shadow:0 1px 0 rgba(0,0,0,.35)}
+.ps-favbtn{display:inline-flex;align-items:center;gap:4px;padding:3px 12px;border-radius:99px;border:1px solid var(--ps-line2);background:var(--ps-sunk);color:var(--ps-soft);font:800 12px 'Nunito',system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.ps-favbtn.on{background:#ffb21e;border-color:#ffb21e;color:#3a2600}
+.ps-tile:has(.ps-ic) .ps-fav{top:4px;right:4px;width:20px;height:20px;font-size:12px;background:var(--m-btn);box-shadow:var(--m-pillsh);opacity:1}
+.ps-tile:has(.ps-ic) .ps-fav.on{background:#ffb21e;color:#3a2600;text-shadow:none}
+.ps-tile .ps-evo-dot{top:28px!important}
 .ps-evo-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:#5fe08f;box-shadow:0 0 0 2px rgba(0,0,0,.25)}
 .ps-prog{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px 4px 2px;border-top:1px solid var(--ps-line);font:900 15px 'Nunito',system-ui,sans-serif}
 @media (max-height:860px) and (min-width:761px){
@@ -4086,7 +4098,7 @@ addEventListener('keydown', e => {
   if (state === 'play' && k === 'shift') tryDash();
   if (state === 'play' && k === ' ' && g && g.p.y === 0) g.p.vy = 11;   // salto (altura ~2)
   if (state === 'play' && k === 'e' && g && g.nearChest) openChest(g.nearChest);
-  const list = SEASONS.adventure.chars;
+  const list = state === 'pick' ? pickOrder() : SEASONS.adventure.chars;
   if (state === 'select'){
     if (k === 'enter') showPicker('personaje');
   }
@@ -4812,7 +4824,7 @@ function showHelp(){
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
   'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
-  'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly'];
+  'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort'];
 // También cuentan los contadores por banner (pity) y la mejor oleada de cada mapa
 const isSaveKey = k => SAVE_KEYS.includes(k) || /^digibonk3d-(pity|surv-wave)-[A-Za-z0-9_]{1,32}$/.test(k);
 function saveData(){
@@ -5349,6 +5361,26 @@ const COMING_SOON = [
   ['pumpkinmon','Pumpkinmon'], ['gotsumon','Gotsumon'], ['dokugumon','Dokugumon'], ['flymon','Flymon'], ['snimon','Snimon'], ['tortomon','Tortomon'],
   ['guardromon','Guardromon'], ['giromon','Giromon'], ['ebidramon','Ebidramon']
 ].map(([id, name]) => ({id, name}));
+// Favoritos del jugador (se guardan con el progreso) y orden del plantel; los favoritos van siempre primero
+const PICK_SORTS = [['num', 'Número'], ['name', 'Nombre'], ['plays', 'Más jugados']];
+const pickFavs = () => { const v = loadJSON('digibonk3d-favs', []); return Array.isArray(v) ? v : []; };
+const isFav = k => pickFavs().includes(k);
+function toggleFav(k){
+  const f = pickFavs(), i = f.indexOf(k);
+  if (i >= 0) f.splice(i, 1); else f.push(k);
+  try { localStorage.setItem('digibonk3d-favs', JSON.stringify(f)); } catch(e){}
+}
+const pickSort = () => { const v = localStorage.getItem('digibonk3d-picksort'); return PICK_SORTS.some(x => x[0] === v) ? v : 'num'; };
+// Orden en que se ven los Digimon del plantel (también lo siguen las teclas 1-9 y ←→)
+function pickOrder(){
+  const list = SEASONS.adventure.chars, favs = pickFavs(), sort = pickSort();
+  const stats = loadJSON('digibonk3d-stats', {});
+  return list.slice().sort((a, b) =>
+    (favs.includes(b) - favs.includes(a)) ||
+    (isUnlocked(b) - isUnlocked(a)) ||
+    (sort === 'name' ? CHARS[a].name.localeCompare(CHARS[b].name) : sort === 'plays' ? ((stats[b] || {}).plays || 0) - ((stats[a] || {}).plays || 0) : 0) ||
+    list.indexOf(a) - list.indexOf(b));
+}
 function pickIsEvolved(k){ return !!loadJSON('digibonk3d-evo', {})[k]; }
 function pickProgress(){
   const chars = SEASONS.adventure.chars;
@@ -5475,17 +5507,27 @@ function renderRoster(){
     return;
   }
   if (rosterTab === 'apoyo') rosterTab = 'todos';
-  const tiles = chars.map((id, i) => {
-    const open = isUnlocked(id);
-    return `<button type="button" class="ps-tile${id === k ? ' sel' : ''}${open ? '' : ' lock'}" ${open ? `data-pick="${id}"` : 'disabled'} data-name="${open ? CHARS[id].name.toLowerCase() : '???'}" title="${open ? CHARS[id].name : unlockHow(id)}">
-      <span class="ps-key">${i + 1}</span>${open && pickIsEvolved(id) ? '<span class="ps-evo-dot" title="Ya ha evolucionado"></span>' : ''}
+  const favs = pickFavs(), sort = pickSort();
+  const tiles = pickOrder().map((id, i) => {
+    const open = isUnlocked(id), fav = open && favs.includes(id);
+    return `<button type="button" class="ps-tile${id === k ? ' sel' : ''}${open ? '' : ' lock'}${fav ? ' fav' : ''}" ${open ? `data-pick="${id}"` : 'disabled'} data-name="${open ? CHARS[id].name.toLowerCase() : '???'}" title="${open ? CHARS[id].name : unlockHow(id)}">
+      <span class="ps-key">${i + 1}</span>${open ? `<span class="ps-fav${fav ? ' on' : ''}" data-fav="${id}" role="button" aria-pressed="${fav}" title="${fav ? 'Quitar de favoritos' : 'Marcar como favorito'}">${fav ? '★' : '☆'}</span>` : ''}${open && pickIsEvolved(id) ? '<span class="ps-evo-dot" title="Ya ha evolucionado"></span>' : ''}
       <span class="ps-ic"><img src="${open ? charIcon(id) : 'ui/jugador/' + id + '.webp'}" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
     </button>`;
   }).join('');
   const soon = COMING_SOON.map(c => `<span class="ps-tile soon" data-name="${c.name.toLowerCase()}" title="${c.name} · Próximamente"><span class="ps-lock">🔒</span><span class="ps-ic"><img src="${AD(c.id)}" alt="" loading="lazy"></span><b>${c.name}</b></span>`).join('');
-  el.innerHTML = `<input class="ps-search" id="pkSearch" placeholder="Buscar por nombre..." value="${pickQuery}" maxlength="20">
+  el.innerHTML = `<div class="ps-find"><input class="ps-search" id="pkSearch" placeholder="Buscar por nombre..." value="${pickQuery}" maxlength="20">
+    <select class="ps-sort" id="pkSort" title="Ordenar" aria-label="Ordenar">${PICK_SORTS.map(([id, n]) => `<option value="${id}"${sort === id ? ' selected' : ''}>${n}</option>`).join('')}</select></div>
     <div class="ps-grid" id="pkGrid">${tiles}${soon}</div>
-    <p class="ps-note">1-8 elegir · ←→ cambiar · doble clic para empezar</p>`;
+    <p class="ps-note">1-9 elegir · ←→ cambiar · doble clic para empezar</p>
+    <p class="ps-note">☆ Los favoritos salen siempre primero</p>`;
+  el.querySelectorAll('[data-fav]').forEach(s => {
+    s.onclick = e => { e.stopPropagation(); toggleFav(s.dataset.fav); sfx('pick'); renderRoster(); renderPickPreview(); };
+    s.ondblclick = e => e.stopPropagation();
+  });
+  const sortSel = document.getElementById('pkSort');
+  sortSel.addEventListener('keydown', e => e.stopPropagation());
+  sortSel.onchange = () => { try { localStorage.setItem('digibonk3d-picksort', sortSel.value); } catch(e){} renderRoster(); };
   el.querySelectorAll('.ps-tile[data-pick]').forEach(b => {
     b.onclick = () => { selectedKey = b.dataset.pick; showPicker(); popPick(); };
     b.ondblclick = () => { selectedKey = b.dataset.pick; showMapSelect(); };
@@ -5515,7 +5557,7 @@ function renderPickPreview(){
       <span class="ps-hero-tag">${stageName(k, pickStage)}</span>
     </div>
     <div class="ps-id">
-      <div class="ps-idline"><span class="ps-lbl">#${String(idx).padStart(3, '0')} · ${ATTACK_NAME[c.kind] || c.kind}</span>${emb ? `<span class="ps-emb" title="${emb.name}: ${emb.text}">${emb.name}</span>` : ''}</div>
+      <div class="ps-idline"><span class="ps-lbl">#${String(idx).padStart(3, '0')} · ${ATTACK_NAME[c.kind] || c.kind}</span>${emb ? `<span class="ps-emb" title="${emb.name}: ${emb.text}">${emb.name}</span>` : ''}<button type="button" class="ps-favbtn${isFav(k) ? ' on' : ''}" id="pkFav" aria-pressed="${isFav(k)}">${isFav(k) ? '★ Favorito' : '☆ Favorito'}</button></div>
       <h3>${c.name}</h3>
       <div><span class="ps-attr a-${at}" title="Vacuna gana a Virus, Virus a Datos y Datos a Vacuna">${ATTR_ICON[at] || ''} ${ATTR_NAME[at] || ''}</span></div>
       <div class="ps-lbl">${(EVO_LINE[k] || []).length ? 'Evoluciona durante la partida' : 'No evoluciona: más vida de base'}</div>
@@ -5545,6 +5587,8 @@ function renderPickPreview(){
       ${row('Ataques por partida', SKILL_SLOTS + ' de ' + (CHAR_SKILLS[k] || []).length)}
     </div>`;
   el.querySelectorAll('.pk-stage').forEach(n => n.onclick = () => { pickStage = +n.dataset.stage; showPicker(); });
+  const fb = document.getElementById('pkFav');
+  if (fb) fb.onclick = () => { toggleFav(k); sfx('pick'); renderPickPreview(); renderRoster(); };
 }
 // Paneles inferiores: ataque básico y kit · evolución de emergencia, etapas y tipos
 function renderPickPanels(){
@@ -5575,7 +5619,7 @@ function renderPickPanels(){
 // Progreso hacia una skin por logro (0-1); las demás no tienen progreso
 // Cambia de personaje en la pantalla de elección (flechas)
 function pickMove(delta){
-  const list = SEASONS.adventure.chars;
+  const list = pickOrder();
   let i = Math.max(0, list.indexOf(selectedKey));
   for (let n = 0; n < list.length; n++){
     i = (i + delta + list.length) % list.length;
