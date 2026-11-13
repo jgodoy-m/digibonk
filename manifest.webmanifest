@@ -1,0 +1,16 @@
+{
+  "name": "DigiBonk",
+  "short_name": "DigiBonk",
+  "description": "Survivor 3D de Digimon, gratis en el navegador. Fan-game no oficial.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#081d4d",
+  "theme_color": "#081d4d",
+  "icons": [
+    {"src": "ui/icono_192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "ui/icono_512.png", "sizes": "512x512", "type": "image/png"}
+  ]
+}

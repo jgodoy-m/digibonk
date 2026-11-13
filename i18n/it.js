@@ -964,5 +964,12 @@ I18N.add('it', {
 });
 I18N.add('it', {
   "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "Cattura {0}: restagli accanto {1}/2 s · mancano {2} s",
-  "{0} salvaje: debilítalo · quedan {1} s": "{0} selvatico: indeboliscilo · mancano {1} s"
+  "{0} salvaje: debilítalo · quedan {1} s": "{0} selvatico: indeboliscilo · mancano {1} s",
+  "🎟 Ir a la Incubadora": "🎟 Vai all'Incubatrice",
+  "Incubadora (banner permanente)": "Incubatrice (banner permanente)",
+  "Los marcos y títulos se ganan en la Incubadora y con los logros. Los iconos de entrenador están disponibles desde el principio.": "Cornici e titoli si ottengono nell'Incubatrice e con gli obiettivi. Le icone allenatore sono disponibili fin dall'inizio.",
+  "Solo en la Incubadora (épico)": "Solo nell'Incubatrice (epico)",
+  "{0}/{1} objetos": "{0}/{1} oggetti",
+  "Skins, evoluciones, marcos y títulos": "Skin, evoluzioni, cornici e titoli",
+  "Claro u oscuro para todos los menús.": "Chiaro o scuro per tutti i menu.",
 });

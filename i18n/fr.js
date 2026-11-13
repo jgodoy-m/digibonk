@@ -962,5 +962,12 @@ I18N.add('fr', {
 });
 I18N.add('fr', {
   "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "Capture {0} : reste à côté {1}/2 s · encore {2} s",
-  "{0} salvaje: debilítalo · quedan {1} s": "{0} sauvage : affaiblis-le · encore {1} s"
+  "{0} salvaje: debilítalo · quedan {1} s": "{0} sauvage : affaiblis-le · encore {1} s",
+  "🎟 Ir a la Incubadora": "🎟 Aller à l'Incubateur",
+  "Incubadora (banner permanente)": "Incubateur (bannière permanente)",
+  "Los marcos y títulos se ganan en la Incubadora y con los logros. Los iconos de entrenador están disponibles desde el principio.": "Les cadres et titres s'obtiennent dans l'Incubateur et avec les succès. Les icônes de dresseur sont disponibles dès le début.",
+  "Solo en la Incubadora (épico)": "Uniquement dans l'Incubateur (épique)",
+  "{0}/{1} objetos": "{0}/{1} objets",
+  "Skins, evoluciones, marcos y títulos": "Skins, évolutions, cadres et titres",
+  "Claro u oscuro para todos los menús.": "Clair ou sombre pour tous les menus.",
 });

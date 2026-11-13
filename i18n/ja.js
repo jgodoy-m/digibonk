@@ -976,5 +976,12 @@ I18N.add('ja', {
 });
 I18N.add('ja', {
   "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "{0}を捕まえよう：そばにいる {1}/2秒 · 残り{2}秒",
-  "{0} salvaje: debilítalo · quedan {1} s": "野生の{0}：弱らせよう · 残り{1}秒"
+  "{0} salvaje: debilítalo · quedan {1} s": "野生の{0}：弱らせよう · 残り{1}秒",
+  "🎟 Ir a la Incubadora": "🎟 インキュベーターへ",
+  "Incubadora (banner permanente)": "インキュベーター(常設バナー)",
+  "Los marcos y títulos se ganan en la Incubadora y con los logros. Los iconos de entrenador están disponibles desde el principio.": "フレームと称号はインキュベーターと実績で手に入ります。トレーナーアイコンは最初から使えます。",
+  "Solo en la Incubadora (épico)": "インキュベーター限定(エピック)",
+  "{0}/{1} objetos": "{0}/{1} アイテム",
+  "Skins, evoluciones, marcos y títulos": "スキン・進化・フレーム・称号",
+  "Claro u oscuro para todos los menús.": "すべてのメニューをライトまたはダークに。",
 });

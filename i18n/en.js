@@ -961,5 +961,12 @@ I18N.add('en', {
 });
 I18N.add('en', {
   "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "Capture {0}: stay next to it {1}/2 s · {2} s left",
-  "{0} salvaje: debilítalo · quedan {1} s": "Wild {0}: weaken it · {1} s left"
+  "{0} salvaje: debilítalo · quedan {1} s": "Wild {0}: weaken it · {1} s left",
+  "🎟 Ir a la Incubadora": "🎟 Go to the Incubator",
+  "Incubadora (banner permanente)": "Incubator (permanent banner)",
+  "Los marcos y títulos se ganan en la Incubadora y con los logros. Los iconos de entrenador están disponibles desde el principio.": "Frames and titles are earned in the Incubator and from achievements. Trainer icons are available from the start.",
+  "Solo en la Incubadora (épico)": "Incubator only (epic)",
+  "{0}/{1} objetos": "{0}/{1} items",
+  "Skins, evoluciones, marcos y títulos": "Skins, evolutions, frames and titles",
+  "Claro u oscuro para todos los menús.": "Light or dark for all menus.",
 });

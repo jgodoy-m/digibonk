@@ -962,5 +962,12 @@ I18N.add('de', {
 });
 I18N.add('de', {
   "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "Fange {0}: bleib neben ihm {1}/2 s · noch {2} s",
-  "{0} salvaje: debilítalo · quedan {1} s": "Wildes {0}: schwäche es · noch {1} s"
+  "{0} salvaje: debilítalo · quedan {1} s": "Wildes {0}: schwäche es · noch {1} s",
+  "🎟 Ir a la Incubadora": "🎟 Zum Brutkasten",
+  "Incubadora (banner permanente)": "Brutkasten (Dauerbanner)",
+  "Los marcos y títulos se ganan en la Incubadora y con los logros. Los iconos de entrenador están disponibles desde el principio.": "Rahmen und Titel erhältst du im Brutkasten und durch Erfolge. Trainer-Symbole sind von Anfang an verfügbar.",
+  "Solo en la Incubadora (épico)": "Nur im Brutkasten (episch)",
+  "{0}/{1} objetos": "{0}/{1} Objekte",
+  "Skins, evoluciones, marcos y títulos": "Skins, Entwicklungen, Rahmen und Titel",
+  "Claro u oscuro para todos los menús.": "Hell oder dunkel für alle Menüs.",
 });

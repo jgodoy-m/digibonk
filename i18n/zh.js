@@ -976,5 +976,12 @@ I18N.add('zh', {
 });
 I18N.add('zh', {
   "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "捕获{0}：待在它身边 {1}/2秒 · 剩余{2}秒",
-  "{0} salvaje: debilítalo · quedan {1} s": "野生的{0}：削弱它 · 剩余{1}秒"
+  "{0} salvaje: debilítalo · quedan {1} s": "野生的{0}：削弱它 · 剩余{1}秒",
+  "🎟 Ir a la Incubadora": "🎟 前往孵化器",
+  "Incubadora (banner permanente)": "孵化器(常驻卡池)",
+  "Los marcos y títulos se ganan en la Incubadora y con los logros. Los iconos de entrenador están disponibles desde el principio.": "边框和称号可在孵化器和成就中获得。训练师图标一开始就可使用。",
+  "Solo en la Incubadora (épico)": "仅限孵化器(史诗)",
+  "{0}/{1} objetos": "{0}/{1} 件物品",
+  "Skins, evoluciones, marcos y títulos": "皮肤、进化、边框和称号",
+  "Claro u oscuro para todos los menús.": "所有菜单使用浅色或深色。",
 });

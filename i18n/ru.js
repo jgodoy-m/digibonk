@@ -974,5 +974,12 @@ I18N.add('ru', {
 });
 I18N.add('ru', {
   "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "Поймай {0}: стой рядом {1}/2 с · осталось {2} с",
-  "{0} salvaje: debilítalo · quedan {1} s": "Дикий {0}: ослабь его · осталось {1} с"
+  "{0} salvaje: debilítalo · quedan {1} s": "Дикий {0}: ослабь его · осталось {1} с",
+  "🎟 Ir a la Incubadora": "🎟 В Инкубатор",
+  "Incubadora (banner permanente)": "Инкубатор (постоянный баннер)",
+  "Los marcos y títulos se ganan en la Incubadora y con los logros. Los iconos de entrenador están disponibles desde el principio.": "Рамки и титулы можно получить в Инкубаторе и за достижения. Значки тренера доступны с самого начала.",
+  "Solo en la Incubadora (épico)": "Только в Инкубаторе (эпический)",
+  "{0}/{1} objetos": "{0}/{1} предметов",
+  "Skins, evoluciones, marcos y títulos": "Скины, эволюции, рамки и титулы",
+  "Claro u oscuro para todos los menús.": "Светлая или тёмная тема для всех меню.",
 });

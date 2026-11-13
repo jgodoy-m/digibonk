@@ -969,5 +969,12 @@ I18N.add('tr', {
 });
 I18N.add('tr', {
   "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "{0} yakala: yanında kal {1}/2 sn · {2} sn kaldı",
-  "{0} salvaje: debilítalo · quedan {1} s": "Vahşi {0}: zayıflat · {1} sn kaldı"
+  "{0} salvaje: debilítalo · quedan {1} s": "Vahşi {0}: zayıflat · {1} sn kaldı",
+  "🎟 Ir a la Incubadora": "🎟 Kuluçka Makinesine git",
+  "Incubadora (banner permanente)": "Kuluçka Makinesi (kalıcı afiş)",
+  "Los marcos y títulos se ganan en la Incubadora y con los logros. Los iconos de entrenador están disponibles desde el principio.": "Çerçeveler ve unvanlar Kuluçka Makinesinde ve başarımlarla kazanılır. Eğitmen simgeleri baştan beri açıktır.",
+  "Solo en la Incubadora (épico)": "Yalnızca Kuluçka Makinesi (destansı)",
+  "{0}/{1} objetos": "{0}/{1} öğe",
+  "Skins, evoluciones, marcos y títulos": "Görünümler, evrimler, çerçeveler ve unvanlar",
+  "Claro u oscuro para todos los menús.": "Tüm menüler için açık veya koyu.",
 });

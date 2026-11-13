@@ -975,5 +975,12 @@ I18N.add('ko', {
 });
 I18N.add('ko', {
   "Captura a {0}: quédate a su lado {1}/2 s · quedan {2} s": "{0} 포획: 곁에 있기 {1}/2초 · {2}초 남음",
-  "{0} salvaje: debilítalo · quedan {1} s": "야생 {0}: 약하게 만드세요 · {1}초 남음"
+  "{0} salvaje: debilítalo · quedan {1} s": "야생 {0}: 약하게 만드세요 · {1}초 남음",
+  "🎟 Ir a la Incubadora": "🎟 인큐베이터로 가기",
+  "Incubadora (banner permanente)": "인큐베이터 (상시 배너)",
+  "Los marcos y títulos se ganan en la Incubadora y con los logros. Los iconos de entrenador están disponibles desde el principio.": "프레임과 칭호는 인큐베이터와 업적으로 얻습니다. 트레이너 아이콘은 처음부터 사용할 수 있습니다.",
+  "Solo en la Incubadora (épico)": "인큐베이터 전용 (에픽)",
+  "{0}/{1} objetos": "{0}/{1} 아이템",
+  "Skins, evoluciones, marcos y títulos": "스킨, 진화, 프레임, 칭호",
+  "Claro u oscuro para todos los menús.": "모든 메뉴를 밝게 또는 어둡게.",
 });
