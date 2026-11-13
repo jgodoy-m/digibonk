@@ -3025,7 +3025,7 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
 #overlay .realhub.hb .hb-ver{position:absolute;right:-10px;bottom:2px;margin:0!important;transform:rotate(-4deg)}
 #overlay .realhub.hb .nm-play .hb-play-face{width:52%!important;right:0!important;bottom:38px!important;top:auto!important;height:calc(100% - 38px)!important;overflow:visible;display:flex!important;align-items:flex-end!important;justify-content:center!important;place-items:unset!important}
 #overlay .realhub.hb .nm-play .hb-play-face::before{content:'';position:absolute;left:50%;bottom:4%;width:78%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,244,214,.75),rgba(255,214,140,.25) 45%,transparent 70%);pointer-events:none}
-#overlay .realhub.hb .nm-play .hb-play-face>*{position:absolute!important;left:0;right:0;bottom:-5px;margin:0 auto!important;width:clamp(140px,11vw,180px)!important;height:clamp(140px,11vw,180px)!important;transform-origin:50% 100%}
+#overlay .realhub.hb .nm-play .hb-play-face>*{position:absolute!important;left:0;right:0;bottom:-5px;margin:0 auto!important;width:clamp(116px,8.6vw,140px)!important;height:clamp(116px,8.6vw,140px)!important;transform-origin:50% 100%}
 #overlay .realhub.hb .nm-play:hover .hb-play-face>*{animation:nm-breathe 1.6s ease-in-out infinite}
 @keyframes nm-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05,1.07)}}
 @media(prefers-reduced-motion:reduce){#overlay .realhub.hb .nm-play:hover .hb-play-face>*{animation:none}}
@@ -3044,7 +3044,7 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
   #overlay .realhub.hb .hb-bar .hb-btn .nm-ic{margin-left:0}
   #overlay .realhub.hb #mBug .nm-lbl{display:none}
   #overlay .realhub.hb #mBug{width:40px;padding:0!important;justify-content:center}
-  #overlay .realhub.hb .nm-play .hb-play-face>*{width:132px!important;height:132px!important}
+  #overlay .realhub.hb .nm-play .hb-play-face>*{width:116px!important;height:116px!important}
   #overlay .realhub.hb .hm-msg{bottom:18px;font-size:13px!important;white-space:nowrap}
 }
 #overlay .realhub.hb .hb-me{height:40px!important;padding:0 14px 0 4px!important}
@@ -4570,7 +4570,7 @@ function showHelp(){
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
-  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme'];
+  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme'];
 function makeSaveCode(){
   const data = {};
   for (const k of SAVE_KEYS){ const v = localStorage.getItem(k); if (v !== null) data[k] = v; }
@@ -7449,24 +7449,24 @@ function recordSurv(k, t){
 /* ---------- Encargos: 3 al día, se cumplen dentro de una partida ---------- */
 const ENC_REWARD = {bits: 100, tix: 1};
 const ENC_TYPES = [
-  {id:'kills', ns:[200, 300, 400], t: n => `Derrota a ${n} enemigos en una partida`, ok: (n) => g.kills >= n},
-  {id:'nodash', ns:[5, 8, 10], t: n => `Llega al minuto ${n} sin usar el dash`, ok: (n) => !g.dashUsed && g.t >= n*60},
-  {id:'chests', ns:[3, 4, 5], t: n => `Abre ${n} cofres en una partida`, ok: (n) => (g.chestsOpened || 0) >= n},
-  {id:'bonk', ns:[2, 3, 4], t: n => `Usa el Bonk ${n} veces en una partida`, ok: (n) => (g.bonks || 0) >= n},
-  {id:'level', ns:[15, 20, 25], t: n => `Llega al nivel ${n}`, ok: (n) => g.p.lvl >= n},
+  {id:'kills', ns:[8000, 10000, 12000], t: n => `Derrota a ${n.toLocaleString('es-ES')} enemigos en una partida`, ok: (n) => g.kills >= n},
+  {id:'nodash', ns:[8, 10, 12], t: n => `Llega al minuto ${n} sin usar el dash`, ok: (n) => !g.dashUsed && g.t >= n*60},
+  {id:'chests', ns:[6, 8, 10], t: n => `Abre ${n} cofres en una partida`, ok: (n) => (g.chestsOpened || 0) >= n},
+  {id:'bonk', ns:[6, 8, 10], t: n => `Usa el Bonk ${n} veces en una partida`, ok: (n) => (g.bonks || 0) >= n},
+  {id:'level', ns:[35, 45, 55], t: n => `Llega al nivel ${n}`, ok: (n) => g.p.lvl >= n},
   {id:'mini', ns:[0, 1, 2], t: n => `Derrota a ${MINIS[n].name}`, ok: (n) => (g.minisKilled || []).includes(MINIS[n].name)},
   {id:'with', ns:null, t: k => `Aguanta 10 minutos con ${CHARS[k].name}`, ok: (k) => g.ch.id === k && g.t >= 600}
 ];
 // Generador con semilla del día: todos los jugadores ven los mismos encargos ese día
 function dayRng(){ let h = 2166136261; for (const ch of dayKey()) h = Math.imul(h ^ ch.charCodeAt(0), 16777619); return () => ((h = Math.imul(h ^ (h >>> 15), 2246822507) ^ Math.imul(h ^ (h >>> 13), 3266489909)) >>> 0) / 4294967296; }
 function loadEncargos(){
-  const st = loadJSON('digibonk3d-enc', null);
+  const st = loadJSON('digibonk3d-enc2', null);
   if (st && st.day === dayKey()) return st;
   const rnd = dayRng(), types = [...ENC_TYPES].sort(() => rnd() - 0.5).slice(0, 3);
   const opened = SEASONS.adventure.chars.filter(k => isUnlocked(k));
   const list = types.map(tp => ({id: tp.id, n: tp.ns ? tp.ns[Math.floor(rnd()*tp.ns.length)] : opened[Math.floor(rnd()*opened.length)], done: false}));
   const fresh = {day: dayKey(), list};
-  localStorage.setItem('digibonk3d-enc', JSON.stringify(fresh));
+  localStorage.setItem('digibonk3d-enc2', JSON.stringify(fresh));
   return fresh;
 }
 function encText(e){ const tp = ENC_TYPES.find(x => x.id === e.id); return tp ? tp.t(e.n) : e.id; }
@@ -7479,7 +7479,7 @@ function checkEncargos(){
     e.done = true; won.push(encText(e));
     SAVE.bits = SAVE.bits + ENC_REWARD.bits; addTickets('std', ENC_REWARD.tix);
   }
-  localStorage.setItem('digibonk3d-enc', JSON.stringify(st));
+  localStorage.setItem('digibonk3d-enc2', JSON.stringify(st));
   return won;
 }
 // Ventana del menú (mismo estilo que las de misión diaria y récords)
@@ -7492,20 +7492,23 @@ function menuModal(title, content){
   host.querySelector('.approved-info-scrim').onclick = e => { if (e.target === e.currentTarget) close(); };
   host.querySelector('#realClose').focus();
 }
-// Encargos semanales y de evento: sus contadores se acumulan entre partidas
+// Encargos semanales y de evento: contadores que se suman entre partidas. Las metas están pensadas
+// para varias sesiones: una partida completa ronda los 10.000 enemigos
 const WEEK_QUESTS = [
-  {id:'runs',  goal:15,   t:'Juega 15 partidas',                   bits:400, tix:3},
-  {id:'kills', goal:3000, t:'Derrota a 3.000 enemigos',            bits:400, tix:3},
-  {id:'wins',  goal:1,    t:'Gana una partida en cualquier mapa',  bits:500, tix:5}
+  {id:'runs',  goal:15,     t:'Juega 15 partidas',                 bits:400, tix:3},
+  {id:'kills', goal:100000, t:'Derrota a 100.000 enemigos',        bits:500, tix:4},
+  {id:'wins',  goal:3,      t:'Gana 3 partidas en cualquier mapa', bits:600, tix:5}
 ];
 const EVENT_QUESTS = [
-  {id:'runs',  goal:10,   t:'Juega 10 partidas durante el evento', bits:300, tix:3},
-  {id:'kills', goal:5000, t:'Derrota a 5.000 enemigos',            bits:500, tix:5},
-  {id:'wins',  goal:3,    t:'Gana 3 partidas',                     bits:800, tix:8}
+  {id:'runs',  goal:40,     t:'Juega 40 partidas durante el evento', bits:800,  tix:6},
+  {id:'kills', goal:400000, t:'Derrota a 400.000 enemigos',          bits:1000, tix:8},
+  {id:'wins',  goal:10,     t:'Gana 10 partidas',                    bits:1200, tix:10}
 ];
-function weekQuestState(){ const w = weekNum(), st = loadJSON('digibonk3d-wq', null); return st && st.week === w ? st : {week: w, runs: 0, kills: 0, wins: 0, done: []}; }
-function eventQuestState(){ const k = EVENT.name + '-' + EVENT.start, st = loadJSON('digibonk3d-evq', null); return st && st.ev === k ? st : {ev: k, runs: 0, kills: 0, wins: 0, done: []}; }
-// Al terminar la partida: suma a los contadores y paga los encargos largos cumplidos. Devuelve {t, bits, tix}
+const questFresh = o => ({...o, runs: 0, kills: 0, wins: 0, done: []});
+function weekQuestState(){ const w = weekNum(), st = loadJSON('digibonk3d-wq3', null); return st && st.week === w ? st : questFresh({week: w}); }
+function eventQuestState(){ const k = EVENT.name + '-' + EVENT.start, st = loadJSON('digibonk3d-evq3', null); return st && st.ev === k ? st : questFresh({ev: k}); }
+function questProg(st, q){ return st[q.id] || 0; }
+// Al terminar la partida: suma a los contadores y paga los encargos largos cumplidos. Devuelve los cumplidos
 function checkLongQuests(win){
   const won = [];
   const run = (st, list, key) => {
@@ -7513,14 +7516,14 @@ function checkLongQuests(win){
     st.kills += g.kills || 0;
     if (win && g.mode !== 'surv') st.wins += 1;
     for (const q of list){
-      if (st.done.includes(q.id) || (st[q.id] || 0) < q.goal) continue;
+      if (st.done.includes(q.id) || questProg(st, q) < q.goal) continue;
       st.done.push(q.id); won.push(q);
       SAVE.bits = SAVE.bits + q.bits; addTickets('std', q.tix);
     }
     localStorage.setItem(key, JSON.stringify(st));
   };
-  run(weekQuestState(), WEEK_QUESTS, 'digibonk3d-wq');
-  if (eventActive()) run(eventQuestState(), EVENT_QUESTS, 'digibonk3d-evq');
+  run(weekQuestState(), WEEK_QUESTS, 'digibonk3d-wq3');
+  if (eventActive()) run(eventQuestState(), EVENT_QUESTS, 'digibonk3d-evq3');
   return won;
 }
 // Resumen para la tarjeta del menú: hechos/total de hoy, de la semana y del evento
@@ -7540,17 +7543,17 @@ function showEncargos(){
   const panel = (cls, icon, title, sub, rows, done, all) => `<section class="eq-panel ${cls}"><header><img src="ui/hub/${icon}.webp" alt=""><span><b>${title}</b><small>${sub}</small></span><em>${done}/${all}</em></header><div class="eq-rows">${rows.join('')}</div></section>`;
   const dayDone = d.claimed || d.runs >= DAILY.runsGoal;
   const dayRows = [row(dayDone, `Juega ${DAILY.runsGoal} partidas`, d.runs, DAILY.runsGoal, rw(DAILY.reward, DAILY.rewardTix)), ...enc.list.map(e => row(e.done, encText(e), e.done ? 1 : 0, 1, rw(ENC_REWARD.bits, ENC_REWARD.tix)))];
-  const weekRows = [row(wk.claimed, `Haz ${WEEK_PULLS} tiradas en la Incubadora`, wk.pulls, WEEK_PULLS, rw(0, 1)), ...WEEK_QUESTS.map(q => row(wq.done.includes(q.id), q.t, wq[q.id] || 0, q.goal, rw(q.bits, q.tix)))];
+  const weekRows = [row(wk.claimed, `Haz ${WEEK_PULLS} tiradas en la Incubadora`, wk.pulls, WEEK_PULLS, rw(0, 1)), ...WEEK_QUESTS.map(q => row(wq.done.includes(q.id), q.t, questProg(wq, q), q.goal, rw(q.bits, q.tix)))];
   const days = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
   const parts = [
     panel('eq-day', 'ic_mision', 'Diarios', 'Se renuevan cada día', dayRows, dayRows.filter(r => r.includes(' done"')).length, dayRows.length),
     panel('eq-week', 'ic_encargos', 'Semanales', `Se renuevan cada lunes · ${weeklyMod().name}`, weekRows, weekRows.filter(r => r.includes(' done"')).length, weekRows.length)
   ];
   if (ev){
-    const evRows = EVENT_QUESTS.map(q => row(ev.done.includes(q.id), q.t, ev[q.id] || 0, q.goal, rw(q.bits, q.tix)));
+    const evRows = EVENT_QUESTS.map(q => row(ev.done.includes(q.id), q.t, questProg(ev, q), q.goal, rw(q.bits, q.tix)));
     parts.push(panel('eq-ev', 'ic_evento', 'Evento', `${EVENT.name} · quedan ${days} ${days === 1 ? 'día' : 'días'}`, evRows, ev.done.length, evRows.length));
   }
-  menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios y los semanales se cumplen al terminar cada partida. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d}</p>`);
+  menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios se renuevan cada día. Los semanales y los de evento suman lo que haces en todas tus partidas. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d}</p>`);
   const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('eq-dialog');
 }
 function showLogros(){
