@@ -2703,6 +2703,10 @@ html[data-theme=oscuro] #overlay:has(.rg){background:radial-gradient(ellipse 60%
 .pz2-keys kbd{font:800 10px 'Nunito',sans-serif;padding:1px 6px;border-radius:5px;background:var(--m-text);color:var(--m-card)}
 html[data-theme=oscuro] .pz2-keys kbd{color:#16171a}
 @media (max-width:520px){.pz2{padding:0 14px 14px}.pz2-av{width:76px;height:76px}.pz2-av .anim{width:66px;height:66px}.pz2-stats b{font-size:16px}}
+/* En los paneles con poco sitio la barra superior va sin la tarjeta del usuario */
+body:has(#overlay :is(.ps,.ms,.pk2-starter,.lab-screen)) #topbar .tb-id{display:none!important}
+@media(max-width:1200px){html[lang] body #topbar .tb-id{display:none!important}}
+#overlay:not(.menu-mode)>.picker-screen.ps{margin-top:-14px!important}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
