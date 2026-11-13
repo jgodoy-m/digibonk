@@ -2745,6 +2745,11 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
 .set-range::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#ff8a1e;border:2px solid #fff}
 @media(max-width:600px){.set-vol{flex-wrap:wrap;justify-content:flex-end}.set-range{width:120px}}
 #overlay button:focus-visible,#pause button:focus-visible,#overlay [role=button]:focus-visible{outline:3px solid var(--m-sel)!important;outline-offset:3px!important}
+/* Carta de fusión */
+#overlay .lv3-card.fusion{border-color:var(--m-sel)!important;box-shadow:0 0 0 3px var(--m-selbg),0 0 22px rgba(255,138,30,.45)!important}
+#overlay .lv3-card.fusion .lv3-tag{background:var(--m-cta)!important;color:#fff!important}
+#overlay .lv3-card.fusion .lv3-ic{display:inline-flex;gap:4px}
+.sb-fus{display:grid;place-items:center;font:900 20px 'Nunito',sans-serif;color:#fff;background:linear-gradient(180deg,#ffc24f,#ef6400)!important;box-shadow:0 0 12px rgba(255,138,30,.6)}
 </style>
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
@@ -5205,7 +5210,11 @@ function initShrines(){
     const mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.9, 2.2, 10), new THREE.MeshBasicMaterial({color: type.col}));
     mesh.position.set(x, 1.1 + terrainH(x, z), z);
     world.add(mesh);
-    g.shrines.push({x, z, type, mesh, used: false});
+    // Círculo en el suelo con el radio real de carga
+    const ring = new THREE.Mesh(RING_GEO, new THREE.MeshBasicMaterial({color: type.col, transparent: true, opacity: 0.7, side: THREE.DoubleSide, depthWrite: false}));
+    ring.rotation.x = -Math.PI/2; ring.scale.setScalar(SHRINE_RANGE); ring.position.set(x, terrainH(x, z) + 0.08, z);
+    world.add(ring);
+    g.shrines.push({x, z, type, mesh, ring, used: false});
   }
 }
 // Para cargar un santuario hay que quedarse dentro de su círculo unos 3 segundos; si te alejas, la carga baja
@@ -5237,7 +5246,7 @@ function updateShrines(dt){
     sh.mesh.scale.y = 1 + 0.6 * (sh.charge / SHRINE_CHARGE);   // el santuario crece mientras se carga
     if (inside && sh.charge > 0 && !sh.used) charging = sh;
     if (inside && sh.charge >= SHRINE_CHARGE){
-      sh.used = true; world.remove(sh.mesh);
+      sh.used = true; world.remove(sh.mesh); if (sh.ring) world.remove(sh.ring);
       sh.type.apply(g);
       announce(sh.type.name, sh.type.text, '#' + sh.type.col.toString(16).padStart(6, '0'));
       sfx('ready');
@@ -5539,6 +5548,7 @@ function update(dt){
   }
   if (g.boss && g.enemies.includes(g.boss)){
     g.bossShotT -= dt;
+    bossPhases(dt);
     // Aviso: un anillo rojo se encoge sobre el jefe 0.8 s antes de cada disparo
     if (g.bossShotT <= 0.8){
       if (!g.bossRing) g.bossRing = makeBossRing();
@@ -5549,15 +5559,16 @@ function update(dt){
     }
     if (g.bossShotT <= 0){
       const bd = g.boss.def || {};
-      g.bossShotT = bd.gap || 2.5;
+      const b = g.boss, ph = b.phase || 1;
+      g.bossShotT = (bd.gap || 2.5) * (ph === 3 ? 0.75 : 1);
       clearBossRing();
-      const b = g.boss, ns = bd.shots || 10;
+      const ns = Math.round((bd.shots || 10) * [1, 1, 1.4, 1.7][ph]), spd = 6 + (ph - 1) * 1.2;
       for (let i = 0; i < ns; i++){
         const an = i/ns*Math.PI*2 + g.t;
         const shot = new THREE.Mesh(SPROJ_GEO, matFor(0xff1744));
         shot.position.set(b.x, 1 + terrainH(b.x, b.z), b.z);
         world.add(shot);
-        g.eshots.push({x: b.x, z: b.z, vx: Math.cos(an)*6, vz: Math.sin(an)*6, life: 4, mesh: shot, dmg: bd.shotDmg || 8});
+        g.eshots.push({x: b.x, z: b.z, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4, mesh: shot, dmg: bd.shotDmg || 8});
       }
     }
     // Mapa 3: el jefe único huye por el portal a mitad de vida en la primera pantalla
@@ -5693,11 +5704,13 @@ function upgradeChoices(){
     .map(c => !c.skill && Math.random() < 0.18 ? {...c, rare: true} : c);   // carta rara: la mejora pasiva cuenta doble
   const evo = g.chestPick ? [] : evoSkillCards();   // si hay una evolución disponible, ocupa la primera carta
   if (evo.length) picks[0] = evo[0];
+  const fus = g.chestPick ? [] : fusionCards().filter(c => !upRes().banned.includes('fus:' + c.fusion));   // y una fusión, la segunda
+  if (fus.length) picks[evo.length && picks.length > 1 ? 1 : 0] = fus[Math.floor(Math.random() * fus.length)];
   return picks;
 }
 // Recursos de la subida de nivel por partida: refrescar 2, saltar 2, desterrar 1
 function upRes(){ return g.upRes || (g.upRes = {rer: 2, skip: 2, ban: 1, banned: []}); }
-function upKey(c){ return c.skill ? 'skill:' + c.skill : 'up:' + c.t; }
+function upKey(c){ return c.fusion ? 'fus:' + c.fusion : c.skill ? 'skill:' + c.skill : 'up:' + c.t; }
 function rerollUp(){
   const r = upRes(); if (r.rer <= 0 || state !== 'levelup') return;
   r.rer--; g.upMode = null;
@@ -5969,6 +5982,7 @@ function updateSkills(dt){
   }
   S.proj = S.proj.filter(pr => { if (pr.life > 0) return true; world.remove(pr.mesh); return false; });
   dmgSrc = 'base';
+  updateFusions(dt);
 }
 // Iconos propios (SVG) de habilidades y categorías: no dependen de los emojis del navegador
 const ICON = {
@@ -5997,14 +6011,14 @@ function openUpgrades(){
     <div class="lv3">
       <div class="lv3-head"><h2 class="lv3-banner">${g.chestPick ? (g.chestPick.gold ? '¡Cofre dorado! Carta doble' : '¡Cofre abierto!') : `¡Nivel ${g.p.lvl}!`}</h2><p>${banMode ? 'Elige una carta para desterrarla' : 'Pulsa 1-3 o haz clic'}</p></div>
       <div class="lv3-row">${g.choices.map((c, i) => `
-        <button class="lv3-card ${c.k || 'utilidad'}${c.rare ? ' rare' : ''}${banMode ? ' ban' : ''}" data-up="${i}" style="animation-delay:${i*0.09}s">
+        <button class="lv3-card ${c.k || 'utilidad'}${c.rare ? ' rare' : ''}${c.fusion ? ' fusion' : ''}${banMode ? ' ban' : ''}" data-up="${i}" style="animation-delay:${i*0.09}s">
           <span class="lv3-key">${i + 1}</span>
           ${c.skill && !c.lv ? '<span class="lv3-new">NUEVO</span>' : ''}
-          <span class="lv3-tag">${c.evo ? '★ Evolución' : c.skill ? (c.lv ? 'Mejora' : 'Nueva habilidad') : (c.rare ? '◆ Rara · ' : '') + (cat[c.k] || 'Mejora')}</span>
-          ${!c.skill && !c.evo && CARD_ART[c.t] ? `<img class="lv3-art" src="ui/hud/carta_${CARD_ART[c.t]}.webp" alt="">` : `<span class="lv3-ic">${svgIcon(c.evo || c.skill || c.k)}</span>`}
+          <span class="lv3-tag">${c.fusion ? '✦ Fusión' : c.evo ? '★ Evolución' : c.skill ? (c.lv ? 'Mejora' : 'Nueva habilidad') : (c.rare ? '◆ Rara · ' : '') + (cat[c.k] || 'Mejora')}</span>
+          ${!c.skill && !c.evo && !c.fusion && CARD_ART[c.t] ? `<img class="lv3-art" src="ui/hud/carta_${CARD_ART[c.t]}.webp" alt="">` : `<span class="lv3-ic">${c.fusion ? c.fusion.split('+').map(svgIcon).join('') : svgIcon(c.evo || c.skill || c.k)}</span>`}
           <b>${c.name || c.t}</b>
           <p>${c.d || ''}</p>
-          ${c.evo ? '<span class="lv3-pips pasiva">EVO · nivel 4</span>' : c.skill ? `<span class="lv3-pips">${[1, 2, 3].map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : (c.rare ? '<span class="lv3-pips pasiva rare">Rara · efecto doble</span>' : '<span class="lv3-pips pasiva">Pasiva</span>')}
+          ${c.fusion ? '<span class="lv3-pips pasiva">FUSIÓN · efecto nuevo</span>' : c.evo ? '<span class="lv3-pips pasiva">EVO · nivel 4</span>' : c.skill ? `<span class="lv3-pips">${[1, 2, 3].map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : (c.rare ? '<span class="lv3-pips pasiva rare">Rara · efecto doble</span>' : '<span class="lv3-pips pasiva">Pasiva</span>')}
         </button>`).join('')}</div>
       <div class="lv3-acts">
         <button class="lv3-act" id="upRer" ${r.rer > 0 ? '' : 'disabled'}>Refrescar (${r.rer}) <kbd>F</kbd></button>
@@ -6022,9 +6036,9 @@ function pickUpgrade(i){
   if (state !== 'levelup') return;
   const ch = g.choices[i];
   ch.f(g.p);
-  if (g.chestPick && g.chestPick.gold && !ch.evo) ch.f(g.p);
+  if (g.chestPick && g.chestPick.gold && !ch.evo && !ch.fusion) ch.f(g.p);
   if (ch.rare) ch.f(g.p);
-  if (!ch.skill && !ch.evo){ g.upTaken = g.upTaken || {}; g.upTaken[ch.t] = (g.upTaken[ch.t] || 0) + 1; }   // cofre dorado: la carta cuenta dos veces
+  if (!ch.skill && !ch.evo && !ch.fusion){ g.upTaken = g.upTaken || {}; g.upTaken[ch.t] = (g.upTaken[ch.t] || 0) + 1; }   // cofre dorado: la carta cuenta dos veces
   g.chestPick = null;
   hideOverlay();
   lockMouse();
@@ -6063,7 +6077,7 @@ function endGame(win){
   // Resumen de la partida: cifras, daño por habilidad y recompensas
   const dmgRows = Object.entries(g.dmgBy).sort((a, b) => b[1] - a[1]).slice(0, 6);
   const dmgMax = dmgRows.length ? dmgRows[0][1] : 1;
-  const dmgName = k => k === 'base' ? `Ataque de ${g.ch.name}` : (SKILLS[k] ? SKILLS[k].name : k);
+  const dmgName = k => k === 'base' ? `Ataque de ${g.ch.name}` : k.startsWith('fus:') ? 'Fusión: ' + (FUSION_NAMES[k.slice(4)] || k.slice(4)) : (SKILLS[k] ? SKILLS[k].name : k);
   const rewards = [`<li><b>+${g.earned - g.bonus - (g.extraBits || 0)}</b> Bits</li>`];
   if (g.extraBits) rewards.push(`<li><b>+${g.extraBits}</b> Bits de eventos del mapa</li>`);
   if (g.emblems && g.emblems.length) rewards.push(`<li>Emblemas: <b>${g.emblems.length}/8</b></li>`);
@@ -6246,7 +6260,7 @@ function enterScreen(n){
   g.gems = [];
   for (const c of g.chests) if (c.group) world.remove(c.group);
   g.chests = [];
-  for (const sh of g.shrines || []) world.remove(sh.mesh);
+  for (const sh of g.shrines || []){ world.remove(sh.mesh); if (sh.ring) world.remove(sh.ring); }
   if (g.ev) endMapEvent(false);
   if (g.portal){ world.remove(g.portal.grp); g.portal = null; }
   g.zone = n; g.screenT = 0; g.inferno = false; g.portalOpen = false; g.screenWarn = 0;
@@ -6258,6 +6272,27 @@ function enterScreen(n){
   sfx('evolve');
   const z = zoneDef(n);
   announce('Pantalla ' + n + ': ' + z.name, g.mode === 'surv' ? 'Supervivencia: el escenario cambia, la horda no' : z.boss ? 'Pulsa B para invocar a ' + z.boss.name + ' cuando estés listo' : '', z.color);
+}
+// Fases de los jefes: al 50% y al 25% de vida cambian de ritmo y añaden golpes en el suelo avisados con círculos
+function bossPhases(dt){
+  const b = g.boss;
+  if (!b || b.hp <= 0) return;
+  const ph = b.hp <= b.max * 0.25 ? 3 : b.hp <= b.max * 0.5 ? 2 : 1;
+  if ((b.phase || 1) < ph){
+    b.phase = ph; b.spd *= 1.15; b.slamT = 1.2;
+    spawnRing(b.x, b.z, 0xff1744, 10, 0.9); shake = Math.max(shake, 0.6); sfx('boss');
+    announce('¡Fase ' + ph + '!', ph === 2 ? 'Golpes en el suelo: sal de los círculos rojos' : 'Más disparos y más golpes', '#ff5a6e');
+  }
+  if ((b.phase || 1) < 2) return;
+  b.slamT -= dt;
+  if (b.slamT > 0) return;
+  b.slamT = b.phase === 3 ? 4 : 6;
+  const n = b.phase === 3 ? 5 : 3, dmg = 14 * (lvlDiff().dmg || 1) * (b.phase === 3 ? 1.25 : 1);
+  for (let i = 0; i < n; i++){
+    const a = Math.random() * Math.PI * 2, r = i ? 2.5 + Math.random() * 4 : 0;
+    const [x, z] = clampArena(g.p.x + Math.cos(a) * r, g.p.z + Math.sin(a) * r, ARENA_R - 1);
+    addHazard(x, z, 2.6, 1.3, 'bomb', dmg, 0xff1744);
+  }
 }
 // Invoca al jefe de la pantalla cuando quieras: su fuerza no depende del tiempo ni de tu nivel
 function summonBoss(){
@@ -6396,10 +6431,10 @@ function updateHUD(){
     dash.classList.remove('flash'); void dash.offsetWidth; dash.classList.add('flash');
   }
   g.dashReady = dashReady;
-  const sbKey = Object.keys(g.skills).map(k => k + g.skills[k]).join(',');
+  const sbKey = Object.keys(g.skills).map(k => k + g.skills[k]).join(',') + '|' + (g.fus || []).length;
   if (g.sbKey !== sbKey){
     g.sbKey = sbKey;
-    document.getElementById('skillBar').innerHTML = Object.keys(g.skills).map(k => `<span class="sb-i ${SKILLS[k].k}" title="${SKILLS[k].name}">${svgIcon(k)}<em>${g.skills[k]}</em></span>`).join('');
+    document.getElementById('skillBar').innerHTML = Object.keys(g.skills).map(k => `<span class="sb-i ${SKILLS[k].k}" title="${SKILLS[k].name}">${svgIcon(k)}<em>${g.skills[k]}</em></span>`).join('') + (g.fus || []).map(f => `<span class="sb-i ofensiva sb-fus" title="Fusión: ${f.name}">✦</span>`).join('');
   }
   const bf = document.getElementById('bonkFill'), bbar = document.getElementById('bonkBar');
   if (bf){
@@ -6736,6 +6771,59 @@ const EVO_SKILLS = {
   tornado:  {need:'Velocidad +10%',           name:'Tornado Digital'},
   pulso:    {need:'Probabilidad crítica +8%', name:'Onda Mega'}
 };
+// Fusiones: dos ataques al nivel máximo se combinan en un efecto nuevo que se suma a los dos
+const FUSION_NAMES = {
+  'espiral+laser': 'Rayo Espiral', 'espiral+meteoro': 'Cometa Espiral', 'espiral+mina': 'Bomba Espiral', 'espiral+cuchilla': 'Danza de Hojas',
+  'espiral+pulso': 'Pulso Perforante', 'espiral+tornado': 'Huracán de Bits', 'espiral+aura': 'Halo Espiral',
+  'laser+meteoro': 'Bombardeo Orbital', 'laser+mina': 'Trampa Láser', 'laser+cuchilla': 'Filo de Luz', 'laser+pulso': 'Prisma de Choque', 'laser+tornado': 'Tormenta Eléctrica', 'laser+aura': 'Corona Láser',
+  'meteoro+mina': 'Campo Volcánico', 'aura+meteoro': 'Estrella Fugaz', 'meteoro+pulso': 'Impacto Sísmico', 'cuchilla+meteoro': 'Lluvia de Filos', 'meteoro+tornado': 'Ciclón de Fuego',
+  'mina+tornado': 'Remolino Explosivo', 'mina+pulso': 'Onda Detonante', 'aura+mina': 'Escudo Minado', 'cuchilla+mina': 'Garras Trampa',
+  'cuchilla+pulso': 'Tajo Expansivo', 'aura+cuchilla': 'Hojas Sagradas', 'cuchilla+tornado': 'Vendaval Cortante',
+  'aura+pulso': 'Latido de Datos', 'pulso+tornado': 'Tifón Digital', 'aura+tornado': 'Vórtice Sagrado'
+};
+const fusionKey = (a, b) => [a, b].sort().join('+');
+// Tipo de efecto según los ataques: dos ofensivos disparan en estrella, con cuchilla persiguen, el resto es una onda expansiva
+function fusionKind(a, b){
+  if (a === 'cuchilla' || b === 'cuchilla') return 'homing';
+  return SKILLS[a].k === 'ofensiva' && SKILLS[b].k === 'ofensiva' ? 'nova' : 'blast';
+}
+function fusionCards(){
+  const have = Object.keys(g.skills).filter(id => (g.skills[id] || 0) >= SKILL_MAX), out = [];
+  for (let i = 0; i < have.length; i++) for (let j = i + 1; j < have.length; j++){
+    const a = have[i], b = have[j], key = fusionKey(a, b);
+    if ((g.fus || []).some(f => f.key === key)) continue;
+    const name = FUSION_NAMES[key] || `${SKILLS[a].name} + ${SKILLS[b].name}`, kind = fusionKind(a, b);
+    const what = kind === 'nova' ? 'una estrella de 10 proyectiles que atraviesan' : kind === 'homing' ? '4 proyectiles que persiguen al enemigo más fuerte' : 'una onda expansiva que daña y empuja';
+    out.push({t: 'FUSIÓN: ' + name, name, fusion: key, k: 'ofensiva', d: `${SKILLS[a].name} + ${SKILLS[b].name}: cada pocos segundos lanza ${what}. Los dos ataques siguen como estaban.`,
+      f: () => { (g.fus || (g.fus = [])).push({key, name, kind, t: 1, cd: kind === 'nova' ? 2.6 : kind === 'homing' ? 3 : 4}); announce(name + '!', 'Fusión de ataques', '#ff8a1e'); sfx('evolve'); }});
+  }
+  return out;
+}
+function updateFusions(dt){
+  if (!g.fus) return;
+  const p = g.p, dm = p.dmg * SKILL_K, ar = p.area;
+  for (const f of g.fus){
+    f.t -= dt;
+    if (f.t > 0) continue;
+    f.t = f.cd * p.cdMul;
+    dmgSrc = 'fus:' + f.key;
+    if (f.kind === 'nova'){
+      for (let i = 0; i < 10; i++){ const an = i / 10 * Math.PI * 2; spawnSProj(p.x, p.z, Math.cos(an)*20, Math.sin(an)*20, 16 * dm, 1.4, 4, false, 0xff8a1e); }
+    } else if (f.kind === 'homing'){
+      const t = strongestIn(p.x, p.z, 45);
+      for (let i = 0; i < 4; i++){ const an = Math.random() * Math.PI * 2; spawnSProj(p.x, p.z, Math.cos(an)*10, Math.sin(an)*10, 18 * dm, 4, 2, true, 0x8576ff, t); }
+    } else {
+      const R = 8.5 * ar;
+      spawnRing(p.x, p.z, 0xff8a1e, R, 0.6);
+      for (const e of g.enemies){
+        if (e.hp <= 0) continue;
+        const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz);
+        if (d < R + e.r){ hurt(e, 24 * dm); if (!e.boss){ const push = 4/(d || 1); e.x += dx*push; e.z += dz*push; [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5); } }
+      }
+    }
+  }
+  dmgSrc = 'base';
+}
 function evoSkillCards(){
   const out = [];
   for (const [id, ev] of Object.entries(EVO_SKILLS)){
@@ -8387,7 +8475,7 @@ if (new URLSearchParams(location.search).has('demo')){
     rollTier,
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
-    spawnMini, MINIS, startMapEvent, summonBoss, openPortal, enterScreen, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS,
+    spawnMini, MINIS, startMapEvent, summonBoss, openPortal, enterScreen, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
     // Simulación rápida sin dibujar (para medir el equilibrio): avanza sec segundos y elige la carta pick en cada subida
     sim(sec, pick = 0, move = false, god = false){
       const out = [];
