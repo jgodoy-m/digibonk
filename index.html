@@ -1,11 +1,22 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" translate="no">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Digibonk</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<title>DigiBonk · Survivor 3D de Digimon gratis en el navegador</title>
+<script src="i18n/i18n.js"></script>
+<meta name="description" content="Fan-game gratuito: elige a tu Digimon, sobrevive a la horda, digievoluciona y derrota a los jefes. Se juega en el navegador, en ordenador y en móvil.">
+<meta name="theme-color" content="#081d4d">
+<link rel="icon" type="image/png" sizes="32x32" href="ui/icono_32.png">
+<link rel="apple-touch-icon" href="ui/icono_180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<!-- Vista previa al compartir el enlace (Discord, X, WhatsApp). Cuando el juego tenga dirección fija, pon la URL completa en og:image y og:url -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="DigiBonk">
+<meta property="og:description" content="Survivor 3D de Digimon, gratis en el navegador. Fan-game no oficial.">
+<meta property="og:image" content="ui/compartir.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>
 html,body{margin:0;height:100%;overflow:hidden;background:#0b0f1a;font-family:system-ui,sans-serif;color:#fff}
 canvas{display:block}
@@ -2080,6 +2091,10 @@ body.is-touch #skillBar{bottom:176px!important}
 @media (max-width:760px){#xpTxt{top:84px!important;left:12px!important}#hudEmb{top:110px;left:12px}}
 #hudEmb{position:fixed;left:18px;top:150px;display:flex;gap:4px;pointer-events:none;z-index:5}
 #hudEmb:empty{display:none}
+#hudEmb .hud-sup{position:relative;width:40px;height:40px;border-radius:50%;box-shadow:0 0 0 2px #7cf29c,0 2px 6px rgba(0,0,0,.5);background:#0e1220;margin-right:2px}
+#hudEmb .hud-sup img{width:100%;height:100%;border-radius:50%;object-fit:cover;animation:none}
+#hudEmb .hud-sup i{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);font-style:normal;font-size:9px;color:#ffd54f;text-shadow:0 1px 2px #000;white-space:nowrap}
+@media (max-width:760px){#hudEmb .hud-sup{width:30px;height:30px}}
 #hudEmb img{width:40px;height:auto;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5));animation:embIn .5s cubic-bezier(.2,1.6,.4,1)}
 @keyframes embIn{from{transform:scale(.2) rotate(-20deg);opacity:0}}
 .lv3-art{width:100%;max-width:200px;height:auto;margin:2px 0 4px;filter:drop-shadow(0 6px 12px rgba(0,0,0,.45));image-rendering:auto}
@@ -2774,6 +2789,24 @@ body:has(#overlay .end3) #hudSummon{display:none!important}
 #overlay>:is(.settings,.help-box,.lab-screen,.cl4,.end3),.approved-info-scrim .approved-info-dialog,#pause .pz2{zoom:var(--ui-scale,1)}
 html.reduce-motion *:not(.anim){animation:none!important;transition:none!important}
 html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
+/* Logo animado: entrada con rebote, brillo cian que respira y un destello que lo cruza cada pocos segundos.
+   El destello usa el propio logo como máscara, así que solo pasa por encima de las letras. */
+.logo-fx{position:relative;display:inline-block;line-height:0;animation:logo-in .7s cubic-bezier(.2,1.5,.4,1) both}
+.logo-fx>img{animation:logo-glow 3.6s ease-in-out .7s infinite alternate}
+.logo-fx::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.85) 48%,rgba(190,250,255,.9) 52%,transparent 62%) no-repeat;
+  background-size:250% 100%;background-position:130% 0;mix-blend-mode:screen;
+  -webkit-mask:url('ui/logo_digibonk.webp') center/100% 100% no-repeat;mask:url('ui/logo_digibonk.webp') center/100% 100% no-repeat;
+  animation:logo-shine 5s ease-in-out 1.2s infinite}
+.logo-fx-rg{width:min(520px,80%)}
+.logo-fx-rg>.rg-logo{width:100%}
+@media (max-width:1000px),(max-height:620px){.logo-fx-rg{width:min(360px,80%)}}
+@keyframes logo-in{0%{opacity:0;transform:translateY(-10px) scale(.88)}100%{opacity:1;transform:none}}
+@keyframes logo-glow{from{filter:drop-shadow(0 4px 0 rgba(0,0,0,.25)) drop-shadow(0 0 4px rgba(90,230,255,.25))}to{filter:drop-shadow(0 4px 0 rgba(0,0,0,.25)) drop-shadow(0 0 16px rgba(90,230,255,.65))}}
+@keyframes logo-shine{0%{background-position:130% 0}30%,100%{background-position:-30% 0}}
+html.reduce-motion .logo-fx,html.reduce-motion .logo-fx>img{animation:none!important}
+html.reduce-motion .logo-fx::after{display:none}
+@media (prefers-reduced-motion:reduce){.logo-fx,.logo-fx>img{animation:none!important}.logo-fx::after{display:none}}
 .set-vol{display:flex;align-items:center;gap:10px}
 .set-range{-webkit-appearance:none;appearance:none;width:150px;height:8px;border-radius:5px;background:var(--m-line);outline:none;cursor:pointer}
 .set-range::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--m-cta);box-shadow:0 2px 0 var(--m-cta-sh);border:2px solid #fff}
@@ -3177,9 +3210,90 @@ html[data-theme=oscuro] #overlay .help-box.gd .gd-tabs button.on{background:#3d4
   #overlay .help-box.gd .gd-next{min-width:0;padding:10px 14px}
   #overlay .help-box.gd .gd-count{display:none}
 }
+/* ===== Móvil en horizontal durante la partida: HUD compacto y subida de nivel en fila ===== */
+@media (orientation:landscape) and (max-height:500px){
+  #hud{left:10px!important;top:8px!important}
+  .hud-card{padding:6px 10px 6px 6px!important;gap:8px!important;border-radius:16px!important}
+  .hud-portrait:not([class*="fr-"]){width:42px!important;height:42px!important}
+  .hud-lvl{min-width:18px!important;height:18px!important;font-size:10px!important;right:-6px!important;bottom:-6px!important}
+  .hud-main{min-width:0!important}.hud-hp{width:130px!important;height:12px!important}
+  .hud-name{font-size:13px!important}.hud-title{display:none!important}.hud-chips{display:none!important}
+  #xpTxt{top:68px!important;left:10px!important;font-size:11px!important}
+  #hudTop{top:6px!important;bottom:auto!important;padding:4px 12px 5px!important;min-width:0!important;max-width:44vw;gap:2px!important;border-radius:14px!important}
+  #hudTop #timer{font-size:19px!important}
+  #hudZone{display:none!important}
+  #hudChips{zoom:.78}
+  #hudObj{font-size:11px!important;white-space:normal!important;text-align:center}
+  #minimap{width:80px!important;height:80px!important;top:8px!important;right:8px!important}
+  #tPause{top:8px!important;right:98px!important;left:auto!important;width:36px!important;height:36px!important}
+  #tDash{right:100px!important;bottom:20px!important;width:56px!important;height:56px!important}
+  #tJump{right:22px!important;bottom:112px!important;width:52px!important;height:52px!important}
+  #tEvo{right:168px!important;bottom:24px!important;width:52px!important;height:52px!important}
+  #bonkBar{width:70px!important;height:70px!important;right:20px!important;bottom:22px!important}
+  #hudSummon{top:96px!important;bottom:auto!important;left:auto!important;right:8px!important;transform:none!important;padding:5px 8px 5px 5px!important}
+  #hudSummon kbd,#hudSummon small{display:none!important}#hudSummon img{width:26px!important;height:26px!important}
+  #skillBar{left:10px!important;top:92px!important;bottom:auto!important}.sb-i{width:32px!important;height:32px!important;border-radius:10px!important}
+  #evHud{top:58px!important;font-size:11px!important;max-width:44vw;white-space:normal!important;text-align:center}
+  #tJoy{width:108px;height:108px;margin:-54px 0 0 -54px}
+  #combo{top:auto!important;bottom:20px!important;right:auto!important;left:50%!important;transform:translateX(-50%);font-size:22px!important}
+  /* Subida de nivel: tres cartas en fila, todo dentro de la pantalla */
+  #overlay:not(.menu-mode):has(>.lv3){padding:6px 8px!important;--ui-top:6px;--ui-bot:6px}
+  #overlay .lv3{gap:6px!important;max-height:100%}
+  #overlay .lv3-head h2,#overlay .lv3-banner{font-size:19px!important;padding:2px 14px!important;margin:0!important}
+  #overlay .lv3-head p{display:none}
+  #overlay .lv3-row{flex-direction:row!important;gap:8px!important}
+  #overlay .lv3-card{width:min(31vw,250px)!important;height:auto!important;max-height:calc(100dvh - 96px);padding:28px 10px 10px!important;gap:4px!important;overflow:hidden}
+  #overlay .lv3-art{max-width:100%!important;max-height:min(24dvh,96px)!important;width:auto!important;margin:0!important}
+  #overlay .lv3-ic{font-size:28px!important}
+  #overlay .lv3-card b{font-size:14px!important}
+  #overlay .lv3-card p{font-size:11.5px!important;line-height:1.3!important}
+  #overlay .lv3-tag{top:9px!important;font-size:9px!important}
+  #overlay .lv3-acts{margin-top:2px!important;gap:8px!important}
+  #overlay .lv3-act{padding:7px 12px!important;font-size:12px!important}
+  body:has(#overlay:not(.hidden)>.lv3) :is(#hud,#hudTop,#bonkBar,#xpTxt,#minimap,#hudSummon,#skillBar,#tPause){visibility:hidden!important}
+}
+/* Móviles pequeños en horizontal (iPhone SE): el objetivo y la barra de vida no caben juntos */
+@media (orientation:landscape) and (max-height:500px) and (max-width:700px){
+  .hud-hp{width:96px!important}.hud-name{font-size:12px!important}
+  #hudTop{max-width:36vw}#hudObj{display:none!important}#hudChips{zoom:.68}
+}
+/* En pantallas táctiles no hay teclado: fuera las pistas de teclas */
+body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch .lv3-key{display:none!important}
+/* Fin de partida: cabe en pantallas bajas (1280×720, móvil en horizontal) */
+#overlay .end3{max-height:calc(100dvh - 16px);overflow-y:auto;box-sizing:border-box}
+@media (max-height:820px){
+  #overlay .end3{padding:14px 22px!important}
+  #overlay .end3 .end3-ic{width:52px!important;height:52px!important}
+  #overlay .end3 h1{font-size:28px!important;margin:4px 0!important}
+  #overlay .end3 .end3-sub{margin:6px 0 10px!important}
+  #overlay .end3 .end3-cells>span{padding:5px 6px!important}
+  #overlay .end3 .end3-cells>span i{font-size:14px!important;height:18px!important}
+  #overlay .end3 .end3-cells>span b{font-size:21px!important}
+  #overlay .end3 .end3-act2{margin-top:10px!important}
+}
+/* Los botones del fin de partida siempre a la vista aunque el resumen sea largo */
+#overlay .end3 .end3-act2{position:sticky;bottom:-14px;z-index:2;background:var(--m-card,#fff);padding:8px 0 4px;margin-bottom:-4px}
+@media (orientation:landscape) and (max-height:500px){
+  #overlay .end3{padding:10px 16px!important}
+  #overlay .end3 .end3-ic{width:40px!important;height:40px!important}
+  #overlay .end3 h1{font-size:22px!important}
+  #overlay .end3 .end3-cells{grid-template-columns:repeat(6,1fr)!important;gap:6px!important;margin-bottom:6px!important}
+  #overlay .end3 .end3-cells>span b{font-size:17px!important}
+  #overlay .end3 .end3-cols{grid-template-columns:1fr 1fr!important;gap:10px!important}
+  #overlay .end3 .end3-act2 button{padding:7px 14px!important;font-size:13px!important}
+}
+/* Avisos del menú (regalo, próximamente…): arriba en el centro, sin tapar botones; en vertical pueden ocupar dos líneas */
+#overlay .realhub.hb .hm-msg:not(:empty){top:14px!important;bottom:auto!important;white-space:normal!important;text-align:center}
+@media (orientation:portrait) and (max-width:760px){#overlay .realhub.hb .hm-msg:not(:empty){top:auto!important;bottom:18px!important;width:max-content;max-width:calc(100vw - 32px)!important}}
+/* Móvil en horizontal: el menú se desplaza en vez de encogerse hasta que los botones sean diminutos */
+@media (orientation:landscape) and (max-height:500px){
+  body.is-touch #overlay.menu-mode:has(.realhub:not(.pl4)){overflow-y:auto!important;-webkit-overflow-scrolling:touch}
+  body.is-touch #overlay.menu-mode .realhub:not(.pl4){height:auto!important;min-height:100%!important;overflow:visible!important}
+  #overlay .realhub.hb .hm-msg:not(:empty){top:58px!important}
+}
 </style>
 <script type="importmap">
-{ "imports": { "three": "./vendor/three.module.js" } }
+{ "imports": { "three": "./vendor/three.module.min.js" } }
 </script>
 </head>
 <body>
@@ -3271,7 +3385,7 @@ const MAPS = {
     desc: 'Nieve y una fortaleza oscura. Sin jefes menores: solo Machinedramon, el único jefe final, que te espera en las dos pantallas.',
     zones: [
       {name: 'Valle Nevado', biome: 'nieve', fog: 0xe4eefa, sky: ['#7fa6d6', '#c4dcf2', '#f2f8ff'], tint: 0xffffff, color: '#81d4fa',
-        foes: {basic: [AD('snowbotamon'), AD('gotsumon')], fast: [AD('gazimon'), AD('kokatorimon')], tank: [AD('mojyamon'), AD('mammothmon')], elite: [AD('skullgreymon'), AD('darktyrannomon')]},
+        foes: {basic: [AD('gotsumon'), AD('otamamon')], fast: [AD('gazimon'), AD('kokatorimon')], tank: [AD('mojyamon'), AD('mammothmon')], elite: [AD('skullgreymon'), AD('darktyrannomon')]},
         boss: {name: 'Machinedramon', sprite: AD('machinedramon'), hp: 9000, dmg: 22, shots: 16, shotDmg: 11, gap: 2.0, col: '#b0bec5', sub: 'El único jefe final de la Montaña Helada', retreatAt: 0.5}},
       {name: 'Fortaleza Oscura', biome: 'fortaleza', fog: 0x3a2440, sky: ['#120818', '#3d1838', '#8a3a4a'], tint: 0xb8a8d8, color: '#ce93d8',
         foes: {basic: [AD('bakemon'), AD('dokugumon')], fast: [AD('phantomon'), AD('snimon')], tank: [AD('darktyrannomon'), AD('warumonzaemon')], elite: [AD('megadramon'), AD('gigadramon')]},
@@ -3307,7 +3421,7 @@ const sqDist = (x, z) => Math.max(Math.abs(x), Math.abs(z));   // distancia "cua
 const smooth01 = t => { t = Math.min(1, Math.max(0, t)); return t*t*(3 - 2*t); };
 // Estanque al suroeste: cuenca plana con agua; se funde con el terreno alrededor
 const POND = {x: -38, z: 22, r: 6, water: -0.35, bed: -0.9};
-// Lagos de orilla irregular (rx/rz: radios; s: forma). El segundo lo cruza un puente de este a oeste
+// Lagos de orilla irregular (rx/rz: radios; s: forma)
 const PONDS = [{x: -38, z: 22, rx: 8, rz: 6.5, s: 0.4}, {x: 54, z: -22, rx: 6, rz: 12, s: 1.7}, {x: 22, z: 66, rx: 10, rz: 7, s: 2.9}];
 const pondEdge = (P, a) => 1 + 0.12*Math.sin(3*a + P.s) + 0.07*Math.sin(5*a + P.s*2);
 // Distancia aproximada (en unidades) desde la orilla: negativa dentro del lago
@@ -3315,10 +3429,7 @@ function pondDist(P, x, z){
   const dx = (x - P.x)/P.rx, dz = (z - P.z)/P.rz;
   return (Math.hypot(dx, dz)/pondEdge(P, Math.atan2(dz, dx)) - 1)*Math.min(P.rx, P.rz);
 }
-const BRIDGE = (() => { const P = PONDS[1], half = P.rx*1.25 + 2.5; return {x0: P.x - half, x1: P.x + half, z: P.z, hw: 1.7}; })();
-const onBridge = (x, z) => Math.abs(z - BRIDGE.z) < BRIDGE.hw && x > BRIDGE.x0 && x < BRIDGE.x1;
 function pondWeight(x, z){
-  if (onBridge(x, z)) return 0;
   let w = 0;
   for (const P of PONDS) w = Math.max(w, 1 - smooth01(pondDist(P, x, z)/3));
   return w;
@@ -3350,11 +3461,6 @@ function terrainH(x, z){
   const hn = base*(1 - near) + shore*near;
   const t = smooth01(d/1.6);
   let h = POND.bed*(1 - t) + hn*t;
-  // Bajo el puente hay un terraplén a ras de orilla: se camina por encima del agua
-  if (x > BRIDGE.x0 - 2 && x < BRIDGE.x1 + 2){
-    const k = (1 - smooth01((Math.abs(z - BRIDGE.z) - BRIDGE.hw)/1.2))*(1 - smooth01((Math.max(BRIDGE.x0 - x, x - BRIDGE.x1))/2));
-    h = h*(1 - k) + (POND.water + 0.45)*k;   // a nivel: el puente queda siempre por encima del suelo
-  }
   return h;
 }
 // Hitboxes: círculos y segmentos (por si se añaden obstáculos al mapa)
@@ -3406,20 +3512,32 @@ const EVO_LINE = {
   gomamon:  [{name:'Ikkakumon',   sprite:'sprites/adventure/ikkakumon.png'}, {name:'Zudomon',         sprite:'sprites/adventure/zudomon.png'}],
   patamon:  [{name:'Angemon',     sprite:'sprites/adventure/angemon.png'},   {name:'MagnaAngemon',    sprite:'sprites/adventure/magnaangemon.png'}],
   biyomon:  [{name:'Birdramon',   sprite:'sprites/adventure/birdramon.png'}, {name:'Garudamon',       sprite:'sprites/adventure/garudamon.png'}],
-  tentomon: [{name:'Kabuterimon', sprite:'sprites/adventure/kabuterimon.png'},    {name:'MegaKabuterimon', sprite:'sprites/adventure/megakabuterimon.png'}]
+  tentomon: [{name:'Kabuterimon', sprite:'sprites/adventure/kabuterimon.png'},    {name:'MegaKabuterimon', sprite:'sprites/adventure/megakabuterimon.png'}],
+  leomon:   [{name:'SaberLeomon', sprite:'sprites/adventure/saberleomon.png'}],
+  // Sin evolución: Hagurumon (Guardromon/Andromon no tienen hoja con el estilo nuevo), Frigimon y Wizardmon
+  hagurumon:[],
+  frigimon: [],
+  wizardmon:[]
 };
 // Primera etapa de cada línea (colección y menús)
 // Nombre y sprite del Digimon en la etapa st (0 = forma inicial)
 const stageName = (key, st) => st ? EVO_LINE[key][st - 1].name : CHARS[key].name;
 // Personajes de la temporada 1
 const SEASONS = {
-  adventure: {name:'Digimon Adventure', chars:['agumon','gabumon','biyomon','tentomon','palmon','gomamon','patamon','gatomon']}
+  adventure: {name:'Digimon Adventure', chars:['agumon','gabumon','biyomon','tentomon','palmon','gomamon','patamon','gatomon','leomon','hagurumon','frigimon','wizardmon']}
 };
 Object.assign(CHARS, {
   gomamon: {name:'Gomamon', desc:'Burbujas al enemigo más cercano', sprite:'sprites/adventure/gomamon.png', kind:'shot', cd:0.92, dmg: 11},
   patamon: {name:'Patamon', desc:'Ráfagas rápidas al enemigo más cercano', sprite:'sprites/adventure/patamon.png', kind:'shot', cd:0.58, dmg:7},
-  biyomon: {name:'Biyomon', desc:'Ráfaga de viento al enemigo más cercano', sprite:'sprites/adventure/biyomon.png', kind:'shot', cd:1.17, dmg:14}
+  biyomon: {name:'Biyomon', desc:'Ráfaga de viento al enemigo más cercano', sprite:'sprites/adventure/biyomon.png', kind:'shot', cd:1.17, dmg:14},
+  // Compañeros que no son de los niños elegidos: cada uno estrena un tipo de ataque propio
+  leomon:    {name:'Leomon',    desc:'Puño de la Bestia: golpe en abanico hacia donde miras', sprite:'sprites/adventure/leomon.png',    kind:'melee',  cd:0.6, dmg:30},
+  hagurumon: {name:'Hagurumon', desc:'Deja torretas de engranaje que disparan solas',         sprite:'sprites/adventure/hagurumon.png', kind:'turret', cd:2.6, dmg:7},
+  frigimon:  {name:'Frigimon',  desc:'Ventisca alrededor: daña y frena a los enemigos',        sprite:'sprites/adventure/frigimon.png',  kind:'frost',  cd:1.6, dmg:9},
+  wizardmon: {name:'Wizardmon', desc:'Círculos mágicos que estallan bajo los enemigos',        sprite:'sprites/adventure/wizardmon.png', kind:'zone',   cd:1.4, dmg:16}
 });
+// Compañeros iniciales: solo los de los niños elegidos (el resto se desbloquea jugando)
+const STARTERS = ['agumon','gabumon','biyomon','tentomon','palmon','gomamon','patamon','gatomon'];
 const ENEMY = {
   basic: {sprite:'sprites/numemon.png', hp:22, spd:3.2, r:0.9, scale:1.8, xp:2, dmg:5},
   fast:  {sprite:'sprites/meramon.png', hp:14, spd:6.0, r:0.6, scale:1.4, xp:3, dmg:4},
@@ -3795,10 +3913,7 @@ function buildLayout(name, B){
     return pts;
   };
   for (const P of L.plazas) L.paths.push(wobble(0, 0, P.x, P.z, 5));
-  // Al puente: el camino llega a cada extremo y sigue al otro lado; nunca pasa por debajo
-  L.paths.push(wobble(0, 0, BRIDGE.x0 + 1.5, BRIDGE.z, 4));
-  L.paths.push(wobble(BRIDGE.x1 - 1.5, BRIDGE.z, ARENA_R - 12, BRIDGE.z + 14, 3));
-  for (const i of [0, 2]){ const P = PONDS[i], d = Math.hypot(P.x, P.z), k = 1 - (Math.max(P.rx, P.rz) + 3)/d; L.paths.push(wobble(0, 0, P.x*k, P.z*k, 3)); }
+  for (const i of [0, 1, 2]){ const P = PONDS[i], d = Math.hypot(P.x, P.z), k = 1 - (Math.max(P.rx, P.rz) + 3)/d; L.paths.push(wobble(0, 0, P.x*k, P.z*k, 3)); }
   // Máscara: canal rojo = camino, verde = losas (con un poco de desenfoque para bordes suaves)
   const c = maskCanvas.getContext('2d'), N = MASK_N, S = TERRAIN_SIZE, px = v => (v + S/2)/S*N;
   c.globalCompositeOperation = 'source-over'; c.filter = 'none';
@@ -3843,16 +3958,6 @@ function propSprite(set, name, x, z, scale = 1, shadow = 0){
   decoSprite(decoTex('sprites/deco/' + key + '.png'), h*ar, h, x, gy, z);
   if (shadow){ const sh = makeShadow(h*ar*shadow); sh.position.set(x, gy + 0.02, z); decoGroup.add(sh); }
 }
-// Puente plano sobre el lago (se camina por encima: el terreno de debajo es un terraplén)
-let bridgeMesh = null;
-function placeBridge(set){
-  if (bridgeMesh){ scene.remove(bridgeMesh); bridgeMesh.material.dispose(); }
-  const len = BRIDGE.x1 - BRIDGE.x0 + 1, ar = DECO_AR[set + '/puente'] || 2.6;
-  bridgeMesh = new THREE.Mesh(new THREE.PlaneGeometry(len, len/ar), new THREE.MeshStandardMaterial({map: decoTex('sprites/deco/' + set + '/puente.png'), transparent: true, alphaTest: 0.5, roughness: 1}));
-  bridgeMesh.rotation.x = -Math.PI/2;
-  bridgeMesh.position.set((BRIDGE.x0 + BRIDGE.x1)/2, POND.water + 0.5, BRIDGE.z - 0.3);
-  scene.add(bridgeMesh);
-}
 const biomeTexCache = {};
 function biomeTex(path, rx, ry){ return biomeTexCache[path + rx + ':' + ry] || (biomeTexCache[path + rx + ':' + ry] = loadTex(path, rx, ry, true)); }
 let curBiome = null;
@@ -3866,7 +3971,6 @@ function buildEnvironment(name = 'bosque'){
   // Suelo por capas y disposición del mapa
   floorU.uPathTex.value = biomeTex(B.path, 1, 1); floorU.uStoneTex.value = biomeTex(B.stone, 1, 1); floorU.uRockTex.value = biomeTex(B.rock, 1, 1);
   layout = buildLayout(name, B);
-  placeBridge(B.set);
   const rnd = seededRng(name + '-deco'), set = B.set;
   // Plazas: arco o torre al fondo, altar en el centro, columnas o muros en corro y restos sueltos
   for (const P of layout.plazas){
@@ -3945,10 +4049,15 @@ addEventListener('popstate', () => {
     if (state === 'play') pauseGame();
   }
 });
+// Cambiar de pestaña, de app o de ventana pausa la partida (al volver no te encuentras rodeado)
+document.addEventListener('visibilitychange', () => { if (document.hidden && state === 'play') pauseGame(); });
+addEventListener('blur', () => { if (state === 'play' && !new URLSearchParams(location.search).has('demo')) pauseGame(); });
 document.getElementById('hudSummon').onclick = e => { e.stopPropagation(); summonBoss(); };
 addEventListener('keydown', e => {
   const k = e.key.toLowerCase();
   audioInit();
+  // Esc cierra las ventanas del menú (Logros, Encargos, Récords…) antes que nada
+  if (k === 'escape'){ const x = overlay.querySelector('.approved-info-scrim #realClose'); if (x){ x.click(); return; } }
   if (state === 'savecode'){ if (k === 'escape') showSettings(); return; }
   if (state === 'cloud' || state === 'ranking'){ if (k === 'escape'){ const b = document.getElementById(state === 'cloud' ? 'cdBack' : 'rkBack'); if (b) b.click(); } return; }
   if (state === 'register') return;
@@ -4111,7 +4220,11 @@ const PAUSE_LINE = {
   gatomon: '¡Mis garras están listas!',
   gomamon: '¡A por otra ola de burbujas!',
   patamon: '¡A volar otra vez!',
-  biyomon: '¡Ráfaga de viento lista!'
+  biyomon: '¡Ráfaga de viento lista!',
+  leomon:  '¡El Puño de la Bestia no se rinde!',
+  hagurumon: '¡Los engranajes siguen girando!',
+  frigimon: '¡Que nieve un poco más!',
+  wizardmon: '¡Un truco más y ganamos!'
 };
 let pauseConfirm = false;   // true mientras se muestra la confirmación de desconexión
 function showPause(askQuit = false){
@@ -4235,10 +4348,10 @@ function setHud(v){
   if (!v) document.getElementById('hurt').style.opacity = 0;
 }
 // Barra de estadística (0-100%)
-const ATTACK_NAME = {shot:'Disparo dirigido', ring:'Onda circular', orbit:'Órbita defensiva'};
+const ATTACK_NAME = {shot:'Disparo dirigido', ring:'Onda circular', orbit:'Órbita defensiva', melee:'Golpe cuerpo a cuerpo', turret:'Torretas', frost:'Ventisca de control', zone:'Magia de área'};
 
-// ---------- Idioma (ES/EN) de login, menú principal y barra superior; el resto del juego sigue en español ----------
-let LANG = localStorage.getItem('digibonk3d-lang') === 'en' ? 'en' : 'es';
+// ---------- Idioma: los textos se escriben en español y i18n/i18n.js los traduce en pantalla al idioma elegido ----------
+let LANG = window.I18N ? I18N.lang : 'es';
 const TXT = {
   es: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'Survivor 3D de Digimon, gratis en el navegador', boot:'DIGIVICE · ACCESO AL DIGIMUNDO', who:'Niño elegido, identifícate',
        saved:'Tu nombre se guarda en este navegador.', ph:'TU NOMBRE', enter:'ENTRAR AL DIGIMUNDO', guest:'Entrar como invitado (pruebas)', needName:'Escribe un nombre',
@@ -4246,20 +4359,16 @@ const TXT = {
        coll:'COLECCIÓN', collS:'Skins, marcos, títulos y evoluciones', help:'CÓMO JUGAR', helpS:'Tutorial con vídeos', set:'AJUSTES', setS:'Calidad, sonido y guardado', recs:'Tus récords', runs:'Partidas', best:'Mejor tiempo', lvl:'Mejor nivel',
        kills:'Bajas', none:'Todavía no hay partidas. ¡Empieza una!', partner:'Tu compañero', noTitle:'Sin título', guestTag:'invitado · pruebas',
        evEnds:'Termina en', evSkin:'Skins de Navidad como legendarias en la Incubadora', tipT:'Consejo', tip:'Los élites y el jefe sueltan tickets de tirada.', daily:'Misión diaria',
-       legal:'Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon.'},
-  en: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'A free 3D Digimon survivor in your browser', boot:'DIGIVICE · DIGITAL WORLD ACCESS', who:'DigiDestined, identify yourself',
-       saved:'Your name is saved in this browser.', ph:'YOUR NAME', enter:'ENTER THE DIGITAL WORLD', guest:'Enter as guest (testing)', needName:'Type a name',
-       play:'PLAY', playS:'Pick your Digimon, map and difficulty', gacha:'GACHA', gachaS:'Pulls with Bits or tickets', player:'PLAYER', playerS:'Your card, frames and titles',
-       coll:'COLLECTION', collS:'Skins, frames, titles and evolutions', help:'HOW TO PLAY', helpS:'Video tutorial', set:'SETTINGS', setS:'Quality, sound and save', recs:'Your records', runs:'Runs', best:'Best time', lvl:'Best level',
-       kills:'Kills', none:'No runs yet. Start one!', partner:'Your partner', noTitle:'No title', guestTag:'guest · testing',
-       evEnds:'Ends in', evSkin:'Christmas skins as legendaries in the gacha', tipT:'Tip', tip:'Elites and the boss drop pull tickets.', daily:'Daily mission',
-       legal:'Unofficial, free, non-profit fan game. Not affiliated with Bandai, Toei Animation or the Digimon rights holders.'}
+       legal:'Fan-game no oficial y gratuito, sin ánimo de lucro. No está afiliado a Bandai, Toei Animation ni a los titulares de Digimon.'}
 };
-const t = k => TXT[LANG][k] || TXT.es[k] || k;
+const t = k => TXT.es[k] || k;
+// Abre el selector de idiomas; al elegir, i18n.js retraduce la pantalla y aquí se rehace la actual para el código del botón
 function toggleLang(){
-  LANG = LANG === 'es' ? 'en' : 'es';
-  localStorage.setItem('digibonk3d-lang', LANG);
-  if (state === 'register') showRegister(); else if (state === 'select') showSelect(); else refreshTopbar();
+  if (!window.I18N) return;
+  I18N.openPicker(code => {
+    LANG = code;
+    if (state === 'register') showRegister(); else if (state === 'select') showSelect(); else refreshTopbar();
+  });
 }
 // Colección: todo lo que se puede conseguir, con porcentaje de completado (solo consulta)
 // Colección: lista de Digimon a la izquierda, etapas y skins de cada etapa a la derecha; marcos y títulos en otra pestaña
@@ -4295,7 +4404,7 @@ function showCollection(){
       let own = 0, all = 0;
       for (const sk of lineSkins(k)){ all++; if (ownsAt(k, 0, sk.id)) own++; }
       return `<button class="cl4-item${k === colKey ? ' sel' : ''}${open ? '' : ' lock'}" data-k="${k}" ${open ? '' : 'disabled'}>
-        <span class="ps-ic cl4-ic"><img src="${open ? charIcon(k) : 'ui/jugador/' + k + '.png'}" alt=""></span>
+        <span class="ps-ic cl4-ic"><img src="${open ? charIcon(k) : 'ui/jugador/' + k + '.webp'}" alt=""></span>
         <span><b>${open ? CHARS[k].name : '???'}</b><small>${open ? own + ' skins' : unlockHow(k)}</small></span></button>`;
     }).join('');
     const k = colKey, open = isUnlocked(k);
@@ -4330,7 +4439,7 @@ function showCollection(){
   }
   showOverlay(`
     <div class="picker-screen cl4">
-      <header class="pk-head"><button class="g-back" id="clBack">← Volver</button><h2>Colección</h2><span class="cl-pct">${have} conseguidos</span></header>
+      <header class="pk-head"><button class="g-back" id="clBack">← Volver</button><h2>Colección</h2><span class="cl-pct" title="Skins, evoluciones, marcos y títulos">${have}/${total} objetos</span></header>
       ${tabs}
       ${body}
     </div>`);
@@ -4394,7 +4503,7 @@ function refreshTopbar(){
   const tt = extra.title ? TITLES.find(x => x.id === extra.title) : null;
   el.innerHTML = `
     <button class="tb-id" id="tbId"><span class="hud-portrait mini${extra.frame ? ' fr-' + extra.frame : ''}"><img src="${avatarSrc()}" alt=""></span>
-      <span><b>${trainerName || 'Entrenador'}</b><small>${isGuest() ? t('guestTag') : (tt ? tt.name : t('noTitle'))}</small></span></button>
+      <span><b>${escHtml(trainerName || 'Entrenador')}</b><small>${isGuest() ? t('guestTag') : (tt ? tt.name : t('noTitle'))}</small></span></button>
     <span class="tb-sp"></span>
     <span class="tb-chip" title="Bits">Ⓑ ${SAVE.bits}</span>
     <span class="tb-chip tix" title="Tickets">🎟 ${SAVE.tickets}</span>
@@ -4493,7 +4602,7 @@ function showSelect(){
       </header>
       <section class="hb-main">
         <div class="hb-left">
-          <h1 class="hb-brand"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"><span class="hb-ver">BETA</span></h1>
+          <h1 class="hb-brand"><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span><span class="hb-ver">BETA</span></h1>
           <div class="hb-modes nm-modes">
             <button type="button" id="playBtn" class="hb-play nm-play" aria-label="Jugar con ${safeText(choice.name)}">
               <span class="hb-play-txt"><b>Jugar</b></span>
@@ -4508,7 +4617,7 @@ function showSelect(){
           <button type="button" class="nm-quests nm-encard" id="mEnc" aria-label="Encargos: hoy ${qs.day.done} de ${qs.day.all}, semana ${qs.week.done} de ${qs.week.all}${qs.ev ? ', evento ' + qs.ev.done + ' de ' + qs.ev.all : ''}"><i><img class="nm-ic" src="ui/hub/ic_encargos.webp" alt=""></i><span class="nm-eh"><b>Encargos</b><small>${qs.ev ? 'Diarios, semanales y de evento' : 'Diarios y semanales'}</small></span><span class="nm-eqs">${[['Hoy', qs.day, 'q-d'], ['Semana', qs.week, 'q-w'], ...(qs.ev ? [['Evento', qs.ev, 'q-e']] : [])].map(([n, q, c]) => `<span class="nm-eq ${c}"><small>${n}</small><b>${q.done}/${q.all}</b><span class="hb-meter"><i style="width:${Math.round(q.done / q.all * 100)}%"></i></span></span>`).join('')}</span></button>
           ${(bannerOpen("navidadP") || bannerOpen("navidadR")) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
           <div class="hb-tiles nm-tiles">
-            <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex: ${unlockedSet().size} de ${Object.keys(CHARS).length} Digimon"><i><img class="nm-ic" src="ui/hub/ic_digidex.webp" alt=""></i><b>Digidex</b><small>${unlockedSet().size}/${Object.keys(CHARS).length} Digimon</small></button>
+            <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex: ${pickProgress().done} de ${pickProgress().total} Digimon"><i><img class="nm-ic" src="ui/hub/ic_digidex.webp" alt=""></i><b>Digidex</b><small>${pickProgress().done}/${pickProgress().total} Digimon</small></button>
             <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio${labReady ? ': ' + labReady + ' mejoras disponibles' : ''}"><i><img class="nm-ic" src="ui/hub/ic_laboratorio.webp" alt=""></i><b>Laboratorio</b><small>${labReady ? labReady + (labReady === 1 ? ' mejora' : ' mejoras') : 'Mejoras'}</small>${labReady ? '<em class="nm-dot" aria-hidden="true"></em>' : ''}</button>
             <button type="button" class="hb-tile t3" id="mMaps" aria-label="Mapas: ${safeText(MAPS[runMap].name)}"><i><img class="nm-ic" src="ui/hub/ic_mapas.webp" alt=""></i><b>Mapas</b><small>${safeText(MAPS[runMap].name)}</small></button>
             <button type="button" class="hb-tile t4" id="mLog" aria-label="Logros: ${achOwned} de ${achAll}"><i><img class="nm-ic" src="ui/hub/ic_logros.webp" alt=""></i><b>Logros</b><small>${achOwned}/${achAll}</small></button>
@@ -4542,7 +4651,7 @@ function showSelect(){
     </main>`);
   overlay.classList.add('menu-mode');
   // Menú sin scroll: si la ventana es más baja que el diseño, se reduce para que entre entero
-  const fitHub = () => { const hub = document.querySelector('#overlay.menu-mode .realhub:not(.pl4)'); if (!hub) return; hub.style.zoom = '1'; if (innerWidth <= 760) return; hub.style.zoom = String(Math.min(1, innerHeight / hub.scrollHeight)); };
+  const fitHub = () => { const hub = document.querySelector('#overlay.menu-mode .realhub:not(.pl4)'); if (!hub) return; hub.style.zoom = '1'; if (innerWidth <= 760) return; hub.style.zoom = String(Math.min(1, Math.max(isTouchUI() ? 0.8 : 0, innerHeight / hub.scrollHeight))); };   // en táctil no se encoge tanto que los botones queden diminutos: mejor desplazarse
   fitHub(); if (!window.__hmFitBound){ window.__hmFitBound = true; addEventListener('resize', () => { if (document.querySelector('#overlay.menu-mode .realhub:not(.pl4)')) fitHub(); }); }
   // Always start with a valid still portrait: no animation strip flashes in the Digivice.
   const playPortrait = document.getElementById('rhPlayPortrait');
@@ -5077,7 +5186,7 @@ function showSettings(){
         <div class="set-seg-wrap">${seg('auto', 'Auto')}${seg('alta', 'Alta')}${seg('baja', 'Baja')}</div>
       </div>
       <div class="set-row">
-        <div><b>Tema de los menús</b><small>Claro u oscuro. Se aplica a los menús rediseñados.</small></div>
+        <div><b>Tema de los menús</b><small>Claro u oscuro para todos los menús.</small></div>
         <div class="set-seg-wrap">${['claro', 'oscuro'].map(t => `<button class="set-seg${uiTheme() === t ? ' on' : ''}" data-theme="${t}">${t === 'claro' ? 'Claro' : 'Oscuro'}</button>`).join('')}</div>
       </div>
       <div class="set-row">
@@ -5132,8 +5241,8 @@ function showSettings(){
   };
   // Eliminar cuenta: borra todo lo guardado por el juego en este navegador
   document.getElementById('btnDelete').onclick = async () => {
-    if (!confirm('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Bits, skins, colección, récords)' + (Cloud.st.uid ? ' y tu cuenta en la nube con tus puestos del ranking' : '') + '. No se puede deshacer.')) return;
-    if (Cloud.st.uid && CLOUD_ON){ try { await cloudRpc('delete_my_data', {}); } catch(e){ if (!confirm('No se pudo borrar la cuenta de la nube (' + e.message + '). ¿Borrar solo este navegador?')) return; } }
+    if (!confirm(Cloud.st.uid ? I18N.tr('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Bits, skins, colección, récords) y tu cuenta en la nube con tus puestos del ranking. No se puede deshacer.') : I18N.tr('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Bits, skins, colección, récords). No se puede deshacer.'))) return;
+    if (Cloud.st.uid && CLOUD_ON){ try { await cloudRpc('delete_my_data', {}); } catch(e){ if (!confirm(I18N.tr('No se pudo borrar la cuenta de la nube ({0}). ¿Borrar solo este navegador?'.replace('{0}', e.message)))) return; } }
     Object.keys(localStorage).filter(k => k.startsWith('digibonk3d-')).forEach(k => localStorage.removeItem(k));
     location.reload();
   };
@@ -5157,7 +5266,11 @@ const UNLOCK = {
   patamon:  {how: 'Logro: completar 10 partidas', ok: () => sumStats('plays') >= 10},
   biyomon:  {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05},
   tentomon: {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05},
-  gatomon:  {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05}
+  gatomon:  {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05},
+  leomon:   {how: 'Logro: 1.000 bajas en total', ok: () => sumStats('kills') >= 1000},
+  hagurumon:{how: 'Logro: completar 25 partidas', ok: () => sumStats('plays') >= 25},
+  frigimon: {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05},
+  wizardmon:{how: 'Logro: tener a Gatomon', ok: () => isUnlocked('gatomon')}
 };
 function sumStats(field){ return Object.values(loadJSON('digibonk3d-stats', {})).reduce((a, x) => a + (x[field] || 0), 0); }
 // Texto de cómo se consigue un Digimon bloqueado (los iniciales no tienen regla propia)
@@ -5185,7 +5298,7 @@ function showStarter(){
   setHud(false);
   let pick = 'agumon';
   const draw = () => {
-    const grid = SEASONS.adventure.chars.map(k => `
+    const grid = STARTERS.map(k => `
       <button class="pk2-tile${k === pick ? ' sel' : ''}" data-st="${k}">
         ${animEl(spriteOf(k, false), 'pk2-face')}
         <b>${CHARS[k].name}</b><small>${ATTACK_NAME[CHARS[k].kind] || ''}</small>
@@ -5218,12 +5331,24 @@ function showStarter(){
 let pickQuery = '';
 let pickStage = 0, pickStageFor = null;   // etapa de la línea que se previsualiza y se viste
 // Compañeros jugables en preparación: se ven en el selector como bloqueados hasta que estén terminados
+// Resto de Digimon de Adventure (sin bebés): se ven bloqueados con su nombre hasta que tengan hoja y jugabilidad
 const COMING_SOON = [
-  {name:'Leomon',       sprite:'sprites/adventure/leomon.png',      role:'Compañero · cuerpo a cuerpo'},
-  {name:'Hagurumon',    sprite:'sprites/adventure/hagurumon.png',   role:'Compañero · torretas'},
-  {name:'Frigimon',     sprite:'sprites/adventure/frigimon.png',    role:'Compañero · control'},
-  {name:'Wizardmon',    sprite:'sprites/adventure/wizardmon.png',   role:'Compañero · magia de área'}
-];
+  ['skullgreymon','SkullGreymon'], ['salamon','Salamon'], ['devimon','Devimon'], ['etemon','Etemon'], ['metaletemon','MetalEtemon'],
+  ['myotismon','Myotismon'], ['venommyotismon','VenomMyotismon'], ['demidevimon','DemiDevimon'], ['metalseadramon','MetalSeadramon'],
+  ['puppetmon','Puppetmon'], ['machinedramon','Machinedramon'], ['piedmon','Piedmon'], ['apocalymon','Apocalymon'], ['ladydevimon','LadyDevimon'],
+  ['ogremon','Ogremon'], ['kuwagamon','Kuwagamon'], ['shellmon','Shellmon'], ['seadramon','Seadramon'], ['meramon','Meramon'], ['andromon','Andromon'],
+  ['monzaemon','Monzaemon'], ['numemon','Numemon'], ['unimon','Unimon'], ['centarumon','Centarumon'], ['mojyamon','Mojyamon'], ['bakemon','Bakemon'],
+  ['elecmon','Elecmon'], ['whamon','Whamon'], ['gazimon','Gazimon'], ['tyrannomon','Tyrannomon'], ['monochromon','Monochromon'],
+  ['drimogemon','Drimogemon'], ['sukamon','Sukamon'], ['chuumon','Chuumon'], ['piximon','Piximon'], ['gekomon','Gekomon'],
+  ['shogungekomon','ShogunGekomon'], ['otamamon','Otamamon'], ['vegiemon','Vegiemon'], ['digitamamon','Digitamamon'], ['tuskmon','Tuskmon'],
+  ['kokatorimon','Kokatorimon'], ['nanomon','Datamon'], ['gesomon','Gesomon'], ['raremon','Raremon'], ['mammothmon','Mammothmon'],
+  ['darktyrannomon','DarkTyrannomon'], ['phantomon','Phantomon'], ['gizamon','Gizamon'], ['megaseadramon','MegaSeadramon'],
+  ['scorpiomon','Scorpiomon'], ['divermon','Divermon'], ['kiwimon','Kiwimon'], ['cherrymon','Cherrymon'], ['garbagemon','Garbagemon'],
+  ['deramon','Deramon'], ['floramon','Floramon'], ['mushroomon','Mushroomon'], ['redvegiemon','RedVegiemon'], ['blossomon','Blossomon'],
+  ['mekanorimon','Mekanorimon'], ['tankmon','Tankmon'], ['megadramon','Megadramon'], ['gigadramon','Gigadramon'], ['warumonzaemon','WaruMonzaemon'],
+  ['pumpkinmon','Pumpkinmon'], ['gotsumon','Gotsumon'], ['dokugumon','Dokugumon'], ['flymon','Flymon'], ['snimon','Snimon'], ['tortomon','Tortomon'],
+  ['guardromon','Guardromon'], ['giromon','Giromon'], ['ebidramon','Ebidramon']
+].map(([id, name]) => ({id, name}));
 function pickIsEvolved(k){ return !!loadJSON('digibonk3d-evo', {})[k]; }
 function pickProgress(){
   const chars = SEASONS.adventure.chars;
@@ -5264,6 +5389,10 @@ function baseFacts(c){
   const dmg = fmtN(c.dmg);
   if (c.kind === 'ring') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Proyectiles', 6], ['Alcance', '8 m']];
   if (c.kind === 'orbit') return [['Daño', dmg], ['Golpe cada', '0,35 s'], ['Cuchillas', 2], ['Radio', '2,2 m']];
+  if (c.kind === 'melee') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Abanico', '140°'], ['Alcance', '4,5 m']];
+  if (c.kind === 'turret') return [['Daño', dmg], ['Torreta cada', fmtN(c.cd, 2) + ' s'], ['Torretas', 2], ['Dura', '8 s']];
+  if (c.kind === 'frost') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Frena', '−50% 2 s'], ['Radio', '6 m']];
+  if (c.kind === 'zone') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Círculos', 1], ['Radio', '3 m']];
   return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Proyectiles', 1], ['Alcance', '22 m']];
 }
 const chipsHtml = facts => `<div class="ps-chips">${facts.map(([k, v]) => `<span><small>${k}</small><b>${v}</b></span>`).join('')}</div>`;
@@ -5277,7 +5406,7 @@ function recordCharRun(key, win, diff, kills, lvl){
   try { localStorage.setItem('digibonk3d-stats', JSON.stringify(all)); } catch(e){}
 }
 const SKILL_ICON = {aura: '◎', tornado: '✦', pulso: '◉', espiral: '➹', cuchilla: '✧', laser: '⚡', mina: '✹', meteoro: '☄'};
-const KIND_ICON = {shot: '➹', ring: '◉', orbit: '✧'};
+const KIND_ICON = {shot: '➹', ring: '◉', orbit: '✧', melee: '✊', turret: '⚙', frost: '❄', zone: '✦'};
 function showPicker(tab){
   if (tab) pickTab = tab === 'skins' ? 'personaje' : tab;
   if (pickStageFor !== selectedKey){ pickStage = 0; pickStageFor = selectedKey; }
@@ -5295,7 +5424,7 @@ function showPicker(tab){
       <header class="ps-top">
         <button class="g-back" id="pkBack"><kbd>Esc</kbd> Volver</button>
         <div class="ps-banner"><h2>${runMode === 'surv' ? 'Supervivencia' : 'Elige tu Digimon'}</h2><small>${pr.done}/${pr.total} Digimon</small></div>
-        <div class="ps-theme" role="group" aria-label="Tema">${[['claro', '☀ Claro'], ['oscuro', '☾ Oscuro']].map(([v, n]) => `<button type="button" data-theme="${v}" class="${uiTheme() === v ? 'on' : ''}">${n}</button>`).join('')}</div>
+        
       </header>
       <div class="ps-body">
         <main class="ps-card ps-main">
@@ -5310,13 +5439,12 @@ function showPicker(tab){
           </footer>
         </main>
         <aside class="ps-card ps-roster">
-          <nav class="ps-seg">${[['todos', 'Todos'], ['vestidor', 'Vestidor'], ['apoyo', 'Apoyo']].map(([id, n]) => `<button type="button" class="${rosterTab === id ? 'on' : ''}" data-rt="${id}">${n}</button>`).join('')}</nav>
+          <nav class="ps-seg">${[['todos', 'Todos'], ['vestidor', 'Vestidor']].map(([id, n]) => `<button type="button" class="${rosterTab === id ? 'on' : ''}" data-rt="${id}">${n}</button>`).join('')}</nav>
           <div class="ps-roster-in" id="pkRoster"></div>
           <div class="ps-prog"><span class="ps-lbl">Progreso</span><div class="ps-meter"><i style="width:${Math.round(pr.done / pr.total * 100)}%"></i></div><b>${pr.done}/${pr.total}</b></div>
         </aside>
       </div>
     </div>`);
-  overlay.querySelectorAll('.ps-theme button').forEach(b => b.onclick = () => { setUiTheme(b.dataset.theme); showPicker(); });
   overlay.querySelectorAll('.ps-seg button').forEach(b => b.onclick = () => { rosterTab = b.dataset.rt; showPicker(); });
   document.getElementById('pkBack').onclick = () => showSelect();
   document.getElementById('pkStart').onclick = () => showMapSelect();
@@ -5346,21 +5474,15 @@ function renderRoster(){
     el.querySelectorAll('[data-skin]').forEach(b => b.onclick = () => { equipSkinAt(k, 0, b.dataset.skin); showPicker(); });
     return;
   }
-  if (rosterTab === 'apoyo'){
-    const opened = chars.filter(o => isUnlocked(o) && o !== k), cur = supportKey(k);
-    el.innerHTML = `<div class="ps-lbl">Te acompaña y dispara al más cercano con el 40% de tu daño</div>
-      <div class="ps-grid">${['none', ...opened].map(o => `<button type="button" class="ps-tile${(o === 'none' ? !cur : o === cur) ? ' sel' : ''}" data-sup="${o}">${o === 'none' ? '<span class="ps-ic ps-none">—</span>' : `<span class="ps-ic"><img src="ui/jugador/${o}.png" alt="" loading="lazy"></span>`}<b>${o === 'none' ? 'Ninguno' : CHARS[o].name}</b></button>`).join('')}</div>`;
-    el.querySelectorAll('[data-sup]').forEach(b => b.onclick = () => { localStorage.setItem('digibonk3d-support', b.dataset.sup); showPicker(); });
-    return;
-  }
+  if (rosterTab === 'apoyo') rosterTab = 'todos';
   const tiles = chars.map((id, i) => {
     const open = isUnlocked(id);
     return `<button type="button" class="ps-tile${id === k ? ' sel' : ''}${open ? '' : ' lock'}" ${open ? `data-pick="${id}"` : 'disabled'} data-name="${open ? CHARS[id].name.toLowerCase() : '???'}" title="${open ? CHARS[id].name : unlockHow(id)}">
       <span class="ps-key">${i + 1}</span>${open && pickIsEvolved(id) ? '<span class="ps-evo-dot" title="Ya ha evolucionado"></span>' : ''}
-      <span class="ps-ic"><img src="${open ? charIcon(id) : 'ui/jugador/' + id + '.png'}" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
+      <span class="ps-ic"><img src="${open ? charIcon(id) : 'ui/jugador/' + id + '.webp'}" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
     </button>`;
   }).join('');
-  const soon = COMING_SOON.map(c => `<span class="ps-tile soon" title="${c.name} · ${c.role} · Próximamente"><span class="ps-lock">🔒</span><span class="ps-ic"><img src="ui/jugador/${c.name.toLowerCase()}.png" alt="" loading="lazy"></span><b>Pronto</b></span>`).join('');
+  const soon = COMING_SOON.map(c => `<span class="ps-tile soon" data-name="${c.name.toLowerCase()}" title="${c.name} · Próximamente"><span class="ps-lock">🔒</span><span class="ps-ic"><img src="${AD(c.id)}" alt="" loading="lazy"></span><b>${c.name}</b></span>`).join('');
   el.innerHTML = `<input class="ps-search" id="pkSearch" placeholder="Buscar por nombre..." value="${pickQuery}" maxlength="20">
     <div class="ps-grid" id="pkGrid">${tiles}${soon}</div>
     <p class="ps-note">1-8 elegir · ←→ cambiar · doble clic para empezar</p>`;
@@ -5383,8 +5505,8 @@ function renderPickPreview(){
   const idx = SEASONS.adventure.chars.indexOf(k) + 1, at = ATTR_OF[k], emb = EMBLEMS.find(e => e.owner === k);
   const wins = st.wins || {};
   const hp = Math.round(b.hp * labMul('hp')), dmg = c.dmg * b.dmgMul * labMul('dmg'), spd = b.speed * labMul('speed');
-  const rate = c.kind === 'orbit' ? 1 / 0.35 : c.kind === 'ring' ? 6 / c.cd : 1 / c.cd;
-  const reach = c.kind === 'ring' ? 8 : c.kind === 'orbit' ? 2.2 : 22;
+  const rate = c.kind === 'orbit' ? 1 / 0.35 : c.kind === 'ring' ? 6 / c.cd : c.kind === 'melee' ? 3 / c.cd : c.kind === 'turret' ? 1 / 0.7 * 2 : c.kind === 'frost' ? 4 / c.cd : 1.5 / c.cd;
+  const reach = c.kind === 'ring' ? 8 : c.kind === 'orbit' ? 2.2 : c.kind === 'melee' ? 4.5 : c.kind === 'turret' ? 12 : c.kind === 'frost' ? 6 : c.kind === 'zone' ? 16 : 22;
   const bar = (label, val, max, shown) => `<div class="ps-bar"><span>${label}</span><div class="ps-meter"><i style="width:${Math.max(6, Math.min(100, Math.round(val / max * 100)))}%"></i></div><b>${shown}</b></div>`;
   const row = (label, val) => `<div class="ps-row"><span>${label}</span><b>${val}</b></div>`;
   el.innerHTML = `
@@ -5396,7 +5518,7 @@ function renderPickPreview(){
       <div class="ps-idline"><span class="ps-lbl">#${String(idx).padStart(3, '0')} · ${ATTACK_NAME[c.kind] || c.kind}</span>${emb ? `<span class="ps-emb" title="${emb.name}: ${emb.text}">${emb.name}</span>` : ''}</div>
       <h3>${c.name}</h3>
       <div><span class="ps-attr a-${at}" title="Vacuna gana a Virus, Virus a Datos y Datos a Vacuna">${ATTR_ICON[at] || ''} ${ATTR_NAME[at] || ''}</span></div>
-      <div class="ps-lbl">Evoluciona durante la partida</div>
+      <div class="ps-lbl">${(EVO_LINE[k] || []).length ? 'Evoluciona durante la partida' : 'No evoluciona: más vida de base'}</div>
       <div class="ps-evo">
         <button type="button" class="ps-node pk-stage${pickStage === 0 ? ' on' : ''}" data-stage="0" title="${c.name}">${sprEl(spriteOf(k, 0), 46)}</button>
         ${EVO_LINE[k].map((e, i) => `<span class="ps-arrow">Nv. ${evoLevelFor(k, i)}<i>›</i></span><button type="button" class="ps-node pk-stage${pickStage === i + 1 ? ' on' : ''}" data-stage="${i + 1}" title="${e.name}">${sprEl(spriteOf(k, i + 1), 46)}</button>`).join('')}
@@ -5528,7 +5650,7 @@ function startGame(key){
     mode: runMode,
     ch: {...c, id:key},
     p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:2.5, critChance:0.12, critMul:2},
-    t: 0, kills: 0, enemies: [], shots: [], gems: [], blades: [],
+    t: 0, kills: 0, enemies: [], shots: [], gems: [], blades: [], turrets: [], zones: [],
     wCd: 0, spawnT: 0, orbitA: 0, choices: [],
     dash: 0, dashCd: 0, dir: {x:0, z:-1}, chests: [], chestT: 20, flash: '', flashT: 0,
     texts: [], nearChest: null, combo: 0, comboT: 0,
@@ -5884,8 +6006,93 @@ const BONK_FX = {
   tentomon: {name: 'Descarga en cadena', f: p => { g.enemies.filter(e => dist2(e.x, e.z, p.x, p.z) < 30).sort((a, b) => dist2(a.x, a.z, p.x, p.z) - dist2(b.x, b.z, p.x, p.z)).slice(0, 12).forEach(e => { e.hp -= 120; popText(e.x, e.z, 120, '#40c4ff', 0.7); }); }},
   gomamon:  {name: 'Marea: la horda sale despedida', f: p => { for (const e of g.enemies){ const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz) || 1; if (d < 20) [e.x, e.z] = clampArena(e.x + dx/d*10, e.z + dz/d*10, ARENA_R - 0.5); } }},
   patamon:  {name: 'Aire curativo: +30% vida', f: p => { if (!(g.mod && g.mod.noHeal)) p.hp = Math.min(p.maxHp, p.hp + p.maxHp*0.3); }},
-  gatomon:  {name: 'Luz sagrada: críticos 5 s', f: () => { g.critT = 5; }}
+  gatomon:  {name: 'Luz sagrada: críticos 5 s', f: () => { g.critT = 5; }},
+  leomon:   {name: 'Rugido: golpe enorme alrededor', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 12){ e.hp -= 200; popText(e.x, e.z, 200, '#ffb74d', 0.7); } spawnRing(p.x, p.z, 0xffb74d, 12, 0.5); }},
+  hagurumon:{name: 'Fábrica: 3 torretas extra', f: p => { for (let i = 0; i < 3; i++){ const a = i/3*Math.PI*2; placeTurret(p.x + Math.cos(a)*2.5, p.z + Math.sin(a)*2.5, true); } }},
+  frigimon: {name: 'Ventisca: todo congelado', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 24) e.frozenT = e.boss ? 1.5 : 5; spawnRing(p.x, p.z, 0x81d4fa, 24, 0.8); }},
+  wizardmon:{name: 'Lluvia de truenos', f: p => { g.enemies.filter(e => dist2(e.x, e.z, p.x, p.z) < 24).slice(0, 10).forEach(e => castZone(e.x, e.z, 0.25, 3.2, 90)); }}
 };
+/* ---------- Ataques de Leomon (melee), Hagurumon (turret), Frigimon (frost) y Wizardmon (zone) ---------- */
+const TURRET_GEO = new THREE.CylinderGeometry(0.45, 0.6, 0.9, 8), TURRET_MAT = new THREE.MeshLambertMaterial({color: 0x9e9e9e});
+function placeTurret(x, z, extra){
+  [x, z] = clampArena(x, z, ARENA_R - 1);
+  const mesh = new THREE.Mesh(TURRET_GEO, TURRET_MAT);
+  mesh.position.set(x, 0.45 + terrainH(x, z), z);
+  world.add(mesh);
+  g.turrets.push({x, z, t: 8, cd: 0.2, mesh, extra});
+  // Como máximo proyectiles + 1 torretas propias a la vez (las del Bonk no cuentan): se quita la más vieja
+  const own = g.turrets.filter(t => !t.extra);
+  if (own.length > g.p.count + 1){ const old = own[0]; old.t = 0; }
+  spawnRing(x, z, 0xbdbdbd, 1.4, 0.35);
+}
+function castZone(x, z, delay, r, dmg){
+  const mesh = new THREE.Mesh(new THREE.RingGeometry(r*0.85, r, 28), new THREE.MeshBasicMaterial({color: 0xb388ff, transparent: true, opacity: 0.55, depthWrite: false}));
+  mesh.rotation.x = -Math.PI/2;
+  mesh.position.set(x, terrainH(x, z) + 0.07, z);
+  world.add(mesh);
+  g.zones.push({x, z, t: delay, r, dmg, mesh});
+}
+function updateKindAttacks(dt){
+  const p = g.p, ch = g.ch;
+  if (ch.kind === 'melee' && g.wCd <= 0 && g.enemies.length){
+    // Golpe en abanico hacia donde mira el Digimon; el abanico se abre con cada proyectil extra
+    let hit = 0;
+    const R = 4.5*p.area, half = Math.min(Math.PI, (70 + 20*(p.count - 1)) * Math.PI/180);
+    // Si no hay nadie delante, se gira hacia el enemigo más cercano dentro del alcance
+    let dx = g.dir.x, dz = g.dir.z;
+    const near = g.enemies.reduce((b, e) => { const d = dist2(e.x, e.z, p.x, p.z); return d < b.d ? {e, d} : b; }, {e: null, d: R + 1});
+    if (near.e && !g.enemies.some(e => { const rx = e.x - p.x, rz = e.z - p.z, d = Math.hypot(rx, rz); return d < R + e.r && (rx*dx + rz*dz) / (d || 1) > Math.cos(half); })){
+      dx = (near.e.x - p.x) / (near.d || 1); dz = (near.e.z - p.z) / (near.d || 1);
+    }
+    for (const e of g.enemies){
+      const rx = e.x - p.x, rz = e.z - p.z, d = Math.hypot(rx, rz) || 1;
+      if (e.hp > 0 && d < R + e.r && (rx*dx + rz*dz)/d > Math.cos(half)){
+        hurt(e, ch.dmg*p.dmg); hit++;
+        if (!e.boss) [e.x, e.z] = clampArena(e.x + rx/d*0.3, e.z + rz/d*0.3, ARENA_R - 0.5);   // pequeño empujón
+      }
+    }
+    if (hit || near.e){ g.wCd = ch.cd * p.cdMul; g.atkT = 0.26; spawnRing(p.x + dx*R*0.55, p.z + dz*R*0.55, 0xffb74d, R*0.6, 0.25); }
+  }
+  if (ch.kind === 'turret' && g.wCd <= 0){
+    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    placeTurret(p.x - g.dir.x*1.2, p.z - g.dir.z*1.2, false);
+  }
+  if (ch.kind === 'frost' && g.wCd <= 0){
+    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    const R = 6*p.area;
+    for (const e of g.enemies){
+      if (e.hp > 0 && dist2(e.x, e.z, p.x, p.z) < R + e.r){ hurt(e, ch.dmg*p.dmg); e.slowT = 2 + 0.3*(p.count - 1); }
+    }
+    spawnRing(p.x, p.z, 0x81d4fa, R, 0.5);
+  }
+  if (ch.kind === 'zone' && g.wCd <= 0 && g.enemies.length){
+    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    const near = g.enemies.filter(e => e.hp > 0 && dist2(e.x, e.z, p.x, p.z) < 16).sort(() => Math.random() - 0.5);
+    for (let i = 0; i < Math.min(p.count, near.length); i++) castZone(near[i].x, near[i].z, 0.5, 3*p.area, ch.dmg*p.dmg);
+  }
+  // Torretas: disparan al enemigo más cercano y desaparecen a los 8 s
+  for (const t of g.turrets){
+    t.t -= dt; t.cd -= dt;
+    t.mesh.rotation.y += dt*4;
+    if (t.cd > 0) continue;
+    let best = null, bd = 12;
+    for (const e of g.enemies){ const d = dist2(e.x, e.z, t.x, t.z); if (e.hp > 0 && d < bd){ bd = d; best = e; } }
+    if (!best) continue;
+    t.cd = 0.7 * p.cdMul;
+    const d = bd || 1;
+    fireProjectile(t.x, t.z, (best.x - t.x)/d*15, (best.z - t.z)/d*15, ch.dmg*p.dmg, 1, 0xffd54f);
+  }
+  g.turrets = g.turrets.filter(t => { if (t.t > 0) return true; world.remove(t.mesh); return false; });
+  // Círculos mágicos: estallan al acabar su cuenta atrás
+  for (const z of g.zones){
+    z.t -= dt;
+    z.mesh.material.opacity = 0.35 + 0.4*Math.abs(Math.sin(g.t*14));
+    if (z.t > 0) continue;
+    for (const e of g.enemies) if (e.hp > 0 && dist2(e.x, e.z, z.x, z.z) < z.r + e.r) hurt(e, z.dmg);
+    spawnRing(z.x, z.z, 0xb388ff, z.r, 0.35);
+  }
+  g.zones = g.zones.filter(z => { if (z.t > 0) return true; world.remove(z.mesh); return false; });
+}
 let dmgSrc = 'base';   // qué ataque está golpeando (para el resumen de fin de partida)
 function hurt(e, dmg){
   // 12% de golpes críticos: doble daño, número naranja y sacudida ligera
@@ -5963,6 +6170,8 @@ const infMul = () => (g && g.inferno) ? 1 + Math.max(0, g.screenT - SCREEN_LIMIT
 const diffT = t => (g && g.mode === 'surv') ? t : (t <= 600 ? t : 600 + (t - 600) * 0.3);
 let runMode = 'normal';   // 'normal' o 'surv' (lo elige el menú antes del selector)
 function spawnEnemy(forced){
+  // Tope de enemigos para todas las fuentes (horda, élites, invocaciones, eventos); las élites tienen 20 de margen
+  if (g.enemies.length >= MAX_ENEMIES + (forced === 'elite' ? 20 : 0)) return null;
   const t = g.t, r = Math.random(), a = Math.random()*Math.PI*2, R = (g.idleT || 0) > 2.5 ? 13 : 25;
   let kind = 'basic';
   const z2 = g.zone >= 2;   // la zona 2 trae más tanques y rápidos
@@ -5979,10 +6188,12 @@ function spawnEnemy(forced){
   const sp = clampArena(g.p.x + Math.cos(a)*R, g.p.z + Math.sin(a)*R, ARENA_R - 0.5);
   const shadow = Q.shadows ? makeShadow(d.r*2.2) : new THREE.Object3D();
   world.add(shadow);
-  g.enemies.push({
+  const foe = {
     kind, sprite, mesh, shadow, x: sp[0], z: sp[1],
     hp: d.hp*k*evoHp()*diffMul('hp'), max: d.hp*k*evoHp()*diffMul('hp'), spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300)*evoDmg()*diffMul('dmg'), cd: 0
-  });
+  };
+  g.enemies.push(foe);
+  return foe;
 }
 
 // Santuarios: 6 por partida en el mapa. Al pasar por uno, un efecto para el resto de la partida (una sola vez)
@@ -6152,10 +6363,12 @@ function update(dt){
     if (e.frozenT > 0){ e.frozenT -= dt; continue; }   // congelado o atrapado por el Bonk: ni se mueve ni daña
     const dx = p.x - e.x, dz = p.z - e.z, d = Math.hypot(dx, dz) || 1;
     if (e.golden){ [e.x, e.z] = clampArena(e.x - dx/d*e.spd*dt, e.z - dz/d*e.spd*dt, ARENA_R - 2); continue; }   // el Numemon dorado huye
+    if (e.wild){ if (!e.weak && d < 14) [e.x, e.z] = clampArena(e.x - dx/d*e.spd*dt, e.z - dz/d*e.spd*dt, ARENA_R - 2); continue; }   // el salvaje huye hasta quedar debilitado
     // Se paran a distancia de contacto (no se meten encima del jugador)
     if (d > e.r + 0.6){
-      e.x += dx/d * e.spd * dt;
-      e.z += dz/d * e.spd * dt;
+      const spd = e.slowT > 0 ? (e.slowT -= dt, e.spd*0.5) : e.spd;   // frenado por la ventisca de Frigimon
+      e.x += dx/d * spd * dt;
+      e.z += dz/d * spd * dt;
     }
     [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5);   // los enemigos también quedan dentro
     resolveSolids(e, e.r*0.8);                          // y no atraviesan casas ni vallas
@@ -6222,8 +6435,14 @@ function update(dt){
     g.blades = [];
   }
 
+  updateKindAttacks(dt);
   updateSkills(dt);
 
+  // Digimon salvaje: no muere, se queda debilitado al 20% para poder capturarlo
+  for (const e of g.enemies) if (e.wild && e.hp < e.max*0.2){
+    e.hp = e.max*0.2;
+    if (!e.weak){ e.weak = true; e.mesh.material.color.set(0xa9c4ff); popText(e.x, e.z, '¡Debilitado! Acércate', '#7cf29c', 1); }
+  }
   // Muertes
   const dead = g.enemies.filter(e => e.hp <= 0);
   for (const e of dead){
@@ -6434,6 +6653,7 @@ function drawEdgeMarkers(){
   if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
   if (g.portal && (g.portalOpen || canSummonBoss())) targets.push({x: PORTAL.x, z: PORTAL.z, col: '#3de0ff'});
   if (g.ev) for (const n of g.ev.nodes || [{x: g.ev.foe.x, z: g.ev.foe.z}]) if (!n.done) targets.push({x: n.x, z: n.z, col: '#7cf29c'});
+  for (const e of g.eggs || []) targets.push({x: e.x, z: e.z, col: '#ffd54f'});
   for (const e of g.enemies) if (e.kind === 'elite' || e.kind === 'mini') targets.push({x: e.x, z: e.z, col: e.kind === 'mini' ? '#ce93d8' : '#ff7043'});
   const W = cv.width, H = cv.height, cx = W/2, cy = H/2;
   for (const t of targets){
@@ -6477,7 +6697,11 @@ const CHAR_SKILLS = {
   gomamon:  ['pulso', 'tornado', 'espiral', 'mina'],
   patamon:  ['aura', 'meteoro', 'pulso', 'laser'],
   biyomon:  ['meteoro', 'espiral', 'cuchilla', 'aura'],
-  tentomon: ['laser', 'mina', 'meteoro', 'tornado']
+  tentomon: ['laser', 'mina', 'meteoro', 'tornado'],
+  leomon:   ['espiral', 'tornado', 'pulso', 'cuchilla'],
+  hagurumon:['mina', 'laser', 'meteoro', 'aura'],
+  frigimon: ['aura', 'pulso', 'mina', 'tornado'],
+  wizardmon:['meteoro', 'laser', 'espiral', 'aura']
 };
 function addSkill(id){ g.skills[id] = Math.min(SKILL_MAX, (g.skills[id] || 0) + 1); }
 // Opciones del nivel: mejoras base + ataques de este Digimon (máximo SKILL_SLOTS distintos por partida)
@@ -7068,7 +7292,7 @@ function enterScreen(n){
   shake = Math.max(shake, 0.5);
   sfx('evolve');
   const z = zoneDef(n);
-  announce('Pantalla ' + n + ': ' + z.name, g.mode === 'surv' ? 'Supervivencia: el escenario cambia, la horda no' : z.boss ? 'Pulsa B para invocar a ' + z.boss.name + ' cuando estés listo' : '', z.color);
+  announce('Pantalla ' + n + ': ' + z.name, g.mode === 'surv' ? 'Supervivencia: el escenario cambia, la horda no' : z.boss ? 'Ve al portal del norte para invocar a ' + z.boss.name : '', z.color);
 }
 // Fases de los jefes: al 50% y al 25% de vida cambian de ritmo y añaden golpes en el suelo avisados con círculos
 function bossPhases(dt){
@@ -7249,9 +7473,9 @@ function updateHUD(){
   updatePrompt();
   const pimg = document.getElementById('pimg');
   // Retrato: el icono redondo de siempre del Digimon (o el de su skin); si no hay, la cabeza del sprite
-  const ic = skinIconFor(g.ch.id, equippedAt(g.ch.id, 0)) || PLAYER_ICONS.find(x => x.id === g.ch.id);
-  const hd = ic ? ic.src : headUrl(spriteOf(g.ch.id, g.ch.evolved));
-  pimg.classList.toggle('icon', !!ic);
+  // Retrato: el mismo icono que en la selección de personaje, sin marco
+  const hd = charIcon(g.ch.id);
+  pimg.classList.add('icon');
   if (!pimg.src.endsWith(hd)) pimg.src = hd;
   document.getElementById('combo').textContent = g.combo >= 2 ? `x${g.combo}` : '';
   const bb = document.getElementById('bossbar');
@@ -7464,6 +7688,7 @@ function drawWorldMap(cv, size){
     if (ch.open) continue;
     c.fillText('🎁', X(ch.x), Y(ch.z));
   }
+  for (const e of g.eggs || []) c.fillText('🥚', X(e.x), Y(e.z));
   // Enemigos: su propio sprite, en miniatura
   for (const e of g.enemies){
     if (e.boss) continue;
@@ -7525,7 +7750,7 @@ function dailyText(){
 
 /* ---------- Atributos: Vacuna gana a Virus, Virus a Datos y Datos a Vacuna ---------- */
 const ATTR_NAME = {vac: 'Vacuna', dat: 'Datos', vir: 'Virus'};
-const ATTR_OF = {agumon:'vac', gabumon:'dat', biyomon:'vac', tentomon:'vac', palmon:'dat', gomamon:'vac', patamon:'dat', gatomon:'vac', garurumon:'dat'};
+const ATTR_OF = {agumon:'vac', gabumon:'dat', biyomon:'vac', tentomon:'vac', palmon:'dat', gomamon:'vac', patamon:'dat', gatomon:'vac', garurumon:'dat', leomon:'vac', hagurumon:'vir', frigimon:'vac', wizardmon:'dat'};
 const FOE_ATTR = {numemon:'vir', gazimon:'vir', vegiemon:'vir', meramon:'dat', kuwagamon:'vir', tank:'vir', ogremon:'vir', monochromon:'dat', skullgreymon:'vir', andromon:'vac', bakemon:'vir', gizamon:'vir', raremon:'vir', phantomon:'vir', snimon:'vir', darktyrannomon:'vir', tyrannomon:'dat', megadramon:'vir', gigadramon:'vir', mammothmon:'vac', devimon:'vir', etemon:'vir', myotismon:'vir', metalseadramon:'dat', puppetmon:'vir', machinedramon:'vir', piedmon:'vir'};
 const BEATS = {vac: 'vir', vir: 'dat', dat: 'vac'};
 const ATTR_ADV = 1.25, ATTR_HURT = 1.15;   // daño con ventaja · daño recibido de un enemigo con ventaja
@@ -7649,7 +7874,7 @@ function enemyShot(x, z, an, spd, dmg, color){
   g.eshots.push({x, z, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4, mesh: shot, dmg});
 }
 const MINI_MECH = {
-  Devimon:        {cd: 6, f: e => { for (let i = 0; i < 5; i++){ spawnEnemy('basic'); const m = g.enemies[g.enemies.length - 1], a = i/5*Math.PI*2; [m.x, m.z] = clampArena(e.x + Math.cos(a)*3, e.z + Math.sin(a)*3, ARENA_R - 0.5); } popText(e.x, e.z, '¡Invocación!', '#ce93d8', 1); }},
+  Devimon:        {cd: 6, f: e => { for (let i = 0; i < 5; i++){ const m = spawnEnemy('basic'), a = i/5*Math.PI*2; if (!m) break; [m.x, m.z] = clampArena(e.x + Math.cos(a)*3, e.z + Math.sin(a)*3, ARENA_R - 0.5); } popText(e.x, e.z, '¡Invocación!', '#ce93d8', 1); }},
   Etemon:         {cd: 7, f: () => { addHazard(g.p.x, g.p.z, 4.5, 4, 'slow', 0, 0xab47bc); popText(g.p.x, g.p.z, '¡Concierto! Te frena', '#ce93d8', 1); }},
   Myotismon:      {cd: 5, f: e => { const base = Math.atan2(g.p.z - e.z, g.p.x - e.x); for (let i = -2; i <= 2; i++) enemyShot(e.x, e.z, base + i*0.22, 9, 7, 0x7b1fa2); }},
   MetalSeadramon: {cd: 6, f: e => { const a = Math.atan2(g.p.z - e.z, g.p.x - e.x); e.charge = {t: 0.9, wait: 0.6, dx: Math.cos(a), dz: Math.sin(a)}; popText(e.x, e.z, '¡Embestida!', '#40c4ff', 1); }},
@@ -7698,6 +7923,7 @@ const CARD_ART = {'Daño +20%': 'dano', 'Cadencia +15%': 'cadencia', 'Velocidad 
   'Área +20%': 'area', 'Imán +50%': 'iman', 'Probabilidad crítica +8%': 'critico', 'Daño crítico +25%': 'dano_critico', 'Robo de vida': 'robo_vida', 'Dash −20% espera': 'dash', 'Armadura +8%': 'armadura'};
 function hudRing(){
   const el = document.getElementById('pring'); if (!el) return;
+  el.style.display = 'none'; return;   // sin aro: el retrato es sólo el icono del selector
   const cosmetic = !!frameClass();
   const st = Math.min(3, g.ch.evolved | 0), r = HUD_RINGS[st], h = r.d*0.94;   // el hueco tapa un poco el borde del icono
   el.style.display = cosmetic ? 'none' : 'block';
@@ -7714,10 +7940,10 @@ function hudRing(){
 }
 function hudEmblems(){
   const el = document.getElementById('hudEmb'); if (!el) return;
-  const key = (g.emblems || []).join(',');
+  const key = (g.emblems || []).join(',') + '|' + (g.sups || []).map(s => s.key + s.st).join(',');
   if (el.dataset.k === key) return;
   el.dataset.k = key;
-  el.innerHTML = (g.emblems || []).map(id => `<img src="ui/hud/emb_${id}.webp" alt="" title="${(EMBLEMS.find(e => e.id === id) || {}).name || ''}">`).join('');
+  el.innerHTML = (g.sups || []).map(s => `<span class="hud-sup" title="Apoyo: ${supName(s)}"><img src="${charIcon(s.key)}" alt="">${s.st ? `<i>${'★'.repeat(s.st)}</i>` : ''}</span>`).join('') + (g.emblems || []).map(id => `<img src="ui/hud/emb_${id}.webp" alt="" title="${(EMBLEMS.find(e => e.id === id) || {}).name || ''}">`).join('');
 }
 /* ---------- Eventos en el mapa (cada 200 s desde el minuto 2:30) ---------- */
 function evHud(text){
@@ -7745,6 +7971,7 @@ function nodeNear(dmin, dmax){
 }
 function startMapEvent(){
   const kinds = ['defend', 'corrupt', 'golden'];
+  if (supFree() > 0) kinds.push('capture', 'capture');   // Digimon salvaje: más probable mientras te falte apoyo
   const kind = kinds[Math.floor(Math.random()*kinds.length)];
   if (kind === 'defend'){
     const [x, z] = nodeNear(18, 28);
@@ -7754,6 +7981,17 @@ function startMapEvent(){
   } else if (kind === 'corrupt'){
     g.ev = {kind, t: 60, nodes: [0, 1, 2].map(() => { const [x, z] = nodeNear(14, 32); const n = eventNode(x, z, 0xe040fb); n.ring.scale.setScalar(2.5); return n; })};
     announce('Evento: datos corruptos', 'Rompe los 3 nodos morados (quédate encima)', '#e040fb');
+  } else if (kind === 'capture'){
+    const pool = supPool(), k = pool[Math.floor(Math.random()*pool.length)];
+    const [x, z] = nodeNear(16, 22);
+    const mesh = billboard(spriteOf(k, 0), 2, false);
+    world.add(mesh);
+    const shadow = makeShadow(1.6); world.add(shadow);
+    const hp = 260*(1 + diffT(g.t)/200);
+    const e = {kind: 'basic', wild: k, sprite: spriteOf(k, 0), mesh, shadow, x, z, hp, max: hp, spd: 4.2, r: 0.9, xp: 0, dmg: 0, cd: 0, attr: ATTR_OF[k] || 'vac'};
+    g.enemies.push(e);
+    g.ev = {kind, t: 50, foe: e, prog: 0};
+    announce('Evento: ¡' + CHARS[k].name + ' salvaje!', 'Debilítalo y quédate a su lado 2 s para capturarlo', '#7cf29c');
   } else {
     const [x, z] = nodeNear(16, 22);
     const mesh = billboard('sprites/numemon.png', 2.2, false);
@@ -7771,6 +8009,12 @@ function startMapEvent(){
 function endMapEvent(ok){
   const ev = g.ev; g.ev = null; evHud(null);
   for (const n of ev.nodes || []){ world.remove(n.mesh); world.remove(n.ring); }
+  if (ev.kind === 'capture'){
+    const e = ev.foe; e.gone = true; world.remove(e.mesh); world.remove(e.shadow); g.enemies = g.enemies.filter(x => x !== e);
+    if (ok) addSupport(e.wild, e.x, e.z);
+    else announce(CHARS[e.wild].name + ' ha escapado', 'Otra vez será', '#9e9e9e');
+    return;
+  }
   if (ev.kind === 'golden'){
     if (ok){ g.extraBits = (g.extraBits || 0) + 80; g.tix++; announce('¡Numemon dorado atrapado!', '+80 Bits y +1 ticket', '#ffd54f'); }
     else { const e = ev.foe; e.gone = true; world.remove(e.mesh); world.remove(e.shadow); g.enemies = g.enemies.filter(x => x !== e); announce('El Numemon dorado ha huido', '', '#9e9e9e'); }
@@ -7800,7 +8044,7 @@ function updateMapEvent(dt){
     const n = ev.nodes[0];
     if (dist2(n.x, n.z, p.x, p.z) < 6) n.prog += dt;
     ev.spawnT -= dt;
-    if (ev.spawnT <= 0){ ev.spawnT = 2; spawnEnemy(); const m = g.enemies[g.enemies.length - 1]; const a = Math.random()*Math.PI*2; [m.x, m.z] = clampArena(n.x + Math.cos(a)*12, n.z + Math.sin(a)*12, ARENA_R - 0.5); }
+    if (ev.spawnT <= 0){ ev.spawnT = 2; const m = spawnEnemy(); if (m){ const a = Math.random()*Math.PI*2; [m.x, m.z] = clampArena(n.x + Math.cos(a)*12, n.z + Math.sin(a)*12, ARENA_R - 0.5); } }
     evHud(`Defiende el nodo: ${Math.min(20, n.prog).toFixed(0)}/20 s · quedan ${Math.ceil(ev.t)} s`);
     if (n.prog >= 20) return endMapEvent(true);
   } else if (ev.kind === 'corrupt'){
@@ -7812,6 +8056,11 @@ function updateMapEvent(dt){
     const done = ev.nodes.filter(n => n.done).length;
     evHud(`Datos corruptos: ${done}/3 nodos · quedan ${Math.ceil(ev.t)} s`);
     if (done === 3) return endMapEvent(true);
+  } else if (ev.kind === 'capture'){
+    const e = ev.foe, nm = CHARS[e.wild].name;
+    if (e.weak && dist2(e.x, e.z, p.x, p.z) < 2.6) ev.prog += dt;
+    evHud(e.weak ? `Captura a ${nm}: quédate a su lado ${Math.min(2, ev.prog).toFixed(1)}/2 s · quedan ${Math.ceil(ev.t)} s` : `${nm} salvaje: debilítalo · quedan ${Math.ceil(ev.t)} s`);
+    if (ev.prog >= 2) return endMapEvent(true);
   } else {
     const e = ev.foe;
     evHud(`Numemon dorado · quedan ${Math.ceil(ev.t)} s`);
@@ -7820,37 +8069,87 @@ function updateMapEvent(dt){
   if (ev.t <= 0) endMapEvent(false);
 }
 
-/* ---------- Digimon de apoyo: un segundo compañero que dispara al 40% ---------- */
-function supportKey(main){
-  const opened = SEASONS.adventure.chars.filter(k => isUnlocked(k) && k !== main);
-  const saved = localStorage.getItem('digibonk3d-support');
-  if (saved === 'none') return null;
-  return opened.includes(saved) ? saved : (opened[0] || null);
-}
-function initSupport(){
-  const k = supportKey(g.ch.id);
-  if (!k) return;
-  const mesh = billboard(spriteOf(k, false), 1.7, false);
+/* ---------- Digimon de apoyo: hasta 2 por partida, al azar entre todos los jugables ----------
+   Salen de digihuevos que aparecen por el mapa o se capturan en el evento "Digimon salvaje".
+   Evolucionan contigo: una etapa cada 8 niveles desde que se unen. */
+const SUP_MAX = 2, SUP_EVO_LVLS = 8;
+function supPool(){ return SEASONS.adventure.chars.filter(k => CHARS[k] && k !== g.ch.id && !g.sups.some(s => s.key === k)); }
+function supFree(){ return SUP_MAX - g.sups.length - g.eggs.length - (g.ev && g.ev.kind === 'capture' ? 1 : 0); }
+function addSupport(k, x = g.p.x, z = g.p.z){
+  if (!k || g.sups.length >= SUP_MAX) return;
+  const mesh = billboard(spriteOf(k, 0), 1.7, false);
   world.add(mesh);
   const shadow = makeShadow(1.1); world.add(shadow);
-  g.sup = {key: k, mesh, shadow, x: g.p.x - 1.5, z: g.p.z, cd: 1};
+  g.sups.push({key: k, st: 0, joinLvl: g.p.lvl, mesh, shadow, x, z, cd: 1});
+  spawnRing(x, z, 0x7cf29c, 6, 0.8); burst(x, z, '#7cf29c');
+  sfx('victory');
+  announce('¡' + CHARS[k].name + ' se une a ti!', `Digimon de apoyo ${g.sups.length}/${SUP_MAX} · evoluciona cada ${SUP_EVO_LVLS} niveles`, '#7cf29c');
+}
+function supEvolve(s){
+  const line = EVO_LINE[s.key] || [];
+  const want = Math.min(line.length, Math.floor((g.p.lvl - s.joinLvl)/SUP_EVO_LVLS));
+  if (want <= s.st) return;
+  s.st = want;
+  s.mesh.material.map = animTex(spriteOf(s.key, s.st), true); s.mesh.material.needsUpdate = true;
+  const sc = 1.7*(1 + 0.18*s.st); s.mesh.scale.set(sc, sc, 1);
+  spawnRing(s.x, s.z, 0xffd54f); burst(s.x, s.z, '#ffd54f');
+  sfx('evolve');
+  announce('¡' + CHARS[s.key].name + ' digievoluciona!', 'Tu apoyo ahora es ' + line[s.st - 1].name, '#ffd54f');
+}
+function supName(s){ return s.st ? EVO_LINE[s.key][s.st - 1].name : CHARS[s.key].name; }
+function initSupport(){ g.sups = []; g.eggs = []; g.eggT = 100; }
+/* Digihuevos: el primero al 1:40 y luego cada ~5,5 min mientras quede hueco. Tócalo para abrirlo */
+function spawnEgg(){
+  const [x, z] = nodeNear(14, 22);
+  const mesh = billboard('ui/gacha/huevo_c0.png', 1.9, false);
+  world.add(mesh);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(1.3, 1.6, 32), new THREE.MeshBasicMaterial({color: 0xffd54f, transparent: true, opacity: 0.7, depthWrite: false}));
+  ring.rotation.x = -Math.PI/2; world.add(ring);
+  const shadow = makeShadow(1.3); world.add(shadow);
+  g.eggs.push({x, z, mesh, ring, shadow, hatch: 0});
+  announce('¡Un digihuevo!', 'Tócalo para abrirlo: dentro hay un Digimon de apoyo (flecha amarilla)', '#ffd54f');
+  sfx('chest');
+}
+function updateEggs(dt){
+  if (g.t >= g.eggT){ g.eggT = g.t + 330; if (supFree() > 0) spawnEgg(); }
+  for (const e of g.eggs){
+    const gy = terrainH(e.x, e.z);
+    e.ring.position.set(e.x, gy + 0.06, e.z); e.shadow.position.set(e.x, gy + 0.02, e.z);
+    if (!e.hatch && dist2(e.x, e.z, g.p.x, g.p.z) < 1.8){ e.hatch = 0.001; sfx('chest'); }
+    if (e.hatch){
+      e.hatch += dt;
+      const f = Math.min(3, 1 + Math.floor(e.hatch/0.45));
+      e.mesh.material.map = tex('ui/gacha/huevo_c' + f + '.png');
+      e.mesh.position.set(e.x + Math.sin(e.hatch*40)*0.08, gy + 0.95, e.z);
+      if (e.hatch >= 1.4){
+        e.done = true; world.remove(e.mesh); world.remove(e.ring); world.remove(e.shadow);
+        const pool = supPool();
+        addSupport(pool[Math.floor(Math.random()*pool.length)], e.x, e.z);
+      }
+    } else e.mesh.position.set(e.x, gy + 0.95 + Math.sin(g.t*3)*0.12, e.z);
+  }
+  g.eggs = g.eggs.filter(e => !e.done);
 }
 function updateSupport(dt){
-  const s = g.sup; if (!s) return;
-  const p = g.p, side = {x: -g.dir.z, z: g.dir.x};
-  const tx = p.x + side.x*1.8 - g.dir.x*0.8, tz = p.z + side.z*1.8 - g.dir.z*0.8;
-  s.x += (tx - s.x)*Math.min(1, dt*5); s.z += (tz - s.z)*Math.min(1, dt*5);
-  const gy = terrainH(s.x, s.z);
-  s.mesh.position.set(s.x, gy + 0.85 + Math.sin(g.t*6)*0.05, s.z);
-  s.shadow.position.set(s.x, gy + 0.02, s.z);
-  s.cd -= dt;
-  if (s.cd > 0) return;
-  let best = null, bd = 14;
-  for (const e of g.enemies){ const d = dist2(e.x, e.z, s.x, s.z); if (e.hp > 0 && d < bd){ bd = d; best = e; } }
-  if (!best) return;
-  s.cd = 1.1 * p.cdMul;
-  const d = bd || 1, c = CHARS[s.key];
-  fireProjectile(s.x, s.z, (best.x - s.x)/d*16, (best.z - s.z)/d*16, (c.dmg || 10) * Math.min(0.5, 0.25 + 0.005*p.lvl) * p.dmg, 1.2, 0x80deea);
+  updateEggs(dt);
+  const p = g.p;
+  g.sups.forEach((s, i) => {
+    supEvolve(s);
+    const sk = i ? -1 : 1, side = {x: -g.dir.z*sk, z: g.dir.x*sk};
+    const tx = p.x + side.x*1.8 - g.dir.x*0.8, tz = p.z + side.z*1.8 - g.dir.z*0.8;
+    s.x += (tx - s.x)*Math.min(1, dt*5); s.z += (tz - s.z)*Math.min(1, dt*5);
+    const gy = terrainH(s.x, s.z), hh = s.mesh.scale.y/2;
+    s.mesh.position.set(s.x, gy + hh + Math.sin(g.t*6 + i)*0.05, s.z);
+    s.shadow.position.set(s.x, gy + 0.02, s.z);
+    s.cd -= dt;
+    if (s.cd > 0) return;
+    let best = null, bd = 14;
+    for (const e of g.enemies){ const d = dist2(e.x, e.z, s.x, s.z); if (e.hp > 0 && !e.wild && d < bd){ bd = d; best = e; } }
+    if (!best) return;
+    s.cd = 1.1 * p.cdMul;
+    const d = bd || 1, c = CHARS[s.key];
+    fireProjectile(s.x, s.z, (best.x - s.x)/d*16, (best.z - s.z)/d*16, (c.dmg || 10) * Math.min(0.5, 0.25 + 0.005*p.lvl) * p.dmg * (1 + 0.35*s.st), 1.2 + 0.2*s.st, s.st ? 0xffd54f : 0x80deea);
+  });
 }
 
 /* ---------- Evolución de emergencia: una vez por partida por debajo del 20% de vida ---------- */
@@ -8123,7 +8422,7 @@ function showLab(){
       <div class="lab-grid">${cards}</div>
       <footer class="lab-foot">
         <button type="button" class="mini-btn" id="labRefund" ${labSpent() ? '' : 'disabled'}>Reembolsar todo (Ⓑ ${labSpent()})</button>
-        <button type="button" class="g-btn" id="labGacha">🎟 Ir al gacha de tickets</button>
+        <button type="button" class="g-btn" id="labGacha">🎟 Ir a la Incubadora</button>
       </footer>
     </div>`);
   document.getElementById('labBack').onclick = () => showSelect();
@@ -8181,7 +8480,7 @@ function eventActive(){ const now = Date.now(); return now >= EVENT.start && now
 const SKINS = [
   {id:'clasico',   name:'Clásico',    src:'base',   tier:'n', f:''},
   {id:'galactico', name:'Galáctico',  src:'banner', tier:'r', desc:'Skin galáctica del banner permanente (cambia cada semana)'},
-  {id:'holografica', name:'Holográfica', src:'gacha', tier:'l', desc:'Gacha de Bits (banner permanente)'},
+  {id:'holografica', name:'Holográfica', src:'gacha', tier:'l', desc:'Incubadora (banner permanente)'},
   {id:'lcd',       name:'Digivice LCD', src:'logro', tier:'e', req:{kills:100000}, desc:'Logro: 100.000 bajas con este Digimon'},
   {id:'festival',  name:'Papá Noel',  src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)'},
   {id:'reno',      name:'Reno',       src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)'},
@@ -8238,8 +8537,8 @@ function skinHasArt(key, st, id){ return id === 'clasico' || ANIM_IDS.has(`${key
 function skinLineArt(key, id){ for (let st = 0; st < stageCount(key); st++) if (skinHasArt(key, st, id)) return st; return -1; }
 function lineSkins(key){ return SKINS.filter(sk => skinLineArt(key, sk.id) >= 0 && (!sk.hidden || ownsAt(key, 0, sk.id))); }
 // Icono redondo de un Digimon con su skin (si la skin no tiene icono, el del Digimon)
-function charIcon(key, skin = equippedAt(key, 0)){ const ic = skinIconFor(key, skin); return ic ? ic.src : 'ui/jugador/' + key + '.png'; }
-function skinThumb(key, sk){ const ic = skinIconFor(key, sk.id); if (ic || sk.id === 'clasico') return `<span class="ps-ic"><img src="${ic ? ic.src : 'ui/jugador/' + key + '.png'}" alt=""></span>`; const st = Math.max(0, skinLineArt(key, sk.id)); return `<span class="ps-ic ps-ic-spr">${animEl(spriteWith(key, st, sk.id), 'ps-face')}</span>`; }
+function charIcon(key, skin = equippedAt(key, 0)){ const ic = skinIconFor(key, skin); return ic ? ic.src : 'ui/jugador/' + key + '.webp'; }
+function skinThumb(key, sk){ const ic = skinIconFor(key, sk.id); if (ic || sk.id === 'clasico') return `<span class="ps-ic"><img src="${ic ? ic.src : 'ui/jugador/' + key + '.webp'}" alt=""></span>`; const st = Math.max(0, skinLineArt(key, sk.id)); return `<span class="ps-ic ps-ic-spr">${animEl(spriteWith(key, st, sk.id), 'ps-face')}</span>`; }
 function visibleSkinsAt(key, st){ return SKINS.filter(sk => skinHasArt(key, st, sk.id) && (!sk.hidden || ownsAt(key, st, sk.id))); }
 // Se llama al terminar cada partida: actualiza el progreso y devuelve las skins nuevas
 function statsOf(key){ return loadJSON('digibonk3d-stats', {})[key] || {plays:0, kills:0}; }
@@ -8364,9 +8663,13 @@ function unlockAllForTesting(){
   localStorage.setItem('digibonk3d-name', 'Invitado');
   localStorage.setItem('digibonk3d-guest', '1');
 }
+// El modo invitado (todo desbloqueado) es solo para pruebas: aparece con ?test o ?demo en la dirección
+const TEST_MODE = /[?&](test|demo)\b/.test(location.search);
 const isGuest = () => localStorage.getItem('digibonk3d-guest') === '1';
 
 /* ---------- Entrenador: nombre elegido al registrarse ---------- */
+// Texto seguro para meter en HTML (el nombre puede venir de un código de guardado ajeno)
+function escHtml(v){ return String(v).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c])); }
 let trainerName = localStorage.getItem('digibonk3d-name') || '';
 function setTrainerName(v){
   trainerName = v.trim().slice(0, 16);
@@ -8380,7 +8683,7 @@ function showRegister(){
     <div class="dvl2 rg">
       <button class="rg-pill rg-lang" id="regLang">🌐 ${LANG.toUpperCase()}</button>
       <section class="rg-scene">
-        <img class="rg-logo" src="ui/logo_digibonk.webp" alt="DIGIBONK">
+        <span class="logo-fx logo-fx-rg"><img class="rg-logo" src="ui/logo_digibonk.webp" alt="DIGIBONK"></span>
         <div class="rg-tag">${t('tag')}</div>
         <p class="rg-pitch">${t('pitch')}</p>
         <div class="rg-duo">${animEl(spriteOf('agumon', 0), 'flip')}${animEl(spriteOf('gabumon', 0))}</div>
@@ -8392,8 +8695,8 @@ function showRegister(){
           <p class="rg-saved">${t('saved')}</p>
           <input id="regName" class="rg-input" maxlength="16" placeholder="${t('ph')}" autocomplete="off">
           <button class="rg-go" id="regGo">${t('enter')}<kbd>Enter</kbd></button>
-          <div class="rg-or"><span>o</span></div>
-          <button class="rg-pill rg-guest" id="regGuest">${t('guest')}</button>
+          ${TEST_MODE ? `<div class="rg-or"><span>o</span></div>
+          <button class="rg-pill rg-guest" id="regGuest">${t('guest')}</button>` : ''}
         </div>
       </section>
     </div>`);
@@ -8405,7 +8708,7 @@ function showRegister(){
     if (localStorage.getItem('digibonk3d-unlocked')) showSelect(); else showStarter();
   };
   document.getElementById('regGo').onclick = go;
-  document.getElementById('regGuest').onclick = () => {
+  if (TEST_MODE) document.getElementById('regGuest').onclick = () => {
     unlockAllForTesting();
     location.reload();
   };
@@ -8425,16 +8728,17 @@ function evolvedUnlocked(key){ return !!loadJSON('digibonk3d-evo', {})[key]; }
 const AVATAR_KIDS = [
   {id:'tai', name:'Tai'}, {id:'matt', name:'Matt'}, {id:'sora', name:'Sora'}, {id:'izzy', name:'Izzy'},
   {id:'mimi', name:'Mimi'}, {id:'joe', name:'Joe'}, {id:'tk', name:'T.K.'}, {id:'kari', name:'Kari'}
-].map(x => ({...x, src: 'ui/jugador/' + x.id + '.png'}));
+].map(x => ({...x, src: 'ui/jugador/' + x.id + '.webp'}));
 const PLAYER_ICONS = [
   {id:'agumon', name:'Agumon'}, {id:'gabumon', name:'Gabumon'}, {id:'biyomon', name:'Biyomon'}, {id:'tentomon', name:'Tentomon'},
-  {id:'palmon', name:'Palmon'}, {id:'gomamon', name:'Gomamon'}, {id:'patamon', name:'Patamon'}, {id:'gatomon', name:'Gatomon'}
-].map(x => ({...x, src: 'ui/jugador/' + x.id + '.png'}));
+  {id:'palmon', name:'Palmon'}, {id:'gomamon', name:'Gomamon'}, {id:'patamon', name:'Patamon'}, {id:'gatomon', name:'Gatomon'},
+  {id:'leomon', name:'Leomon'}, {id:'hagurumon', name:'Hagurumon'}, {id:'frigimon', name:'Frigimon'}, {id:'wizardmon', name:'Wizardmon'}
+].map(x => ({...x, src: 'ui/jugador/' + x.id + '.webp'}));
 // Iconos de skin: se desbloquean al tener la skin en alguna etapa (los de skins ocultas solo se ven al tenerlas)
 const SKIN_ICONS = [
   {key:'agumon', skin:'galactico'}, {key:'agumon', skin:'festival'}, {key:'agumon', skin:'reno'}, {key:'agumon', skin:'variocolor'},
   {key:'patamon', skin:'galactico'}, {key:'patamon', skin:'festival'}, {key:'patamon', skin:'reno'}, {key:'patamon', skin:'variocolor'}
-].map(x => ({...x, id: x.key + '_' + x.skin, src: 'ui/jugador/' + x.key + '_' + x.skin + '.png'}));
+].map(x => ({...x, id: x.key + '_' + x.skin, src: 'ui/jugador/' + x.key + '_' + x.skin + '.webp'}));
 function skinIconName(ic){ const sk = SKINS.find(s => s.id === ic.skin); return CHARS[ic.key].name + ' ' + (sk ? sk.name : ic.skin); }
 function ownsSkinIcon(ic){ return ownsAnyStage(ic.key, ic.skin); }
 function skinIconFor(key, skin){ return SKIN_ICONS.find(x => x.key === key && x.skin === skin) || null; }
@@ -8485,7 +8789,7 @@ function showPlayer(){
       <section class="pl5-hero" id="tc">
         <div class="pl5-id">
           <div class="pl4-id">
-            <input class="pl4-name" id="tcName" maxlength="16" value="${trainerName || ''}" placeholder="Tu nombre" title="Haz clic para cambiar tu nombre">
+            <input class="pl4-name" id="tcName" maxlength="16" value="${escHtml(trainerName || '')}" placeholder="Tu nombre" title="Haz clic para cambiar tu nombre">
             <span class="pl4-title-badge" id="tcTitle">${tt ? tt.name : 'Sin título'}</span>
             <div class="pl4-chips"><span>ID ${idNum}</span>${companion}</div>
           </div>
@@ -8565,7 +8869,7 @@ function openCustomizer(){
     box.innerHTML = `
       <div class="cz-head">${preview()}
         <div class="cz-copy"><small>Tu imagen en la clasificación y en tu ficha</small><h2>Avatar, marco y título</h2>
-          <p>Los marcos y títulos se ganan con el gacha y con los logros. Los iconos de entrenador están disponibles desde el principio.</p></div></div>
+          <p>Los marcos y títulos se ganan en la Incubadora y con los logros. Los iconos de entrenador están disponibles desde el principio.</p></div></div>
       <div class="cz-tabs">${[['av', 'Entrenadores'], ['dg', 'Digimon'], ['frame', 'Marcos'], ['title', 'Títulos']].map(([k, l]) => `<button type="button" class="cz-tab${tab === k ? ' on' : ''}" data-tab="${k}">${l}</button>`).join('')}</div>
       <div class="cz-grid">${grid()}</div>
       <div class="cz-foot"><button type="button" class="cz-btn" id="czCancel">Cancelar</button><button type="button" class="cz-btn ok" id="czSave">Guardar</button></div>`;
@@ -8611,7 +8915,7 @@ const TITLES = [
   {id:'cazador',    name:'Cazador de bajas', tier:'c', how:'Acumula 300 bajas en total'},
   {id:'explorador', name:'Explorador',       tier:'r', how:'Llega a la zona 2 (Pantano de Datos)'},
   {id:'maestro',    name:'Maestro Digimon',  tier:'r', how:'Derrota al jefe final'},
-  {id:'leyenda',    name:'Leyenda digital',  tier:'e', how:'Solo del gacha (épico)'}
+  {id:'leyenda',    name:'Leyenda digital',  tier:'e', how:'Solo en la Incubadora (épico)'}
 ];
 // Progreso de logros guardado en 'digibonk3d-ach'
 function loadAch(){ return loadJSON('digibonk3d-ach', {runs: 0, zone2: false, boss: false}); }
@@ -8989,7 +9293,7 @@ function showGacha(){
   ];
   const tile = r => `<button type="button" class="treasure-card tier-${r.tier}" data-info="${esc(r.name)}" data-tier="${r.tier}"><span class="tc-shine"></span><span class="tc-art">${r.icon}</span><strong>${esc(r.name)}</strong><small>${esc(TIER_NAME[r.tier])}</small></button>`;
   const featName = prevKey === fk ? `${CHARS[fk].name} ${FEATURED_NAME[feat.id]}` : `${CHARS[prevKey].name} · Vista previa`;
-  const grand = `<div class="tr11-grand"><div class="tr11-grand-inner"><div class="tr11-rays"></div><div class="tr11-digital-orbit"></div><div class="tr12-grand-portrait" aria-hidden="true">${portrait(prevKey, skinId) ? `<img src="${portrait(prevKey, skinId)}" alt="">` : ''}</div><div class="tr11-feature-art">${sprEl(spriteWith(prevKey, false, skinId), 164, 'tr11-hero-spr')}</div>${partner ? `<div class="tr12-partner" aria-hidden="true"><img src="ui/jugador/${partner}.png" alt=""></div>` : ''}<div class="tr11-grand-sub"><span>✦ PREMIO DESTACADO ✦</span><b>${esc(featName)}</b><small>La selección de personaje es solo una vista previa</small></div></div></div>`;
+  const grand = `<div class="tr11-grand"><div class="tr11-grand-inner"><div class="tr11-rays"></div><div class="tr11-digital-orbit"></div><div class="tr12-grand-portrait" aria-hidden="true">${portrait(prevKey, skinId) ? `<img src="${portrait(prevKey, skinId)}" alt="">` : ''}</div><div class="tr11-feature-art">${sprEl(spriteWith(prevKey, false, skinId), 164, 'tr11-hero-spr')}</div>${partner ? `<div class="tr12-partner" aria-hidden="true"><img src="ui/jugador/${partner}.webp" alt=""></div>` : ''}<div class="tr11-grand-sub"><span>✦ PREMIO DESTACADO ✦</span><b>${esc(featName)}</b><small>La selección de personaje es solo una vista previa</small></div></div></div>`;
   const fighters = chars.map((k, i) => `<button type="button" class="tr11-fighter${i === trPrevIdx ? ' active' : ''}" data-index="${i}" aria-pressed="${i === trPrevIdx}"><span class="tr12-portrait">${portrait(k) ? `<img class="tr12-portrait-img" src="${portrait(k)}" alt="" loading="lazy">` : sprEl(spriteWith(k, false, 'clasico'), 48)}</span><span class="tr12-fighter-text"><b>${esc(CHARS[k].name)}</b><small>Vista previa</small></span></button>`).join('');
   const oddsRows = [['l', 5], ['e', 4], ['r', 3], ['c', 2]].map(([t, n]) => `<div class="gx2-odd"><i style="color:${GX_TIER_COL[t]}">${'★'.repeat(n)}</i><span>${esc(TIER_NAME[t])}</span><b>${TIER_ODDS[t].toFixed(2)}%</b></div>`).join('');
   const pity = pityCount(gxBanner), pityMax = pityAt(gxBanner);
@@ -9115,7 +9419,11 @@ const BALANCE = {
   gabumon: {hp:100, speed:6.0, dmgMul:1.00, why:'Onda en círculo: hay que colocarse entre enemigos'},
   gatomon: {hp:100,  speed:6.0, dmgMul:1.00, why:'Garras giratorias: hay que mantenerse en movimiento'},
   biyomon: {hp:100,  speed:6.0, dmgMul:1.00, why:'Disparo dirigido de cadencia media'},
-  patamon: {hp:100,  speed:6.0, dmgMul:1.00, why:'Ataque dirigido: la clave es colocarse bien'}
+  patamon: {hp:100,  speed:6.0, dmgMul:1.00, why:'Ataque dirigido: la clave es colocarse bien'},
+  leomon:  {hp:120,  speed:6.0, dmgMul:1.00, why:'Cuerpo a cuerpo: más vida porque pelea pegado a la horda'},
+  hagurumon:{hp:110, speed:5.6, dmgMul:1.00, why:'Torretas fijas: hay que llevar a la horda hacia ellas; no evoluciona'},
+  frigimon:{hp:130,  speed:5.4, dmgMul:1.00, why:'Lento y resistente; no evoluciona, así que tiene más vida de base'},
+  wizardmon:{hp:85,  speed:6.2, dmgMul:1.10, why:'Frágil, sin evolución: daño en área algo mayor'}
 };
 function applyBalance(key){
   const b = BALANCE[key];

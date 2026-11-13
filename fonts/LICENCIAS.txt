@@ -1,0 +1,3 @@
+Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly), descargadas de Google Fonts.
+Ambas se distribuyen bajo la SIL Open Font License 1.1: https://openfontlicense.org
+Se sirven desde el propio juego para no depender de servidores externos (privacidad y funcionamiento sin conexión).
