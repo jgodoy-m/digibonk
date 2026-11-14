@@ -1017,4 +1017,5 @@ I18N.add('ko', {
   "Recuperas 1 PS cada 3 enemigos derrotados.": "적을 3마리 쓰러뜨릴 때마다 HP를 1 회복한다.",
   "¡Corrupción de datos!": "데이터 손상!",
   "Si sigues quieto pierdes vida cada segundo": "계속 멈춰 있으면 매초 체력이 줄어든다",
+  "No se aplica en Fácil ni en tus {0} primeras partidas.": "쉬움 난이도와 처음 {0}판에는 적용되지 않습니다.",
 });

@@ -6639,7 +6639,7 @@ function update(dt){
         const shot = new THREE.Mesh(SPROJ_GEO, matFor(0xff1744));
         shot.position.set(b.x, 1 + terrainH(b.x, b.z), b.z);
         world.add(shot);
-        g.eshots.push({x: b.x, z: b.z, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4, mesh: shot, dmg: bd.shotDmg || 8});
+        g.eshots.push({x: b.x, z: b.z, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4, mesh: shot, dmg: (bd.shotDmg || 8) * bossDmgMul()});
       }
     }
     // Mapa 3: el jefe único huye por el portal a mitad de vida en la primera pantalla
@@ -7367,14 +7367,22 @@ function bossPhases(dt){
   b.slamT -= dt;
   if (b.slamT > 0) return;
   b.slamT = b.phase === 3 ? 4 : 6;
-  const n = b.phase === 3 ? 5 : 3, dmg = 14 * (lvlDiff().dmg || 1) * (b.phase === 3 ? 1.25 : 1);
+  const n = b.phase === 3 ? 5 : 3, dmg = 14 * bossDmgMul() * (b.phase === 3 ? 1.25 : 1);
   for (let i = 0; i < n; i++){
     const a = Math.random() * Math.PI * 2, r = i ? 2.5 + Math.random() * 4 : 0;
     const [x, z] = clampArena(g.p.x + Math.cos(a) * r, g.p.z + Math.sin(a) * r, ARENA_R - 1);
     addHazard(x, z, 2.6, 1.3, 'bomb', dmg, 0xff1744);
   }
 }
-// Invoca al jefe de la pantalla cuando quieras: su fuerza no depende del tiempo ni de tu nivel
+// Fuerza de los jefes de zona según el momento en que se invocan. Antes era fija y, a partir del minuto 5,
+// un élite tenía más vida que Andromon (en el minuto 10, el doble que Piedmon). Ahora la vida sigue la
+// misma curva que los enemigos tomando el minuto 3 como base (antes del minuto 3 no baja) y tu etapa de
+// evolución; el daño (contacto, disparos y golpes) sube como el de la horda pero más despacio.
+const BOSS_REF_T = 180;
+const foeHpK = tt => 1 + tt/45 + (tt/115)*(tt/115);
+function bossHpMul(){ return Math.max(1, foeHpK(diffT(g.t)) / foeHpK(BOSS_REF_T)) * evoHp(); }
+function bossDmgMul(){ return (lvlDiff().dmg || 1) * (1 + diffT(g.t)/300); }
+// Invoca al jefe de la pantalla cuando quieras: cuanto más tarde, más fuerte (ver bossHpMul)
 function summonBoss(){
   if (!isPortalMap() || g.mode === 'surv' || state !== 'play') return;
   const def = zoneDef().boss;
@@ -7383,7 +7391,7 @@ function summonBoss(){
   if (g.portalOpen){ announce('El portal ya está abierto', 'Ve al norte para cruzarlo', '#3de0ff'); return; }
   if (g.bossDown) return;
   if (!nearPortal()){ announce('Ve al portal', 'Invoca a ' + def.name + ' junto al portal del norte', '#3de0ff'); return; }
-  const max = def.hp * lvlDiff().boss;
+  const max = Math.round(def.hp * lvlDiff().boss * bossHpMul());
   const hp = def.resume && g.bossLeftHp ? g.bossLeftHp : max;
   // Aparece delante del portal, entre el portal y el jugador
   const away = Math.atan2(g.p.z - PORTAL.z, g.p.x - PORTAL.x);
@@ -7392,7 +7400,7 @@ function summonBoss(){
   world.add(mesh);
   const shadow = makeShadow(5);
   world.add(shadow);
-  g.boss = {kind: 'boss', boss: true, def, name: def.name, sprite: def.sprite, mesh, shadow, x, z, hp, max, spd: 2.3, r: 2.4, xp: 60, dmg: def.dmg * lvlDiff().dmg, cd: 0};
+  g.boss = {kind: 'boss', boss: true, def, name: def.name, sprite: def.sprite, mesh, shadow, x, z, hp, max, spd: 2.3, r: 2.4, xp: 60, dmg: def.dmg * bossDmgMul(), cd: 0};
   g.enemies.push(g.boss);
   g.bossSpawned = true; g.bossName = def.name; g.bossShotT = 2.2;
   spawnRing(x, z, 0xff1744, 9, 0.9); shake = Math.max(shake, 0.6);
@@ -8359,7 +8367,7 @@ function showEncargos(){
     const evRows = EVENT_QUESTS.map(q => row(ev.done.includes(q.id), q.t, questProg(ev, q), q.goal, rw(q.bits, q.tix)));
     parts.push(panel('eq-ev', 'ic_evento', 'Evento', `${EVENT.name} · quedan ${days} ${days === 1 ? 'día' : 'días'}`, evRows, ev.done.length, evRows.length));
   }
-  menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios se renuevan cada día. Los semanales y los de evento suman lo que haces en todas tus partidas. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d}</p>`);
+  menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios se renuevan cada día. Los semanales y los de evento suman lo que haces en todas tus partidas. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d} <span>No se aplica en Fácil ni en tus ${WEEKLY_MIN_RUNS} primeras partidas.</span></p>`);
   const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('eq-dialog');
 }
 function showLogros(){
@@ -8427,8 +8435,13 @@ const WEEKLY_MODS = [
   {id:'horda',   name:'Horda', d:'Aparecen enemigos un 40% más a menudo.', apply: () => { g.mod.spawnMul = 0.6; }}
 ];
 function weeklyMod(){ const n = WEEKLY_MODS.length; return WEEKLY_MODS[((weekNum() % n) + n) % n]; }
+// El modificador no se aplica en Fácil ni en las 3 primeras partidas de la cuenta: un jugador nuevo no debe
+// empezar sin curación o con un 40% menos de vida sin saberlo
+const WEEKLY_MIN_RUNS = 3;
+function totalPlays(){ return Object.values(loadJSON('digibonk3d-stats', {})).reduce((n, s) => n + ((s && s.plays) || 0), 0); }
 function applyWeekly(){
   g.mod = {spawnMul: 1};
+  if (g.diff === 'facil' || totalPlays() < WEEKLY_MIN_RUNS) return;
   const m = weeklyMod();
   m.apply();
   g.mod.id = m.id;

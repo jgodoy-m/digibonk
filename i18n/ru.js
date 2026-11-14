@@ -1016,4 +1016,5 @@ I18N.add('ru', {
   "Recuperas 1 PS cada 3 enemigos derrotados.": "Восстанавливаешь 1 ОЗ за каждых 3 побеждённых врагов.",
   "¡Corrupción de datos!": "Порча данных!",
   "Si sigues quieto pierdes vida cada segundo": "Если продолжишь стоять на месте, будешь терять здоровье каждую секунду",
+  "No se aplica en Fácil ni en tus {0} primeras partidas.": "Не действует на лёгком уровне и в первых {0} забегах.",
 });

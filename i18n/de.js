@@ -1004,4 +1004,5 @@ I18N.add('de', {
   "Recuperas 1 PS cada 3 enemigos derrotados.": "Du erhältst 1 KP für je 3 besiegte Gegner zurück.",
   "¡Corrupción de datos!": "Datenkorruption!",
   "Si sigues quieto pierdes vida cada segundo": "Wenn du stehen bleibst, verlierst du jede Sekunde Leben",
+  "No se aplica en Fácil ni en tus {0} primeras partidas.": "Gilt nicht auf Leicht und nicht in deinen ersten {0} Runden.",
 });

@@ -1018,4 +1018,5 @@ I18N.add('zh', {
   "Recuperas 1 PS cada 3 enemigos derrotados.": "每击败3个敌人恢复1点生命。",
   "¡Corrupción de datos!": "数据损坏！",
   "Si sigues quieto pierdes vida cada segundo": "继续站着不动会每秒损失生命",
+  "No se aplica en Fácil ni en tus {0} primeras partidas.": "简单难度和你的前 {0} 局不生效。",
 });

@@ -1018,4 +1018,5 @@ I18N.add('ja', {
   "Recuperas 1 PS cada 3 enemigos derrotados.": "敵を3体倒すごとにHPが1回復する。",
   "¡Corrupción de datos!": "データ破損！",
   "Si sigues quieto pierdes vida cada segundo": "止まったままだと毎秒HPが減っていく",
+  "No se aplica en Fácil ni en tus {0} primeras partidas.": "イージーと最初の{0}回のプレイには適用されません。",
 });

@@ -1011,4 +1011,5 @@ I18N.add('tr', {
   "Recuperas 1 PS cada 3 enemigos derrotados.": "Her 3 düşman yendiğinde 1 can kazanırsın.",
   "¡Corrupción de datos!": "Veri bozulması!",
   "Si sigues quieto pierdes vida cada segundo": "Kıpırdamadan durursan her saniye can kaybedersin",
+  "No se aplica en Fácil ni en tus {0} primeras partidas.": "Kolay modda ve ilk {0} oyununda uygulanmaz.",
 });
