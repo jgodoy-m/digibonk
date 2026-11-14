@@ -3303,6 +3303,75 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
   body.is-touch #overlay.menu-mode .realhub:not(.pl4){height:auto!important;min-height:100%!important;overflow:visible!important}
   #overlay .realhub.hb .hm-msg:not(:empty){top:58px!important}
 }
+
+/* ===== Vida en el menú de inicio (lv-*): Digimon paseando por el escenario, chispas del portal y tarjetas con movimiento =====
+   El escenario (.lv-stage) copia la geometría del fondo del inicio (125% de ancho, anclado a la derecha y al 72% en vertical),
+   así cada Digimon pisa siempre el mismo punto del dibujo sea cual sea el tamaño de la ventana. Coordenadas en % de la imagen. */
+#overlay .realhub.hb .real-world{container-type:size}
+#overlay .realhub.hb .lv-stage{position:absolute;right:0;width:125cqw;aspect-ratio:1672/941;top:calc((100cqh - 125cqw * 941 / 1672) * .72);z-index:3;pointer-events:none}
+#overlay .realhub.hb .lv-d{position:absolute;left:calc(var(--x) * 1%);top:calc(var(--y) * 1%);width:calc(var(--s) * 1%);aspect-ratio:1;transform:translate(-50%,-93%)}
+#overlay .realhub.hb .lv-d::after{content:'';position:absolute;left:24%;right:24%;bottom:3%;height:10%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,8,30,.55),transparent);z-index:-1}
+#overlay .realhub.hb .lv-spr{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;filter:brightness(.9) saturate(.92) drop-shadow(0 0 1px rgba(154,239,255,.7)) drop-shadow(0 3px 2px rgba(0,8,30,.45))}
+#overlay .realhub.hb .lv-d.flip .lv-spr{scale:-1 1}
+/* Caminar: ida (mirando a la derecha), pausa, vuelta (mirando a la izquierda), pausa */
+#overlay .realhub.hb .lv-walk{animation:lv-walk var(--t) linear var(--dl,0s) infinite}
+#overlay .realhub.hb .lv-walk .lv-spr{animation:animIdle .8s steps(1) infinite,lv-face var(--t) steps(1,end) var(--dl,0s) infinite,lv-step .42s ease-in-out infinite alternate}
+@keyframes lv-walk{0%{translate:0 0}42%,50%{translate:calc(var(--dx) * 100%) 0}92%,100%{translate:0 0}}
+@keyframes lv-face{0%{scale:-1 1}46%{scale:1 1}96%,100%{scale:-1 1}}
+@keyframes lv-step{to{translate:0 -3%}}
+/* Compañero elegido: delante del portal, con su círculo digital y un saltito de vez en cuando */
+#overlay .realhub.hb .lv-hero{animation:lv-hop 7s ease-in-out 1.2s infinite}
+#overlay .realhub.hb .lv-hero::before{content:'';position:absolute;left:4%;right:4%;bottom:-4%;height:24%;border-radius:50%;border:2px solid rgba(154,239,255,.75);background:radial-gradient(closest-side,rgba(89,251,255,.38),rgba(37,108,187,.12) 70%,transparent);box-shadow:0 0 18px rgba(89,251,255,.55),inset 0 0 12px rgba(154,239,255,.45);z-index:-2;animation:lv-ring 2.6s ease-in-out infinite alternate}
+#overlay .realhub.hb .lv-hero .lv-spr{filter:saturate(1) drop-shadow(0 0 2px rgba(154,239,255,.9)) drop-shadow(0 0 10px rgba(89,251,255,.35))}
+@keyframes lv-hop{0%,86%,100%{translate:0 0}90%{translate:0 -16%}93%{translate:0 0}95.5%{translate:0 -7%}98%{translate:0 0}}
+@keyframes lv-ring{from{opacity:.55;scale:.94}to{opacity:1;scale:1.04}}
+/* Volador: flota alrededor del árbol */
+#overlay .realhub.hb .lv-fly{animation:lv-fly 11s ease-in-out infinite}
+#overlay .realhub.hb .lv-fly::after{display:none}
+#overlay .realhub.hb .lv-fly .lv-spr{animation:animIdle .8s steps(1) infinite,lv-flap 1.6s ease-in-out infinite alternate}
+@keyframes lv-fly{0%,100%{translate:0 0}25%{translate:110% -40%}50%{translate:260% -10%}75%{translate:120% 25%}}
+/* Sentado entre las raíces: se balancea despacio */
+#overlay .realhub.hb .lv-sit .lv-spr{transform-origin:50% 93%;animation:animIdle 1.2s steps(1) infinite,lv-sway 4s ease-in-out infinite alternate}
+@keyframes lv-sway{from{rotate:-2deg}to{rotate:2deg}}
+/* Nadando: medio cuerpo bajo el agua, con ondas en lugar de sombra */
+#overlay .realhub.hb .lv-swim .lv-spr{clip-path:inset(0 0 30% 0);filter:brightness(.8) saturate(.9) drop-shadow(0 0 1px rgba(154,239,255,.6))}
+#overlay .realhub.hb .lv-swim::after{left:8%;right:8%;bottom:26%;height:12%;background:none;border:2px solid rgba(154,239,255,.55);box-shadow:0 0 8px rgba(89,251,255,.35);animation:lv-ripple 1.8s ease-out infinite}
+@keyframes lv-ripple{from{scale:.7;opacity:.9}to{scale:1.25;opacity:0}}
+@keyframes lv-flap{to{translate:0 -8%}}
+/* Bocadillo que aparece en la pausa del paseo */
+#overlay .realhub.hb .lv-emo{position:absolute;left:50%;top:-6%;translate:-50% 0;padding:2px 7px;border-radius:999px;background:#fff;color:#1d2b4a;font:900 13px/1.2 'Nunito',sans-serif;box-shadow:0 2px 0 rgba(0,0,0,.25);opacity:0;scale:.6;animation:lv-emo var(--t) ease-out var(--dl,0s) infinite}
+#overlay .realhub.hb .lv-emo::after{content:'';position:absolute;left:50%;bottom:-4px;width:8px;height:8px;background:#fff;transform:translateX(-50%) rotate(45deg)}
+@keyframes lv-emo{0%,42%{opacity:0;scale:.6}44%,49%{opacity:1;scale:1}51%,100%{opacity:0;scale:.6}}
+/* Chispas que suben del portal y luciérnagas sobre la hierba */
+#overlay .realhub.hb .lv-fx b{position:absolute;left:calc(var(--x) * 1%);top:calc(var(--y) * 1%);width:.32%;aspect-ratio:1;background:#9aefff;box-shadow:0 0 6px 2px rgba(89,251,255,.7);opacity:0;animation:lv-rise var(--t) linear var(--dl) infinite}
+#overlay .realhub.hb .lv-fx b.ff{width:.26%;border-radius:50%;background:#e8ff9a;box-shadow:0 0 8px 3px rgba(214,255,120,.55);animation:lv-ff var(--t) ease-in-out var(--dl) infinite alternate}
+@keyframes lv-rise{0%{opacity:0;translate:0 0}15%{opacity:.95}80%{opacity:.6}100%{opacity:0;translate:1.5vw -14vw}}
+@keyframes lv-ff{0%{opacity:0;translate:0 0}30%{opacity:.9}60%{opacity:.25}100%{opacity:.85;translate:3vw -2.4vw}}
+/* Móvil (fondo vertical): las tarjetas tapan el escenario, así que los Digimon pasean en una franja bajo el logo */
+#overlay .realhub.hb .lv-parade{display:none}
+@media(max-aspect-ratio:4/5){
+  #overlay .realhub.hb .lv-stage{display:none}
+  #overlay .realhub.hb .lv-parade{display:block;position:relative;z-index:3;align-self:stretch;height:56px;margin:-14px 12px -12px;pointer-events:none}
+  #overlay .realhub.hb .lv-p{position:absolute;bottom:calc(var(--s) * -.07);left:0;width:var(--s);height:var(--s);animation:lv-pwalk var(--t) linear var(--dl) infinite}
+  #overlay .realhub.hb .lv-p::after{content:'';position:absolute;left:22%;right:22%;bottom:4%;height:9%;border-radius:50%;background:radial-gradient(closest-side,rgba(60,20,0,.4),transparent);z-index:-1}
+  #overlay .realhub.hb .lv-p .lv-spr{animation:animIdle .8s steps(1) infinite,lv-face var(--t) steps(1,end) var(--dl) infinite,lv-step .42s ease-in-out infinite alternate}
+  @keyframes lv-pwalk{0%{left:0}42%,50%{left:calc(100% - var(--s))}92%,100%{left:0}}
+}
+/* Tarjetas con más carácter: rayas del botón Jugar en marcha, brillo que cruza Jugar y el evento, iconos de modo flotando */
+#overlay .realhub.hb .nm-play::before{background-size:auto,34px 34px;animation:lv-stripes 2.4s linear infinite}
+@keyframes lv-stripes{to{background-position:0 0,34px 0}}
+#overlay .realhub.hb .lv-sheen{position:absolute;inset:0;overflow:hidden;border-radius:inherit;pointer-events:none;z-index:3}
+#overlay .realhub.hb .lv-sheen::after{content:'';position:absolute;top:-20%;bottom:-20%;left:-40%;width:22%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-18deg);animation:lv-sheen 5.5s ease-in-out 1.5s infinite}
+#overlay .realhub.hb .nm-event .lv-sheen::after{animation-duration:7s;animation-delay:3.2s}
+@keyframes lv-sheen{0%,70%{left:-40%}100%{left:130%}}
+#overlay .realhub.hb .nm-play .hb-play-face>*{animation:lv-breathe 2.4s ease-in-out infinite}
+@keyframes lv-breathe{0%,100%{scale:1 1}50%{scale:1.03 1.05}}
+#overlay .realhub.hb .nm-stack .hb-mode>i .nm-ic{animation:lv-float 3.2s ease-in-out infinite}
+#overlay .realhub.hb .nm-stack .hb-mode+.hb-mode>i .nm-ic{animation-delay:-1.6s}
+@keyframes lv-float{0%,100%{translate:0 0;rotate:0deg}50%{translate:0 -3px;rotate:-4deg}}
+#overlay .realhub.hb .nm-dot{animation:lv-dot 1.8s ease-in-out infinite}
+@keyframes lv-dot{0%,100%{scale:1}50%{scale:1.25}}
+@media(prefers-reduced-motion:reduce){#overlay .realhub.hb :is(.lv-stage,.lv-parade,.nm-play,.nm-event,.nm-stack,.nm-tiles) *,#overlay .realhub.hb :is(.nm-play,.lv-sheen)::before,#overlay .realhub.hb .lv-sheen::after{animation:none!important}#overlay .realhub.hb .lv-fx{display:none}}
 </style>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.min.js" } }
@@ -4581,6 +4650,37 @@ function bindMenuFX(){
     el.addEventListener('pointerleave', () => { el.style.removeProperty('--tx'); el.style.removeProperty('--ty'); });
   });
 }
+// Vida en el menú de inicio: el compañero elegido delante del portal y otros Digimon paseando (primero los desbloqueados)
+function hubLife(){
+  const sprOf = k => { try { return spriteOf(k, false); } catch(e){ return 'sprites/adventure/' + k + '.png'; } };
+  const sprite = (k, cls = '') => animEl(sprOf(k), 'lv-spr ' + cls);
+  const hero = (CHARS[selectedKey] || SEASONS.adventure.chars.includes(selectedKey)) ? selectedKey : 'agumon';
+  // Cada sitio del dibujo tiene su habitante, elegido por lo que encaja con él (sin azar).
+  // Si el compañero elegido es ese habitante, pasa al siguiente de la lista.
+  const used = new Set([hero]);
+  const cast = list => { const k = list.find(x => !used.has(x)); if (k) used.add(k); return k; };
+  const tree = cast(['palmon', 'tentomon', 'hagurumon']);   // planta: sentada entre las raíces del árbol
+  const walker = cast(['gabumon', 'leomon', 'gatomon']);    // pasea por la hierba entre el árbol y las escaleras
+  const flyer = cast(['biyomon', 'patamon', 'tentomon']);   // vuela alrededor de la copa del árbol
+  const swimmer = cast(['gomamon']);                         // nada en el lago, al pie de la cascada
+  // Coordenadas en % de ui/fondo_inicio.webp: x = centro, y = línea de los pies; s = ancho; dx = recorrido en anchos del sprite
+  const stage = [
+    tree ? `<span class="lv-d lv-sit" style="--x:59;--y:61.3;--s:4.2">${sprite(tree)}</span>` : '',
+    walker ? `<span class="lv-d lv-walk" style="--x:62;--y:62.8;--s:4.6;--dx:1.1;--t:16s;--dl:-3s">${sprite(walker)}<em class="lv-emo">♪</em></span>` : '',
+    `<span class="lv-d lv-hero" style="--x:73.5;--y:65;--s:6.2">${sprite(hero)}</span>`,
+    flyer ? `<span class="lv-d lv-fly" style="--x:53;--y:45;--s:3.4">${sprite(flyer)}</span>` : '',
+    swimmer ? `<span class="lv-d lv-walk lv-swim" style="--x:64.8;--y:82.6;--s:4.6;--dx:1.1;--t:22s;--dl:-8s">${sprite(swimmer)}</span>` : ''
+  ].join('');
+  // Chispas del portal (x 70-80, y 40-60) y luciérnagas sobre la hierba (x 45-90, y 55-75)
+  const fx = Array.from({length: 14}, (_, i) => `<b style="--x:${70 + (i * 37) % 11};--y:${42 + (i * 29) % 20};--t:${4 + i % 4}s;--dl:${-(i * 0.73).toFixed(2)}s"></b>`).join('')
+    + Array.from({length: 10}, (_, i) => `<b class="ff" style="--x:${45 + (i * 43) % 45};--y:${56 + (i * 31) % 20};--t:${3 + i % 3}s;--dl:${-(i * 0.9).toFixed(2)}s"></b>`).join('');
+  // Móvil: el compañero y su pareja de paseo caminan por el borde de arriba de la tarjeta Jugar
+  const parade = [[hero, 64, 15, -1], [walker || flyer, 56, 19, -10]].filter(x => x[0]).map(([k, sz, t, dl]) => `<span class="lv-p" style="--s:${sz}px;--t:${t}s;--dl:${dl}s">${sprite(k)}</span>`).join('');
+  return {
+    stage: `<div class="lv-stage" aria-hidden="true">${stage}<div class="lv-fx">${fx}</div></div>`,
+    parade: `<div class="lv-parade" aria-hidden="true">${parade}</div>`
+  };
+}
 function showSelect(){
   if (typeof Cloud !== 'undefined' && Cloud.pending){ cloudShowConflict(); return; }
   if (!localStorage.getItem('digibonk3d-gift')){ localStorage.setItem('digibonk3d-gift', '1'); addTickets('std', 10); setTimeout(() => { const m = document.getElementById('hmMsg'); if (m) { m.textContent = '🎁 Regalo de bienvenida: 10 tickets para la Incubadora'; clearTimeout(m._t); m._t = setTimeout(() => { m.textContent = ''; }, 4500); } }, 300); }
@@ -4601,9 +4701,10 @@ function showSelect(){
   const qs = questSummary();
   const labReady = LAB.filter(u => labLv(u.id) < labMax(u) && labCosts(u)[labLv(u.id)] <= SAVE.bits).length;
   const achAll = TITLES.filter(tl => !tl.weekly && !tl.seasonal).length, achOwned = TITLES.filter(tl => !tl.weekly && !tl.seasonal && inv.titles.includes(tl.id)).length;
+  const life = hubLife();
   showOverlay(`
     <main class="realhub hb" aria-label="Menú principal Digibonk">
-      <div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><div class="rw-scenery-core"></div><div class="rw-aurora"></div><div class="rw-light"></div><div class="rw-water"></div><div class="rw-stars"></div></div>
+      <div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><div class="rw-scenery-core"></div><div class="rw-aurora"></div><div class="rw-light"></div><div class="rw-water"></div><div class="rw-stars"></div>${life.stage}</div>
       <header class="hb-top">
         <div class="hb-utils">
           <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma"><img class="nm-ic" src="ui/hub/ic_idioma.webp" alt="">${LANG.toUpperCase()}</button>
@@ -4619,11 +4720,12 @@ function showSelect(){
       <section class="hb-main">
         <div class="hb-left">
           <h1 class="hb-brand"><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span><span class="hb-ver">BETA</span></h1>
+          ${life.parade}
           <div class="hb-modes nm-modes">
             <button type="button" id="playBtn" class="hb-play nm-play" aria-label="Jugar con ${safeText(choice.name)}">
               <span class="hb-play-txt"><b>Jugar</b></span>
               <span class="hb-play-face">${animEl(spriteOf(selectedKey, false), 'hb-face')}</span>
-              <span class="nm-band"><span class="hb-dev"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span>Modo clásico · <b>${safeText(choice.name)}</b></span></span>
+              <span class="lv-sheen"></span><span class="nm-band"><span class="hb-dev"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span>Modo clásico · <b>${safeText(choice.name)}</b></span></span>
             </button>
             <div class="hb-stack nm-stack">
               <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i><img class="nm-ic" src="ui/hub/ic_supervivencia.webp" alt=""></i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
@@ -4631,7 +4733,7 @@ function showSelect(){
             </div>
           </div>
           <button type="button" class="nm-quests nm-encard" id="mEnc" aria-label="Encargos: hoy ${qs.day.done} de ${qs.day.all}, semana ${qs.week.done} de ${qs.week.all}${qs.ev ? ', evento ' + qs.ev.done + ' de ' + qs.ev.all : ''}"><i><img class="nm-ic" src="ui/hub/ic_encargos.webp" alt=""></i><span class="nm-eh"><b>Encargos</b><small>${qs.ev ? 'Diarios, semanales y de evento' : 'Diarios y semanales'}</small></span><span class="nm-eqs">${[['Hoy', qs.day, 'q-d'], ['Semana', qs.week, 'q-w'], ...(qs.ev ? [['Evento', qs.ev, 'q-e']] : [])].map(([n, q, c]) => `<span class="nm-eq ${c}"><small>${n}</small><b>${q.done}/${q.all}</b><span class="hb-meter"><i style="width:${Math.round(q.done / q.all * 100)}%"></i></span></span>`).join('')}</span></button>
-          ${(bannerOpen("navidadP") || bannerOpen("navidadR")) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
+          ${(bannerOpen("navidadP") || bannerOpen("navidadR")) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span class="lv-sheen"></span><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
           <div class="hb-tiles nm-tiles">
             <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex: ${pickProgress().done} de ${pickProgress().total} Digimon"><i><img class="nm-ic" src="ui/hub/ic_digidex.webp" alt=""></i><b>Digidex</b><small>${pickProgress().done}/${pickProgress().total} Digimon</small></button>
             <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio${labReady ? ': ' + labReady + ' mejoras disponibles' : ''}"><i><img class="nm-ic" src="ui/hub/ic_laboratorio.webp" alt=""></i><b>Laboratorio</b><small>${labReady ? labReady + (labReady === 1 ? ' mejora' : ' mejoras') : 'Mejoras'}</small>${labReady ? '<em class="nm-dot" aria-hidden="true"></em>' : ''}</button>
