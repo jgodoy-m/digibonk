@@ -14,6 +14,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="DigiBonk">
 <meta property="og:description" content="Survivor 3D de Digimon, gratis en el navegador. Fan-game no oficial.">
+<!-- Al publicar: cambia og:image por la URL absoluta (https://tu-dominio/ui/compartir.jpg); Discord, X y WhatsApp no leen rutas relativas -->
 <meta property="og:image" content="ui/compartir.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="fonts/fonts.css">
@@ -1792,6 +1793,17 @@ body:has(.tr11) #hudTop{display:none!important}
 .pk2-starter .pk2-right{width:auto}
 .pk2-starter .pk2-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 .pk2-starter .pk2-foot{justify-content:center}
+/* Móvil en horizontal: la ficha grande quedaba debajo de la cuadrícula, tapada por el botón fijo. Se quita y la cuadrícula va en 4 columnas */
+@media (max-height:500px) and (orientation:landscape){
+  #overlay .pk2-starter .pk2-left{display:none!important}
+  #overlay .pk2-starter .pk2-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}
+  #overlay:not(.menu-mode):not(.has-top)>.pk2-starter.picker-screen.pk2{margin-top:8px!important}
+  #overlay .pk2-starter .pk2-top{flex-direction:row!important;align-items:center!important;flex-wrap:nowrap!important;gap:10px!important}
+  #overlay .pk2-starter .pk2-top h2{font-size:17px!important}
+  #overlay .pk2-starter .pk2-tile{padding:4px!important;gap:0!important}
+  #overlay .pk2-starter .pk2-face{width:40px!important;height:40px!important}
+  #overlay .pk2-starter #stGo{padding:9px 20px!important}
+}
 /* Laboratorio con el mismo marco y cabecera que Ajustes o Colección */
 #overlay:not(.menu-mode)>.lab-screen{width:min(1080px,96vw);max-width:none;margin:0;padding:18px 22px 20px;overflow:auto;text-align:left;color:var(--ui-text);background:var(--ui-panel);border:3px solid var(--ui-line);border-radius:8px;box-shadow:inset 0 3px #b5ffff76,0 8px 0 #03163d,0 0 22px #21afff7c;outline:2px solid #267dbb;outline-offset:3px}
 .lab-top{padding:8px 14px;border:2px solid #c3fdff;border-radius:var(--ui-radius);background:linear-gradient(90deg,#6ee2f4,#147fbf);box-shadow:0 3px #0b3976;color:#06234b}
@@ -2568,6 +2580,7 @@ html[lang] #overlay .end3 .mini-btn{background:var(--m-btn)!important;color:var(
 /* barra inferior */
 #overlay .realhub.hb .hb-bar{display:flex;gap:10px;flex-wrap:wrap}
 #overlay .realhub.hb .hb-btn{height:44px;display:inline-flex;align-items:center;gap:8px;padding:0 18px;border-radius:999px;border:1px solid var(--m-cardline);background:var(--m-card);color:var(--m-text);font:900 15px/1 'Nunito',sans-serif;box-shadow:var(--m-pillsh),0 4px 14px rgba(0,0,0,.12);transition:transform .12s}
+#overlay .realhub .hb-btn[hidden]{display:none!important}
 #overlay .realhub.hb .hb-btn i{font-style:normal;font-size:17px}
 #overlay .realhub.hb .hb-btn.hb-sq{width:44px;padding:0;justify-content:center}
 #overlay .realhub.hb .hb-discord{background:#5865f2;color:#fff;border-color:transparent;box-shadow:0 3px 0 #3640b8}
@@ -2765,6 +2778,16 @@ html[data-theme=oscuro] #overlay:has(.rg){background:radial-gradient(ellipse 60%
 .pz2-keys kbd{font:800 10px 'Nunito',sans-serif;padding:1px 6px;border-radius:5px;background:var(--m-text);color:var(--m-card)}
 html[data-theme=oscuro] .pz2-keys kbd{color:#16171a}
 @media (max-width:520px){.pz2{padding:0 14px 14px}.pz2-av{width:76px;height:76px}.pz2-av .anim{width:66px;height:66px}.pz2-stats b{font-size:16px}}
+/* Táctil: sin teclado, las pistas de teclas sobran. Móvil en horizontal (poca altura): la pausa entera cabe sin desplazar */
+body.is-touch .pz2-keys,body.is-touch .pz2-go kbd{display:none}
+@media (max-height:500px) and (orientation:landscape){
+  .pz2{width:min(720px,94vw);gap:8px;padding:0 16px 12px}
+  .pz2-banner{padding:6px 16px}.pz2-x{margin-top:8px}
+  .pz2-profile{padding:8px;gap:12px}.pz2-av{width:64px;height:64px}.pz2-av .anim{width:56px;height:56px}.pz2-quote{display:none}
+  .pz2-stats div{padding:6px 4px}.pz2-stats b{font-size:16px}
+  .pz2-btns{grid-template-columns:2fr 1fr 1fr}.pz2-btns .pz2-go{grid-column:auto}
+  .pz2-keys{display:none}
+}
 /* En los paneles con poco sitio la barra superior va sin la tarjeta del usuario */
 body:has(#overlay :is(.ps,.ms,.pk2-starter,.lab-screen)) #topbar .tb-id{display:none!important}
 @media(max-width:1200px){html[lang] body #topbar .tb-id{display:none!important}}
@@ -4322,6 +4345,7 @@ function showOverlay(html){
   overlay.innerHTML = html;
   overlay.classList.remove('hidden');
   overlayShownState = state;
+  if (!same) overlay.scrollTop = 0;   // pantalla nueva: empieza arriba (antes heredaba el scroll de la anterior)
   if (same){
     overlay.scrollTop = olTop;
     const all = overlay.querySelectorAll('*');
@@ -4704,6 +4728,8 @@ function showSelect(){
   const HM_DISCORD_URL='', HM_DISCORD_BUGS_URL='', HM_X_URL='', HM_KOFI_URL='';   // pon aquí los enlaces cuando existan
   document.getElementById('mDiscord').onclick=()=>HM_DISCORD_URL?window.open(HM_DISCORD_URL,'_blank','noopener'):hmSoon('Discord: próximamente');
   document.getElementById('mX').onclick=()=>HM_X_URL?window.open(HM_X_URL,'_blank','noopener'):hmSoon('X: próximamente');
+  // Sin enlace, el botón no lleva a ningún sitio: se oculta y vuelve solo al rellenar su URL arriba
+  [['mBug', HM_DISCORD_BUGS_URL || HM_DISCORD_URL], ['mKofi', HM_KOFI_URL], ['mDiscord', HM_DISCORD_URL], ['mX', HM_X_URL]].forEach(([id, url]) => { if (!url) document.getElementById(id).hidden = true; });
   document.getElementById('hmLogout').onclick=()=>{localStorage.removeItem('digibonk3d-name');localStorage.removeItem('digibonk3d-guest');location.reload();};
   document.getElementById('rhProfile').onclick=showPlayer;
   document.getElementById('rhLang').onclick=toggleLang;

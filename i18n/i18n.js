@@ -77,6 +77,13 @@
     const v = d.exact.get(core);
     if (v !== undefined) return v;
     if (depth > 2) return null;
+    // Frase compuesta en la que cada parte tiene clave exacta ("Bosque Inicial → Pantano de Datos"): se traduce por partes
+    // antes de probar los patrones, que si no pillan la frase entera ("{0} de {1}") y dejan "Pantano of Data"
+    if (/ · | → |: /.test(core)){
+      const parts = core.split(/( · | → |: )/);
+      if (parts.every((x, i) => i % 2 || !LETTER.test(x) || d.exact.has(x)))
+        return parts.map((x, i) => (i % 2 || !LETTER.test(x)) ? x : d.exact.get(x)).join('');
+    }
     for (const p of d.patterns){
       const m = p.re.exec(core);
       if (!m) continue;
