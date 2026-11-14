@@ -1,7 +1,7 @@
 # Convierte una hoja de 5 poses dibujada a mano (o generada) al formato del juego.
 # Entrada: PNG con fondo transparente y las 5 poses en fila, cada una en su quinta parte del ancho,
 #   en el orden reposo 1, reposo 2, ataque (preparación), ataque (golpe), daño.
-# Salida: sprites/anim/<nombre>.png, 5 fotogramas cuadrados de LADO px, con el Digimon apoyado abajo
+# Salida: sprites/anim/<nombre>.webp (WebP sin pérdida), 5 fotogramas cuadrados de LADO px, con el Digimon apoyado abajo
 #   y la misma altura relativa en el fotograma que tenía la hoja anterior (así no cambia su tamaño en el juego).
 # También actualiza la imagen fija sprites/adventure/<nombre>.png con la primera pose.
 # Limpia el borde semitransparente, las motas sueltas y el fondo difuminado (umbral de alfa).
@@ -81,7 +81,7 @@ def main():
     ap.add_argument('--pelar-sat', type=int, default=0, help='con --pelar, quita el halo por saturación (p. ej. 75 en la skin LCD)')
     ap.add_argument('--lado', type=int, default=256, help='lado del fotograma de salida')
     a = ap.parse_args()
-    out = os.path.join(HERE, a.nombre + '.png')
+    out = os.path.join(HERE, a.nombre + '.webp')
     alto, abajo = a.alto, a.abajo
     if (alto is None or abajo is None) and os.path.exists(out):
         old = np.array(Image.open(out).convert('RGBA'))[..., 3] > 0
@@ -122,7 +122,7 @@ def main():
         px = i * L + (L - nw) // 2
         py = L - round(abajo * L) - nh
         sheet.alpha_composite(Image.fromarray(fr, 'RGBA'), (px, py))
-    sheet.save(out)
+    sheet.save(out, 'WEBP', lossless=True, method=6)
     # Imagen fija (sprites/adventure/<nombre>.png): la pose de reposo recortada, cuadrada y con 8 px de margen
     fixed = os.path.join(HERE, '..', 'adventure', a.nombre + '.png')
     if os.path.exists(fixed):
