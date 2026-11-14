@@ -6095,7 +6095,7 @@ function animateEvo(dt){
   }
   rings = rings.filter(r => {
     if (r.t < r.life) return true;
-    world.remove(r.mesh); return false;
+    world.remove(r.mesh); r.mesh.geometry.dispose(); r.mesh.material.dispose(); return false;   // cada anillo tiene geometría y material propios: liberarlos o se acumulan en la GPU
   });
   screenFlash = Math.max(0, screenFlash - dt*1.5);
   document.getElementById('flash').style.opacity = screenFlash;
@@ -6266,7 +6266,7 @@ function updateKindAttacks(dt){
     for (const e of g.enemies) if (e.hp > 0 && dist2(e.x, e.z, z.x, z.z) < z.r + e.r) hurt(e, z.dmg);
     spawnRing(z.x, z.z, 0xb388ff, z.r, 0.35);
   }
-  g.zones = g.zones.filter(z => { if (z.t > 0) return true; world.remove(z.mesh); return false; });
+  g.zones = g.zones.filter(z => { if (z.t > 0) return true; world.remove(z.mesh); z.mesh.geometry.dispose(); z.mesh.material.dispose(); return false; });
 }
 let dmgSrc = 'base';   // qué ataque está golpeando (para el resumen de fin de partida)
 function hurt(e, dmg){
@@ -8102,7 +8102,7 @@ function updateBossMechanics(dt){
       }
     }
   }
-  for (const h of (g.hazards || []).filter(h => h.t <= 0)) world.remove(h.mesh);
+  for (const h of (g.hazards || []).filter(h => h.t <= 0)){ world.remove(h.mesh); h.mesh.geometry.dispose(); h.mesh.material.dispose(); }
   if (g.hazards) g.hazards = g.hazards.filter(h => h.t > 0);
 }
 
