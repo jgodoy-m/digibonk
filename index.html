@@ -2083,7 +2083,6 @@ body.is-touch #skillBar{bottom:176px!important}
 .hud-chips .chip .hic.art,#hudChips .hic.art{margin:-3px 0}
 #hudChips .c-emb{color:#ffd77a}
 .hud-portrait:not([class*="fr-"]){overflow:visible!important;box-shadow:none!important;background:none!important}
-.hud-ring{position:absolute;pointer-events:none;z-index:2;max-width:none;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
 .hud-portrait .hud-lvl{z-index:3}
 #hud{left:26px!important;top:26px!important}.hud-card{padding-left:16px!important}.hud-main{margin-left:10px}
 #pimg{transition:transform .3s}
@@ -3313,7 +3312,7 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 <canvas id="menubg" width="320" height="180"></canvas>
 <div id="menuart"><div class="stars"></div></div>
 <div id="hud"><div class="hud-card">
-  <div class="hud-portrait" id="hudPortrait"><img id="pimg" alt=""><img id="pring" class="hud-ring" alt=""><span class="hud-lvl" id="hudLvl">1</span></div>
+  <div class="hud-portrait" id="hudPortrait"><img id="pimg" alt=""><span class="hud-lvl" id="hudLvl">1</span></div>
   <div class="hud-main">
     <div class="hud-name" id="hudName">Gabumon</div>
     <div class="hud-title" id="hudTitle"></div>
@@ -7503,7 +7502,7 @@ function updateHUD(){
     chipsEl.dataset.k = chipKey;
     chipsEl.innerHTML = `<span>${HUD_IC.kills}<b>${g.kills}</b></span><span class="c-tix">${HUD_IC.tix}<b>${g.tix}</b></span><span class="c-shr">${HUD_IC.shr}<b>${shrinesDone}/${(g.shrines || []).length}</b></span><span class="c-emb">${HUD_IC.emb}<b>${(g.emblems || []).length}/${EMBLEMS.length}</b></span>`;
   }
-  hudRing(); hudEmblems();
+  hudEmblems();
   document.querySelector('.hud-hp').classList.toggle('low', p.hp < p.maxHp*0.3);
   const tt = TITLES.find(t => t.id === extra.title);
   document.getElementById('hudTitle').textContent = tt ? tt.name : '';
@@ -7983,28 +7982,9 @@ function updateBossMechanics(dt){
 const hudImg = f => `<img class="hic" src="ui/hud/${f}.png" alt="">`;
 const hudArt = f => `<img class="hic art" src="ui/hud/${f}.webp" alt="">`;
 const HUD_IC = {kills: hudArt('ic_bajas'), tix: hudArt('ic_ticket'), shr: hudArt('ic_santuario'), dash: hudArt('ic_dash'), emb: hudArt('ic_emblema'), boss: hudImg('jefe')};
-// Aros del retrato por etapa: hueco interior (diámetro y centro, en px sobre 256) medido en cada imagen
-const HUD_RINGS = [{d: 177, x: 127, y: 127}, {d: 164, x: 127, y: 137}, {d: 155, x: 126, y: 130}, {d: 124, x: 127, y: 126}];
 // Ilustración de cada carta de mejora pasiva
 const CARD_ART = {'Daño +20%': 'dano', 'Cadencia +15%': 'cadencia', 'Velocidad +10%': 'velocidad', '+25 vida máx. y cura': 'vida', 'Proyectil / cuchilla +1': 'proyectil',
   'Área +20%': 'area', 'Imán +50%': 'iman', 'Probabilidad crítica +8%': 'critico', 'Daño crítico +25%': 'dano_critico', 'Robo de vida': 'robo_vida', 'Dash −20% espera': 'dash', 'Armadura +8%': 'armadura'};
-function hudRing(){
-  const el = document.getElementById('pring'); if (!el) return;
-  el.style.display = 'none'; return;   // sin aro: el retrato es sólo el icono del selector
-  const cosmetic = !!frameClass();
-  const st = Math.min(3, g.ch.evolved | 0), r = HUD_RINGS[st], h = r.d*0.94;   // el hueco tapa un poco el borde del icono
-  el.style.display = cosmetic ? 'none' : 'block';
-  if (cosmetic){ document.getElementById('pimg').style.transform = ''; el.dataset.st = ''; return; }
-  if (el.dataset.st === String(st)) return;
-  el.dataset.st = st;
-  el.src = `ui/hud/marco_${st}.webp`;
-  // El aro mide siempre 1,65 veces el retrato; el icono se encoge para caber en el hueco de cada aro
-  const W = 165;
-  el.style.width = el.style.height = W + '%';
-  el.style.left = (50 - r.x/256*W) + '%';
-  el.style.top = (50 - r.y/256*W) + '%';
-  document.getElementById('pimg').style.transform = `scale(${Math.min(1, W/100*h/256).toFixed(3)})`;
-}
 function hudEmblems(){
   const el = document.getElementById('hudEmb'); if (!el) return;
   const key = (g.emblems || []).join(',') + '|' + (g.sups || []).map(s => s.key + s.st).join(',');
