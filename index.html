@@ -3327,12 +3327,17 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 @keyframes lv-ring{from{opacity:.55;scale:.94}to{opacity:1;scale:1.04}}
 /* Volador: flota alrededor del árbol */
 #overlay .realhub.hb .lv-fly{animation:lv-fly 11s ease-in-out infinite}
-#overlay .realhub.hb .lv-fly::after{bottom:-60%;opacity:.35}
+#overlay .realhub.hb .lv-fly::after{display:none}
 #overlay .realhub.hb .lv-fly .lv-spr{animation:animIdle .8s steps(1) infinite,lv-flap 1.6s ease-in-out infinite alternate}
-@keyframes lv-fly{0%,100%{translate:0 0}25%{translate:60% -18%}50%{translate:120% 6%}75%{translate:50% 14%}}
+@keyframes lv-fly{0%,100%{translate:0 0}25%{translate:110% -40%}50%{translate:260% -10%}75%{translate:120% 25%}}
+/* Sentado entre las raíces: se balancea despacio */
+#overlay .realhub.hb .lv-sit .lv-spr{transform-origin:50% 93%;animation:animIdle 1.2s steps(1) infinite,lv-sway 4s ease-in-out infinite alternate}
+@keyframes lv-sway{from{rotate:-2deg}to{rotate:2deg}}
+/* Nadando: medio cuerpo bajo el agua, con ondas en lugar de sombra */
+#overlay .realhub.hb .lv-swim .lv-spr{clip-path:inset(0 0 30% 0);filter:brightness(.8) saturate(.9) drop-shadow(0 0 1px rgba(154,239,255,.6))}
+#overlay .realhub.hb .lv-swim::after{left:8%;right:8%;bottom:26%;height:12%;background:none;border:2px solid rgba(154,239,255,.55);box-shadow:0 0 8px rgba(89,251,255,.35);animation:lv-ripple 1.8s ease-out infinite}
+@keyframes lv-ripple{from{scale:.7;opacity:.9}to{scale:1.25;opacity:0}}
 @keyframes lv-flap{to{translate:0 -8%}}
-/* Primer plano: más grandes y algo más oscuros, como si estuvieran cerca de la cámara */
-#overlay .realhub.hb .lv-near .lv-spr{filter:brightness(.72) saturate(.85) drop-shadow(0 0 1px rgba(154,239,255,.6)) drop-shadow(0 6px 4px rgba(0,8,30,.5));animation:animIdle 1.1s steps(1) infinite}
 /* Bocadillo que aparece en la pausa del paseo */
 #overlay .realhub.hb .lv-emo{position:absolute;left:50%;top:-6%;translate:-50% 0;padding:2px 7px;border-radius:999px;background:#fff;color:#1d2b4a;font:900 13px/1.2 'Nunito',sans-serif;box-shadow:0 2px 0 rgba(0,0,0,.25);opacity:0;scale:.6;animation:lv-emo var(--t) ease-out var(--dl,0s) infinite}
 #overlay .realhub.hb .lv-emo::after{content:'';position:absolute;left:50%;bottom:-4px;width:8px;height:8px;background:#fff;transform:translateX(-50%) rotate(45deg)}
@@ -3346,9 +3351,9 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 #overlay .realhub.hb .lv-parade{display:none}
 @media(max-aspect-ratio:4/5){
   #overlay .realhub.hb .lv-stage{display:none}
-  #overlay .realhub.hb .lv-parade{display:block;position:relative;align-self:stretch;height:66px;margin:-18px 0 -8px;pointer-events:none}
-  #overlay .realhub.hb .lv-parade::before{content:'';position:absolute;left:6%;right:6%;bottom:4px;height:10px;border-radius:50%;background:radial-gradient(closest-side,rgba(89,251,255,.28),transparent)}
-  #overlay .realhub.hb .lv-p{position:absolute;bottom:0;left:0;width:var(--s);height:var(--s);animation:lv-pwalk var(--t) linear var(--dl) infinite}
+  #overlay .realhub.hb .lv-parade{display:block;position:relative;z-index:3;align-self:stretch;height:56px;margin:-14px 12px -12px;pointer-events:none}
+  #overlay .realhub.hb .lv-p{position:absolute;bottom:calc(var(--s) * -.07);left:0;width:var(--s);height:var(--s);animation:lv-pwalk var(--t) linear var(--dl) infinite}
+  #overlay .realhub.hb .lv-p::after{content:'';position:absolute;left:22%;right:22%;bottom:4%;height:9%;border-radius:50%;background:radial-gradient(closest-side,rgba(60,20,0,.4),transparent);z-index:-1}
   #overlay .realhub.hb .lv-p .lv-spr{animation:animIdle .8s steps(1) infinite,lv-face var(--t) steps(1,end) var(--dl) infinite,lv-step .42s ease-in-out infinite alternate}
   @keyframes lv-pwalk{0%{left:0}42%,50%{left:calc(100% - var(--s))}92%,100%{left:0}}
 }
@@ -4649,28 +4654,28 @@ function bindMenuFX(){
 function hubLife(){
   const sprOf = k => { try { return spriteOf(k, false); } catch(e){ return 'sprites/adventure/' + k + '.png'; } };
   const sprite = (k, cls = '') => animEl(sprOf(k), 'lv-spr ' + cls);
-  const pool = SEASONS.adventure.chars.filter(k => k !== selectedKey);
-  const own = new Set(unlockedSet());
-  const mix = a => a.map(v => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map(v => v[1]);
-  const fliers = ['patamon', 'biyomon', 'tentomon'];
-  const flyer = mix(fliers.filter(k => k !== selectedKey))[0];
-  const rest = [...mix(pool.filter(k => own.has(k) && k !== flyer)), ...mix(pool.filter(k => !own.has(k) && k !== flyer))];
-  const hero = CHARS[selectedKey] || SEASONS.adventure.chars.includes(selectedKey) ? selectedKey : 'agumon';
-  const emos = ['♪', '!', '♥', '…'];
-  // [x, y, tamaño] en % de la imagen de fondo; dx = recorrido en anchos del propio sprite
-  const walk = (k, x, y, sz, dx, t, dl, emo) => `<span class="lv-d lv-walk" style="--x:${x};--y:${y};--s:${sz};--dx:${dx};--t:${t}s;--dl:${dl}s">${sprite(k)}${emo ? `<em class="lv-emo">${emo}</em>` : ''}</span>`;
+  const hero = (CHARS[selectedKey] || SEASONS.adventure.chars.includes(selectedKey)) ? selectedKey : 'agumon';
+  // Cada sitio del dibujo tiene su habitante, elegido por lo que encaja con él (sin azar).
+  // Si el compañero elegido es ese habitante, pasa al siguiente de la lista.
+  const used = new Set([hero]);
+  const cast = list => { const k = list.find(x => !used.has(x)); if (k) used.add(k); return k; };
+  const tree = cast(['palmon', 'tentomon', 'hagurumon']);   // planta: sentada entre las raíces del árbol
+  const walker = cast(['gabumon', 'leomon', 'gatomon']);    // pasea por la hierba entre el árbol y las escaleras
+  const flyer = cast(['biyomon', 'patamon', 'tentomon']);   // vuela alrededor de la copa del árbol
+  const swimmer = cast(['gomamon']);                         // nada en el lago, al pie de la cascada
+  // Coordenadas en % de ui/fondo_inicio.webp: x = centro, y = línea de los pies; s = ancho; dx = recorrido en anchos del sprite
   const stage = [
-    walk(rest[0], 53, 62.2, 4.6, 2.2, 15, -2, emos[Math.floor(Math.random() * emos.length)]),
-    walk(rest[1], 52.5, 75.6, 3.8, 1.3, 12, -7),
-    `<span class="lv-d lv-hero" style="--x:74.6;--y:63.4;--s:6.2">${sprite(hero)}</span>`,
-    flyer ? `<span class="lv-d lv-fly" style="--x:57;--y:40;--s:3.6">${sprite(flyer)}</span>` : '',
-    `<span class="lv-d lv-near flip" style="--x:45.5;--y:91.5;--s:8.4">${sprite(rest[2])}</span>`,
-    `<span class="lv-d lv-near" style="--x:80.5;--y:91;--s:7.6">${sprite(rest[3])}</span>`
+    tree ? `<span class="lv-d lv-sit" style="--x:59;--y:61.3;--s:4.2">${sprite(tree)}</span>` : '',
+    walker ? `<span class="lv-d lv-walk" style="--x:62;--y:62.8;--s:4.6;--dx:1.1;--t:16s;--dl:-3s">${sprite(walker)}<em class="lv-emo">♪</em></span>` : '',
+    `<span class="lv-d lv-hero" style="--x:73.5;--y:65;--s:6.2">${sprite(hero)}</span>`,
+    flyer ? `<span class="lv-d lv-fly" style="--x:53;--y:45;--s:3.4">${sprite(flyer)}</span>` : '',
+    swimmer ? `<span class="lv-d lv-walk lv-swim" style="--x:64.8;--y:82.6;--s:4.6;--dx:1.1;--t:22s;--dl:-8s">${sprite(swimmer)}</span>` : ''
   ].join('');
-  // Chispas del portal (x 70-80, y 40-60) y luciérnagas sobre la hierba (x 45-90, y 55-75); posiciones fijas para que no tiemble al volver al menú
+  // Chispas del portal (x 70-80, y 40-60) y luciérnagas sobre la hierba (x 45-90, y 55-75)
   const fx = Array.from({length: 14}, (_, i) => `<b style="--x:${70 + (i * 37) % 11};--y:${42 + (i * 29) % 20};--t:${4 + i % 4}s;--dl:${-(i * 0.73).toFixed(2)}s"></b>`).join('')
     + Array.from({length: 10}, (_, i) => `<b class="ff" style="--x:${45 + (i * 43) % 45};--y:${56 + (i * 31) % 20};--t:${3 + i % 3}s;--dl:${-(i * 0.9).toFixed(2)}s"></b>`).join('');
-  const parade = [[hero, 72, 13, -1], [rest[0], 62, 17, -9], [flyer || rest[1], 58, 21, -15]].map(([k, sz, t, dl]) => `<span class="lv-p" style="--s:${sz}px;--t:${t}s;--dl:${dl}s">${sprite(k)}</span>`).join('');
+  // Móvil: el compañero y su pareja de paseo caminan por el borde de arriba de la tarjeta Jugar
+  const parade = [[hero, 64, 15, -1], [walker || flyer, 56, 19, -10]].filter(x => x[0]).map(([k, sz, t, dl]) => `<span class="lv-p" style="--s:${sz}px;--t:${t}s;--dl:${dl}s">${sprite(k)}</span>`).join('');
   return {
     stage: `<div class="lv-stage" aria-hidden="true">${stage}<div class="lv-fx">${fx}</div></div>`,
     parade: `<div class="lv-parade" aria-hidden="true">${parade}</div>`
