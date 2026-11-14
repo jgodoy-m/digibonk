@@ -1006,4 +1006,5 @@ I18N.add('en', {
   "Recuperas 1 PS cada 3 enemigos derrotados.": "You recover 1 HP for every 3 defeated enemies.",
   "¡Corrupción de datos!": "Data corruption!",
   "Si sigues quieto pierdes vida cada segundo": "If you keep standing still you lose HP every second",
+  "No se aplica en Fácil ni en tus {0} primeras partidas.": "Not applied on Easy or in your first {0} runs.",
 });

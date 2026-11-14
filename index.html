@@ -717,7 +717,7 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .realhub .real-brand small{letter-spacing:.21em!important;text-shadow:0 1px 2px #061d38!important}
 .real-world .rw-scenery-core{
  position:absolute;z-index:1;left:40%;width:40%;top:0;bottom:0;
- background-image:url('ui/escenario_original_recorte.png');
+ background-image:url('ui/escenario_original_recorte.webp');
  background-size:100% 100%;background-position:center;
  image-rendering:auto;
  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 9%,#000 91%,transparent 100%);
@@ -2095,7 +2095,6 @@ body.is-touch #skillBar{bottom:176px!important}
 .hud-chips .chip .hic.art,#hudChips .hic.art{margin:-3px 0}
 #hudChips .c-emb{color:#ffd77a}
 .hud-portrait:not([class*="fr-"]){overflow:visible!important;box-shadow:none!important;background:none!important}
-.hud-ring{position:absolute;pointer-events:none;z-index:2;max-width:none;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
 .hud-portrait .hud-lvl{z-index:3}
 #hud{left:26px!important;top:26px!important}.hud-card{padding-left:16px!important}.hud-main{margin-left:10px}
 #pimg{transition:transform .3s}
@@ -3405,7 +3404,7 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 <canvas id="menubg" width="320" height="180"></canvas>
 <div id="menuart"><div class="stars"></div></div>
 <div id="hud"><div class="hud-card">
-  <div class="hud-portrait" id="hudPortrait"><img id="pimg" alt=""><img id="pring" class="hud-ring" alt=""><span class="hud-lvl" id="hudLvl">1</span></div>
+  <div class="hud-portrait" id="hudPortrait"><img id="pimg" alt=""><span class="hud-lvl" id="hudLvl">1</span></div>
   <div class="hud-main">
     <div class="hud-name" id="hudName">Gabumon</div>
     <div class="hud-title" id="hudTitle"></div>
@@ -3877,10 +3876,10 @@ function tex(url){
   }
   return texCache[url];
 }
-// Hojas de animación (sprites/anim/<id>.png): 5 fotogramas en fila -> reposo 1, reposo 2, ataque 1, ataque 2, daño
+// Hojas de animación (sprites/anim/<id>.webp, WebP sin pérdida): 5 fotogramas en fila -> reposo 1, reposo 2, ataque 1, ataque 2, daño
 const ANIM_N = 5;
 const ANIM_IDS = new Set(["agumon", "gatomon_0_lcd", "gatomon_0_variocolor", "gatomon_0_galactico", "gatomon_0_festival", "gatomon_0_reno", "gatomon_1_lcd", "gatomon_1_variocolor", "gatomon_1_galactico", "gatomon_1_festival", "gatomon_1_reno", "wizardmon_0_galactico", "hagurumon_0_lcd", "hagurumon_0_variocolor", "hagurumon_0_galactico", "hagurumon_0_festival", "hagurumon_0_reno", "wizardmon_0_lcd", "wizardmon_0_variocolor", "wizardmon_0_festival", "wizardmon_0_reno", "frigimon_0_lcd", "frigimon_0_variocolor", "frigimon_0_galactico", "frigimon_0_festival", "frigimon_0_reno", "gabumon_0_lcd", "gabumon_1_lcd", "gabumon_0_festival", "gabumon_0_galactico", "gabumon_0_reno", "gabumon_0_variocolor", "gabumon_1_festival", "gabumon_1_galactico", "gabumon_1_reno", "gabumon_1_variocolor", "gabumon_2_festival", "gabumon_2_galactico", "gabumon_2_lcd", "gabumon_2_reno", "gabumon_2_variocolor", "gabumon_3_festival", "gabumon_3_galactico", "gabumon_3_lcd", "gabumon_3_reno", "gabumon_3_variocolor", "leomon_1_reno", "leomon_0_festival", "leomon_0_reno", "leomon_1_lcd", "leomon_1_variocolor", "leomon_1_galactico", "leomon_1_festival", "leomon_0_galactico", "leomon_0_lcd", "leomon_0_variocolor", "patamon_0_reno", "patamon_1_reno", "patamon_2_reno", "patamon_0_variocolor", "patamon_1_variocolor", "patamon_2_variocolor", "patamon_0_lcd", "patamon_1_lcd", "patamon_2_lcd", "patamon_0_festival", "patamon_1_festival", "patamon_2_festival", "patamon_0_galactico", "patamon_1_galactico", "patamon_2_galactico", "patamon_0_holografica", "patamon_1_holografica", "patamon_2_holografica", "agumon_0_variocolor", "agumon_1_variocolor", "agumon_2_variocolor", "agumon_3_variocolor", "agumon_0_festival", "agumon_1_festival", "agumon_2_festival", "agumon_3_festival", "agumon_0_lcd", "agumon_1_lcd", "agumon_2_lcd", "agumon_3_lcd", "agumon_0_reno", "agumon_1_reno", "agumon_2_reno", "agumon_3_reno", "agumon_0_galactico", "agumon_1_galactico", "agumon_2_galactico", "agumon_3_galactico", "agumon_0_holografica", "agumon_1_holografica", "agumon_2_holografica", "agumon_3_holografica", "leomon", "saberleomon", "hagurumon", "frigimon", "wizardmon", "andromon", "angemon", "angewomon", "bakemon", "birdramon", "biyomon", "darktyrannomon", "devimon", "etemon", "gabumon", "garudamon", "garurumon", "gatomon", "gazimon", "gigadramon", "gizamon", "gomamon", "greymon", "ikkakumon", "kabuterimon", "kuwagamon", "lillymon", "machinedramon", "magnaangemon", "mammothmon", "megadramon", "megakabuterimon", "meramon", "metalgarurumon", "metalgreymon", "metalseadramon", "monochromon", "myotismon", "numemon", "palmon", "patamon", "phantomon", "piedmon", "puppetmon", "raremon", "skullgreymon", "snimon", "tank", "tentomon", "togemon", "tyrannomon", "vegiemon", "wargreymon", "weregarurumon", "zudomon"]);
-function sheetOf(url){ const m = /([^\/]+)\.png$/.exec(url || ''); return m && ANIM_IDS.has(m[1]) ? `sprites/anim/${m[1]}.png` : null; }
+function sheetOf(url){ const m = /([^\/]+)\.(?:png|webp)$/.exec(url || ''); return m && ANIM_IDS.has(m[1]) ? `sprites/anim/${m[1]}.webp` : null; }
 const animTexs = [];   // texturas compartidas (enemigos del mismo tipo marcan el paso a la vez)
 function animTex(url, own = false){
   const sh = sheetOf(url);
@@ -6767,7 +6766,7 @@ function update(dt){
         const shot = new THREE.Mesh(SPROJ_GEO, matFor(0xff1744));
         shot.position.set(b.x, 1 + terrainH(b.x, b.z), b.z);
         world.add(shot);
-        g.eshots.push({x: b.x, z: b.z, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4, mesh: shot, dmg: bd.shotDmg || 8});
+        g.eshots.push({x: b.x, z: b.z, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4, mesh: shot, dmg: (bd.shotDmg || 8) * bossDmgMul()});
       }
     }
     // Mapa 3: el jefe único huye por el portal a mitad de vida en la primera pantalla
@@ -7495,14 +7494,22 @@ function bossPhases(dt){
   b.slamT -= dt;
   if (b.slamT > 0) return;
   b.slamT = b.phase === 3 ? 4 : 6;
-  const n = b.phase === 3 ? 5 : 3, dmg = 14 * (lvlDiff().dmg || 1) * (b.phase === 3 ? 1.25 : 1);
+  const n = b.phase === 3 ? 5 : 3, dmg = 14 * bossDmgMul() * (b.phase === 3 ? 1.25 : 1);
   for (let i = 0; i < n; i++){
     const a = Math.random() * Math.PI * 2, r = i ? 2.5 + Math.random() * 4 : 0;
     const [x, z] = clampArena(g.p.x + Math.cos(a) * r, g.p.z + Math.sin(a) * r, ARENA_R - 1);
     addHazard(x, z, 2.6, 1.3, 'bomb', dmg, 0xff1744);
   }
 }
-// Invoca al jefe de la pantalla cuando quieras: su fuerza no depende del tiempo ni de tu nivel
+// Fuerza de los jefes de zona según el momento en que se invocan. Antes era fija y, a partir del minuto 5,
+// un élite tenía más vida que Andromon (en el minuto 10, el doble que Piedmon). Ahora la vida sigue la
+// misma curva que los enemigos tomando el minuto 3 como base (antes del minuto 3 no baja) y tu etapa de
+// evolución; el daño (contacto, disparos y golpes) sube como el de la horda pero más despacio.
+const BOSS_REF_T = 180;
+const foeHpK = tt => 1 + tt/45 + (tt/115)*(tt/115);
+function bossHpMul(){ return Math.max(1, foeHpK(diffT(g.t)) / foeHpK(BOSS_REF_T)) * evoHp(); }
+function bossDmgMul(){ return (lvlDiff().dmg || 1) * (1 + diffT(g.t)/300); }
+// Invoca al jefe de la pantalla cuando quieras: cuanto más tarde, más fuerte (ver bossHpMul)
 function summonBoss(){
   if (!isPortalMap() || g.mode === 'surv' || state !== 'play') return;
   const def = zoneDef().boss;
@@ -7511,7 +7518,7 @@ function summonBoss(){
   if (g.portalOpen){ announce('El portal ya está abierto', 'Ve al norte para cruzarlo', '#3de0ff'); return; }
   if (g.bossDown) return;
   if (!nearPortal()){ announce('Ve al portal', 'Invoca a ' + def.name + ' junto al portal del norte', '#3de0ff'); return; }
-  const max = def.hp * lvlDiff().boss;
+  const max = Math.round(def.hp * lvlDiff().boss * bossHpMul());
   const hp = def.resume && g.bossLeftHp ? g.bossLeftHp : max;
   // Aparece delante del portal, entre el portal y el jugador
   const away = Math.atan2(g.p.z - PORTAL.z, g.p.x - PORTAL.x);
@@ -7520,7 +7527,7 @@ function summonBoss(){
   world.add(mesh);
   const shadow = makeShadow(5);
   world.add(shadow);
-  g.boss = {kind: 'boss', boss: true, def, name: def.name, sprite: def.sprite, mesh, shadow, x, z, hp, max, spd: 2.3, r: 2.4, xp: 60, dmg: def.dmg * lvlDiff().dmg, cd: 0};
+  g.boss = {kind: 'boss', boss: true, def, name: def.name, sprite: def.sprite, mesh, shadow, x, z, hp, max, spd: 2.3, r: 2.4, xp: 60, dmg: def.dmg * bossDmgMul(), cd: 0};
   g.enemies.push(g.boss);
   g.bossSpawned = true; g.bossName = def.name; g.bossShotT = 2.2;
   spawnRing(x, z, 0xff1744, 9, 0.9); shake = Math.max(shake, 0.6);
@@ -7623,7 +7630,7 @@ function updateHUD(){
     chipsEl.dataset.k = chipKey;
     chipsEl.innerHTML = `<span>${HUD_IC.kills}<b>${g.kills}</b></span><span class="c-tix">${HUD_IC.tix}<b>${g.tix}</b></span><span class="c-shr">${HUD_IC.shr}<b>${shrinesDone}/${(g.shrines || []).length}</b></span><span class="c-emb">${HUD_IC.emb}<b>${(g.emblems || []).length}/${EMBLEMS.length}</b></span>`;
   }
-  hudRing(); hudEmblems();
+  hudEmblems();
   document.querySelector('.hud-hp').classList.toggle('low', p.hp < p.maxHp*0.3);
   const tt = TITLES.find(t => t.id === extra.title);
   document.getElementById('hudTitle').textContent = tt ? tt.name : '';
@@ -8103,28 +8110,9 @@ function updateBossMechanics(dt){
 const hudImg = f => `<img class="hic" src="ui/hud/${f}.png" alt="">`;
 const hudArt = f => `<img class="hic art" src="ui/hud/${f}.webp" alt="">`;
 const HUD_IC = {kills: hudArt('ic_bajas'), tix: hudArt('ic_ticket'), shr: hudArt('ic_santuario'), dash: hudArt('ic_dash'), emb: hudArt('ic_emblema'), boss: hudImg('jefe')};
-// Aros del retrato por etapa: hueco interior (diámetro y centro, en px sobre 256) medido en cada imagen
-const HUD_RINGS = [{d: 177, x: 127, y: 127}, {d: 164, x: 127, y: 137}, {d: 155, x: 126, y: 130}, {d: 124, x: 127, y: 126}];
 // Ilustración de cada carta de mejora pasiva
 const CARD_ART = {'Daño +20%': 'dano', 'Cadencia +15%': 'cadencia', 'Velocidad +10%': 'velocidad', '+25 vida máx. y cura': 'vida', 'Proyectil / cuchilla +1': 'proyectil',
   'Área +20%': 'area', 'Imán +50%': 'iman', 'Probabilidad crítica +8%': 'critico', 'Daño crítico +25%': 'dano_critico', 'Robo de vida': 'robo_vida', 'Dash −20% espera': 'dash', 'Armadura +8%': 'armadura'};
-function hudRing(){
-  const el = document.getElementById('pring'); if (!el) return;
-  el.style.display = 'none'; return;   // sin aro: el retrato es sólo el icono del selector
-  const cosmetic = !!frameClass();
-  const st = Math.min(3, g.ch.evolved | 0), r = HUD_RINGS[st], h = r.d*0.94;   // el hueco tapa un poco el borde del icono
-  el.style.display = cosmetic ? 'none' : 'block';
-  if (cosmetic){ document.getElementById('pimg').style.transform = ''; el.dataset.st = ''; return; }
-  if (el.dataset.st === String(st)) return;
-  el.dataset.st = st;
-  el.src = `ui/hud/marco_${st}.webp`;
-  // El aro mide siempre 1,65 veces el retrato; el icono se encoge para caber en el hueco de cada aro
-  const W = 165;
-  el.style.width = el.style.height = W + '%';
-  el.style.left = (50 - r.x/256*W) + '%';
-  el.style.top = (50 - r.y/256*W) + '%';
-  document.getElementById('pimg').style.transform = `scale(${Math.min(1, W/100*h/256).toFixed(3)})`;
-}
 function hudEmblems(){
   const el = document.getElementById('hudEmb'); if (!el) return;
   const key = (g.emblems || []).join(',') + '|' + (g.sups || []).map(s => s.key + s.st).join(',');
@@ -8487,7 +8475,7 @@ function showEncargos(){
     const evRows = EVENT_QUESTS.map(q => row(ev.done.includes(q.id), q.t, questProg(ev, q), q.goal, rw(q.bits, q.tix)));
     parts.push(panel('eq-ev', 'ic_evento', 'Evento', `${EVENT.name} · quedan ${days} ${days === 1 ? 'día' : 'días'}`, evRows, ev.done.length, evRows.length));
   }
-  menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios se renuevan cada día. Los semanales y los de evento suman lo que haces en todas tus partidas. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d}</p>`);
+  menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios se renuevan cada día. Los semanales y los de evento suman lo que haces en todas tus partidas. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d} <span>No se aplica en Fácil ni en tus ${WEEKLY_MIN_RUNS} primeras partidas.</span></p>`);
   const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('eq-dialog');
 }
 function showLogros(){
@@ -8555,8 +8543,13 @@ const WEEKLY_MODS = [
   {id:'horda',   name:'Horda', d:'Aparecen enemigos un 40% más a menudo.', apply: () => { g.mod.spawnMul = 0.6; }}
 ];
 function weeklyMod(){ const n = WEEKLY_MODS.length; return WEEKLY_MODS[((weekNum() % n) + n) % n]; }
+// El modificador no se aplica en Fácil ni en las 3 primeras partidas de la cuenta: un jugador nuevo no debe
+// empezar sin curación o con un 40% menos de vida sin saberlo
+const WEEKLY_MIN_RUNS = 3;
+function totalPlays(){ return Object.values(loadJSON('digibonk3d-stats', {})).reduce((n, s) => n + ((s && s.plays) || 0), 0); }
 function applyWeekly(){
   g.mod = {spawnMul: 1};
+  if (g.diff === 'facil' || totalPlays() < WEEKLY_MIN_RUNS) return;
   const m = weeklyMod();
   m.apply();
   g.mod.id = m.id;
@@ -8663,7 +8656,7 @@ function spendUsable(bn, n){
 const EVENT = {name:'Navidad Digital', start: Date.parse('2026-11-01T00:00:00'), end: Date.parse('2026-12-31T23:59:59')};
 function eventActive(){ const now = Date.now(); return now >= EVENT.start && now <= EVENT.end; }
 // Skins por personaje (recoloreados). src: 'base' | 'logro' | 'gacha' | 'evento'
-// Cada skin usa sus hojas sprites/anim/<digimon>_<etapa>_<skin>.png (importadas con importar_hoja.py); sin hoja no aparece
+// Cada skin usa sus hojas sprites/anim/<digimon>_<etapa>_<skin>.webp (importadas con importar_hoja.py); sin hoja no aparece
 const SKINS = [
   {id:'clasico',   name:'Clásico',    src:'base',   tier:'n', f:''},
   {id:'galactico', name:'Galáctico',  src:'banner', tier:'r', desc:'Skin galáctica del banner permanente (cambia cada semana)'},
@@ -8718,7 +8711,7 @@ function grantSkinAt(key, st, id){
 function ownedSkins(key){ return ownedSkinsAt(key, 0); }
 function ownsAnyStage(key, id){ for (let st = 0; st < stageCount(key); st++) if (ownsAt(key, st, id)) return true; return false; }
 // Skins que se muestran en una etapa: las ocultas (variocolor) solo cuando se tienen
-// Una skin solo existe para un Digimon y etapa si tiene su hoja dibujada (sprites/anim/<digimon>_<etapa>_<skin>.png)
+// Una skin solo existe para un Digimon y etapa si tiene su hoja dibujada (sprites/anim/<digimon>_<etapa>_<skin>.webp)
 function skinHasArt(key, st, id){ return id === 'clasico' || ANIM_IDS.has(`${key}_${st}_${id}`); }
 // Skins de una línea entera: las que tienen hoja en alguna etapa
 function skinLineArt(key, id){ for (let st = 0; st < stageCount(key); st++) if (skinHasArt(key, st, id)) return st; return -1; }
@@ -8777,7 +8770,7 @@ function buildSkins(){
       for (const sk of SKINS){
         if (sk.id === 'clasico') continue;
         // hoja animada de la skin (importada con sprites/anim/importar_hoja.py); sin hoja, la skin usa el sprite base
-        if (ANIM_IDS.has(`${key}_${st}_${sk.id}`)) skinURL[`${key}|${st}|${sk.id}`] = `sprites/anim/${key}_${st}_${sk.id}.png`;
+        if (ANIM_IDS.has(`${key}_${st}_${sk.id}`)) skinURL[`${key}|${st}|${sk.id}`] = `sprites/anim/${key}_${st}_${sk.id}.webp`;
       }
     }
   }

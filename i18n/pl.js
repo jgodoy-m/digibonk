@@ -1013,4 +1013,5 @@ I18N.add('pl', {
   "Recuperas 1 PS cada 3 enemigos derrotados.": "Odzyskujesz 1 PŻ za każdych 3 pokonanych wrogów.",
   "¡Corrupción de datos!": "Uszkodzenie danych!",
   "Si sigues quieto pierdes vida cada segundo": "Jeśli dalej stoisz w miejscu, co sekundę tracisz życie",
+  "No se aplica en Fácil ni en tus {0} primeras partidas.": "Nie działa na poziomie Łatwy ani w twoich pierwszych {0} grach.",
 });

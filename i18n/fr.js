@@ -1007,4 +1007,5 @@ I18N.add('fr', {
   "Recuperas 1 PS cada 3 enemigos derrotados.": "Tu récupères 1 PV tous les 3 ennemis vaincus.",
   "¡Corrupción de datos!": "Corruption de données !",
   "Si sigues quieto pierdes vida cada segundo": "Si tu restes immobile, tu perds des PV chaque seconde",
+  "No se aplica en Fácil ni en tus {0} primeras partidas.": "Ne s'applique pas en Facile ni lors de vos {0} premières parties.",
 });
