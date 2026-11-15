@@ -1,6 +1,6 @@
 # Nube y ranking (Supabase)
 
-El juego funciona sin esto: con `CLOUD_CFG` vacío en `index.html` todo se guarda en el navegador, como antes.
+El juego funciona sin esto: con `supabase_url` vacío en `sitio.json` todo se guarda en el navegador, como antes.
 Para activar el guardado en la nube y el ranking por regiones:
 
 1. Crea un proyecto gratis en https://supabase.com (región: Europa, p. ej. Frankfurt).
@@ -11,13 +11,20 @@ Para activar el guardado en la nube y el ranking por regiones:
    - Recomendado: **Attack Protection → CAPTCHA** más adelante, si aparecen cuentas basura.
 4. **Authentication → Emails → Templates**: en **Magic Link** y en **Change Email Address**, añade el código al texto, por ejemplo
    `Tu código de DigiBonk: {{ .Token }}`. El juego pide ese código de 6 cifras (no usa enlaces, así funciona también dentro de itch.io).
-5. **Project Settings → API**: copia la *Project URL* y la clave *anon public* en `index.html`:
-   ```js
-   const CLOUD_CFG = {url: 'https://xxxx.supabase.co', key: 'eyJ...'};
+5. **Project Settings → API**: copia la *Project URL* y la clave *anon public* (o *publishable*) en `sitio.json`
+   y ejecuta `python3 tools/configurar.py`:
+   ```json
+   "supabase_url": "https://xxxx.supabase.co",
+   "supabase_anon_key": "eyJ..."
    ```
    La clave anon es pública por diseño; la seguridad la ponen las reglas de `schema.sql`.
+   **Nunca** pongas la clave *service_role* / *secret*: el script la rechaza.
+   Cuando tengas dominio, ponlo también en **Authentication → URL Configuration → Site URL**.
 6. El correo de Supabase por defecto solo envía unos pocos emails por hora. Para el lanzamiento conviene
    configurar un SMTP propio (Authentication → Emails → SMTP), por ejemplo Resend o Brevo, que tienen plan gratis.
+   Con dominio propio, el remitente puede ser `noreply@tu-dominio` (Resend y Brevo explican qué registros DNS añadir).
+7. En el plan gratis, Supabase pausa el proyecto tras 7 días sin ninguna visita. Con jugadores no pasa;
+   si se pausa, se reactiva desde el panel con un clic.
 
 ## Cómo funciona
 

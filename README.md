@@ -38,4 +38,8 @@ Luego abre `http://localhost:8765/` en el navegador.
 
 ## Nube y ranking
 
-Guardado en la nube entre dispositivos y ranking por regiones con Supabase. Está apagado hasta rellenar `CLOUD_CFG` en `index.html`; los pasos están en [`supabase/README.md`](supabase/README.md).
+Guardado en la nube entre dispositivos y ranking por regiones con Supabase. Está apagado hasta rellenar Supabase en `sitio.json`; los pasos están en [`supabase/README.md`](supabase/README.md).
+
+## Dominio, Ko-fi y redes
+
+El dominio (y la imagen al compartir el enlace), la nube, Ko-fi, Discord y X se configuran en `sitio.json` y se aplican con `python3 tools/configurar.py`. Guía completa en [`LANZAMIENTO.md`](LANZAMIENTO.md).
