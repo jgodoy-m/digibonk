@@ -1021,4 +1021,18 @@ I18N.add('ko', {
   "¡Corrupción de datos!": "데이터 손상!",
   "Si sigues quieto pierdes vida cada segundo": "계속 멈춰 있으면 매초 체력이 줄어든다",
   "No se aplica en Fácil ni en tus {0} primeras partidas.": "쉬움 난이도와 처음 {0}판에는 적용되지 않습니다.",
+  // Tutorial de la primera partida y aviso de gráficos perdidos
+  "Objetivo": "목표",
+  "Desliza el pulgar en la mitad izquierda para moverte": "왼쪽 절반을 엄지로 밀어 이동하세요",
+  "Muévete con WASD o las flechas": "WASD 또는 방향키로 이동하세요",
+  "Tu Digimon ataca solo. Tú esquiva a la horda y no te quedes quieto": "디지몬은 알아서 공격해요. 당신은 무리를 피하며 계속 움직이세요",
+  "Recoge los datos que sueltan los enemigos para subir de nivel": "적이 떨어뜨린 데이터를 주워 레벨을 올리세요",
+  "Pulsa DASH para esquivar rápido": "DASH를 눌러 빠르게 피하세요",
+  "Pulsa Shift para hacer un dash y esquivar": "Shift를 눌러 대시로 피하세요",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»": "준비되면 북쪽 포털(미니맵에 표시)로 가서 「보스 소환」을 누르세요",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe": "준비되면 북쪽 포털(미니맵에 표시)로 가서 B를 눌러 보스를 소환하세요",
+  "Recuperando los gráficos…": "그래픽 복구 중…",
+  "El navegador ha liberado la memoria gráfica. La partida está en pausa.": "브라우저가 그래픽 메모리를 해제했어요. 게임이 일시 정지되었습니다.",
+  "No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.": "그래픽을 복구하지 못했어요. 게임을 새로고침하세요. 저장된 진행 상황은 유지됩니다.",
+  "Recargar el juego": "게임 새로고침",
 });

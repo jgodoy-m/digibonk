@@ -1009,4 +1009,18 @@ I18N.add('pt', {
   "¡Corrupción de datos!": "Corrupção de dados!",
   "Si sigues quieto pierdes vida cada segundo": "Se continuares parado perdes vida a cada segundo",
   "No se aplica en Fácil ni en tus {0} primeras partidas.": "Não se aplica no Fácil nem nas suas {0} primeiras partidas.",
+  // Tutorial de la primera partida y aviso de gráficos perdidos
+  "Objetivo": "Objetivo",
+  "Desliza el pulgar en la mitad izquierda para moverte": "Deslize o polegar na metade esquerda para se mover",
+  "Muévete con WASD o las flechas": "Mova-se com WASD ou as setas",
+  "Tu Digimon ataca solo. Tú esquiva a la horda y no te quedes quieto": "Seu Digimon ataca sozinho. Você desvia da horda e não fica parado",
+  "Recoge los datos que sueltan los enemigos para subir de nivel": "Pegue os dados que os inimigos soltam para subir de nível",
+  "Pulsa DASH para esquivar rápido": "Toque em DASH para desviar rápido",
+  "Pulsa Shift para hacer un dash y esquivar": "Aperte Shift para dar um dash e desviar",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»": "Quando quiser, vá ao portal do norte (no minimapa) e toque em «Invocar chefe»",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe": "Quando quiser, vá ao portal do norte (no minimapa) e aperte B para invocar o chefe",
+  "Recuperando los gráficos…": "Recuperando os gráficos…",
+  "El navegador ha liberado la memoria gráfica. La partida está en pausa.": "O navegador liberou a memória gráfica. A partida está pausada.",
+  "No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.": "Não foi possível recuperar os gráficos. Recarregue o jogo: seu progresso salvo é mantido.",
+  "Recargar el juego": "Recarregar o jogo",
 });

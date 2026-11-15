@@ -1014,4 +1014,18 @@ I18N.add('pl', {
   "¡Corrupción de datos!": "Uszkodzenie danych!",
   "Si sigues quieto pierdes vida cada segundo": "Jeśli dalej stoisz w miejscu, co sekundę tracisz życie",
   "No se aplica en Fácil ni en tus {0} primeras partidas.": "Nie działa na poziomie Łatwy ani w twoich pierwszych {0} grach.",
+  // Tutorial de la primera partida y aviso de gráficos perdidos
+  "Objetivo": "Cel",
+  "Desliza el pulgar en la mitad izquierda para moverte": "Przesuń kciukiem po lewej połowie ekranu, aby się poruszać",
+  "Muévete con WASD o las flechas": "Poruszaj się klawiszami WASD lub strzałkami",
+  "Tu Digimon ataca solo. Tú esquiva a la horda y no te quedes quieto": "Twój Digimon atakuje sam. Ty unikaj hordy i nie stój w miejscu",
+  "Recoge los datos que sueltan los enemigos para subir de nivel": "Zbieraj dane upuszczane przez wrogów, aby awansować",
+  "Pulsa DASH para esquivar rápido": "Dotknij DASH, aby szybko zrobić unik",
+  "Pulsa Shift para hacer un dash y esquivar": "Naciśnij Shift, aby zrobić zryw i uniknąć",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»": "Kiedy chcesz, idź do portalu na północy (na minimapie) i dotknij „Przywołaj bossa”",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe": "Kiedy chcesz, idź do portalu na północy (na minimapie) i naciśnij B, aby przywołać bossa",
+  "Recuperando los gráficos…": "Przywracanie grafiki…",
+  "El navegador ha liberado la memoria gráfica. La partida está en pausa.": "Przeglądarka zwolniła pamięć grafiki. Rozgrywka jest wstrzymana.",
+  "No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.": "Nie udało się przywrócić grafiki. Wczytaj grę ponownie: zapisany postęp zostanie zachowany.",
+  "Recargar el juego": "Wczytaj grę ponownie",
 });

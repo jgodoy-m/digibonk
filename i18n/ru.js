@@ -1020,4 +1020,18 @@ I18N.add('ru', {
   "¡Corrupción de datos!": "Порча данных!",
   "Si sigues quieto pierdes vida cada segundo": "Если продолжишь стоять на месте, будешь терять здоровье каждую секунду",
   "No se aplica en Fácil ni en tus {0} primeras partidas.": "Не действует на лёгком уровне и в первых {0} забегах.",
+  // Tutorial de la primera partida y aviso de gráficos perdidos
+  "Objetivo": "Цель",
+  "Desliza el pulgar en la mitad izquierda para moverte": "Проведите большим пальцем по левой половине экрана, чтобы двигаться",
+  "Muévete con WASD o las flechas": "Двигайтесь клавишами WASD или стрелками",
+  "Tu Digimon ataca solo. Tú esquiva a la horda y no te quedes quieto": "Ваш Дигимон атакует сам. Уворачивайтесь от орды и не стойте на месте",
+  "Recoge los datos que sueltan los enemigos para subir de nivel": "Собирайте данные, которые роняют враги, чтобы повышать уровень",
+  "Pulsa DASH para esquivar rápido": "Нажмите DASH, чтобы быстро увернуться",
+  "Pulsa Shift para hacer un dash y esquivar": "Нажмите Shift, чтобы сделать рывок и увернуться",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»": "Когда будете готовы, идите к северному порталу (на мини-карте) и нажмите «Призвать босса»",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe": "Когда будете готовы, идите к северному порталу (на мини-карте) и нажмите B, чтобы призвать босса",
+  "Recuperando los gráficos…": "Восстанавливаем графику…",
+  "El navegador ha liberado la memoria gráfica. La partida está en pausa.": "Браузер освободил графическую память. Забег на паузе.",
+  "No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.": "Не удалось восстановить графику. Перезагрузите игру: сохранённый прогресс останется.",
+  "Recargar el juego": "Перезагрузить игру",
 });

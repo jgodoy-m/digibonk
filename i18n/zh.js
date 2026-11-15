@@ -1022,4 +1022,18 @@ I18N.add('zh', {
   "¡Corrupción de datos!": "数据损坏！",
   "Si sigues quieto pierdes vida cada segundo": "继续站着不动会每秒损失生命",
   "No se aplica en Fácil ni en tus {0} primeras partidas.": "简单难度和你的前 {0} 局不生效。",
+  // Tutorial de la primera partida y aviso de gráficos perdidos
+  "Objetivo": "目标",
+  "Desliza el pulgar en la mitad izquierda para moverte": "在左半边滑动拇指来移动",
+  "Muévete con WASD o las flechas": "用 WASD 或方向键移动",
+  "Tu Digimon ataca solo. Tú esquiva a la horda y no te quedes quieto": "你的数码宝贝会自动攻击。你负责躲开怪群，别停下",
+  "Recoge los datos que sueltan los enemigos para subir de nivel": "拾取敌人掉落的数据来升级",
+  "Pulsa DASH para esquivar rápido": "点击 DASH 快速闪避",
+  "Pulsa Shift para hacer un dash y esquivar": "按 Shift 冲刺闪避",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»": "准备好后，前往北方传送门（小地图上有标记），点击“召唤头目”",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe": "准备好后，前往北方传送门（小地图上有标记），按 B 召唤头目",
+  "Recuperando los gráficos…": "正在恢复画面…",
+  "El navegador ha liberado la memoria gráfica. La partida está en pausa.": "浏览器释放了图形内存。游戏已暂停。",
+  "No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.": "无法恢复画面。请重新加载游戏：已保存的进度不会丢失。",
+  "Recargar el juego": "重新加载游戏",
 });
