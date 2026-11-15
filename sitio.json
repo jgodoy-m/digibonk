@@ -1,0 +1,10 @@
+{
+  "_ayuda": "Rellena lo que tengas y ejecuta: python3 tools/configurar.py  (lo vacío se queda apagado). Pasos en LANZAMIENTO.md",
+  "dominio": "",
+  "supabase_url": "",
+  "supabase_anon_key": "",
+  "kofi": "",
+  "discord": "",
+  "discord_bugs": "",
+  "x": ""
+}
