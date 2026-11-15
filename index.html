@@ -55,6 +55,18 @@ canvas{display:block}
 #combo{position:fixed;right:24px;top:200px;padding:4px 14px;border-radius:10px;background:#ffd54f;color:#1a1200;
   font-weight:900;font-size:28px;box-shadow:0 0 14px rgba(255,213,79,.6);pointer-events:none}
 #combo:empty{display:none}
+/* Presentación y derrota de jefes: cartel grande con el sprite (pensado para que luzca en vídeos cortos) */
+#bossCard{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:8;opacity:0;transform:scale(1.5);transition:opacity .35s,transform .35s}
+#bossCard.show{opacity:1;transform:none;transition:opacity .12s,transform .18s cubic-bezier(.2,1.6,.4,1)}
+#bossCard .bc-band{position:absolute;left:-5%;right:-5%;top:50%;height:150px;transform:translateY(-50%) skewY(-4deg);background:linear-gradient(90deg,transparent,var(--bc,#ff1744) 18%,var(--bc,#ff1744) 82%,transparent);opacity:.82;box-shadow:0 0 40px var(--bc,#ff1744)}
+#bossCard .bc-in{position:relative;display:flex;align-items:center;gap:22px;transform:skewY(-4deg)}
+#bossCard img{width:170px;height:170px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 6px 0 #000) drop-shadow(0 0 18px #fff)}
+#bossCard .bc-t{font:900 clamp(30px,6vw,64px) 'Orbitron',system-ui,sans-serif;letter-spacing:4px;color:#fff;text-shadow:0 5px 0 #000,0 0 24px #000;line-height:1}
+#bossCard .bc-s{font:800 clamp(12px,1.8vw,18px) system-ui,sans-serif;letter-spacing:3px;color:#fff;text-transform:uppercase;margin-top:8px;text-shadow:0 2px 0 #000}
+#bossCard.ko .bc-t{color:#ffd54f}
+#bossCard.small .bc-band{height:100px}
+#bossCard.small img{width:110px;height:110px}
+.reduce-motion #bossCard,.reduce-motion #bossCard.show{transform:none}
 #banner{position:fixed;left:50%;top:26%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;opacity:0;white-space:nowrap}
 #banner b{display:block;font-size:46px;letter-spacing:3px;color:inherit;text-shadow:0 4px 0 #000,0 0 24px currentColor}
 #banner small{display:block;margin-top:4px;font-size:15px;letter-spacing:1px;color:#e6f4ff;text-shadow:0 2px 4px #000}
@@ -3453,6 +3465,7 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 <div id="flash"style="position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none"></div>
 <div id="hurt"></div>
 <div id="banner"></div>
+<div id="bossCard"><div class="bc-band"></div><div class="bc-in"><img alt=""><div><div class="bc-t"></div><div class="bc-s"></div></div></div></div>
 <div id="tutoTip" aria-live="polite"></div>
 <div id="glLost" role="alertdialog" aria-live="assertive"><div><b>Recuperando los gráficos…</b><p id="glLostP">El navegador ha liberado la memoria gráfica. La partida está en pausa.</p><button type="button" id="glReload" hidden>Recargar el juego</button></div></div>
 <div id="prompt"></div>
@@ -3610,12 +3623,12 @@ function randomSpawn(){
   return {x: Math.cos(a)*r, z: Math.sin(a)*r};
 }
 const CHARS = {
-  agumon:  {name:'Agumon',  desc:'Dispara al enemigo más cercano', sprite:'sprites/adventure/agumon.png',  kind:'shot',  cd:0.83, dmg:10},
-  gabumon: {name:'Gabumon', desc:'Onda de energía alrededor',      sprite:'sprites/adventure/gabumon.png', kind:'ring',  cd:1.0, dmg:10},
-  palmon:  {name:'Palmon',  desc:'Cuchillas giratorias',           sprite:'sprites/adventure/palmon.png',  kind:'orbit', cd:0,   dmg:10},
+  agumon:  {name:'Agumon',  desc:'Bolas de fuego que estallan al impactar', sprite:'sprites/adventure/agumon.png',  kind:'shot',  cd:0.8, dmg:13, splash:1.8, fx:'fire'},
+  gabumon: {name:'Gabumon', desc:'Onda de energía alrededor que atraviesa', sprite:'sprites/adventure/gabumon.png', kind:'ring',  cd:1.0, dmg:12, pierce:1, fx:'bluefire'},
+  palmon:  {name:'Palmon',  desc:'Cuchillas giratorias',           sprite:'sprites/adventure/palmon.png',  kind:'orbit', cd:0,   dmg:15, fx:'leaf'},
   garurumon:{name:'Garurumon', desc:'Colmillos rápidos hacia el enemigo más cercano', sprite:'sprites/adventure/garurumon.png', kind:'shot',  cd:0.83, dmg:10},
-  tentomon: {name:'Tentomon',   desc:'Descarga eléctrica en círculo',                 sprite:'sprites/adventure/tentomon.png',  kind:'ring',  cd:1.2, dmg:10},
-  gatomon:  {name:'Gatomon',    desc:'Garras giratorias',                             sprite:'sprites/adventure/gatomon.png',   kind:'orbit', cd:0,   dmg:10}
+  tentomon: {name:'Tentomon',   desc:'Descarga eléctrica en círculo',                 sprite:'sprites/adventure/tentomon.png',  kind:'ring',  cd:1.1, dmg:12, fx:'spark'},
+  gatomon:  {name:'Gatomon',    desc:'Puño de Gato: zarpazo que salta de enemigo en enemigo', sprite:'sprites/adventure/gatomon.png',   kind:'chain', cd:0.75, dmg:15, fx:'claw'}
 };
 // Digievolución (se activa al llegar a este nivel)
 // Etapas de digievolución: se alcanzan a estos niveles (las que tenga cada línea en Digimon Adventure)
@@ -3644,14 +3657,14 @@ const SEASONS = {
   adventure: {name:'Digimon Adventure', chars:['agumon','gabumon','biyomon','tentomon','palmon','gomamon','patamon','gatomon','leomon','hagurumon','frigimon','wizardmon']}
 };
 Object.assign(CHARS, {
-  gomamon: {name:'Gomamon', desc:'Burbujas al enemigo más cercano', sprite:'sprites/adventure/gomamon.png', kind:'shot', cd:0.92, dmg: 11},
-  patamon: {name:'Patamon', desc:'Ráfagas rápidas al enemigo más cercano', sprite:'sprites/adventure/patamon.png', kind:'shot', cd:0.58, dmg:7},
-  biyomon: {name:'Biyomon', desc:'Ráfaga de viento al enemigo más cercano', sprite:'sprites/adventure/biyomon.png', kind:'shot', cd:1.17, dmg:14},
+  gomamon: {name:'Gomamon', desc:'Burbujas que atraviesan y frenan', sprite:'sprites/adventure/gomamon.png', kind:'shot', cd:0.85, dmg:13, pierce:2, slow:1.5, fx:'bubble'},
+  patamon: {name:'Patamon', desc:'Ráfagas rápidas que atraviesan a un enemigo', sprite:'sprites/adventure/patamon.png', kind:'shot', cd:0.5, dmg:10, pierce:1, fx:'air'},
+  biyomon: {name:'Biyomon', desc:'Remolino de viento que atraviesa la fila', sprite:'sprites/adventure/biyomon.png', kind:'shot', cd:1.0, dmg:14, pierce:6, fx:'greenfire'},
   // Compañeros que no son de los niños elegidos: cada uno estrena un tipo de ataque propio
-  leomon:    {name:'Leomon',    desc:'Puño de la Bestia: golpe en abanico hacia donde miras', sprite:'sprites/adventure/leomon.png',    kind:'melee',  cd:0.6, dmg:30},
-  hagurumon: {name:'Hagurumon', desc:'Deja torretas de engranaje que disparan solas',         sprite:'sprites/adventure/hagurumon.png', kind:'turret', cd:2.6, dmg:7},
-  frigimon:  {name:'Frigimon',  desc:'Ventisca alrededor: daña y frena a los enemigos',        sprite:'sprites/adventure/frigimon.png',  kind:'frost',  cd:1.6, dmg:9},
-  wizardmon: {name:'Wizardmon', desc:'Círculos mágicos que estallan bajo los enemigos',        sprite:'sprites/adventure/wizardmon.png', kind:'zone',   cd:1.4, dmg:16}
+  leomon:    {name:'Leomon',    desc:'Puño de la Bestia: golpe en abanico hacia donde miras', sprite:'sprites/adventure/leomon.png',    kind:'melee',  cd:0.6, dmg:26, fx:'fire'},
+  hagurumon: {name:'Hagurumon', desc:'Deja torretas de engranaje que disparan solas',         sprite:'sprites/adventure/hagurumon.png', kind:'turret', cd:2.2, dmg:11, fx:'gear'},
+  frigimon:  {name:'Frigimon',  desc:'Ventisca alrededor: daña y frena a los enemigos',        sprite:'sprites/adventure/frigimon.png',  kind:'frost',  cd:1.6, dmg:9, fx:'snow'},
+  wizardmon: {name:'Wizardmon', desc:'Círculos mágicos que estallan bajo los enemigos',        sprite:'sprites/adventure/wizardmon.png', kind:'zone',   cd:1.5, dmg:11, fx:'star'}
 });
 // Compañeros iniciales: solo los de los niños elegidos (el resto se desbloquea jugando)
 const STARTERS = ['agumon','gabumon','biyomon','tentomon','palmon','gomamon','patamon','gatomon'];
@@ -3659,6 +3672,9 @@ const ENEMY = {
   basic: {sprite:'sprites/numemon.png', hp:22, spd:3.2, r:0.9, scale:1.8, xp:2, dmg:5},
   fast:  {sprite:'sprites/meramon.png', hp:14, spd:6.0, r:0.6, scale:1.4, xp:3, dmg:4},
   tank:  {sprite:'sprites/tank.png',  hp:90, spd:2.0, r:1.3, scale:2.6, xp:8, dmg:12},
+  // Tiradores: se quedan a distancia y disparan bolas lentas. Embestidores: se paran, avisan y cargan en línea recta
+  shooter: {sprite:'sprites/adventure/mekanorimon.png', hp:30, spd:2.8, r:0.9, scale:2.0, xp:4, dmg:4},
+  charger: {sprite:'sprites/adventure/tuskmon.png', hp:48, spd:2.6, r:1.0, scale:2.3, xp:5, dmg:8},
   elite: {sprite:'sprites/skullgreymon.png', hp:180, spd:2.6, r:1.5, scale:3.0, xp:20, dmg:14},
   mini:  {sprite:'sprites/devimon.png', hp:300, spd:2.5, r:1.9, scale:4.6, xp:60, dmg:16}
 };
@@ -4491,7 +4507,7 @@ function setHud(v){
   if (!v) document.getElementById('hurt').style.opacity = 0;
 }
 // Barra de estadística (0-100%)
-const ATTACK_NAME = {shot:'Disparo dirigido', ring:'Onda circular', orbit:'Órbita defensiva', melee:'Golpe cuerpo a cuerpo', turret:'Torretas', frost:'Ventisca de control', zone:'Magia de área'};
+const ATTACK_NAME = {shot:'Disparo dirigido', ring:'Onda circular', orbit:'Órbita defensiva', melee:'Golpe cuerpo a cuerpo', turret:'Torretas', frost:'Ventisca de control', zone:'Magia de área', chain:'Golpe en cadena'};
 
 // ---------- Idioma: los textos se escriben en español y i18n/i18n.js los traduce en pantalla al idioma elegido ----------
 let LANG = window.I18N ? I18N.lang : 'es';
@@ -5571,14 +5587,14 @@ const ATTR_ICON = {vac: '✚', dat: '◆', vir: '✖'};
 function skillFacts(id){
   const K = SKILL_K, L = 1;
   const f = {
-    aura:     [['Daño', (1.5 + 0.8*L)*K], ['Cada', '0,3 s'], ['Radio', (2.6 + 0.9*L) + ' m']],
-    tornado:  [['Daño', (3 + 1.5*L)*K], ['Bits', L + 1], ['Radio', '3,4 m']],
-    pulso:    [['Daño', (6 + 2*L)*K], ['Recarga', fmtN(3.2 - 0.4*L) + ' s'], ['Radio', (6.5 + 1.5*L) + ' m']],
-    espiral:  [['Daño', (7 + 3*L)*K], ['Recarga', '0,9 s'], ['Atraviesa', 1 + L]],
-    cuchilla: [['Daño', (6 + 2*L)*K], ['Recarga', '1,6 s'], ['Hojas', 2*L]],
-    laser:    [['Daño', (12 + 4*L)*K], ['Recarga', '2,8 s'], ['Alcance', '18 m']],
-    mina:     [['Daño', (12 + 4*L)*K], ['Radio', fmtN(2.6 + 0.6*L) + ' m'], ['Una cada', '2,2 m']],
-    meteoro:  [['Daño', (10 + 3*L)*K], ['Recarga', '2,6 s'], ['Impactos', L + 1]]
+    aura:     [['Daño', (2.5 + 1.2*L)*K], ['Cada', '0,3 s'], ['Radio', fmtN(3.2 + 1.0*L) + ' m']],
+    tornado:  [['Daño', (6 + 3*L)*K], ['Bits', L + 1], ['Radio', '3,4 m']],
+    pulso:    [['Daño', (6 + 2*L)*K], ['Recarga', fmtN(4.2 - 0.4*L) + ' s'], ['Radio', (6.5 + 1.5*L) + ' m']],
+    espiral:  [['Daño', (14 + 6*L)*K], ['Recarga', '0,6 s'], ['Atraviesa', 2 + L]],
+    cuchilla: [['Daño', (11 + 4*L)*K], ['Recarga', '1,3 s'], ['Hojas', 2*L]],
+    laser:    [['Daño', (16 + 6*L)*K], ['Recarga', '2,4 s'], ['Alcance', '18 m']],
+    mina:     [['Daño', (10 + 3.5*L)*K], ['Radio', fmtN(2.2 + 0.35*L) + ' m'], ['Una cada', '2,2 m']],
+    meteoro:  [['Daño', (11 + 3.5*L)*K], ['Recarga', '3 s'], ['Impactos', L + 1]]
   }[id] || [];
   return f.map(([k, v]) => [k, typeof v === 'number' ? fmtN(v) : v]);
 }
@@ -5586,12 +5602,13 @@ function skillFacts(id){
 function baseFacts(c){
   const dmg = fmtN(c.dmg);
   if (c.kind === 'ring') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Proyectiles', 6], ['Alcance', '8 m']];
-  if (c.kind === 'orbit') return [['Daño', dmg], ['Golpe cada', '0,35 s'], ['Cuchillas', 2], ['Radio', '2,2 m']];
+  if (c.kind === 'orbit') return [['Daño', dmg], ['Golpe cada', '0,25 s'], ['Cuchillas', 2], ['Radio', '3,2 m']];
+  if (c.kind === 'chain') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Saltos', 3], ['Alcance', '6 m']];
   if (c.kind === 'melee') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Abanico', '140°'], ['Alcance', '4,5 m']];
-  if (c.kind === 'turret') return [['Daño', dmg], ['Torreta cada', fmtN(c.cd, 2) + ' s'], ['Torretas', 2], ['Dura', '8 s']];
+  if (c.kind === 'turret') return [['Daño', dmg], ['Torreta cada', fmtN(c.cd, 2) + ' s'], ['Torretas', 3], ['Dura', '10 s']];
   if (c.kind === 'frost') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Frena', '−50% 2 s'], ['Radio', '6 m']];
   if (c.kind === 'zone') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Círculos', 1], ['Radio', '3 m']];
-  return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Proyectiles', 1], ['Alcance', '22 m']];
+  return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], c.splash ? ['Estalla', fmtN(c.splash) + ' m'] : c.pierce ? ['Atraviesa', c.pierce] : ['Proyectiles', 1], ['Alcance', '22 m']];
 }
 const chipsHtml = facts => `<div class="ps-chips">${facts.map(([k, v]) => `<span><small>${k}</small><b>${v}</b></span>`).join('')}</div>`;
 // Victorias, mejor partida y nivel máximo por Digimon (se guardan en digibonk3d-stats)
@@ -5713,8 +5730,8 @@ function renderPickPreview(){
   const idx = SEASONS.adventure.chars.indexOf(k) + 1, at = ATTR_OF[k], emb = EMBLEMS.find(e => e.owner === k);
   const wins = st.wins || {};
   const hp = Math.round(b.hp * labMul('hp')), dmg = c.dmg * b.dmgMul * labMul('dmg'), spd = b.speed * labMul('speed');
-  const rate = c.kind === 'orbit' ? 1 / 0.35 : c.kind === 'ring' ? 6 / c.cd : c.kind === 'melee' ? 3 / c.cd : c.kind === 'turret' ? 1 / 0.7 * 2 : c.kind === 'frost' ? 4 / c.cd : 1.5 / c.cd;
-  const reach = c.kind === 'ring' ? 8 : c.kind === 'orbit' ? 2.2 : c.kind === 'melee' ? 4.5 : c.kind === 'turret' ? 12 : c.kind === 'frost' ? 6 : c.kind === 'zone' ? 16 : 22;
+  const rate = c.kind === 'orbit' ? 1 / 0.25 : c.kind === 'chain' ? 3 / c.cd : c.kind === 'ring' ? 6 / c.cd : c.kind === 'melee' ? 3 / c.cd : c.kind === 'turret' ? 1 / 0.5 * 3 : c.kind === 'frost' ? 4 / c.cd : 1.5 / c.cd;
+  const reach = c.kind === 'ring' ? 8 : c.kind === 'orbit' ? 3.2 : c.kind === 'chain' ? 6 : c.kind === 'melee' ? 4.5 : c.kind === 'turret' ? 12 : c.kind === 'frost' ? 6 : c.kind === 'zone' ? 16 : 22;
   const bar = (label, val, max, shown) => `<div class="ps-bar"><span>${label}</span><div class="ps-meter"><i style="width:${Math.max(6, Math.min(100, Math.round(val / max * 100)))}%"></i></div><b>${shown}</b></div>`;
   const row = (label, val) => `<div class="ps-row"><span>${label}</span><b>${val}</b></div>`;
   el.innerHTML = `
@@ -5745,7 +5762,7 @@ function renderPickPreview(){
       <div class="ps-lbl">En partida</div>
       ${row('PS máx.', hp)}
       ${row('Daño base', fmtN(dmg))}
-      ${row(c.kind === 'orbit' ? 'Golpe cada' : 'Recarga', c.kind === 'orbit' ? '0,35 s' : fmtN(c.cd, 2) + ' s')}
+      ${row(c.kind === 'orbit' ? 'Golpe cada' : 'Recarga', c.kind === 'orbit' ? '0,25 s' : fmtN(c.cd, 2) + ' s')}
       ${row('Velocidad', fmtN(spd))}
       ${row('Prob. crítico', '12%')}
       ${row('Daño crítico', '×2')}
@@ -5942,6 +5959,11 @@ const ZONE_FOES = [
   {basic: ['sprites/numemon.png', 'sprites/adventure/gazimon.png', 'sprites/adventure/vegiemon.png'], fast: ['sprites/meramon.png', 'sprites/adventure/kuwagamon.png'], tank: ['sprites/tank.png', 'sprites/adventure/monochromon.png'], elite: ['sprites/skullgreymon.png', 'sprites/adventure/andromon.png']},
   {basic: ['sprites/adventure/bakemon.png', 'sprites/adventure/gizamon.png', 'sprites/adventure/raremon.png'], fast: ['sprites/adventure/phantomon.png', 'sprites/adventure/snimon.png'], tank: ['sprites/adventure/darktyrannomon.png', 'sprites/adventure/tyrannomon.png'], elite: ['sprites/adventure/megadramon.png', 'sprites/adventure/gigadramon.png', 'sprites/adventure/mammothmon.png']}
 ];
+// Tipos de enemigo nuevos: el mismo aspecto en todos los mapas
+const EXTRA_FOES = {
+  shooter: ['sprites/adventure/mekanorimon.png', 'sprites/adventure/shellmon.png', 'sprites/adventure/gekomon.png'],
+  charger: ['sprites/adventure/tuskmon.png', 'sprites/adventure/unimon.png', 'sprites/adventure/kuwagamon.png']
+};
 // Minijefes en el orden de la serie; el último, Piedmon, es el jefe final (BOSS_AT)
 const MINIS = [
   {at: 180, name: 'Devimon',        sprite: 'sprites/devimon.png',        hp: 300},
@@ -5989,7 +6011,7 @@ function spawnMini(m){
   const hp = m.hp*(1 + diffT(t)/90)*evoHp()*diffMul('hp');
   g.enemies.push({kind: 'mini', name: m.name, sprite: m.sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 2.5, r: 1.9, xp: 60, dmg: 16*(1 + diffT(t)/300)*diffMul('dmg'), cd: 0});
   sfx('boss');
-  announce('¡' + m.name.toUpperCase() + '!', 'Un jefe menor entra en combate', '#ce93d8');
+  bossIntro(g.enemies[g.enemies.length - 1], m.name, 'Jefe menor', '#ce93d8', true);
 }
 function burst(x, z, color){
   for (let i = 0; i < 7; i++){
@@ -6035,20 +6057,24 @@ function popText(x, z, n, color = '#ffeb3b', k = 0.6){
   g.texts.push({s, tex, mat, life: 0.9});
 }
 
+const EVO_TOTAL = {dmg: 1.6, area: 1.15};
 function digivolve(){
   const line = EVO_LINE[g.ch.id], st = (g.ch.evolved | 0) + 1;
   if (!line || st > line.length || g.evoAnim) return;
   const evo = line[st - 1];
   g.ch.evolved = st;
   recordEvolve(g.ch.id);
-  g.p.dmg *= 1.2;
-  g.p.area *= 1.05;
-  g.p.maxHp += 20; g.p.hp += 20;
+  // Todas las líneas acaban con el mismo extra (×1,6 daño, ×1,15 área, +60 vida) repartido entre sus etapas:
+  // así Gatomon o Leomon (una sola evolución) no se quedan atrás frente a Agumon o Gabumon (tres)
+  const n = line.length, inc = Math.round(60/n);
+  g.p.dmg *= Math.pow(EVO_TOTAL.dmg, 1/n);
+  g.p.area *= Math.pow(EVO_TOTAL.area, 1/n);
+  g.p.maxHp += inc; g.p.hp += inc;
   if (st === 1) g.p.count += 1;
   g.evoAnim = {t: 0, dur: 2.6, swapped: false, sprite: spriteOf(g.ch.id, st), name: evo.name};
   shake = Math.max(shake, 0.5);
   sfx('evolve');
-  announce(evo.name + '!', 'Digievolución · +20% daño, +5% área, +20 vida', '#ffd54f');
+  announce(evo.name + '!', `Digievolución · +${Math.round((Math.pow(EVO_TOTAL.dmg, 1/n) - 1)*100)}% daño, +${inc} vida`, '#ffd54f');
 }
 
 // Animación de digievolución: 0-0.6 s brillo y temblor, cambio de sprite con destello y anillo, 0.6-1.6 s asentamiento
@@ -6057,9 +6083,8 @@ let shake = 0;          // intensidad de la sacudida de cámara
 let rings = [];
 // Anillo que se expande: radius = radio final en unidades del mundo; life = duración en segundos
 function spawnRing(x, z, color = 0xffd54f, radius = null, life = 0.7){
-  const mesh = new THREE.Mesh(new THREE.RingGeometry(0.5, 0.7, 32),
-    new THREE.MeshBasicMaterial({color, transparent: true, depthWrite: false}));
-  mesh.rotation.x = -Math.PI/2;
+  const mesh = new THREE.Mesh(FX_PLANE, fxMatOwn('wave', color, 1));   // onda expansiva suave (antes un aro plano)
+  mesh.scale.set(1.4, 1, 1.4);
   mesh.position.set(x, 0.05 + terrainH(x, z), z);
   world.add(mesh);
   const grow = radius ? (radius/0.7 - 1)/life : 12;
@@ -6126,12 +6151,12 @@ function removeDigivice(a){
 function animateEvo(dt){
   for (const r of rings){
     r.t += dt;
-    r.mesh.scale.setScalar(1 + r.t*r.grow);
+    const sc = 1.4*(1 + r.t*r.grow); r.mesh.scale.set(sc, 1, sc);
     r.mesh.material.opacity = Math.max(0, 1 - r.t/r.life);
   }
   rings = rings.filter(r => {
     if (r.t < r.life) return true;
-    world.remove(r.mesh); r.mesh.geometry.dispose(); r.mesh.material.dispose(); return false;   // cada anillo tiene geometría y material propios: liberarlos o se acumulan en la GPU
+    world.remove(r.mesh); r.mesh.material.dispose(); return false;   // cada anillo tiene geometría y material propios: liberarlos o se acumulan en la GPU
   });
   screenFlash = Math.max(0, screenFlash - dt*1.5);
   document.getElementById('flash').style.opacity = screenFlash;
@@ -6165,6 +6190,7 @@ function animateEvo(dt){
     spawnRing(p.x, p.z);
     popText(p.x, p.z, `¡${a.name}!`, '#ffd54f', 2.2);
     screenFlash = 1;
+    if (g.ch.evolved) evoBlast(g.ch.evolved);
   } else {
     const e = Math.min(1, (a.t - 0.6) / 2.0);
     const s = 3.3 - 0.4*e;
@@ -6230,15 +6256,31 @@ function placeTurret(x, z, extra){
   const mesh = new THREE.Mesh(TURRET_GEO, TURRET_MAT);
   mesh.position.set(x, 0.45 + terrainH(x, z), z);
   world.add(mesh);
-  g.turrets.push({x, z, t: 8, cd: 0.2, mesh, extra});
+  g.turrets.push({x, z, t: 10, cd: 0.2, mesh, extra});
   // Como máximo proyectiles + 1 torretas propias a la vez (las del Bonk no cuentan): se quita la más vieja
   const own = g.turrets.filter(t => !t.extra);
-  if (own.length > g.p.count + 1){ const old = own[0]; old.t = 0; }
+  if (own.length > g.p.count + 2){ const old = own[0]; old.t = 0; }
   spawnRing(x, z, 0xbdbdbd, 1.4, 0.35);
 }
+// Rastro del zarpazo de Gatomon: línea brillante que se desvanece enseguida
+function clawLine(x0, z0, x1, z1){
+  const len = Math.hypot(x1 - x0, z1 - z0) || 0.1;
+  // Estela fina del salto y tres zarpazos sobre el enemigo
+  const m = new THREE.Mesh(FX_PLANE, fxMat('beam', 0xfff59d));
+  m.position.set((x0 + x1)/2, 1 + terrainH(x1, z1), (z0 + z1)/2);
+  m.rotation.y = -Math.atan2(z1 - z0, x1 - x0);
+  m.scale.set(len, 1, 0.5);
+  world.add(m);
+  g.sk.beams.push({m, t: 0.04});
+  const c = fxMesh('claw', 2.2, 0xffffff);
+  c.position.set(x1, 1.1 + terrainH(x1, z1), z1);
+  c.rotation.y = Math.random()*Math.PI;
+  world.add(c);
+  g.sk.beams.push({m: c, t: 0});
+}
 function castZone(x, z, delay, r, dmg){
-  const mesh = new THREE.Mesh(new THREE.RingGeometry(r*0.85, r, 28), new THREE.MeshBasicMaterial({color: 0xb388ff, transparent: true, opacity: 0.55, depthWrite: false}));
-  mesh.rotation.x = -Math.PI/2;
+  const mesh = new THREE.Mesh(FX_PLANE, fxMatOwn('rune', 0xb388ff, 0.6));   // círculo mágico que gira y estalla
+  mesh.scale.set(2*r, 1, 2*r);
   mesh.position.set(x, terrainH(x, z) + 0.07, z);
   world.add(mesh);
   g.zones.push({x, z, t: delay, r, dmg, mesh});
@@ -6263,6 +6305,24 @@ function updateKindAttacks(dt){
       }
     }
     if (hit || near.e){ g.wCd = ch.cd * p.cdMul; g.atkT = 0.26; spawnRing(p.x + dx*R*0.55, p.z + dz*R*0.55, 0xffb74d, R*0.6, 0.25); }
+  }
+  if (ch.kind === 'chain' && g.wCd <= 0 && g.enemies.length){
+    // Puño de Gato: golpea al más cercano (6 m) y salta a otros cercanos (4 m); un salto más por proyectil extra
+    let cur = nearestIn(p.x, p.z, 6*p.area);
+    if (cur){
+      g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+      const hit = new Set(), jumps = 2 + p.count;
+      let fx = p.x, fz = p.z;
+      for (let i = 0; i < jumps && cur; i++){
+        hit.add(cur);
+        hurt(cur, ch.dmg*p.dmg*(i ? 0.85 : 1));
+        clawLine(fx, fz, cur.x, cur.z);
+        fx = cur.x; fz = cur.z;
+        let nb = null, nd = 4*p.area;
+        for (const e of g.enemies){ if (e.hp <= 0 || hit.has(e) || e.wild) continue; const d = dist2(e.x, e.z, fx, fz); if (d < nd){ nd = d; nb = e; } }
+        cur = nb;
+      }
+    } else g.wCd = 0.1;
   }
   if (ch.kind === 'turret' && g.wCd <= 0){
     g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
@@ -6289,20 +6349,21 @@ function updateKindAttacks(dt){
     let best = null, bd = 12;
     for (const e of g.enemies){ const d = dist2(e.x, e.z, t.x, t.z); if (e.hp > 0 && d < bd){ bd = d; best = e; } }
     if (!best) continue;
-    t.cd = 0.7 * p.cdMul;
+    t.cd = 0.5 * p.cdMul;
     const d = bd || 1;
-    fireProjectile(t.x, t.z, (best.x - t.x)/d*15, (best.z - t.z)/d*15, ch.dmg*p.dmg, 1, 0xffd54f);
+    fireProjectile(t.x, t.z, (best.x - t.x)/d*15, (best.z - t.z)/d*15, ch.dmg*p.dmg, 1, 0xffd54f, {pierce: 1, fx: 'gear'});
   }
   g.turrets = g.turrets.filter(t => { if (t.t > 0) return true; world.remove(t.mesh); return false; });
   // Círculos mágicos: estallan al acabar su cuenta atrás
   for (const z of g.zones){
     z.t -= dt;
     z.mesh.material.opacity = 0.35 + 0.4*Math.abs(Math.sin(g.t*14));
+    z.mesh.rotation.y += dt*4;
     if (z.t > 0) continue;
     for (const e of g.enemies) if (e.hp > 0 && dist2(e.x, e.z, z.x, z.z) < z.r + e.r) hurt(e, z.dmg);
     spawnRing(z.x, z.z, 0xb388ff, z.r, 0.35);
   }
-  g.zones = g.zones.filter(z => { if (z.t > 0) return true; world.remove(z.mesh); z.mesh.geometry.dispose(); z.mesh.material.dispose(); return false; });
+  g.zones = g.zones.filter(z => { if (z.t > 0) return true; world.remove(z.mesh); z.mesh.material.dispose(); return false; });
 }
 let dmgSrc = 'base';   // qué ataque está golpeando (para el resumen de fin de partida)
 function hurt(e, dmg){
@@ -6388,12 +6449,15 @@ function spawnEnemy(forced){
   const z2 = g.zone >= 2;   // la zona 2 trae más tanques y rápidos
   if (forced) kind = forced;
   else if (g.mod && g.mod.fastOnly && t > 20) kind = 'fast';
+  else if (t > 150 && r < 0.07 && g.enemies.filter(e => e.kind === 'shooter').length < 8) kind = 'shooter';
+  else if (t > 240 && r < 0.15 && g.enemies.filter(e => e.kind === 'charger').length < 10) kind = 'charger';
   else if (t > 120 && r < (z2 ? 0.3 : 0.2)) kind = 'tank';
   else if (t > 60 && r < (z2 ? 0.5 : 0.4)) kind = 'fast';
   const tt = diffT(t);
   const d = ENEMY[kind], k = 1 + tt/45 + (tt/115)*(tt/115);   // vida: crece más deprisa a partir del minuto 5 (antes /170: a nivel 20 nada aguantaba)
-  const pool = (zoneDef().foes || ZONE_FOES[g.zone - 1])[kind], sprite = pool ? pool[Math.floor(Math.random()*pool.length)] : d.sprite;
+  const pool = (zoneDef().foes || ZONE_FOES[g.zone - 1])[kind] || EXTRA_FOES[kind], sprite = pool ? pool[Math.floor(Math.random()*pool.length)] : d.sprite;
   const mesh = billboard(sprite, d.scale);
+  if (kind === 'charger' || forced === 'elite') mesh.material = mesh.material.clone();   // material propio: se tiñe al cargar o al ser el Digimon buscado
   mesh.position.y = d.scale/2;
   world.add(mesh);
   const sp = clampArena(g.p.x + Math.cos(a)*R, g.p.z + Math.sin(a)*R, ARENA_R - 0.5);
@@ -6407,33 +6471,55 @@ function spawnEnemy(forced){
   return foe;
 }
 
-// Santuarios: 6 por partida en el mapa. Al pasar por uno, un efecto para el resto de la partida (una sola vez)
+// Santuarios: 5 por partida, de tipos distintos. Al cargar uno, un efecto para el resto de la partida (una sola vez)
 const SHRINE_TYPES = [
   {name: 'Santuario de curación', col: 0x7cf29c, text: '+40 PS', apply: g => { if (!(g.mod && g.mod.noHeal)) g.p.hp = Math.min(g.p.maxHp, g.p.hp + 40); }},
   {name: 'Santuario de poder', col: 0xff7043, text: '+10% daño', apply: g => { g.p.dmg *= 1.1; }},
   {name: 'Santuario veloz', col: 0x40c4ff, text: '+8% velocidad', apply: g => { g.p.speed *= 1.08; }},
   {name: 'Santuario de área', col: 0xce93d8, text: '+10% área', apply: g => { g.p.area *= 1.1; }},
   {name: 'Santuario de tickets', col: 0xffd54f, text: '+1 ticket del permanente', apply: () => addTickets('std', 1)},
-  {name: 'Santuario maldito', col: 0x8e24aa, text: '+25% daño · −20 vida máx.', apply: g => { g.p.dmg *= 1.25; g.p.maxHp = Math.max(30, g.p.maxHp - 20); g.p.hp = Math.min(g.p.hp, g.p.maxHp); }}
+  {name: 'Santuario maldito', col: 0x8e24aa, text: '+25% daño · −20 vida máx.', apply: g => { g.p.dmg *= 1.25; g.p.maxHp = Math.max(30, g.p.maxHp - 20); g.p.hp = Math.min(g.p.hp, g.p.maxHp); }},
+  {name: 'Santuario del ritmo', col: 0xffab40, text: '+10% cadencia', apply: g => { g.p.cdMul /= 1.1; }},
+  {name: 'Santuario de la suerte', col: 0x69f0ae, text: '+8% crítico · +1 refresco', apply: g => { g.p.critChance = Math.min(0.75, g.p.critChance + 0.08); upRes().rer++; }},
+  {name: 'Santuario de sabiduría', col: 0x80d8ff, text: 'Media subida de nivel', apply: g => { g.p.xp += g.p.nextXp*0.5; }}
 ];
+const SHRINE_N = 5;
+// Geometrías compartidas del santuario: pedestal de piedra, cristal flotante y columna de luz
+const SHRINE_GEO = {
+  base: new THREE.CylinderGeometry(1.15, 1.35, 0.5, 8),
+  top: new THREE.CylinderGeometry(0.8, 1.0, 0.35, 8),
+  gem: new THREE.OctahedronGeometry(0.6, 0),
+  beam: new THREE.CylinderGeometry(0.55, 0.55, 14, 12, 1, true)
+};
+const SHRINE_STONE = new THREE.MeshLambertMaterial({color: 0x8d8f99, flatShading: true});
 function initShrines(){
   g.shrines = [];
-  for (let i = 0; i < 3; i++){   // 3 santuarios por partida
-    const type = SHRINE_TYPES[Math.floor(Math.random()*SHRINE_TYPES.length)];   // tipo al azar entre todos
-    const a = Math.random()*Math.PI*2, R = 22 + Math.random()*68;
+  const types = [...SHRINE_TYPES].sort(() => Math.random() - 0.5).slice(0, SHRINE_N);   // tipos distintos en cada partida
+  types.forEach((type, i) => {
+    // Repartidos alrededor del mapa (un sector cada uno) para que haya uno cerca vayas donde vayas
+    const a = (i + 0.2 + Math.random()*0.6)/SHRINE_N*Math.PI*2, R = 24 + Math.random()*58;
     const [x, z] = clampArena(Math.cos(a)*R, Math.sin(a)*R, ARENA_R - 6);
-    const mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.9, 2.2, 10), new THREE.MeshBasicMaterial({color: type.col}));
-    mesh.position.set(x, 1.1 + terrainH(x, z), z);
+    const gy = terrainH(x, z);
+    const mesh = new THREE.Group();
+    const base = new THREE.Mesh(SHRINE_GEO.base, SHRINE_STONE); base.position.y = 0.25;
+    const top = new THREE.Mesh(SHRINE_GEO.top, SHRINE_STONE); top.position.y = 0.67;
+    const gemMat = new THREE.MeshLambertMaterial({color: type.col, emissive: type.col, emissiveIntensity: 0.55, flatShading: true});
+    const gem = new THREE.Mesh(SHRINE_GEO.gem, gemMat); gem.position.y = 2; gem.scale.set(1, 1.5, 1);
+    const beamMat = new THREE.MeshBasicMaterial({color: type.col, transparent: true, opacity: 0.18, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending});
+    const beam = new THREE.Mesh(SHRINE_GEO.beam, beamMat); beam.position.y = 7;
+    mesh.add(base, top, gem, beam);
+    mesh.position.set(x, gy, z);
+    mesh.scale.setScalar(1.35);
     world.add(mesh);
     // Círculo en el suelo con el radio real de carga
     const ring = new THREE.Mesh(RING_GEO, new THREE.MeshBasicMaterial({color: type.col, transparent: true, opacity: 0.7, side: THREE.DoubleSide, depthWrite: false}));
-    ring.rotation.x = -Math.PI/2; ring.scale.setScalar(SHRINE_RANGE); ring.position.set(x, terrainH(x, z) + 0.08, z);
+    ring.rotation.x = -Math.PI/2; ring.scale.setScalar(SHRINE_RANGE); ring.position.set(x, gy + 0.08, z);
     world.add(ring);
-    g.shrines.push({x, z, type, mesh, ring, used: false});
-  }
+    g.shrines.push({x, z, type, mesh, gem, beam, ring, used: false, ph: Math.random()*6});
+  });
 }
 // Para cargar un santuario hay que quedarse dentro de su círculo unos 3 segundos; si te alejas, la carga baja
-const SHRINE_CHARGE = 3, SHRINE_RANGE = 2.2;
+const SHRINE_CHARGE = 2.5, SHRINE_RANGE = 2.6;
 // Aviso con la cuenta atrás mientras se carga un santuario
 function shrineHud(sh){
   let el = document.getElementById('shrineHud');
@@ -6458,10 +6544,17 @@ function updateShrines(dt){
     if (sh.used) continue;
     const inside = dist2(sh.x, sh.z, g.p.x, g.p.z) < SHRINE_RANGE;   // dist2 ya es la distancia (no al cuadrado)
     sh.charge = Math.max(0, Math.min(SHRINE_CHARGE, (sh.charge || 0) + (inside ? dt : -dt*0.5)));
-    sh.mesh.scale.y = 1 + 0.6 * (sh.charge / SHRINE_CHARGE);   // el santuario crece mientras se carga
+    const ch = sh.charge / SHRINE_CHARGE;   // el cristal gira más deprisa, sube y brilla mientras se carga
+    sh.ph += dt*(1.5 + 6*ch);
+    sh.gem.rotation.y = sh.ph; sh.gem.position.y = 2 + 0.2*Math.sin(g.t*2 + sh.x) + 0.8*ch;
+    sh.gem.material.emissiveIntensity = 0.55 + 0.45*ch + 0.15*Math.sin(g.t*4);
+    sh.beam.material.opacity = 0.14 + 0.08*Math.sin(g.t*2.5 + sh.z) + 0.3*ch;
+    sh.ring.material.opacity = 0.5 + 0.4*ch;
     if (inside && sh.charge > 0 && !sh.used) charging = sh;
     if (inside && sh.charge >= SHRINE_CHARGE){
       sh.used = true; world.remove(sh.mesh); if (sh.ring) world.remove(sh.ring);
+      sh.gem.material.dispose(); sh.beam.material.dispose(); sh.ring.material.dispose();
+      spawnRing(sh.x, sh.z, sh.type.col, 7, 0.8); burst(sh.x, sh.z, '#' + sh.type.col.toString(16).padStart(6, '0'));
       sh.type.apply(g);
       announce(sh.type.name, sh.type.text, '#' + sh.type.col.toString(16).padStart(6, '0'));
       sfx('ready');
@@ -6484,11 +6577,13 @@ function spawnMagnetDrop(x, z){
   world.add(mesh);
   g.drops.push({x, z, mesh, taken: false});
 }
-function fireProjectile(x, z, vx, vz, dmg, life, color){
-  const mesh = new THREE.Mesh(SPROJ_GEO, matFor(color));
+function fireProjectile(x, z, vx, vz, dmg, life, color, o = null){
+  const mesh = projMesh(color, o && o.fx);
   mesh.position.set(x, 0.9 + terrainH(x, z), z);
+  aimMesh(mesh, vx, vz);
+  if (o && o.big) mesh.scale.multiplyScalar(o.big);
   world.add(mesh);
-  g.shots.push({x, z, vx, vz, dmg, life, mesh, r: 0.3});
+  g.shots.push({x, z, vx, vz, dmg, life, mesh, r: 0.3*((o && o.big) || 1), pierce: (o && o.pierce) || 0, splash: (o && o.splash) || 0, slow: (o && o.slow) || 0, hit: null});
   sfx('shoot');
 }
 
@@ -6643,6 +6738,29 @@ function update(dt){
     const dx = p.x - e.x, dz = p.z - e.z, d = Math.hypot(dx, dz) || 1;
     if (e.golden){ [e.x, e.z] = clampArena(e.x - dx/d*e.spd*dt, e.z - dz/d*e.spd*dt, ARENA_R - 2); continue; }   // el Numemon dorado huye
     if (e.wild){ if (!e.weak && d < 14) [e.x, e.z] = clampArena(e.x - dx/d*e.spd*dt, e.z - dz/d*e.spd*dt, ARENA_R - 2); continue; }   // el salvaje huye hasta quedar debilitado
+    // Tirador: mantiene unos 9-11 m y dispara cada 3,5 s
+    if (e.kind === 'shooter'){
+      const want = d > 11 ? 1 : d < 8 ? -0.8 : 0, spd = e.slowT > 0 ? (e.slowT -= dt, e.spd*0.5) : e.spd;
+      e.x += dx/d*spd*want*dt; e.z += dz/d*spd*want*dt;
+      e.st = (e.st === undefined ? 1 + Math.random()*2 : e.st) - dt;
+      if (e.st <= 0 && d < 16){ e.st = 3.5; enemyShot(e.x, e.z, Math.atan2(dz, dx), 8, e.dmg*1.3*foeMul(e)*idleMul(), 0xff6e40); }
+      [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5); resolveSolids(e, e.r*0.8);
+      if (d < e.r + 0.8 && g.dash <= 0) p.hp -= e.dmg * foeMul(e) * (p.armor || 1) * idleMul() * dt;
+      continue;
+    }
+    // Embestidor: a menos de 10 m se para 0,7 s (se pone rojo) y carga 0,6 s hacia donde estabas
+    if (e.kind === 'charger'){
+      e.st = (e.st === undefined ? 2 : e.st) - dt;
+      if (!e.ch && e.st <= 0 && d < 10){ e.ch = {w: 0.7, t: 0.6, dx: dx/d, dz: dz/d}; e.mesh.material.color.set(0xff5252); }
+      if (e.ch){
+        const c = e.ch;
+        if (c.w > 0){ c.w -= dt; if (c.w > 0.25){ c.dx = dx/d; c.dz = dz/d; } }   // apunta y fija la dirección en el último cuarto de segundo
+        else { c.t -= dt; e.x += c.dx*15*dt; e.z += c.dz*15*dt; if (c.t <= 0){ e.ch = null; e.st = 3.5; e.mesh.material.color.set(0xffffff); } }
+        [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5); resolveSolids(e, e.r*0.8);
+        if (d < e.r + 0.8 && g.dash <= 0) p.hp -= e.dmg * (c.w > 0 ? 1 : 1.8) * foeMul(e) * (p.armor || 1) * idleMul() * dt;
+        continue;
+      }
+    }
     // Se paran a distancia de contacto (no se meten encima del jugador)
     if (d > e.r + 0.6){
       const spd = e.slowT > 0 ? (e.slowT -= dt, e.spd*0.5) : e.spd;   // frenado por la ventisca de Frigimon
@@ -6655,14 +6773,16 @@ function update(dt){
     if (d < e.r + 0.8 && g.dash <= 0){ p.hp -= e.dmg * foeMul(e) * (p.armor || 1) * idleMul() * (g.inferno && !e.boss ? Math.sqrt(infMul()) : 1) * dt; shake = Math.max(shake, 0.12); }
   }
 
-  // Armas
-  g.wCd -= dt;
+  // Armas (tras digievolucionar, 4 s de ataque acelerado)
+  if (g.evoRushT > 0) g.evoRushT -= dt;
+  g.wCd -= dt * (g.evoRushT > 0 ? 1.8 : 1);
   if (ch.kind === 'shot' && g.wCd <= 0 && g.enemies.length){
     g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
     const sorted = [...g.enemies].sort((a,b) => dist2(a.x,a.z,p.x,p.z) - dist2(b.x,b.z,p.x,p.z));
     for (let i = 0; i < Math.min(p.count, sorted.length); i++){
       const e = sorted[i], d = dist2(e.x, e.z, p.x, p.z) || 1;
-      fireProjectile(p.x, p.z, (e.x-p.x)/d*14, (e.z-p.z)/d*14, ch.dmg*p.dmg, 1.6, 0xffb74d);
+      fireProjectile(p.x, p.z, (e.x-p.x)/d*14, (e.z-p.z)/d*14, ch.dmg*p.dmg, 1.6, ch.splash ? 0xff7043 : ch.pierce > 2 ? 0xb2ebf2 : ch.slow ? 0x4fc3f7 : 0xffb74d,
+        {pierce: ch.pierce || 0, splash: ch.splash ? ch.splash*p.area : 0, slow: ch.slow || 0, big: ch.pierce > 2 ? 1.6 : ch.splash ? 1.25 : 1, fx: ch.fx});
     }
   }
   if (ch.kind === 'ring' && g.wCd <= 0){
@@ -6670,7 +6790,7 @@ function update(dt){
     const n = 6*p.count, off = Math.random()*Math.PI*2;
     for (let i = 0; i < n; i++){
       const an = off + i/n*Math.PI*2;
-      fireProjectile(p.x, p.z, Math.cos(an)*9, Math.sin(an)*9, ch.dmg*p.dmg, 1.1, 0x4fc3f7);   // alcance 10 m (antes 8)
+      fireProjectile(p.x, p.z, Math.cos(an)*9, Math.sin(an)*9, ch.dmg*p.dmg, 1.1, 0x4fc3f7, {pierce: ch.pierce || 0, fx: ch.fx});   // alcance 10 m
     }
   }
 
@@ -6678,10 +6798,18 @@ function update(dt){
   for (const s of g.shots){
     s.x += s.vx*dt; s.z += s.vz*dt; s.life -= dt;
     s.mesh.position.set(s.x, 0.9 + terrainH(s.x, s.z), s.z);
+    if (s.mesh.userData.fx === 'gear' || s.mesh.userData.fx === 'spark' || s.mesh.userData.fx === 'wind') s.mesh.rotation.y += dt*9;
     if (s.life <= 0) continue;
     for (const e of g.enemies){
-      if (e.hp > 0 && dist2(s.x, s.z, e.x, e.z) < e.r + s.r){
-        hurt(e, s.dmg); s.life = 0; break;
+      if (e.hp > 0 && !(s.hit && s.hit.has(e)) && dist2(s.x, s.z, e.x, e.z) < e.r + s.r){
+        hurt(e, s.dmg);
+        if (s.slow) e.slowT = Math.max(e.slowT || 0, s.slow);
+        if (s.splash){   // bola de fuego: estalla y daña alrededor (60%)
+          for (const o of g.enemies) if (o !== e && o.hp > 0 && dist2(s.x, s.z, o.x, o.z) < s.splash + o.r) hurt(o, s.dmg*0.6);
+          spawnRing(s.x, s.z, 0xff7043, s.splash, 0.3);
+        }
+        if (s.pierce > 0){ s.pierce--; (s.hit || (s.hit = new Set())).add(e); continue; }
+        s.life = 0; break;
       }
     }
   }
@@ -6692,10 +6820,10 @@ function update(dt){
 
   // Cuchillas orbitales
   if (ch.kind === 'orbit'){
-    g.orbitA += dt*3.2;
-    const n = p.count + 1, R = 2.8*p.area;
+    g.orbitA += dt*3.6;
+    const n = p.count + 1, R = 3.2*p.area;
     while (g.blades.length < n){
-      const m = new THREE.Mesh(new THREE.SphereGeometry(0.35, 10, 10), new THREE.MeshBasicMaterial({color:0xa5d6a7}));
+      const m = fxMesh('leaf', 1.7, 0xffffff, false);
       world.add(m); g.blades.push(m);
     }
     while (g.blades.length > n){ world.remove(g.blades.pop()); }
@@ -6703,9 +6831,10 @@ function update(dt){
       const an = g.orbitA + i*Math.PI*2/n;
       const bx = p.x + Math.cos(an)*R, bz = p.z + Math.sin(an)*R;
       g.blades[i].position.set(bx, 0.9 + terrainH(bx, bz), bz);
+      g.blades[i].rotation.y = -an - Math.PI/2;   // la hoja apunta en el sentido del giro
       for (const e of g.enemies){
-        if (e.cd <= 0 && dist2(bx, bz, e.x, e.z) < e.r + 0.5){
-          hurt(e, ch.dmg*p.dmg); e.cd = 0.3;
+        if (e.cd <= 0 && dist2(bx, bz, e.x, e.z) < e.r + 0.9){
+          hurt(e, ch.dmg*p.dmg); e.cd = 0.25;
         }
       }
     }
@@ -6734,6 +6863,8 @@ function update(dt){
     if (e.kind === 'mini'){ g.tix++; announce('¡' + e.name + ' derrotado!', '+1 ticket de tirada · cofre dorado', '#3de0ff'); spawnChestAt(e.x, e.z, true); if (!e.special){ (g.minisKilled || (g.minisKilled = [])).push(e.name); grantEmblem(); } }
     if (e.kind === 'elite' && Math.random() < 0.3) spawnChestAt(e.x, e.z, true);   // 30% de las élites dejan un cofre dorado
     if (e.boss) g.tix += 3;
+    if (e.boss || (e.kind === 'mini' && !e.wild)) bossKO(e);
+    if (e.mesh.material !== spriteMats[e.sprite] && (e.kind === 'charger' || e.kind === 'elite')) e.mesh.material.dispose();
     world.remove(e.mesh);
     world.remove(e.shadow);
   }
@@ -6835,7 +6966,7 @@ function update(dt){
     g.enemies.push(g.boss);
     g.bossShotT = 2;
     sfx('boss');
-    announce('¡JEFE FINAL!', 'Piedmon, líder de los Dark Masters', '#ce93d8');
+    bossIntro(g.boss, 'Piedmon', 'Jefe final · líder de los Dark Masters', '#ce93d8');
   }
   if (g.boss && g.enemies.includes(g.boss)){
     g.bossShotT -= dt;
@@ -6856,7 +6987,7 @@ function update(dt){
       const ns = Math.round((bd.shots || 10) * [1, 1, 1.4, 1.7][ph]), spd = 6 + (ph - 1) * 1.2;
       for (let i = 0; i < ns; i++){
         const an = i/ns*Math.PI*2 + g.t;
-        const shot = new THREE.Mesh(SPROJ_GEO, matFor(0xff1744));
+        const shot = projMesh(0xff1744, 'dark'); shot.scale.multiplyScalar(1.3);
         shot.position.set(b.x, 1 + terrainH(b.x, b.z), b.z);
         world.add(shot);
         g.eshots.push({x: b.x, z: b.z, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4, mesh: shot, dmg: (bd.shotDmg || 8) * bossDmgMul()});
@@ -6883,6 +7014,7 @@ function update(dt){
   for (const s of g.eshots){
     s.x += s.vx*dt; s.z += s.vz*dt; s.life -= dt;
     s.mesh.position.set(s.x, 1 + terrainH(s.x, s.z), s.z);
+    s.mesh.rotation.y += dt*5;
     if (s.life > 0 && dist2(s.x, s.z, p.x, p.z) < 0.9 && g.dash <= 0){
       p.hp -= s.dmg * (p.armor || 1); s.life = 0; shake = Math.max(shake, 0.3);
     }
@@ -6931,7 +7063,8 @@ function drawEdgeMarkers(){
   const targets = g.chests.filter(ch => !ch.open && !ch.gone).map(ch => ({x: ch.x, z: ch.z, col: '#ffd54f'}));
   if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
   if (g.portal && (g.portalOpen || canSummonBoss())) targets.push({x: PORTAL.x, z: PORTAL.z, col: '#3de0ff'});
-  if (g.ev) for (const n of g.ev.nodes || [{x: g.ev.foe.x, z: g.ev.foe.z}]) if (!n.done) targets.push({x: n.x, z: n.z, col: '#7cf29c'});
+  if (g.ev) targets.push(...evTargets());
+  for (const sh of g.shrines || []) if (!sh.used && Math.hypot(sh.x - g.p.x, sh.z - g.p.z) < 45) targets.push({x: sh.x, z: sh.z, col: '#' + sh.type.col.toString(16).padStart(6, '0')});
   for (const e of g.eggs || []) targets.push({x: e.x, z: e.z, col: '#ffd54f'});
   for (const e of g.enemies) if (e.kind === 'elite' || e.kind === 'mini') targets.push({x: e.x, z: e.z, col: e.kind === 'mini' ? '#ce93d8' : '#ff7043'});
   const W = cv.width, H = cv.height, cx = W/2, cy = H/2;
@@ -7029,6 +7162,129 @@ function banishUp(i){
 }
 // Materiales y geometrías compartidos (evitan crear objetos en cada disparo o impacto)
 const matCache = {};
+
+/* ---------- Efectos de ataque dibujados (en vez de bolas y círculos de color) ----------
+   Cada ataque tiene su forma: fuego, burbuja, rayo, viento, hoja, engranaje, estrella, círculo mágico...
+   Se dibujan una vez en un canvas y se usan en planos horizontales con mezcla aditiva (brillan sobre el suelo). */
+const FX_TEX = {};
+function fxTex(kind){
+  if (FX_TEX[kind]) return FX_TEX[kind];
+  const S = 128, c = document.createElement('canvas'); c.width = c.height = S;
+  const x = c.getContext('2d'), m = S/2;
+  const glow = (r, c0, c1) => { const gr = x.createRadialGradient(m, m, 0, m, m, r); gr.addColorStop(0, c0); gr.addColorStop(1, c1); x.fillStyle = gr; x.beginPath(); x.arc(m, m, r, 0, Math.PI*2); x.fill(); };
+  const flame = (cOut, cMid, cIn) => {   // llama que apunta a la derecha (+x) con la cola a la izquierda
+    for (const [col, k] of [[cOut, 1], [cMid, 0.7], [cIn, 0.42]]){
+      x.fillStyle = col; x.beginPath();
+      x.moveTo(m + 34*k + 10, m);
+      x.bezierCurveTo(m + 30*k, m - 30*k, m - 20*k, m - 26*k, m - 58*k, m - 4*k);
+      x.quadraticCurveTo(m - 30*k, m, m - 58*k, m + 6*k);
+      x.bezierCurveTo(m - 20*k, m + 26*k, m + 30*k, m + 30*k, m + 34*k + 10, m);
+      x.fill();
+    }
+  };
+  const star = (n, r0, r1, col, rot = 0) => { x.fillStyle = col; x.beginPath(); for (let i = 0; i < n*2; i++){ const a = rot + i*Math.PI/n, r = i % 2 ? r1 : r0; x.lineTo(m + Math.cos(a)*r, m + Math.sin(a)*r); } x.closePath(); x.fill(); };
+  x.lineCap = 'round'; x.lineJoin = 'round';
+  switch (kind){
+    case 'fire': flame('rgba(255,87,34,.85)', '#ffa726', '#fff59d'); break;
+    case 'bluefire': flame('rgba(41,121,255,.85)', '#4fc3f7', '#e1f5fe'); break;
+    case 'greenfire': flame('rgba(46,125,50,.85)', '#76ff03', '#f4ff81'); break;
+    case 'dark': glow(40, 'rgba(255,82,82,1)', 'rgba(120,0,60,0)'); star(8, 34, 16, 'rgba(90,0,50,.9)', 0.2); glow(12, '#ffcdd2', 'rgba(255,23,68,.6)'); break;
+    case 'bubble':
+      glow(44, 'rgba(129,212,250,.15)', 'rgba(129,212,250,.55)');
+      x.strokeStyle = '#e1f5fe'; x.lineWidth = 5; x.beginPath(); x.arc(m, m, 42, 0, Math.PI*2); x.stroke();
+      x.fillStyle = 'rgba(255,255,255,.95)'; x.beginPath(); x.ellipse(m - 14, m - 16, 11, 7, -0.6, 0, Math.PI*2); x.fill(); break;
+    case 'air':
+      for (const [r, a] of [[44, .35], [32, .6], [18, .95]]){ x.strokeStyle = `rgba(255,255,255,${a})`; x.lineWidth = 7; x.beginPath(); x.arc(m, m, r, 0, Math.PI*2); x.stroke(); }
+      break;
+    case 'wind':
+      x.strokeStyle = 'rgba(178,255,239,.95)';
+      for (let i = 0; i < 3; i++){ x.lineWidth = 9 - i*2; x.beginPath(); x.arc(m, m, 46 - i*13, i*2.1, i*2.1 + 3.6); x.stroke(); }
+      break;
+    case 'spark':
+      glow(46, 'rgba(255,241,118,.8)', 'rgba(255,214,0,0)');
+      x.strokeStyle = '#ffffff'; x.lineWidth = 6;
+      for (let i = 0; i < 5; i++){ const a = i/5*Math.PI*2; x.beginPath(); x.moveTo(m, m); x.lineTo(m + Math.cos(a + 0.3)*24, m + Math.sin(a + 0.3)*24); x.lineTo(m + Math.cos(a - 0.2)*34, m + Math.sin(a - 0.2)*34); x.lineTo(m + Math.cos(a)*56, m + Math.sin(a)*56); x.stroke(); }
+      break;
+    case 'leaf':
+      x.fillStyle = '#66bb6a'; x.beginPath(); x.moveTo(m + 54, m); x.quadraticCurveTo(m, m - 40, m - 54, m); x.quadraticCurveTo(m, m + 40, m + 54, m); x.fill();
+      x.fillStyle = '#c5e1a5'; x.beginPath(); x.moveTo(m + 44, m); x.quadraticCurveTo(m, m - 22, m - 40, m); x.quadraticCurveTo(m, m + 8, m + 44, m); x.fill();
+      x.strokeStyle = '#1b5e20'; x.lineWidth = 3; x.beginPath(); x.moveTo(m - 50, m); x.lineTo(m + 50, m); x.stroke();
+      break;
+    case 'gear':
+      star(10, 50, 38, '#ffd54f'); x.fillStyle = '#ff8f00'; x.beginPath(); x.arc(m, m, 30, 0, Math.PI*2); x.fill();
+      x.fillStyle = '#fff8e1'; x.beginPath(); x.arc(m, m, 12, 0, Math.PI*2); x.fill(); break;
+    case 'star': glow(50, 'rgba(255,236,179,.7)', 'rgba(255,193,7,0)'); star(4, 58, 14, '#fffde7', 0); star(4, 34, 10, '#ffe082', Math.PI/4); break;
+    case 'blade':
+      x.fillStyle = 'rgba(206,147,216,.95)'; x.beginPath(); x.arc(m, m, 52, -1.3, 1.3); x.arc(m - 22, m, 46, 1.1, -1.1, true); x.fill();
+      x.fillStyle = '#f3e5f5'; x.beginPath(); x.arc(m, m, 52, -0.6, 0.6); x.arc(m - 8, m, 46, 0.55, -0.55, true); x.fill(); break;
+    case 'claw':
+      x.strokeStyle = '#fffde7'; x.lineWidth = 9;
+      for (let i = -1; i <= 1; i++){ x.beginPath(); x.moveTo(m - 46, m + i*22 - 14); x.quadraticCurveTo(m, m + i*22 + 10, m + 46, m + i*22 - 14); x.stroke(); }
+      break;
+    case 'snow':
+      x.strokeStyle = '#e1f5fe'; x.lineWidth = 7;
+      for (let i = 0; i < 3; i++){ const a = i*Math.PI/3; x.beginPath(); x.moveTo(m + Math.cos(a)*54, m + Math.sin(a)*54); x.lineTo(m - Math.cos(a)*54, m - Math.sin(a)*54); x.stroke(); }
+      break;
+    case 'wave': {   // onda expansiva: anillo suave
+      const gr = x.createRadialGradient(m, m, m*0.55, m, m, m);
+      gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(0.75, 'rgba(255,255,255,1)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+      x.fillStyle = gr; x.fillRect(0, 0, S, S); break; }
+    case 'rune': case 'target': case 'mine': {   // círculo mágico (blanco: se tiñe con el color del material)
+      x.strokeStyle = '#fff';
+      x.lineWidth = 5; x.beginPath(); x.arc(m, m, 60, 0, Math.PI*2); x.stroke();
+      x.lineWidth = 2.5; x.beginPath(); x.arc(m, m, 50, 0, Math.PI*2); x.stroke();
+      if (kind === 'target'){
+        for (let i = 0; i < 4; i++){ const a = i*Math.PI/2 + Math.PI/4; x.lineWidth = 6; x.beginPath(); x.moveTo(m + Math.cos(a)*18, m + Math.sin(a)*18); x.lineTo(m + Math.cos(a)*44, m + Math.sin(a)*44); x.stroke(); }
+        x.fillStyle = 'rgba(255,255,255,.22)'; x.beginPath(); x.arc(m, m, 50, 0, Math.PI*2); x.fill();
+      } else {
+        x.lineWidth = 3; x.beginPath();   // hexagrama
+        for (let k = 0; k < 2; k++){ for (let i = 0; i <= 3; i++){ const a = k*Math.PI/3 + i*Math.PI*2/3 - Math.PI/2; i ? x.lineTo(m + Math.cos(a)*50, m + Math.sin(a)*50) : x.moveTo(m + Math.cos(a)*50, m + Math.sin(a)*50); } }
+        x.stroke();
+        x.font = 'bold 13px monospace'; x.fillStyle = '#fff'; x.textAlign = 'center'; x.textBaseline = 'middle';
+        for (let i = 0; i < 12; i++){ const a = i/12*Math.PI*2; x.save(); x.translate(m + Math.cos(a)*55, m + Math.sin(a)*55); x.rotate(a + Math.PI/2); x.fillText('01'[i % 2], 0, 0); x.restore(); }
+        if (kind === 'mine'){ x.fillStyle = 'rgba(255,255,255,.5)'; x.beginPath(); x.arc(m, m, 16, 0, Math.PI*2); x.fill(); }
+      }
+      break; }
+    case 'beam': {
+      const gr = x.createLinearGradient(0, 0, 0, S);
+      gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(0.35, 'rgba(255,255,255,.7)'); gr.addColorStop(0.5, '#fff'); gr.addColorStop(0.65, 'rgba(255,255,255,.7)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+      x.fillStyle = gr; x.fillRect(0, 0, S, S); break; }
+    default: glow(50, '#ffffff', 'rgba(255,255,255,0)');
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return FX_TEX[kind] = t;
+}
+const FX_PLANE = new THREE.PlaneGeometry(1, 1);
+FX_PLANE.rotateX(-Math.PI/2);   // plano horizontal: se ve bien con la cámara desde arriba
+const FX_MATS = {};
+// Marcas en el suelo: se dibujan sin prueba de profundidad para que las laderas no las corten
+const FX_GROUND = new Set(['rune', 'target', 'mine', 'wave']);
+// Material compartido por forma y color (para proyectiles: muchos a la vez)
+function fxMat(kind, color = 0xffffff, add = true){
+  const k = kind + ':' + color + ':' + add;
+  return FX_MATS[k] || (FX_MATS[k] = new THREE.MeshBasicMaterial({map: fxTex(kind), color, transparent: true, depthWrite: false, depthTest: !FX_GROUND.has(kind), blending: add ? THREE.AdditiveBlending : THREE.NormalBlending, side: THREE.DoubleSide}));
+}
+// Material propio (para lo que cambia de opacidad por separado): hay que liberarlo al quitarlo
+function fxMatOwn(kind, color = 0xffffff, opacity = 1){
+  return new THREE.MeshBasicMaterial({map: fxTex(kind), color, transparent: true, opacity, depthWrite: false, depthTest: !FX_GROUND.has(kind), blending: THREE.AdditiveBlending, side: THREE.DoubleSide});
+}
+function fxMesh(kind, size, color, add){
+  const m = new THREE.Mesh(FX_PLANE, fxMat(kind, color, add));
+  m.scale.set(size, 1, size);
+  return m;
+}
+// Forma de proyectil según su color de siempre (así no hay que tocar cada llamada)
+const FX_OF_COLOR = {0xff7043: 'fire', 0xffb74d: 'fire', 0x4fc3f7: 'bluefire', 0xb2ebf2: 'wind', 0xffd54f: 'gear', 0xffe082: 'star', 0xce93d8: 'blade', 0x80deea: 'air', 0xff1744: 'dark', 0xff6e40: 'dark', 0x7b1fa2: 'dark'};
+function projMesh(color, kind){
+  const k = kind || FX_OF_COLOR[color] || 'glow';
+  const size = {fire: 1.3, bluefire: 1.3, greenfire: 1.3, wind: 1.6, gear: 0.9, star: 1.3, blade: 1.4, air: 1.1, bubble: 1.0, spark: 1.4, leaf: 1.2, dark: 1.2}[k] || 1;
+  const m = fxMesh(k, size, 0xffffff, k !== 'leaf' && k !== 'gear');
+  m.userData.fx = k;
+  return m;
+}
+// Gira el plano del proyectil hacia donde avanza (las formas apuntan a +x)
+function aimMesh(m, vx, vz){ m.rotation.y = -Math.atan2(vz, vx); }
 function matFor(color){ return matCache[color] || (matCache[color] = new THREE.MeshBasicMaterial({color})); }
 const RING_GEO = new THREE.RingGeometry(0.96, 1, 48);
 const GEM_GEO = new THREE.OctahedronGeometry(0.25), GEM_HEAL_GEO = new THREE.OctahedronGeometry(0.32);
@@ -7059,13 +7315,14 @@ function nearestIn(x, z, R){
   return best;
 }
 function spawnSProj(x, z, vx, vz, dmg, life, pierce, homing, color, target = null){
-  const mesh = new THREE.Mesh(SPROJ_GEO, matFor(color));
+  const mesh = projMesh(color);
+  aimMesh(mesh, vx, vz);
   world.add(mesh);
   g.sk.proj.push({x, z, vx, vz, dmg, life, pierce, homing, target, hit: new Set(), mesh, src: dmgSrc});
 }
 function dropMine(x, z, lv){
-  const mesh = new THREE.Mesh(MINE_GEO, MINE_MAT);
-  mesh.position.set(x, 0.1 + terrainH(x, z), z);
+  const mesh = fxMesh('mine', 1.2, 0xff7043);
+  mesh.position.set(x, 0.12 + terrainH(x, z), z);
   world.add(mesh);
   g.sk.mines.push({x, z, life: 14, mesh, lv});
 }
@@ -7079,16 +7336,16 @@ function updateSkills(dt){
   if (lv('aura')){
     const R = (3.2 + 1.0*lv('aura')) * ar;
     if (!S.aura){
-      S.aura = new THREE.Mesh(RING_GEO, new THREE.MeshBasicMaterial({color: 0x4fc3f7, transparent: true, opacity: 0.4, depthWrite: false}));
-      S.aura.rotation.x = -Math.PI/2;
+      S.aura = new THREE.Mesh(FX_PLANE, fxMatOwn('rune', 0x4fc3f7, 0.55));   // círculo de datos que gira bajo el Digimon
       world.add(S.aura);
     }
-    S.aura.scale.setScalar(R);
+    S.aura.scale.set(2*R, 1, 2*R);
+    S.aura.rotation.y += dt*0.8;
     S.aura.position.set(p.x, terrainH(p.x, p.z) + 0.06, p.z);
     S.auraT -= dt;
     if (S.auraT <= 0){
       S.auraT = 0.3;
-      const dmg = (3 + 1.5*lv('aura')) * dm;
+      const dmg = (2.5 + 1.2*lv('aura')) * dm;
       for (const e of g.enemies) if (e.hp > 0 && dist2(p.x, p.z, e.x, e.z) < R + e.r) hurt(e, dmg);
     }
   }
@@ -7096,7 +7353,7 @@ function updateSkills(dt){
   dmgSrc = 'tornado';
   // Tornado Bit: bits que giran, empujan y frenan proyectiles del jefe
   const nT = lv('tornado') ? lv('tornado') + 1 : 0;
-  while (S.bits.length < nT){ const m = new THREE.Mesh(BIT_GEO, BIT_MAT); world.add(m); S.bits.push(m); }
+  while (S.bits.length < nT){ const m = fxMesh('wind', 1.8, 0xea80fc); world.add(m); S.bits.push(m); }
   while (S.bits.length > nT) world.remove(S.bits.pop());
   if (nT){
     S.spin += dt*3.2;
@@ -7105,11 +7362,12 @@ function updateSkills(dt){
     for (let i = 0; i < nT; i++){
       const an = S.spin + i*Math.PI*2/nT, bx = p.x + Math.cos(an)*R, bz = p.z + Math.sin(an)*R;
       S.bits[i].position.set(bx, 0.9 + terrainH(bx, bz), bz);
+      S.bits[i].rotation.y = S.spin*3 + i;
       for (const e of g.enemies){
         if (e.hp <= 0) continue;
         const dx = e.x - bx, dz = e.z - bz, d = Math.hypot(dx, dz);
         if (d < e.r + 0.9){
-          if (!(e.tcd > 0)){ hurt(e, (3 + 1.5*lv('tornado')) * dm); e.tcd = 0.5; }
+          if (!(e.tcd > 0)){ hurt(e, (6 + 3*lv('tornado')) * dm); e.tcd = 0.4; }
           const push = 0.6/(d || 1); e.x += dx*push; e.z += dz*push;
           [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5);
         }
@@ -7148,9 +7406,9 @@ function updateSkills(dt){
     if (S.spiralT <= 0){
       const t = nearestIn(p.x, p.z, 40);
       if (t){
-        S.spiralT = 0.9 * cm;
+        S.spiralT = 0.6 * cm;
         const d = Math.hypot(t.x - p.x, t.z - p.z) || 1;
-        spawnSProj(p.x, p.z, (t.x - p.x)/d*24, (t.z - p.z)/d*24, (7 + 3*lv('espiral')) * dm, 1.8, 1 + lv('espiral'), false, 0xffe082);
+        spawnSProj(p.x, p.z, (t.x - p.x)/d*24, (t.z - p.z)/d*24, (14 + 6*lv('espiral')) * dm, 1.8, 2 + lv('espiral'), false, 0xffe082);
       } else S.spiralT = 0.2;
     }
   }
@@ -7160,12 +7418,12 @@ function updateSkills(dt){
   if (lv('cuchilla')){
     S.bladeT -= dt;
     if (S.bladeT <= 0){
-      S.bladeT = 1.6 * cm;
+      S.bladeT = 1.3 * cm;
       const n = 2*lv('cuchilla') + (p.count - 1);
       const base = Math.random()*Math.PI*2;
       for (let i = 0; i < n; i++){
         const an = base + i*Math.PI*2/n;
-        spawnSProj(p.x, p.z, Math.cos(an)*10, Math.sin(an)*10, (6 + 2*lv('cuchilla')) * dm, 4, 1, true, 0xce93d8, strongestIn(p.x, p.z, 45));
+        spawnSProj(p.x, p.z, Math.cos(an)*10, Math.sin(an)*10, (11 + 4*lv('cuchilla')) * dm, 4, 2, true, 0xce93d8, strongestIn(p.x, p.z, 45));
       }
     }
   }
@@ -7178,18 +7436,18 @@ function updateSkills(dt){
       const t = nearestIn(p.x, p.z, 36);
       if (t){
         const L2 = lv('laser'), len = 18;
-        S.laserT = 2.8 * cm;
+        S.laserT = 2.4 * cm;
         const dx = t.x - p.x, dz = t.z - p.z, d = Math.hypot(dx, dz) || 1, ux = dx/d, uz = dz/d;
         for (const e of g.enemies){
           if (e.hp <= 0) continue;
           const ex = e.x - p.x, ez = e.z - p.z, along = ex*ux + ez*uz;
           if (along < 0 || along > len) continue;
-          if (Math.abs(ex*uz - ez*ux) < e.r + 0.5) hurt(e, (12 + 4*L2) * dm);
+          if (Math.abs(ex*uz - ez*ux) < e.r + 0.8) hurt(e, (16 + 6*L2) * dm);
         }
-        const beam = new THREE.Mesh(BEAM_GEO, BEAM_MAT);
+        const beam = new THREE.Mesh(FX_PLANE, fxMat('beam', 0x40c4ff));
         beam.position.set(p.x + ux*len/2, 0.9 + terrainH(p.x, p.z), p.z + uz*len/2);
-        beam.rotation.y = Math.atan2(ux, uz);
-        beam.scale.z = len;
+        beam.rotation.y = -Math.atan2(uz, ux);
+        beam.scale.set(len, 1, 1.6);
         world.add(beam);
         S.beams.push({m: beam, t: 0});
       } else S.laserT = 0.25;
@@ -7202,20 +7460,21 @@ function updateSkills(dt){
   // Mina Digital: se deja una mina cada 2,2 m recorridos; explota al pisarla un enemigo
   if (lv('mina')){
     const L2 = lv('mina');
-    if (dist2(p.x, p.z, S.lastMine.x, S.lastMine.z) > 2.2 && S.mines.length < 14 + 4*L2){
+    if (dist2(p.x, p.z, S.lastMine.x, S.lastMine.z) > 2.2 && S.mines.length < 9 + 3*L2){
       dropMine(p.x, p.z, L2);
       S.lastMine = {x: p.x, z: p.z};
     }
     for (const m of S.mines){
       if (m.life <= 0) continue;
       m.life -= dt;
+      m.mesh.rotation.y += dt*2;
       const trig = g.enemies.some(e => e.hp > 0 && dist2(m.x, m.z, e.x, e.z) < e.r + 1.2);
       if (m.life <= 0 || trig){
-        const R = (2.6 + 0.6*m.lv) * ar;
+        const R = (2.2 + 0.35*m.lv) * ar;
         m.life = 0;
         spawnRing(m.x, m.z, 0xff7043, R, 0.45);
         burst(m.x, m.z, 0xff7043);
-        for (const e of g.enemies) if (e.hp > 0 && dist2(m.x, m.z, e.x, e.z) < R + e.r) hurt(e, (14 + 5*m.lv) * dm);
+        for (const e of g.enemies) if (e.hp > 0 && dist2(m.x, m.z, e.x, e.z) < R + e.r) hurt(e, (10 + 3.5*m.lv) * dm);
       }
     }
     S.mines = S.mines.filter(m => { if (m.life > 0) return true; world.remove(m.mesh); return false; });
@@ -7227,22 +7486,26 @@ function updateSkills(dt){
     S.meteorT -= dt;
     if (S.meteorT <= 0){
       const L2 = lv('meteoro');
-      S.meteorT = 2.6 * cm;
+      S.meteorT = 3.0 * cm;
       for (let i = 0; i < L2 + 1; i++){
         const an = Math.random()*Math.PI*2, rr = Math.sqrt(Math.random())*13;
         const [mx, mz] = clampArena(p.x + Math.cos(an)*rr, p.z + Math.sin(an)*rr, ARENA_R - 2);
         const R = 3.2 * ar;
-        const wm = new THREE.Mesh(RING_GEO, new THREE.MeshBasicMaterial({color: 0xff5252, transparent: true, opacity: 0.6, depthWrite: false}));
-        wm.rotation.x = -Math.PI/2;
+        const wm = new THREE.Mesh(FX_PLANE, fxMatOwn('target', 0xff5252, 0.6));
         wm.position.set(mx, terrainH(mx, mz) + 0.07, mz);
-        wm.scale.setScalar(R);
+        wm.scale.set(2*R, 1, 2*R);
         world.add(wm);
-        S.meteors.push({x: mx, z: mz, t: 0, R, mesh: wm, dmg: (16 + 5*L2) * dm});
+        const rock = fxMesh('fire', 2.4, 0xffffff); rock.rotation.z = Math.PI/2;   // bola de fuego que cae en vertical
+        world.add(rock);
+        S.meteors.push({x: mx, z: mz, t: 0, R, mesh: wm, rock, dmg: (11 + 3.5*L2) * dm});
       }
     }
     for (const m of S.meteors){
       m.t += dt;
       m.mesh.material.opacity = 0.35 + 0.35*Math.sin(m.t*18);
+      m.mesh.rotation.y += dt*2;
+      m.rock.position.set(m.x - 3*(1 - m.t/0.7), terrainH(m.x, m.z) + 14*(1 - m.t/0.7) + 0.5, m.z);
+      m.rock.rotation.set(0, 0, -1.3);
       if (m.t >= 0.7 && !m.done){
         m.done = true;
         for (const e of g.enemies) if (e.hp > 0 && dist2(m.x, m.z, e.x, e.z) < m.R + e.r) hurt(e, m.dmg);
@@ -7250,7 +7513,7 @@ function updateSkills(dt){
         burst(m.x, m.z, 0xff5252);
       }
     }
-    S.meteors = S.meteors.filter(m => { if (!m.done) return true; world.remove(m.mesh); return false; });
+    S.meteors = S.meteors.filter(m => { if (!m.done) return true; world.remove(m.mesh); world.remove(m.rock); m.mesh.material.dispose(); return false; });
   }
 
   // Proyectiles de Espiral y Cuchilla: avanzan, las cuchillas giran hacia su objetivo y atraviesan según su alcance
@@ -7266,6 +7529,7 @@ function updateSkills(dt){
     }
     pr.x += pr.vx*dt; pr.z += pr.vz*dt; pr.life -= dt;
     pr.mesh.position.set(pr.x, 0.9 + terrainH(pr.x, pr.z), pr.z);
+    if (pr.homing) aimMesh(pr.mesh, pr.vx, pr.vz); else pr.mesh.rotation.y += dt*10;
     if (pr.life <= 0) continue;
     for (const e of g.enemies){
       if (e.hp <= 0 || pr.hit.has(e)) continue;
@@ -7470,6 +7734,53 @@ function updateCamera(dt){
 }
 // Anuncio central con animación: título grande y subtítulo
 let hurtT = 0;
+// Cartel de jefe: entrada (nombre y sprite) o derrota. small = jefe menor
+function bossCard(name, sub, sprite, col, opt = {}){
+  const el = document.getElementById('bossCard');
+  if (!el) return;
+  el.style.setProperty('--bc', col || '#ff1744');
+  el.querySelector('img').src = sprite || '';
+  el.querySelector('.bc-t').textContent = name;
+  el.querySelector('.bc-s').textContent = sub || '';
+  el.className = (opt.ko ? 'ko ' : '') + (opt.small ? 'small' : '');
+  void el.offsetWidth;   // reinicia la transición
+  el.classList.add('show');
+  clearTimeout(bossCard.t);
+  bossCard.t = setTimeout(() => el.classList.remove('show'), 2100);   // tiempo real: también se va en cámara lenta
+}
+// Entrada de jefe: cámara lenta, sacudida, onda roja y cartel
+function bossIntro(e, name, sub, col, small){
+  g.slowT = Math.max(g.slowT || 0, small ? 0.5 : 0.9);
+  shake = Math.max(shake, small ? 0.5 : 0.9);
+  spawnRing(e.x, e.z, 0xff1744, small ? 8 : 14, 1.0); spawnRing(e.x, e.z, 0xffffff, small ? 5 : 9, 0.6);
+  bossCard(name.toUpperCase(), sub, e.sprite, col, {small});
+}
+// Derrota de jefe: cámara lenta, destello, varias ondas, confeti y cartel dorado
+function bossKO(e){
+  const small = !e.boss;
+  g.slowT = Math.max(g.slowT || 0, small ? 0.7 : 1.4);
+  screenFlash = small ? 0.5 : 1; shake = Math.max(shake, 1);
+  for (const [c, r, l] of [[0xffd54f, 16, 1.1], [0xffffff, 10, 0.7], [0xff7043, 22, 1.4]]) spawnRing(e.x, e.z, c, small ? r*0.6 : r, l);
+  for (let i = 0; i < (small ? 3 : 6); i++) burst(e.x + (Math.random() - 0.5)*4, e.z + (Math.random() - 0.5)*4, ['#ffd54f', '#ff7043', '#ffffff', '#3de0ff'][i % 4]);
+  bossCard((e.name || 'Jefe').toUpperCase(), '¡Derrotado!', e.sprite, '#ffb300', {ko: true, small});
+}
+// Onda de la digievolución: arrasa a la horda cercana, empuja al resto y da 4 s de ataque acelerado
+function evoBlast(st){
+  const p = g.p, R = 12 + 2*st;
+  dmgSrc = 'base';
+  for (const e of g.enemies){
+    if (e.hp <= 0 || e.wild) continue;
+    const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz) || 1;
+    if (d > R + e.r) continue;
+    const big = e.boss || e.kind === 'mini' || e.kind === 'elite';
+    hurt(e, big ? e.max*0.08 : e.max*0.75 + 25*p.dmg);
+    if (!e.boss && e.kind !== 'mini') [e.x, e.z] = clampArena(e.x + dx/d*5, e.z + dz/d*5, ARENA_R - 0.5);
+  }
+  for (const [c, r, l] of [[0xffd54f, R, 0.9], [0xffffff, R*0.6, 0.6], [0x3de0ff, R*1.25, 1.2]]) spawnRing(p.x, p.z, c, r, l);
+  for (const s of g.eshots) s.life = 0;
+  g.evoRushT = 4;
+  shake = Math.max(shake, 0.8);
+}
 function announce(title, sub, color = '#ffd54f'){
   const el = document.getElementById('banner');
   el.style.color = color;
@@ -7588,6 +7899,16 @@ function bossPhases(dt){
   if (b.slamT > 0) return;
   b.slamT = b.phase === 3 ? 4 : 6;
   const n = b.phase === 3 ? 5 : 3, dmg = 14 * bossDmgMul() * (b.phase === 3 ? 1.25 : 1);
+  b.slamN = (b.slamN || 0) + 1;
+  if (b.slamN % 2 === 0){
+    // Ataque en línea: una fila de golpes desde el jefe hacia ti (y en fase 3 otra en cruz). Esquiva de lado
+    const a0 = Math.atan2(g.p.z - b.z, g.p.x - b.x);
+    for (const a of b.phase === 3 ? [a0, a0 + Math.PI/2, a0 - Math.PI/2] : [a0]){
+      for (let i = 1; i <= 7; i++){ const [x, z] = clampArena(b.x + Math.cos(a)*i*3, b.z + Math.sin(a)*i*3, ARENA_R - 1); addHazard(x, z, 1.8, 0.9 + i*0.12, 'bomb', dmg, 0xff1744); }
+    }
+    popText(b.x, b.z, '¡Ataque en línea!', '#ff5a6e', 1.2);
+    return;
+  }
   for (let i = 0; i < n; i++){
     const a = Math.random() * Math.PI * 2, r = i ? 2.5 + Math.random() * 4 : 0;
     const [x, z] = clampArena(g.p.x + Math.cos(a) * r, g.p.z + Math.sin(a) * r, ARENA_R - 1);
@@ -7623,9 +7944,8 @@ function summonBoss(){
   g.boss = {kind: 'boss', boss: true, def, name: def.name, sprite: def.sprite, mesh, shadow, x, z, hp, max, spd: 2.3, r: 2.4, xp: 60, dmg: def.dmg * bossDmgMul(), cd: 0};
   g.enemies.push(g.boss);
   g.bossSpawned = true; g.bossName = def.name; g.bossShotT = 2.2;
-  spawnRing(x, z, 0xff1744, 9, 0.9); shake = Math.max(shake, 0.6);
   sfx('boss');
-  announce('¡' + def.name.toUpperCase() + '!', def.resume && g.bossLeftHp ? 'Vuelve con ' + Math.round(hp / max * 100) + '% de vida' : def.sub, def.col);
+  bossIntro(g.boss, def.name, def.resume && g.bossLeftHp ? 'Vuelve con ' + Math.round(hp / max * 100) + '% de vida' : def.sub, def.col);
 }
 // Mapa 3: el jefe único huye por el portal y espera al otro lado con la vida que le queda
 function bossRetreat(){
@@ -7976,6 +8296,14 @@ function drawWorldMap(cv, size){
     c.fillText('🎁', X(ch.x), Y(ch.z));
   }
   for (const e of g.eggs || []) c.fillText('🥚', X(e.x), Y(e.z));
+  // Santuarios sin usar: rombo de su color; nodos y objetivo del evento: punto verde
+  for (const sh of g.shrines || []){
+    if (sh.used) continue;
+    const sx = X(sh.x), sy = Y(sh.z), r = 5*u;
+    c.fillStyle = '#' + sh.type.col.toString(16).padStart(6, '0'); c.strokeStyle = '#fff'; c.lineWidth = 1.5*u;
+    c.beginPath(); c.moveTo(sx, sy - r*1.3); c.lineTo(sx + r, sy); c.lineTo(sx, sy + r*1.3); c.lineTo(sx - r, sy); c.closePath(); c.fill(); c.stroke();
+  }
+  if (g.ev) for (const n of evTargets()){ c.fillStyle = n.col; c.strokeStyle = '#000'; c.lineWidth = 1.5*u; c.beginPath(); c.arc(X(n.x), Y(n.z), 4.5*u, 0, Math.PI*2); c.fill(); c.stroke(); }
   // Enemigos: su propio sprite, en miniatura
   for (const e of g.enemies){
     if (e.boss) continue;
@@ -8148,14 +8476,17 @@ function evoSkillCards(){
 
 /* ---------- Mecánicas de los jefes menores ---------- */
 function addHazard(x, z, r, t, kind, dmg, color){
-  const mesh = new THREE.Mesh(new THREE.CircleGeometry(r, 32), new THREE.MeshBasicMaterial({color, transparent: true, opacity: kind === 'slow' ? 0.32 : 0.45, depthWrite: false}));
-  mesh.rotation.x = -Math.PI/2;
+  // Bombas: diana que se cierra y un proyectil que cae del cielo; zona lenta: círculo de notas que gira
+  const mesh = new THREE.Mesh(FX_PLANE, fxMatOwn(kind === 'slow' ? 'rune' : 'target', color, kind === 'slow' ? 0.45 : 0.5));
+  mesh.scale.set(2*r, 1, 2*r);
   mesh.position.set(x, terrainH(x, z) + 0.06, z);
   world.add(mesh);
-  (g.hazards || (g.hazards = [])).push({x, z, r, t, t0: t, kind, dmg, mesh});
+  let rock = null;
+  if (kind !== 'slow'){ rock = fxMesh('dark', 1.8, 0xffffff); world.add(rock); }
+  (g.hazards || (g.hazards = [])).push({x, z, r, t, t0: t, kind, dmg, mesh, rock});
 }
 function enemyShot(x, z, an, spd, dmg, color){
-  const shot = new THREE.Mesh(SPROJ_GEO, matFor(color));
+  const shot = projMesh(color, 'dark');
   shot.position.set(x, 1 + terrainH(x, z), z);
   world.add(shot);
   g.eshots.push({x, z, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4, mesh: shot, dmg});
@@ -8186,16 +8517,19 @@ function updateBossMechanics(dt){
   for (const h of g.hazards || []){
     h.t -= dt;
     const inside = dist2(h.x, h.z, g.p.x, g.p.z) < h.r;
-    if (h.kind === 'slow'){ if (inside) g.inSlow = true; h.mesh.material.opacity = 0.32 * Math.min(1, h.t); }
+    if (h.kind === 'slow'){ if (inside) g.inSlow = true; h.mesh.material.opacity = 0.45 * Math.min(1, h.t); h.mesh.rotation.y += dt; }
     else {
       h.mesh.material.opacity = 0.2 + 0.5*(1 - h.t/h.t0);
+      const k = Math.max(0, h.t/h.t0);
+      h.mesh.scale.set(2*h.r*(0.6 + 0.4*k + 0.4*(1 - k)), 1, 2*h.r*(0.6 + 0.4*k + 0.4*(1 - k)));
+      if (h.rock){ h.rock.position.set(h.x, terrainH(h.x, h.z) + 0.6 + 12*k, h.z); h.rock.rotation.y += dt*8; }
       if (h.t <= 0){
         burst(h.x, h.z, '#ff1744');
-        if (inside && g.dash <= 0){ g.p.hp -= h.dmg * (g.p.armor || 1); shake = Math.max(shake, 0.35); }
+        if (inside && g.dash <= 0){ g.p.hp -= h.dmg * (g.p.armor || 1); shake = Math.max(shake, 0.35); if (h.ev && g.ev && g.ev.kind === 'storm') g.ev.hits++; }
       }
     }
   }
-  for (const h of (g.hazards || []).filter(h => h.t <= 0)){ world.remove(h.mesh); h.mesh.geometry.dispose(); h.mesh.material.dispose(); }
+  for (const h of (g.hazards || []).filter(h => h.t <= 0)){ world.remove(h.mesh); if (h.rock) world.remove(h.rock); h.mesh.material.dispose(); }
   if (g.hazards) g.hazards = g.hazards.filter(h => h.t > 0);
 }
 
@@ -8233,14 +8567,33 @@ function eventNode(x, z, col){
   world.add(ring);
   return {x, z, mesh, ring, prog: 0, done: false};
 }
+// Experiencia extra: una fracción de lo que falta para el siguiente nivel
+function p0Xp(f){ g.p.xp += g.p.nextXp*f; }
 function nodeNear(dmin, dmax){
   const a = Math.random()*Math.PI*2, r = dmin + Math.random()*(dmax - dmin);
   return clampArena(g.p.x + Math.cos(a)*r, g.p.z + Math.sin(a)*r, ARENA_R - 6);
 }
-function startMapEvent(){
-  const kinds = ['defend', 'corrupt', 'golden'];
-  if (supFree() > 0) kinds.push('capture', 'capture');   // Digimon salvaje: más probable mientras te falte apoyo
-  const kind = kinds[Math.floor(Math.random()*kinds.length)];
+// Eventos del mapa: salen de una bolsa barajada para que no se repitan seguidos
+const EVENT_KINDS = ['defend', 'corrupt', 'golden', 'bounty', 'fragments', 'storm', 'ambush'];
+function nextEventKind(){
+  if (supFree() > 0 && Math.random() < 0.3) return 'capture';   // Digimon salvaje: más probable mientras te falte apoyo
+  if (!g.evBag || !g.evBag.length){
+    g.evBag = [...EVENT_KINDS].sort(() => Math.random() - 0.5);
+    if (g.evBag[0] === g.evLast) g.evBag.push(g.evBag.shift());
+  }
+  return g.evBag.shift();
+}
+// Puntos que marcan el objetivo del evento (flechas del borde y minimapa)
+function evTargets(){
+  const ev = g.ev;
+  if (!ev) return [];
+  if (ev.nodes) return ev.nodes.filter(n => !n.done).map(n => ({x: n.x, z: n.z, col: ev.kind === 'corrupt' ? '#e040fb' : ev.kind === 'fragments' ? '#40c4ff' : '#7cf29c'}));
+  if (ev.foe && ev.foe.hp > 0) return [{x: ev.foe.x, z: ev.foe.z, col: ev.kind === 'bounty' ? '#ff5252' : '#7cf29c'}];
+  return [];
+}
+function startMapEvent(forced){
+  const kind = forced || nextEventKind();
+  g.evLast = kind; g.evCount = (g.evCount || 0) + 1;
   if (kind === 'defend'){
     const [x, z] = nodeNear(18, 28);
     const n = eventNode(x, z, 0x7cf29c); n.ring.scale.setScalar(6);
@@ -8249,6 +8602,33 @@ function startMapEvent(){
   } else if (kind === 'corrupt'){
     g.ev = {kind, t: 60, nodes: [0, 1, 2].map(() => { const [x, z] = nodeNear(14, 32); const n = eventNode(x, z, 0xe040fb); n.ring.scale.setScalar(2.5); return n; })};
     announce('Evento: datos corruptos', 'Rompe los 3 nodos morados (quédate encima)', '#e040fb');
+  } else if (kind === 'fragments'){
+    // Fragmentos de datos repartidos: recógelos todos antes de que se borren
+    g.ev = {kind, t: 40, nodes: [0, 1, 2, 3, 4, 5].map(() => { const [x, z] = nodeNear(8, 30); const n = eventNode(x, z, 0x40c4ff); n.ring.scale.setScalar(1.4); n.mesh.scale.setScalar(0.6); return n; })};
+    announce('Evento: fragmentos de datos', 'Recoge los 6 fragmentos azules en 40 s', '#40c4ff');
+  } else if (kind === 'bounty'){
+    // Digimon buscado: una élite reforzada que huye de ti; si la derrotas, cofre dorado y Bits
+    const e = spawnEnemy('elite');
+    if (!e) return;
+    const [x, z] = nodeNear(20, 28); e.x = x; e.z = z;
+    e.hp *= 2.2; e.max = e.hp; e.bounty = true; e.spd *= 1.25;
+    e.mesh.material.color.set(0xff8a80);
+    g.ev = {kind, t: 50, foe: e};
+    announce('Evento: ¡Digimon buscado!', 'Derrótalo antes de 50 s: cofre dorado y +70 Bits', '#ff5252');
+  } else if (kind === 'storm'){
+    // Tormenta de datos: caen bombas a tu alrededor durante 20 s; esquívalas
+    g.ev = {kind, t: 20, bombT: 0.6, hits: 0};
+    announce('Evento: tormenta de datos', 'Esquiva los círculos rojos 20 s (pocos golpes = cofre dorado)', '#ff1744');
+  } else if (kind === 'ambush'){
+    // Emboscada: un anillo de enemigos te rodea; derrota a 25 en 30 s
+    const n = 22;
+    for (let i = 0; i < n; i++){
+      const m = spawnEnemy(i % 4 === 0 ? 'fast' : 'basic'), an = i/n*Math.PI*2;
+      if (!m) break;
+      [m.x, m.z] = clampArena(g.p.x + Math.cos(an)*11, g.p.z + Math.sin(an)*11, ARENA_R - 0.5);
+    }
+    g.ev = {kind, t: 30, k0: g.kills, need: 25};
+    announce('Evento: ¡emboscada!', 'Te rodean: derrota a 25 enemigos en 30 s', '#ff9100');
   } else if (kind === 'capture'){
     const pool = supPool(), k = pool[Math.floor(Math.random()*pool.length)];
     const [x, z] = nodeNear(16, 22);
@@ -8288,20 +8668,43 @@ function endMapEvent(ok){
     else { const e = ev.foe; e.gone = true; world.remove(e.mesh); world.remove(e.shadow); g.enemies = g.enemies.filter(x => x !== e); announce('El Numemon dorado ha huido', '', '#9e9e9e'); }
     return;
   }
+  if (ev.kind === 'bounty'){
+    const e = ev.foe;
+    if (ok){ g.extraBits = (g.extraBits || 0) + 70; spawnChestAt(e.x, e.z, true); announce('¡Recompensa cobrada!', '+70 Bits y un cofre dorado', '#ff5252'); }
+    else { e.bounty = false; e.mesh.material.color.set(0xffffff); announce('El Digimon buscado se ha escondido', 'Sigue siendo una élite', '#9e9e9e'); }
+    return;
+  }
+  if (ev.kind === 'storm'){
+    const gold = ev.hits <= 2;
+    spawnChestAt(g.p.x + g.dir.x*3, g.p.z + g.dir.z*3, gold);
+    announce('¡Tormenta superada!', gold ? `Solo ${ev.hits} golpes: cofre dorado` : `${ev.hits} golpes: cofre normal`, '#ff1744');
+    return;
+  }
+  if (ev.kind === 'ambush'){
+    if (ok){ spawnChestAt(g.p.x + g.dir.x*3, g.p.z + g.dir.z*3, true); g.extraBits = (g.extraBits || 0) + 40; announce('¡Emboscada superada!', '+40 Bits y un cofre dorado', '#ff9100'); }
+    else announce('Evento fallido', 'Se acabó el tiempo', '#ef5350');
+    return;
+  }
   if (!ok){ announce('Evento fallido', 'Se acabó el tiempo', '#ef5350'); return; }
+  if (ev.kind === 'fragments'){
+    const last = ev.nodes[ev.nodes.length - 1];
+    p0Xp(0.6); spawnChestAt(last.x, last.z, false);
+    announce('¡Fragmentos recuperados!', 'Experiencia extra y un cofre', '#40c4ff');
+    return;
+  }
   const last = ev.nodes[ev.nodes.length - 1];
   spawnChestAt(last.x, last.z, true);
   if (ev.kind === 'corrupt'){ g.extraBits = (g.extraBits || 0) + 60; announce('¡Datos limpios!', '+60 Bits y un cofre dorado', '#e040fb'); }
   else announce('¡Nodo defendido!', 'Un cofre dorado aparece en el nodo', '#7cf29c');
 }
 function updateMapEvent(dt){
-  if (g.evT === undefined) g.evT = 150;
+  if (g.evT === undefined) g.evT = 70;   // el primero, pasado el minuto; luego uno cada ~1,5-2 min
   if (!g.ev){
     if (g.t >= g.evT && !g.bossSpawned){
-      // Si un jefe llega o acaba de llegar (menos de 30 s), el evento espera
-      const near = MINIS.some(m => Math.abs(m.at - g.t) < 30) || (g.mode !== 'surv' && BOSS_AT - g.t < 30);
+      // Si un jefe llega o acaba de llegar (menos de 25 s), el evento espera
+      const near = (mapDef().minis && MINIS.some(m => Math.abs(m.at - g.t) < 25)) || (g.mode !== 'surv' && !isPortalMap() && BOSS_AT - g.t < 30) || g.enemies.some(e => e.kind === 'mini' && !e.special);
       if (near){ g.evT = g.t + 10; return; }
-      g.evT = g.t + 200; startMapEvent();
+      g.evT = g.t + 95 + Math.random()*30; startMapEvent();
     }
     return;
   }
@@ -8324,6 +8727,34 @@ function updateMapEvent(dt){
     const done = ev.nodes.filter(n => n.done).length;
     evHud(`Datos corruptos: ${done}/3 nodos · quedan ${Math.ceil(ev.t)} s`);
     if (done === 3) return endMapEvent(true);
+  } else if (ev.kind === 'fragments'){
+    for (const n of ev.nodes){
+      if (n.done) continue;
+      if (dist2(n.x, n.z, p.x, p.z) < 1.8){ n.done = true; world.remove(n.mesh); world.remove(n.ring); burst(n.x, n.z, '#40c4ff'); sfx('chest'); p.xp += 2 + p.lvl*0.5; }
+    }
+    const done = ev.nodes.filter(n => n.done).length;
+    evHud(`Fragmentos: ${done}/6 · quedan ${Math.ceil(ev.t)} s`);
+    if (done === 6) return endMapEvent(true);
+  } else if (ev.kind === 'bounty'){
+    const e = ev.foe;
+    evHud(`Digimon buscado: ${Math.max(0, Math.round(100*e.hp/e.max))}% de vida · quedan ${Math.ceil(ev.t)} s`);
+    if (e.hp <= 0) return endMapEvent(true);
+  } else if (ev.kind === 'storm'){
+    ev.bombT -= dt;
+    if (ev.bombT <= 0 && ev.t > 1.2){
+      ev.bombT = 0.45;
+      // Bombas cerca de ti y una justo delante de por donde vas
+      const lead = Math.random() < 0.35, a = Math.random()*Math.PI*2, r = lead ? 0 : 1 + Math.random()*7;
+      const bx = lead ? p.x + g.dir.x*p.speed*1.1 : p.x + Math.cos(a)*r, bz = lead ? p.z + g.dir.z*p.speed*1.1 : p.z + Math.sin(a)*r;
+      addHazard(bx, bz, 2.2, 1.1, 'bomb', 10*(1 + diffT(g.t)/300) * diffMul('dmg'), 0xff1744);
+      g.hazards[g.hazards.length - 1].ev = true;
+    }
+    evHud(`Tormenta de datos: esquiva · ${Math.ceil(ev.t)} s · golpes ${ev.hits}`);
+    if (ev.t <= 0) return endMapEvent(true);
+  } else if (ev.kind === 'ambush'){
+    const k = g.kills - ev.k0;
+    evHud(`Emboscada: ${Math.min(ev.need, k)}/${ev.need} derrotados · quedan ${Math.ceil(ev.t)} s`);
+    if (k >= ev.need) return endMapEvent(true);
   } else if (ev.kind === 'capture'){
     const e = ev.foe, nm = CHARS[e.wild].name;
     if (e.weak && dist2(e.x, e.z, p.x, p.z) < 2.6) ev.prog += dt;
@@ -8416,7 +8847,7 @@ function updateSupport(dt){
     if (!best) return;
     s.cd = 1.1 * p.cdMul;
     const d = bd || 1, c = CHARS[s.key];
-    fireProjectile(s.x, s.z, (best.x - s.x)/d*16, (best.z - s.z)/d*16, (c.dmg || 10) * Math.min(0.5, 0.25 + 0.005*p.lvl) * p.dmg * (1 + 0.35*s.st), 1.2 + 0.2*s.st, s.st ? 0xffd54f : 0x80deea);
+    fireProjectile(s.x, s.z, (best.x - s.x)/d*16, (best.z - s.z)/d*16, (c.dmg || 10) * Math.min(0.5, 0.25 + 0.005*p.lvl) * p.dmg * (1 + 0.35*s.st), 1.2 + 0.2*s.st, s.st ? 0xffd54f : 0x80deea, {fx: c.fx === 'claw' || c.fx === 'leaf' || c.fx === 'snow' ? 'star' : c.fx, big: 0.8 + 0.15*s.st});
   });
 }
 
@@ -9699,11 +10130,11 @@ function makeAura(skinId, key){
    y en la facilidad de cada estilo. Hay que ajustarlos con pruebas reales. */
 const BALANCE = {
   tentomon:{hp:100,  speed:6.0, dmgMul:1.00, why:'Descarga en círculo: cubre el área alrededor del Digimon'},
-  agumon:  {hp:100, speed:6.0, dmgMul:1.00, why:'Dispara al enemigo más cercano: apuntado, sin área'},
+  agumon:  {hp:100, speed:6.0, dmgMul:1.00, why:'Bolas de fuego: estallan y dañan alrededor'},
   palmon:  {hp:100, speed:6.0, dmgMul:1.00, why:'Cuchillas que giran alrededor: cubren a su alrededor sin apuntar'},
   gomamon: {hp:100, speed:6.0, dmgMul:1.00, why:'Ataques rápidos al enemigo más cercano'},
   gabumon: {hp:100, speed:6.0, dmgMul:1.00, why:'Onda en círculo: hay que colocarse entre enemigos'},
-  gatomon: {hp:100,  speed:6.0, dmgMul:1.00, why:'Garras giratorias: hay que mantenerse en movimiento'},
+  gatomon: {hp:100,  speed:6.0, dmgMul:1.00, why:'Golpe en cadena: brilla cuando la horda está apiñada'},
   biyomon: {hp:100,  speed:6.0, dmgMul:1.00, why:'Disparo dirigido de cadencia media'},
   patamon: {hp:100,  speed:6.0, dmgMul:1.00, why:'Ataque dirigido: la clave es colocarse bien'},
   leomon:  {hp:120,  speed:6.0, dmgMul:1.00, why:'Cuerpo a cuerpo: más vida porque pelea pegado a la horda'},
@@ -9936,7 +10367,8 @@ if (new URLSearchParams(location.search).has('demo')){
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
     spawnMini, MINIS, startMapEvent, summonBoss, openPortal, enterScreen, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
-    stepUpdate: dt => update(dt), animateEvo,
+    stepUpdate: dt => update(dt), animateEvo, updateFx, syncMeshes, tryDash,
+    resume(){ if (state === 'paused'){ state = 'play'; hideOverlay(); hidePause(); } },
     // Simulación rápida sin dibujar (para medir el equilibrio): avanza sec segundos y elige la carta pick en cada subida
     sim(sec, pick = 0, move = false, god = false){
       const out = [];
