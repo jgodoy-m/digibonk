@@ -3555,6 +3555,7 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 
 <script type="module">
 import * as THREE from 'three';
+import { GLTFLoader } from './vendor/loaders/GLTFLoader.js';
 
 // Prototipo 3D estilo Megabonk. Sprites 2D de Digimon (base DMC) como billboards.
 const BOSS_AT = 1200; // segundos hasta el jefe final (20 minutos); ganas al derrotarlo
@@ -6046,6 +6047,37 @@ function getChestTex(){
   chestTex.magFilter = THREE.NearestFilter;
   return chestTex;
 }
+// ---------- Modelos 3D (GLB de Jaime: santuario y cofre) ----------
+// Se cargan una vez y cada santuario o cofre usa una copia. Sus animaciones (Activar, Abrir) se reproducen una vez
+// y se quedan en el último fotograma. Avanzan en cada fotograma aunque haya un menú abierto encima.
+const gltfLoader = new GLTFLoader();
+const MODELS = {}, modelMixers = new Set();
+function loadModel(name){
+  return MODELS[name] || (MODELS[name] = new Promise(res => gltfLoader.load('models/' + name + '.glb', gl => res(gl), undefined, () => res(null))));
+}
+loadModel('santuario'); loadModel('cofre');
+// Pone una copia del modelo dentro de parent (si carga) y devuelve su acción de animación por la promesa
+function modelInto(name, parent, scale){
+  return loadModel(name).then(gl => {
+    if (!gl) return null;
+    const o = gl.scene.clone(true);
+    o.scale.setScalar(scale);
+    parent.add(o);
+    const mixer = new THREE.AnimationMixer(o);
+    const action = gl.animations[0] ? mixer.clipAction(gl.animations[0]) : null;
+    if (action){ action.setLoop(THREE.LoopOnce, 1); action.clampWhenFinished = true; }
+    parent.userData.model = o;
+    return {o, mixer, action};
+  });
+}
+function playModel(m){ if (!m || !m.action) return; m.action.reset().play(); modelMixers.add(m); }
+function tickModels(dt){
+  for (const m of modelMixers){
+    m.mixer.update(dt);
+    if (!m.action.isRunning()) modelMixers.delete(m);
+  }
+}
+// Cofre: el modelo de Jaime (tapa con bisagra y botín dentro). Mientras carga, la caja de siempre
 function makeChest(){
   const mat = new THREE.MeshBasicMaterial({map: getChestTex()});
   const group = new THREE.Group();
@@ -6059,6 +6091,12 @@ function makeChest(){
   pivot.add(lid);
   group.add(pivot);
   group.add(makeShadow(1.3));
+  modelInto('cofre', group, 0.7).then(m => {
+    if (!m) return;
+    body.visible = false; lid.visible = false;
+    group.userData.m = m;
+    if (group.userData.wantOpen) playModel(m);
+  });
   return {group, pivot};
 }
 
@@ -6495,7 +6533,7 @@ function hurt(e, dmg){
 function openChest(c){
   if (!g || c.open) return;
   c.open = true; c.openT = 2;
-  c.pivot.rotation.x = -1.5;
+  if (c.group.userData.m) playModel(c.group.userData.m); else { c.pivot.rotation.x = -1.5; c.group.userData.wantOpen = true; }
   if (!(g.mod && g.mod.noHeal)) g.p.hp = Math.min(g.p.maxHp, g.p.hp + 15);
   g.chestsOpened = (g.chestsOpened || 0) + 1;
   sfx('chest');
@@ -6641,43 +6679,27 @@ function shrineArtTex(type){
   return shrineTexCache[key] = t;
 }
 function shrineHex(type){ return '#' + type.col.toString(16).padStart(6, '0'); }
+// Santuario: el modelo de Jaime (cristal sobre una base de piedra con circuitos). Apagado hasta que se carga;
+// al activarlo se reproduce su clip Activar y se queda encendido. Encima, el haz de luz y la carta del efecto (del color del tipo)
+const SHRINE_SCALE = 1.1;
 function makeShrine(type, x, z){
   const grp = new THREE.Group();
-  const stoneCol = new THREE.Color(SHRINE_STONE[curBiome] || 0x9aa7b8);
-  const stone = new THREE.MeshLambertMaterial({color: stoneCol, flatShading: true});
-  const dark = new THREE.MeshLambertMaterial({color: stoneCol.clone().multiplyScalar(0.72), flatShading: true});
   const col = new THREE.Color(type.col);
-  const lit = new THREE.MeshBasicMaterial({color: col});
-  const add = (geo, mat, px, py, pz) => { const m = new THREE.Mesh(geo, mat); m.position.set(px, py, pz); grp.add(m); return m; };
-  // Plataforma de dos alturas (octogonal)
-  add(new THREE.CylinderGeometry(2.3, 2.5, 0.16, 8), dark, 0, 0.08, 0);
-  add(new THREE.CylinderGeometry(1.9, 2.05, 0.12, 8), stone, 0, 0.22, 0);
-  // Runas y losa luminosa en el centro
-  const rune = add(new THREE.RingGeometry(0.82, 1.02, 8), lit, 0, 0.29, 0); rune.rotation.x = -Math.PI/2;
-  const padMat = new THREE.MeshBasicMaterial({color: col, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending, depthWrite: false});
-  const pad = add(new THREE.CircleGeometry(0.8, 24), padMat, 0, 0.3, 0); pad.rotation.x = -Math.PI/2;
-  // Dos columnas con basa y capitel, y el dintel con una gema
-  for (const s of [-1, 1]){
-    add(new THREE.BoxGeometry(0.62, 0.22, 0.62), dark, s*1.7, 0.39, 0);
-    add(new THREE.BoxGeometry(0.42, 2.6, 0.42), stone, s*1.7, 1.8, 0);
-    add(new THREE.BoxGeometry(0.62, 0.22, 0.62), dark, s*1.7, 3.15, 0);
-  }
-  add(new THREE.BoxGeometry(4.2, 0.36, 0.72), stone, 0, 3.44, 0);
-  add(new THREE.BoxGeometry(3.6, 0.14, 0.58), dark, 0, 3.68, 0);
-  const gem = add(new THREE.OctahedronGeometry(0.2), lit, 0, 3.44, 0.42); gem.scale.set(1, 1.3, 0.6);
-  // Cristal flotante con su halo
-  const crystal = add(new THREE.OctahedronGeometry(0.36), lit, 0, 1.9, 0); crystal.scale.y = 1.55;
-  const glow = new THREE.Sprite(new THREE.SpriteMaterial({map: shrineGlowTex(), color: col, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false}));
-  glow.scale.set(2.6, 2.6, 1); glow.position.y = 1.9; grp.add(glow);
+  const holder = new THREE.Group(); grp.add(holder);
+  const v = {grp, holder, m: null};
+  modelInto('santuario', holder, SHRINE_SCALE).then(m => { v.m = m; if (m && v.wantOn) playModel(m); });
+  // Halo que crece mientras se carga
+  const glow = new THREE.Sprite(new THREE.SpriteMaterial({map: shrineGlowTex(), color: col, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false}));
+  glow.scale.set(3, 3, 1); glow.position.y = 1.75*SHRINE_SCALE; grp.add(glow);
   // Haz de luz: se ve desde lejos y se apaga al usar el santuario
   const beamMat = new THREE.MeshBasicMaterial({color: col, map: shrineBeamTex(), transparent: true, opacity: 0.32, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide});
-  const beam = add(new THREE.CylinderGeometry(0.45, 0.7, 16, 16, 1, true), beamMat, 0, 0.3 + 8, 0);
+  const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.7, 16, 16, 1, true), beamMat); beam.position.y = 2.4*SHRINE_SCALE + 8; grp.add(beam);
   // Carta del efecto, flotando encima
   const card = new THREE.Sprite(new THREE.SpriteMaterial({map: shrineArtTex(type), transparent: true, depthWrite: false}));
-  const cw = type.art && !/ic_|jefe|bonk/.test(type.art) ? 1.75 : 1.35;
-  card.scale.set(cw, type.art && !/ic_|jefe|bonk/.test(type.art) ? cw*198/240 : cw, 1); card.position.y = 4.8; card.renderOrder = 3; grp.add(card);
+  const wide = type.art && !/ic_|jefe|bonk/.test(type.art), cw = wide ? 1.75 : 1.35;
+  card.scale.set(cw, wide ? cw*198/240 : cw, 1); card.position.y = 4.1; card.renderOrder = 3; grp.add(card);
   grp.position.set(x, terrainH(x, z), z);
-  return {grp, crystal, glow, beam, card, pad, rune, gem, stone, dark, lit};
+  return Object.assign(v, {glow, beam, card});
 }
 // Sitio llano, fuera del agua, de los obstáculos, del portal y lejos de los demás santuarios
 function shrineSpot(list){
@@ -6720,10 +6742,10 @@ function initShrines(){
     world.add(v.grp);
     // Círculo en el suelo con el radio real de carga y, encima, el arco que se llena al cargar
     const ring = new THREE.Mesh(RING_GEO, new THREE.MeshBasicMaterial({color: type.col, transparent: true, opacity: 0.55, side: THREE.DoubleSide, depthWrite: false}));
-    ring.rotation.x = -Math.PI/2; ring.scale.setScalar(SHRINE_RANGE); ring.position.set(x, terrainH(x, z) + 0.31, z);
+    ring.rotation.x = -Math.PI/2; ring.scale.setScalar(SHRINE_RANGE + 0.15); ring.position.set(x, terrainH(x, z) + 0.06, z);
     world.add(ring);
-    const arc = new THREE.Mesh(new THREE.RingGeometry(SHRINE_RANGE - 0.22, SHRINE_RANGE + 0.02, 48, 1, Math.PI/2, 0.001), new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.95, side: THREE.DoubleSide, depthWrite: false}));
-    arc.rotation.x = -Math.PI/2; arc.position.set(x, terrainH(x, z) + 0.33, z); arc.visible = false;
+    const arc = new THREE.Mesh(new THREE.RingGeometry(SHRINE_RANGE - 0.05, SHRINE_RANGE + 0.25, 48, 1, Math.PI/2, 0.001), new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.95, side: THREE.DoubleSide, depthWrite: false}));
+    arc.rotation.x = -Math.PI/2; arc.position.set(x, terrainH(x, z) + 0.08, z); arc.visible = false;
     world.add(arc);
     g.shrines.push({x, z, type, v, ring, arc, used: false, charge: 0, ph: Math.random()*6});
   }
@@ -6783,8 +6805,8 @@ function updateShrines(dt){
       if (sh.fade < 1){
         sh.fade = Math.min(1, sh.fade + dt*1.2);
         v.beam.material.opacity = 0.32*(1 - sh.fade); v.glow.material.opacity = 1 - sh.fade;
-        v.card.material.opacity = 1 - sh.fade; v.card.position.y = 4.8 + sh.fade*2;
-        if (sh.fade >= 1){ v.beam.visible = v.glow.visible = v.card.visible = v.crystal.visible = false; }
+        v.card.material.opacity = 1 - sh.fade; v.card.position.y = 4.1 + sh.fade*2;
+        if (sh.fade >= 1){ v.beam.visible = v.glow.visible = v.card.visible = false; }
       }
       continue;
     }
@@ -6792,17 +6814,14 @@ function updateShrines(dt){
     sh.charge = Math.max(0, Math.min(SHRINE_CHARGE, sh.charge + (inside ? dt : -dt*0.5)));
     const k = sh.charge/SHRINE_CHARGE;
     // Animación: el cristal flota y gira más deprisa al cargar; la carta se mece; el haz late
-    v.crystal.rotation.y += dt*(1.2 + k*8);
-    v.crystal.position.y = 1.9 + Math.sin(t*2 + sh.ph)*0.15 + k*0.4;
-    v.glow.position.y = v.crystal.position.y;
-    v.glow.scale.setScalar(2.4 + Math.sin(t*3 + sh.ph)*0.2 + k*1.6);
-    v.card.position.y = 4.8 + Math.sin(t*1.6 + sh.ph)*0.18;
+    v.glow.material.opacity = k*0.9;
+    v.glow.scale.setScalar(2.4 + Math.sin(t*6 + sh.ph)*0.2 + k*2);
+    v.card.position.y = 4.1 + Math.sin(t*1.6 + sh.ph)*0.18;
     v.beam.material.opacity = 0.26 + Math.sin(t*2.5 + sh.ph)*0.06 + k*0.4;
-    v.pad.material.opacity = 0.45 + k*0.5;
     // Arco de progreso alrededor del círculo
     if (k > 0.001){
       const th = Math.max(0.001, k*Math.PI*2);
-      if (Math.abs((sh.arcK || 0) - k) > 0.01){ sh.arc.geometry.dispose(); sh.arc.geometry = new THREE.RingGeometry(SHRINE_RANGE - 0.22, SHRINE_RANGE + 0.02, 48, 1, Math.PI/2, th); sh.arcK = k; }
+      if (Math.abs((sh.arcK || 0) - k) > 0.01){ sh.arc.geometry.dispose(); sh.arc.geometry = new THREE.RingGeometry(SHRINE_RANGE - 0.05, SHRINE_RANGE + 0.25, 48, 1, Math.PI/2, th); sh.arcK = k; }
       sh.arc.visible = true;
     } else sh.arc.visible = false;
     sh.ring.material.opacity = inside ? 0.95 : 0.55;
@@ -6815,7 +6834,7 @@ function updateShrines(dt){
     if (inside && sh.charge >= SHRINE_CHARGE){
       sh.used = true; sh.fade = 0;
       world.remove(sh.ring); world.remove(sh.arc);
-      v.pad.material.opacity = 0.12; v.rune.material = v.dark; v.gem.material = v.dark;
+      if (v.m) playModel(v.m); else v.wantOn = true;   // el santuario se enciende (clip Activar)
       sh.type.apply(g, sh);
       burst(sh.x, sh.z, shrineHex(sh.type));
       spawnRing(sh.x, sh.z, sh.type.col, 6, 0.5);
@@ -11031,6 +11050,7 @@ function frame(now){
   }
   const dt = Math.min(0.05, (now-last)/1000);
   last = now;
+  if (modelMixers.size) tickModels(dt);
   if (state === 'play' && g){
     // Esquiva perfecta: 1 s de cámara lenta (el reloj real sigue)
     let sdt = dt;
@@ -11090,7 +11110,7 @@ if (new URLSearchParams(location.search).has('demo')){
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
     spawnMini, MINIS, startMapEvent, SHRINE_TYPES, initShrines, summonBoss, openPortal, enterScreen, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
-    stepUpdate: dt => update(dt), animateEvo, updateFx, syncMeshes, tryDash,
+    stepUpdate: dt => update(dt), animateEvo, updateFx, syncMeshes, tryDash, openChest,
     resume(){ if (state === 'paused'){ state = 'play'; hideOverlay(); hidePause(); } },
     // Simulación rápida sin dibujar (para medir el equilibrio): avanza sec segundos y elige la carta pick en cada subida
     sim(sec, pick = 0, move = false, god = false){
