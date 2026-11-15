@@ -2936,6 +2936,9 @@ html.reduce-motion .logo-fx::after{display:none}
 #overlay .realhub.hb .hb-new{position:absolute!important;z-index:2}
 #overlay .realhub.hb .hb-mode.m-gacha{overflow:visible}
 #overlay .realhub.hb .hb-mode.m-gacha::after{display:none}
+/* Incubadora en «Próximamente»: apagada como el resto de botones Pronto */
+#overlay .realhub.hb .hb-mode.m-gacha.hm-soon{background:var(--m-sunk)!important;color:var(--m-mute)!important;box-shadow:none!important;border-bottom-color:var(--m-line2)!important}
+#overlay .realhub.hb .hb-mode.m-gacha.hm-soon>*{opacity:.6;filter:grayscale(1)}
 /* Botones "Pronto": opacos, con el contenido apagado */
 #overlay .realhub.hb .hb-tile.hm-soon{opacity:1!important;filter:none!important;background:var(--m-sunk)!important;border-bottom-color:var(--m-line2)!important;box-shadow:none!important}
 #overlay .realhub.hb .hb-tile.hm-soon>*{opacity:.55;filter:grayscale(1)}
@@ -4815,11 +4818,11 @@ function showSelect(){
             </button>
             <div class="hb-stack nm-stack">
               <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i><img class="nm-ic" src="ui/hub/ic_supervivencia.webp" alt=""></i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
-              <button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Incubadora: ${usableTickets('std')} tickets disponibles"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Incubadora</b><small><em class="nm-tix">${usableTickets('std')}</em> tickets<span class="nm-long"> disponibles</span></small></span></button>
+              ${GACHA_SOON ? `<button type="button" class="hb-mode m-gacha hm-soon" id="hbGacha3" aria-label="Incubadora: Próximamente"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Incubadora</b><small>Próximamente</small></span></button>` : `<button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Incubadora: ${usableTickets('std')} tickets disponibles"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Incubadora</b><small><em class="nm-tix">${usableTickets('std')}</em> tickets<span class="nm-long"> disponibles</span></small></span></button>`}
             </div>
           </div>
           <button type="button" class="nm-quests nm-encard" id="mEnc" aria-label="Encargos: hoy ${qs.day.done} de ${qs.day.all}, semana ${qs.week.done} de ${qs.week.all}${qs.ev ? ', evento ' + qs.ev.done + ' de ' + qs.ev.all : ''}"><i><img class="nm-ic" src="ui/hub/ic_encargos.webp" alt=""></i><span class="nm-eh"><b>Encargos</b><small>${qs.ev ? 'Diarios, semanales y de evento' : 'Diarios y semanales'}</small></span><span class="nm-eqs">${[['Hoy', qs.day, 'q-d'], ['Semana', qs.week, 'q-w'], ...(qs.ev ? [['Evento', qs.ev, 'q-e']] : [])].map(([n, q, c]) => `<span class="nm-eq ${c}"><small>${n}</small><b>${q.done}/${q.all}</b><span class="hb-meter"><i style="width:${Math.round(q.done / q.all * 100)}%"></i></span></span>`).join('')}</span></button>
-          ${(bannerOpen("navidadP") || bannerOpen("navidadR")) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span class="lv-sheen"></span><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
+          ${(!GACHA_SOON && (bannerOpen("navidadP") || bannerOpen("navidadR"))) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span class="lv-sheen"></span><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
           <div class="hb-tiles nm-tiles">
             <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex: ${pickProgress().done} de ${pickProgress().total} Digimon"><i><img class="nm-ic" src="ui/hub/ic_digidex.webp" alt=""></i><b>Digidex</b><small>${pickProgress().done}/${pickProgress().total} Digimon</small></button>
             <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio${labReady ? ': ' + labReady + ' mejoras disponibles' : ''}"><i><img class="nm-ic" src="ui/hub/ic_laboratorio.webp" alt=""></i><b>Laboratorio</b><small>${labReady ? labReady + (labReady === 1 ? ' mejora' : ' mejoras') : 'Mejoras'}</small>${labReady ? '<em class="nm-dot" aria-hidden="true"></em>' : ''}</button>
@@ -4869,7 +4872,7 @@ function showSelect(){
   document.getElementById('btnPlayer').onclick=showPlayer;
   document.getElementById('btnGacha').onclick=showLab;
   document.getElementById('mMaps').onclick=()=>{ runMode='normal'; showMapSelect(); };
-  ['hbGacha2','hbGacha3'].forEach(id => { const el = document.getElementById(id); if (el) el.onclick = () => { gxBanner = 'std'; showGacha(); }; });
+  ['hbGacha2','hbGacha3'].forEach(id => { const el = document.getElementById(id); if (el) el.onclick = () => { if (GACHA_SOON) { hmSoon('Incubadora: Próximamente'); return; } gxBanner = 'std'; showGacha(); }; });
   { const el = document.getElementById('hbLab2'); if (el) el.onclick = showLab; }
   document.getElementById('btnHelp').onclick=showHelp;
   document.getElementById('btnAjustes').onclick=showSettings;
@@ -9042,11 +9045,11 @@ function showLab(){
       <div class="lab-grid">${cards}</div>
       <footer class="lab-foot">
         <button type="button" class="mini-btn" id="labRefund" ${labSpent() ? '' : 'disabled'}>Reembolsar todo (Ⓑ ${labSpent()})</button>
-        <button type="button" class="g-btn" id="labGacha">🎟 Ir a la Incubadora</button>
+        ${GACHA_SOON ? '' : '<button type="button" class="g-btn" id="labGacha">🎟 Ir a la Incubadora</button>'}
       </footer>
     </div>`);
   document.getElementById('labBack').onclick = () => showSelect();
-  document.getElementById('labGacha').onclick = () => showGacha();
+  { const lg = document.getElementById('labGacha'); if (lg) lg.onclick = () => showGacha(); }
   document.getElementById('labRefund').onclick = () => { const b = labRefund(); announce('Reembolso', `+${b} Bits`, '#ffd54f'); showLab(); };
   overlay.querySelectorAll('.lab-buy').forEach(b => b.onclick = () => { if (labBuy(b.dataset.lab)) showLab(); });
 }
@@ -9643,6 +9646,9 @@ function bannerPool(bn = gxBanner){
   } else all();
   return out;
 }
+// La Incubadora (gacha) queda en «Próximamente» hasta pulirla: el botón del inicio sale apagado y no se puede abrir.
+// Para volver a activarla basta con poner GACHA_SOON a false.
+const GACHA_SOON = true;
 let gxBanner = 'std';
 // Garantía: si pasan PITY_AT tiradas sin legendaria, la siguiente lo es. Una legendaria repetida devuelve Bits
 const PITY_AT = 100, LEG_DUP_REFUND = 200;
@@ -9897,6 +9903,7 @@ let gxIdx = 0, gxTimer = null;
 // Las tiradas usan la lógica original (doPulls): Bits o tickets. La vista previa no cambia las probabilidades.
 let trPrevIdx = -1;
 function showGacha(){
+  if (GACHA_SOON) { showSelect(); return; }
   state = 'gacha';
   setHud(false);
   clearInterval(gxTimer);
