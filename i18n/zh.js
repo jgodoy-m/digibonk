@@ -1331,5 +1331,17 @@ I18N.add('zh', {
   "Trueno Mágico": "魔法雷电",
   "Rayo Arcano": "奥术光线",
   "Estrella Mágica": "魔法之星",
-  "Círculo Arcano": "奥术法阵"
+  "Círculo Arcano": "奥术法阵",
+  // Punto de guardado de partida
+  "Esta partida se ha continuado en otra pestaña o ventana": "这局游戏已在另一个标签页或窗口中继续",
+  "Tienes una partida guardada. Si empiezas otra, se perderá. ¿Empezar una partida nueva?": "你有一局已保存的游戏。开始新游戏会将其丢失。要开始新游戏吗？",
+  "Guardar y salir": "保存并退出",
+  "Partida guardada: puedes cerrar el juego y continuarla desde el menú.": "游戏已保存：你可以关闭游戏，之后从菜单继续。",
+  "Las partidas del ranking global no se guardan.": "全球排行榜的对局不会保存。",
+  "Continuar partida": "继续游戏",
+  "Partida guardada": "已保存的游戏",
+  "Continuar partida guardada": "继续已保存的游戏",
+  "Partida continuada": "游戏已继续",
+  "El mapa se ha reconstruido con oleadas nuevas": "地图已用新的波次重建",
+  "{0} · Nv {1} · {2}": "{0} · Lv {1} · {2}"
 });

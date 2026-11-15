@@ -1316,5 +1316,17 @@ I18N.add('en', {
   "Trueno Mágico": "Magic Thunder",
   "Rayo Arcano": "Arcane Ray",
   "Estrella Mágica": "Magic Star",
-  "Círculo Arcano": "Arcane Circle"
+  "Círculo Arcano": "Arcane Circle",
+  // Punto de guardado de partida
+  "Esta partida se ha continuado en otra pestaña o ventana": "This run was continued in another tab or window",
+  "Tienes una partida guardada. Si empiezas otra, se perderá. ¿Empezar una partida nueva?": "You have a saved run. If you start another one, it will be lost. Start a new run?",
+  "Guardar y salir": "Save and quit",
+  "Partida guardada: puedes cerrar el juego y continuarla desde el menú.": "Run saved: you can close the game and continue it from the menu.",
+  "Las partidas del ranking global no se guardan.": "Global leaderboard runs are not saved.",
+  "Continuar partida": "Continue run",
+  "Partida guardada": "Saved run",
+  "Continuar partida guardada": "Continue saved run",
+  "Partida continuada": "Run continued",
+  "El mapa se ha reconstruido con oleadas nuevas": "The map has been rebuilt with new waves",
+  "{0} · Nv {1} · {2}": "{0} · Lv {1} · {2}"
 });

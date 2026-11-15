@@ -1318,5 +1318,17 @@ I18N.add('fr', {
   "Trueno Mágico": "Tonnerre Magique",
   "Rayo Arcano": "Rayon Arcanique",
   "Estrella Mágica": "Étoile Magique",
-  "Círculo Arcano": "Cercle Arcanique"
+  "Círculo Arcano": "Cercle Arcanique",
+  // Punto de guardado de partida
+  "Esta partida se ha continuado en otra pestaña o ventana": "Cette partie a été reprise dans un autre onglet ou une autre fenêtre",
+  "Tienes una partida guardada. Si empiezas otra, se perderá. ¿Empezar una partida nueva?": "Tu as une partie sauvegardée. Si tu en commences une autre, elle sera perdue. Commencer une nouvelle partie ?",
+  "Guardar y salir": "Sauvegarder et quitter",
+  "Partida guardada: puedes cerrar el juego y continuarla desde el menú.": "Partie sauvegardée : tu peux fermer le jeu et la reprendre depuis le menu.",
+  "Las partidas del ranking global no se guardan.": "Les parties du classement mondial ne sont pas sauvegardées.",
+  "Continuar partida": "Reprendre la partie",
+  "Partida guardada": "Partie sauvegardée",
+  "Continuar partida guardada": "Reprendre la partie sauvegardée",
+  "Partida continuada": "Partie reprise",
+  "El mapa se ha reconstruido con oleadas nuevas": "La carte a été reconstruite avec de nouvelles vagues",
+  "{0} · Nv {1} · {2}": "{0} · Nv {1} · {2}"
 });
