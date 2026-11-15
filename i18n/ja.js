@@ -1,5 +1,6 @@
 // 日本語: textos del juego (clave en español -> traducción). Lo que no está aquí se queda en español.
 I18N.add('ja', {
+  "Portal": "ポータル",
   "Bosque Inicial": "はじまりの森",
   "Guardián del Bosque Inicial": "はじまりの森の守護者",
   "Pantano de Datos": "データの沼",
@@ -861,7 +862,7 @@ I18N.add('ja', {
   "Invocar jefe": "ボスを呼ぶ",
   "DASH": "ダッシュ",
   "SALTO": "ジャンプ",
-  "Tú (tu Digimon) · 🎁 cofres · enemigos con su sprite · jefe": "あなた（デジモン）· 🎁 宝箱 · スプライト付きの敵 · ボス",
+  "Tú (tu Digimon) · 🎁 cofres · santuarios · ❗ eventos · portal (círculo cian) · jefe": "あなた（デジモン）· 🎁 宝箱 · 祠 · ❗ イベント · ポータル（水色の円）· ボス",
   "M o Esc para cerrar": "MかEscで閉じる",
   "tickets": "チケット",
   "disponibles": "所持",

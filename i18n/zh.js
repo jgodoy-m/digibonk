@@ -1,5 +1,6 @@
 // 中文: textos del juego (clave en español -> traducción). Lo que no está aquí se queda en español.
 I18N.add('zh', {
+  "Portal": "传送门",
   "Bosque Inicial": "起始森林",
   "Guardián del Bosque Inicial": "起始森林的守护者",
   "Pantano de Datos": "数据沼泽",
@@ -861,7 +862,7 @@ I18N.add('zh', {
   "DASH": "冲刺",
   "SALTO": "跳跃",
   "EVO": "进化",
-  "Tú (tu Digimon) · 🎁 cofres · enemigos con su sprite · jefe": "你（你的数码宝贝）· 🎁 宝箱 · 显示精灵图的敌人 · 头目",
+  "Tú (tu Digimon) · 🎁 cofres · santuarios · ❗ eventos · portal (círculo cian) · jefe": "你（你的数码宝贝）· 🎁 宝箱 · 神殿 · ❗ 事件 · 传送门（青色圆圈）· 头目",
   "M o Esc para cerrar": "按 M 或 Esc 关闭",
   "tickets": "抽奖券",
   "disponibles": "可用",

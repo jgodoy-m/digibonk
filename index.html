@@ -3490,7 +3490,7 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 <canvas id="minimap" width="170" height="170"></canvas>
 <div id="mapview">
   <canvas id="bigmap" width="600" height="600"></canvas>
-  <div class="mapleg">Tú (tu Digimon) · 🎁 cofres · enemigos con su sprite · jefe<br>M o Esc para cerrar</div>
+  <div class="mapleg">Tú (tu Digimon) · 🎁 cofres · santuarios · ❗ eventos · portal (círculo cian) · jefe<br>M o Esc para cerrar</div>
 </div>
 <div id="pause" class="hidden"></div>
 
@@ -7144,29 +7144,34 @@ function drawEdgeMarkers(){
   if (state !== 'play' || !g) return;
   const targets = g.chests.filter(ch => !ch.open && !ch.gone).map(ch => ({x: ch.x, z: ch.z, col: '#ffd54f'}));
   if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
-  if (g.portal && (g.portalOpen || canSummonBoss())) targets.push({x: PORTAL.x, z: PORTAL.z, col: '#3de0ff'});
+  if (g.portal) targets.push({x: PORTAL.x, z: PORTAL.z, col: g.portalOpen ? '#3de0ff' : '#8fe9ff', label: I18N.tr('Portal'), big: true});
   for (const n of eventTargets()) targets.push({x: n.x, z: n.z, col: EVENT_COL[g.ev.kind] || '#7cf29c'});
   for (const sh of g.shrines || []) if (!sh.used) targets.push({x: sh.x, z: sh.z, col: shrineHex(sh.type), far: 40});
   for (const e of g.eggs || []) targets.push({x: e.x, z: e.z, col: '#ffd54f'});
   for (const e of g.enemies) if (e.kind === 'elite' || e.kind === 'mini') targets.push({x: e.x, z: e.z, col: e.kind === 'mini' ? '#ce93d8' : '#ff7043'});
   const W = cv.width, H = cv.height, cx = W/2, cy = H/2;
+  // Las flechas de arriba van por debajo del panel central del HUD (si no, el portal del norte queda tapado)
+  const ht = document.getElementById('hudTop'), hr = ht && ht.getClientRects().length ? ht.getBoundingClientRect() : null;
+  const top = hr && hr.bottom < H/2 ? Math.max(40, hr.bottom + 28) : 40;
   for (const t of targets){
     if (t.far && Math.hypot(t.x - g.p.x, t.z - g.p.z) > t.far) continue;   // santuarios: solo los cercanos
     const v = new THREE.Vector3(t.x, terrainH(t.x, t.z) + 1.5, t.z).project(camera);
     const sx = (v.x + 1)/2*W, sy = (1 - v.y)/2*H;
-    const inside = v.z < 1 && sx > 40 && sx < W - 40 && sy > 40 && sy < H - 40;
-    if (inside) continue;
+    const inside = v.z < 1 && sx > 40 && sx < W - 40 && sy > top && sy < H - 40;
+    if (inside && !(t.big && Math.hypot(t.x - g.p.x, t.z - g.p.z) > 30)) continue;   // el portal lejano cae en el horizonte: flecha igual
     let dx = sx - cx, dy = sy - cy;
     if (v.z > 1){ dx = -dx; dy = -dy; }          // detrás de la cámara: la flecha apunta al lado correcto
-    const k = Math.min((cx - 40)/Math.abs(dx || 1e-6), (cy - 40)/Math.abs(dy || 1e-6));
+    const k = Math.min((cx - 40)/Math.abs(dx || 1e-6), (dy < 0 ? cy - top : cy - 40)/Math.abs(dy || 1e-6));
     const px = cx + dx*k, py = cy + dy*k;
     c.save(); c.translate(px, py); c.rotate(Math.atan2(dy, dx));
     c.fillStyle = t.col; c.strokeStyle = '#000'; c.lineWidth = 2;
+    if (t.big) c.scale(1.4, 1.4);
     c.beginPath(); c.moveTo(16, 0); c.lineTo(-9, -11); c.lineTo(-9, 11); c.closePath(); c.fill(); c.stroke();
     c.restore();
     c.fillStyle = '#fff'; c.strokeStyle = '#000'; c.lineWidth = 3; c.font = 'bold 13px system-ui'; c.textAlign = 'center';
-    const d = Math.round(Math.hypot(t.x - g.p.x, t.z - g.p.z));
-    c.strokeText(d + ' m', px, py - 16); c.fillText(d + ' m', px, py - 16);
+    const d = Math.round(Math.hypot(t.x - g.p.x, t.z - g.p.z)), txt = (t.label ? t.label + ' · ' : '') + d + ' m';
+    const ty = py < top + 10 ? py + 30 : py - 20;   // arriba del todo: el texto va debajo de la flecha
+    c.strokeText(txt, px, ty); c.fillText(txt, px, ty);
   }
 }
 // ---------- Habilidades de ataque: se eligen al subir de nivel (hasta nivel 3) ----------
@@ -7734,8 +7739,12 @@ function buildPortal(){
   lock.scale.set(1.3, 1.3, 1); lock.position.set(0, 3.6, 1.8); grp.add(lock);
   const ring = new THREE.Mesh(new THREE.RingGeometry(PORTAL.r - 0.3, PORTAL.r + 0.3, 40), new THREE.MeshBasicMaterial({color: 0x777788, transparent: true, opacity: 0.5, depthWrite: false}));
   ring.rotation.x = -Math.PI/2; ring.position.y = 0.08; grp.add(ring);
+  // Columna de luz alta: el portal se ve desde cualquier punto de la pantalla
+  const beam = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.6, 60, 20, 1, true),
+    new THREE.MeshBasicMaterial({color: 0x3de0ff, map: shrineBeamTex(), transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide}));
+  beam.position.y = 30; grp.add(beam);
   world.add(grp);
-  g.portal = {grp, swirl, lock, ring, stone};
+  g.portal = {grp, swirl, lock, ring, stone, beam};
 }
 function openPortal(title, sub){
   g.portalOpen = true;
@@ -7756,6 +7765,7 @@ function updatePortal(dt){
   const P = g.portal;
   if (!P) return;
   P.swirl.material.rotation -= dt * (g.portalOpen ? 3 : 0.6);
+  if (P.beam) P.beam.material.opacity = (g.portalOpen ? 0.55 : 0.3) + 0.08*Math.sin(g.t*2.5);
   if (g.portalOpen){
     const k = 1 + 0.06*Math.sin(g.t*5);
     P.swirl.scale.set(3.6*k, 3.6*k, 1);
@@ -8184,35 +8194,41 @@ function drawWorldMap(cv, size){
   c.fillStyle = MC[1];
   for (const P of PONDS){ c.beginPath(); c.ellipse(X(P.x), Y(P.z), P.rx*1.05*k, P.rz*1.05*k, 0, 0, Math.PI*2); c.fill(); }
   if (!g) return;
-  // Portal: anillo gris (cerrado) o cian (abierto)
-  if (g.portal){ c.strokeStyle = g.portalOpen ? '#3de0ff' : '#9aa0b0'; c.lineWidth = 3*u; c.beginPath(); c.arc(X(PORTAL.x), Y(PORTAL.z), 6*u, 0, Math.PI*2); c.stroke(); }
-  // Cofres sin abrir: icono de regalo
+  // Solo puntos de interés: cofres, huevos, santuarios, eventos, jefe y portal (sin enemigos normales)
+  const badge = (x, y, r, fill, stroke) => { c.fillStyle = fill; c.strokeStyle = stroke; c.lineWidth = 2*u; c.beginPath(); c.arc(x, y, r, 0, Math.PI*2); c.fill(); c.stroke(); };
   c.font = `${Math.max(12, 14*u)}px system-ui`; c.textAlign = 'center'; c.textBaseline = 'middle';
   for (const ch of g.chests){
-    if (ch.open) continue;
+    if (ch.open || ch.gone) continue;
     c.fillText('🎁', X(ch.x), Y(ch.z));
   }
   for (const e of g.eggs || []) c.fillText('🥚', X(e.x), Y(e.z));
-  // Santuarios sin usar: rombo de su color; eventos: punto que late
+  // Santuarios sin usar: su arco de piedra sobre un círculo del color de su efecto
   for (const sh of g.shrines || []){
     if (sh.used) continue;
-    const sx = X(sh.x), sy = Y(sh.z), r = 5*u;
-    c.fillStyle = shrineHex(sh.type); c.strokeStyle = '#0b1020'; c.lineWidth = 1.5*u;
-    c.beginPath(); c.moveTo(sx, sy - r); c.lineTo(sx + r, sy); c.lineTo(sx, sy + r); c.lineTo(sx - r, sy); c.closePath(); c.fill(); c.stroke();
+    const sx = X(sh.x), sy = Y(sh.z);
+    badge(sx, sy, 7*u, shrineHex(sh.type), '#0b1020');
+    drawIcon(c, 'ui/hud/ic_santuario.webp', sx, sy, 12*u);
   }
+  // Eventos: círculo que late con una exclamación
   if (g.ev){
-    c.fillStyle = EVENT_COL[g.ev.kind] || '#7cf29c'; c.strokeStyle = '#0b1020'; c.lineWidth = 1.5*u;
-    for (const n of eventTargets()){ c.beginPath(); c.arc(X(n.x), Y(n.z), (3.5 + 1.5*Math.sin(g.t*6))*u, 0, Math.PI*2); c.fill(); c.stroke(); }
+    const col = EVENT_COL[g.ev.kind] || '#7cf29c';
+    for (const n of eventTargets()){
+      const ex = X(n.x), ey = Y(n.z);
+      badge(ex, ey, (6 + 1.5*Math.sin(g.t*6))*u, col, '#0b1020');
+      c.fillStyle = '#0b1020'; c.font = `bold ${Math.max(9, 10*u)}px system-ui`; c.fillText('!', ex, ey + 0.5*u);
+    }
   }
-  // Enemigos: su propio sprite, en miniatura
-  for (const e of g.enemies){
-    if (e.boss) continue;
-    const d = {...ENEMY[e.kind], sprite: e.sprite || ENEMY[e.kind].sprite};
-    drawIcon(c, d ? d.sprite : 'sprites/numemon.png', X(e.x), Y(e.z), (e.kind === 'tank' ? 16 : 12) * u);
-  }
-  // Jefe final
+  // Jefe
   if (g.boss && g.enemies.includes(g.boss)){
     drawIcon(c, g.boss.sprite || 'sprites/adventure/piedmon.png', X(g.boss.x), Y(g.boss.z), 26 * u);
+  }
+  // Portal: la puerta del mapa dentro de un círculo grande que late; gris azulado cerrado, cian abierto
+  if (g.portal){
+    const qx = X(PORTAL.x), qy = Y(PORTAL.z), pr = (11 + (g.portalOpen ? 1.5*Math.sin(g.t*5) : 0))*u;
+    badge(qx, qy, pr, g.portalOpen ? 'rgba(61,224,255,.85)' : 'rgba(20,40,60,.75)', g.portalOpen ? '#ffffff' : '#3de0ff');
+    c.lineWidth = 1.5*u; c.strokeStyle = '#0b1020'; c.beginPath(); c.arc(qx, qy, pr + 2*u, 0, Math.PI*2); c.stroke();
+    const art = PORTAL_ART[g.map] || PORTAL_ART.desierto, im = iconImg(art.file), ih = 15*u, iw = ih*art.aspect;
+    if (im.complete && im.naturalWidth) c.drawImage(im, qx - iw/2, qy - ih/2 - 0.5*u, iw, ih);
   }
   // Jugador: el Digimon que estás usando
   const pc = X(g.p.x), py = Y(g.p.z);

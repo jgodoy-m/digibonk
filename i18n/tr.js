@@ -854,7 +854,7 @@ I18N.add('tr', {
   "Invocar jefe": "Boss çağır",
   "DASH": "ATIL",
   "SALTO": "ZIPLA",
-  "Tú (tu Digimon) · 🎁 cofres · enemigos con su sprite · jefe": "Sen (Digimon'un) · 🎁 sandıklar · sprite'larıyla düşmanlar · boss",
+  "Tú (tu Digimon) · 🎁 cofres · santuarios · ❗ eventos · portal (círculo cian) · jefe": "Sen (Digimon'un) · 🎁 sandıklar · tapınaklar · ❗ etkinlikler · portal (camgöbeği daire) · boss",
   "M o Esc para cerrar": "Kapatmak için M veya Esc",
   "tickets": "bilet",
   "disponibles": "mevcut",
