@@ -93,6 +93,7 @@ canvas{display:block}
 #tutoTip{position:fixed;left:50%;bottom:24%;transform:translate(-50%,8px);max-width:min(560px,86vw);padding:10px 18px;border-radius:16px;background:rgba(8,18,44,.86);border:1px solid rgba(154,239,255,.55);box-shadow:0 6px 20px rgba(0,0,0,.35);color:#fff;font:800 15px/1.35 'Nunito',system-ui,sans-serif;text-align:center;pointer-events:none;opacity:0;transition:opacity .35s,transform .35s;z-index:30}
 #tutoTip.show{opacity:1;transform:translate(-50%,0)}
 #tutoTip small{display:block;margin-bottom:2px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#9aefff}
+body.dbk-noplay #tutoTip{opacity:0!important}   /* el consejo no tapa las cartas de nivel, la pausa ni la tienda */
 @media (max-height:500px){#tutoTip{bottom:auto;top:24%;font-size:13px;padding:7px 14px}}
 /* Aviso si el navegador pierde los gráficos (pasa en móviles al cambiar de app o con poca memoria) */
 #glLost{position:fixed;inset:0;z-index:10000;display:none;place-items:center;background:rgba(4,10,28,.92);color:#fff;font-family:'Nunito',system-ui,sans-serif;text-align:center;padding:20px}
@@ -3523,6 +3524,49 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.min.js" } }
 </script>
+<style>
+/* Móvil en vertical, pantalla del inicial: los 8 caben en una cuadrícula de 4 y la ficha del elegido se ve encima
+   del botón fijo «Empezar con…» (antes el botón tapaba la última fila y la ficha quedaba debajo) */
+@media (orientation:portrait) and (max-width:760px){
+  #overlay .pk2-starter .pk2-top h2{font-size:clamp(17px,5.2vw,24px)!important;white-space:normal!important;max-width:100%}
+  #overlay .pk2-starter .pk2-body{gap:10px!important}
+  #overlay .pk2-starter .pk2-right{order:1}
+  #overlay .pk2-starter .pk2-left{order:2;display:block!important}
+  #overlay .pk2-starter .pk2-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}
+  #overlay .pk2-starter .pk2-tile{padding:6px 2px!important;gap:2px!important;min-height:0!important;height:auto!important}
+  #overlay .pk2-starter .pk2-face{width:46px!important;height:46px!important}
+  #overlay .pk2-starter .pk2-tile b{font-size:12px!important}
+  #overlay .pk2-starter .pk2-tile small{display:none!important}
+  #overlay .pk2-starter .pk2-hero{display:flex!important;flex-direction:row!important;align-items:center!important;gap:12px!important;min-height:0!important;height:auto!important;padding:10px!important}
+  #overlay .pk2-starter .pk2-stage{flex:none!important;width:84px!important;height:84px!important;min-height:0!important}
+  #overlay .pk2-starter .pk2-hero-img{width:84px!important;height:84px!important}
+  #overlay .pk2-starter .pk2-id{text-align:left!important}
+  #overlay .pk2-starter .pk2-id h2{font-size:20px!important;margin:0!important}
+  #overlay .pk2-starter .pk2-id p{font-size:13px!important;margin:2px 0 0!important}
+}
+/* Móvil en horizontal (poca altura): el inicio cabe sin desplazarse. Sin logo; a la izquierda Jugar y los modos,
+   a la derecha encargos, evento y accesos en una cuadrícula de 3×2 */
+@media (orientation:landscape) and (max-height:500px){
+  #overlay .realhub.hb .hb-brand{display:none!important}
+  #overlay .realhub.hb .hb-main{display:block!important;padding:6px 12px 6px!important}
+  #overlay .realhub.hb .hb-left{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;grid-auto-rows:auto;align-content:start;gap:7px 12px!important;width:100%!important;max-width:none!important;margin:0!important}
+  #overlay .realhub.hb .hb-left>*{margin:0!important;min-width:0}
+  #overlay .realhub.hb .hb-modes{grid-column:1;grid-row:1 / span 3;align-self:start}
+  #overlay .realhub.hb .hb-play{min-height:0!important;height:clamp(120px,40vh,170px)!important}
+  #overlay .realhub.hb #mEnc{grid-column:2;grid-row:1;padding:6px 10px!important;min-height:0!important}
+  #overlay .realhub.hb #mEnc .nm-eqs{font-size:11px!important;gap:2px!important}
+  #overlay .realhub.hb #rhEvent{grid-column:2;grid-row:2;min-height:0!important;height:34px!important}
+  #overlay .realhub.hb .hb-tiles{grid-column:2;grid-row:3;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile{min-height:0!important;height:50px!important;padding:3px 4px!important;flex-direction:row!important;gap:6px!important;justify-content:flex-start!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile i{margin:0!important;flex:none}
+  #overlay .realhub.hb .nm-tiles .hb-tile i img{width:24px!important;height:24px!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile b{font-size:12px!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  #overlay .realhub.hb .nm-tiles .hb-tile small{display:none!important}
+  #overlay .realhub.hb .hb-bar{grid-column:1;grid-row:3;align-self:end;margin:0!important;height:auto!important}
+  #overlay .realhub.hb .hb-bar .hb-btn{width:34px!important;height:34px!important}
+  #overlay .realhub.hb .hb-out{color:var(--m-text)!important;font-size:12px!important;opacity:.75}
+}
+</style>
 </head>
 <body>
 <div id="vignette"></div>
@@ -3589,7 +3633,7 @@ const ARENA_R = 110;  // medio lado del escenario: el mapa es cuadrado y lo cier
 const ZONES = [
   {name:'Bosque Inicial',   at:0,   fog:0xbcd9e8, sky:['#4d86c9', '#a9d4ee', '#d8efff'], tint:0xffffff, color:'#ffd54f', biome:'bosque',
     boss: {name: 'Andromon', sprite: 'sprites/adventure/andromon.png', hp: 3000, dmg: 15, shots: 10, shotDmg: 8, gap: 2.5, col: '#ffd54f', sub: 'Guardián del Bosque Inicial'}},
-  {name:'Pantano de Datos', at:600, fog:0x8c7cb8, sky:['#241b4a', '#6a4f9e', '#c59ad6'], tint:0xd8c6ff, color:'#ce93d8', biome:'bosque',
+  {name:'Pantano de Datos', at:600, fog:0x8c7cb8, sky:['#241b4a', '#6a4f9e', '#c59ad6'], tint:0xd8c6ff, color:'#ce93d8', biome:'pantano',
     boss: {name: 'Piedmon', sprite: 'sprites/adventure/piedmon.png', hp: 6000, dmg: 20, shots: 12, shotDmg: 10, gap: 2.3, col: '#ce93d8', sub: 'Líder de los Dark Masters · jefe final', final: true}}
 ];
 const ZONE2_AT = ZONES[1].at;
@@ -4141,6 +4185,19 @@ const BIOMES = {
     water: {map: 'textures/agua_pixel.png', color: 0xff6a2a, shore: 0x5a2a1a, lava: true},
     deco: [['sprites/deco/nieve/muro.png', 1.78, 1, 10.0, 0, 3], ['sprites/deco/nieve/muro_estandarte.png', 1.57, 1, 8.0, 0, 3], ['sprites/deco/nieve/torre.png', 0.73, 1, 4.0, 1.6, 6], ['sprites/deco/nieve/valla_estandarte.png', 1.87, 1, 8.0, 0, 2], ['sprites/deco/nieve/pilar.png', 0.48, 1, 10.0, 0.6, 3.8], ['sprites/deco/nieve/pilar_tech.png', 0.66, 1, 6.0, 0.8, 3.2], ['sprites/deco/nieve/arco.png', 0.93, 1, 4.0, 1, 4.4], ['sprites/deco/nieve/ruina.png', 0.69, 1, 8.0, 0.8, 3], ['sprites/deco/nieve/altar.png', 1.00, 1, 3.0, 1, 2.4], ['sprites/deco/nieve/cristal1.png', 0.97, 1, 5.0, 0.6, 1.8], ['sprites/deco/nieve/cristal2.png', 1.38, 1, 5.0, 0.6, 1.8], ['sprites/deco/nieve/roca1.png', 1.65, 1, 3.3, 1.4, 1.4], ['sprites/deco/nieve/roca2.png', 1.46, 1, 3.3, 1.4, 1.4], ['sprites/deco/nieve/roca3.png', 1.43, 1, 3.3, 1.4, 1.4], ['sprites/deco/nieve/roca_grande1.png', 1.43, 1, 2.5, 2.4, 2.2], ['sprites/deco/nieve/roca_grande2.png', 1.65, 1, 2.5, 2.4, 2.2], ['sprites/deco/nieve/arbol_seco1.png', 0.88, 1, 2.5, 0.6, 5.5], ['sprites/deco/nieve/arbol_seco2.png', 0.94, 1, 2.5, 0.6, 5.5], ['sprites/deco/nieve/pino_hielo.png', 1.02, 1, 3.0, 1.1, 5.6]]}
 };
+// Pantano de Datos (mapa 1, pantalla 2): antes repetía el bioma del bosque con otro tinte. Ahora tiene suelo de barro,
+// caminos de hierba, agua verde turbia y un bosque más cerrado de árboles oscuros, troncos, tocones, setas y helechos
+// (sin flores). Usa los mismos sprites del bosque, así que no añade archivos; su semilla le da otra disposición.
+BIOMES.pantano = {...BIOMES.bosque,
+  path: 'textures/mapa_losas_musgo.png', stone: 'textures/mapa_hierba.png', mm: ['#4f5b3a', '#6b7a62'],
+  plaza: {fondo: ['arco'], centro: ['altar'], anillo: ['pilar', 'tocon2'], sueltos: ['ruina', 'roca_grande2', 'cristal', 'tronco', 'seta2']},
+  borde: ['seta1', 'seta2', 'seta3', 'helecho1', 'helecho2', 'tocon1', 'tocon2', 'arbusto1', 'arbusto3', 'roca1'],
+  floor: 'textures/mapa_tierra.png', rep: 70, center: [0.7, 0.8, 0.62], mount: 0x8a9a7a,
+  water: {map: 'textures/agua_verde_kenney.png', color: 0x8fbf7a, shore: 0x55603f},
+  deco: BIOMES.bosque.deco.filter(d => !/arbol_flor|arbol_otono|arbusto_flor|flores/.test(d[0])).map(d => {
+    const w = /arbol_azul|arbol_medio|tronco|tocon|seta|helecho/.test(d[0]) ? d[3]*2.2 : d[3];
+    return [d[0], d[1], d[2], w, d[4], d[5]];
+  })};
 const DECO_AR = {"bosque/arbol":1.12,"bosque/arbol_flor":1.04,"bosque/arbol_otono":1.18,"bosque/arbol_azul":1.09,"bosque/arbol_medio1":0.77,"bosque/arbol_medio2":0.83,"bosque/arbolito":0.78,"bosque/arbusto1":1.57,"bosque/arbusto2":1.35,"bosque/arbusto3":1.45,"bosque/arbusto_flor1":1.49,"bosque/arbusto_flor2":1.47,"bosque/arbusto_flor3":1.39,"bosque/helecho1":1.42,"bosque/helecho2":1.12,"bosque/flores1":1.58,"bosque/flores2":1.59,"bosque/flores3":1.06,"bosque/flores4":1.15,"bosque/seta1":1.42,"bosque/seta2":1.24,"bosque/seta3":1.24,"bosque/tocon1":1.42,"bosque/tocon2":1.28,"bosque/tronco":2.89,"bosque/roca1":1.45,"bosque/roca2":1.48,"bosque/roca_grande1":1.4,"bosque/roca_grande2":1.64,"bosque/cristal":1.03,"bosque/cartel":0.78,"bosque/pilar":0.57,"bosque/arco":1.24,"bosque/ruina":1.01,"bosque/altar":1.0,"bosque/portal":1.51,"bosque/puente":2.77,"bosque/valla":2.11,"bosque/escalera":1.86,"desierto/acacia1":1.37,"desierto/acacia2":1.39,"desierto/acacia_tech1":1.3,"desierto/acacia_tech2":1.27,"desierto/acacia_media1":0.89,"desierto/acacia_media2":0.86,"desierto/acacia_media3":0.94,"desierto/arbusto1":1.54,"desierto/arbusto2":1.57,"desierto/arbusto_flor1":1.48,"desierto/arbusto_flor2":1.35,"desierto/arbusto_flor3":1.27,"desierto/planta1":1.14,"desierto/planta2":1.4,"desierto/pasto_seco1":1.06,"desierto/pasto_seco2":1.27,"desierto/cactus1":0.84,"desierto/cactus2":0.86,"desierto/cactus3":0.88,"desierto/cactus4":1.13,"desierto/cactus_bola1":1.32,"desierto/cactus_bola2":1.54,"desierto/cactus_bola3":0.75,"desierto/arbol_muerto1":0.9,"desierto/arbol_muerto2":1.35,"desierto/arbol_muerto3":1.19,"desierto/huesos1":2.12,"desierto/huesos2":1.35,"desierto/roca1":1.72,"desierto/roca2":1.45,"desierto/roca3":1.28,"desierto/roca4":1.2,"desierto/roca_roja1":1.61,"desierto/roca_roja2":1.41,"desierto/roca_roja3":1.43,"desierto/cristal1":0.9,"desierto/cristal2":0.72,"desierto/cartel1":0.83,"desierto/cartel2":0.72,"desierto/valla":1.96,"desierto/pilar1":0.5,"desierto/pilar2":0.48,"desierto/arco":1.15,"desierto/ruina1":0.78,"desierto/ruina2":0.75,"desierto/escalera":1.54,"desierto/altar":1.0,"desierto/lapida":0.89,"desierto/puente":2.45,"desierto/ruina_arena1":1.77,"desierto/ruina_arena2":1.97,"desierto/ruina_arena3":1.87,"desierto/ruina_arena4":1.99,"desierto/ruina_arena5":1.64,"desierto/ruina_arena6":1.32,"desierto/ruina_arena7":1.19,"desierto/ruina_arena8":1.19,"desierto/portal":1.43,"nieve/pino1":1.02,"nieve/pino2":1.05,"nieve/pino_hielo":1.02,"nieve/arbol_seco1":0.88,"nieve/arbol_seco2":0.94,"nieve/arbolito_seco1":0.78,"nieve/arbolito_seco2":0.74,"nieve/arbusto1":1.62,"nieve/arbusto2":1.52,"nieve/arbusto3":1.57,"nieve/arbusto_bayas1":1.47,"nieve/arbusto_bayas2":1.43,"nieve/arbusto_hielo":1.45,"nieve/planta_hielo1":1.48,"nieve/planta_hielo2":1.49,"nieve/flores1":1.56,"nieve/flores2":1.36,"nieve/flores3":1.24,"nieve/flor_cristal":1.19,"nieve/seta1":1.4,"nieve/seta2":1.34,"nieve/seta3":1.3,"nieve/tocon1":1.38,"nieve/tocon2":1.3,"nieve/tronco":2.62,"nieve/roca1":1.65,"nieve/roca2":1.46,"nieve/roca3":1.43,"nieve/roca_grande1":1.43,"nieve/roca_grande2":1.65,"nieve/cristal1":0.97,"nieve/cristal2":1.38,"nieve/cartel":0.68,"nieve/valla_estandarte":1.87,"nieve/muro_estandarte":1.57,"nieve/muro":1.78,"nieve/torre":0.73,"nieve/pilar":0.48,"nieve/arco":0.93,"nieve/ruina":0.69,"nieve/altar":1.0,"nieve/pilar_tech":0.66,"nieve/portal":1.32,"nieve/puente":2.27,"nieve/escalera":1.48};
 const PROP_SIZE = {arco: 4.4, altar: 2.4, pilar: 3.8, pilar_tech: 3.2, ruina: 2.8, ruina_arena: 2.6, roca_grande: 2.2, roca_roja: 2.2, cristal: 1.8, roca: 1.4, flores: 0.9,
   arbusto: 1.6, arbusto_flor: 1.6, arbusto_bayas: 1.6, seta: 1.1, valla: 1.6, cartel: 1.8, torre: 6, muro: 3, muro_estandarte: 3, valla_estandarte: 2, lapida: 2.2,
@@ -4465,6 +4522,14 @@ function pauseGame(){
   unlockMouse();
   showPause();
 }
+// Móvil girado a vertical en plena partida: el aviso «Gira el móvil» tapa el juego, así que se pausa
+// (antes la horda seguía haciendo daño debajo del aviso)
+{
+  const portraitMq = matchMedia('(orientation:portrait) and (pointer:coarse)');
+  const onPortrait = () => { if (portraitMq.matches && state === 'play') pauseGame(); };
+  if (portraitMq.addEventListener) portraitMq.addEventListener('change', onPortrait); else if (portraitMq.addListener) portraitMq.addListener(onPortrait);
+  addEventListener('resize', onPortrait);
+}
 function resumeGame(){
   if (state !== 'paused') return;
   if (runTakenOver()) return;
@@ -4538,7 +4603,7 @@ function showPause(askQuit = false){
       ${actions}
       <div class="pz2-keys">
         <span><kbd>Esc</kbd> pausa</span><span><kbd>WASD</kbd> mover</span><span><kbd>Espacio</kbd> saltar</span><span><kbd>Shift</kbd> dash</span>
-        <span><kbd>E</kbd> cofres</span><span><kbd>Tab</kbd> mapa</span><span><kbd>N</kbd> sonido</span><span><kbd>R</kbd> evolucionar</span>
+        <span><kbd>E</kbd> cofres</span><span><kbd>Tab</kbd> mapa</span><span><kbd>N</kbd> sonido</span><span><kbd>R</kbd> evolucionar</span><span><kbd>Q</kbd> Bonk</span><span><kbd>B</kbd> invocar jefe</span>
       </div>
     </div>`;
   pauseEl.classList.remove('hidden');
@@ -4601,7 +4666,7 @@ const fmtTime = s => `${Math.floor(s/60)}:${String(s%60).padStart(2, '0')}`;
 let selectedKey = (() => { try { const k = localStorage.getItem('digibonk3d-last-choice'); return k && CHARS[k] ? k : 'agumon'; } catch(e){ return 'agumon'; } })();
 // Oculta/muestra el HUD de partida (el menú no debe mostrar barras ni temporizador)
 function setHud(v){
-  if (!v) tipHide();
+  if (!v){ tipHide(); hideBossCard(); }
   { const shEl = document.getElementById('shrineHud'); if (shEl && !v) shEl.style.display = 'none'; }
   if (!v) evHud(null);
   // Fuera de partida no se dibujan flechas de radar (así no quedan las de la última partida)
@@ -5603,13 +5668,16 @@ const UNLOCK = {
   leomon:   {how: 'Logro: 1.000 bajas en total', prog: () => [Math.min(1000, sumStats('kills')), 1000]},
   hagurumon:{how: 'Logro: completar 25 partidas', prog: () => [Math.min(25, sumStats('plays')), 25]},
   frigimon: {how: 'Gana la Montaña Helada (o 5% por sorpresa al terminar cada partida)', prog: () => [wonMap('nevado'), 1], rnd: 0.05},
-  wizardmon:{how: 'Logro: tener a Gatomon', prog: () => [isUnlocked('gatomon') ? 1 : 0, 1]}
+  // Antes bastaba con tener a Gatomon y, si era el inicial, Wizardmon llegaba al momento
+  wizardmon:{how: 'Logro: completar 5 partidas con Gatomon', prog: () => [Math.min(5, isUnlocked('gatomon') ? statsOf('gatomon').plays || 0 : 0), 5]}
 };
 function sumStats(field){ return Object.values(loadJSON('digibonk3d-stats', {})).reduce((a, x) => a + (x[field] || 0), 0); }
 // Texto de cómo se consigue un Digimon bloqueado (los iniciales no tienen regla propia)
 function unlockHow(k){ return UNLOCK[k] ? UNLOCK[k].how : 'Compañero inicial: elígelo al registrarte'; }
 // Jugadores anteriores a este sistema (sin lista guardada): todo desbloqueado
 function unlockedSet(){
+  // Registrado pero sin elegir aún el inicial (cerró o recargó en esa pantalla): solo Agumon, nunca todo
+  if (starterPending()) return new Set(['agumon']);
   if (!localStorage.getItem('digibonk3d-unlocked')) return new Set(SEASONS.adventure.chars);
   return new Set([...loadJSON('digibonk3d-unlocked', []), 'agumon']); // Agumon es el inicial: siempre disponible
 }
@@ -5630,8 +5698,12 @@ function checkUnlocks(rnd = true){
   }
   return won;
 }
-// Pantalla de inicial: solo al registrarse
+// Pantalla de inicial: solo al registrarse. Mientras no se elige, queda apuntado que falta (si recarga, vuelve aquí)
+const STARTER_PENDING = 'digibonk3d-starter-pending';
+// Solo cuenta si aún no hay lista de desbloqueados (si llega una de la nube o de un código de guardado, manda esa)
+function starterPending(){ return !!localStorage.getItem(STARTER_PENDING) && !localStorage.getItem('digibonk3d-unlocked'); }
 function showStarter(){
+  try { localStorage.setItem(STARTER_PENDING, '1'); } catch(e){}
   state = 'starter';
   setHud(false);
   let pick = 'agumon';
@@ -5658,7 +5730,9 @@ function showStarter(){
     overlay.querySelectorAll('[data-st]').forEach(b => b.onclick = () => { pick = b.dataset.st; draw(); });
     document.getElementById('stGo').onclick = () => {
       localStorage.setItem('digibonk3d-unlocked', JSON.stringify([pick]));
+      localStorage.removeItem(STARTER_PENDING);
       selectedKey = pick;
+      try { localStorage.setItem('digibonk3d-last-choice', pick); } catch(e){}   // «Jugar» y los mapas muestran al elegido
       showSelect();
     };
   };
@@ -6219,7 +6293,7 @@ function startGame(key, resume){
   g = {
     mode: runMode,
     ch: {...c, id:key},
-    p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:2.5, critChance:0.12, critMul:2},
+    p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:3.5, critChance:0.12, critMul:2},
     t: 0, kills: 0, enemies: [], shots: [], gems: [], blades: [], turrets: [], zones: [],
     wCd: 0, spawnT: 0, orbitA: 0, choices: [],
     dash: 0, dashCd: 0, dir: {x:0, z:-1}, chests: [], chestT: 20, flash: '', flashT: 0,
@@ -6399,7 +6473,9 @@ function spawnMini(m){
   const shadow = makeShadow(4.4);
   world.add(shadow);
   const sp = clampArena(g.p.x + Math.cos(a)*24, g.p.z + Math.sin(a)*24, ARENA_R - 0.5);
-  const hp = m.hp*(1 + diffT(t)/90)*evoHp()*diffMul('hp');
+  // Misma curva de vida que la horda (foeHpK) y unas 3 élites de vida: antes un jefe menor tenía menos vida que
+  // una élite normal (Devimon 995 PS frente a 1.156 en el minuto 3). m.hp solo ordena a unos frente a otros
+  const hp = ENEMY.elite.hp*MINI_HP_K*(m.hp/340)*foeHpK(diffT(t))*evoHp()*diffMul('hp');
   g.enemies.push({kind: 'mini', name: m.name, sprite: m.sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 2.5, r: 1.9, xp: 60, dmg: 16*(1 + diffT(t)/300)*diffMul('dmg'), cd: 0});
   sfx('boss');
   bossIntro(g.enemies[g.enemies.length - 1], m.name, 'Jefe menor', '#ce93d8', true);
@@ -6465,7 +6541,7 @@ function digivolve(){
   g.evoAnim = {t: 0, dur: 2.6, swapped: false, sprite: spriteOf(g.ch.id, st), name: evo.name};
   shake = Math.max(shake, 0.5);
   sfx('evolve');
-  announce(evo.name + '!', `Digievolución · +${Math.round((Math.pow(EVO_TOTAL.dmg, 1/n) - 1)*100)}% daño, +${inc} vida`, '#ffd54f');
+  announce('¡' + evo.name + '!', `Digievolución · +${Math.round((Math.pow(EVO_TOTAL.dmg, 1/n) - 1)*100)}% daño, +${inc} vida`, '#ffd54f');
 }
 
 // Animación de digievolución: 0-0.6 s brillo y temblor, cambio de sprite con destello y anillo, 0.6-1.6 s asentamiento
@@ -6763,6 +6839,7 @@ function hurt(e, dmg){
   if (BEATS[g.attr] === attrOf(e)) dmg *= ATTR_ADV;               // ventaja de atributo
   dmg *= (g.evoSk && g.evoSk[dmgSrc]) || 1;                        // habilidad evolucionada
   if (crit){ dmg *= g.p.critMul; shake = Math.max(shake, 0.2); }
+  if (e.shield) dmg *= 0.2;   // élite con el escudo activo
   e.hp -= dmg;
   g.dmgBy[dmgSrc] = (g.dmgBy[dmgSrc] || 0) + dmg;
   popText(e.x, e.z, Math.round(dmg), crit ? '#ffb300' : '#ffffff', crit ? 0.8 : 0.55);
@@ -6858,12 +6935,35 @@ function spawnEnemy(forced){
     kind, sprite, mesh, shadow, x: sp[0], z: sp[1],
     hp: d.hp*k*evoHp()*diffMul('hp'), max: d.hp*k*evoHp()*diffMul('hp'), spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300 + (tt/600)*(tt/600))*evoDmg()*diffMul('dmg'), cd: 0
   };
+  if (kind === 'elite'){ foe.mech = ELITE_MECHS[Math.floor(Math.random()*ELITE_MECHS.length)]; foe.st = 2 + Math.random()*2; }
   g.enemies.push(foe);
   return foe;
 }
+// Mecánicas de las élites: escudo que se activa a ratos (azul: casi no le hace daño), embestida como los
+// embestidores pero más fuerte, o invocación de 3 enemigos a su alrededor
+const ELITE_MECH = {
+  escudo:    {sub: 'Élite con escudo: atácala cuando no brille azul'},
+  embestida: {sub: 'Élite embestidora: se pone roja antes de cargar'},
+  invoca:    {sub: 'Élite invocadora: trae refuerzos cada pocos segundos'}
+};
+const ELITE_MECHS = Object.keys(ELITE_MECH);
+function eliteMech(e, d, dt){
+  if (e.mech === 'escudo'){
+    // 2,5 s con escudo y 3 s sin él
+    e.shT = (e.shT === undefined ? 3 : e.shT) - dt;
+    if (e.shT <= 0){ e.shield = !e.shield; e.shT = e.shield ? 2.5 : 3; e.mesh.material.color.set(e.shield ? 0x6ec6ff : 0xffffff); if (e.shield) spawnRing(e.x, e.z, 0x6ec6ff, 3, 0.4); }
+  } else if (e.mech === 'invoca'){
+    e.st -= dt;
+    if (e.st <= 0 && d < 24){
+      e.st = 8;
+      for (let i = 0; i < 3; i++){ const m = spawnEnemy('basic'), a = i/3*Math.PI*2; if (!m) break; [m.x, m.z] = clampArena(e.x + Math.cos(a)*2.5, e.z + Math.sin(a)*2.5, ARENA_R - 0.5); }
+      spawnRing(e.x, e.z, 0xce93d8, 4, 0.5); popText(e.x, e.z, '¡Refuerzos!', '#ce93d8', 1);
+    }
+  }
+}
 
 /* ---------- Santuarios ----------
-   Cada pantalla tiene 5 santuarios de tipos distintos, en suelo llano. Para activarlos hay que quedarse unos 3 s dentro de su círculo.
+   Cada pantalla tiene SHRINES_PER_SCREEN (3) santuarios de tipos distintos, en suelo llano. Para activarlos hay que quedarse unos 3 s dentro de su círculo.
    Aspecto (como el icono del HUD): plataforma de piedra con dos columnas y dintel, un haz de luz de su color que se ve desde lejos,
    un cristal flotante y, encima, la carta de su efecto para saber qué da antes de ir. Al usarlo, la piedra se queda apagada. */
 const SHRINE_TYPES = [
@@ -7005,6 +7105,9 @@ function startShrineTrial(sh){
   const foes = [];
   for (let i = 0; i < 3; i++){
     const e = spawnEnemy('elite'); if (!e) continue;
+    // Sin mecánica y con menos vida al principio: antes casi nunca se superaba en los primeros minutos
+    const k = Math.min(1, 0.45 + g.t/600);
+    e.mech = null; e.hp *= k; e.max *= k;
     const a = i/3*Math.PI*2 + Math.random();
     [e.x, e.z] = clampArena(sh.x + Math.cos(a)*11, sh.z + Math.sin(a)*11, ARENA_R - 1);
     foes.push(e);
@@ -7198,7 +7301,8 @@ function openShop(n){
 }
 // Ruleta: 40 monedas por tirada (la primera de cada Piximon es gratis)
 const WHEEL = [
-  {t: 'Cura 40%', col: '#7cf29c', f: () => { if (!(g.mod && g.mod.noHeal)) g.p.hp = Math.min(g.p.maxHp, g.p.hp + g.p.maxHp*0.4); }},
+  // La semana «Sin curación» esta casilla da vida máxima en vez de curar (antes no hacía nada)
+  {get t(){ return g && g.mod && g.mod.noHeal ? '+25 vida máx.' : 'Cura 40%'; }, col: '#7cf29c', f: () => { if (g.mod && g.mod.noHeal) g.p.maxHp += 25; else g.p.hp = Math.min(g.p.maxHp, g.p.hp + g.p.maxHp*0.4); }},
   {t: '+80 monedas', col: '#ffd54f', f: () => addCoins(80)},
   {t: 'Ataque +1', col: '#ff8a65', f: () => { const c = sigCard(); if (c) c.f(); }},
   {t: 'Cofre dorado', col: '#ffca28', f: () => spawnChestAt(g.p.x + g.dir.x*3, g.p.z + g.dir.z*3, true)},
@@ -7320,6 +7424,7 @@ function update(dt){
   let amt = 1;   // joystick táctil: velocidad proporcional a cuánto se empuja
   if (!mx && !mz && tMove.m > 0){ mx = tMove.x; mz = tMove.z; amt = tMove.m; }
   g.dashCd = Math.max(0, g.dashCd - dt);
+  if (g.hitI > 0) g.hitI -= dt;
   if (g.dash > 0){
     g.dash -= dt;
     p.x += g.dir.x * 22 * dt;
@@ -7385,13 +7490,13 @@ function update(dt){
   // Fase extra: un jefe especial cada 40 s
   if (g.extraOn && !g.extraSpawned && g.t >= g.extraNext){ spawnSpecial(); g.extraSpawned = true; }
 
-  // Élites: cada 45 s desde el minuto 1; a partir del minuto 5 salen de dos en dos
+  // Élites: una cada 45 s (40 s desde el minuto 10) desde el minuto 1
   g.eliteT -= dt;
   if (g.eliteT <= 0){
     g.eliteT = eliteGap();
-    const n = g.t >= 300 ? 2 : 1;
-    for (let i = 0; i < n; i++) spawnEnemy('elite');
-    announce('¡Élite!', n > 1 ? 'Dos Digimon élite se acercan' : 'Un Digimon élite se acerca', '#ff7043');
+    // Una sola élite cada vez (antes dos a partir del minuto 5) y cada una con su mecánica: se distingue el peligro
+    const el = spawnEnemy('elite');
+    if (el) announce('¡Élite!', ELITE_MECH[el.mech].sub, '#ff7043');
   }
 
   // Enemigos: persiguen y dañan por contacto
@@ -7411,14 +7516,15 @@ function update(dt){
       if (d < e.r + 0.8 && g.dash <= 0) p.hp -= e.dmg * foeMul(e) * (p.armor || 1) * idleMul() * dt;
       continue;
     }
-    // Embestidor: a menos de 10 m se para 0,7 s (se pone rojo) y carga 0,6 s hacia donde estabas
-    if (e.kind === 'charger'){
+    if (e.mech) eliteMech(e, d, dt);
+    // Embestidor (y élite embestidora, más rápida): a menos de 10 m se para 0,7 s (se pone rojo) y carga 0,6 s hacia donde estabas
+    if (e.kind === 'charger' || e.mech === 'embestida'){
       e.st = (e.st === undefined ? 2 : e.st) - dt;
       if (!e.ch && e.st <= 0 && d < 10){ e.ch = {w: 0.7, t: 0.6, dx: dx/d, dz: dz/d}; e.mesh.material.color.set(0xff5252); }
       if (e.ch){
         const c = e.ch;
         if (c.w > 0){ c.w -= dt; if (c.w > 0.25){ c.dx = dx/d; c.dz = dz/d; } }   // apunta y fija la dirección en el último cuarto de segundo
-        else { c.t -= dt; e.x += c.dx*15*dt; e.z += c.dz*15*dt; if (c.t <= 0){ e.ch = null; e.st = 3.5; e.mesh.material.color.set(0xffffff); } }
+        else { const v = e.mech ? 19 : 15; c.t -= dt; e.x += c.dx*v*dt; e.z += c.dz*v*dt; if (c.t <= 0){ e.ch = null; e.st = e.mech ? 4.5 : 3.5; e.mesh.material.color.set(0xffffff); } }
         [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5); resolveSolids(e, e.r*0.8);
         if (d < e.r + 0.8 && g.dash <= 0) p.hp -= e.dmg * (c.w > 0 ? 1 : 1.8) * foeMul(e) * (p.armor || 1) * idleMul() * dt;
         continue;
@@ -7557,10 +7663,16 @@ function update(dt){
   }
   g.drops = g.drops.filter(dr => !dr.taken);
 
-  // Gemas de XP
+  // Gemas de XP. Si hay demasiadas sueltas, las más lejanas se funden en una gema grande que vale por todas
+  // (antes no había límite: 230-360 gemas en el minuto 5, cada una con su objeto 3D, y miles en partidas largas)
+  if ((g.gemMergeT = (g.gemMergeT || 0) - dt) <= 0){ g.gemMergeT = 0.5; mergeGems(); }
   for (const gm of g.gems){
+    if (gm.born === undefined) gm.born = g.t;
+    // Las gemas que llevan 20 s en el suelo se acercan solas si estás a menos de 12 m (se quedaba mucha experiencia atrás)
+    if (!gm.attract && !gm.heal && g.t - gm.born > GEM_DRIFT_AFTER && dist2(gm.x, gm.z, p.x, p.z) < 12) gm.attract = true;
     if (!gm.mesh){
-      gm.mesh = new THREE.Mesh(gm.heal ? GEM_HEAL_GEO : GEM_GEO, matFor(gm.heal ? 0x66bb6a : 0x29b6f6));
+      gm.mesh = new THREE.Mesh(gm.heal ? GEM_HEAL_GEO : GEM_GEO, matFor(gm.heal ? 0x66bb6a : gm.big ? 0xff4081 : 0x29b6f6));
+      if (gm.big) gm.mesh.scale.setScalar(2.2);
       world.add(gm.mesh);
     }
     const d = dist2(gm.x, gm.z, p.x, p.z), dd = d || 1;
@@ -7655,9 +7767,11 @@ function update(dt){
       for (let i = 0; i < ns; i++){
         const an = i/ns*Math.PI*2 + g.t;
         const shot = projMesh(0xff1744, 'dark'); shot.scale.multiplyScalar(1.3);
-        shot.position.set(b.x, 1 + terrainH(b.x, b.z), b.z);
+        // Salen desde el borde del jefe, no desde su centro: estar encima ya no recibe el anillo entero a la vez
+        const sx = b.x + Math.cos(an)*b.r, sz = b.z + Math.sin(an)*b.r;
+        shot.position.set(sx, 1 + terrainH(sx, sz), sz);
         world.add(shot);
-        g.eshots.push({x: b.x, z: b.z, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4, mesh: shot, dmg: (bd.shotDmg || 8) * bossDmgMul()});
+        g.eshots.push({x: sx, z: sz, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4, mesh: shot, dmg: (bd.shotDmg || 8) * bossDmgMul()});
       }
     }
     // Mapa 3: el jefe único huye por el portal a mitad de vida en la primera pantalla
@@ -7683,7 +7797,8 @@ function update(dt){
     s.mesh.position.set(s.x, 1 + terrainH(s.x, s.z), s.z);
     s.mesh.rotation.y += dt*5;
     if (s.life > 0 && dist2(s.x, s.z, p.x, p.z) < 0.9 && g.dash <= 0){
-      p.hp -= s.dmg * (p.armor || 1); s.life = 0; shake = Math.max(shake, 0.3);
+      s.life = 0;
+      if (hitPlayer(s.dmg)) shake = Math.max(shake, 0.3);
     }
   }
   g.eshots = g.eshots.filter(s => {
@@ -7723,10 +7838,17 @@ function update(dt){
 function drawEdgeMarkers(){
   const cv = document.getElementById('edgeCv');
   if (!cv) return;
+  // Fuera de la partida en curso (subida de nivel, pausa, tienda, ruleta, fin) no se dibuja nada: las flechas tapaban esos menús
+  const inPlay = state === 'play' && !!g;
+  if (drawEdgeMarkers.body !== inPlay){ drawEdgeMarkers.body = inPlay; document.body.classList.toggle('dbk-noplay', !inPlay); }   // oculta el consejo del tutorial
+  if (!inPlay){
+    if (drawEdgeMarkers.on){ cv.getContext('2d').clearRect(0, 0, cv.width, cv.height); drawEdgeMarkers.on = false; }
+    return;
+  }
+  drawEdgeMarkers.on = true;
   if (cv.width !== innerWidth || cv.height !== innerHeight){ cv.width = innerWidth; cv.height = innerHeight; }
   const c = cv.getContext('2d');
   c.clearRect(0, 0, cv.width, cv.height);
-  if (state !== 'play' || !g) return;
   const targets = g.chests.filter(ch => !ch.open && !ch.gone).map(ch => ({x: ch.x, z: ch.z, col: '#ffd54f'}));
   if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
   if (g.portal) targets.push({x: PORTAL.x, z: PORTAL.z, col: g.portalOpen ? '#3de0ff' : '#8fe9ff', label: I18N.tr('Portal'), big: true});
@@ -7992,6 +8114,20 @@ function projMesh(color, kind){
 function aimMesh(m, vx, vz){ m.rotation.y = -Math.atan2(vz, vx); }
 function matFor(color){ return matCache[color] || (matCache[color] = new THREE.MeshBasicMaterial({color})); }
 const RING_GEO = new THREE.RingGeometry(0.96, 1, 48);
+const GEM_CAP = 150, GEM_DRIFT_AFTER = 20;
+// Funde en una gema grande las gemas de experiencia que pasan de GEM_CAP, empezando por las más lejanas.
+// La gema grande se queda donde estaba la más lejana de las fundidas y suma su valor (se reutiliza si ya existe)
+function mergeGems(){
+  const xs = g.gems.filter(gm => !gm.heal && !gm.big && !gm.attract && !gm.taken);
+  if (xs.length <= GEM_CAP) return;
+  const p = g.p;
+  xs.sort((a, b) => dist2(b.x, b.z, p.x, p.z) - dist2(a.x, a.z, p.x, p.z));
+  const out = xs.slice(0, xs.length - GEM_CAP + 20);   // deja margen para no fundir en cada comprobación
+  let big = g.gems.find(gm => gm.big && !gm.taken && !gm.attract);
+  if (!big){ big = {x: out[0].x, z: out[0].z, v: 0, big: true, mesh: null, born: g.t}; g.gems.push(big); }
+  for (const gm of out){ big.v += gm.v; gm.taken = true; if (gm.mesh) world.remove(gm.mesh); }
+  g.gems = g.gems.filter(gm => !gm.taken);
+}
 const GEM_GEO = new THREE.OctahedronGeometry(0.25), GEM_HEAL_GEO = new THREE.OctahedronGeometry(0.32);
 const BIT_GEO = new THREE.SphereGeometry(0.3, 10, 10), BIT_MAT = new THREE.MeshBasicMaterial({color: 0xe040fb});
 const SPROJ_GEO = new THREE.SphereGeometry(0.28, 8, 8);
@@ -8519,6 +8655,12 @@ function bossCard(name, sub, sprite, col, opt = {}){
   clearTimeout(bossCard.t);
   bossCard.t = setTimeout(() => el.classList.remove('show'), 1900);   // tiempo real: también se va en cámara lenta
 }
+// Quita el cartel del jefe al momento (fin de partida o salir al menú: no debe quedarse encima)
+function hideBossCard(){
+  const el = document.getElementById('bossCard');
+  clearTimeout(bossCard.t);
+  if (el) el.classList.remove('show');
+}
 // Entrada de jefe: cámara lenta, sacudida, onda roja y cartel
 function bossIntro(e, name, sub, col, small){
   g.slowT = Math.max(g.slowT || 0, small ? 0.5 : 0.9);
@@ -8735,7 +8877,9 @@ function bossPhases(dt){
 // evolución; el daño (contacto, disparos y golpes) sube como el de la horda pero más despacio.
 const BOSS_REF_T = 180;
 const foeHpK = tt => 1 + tt/45 + (tt/115)*(tt/115);
-function bossHpMul(){ return Math.max(1, foeHpK(diffT(g.t)) / foeHpK(BOSS_REF_T)) * evoHp(); }
+// ×1,3 desde que los jefes menores tienen unas 3 élites de vida: el jefe de zona sigue por encima de ellos
+const MINI_HP_K = 3, BOSS_HP_K = 1.3;
+function bossHpMul(){ return BOSS_HP_K * Math.max(1, foeHpK(diffT(g.t)) / foeHpK(BOSS_REF_T)) * evoHp(); }
 function bossDmgMul(){ return (lvlDiff().dmg || 1) * (1 + diffT(g.t)/300); }
 // Invoca al jefe de la pantalla cuando quieras: cuanto más tarde, más fuerte (ver bossHpMul)
 function summonBoss(){
@@ -8747,7 +8891,10 @@ function summonBoss(){
   if (g.bossDown) return;
   if (!nearPortal()){ announce('Ve al portal', 'Invoca a ' + def.name + ' junto al portal del norte', '#3de0ff'); return; }
   const max = Math.round(def.hp * lvlDiff().boss * bossHpMul());
-  let hp = def.resume && g.bossLeftHp ? g.bossLeftHp : max;
+  // Jefe que huyó (Machinedramon): vuelve con la misma fracción de vida que tenía, aplicada a su nueva vida máxima.
+  // Antes se guardaba la vida en número y, como la vida máxima sube con el tiempo, volvía con un 13 % y en fase 3.
+  const left = def.resume ? leftFrac() : 0;
+  let hp = left ? Math.max(1, Math.round(max * left)) : max;
   if (g.bossResume){ hp = Math.min(hp, Math.max(1, Math.round(max * g.bossResume))); g.bossResume = 0; }   // partida continuada: la vida que le quedaba
   // Aparece delante del portal, entre el portal y el jugador
   const away = Math.atan2(g.p.z - PORTAL.z, g.p.x - PORTAL.x);
@@ -8760,12 +8907,19 @@ function summonBoss(){
   g.enemies.push(g.boss);
   g.bossSpawned = true; g.bossName = def.name; g.bossShotT = 2.2;
   sfx('boss');
-  bossIntro(g.boss, def.name, def.resume && g.bossLeftHp ? 'Vuelve con ' + Math.round(hp / max * 100) + '% de vida' : def.sub, def.col);
+  if (left){ const b = g.boss; b.phase = b.hp <= b.max*0.25 ? 3 : b.hp <= b.max*0.5 ? 2 : 1; b.slamT = 3; }   // sin cartel de fase al aparecer
+  bossIntro(g.boss, def.name, left ? 'Vuelve con ' + Math.round(hp / max * 100) + '% de vida' : def.sub, def.col);
+}
+// Vida que le quedaba al jefe que huyó, como fracción de su máximo (las partidas guardadas antes de este cambio
+// tenían el número absoluto: se toma la mitad, que es cuando huye)
+function leftFrac(){
+  if (g.bossLeftK) return Math.max(0.02, Math.min(1, g.bossLeftK));
+  return g.bossLeftHp ? 0.5 : 0;
 }
 // Mapa 3: el jefe único huye por el portal y espera al otro lado con la vida que le queda
 function bossRetreat(){
   const b = g.boss;
-  g.bossLeftHp = b.hp;
+  g.bossLeftK = b.hp / b.max;
   spawnRing(b.x, b.z, 0xb0bec5, 8, 0.8);
   world.remove(b.mesh); world.remove(b.shadow);
   g.enemies = g.enemies.filter(e => e !== b);
@@ -8847,7 +9001,7 @@ function updateHUD(){
   const canSummon = portalMap && canSummonBoss() && nearPortal();
   const sumEl = document.getElementById('hudSummon');
   sumEl.style.display = canSummon ? 'flex' : 'none';
-  if (canSummon) document.getElementById('hudSummonName').textContent = zoneDef().boss.name + (g.bossLeftHp && zoneDef().boss.resume ? ' · ' + Math.round(g.bossLeftHp / (zoneDef().boss.hp * lvlDiff().boss) * 100) + '%' : '');
+  if (canSummon) document.getElementById('hudSummonName').textContent = zoneDef().boss.name + (zoneDef().boss.resume && leftFrac() ? ' · ' + Math.round(leftFrac() * 100) + '%' : '');
   document.getElementById('xpTxt').textContent = `Nivel ${p.lvl} · EXP ${Math.floor(p.xp)} / ${p.nextXp}`;
   document.getElementById('hpTxt').textContent = `${Math.ceil(Math.max(0, p.hp))} / ${p.maxHp}`;
   document.getElementById('hudName').textContent = stageName(g.ch.id, g.ch.evolved);
@@ -9264,7 +9418,7 @@ function fusionCards(){
     const name = FUSION_NAMES[key] || `${skillName(a)} + ${skillName(b)}`, kind = fusionKind(a, b);
     const what = kind === 'nova' ? 'una estrella de 10 proyectiles que atraviesan' : kind === 'homing' ? '4 proyectiles que persiguen al enemigo más fuerte' : 'una onda expansiva que daña y empuja';
     out.push({t: 'FUSIÓN: ' + name, name, fusion: key, k: 'ofensiva', d: `${skillName(a)} + ${skillName(b)}: cada pocos segundos lanza ${what}. Los dos ataques siguen como estaban.`,
-      f: () => { (g.fus || (g.fus = [])).push({key, name, kind, t: 1, cd: kind === 'nova' ? 2.6 : kind === 'homing' ? 3 : 4}); announce(name + '!', 'Fusión de ataques', '#ff8a1e'); sfx('evolve'); }});
+      f: () => { (g.fus || (g.fus = [])).push({key, name, kind, t: 1, cd: kind === 'nova' ? 2.6 : kind === 'homing' ? 3 : 4}); announce('¡' + name + '!', 'Fusión de ataques', '#ff8a1e'); sfx('evolve'); }});
   }
   return out;
 }
@@ -9298,7 +9452,7 @@ function evoSkillCards(){
   for (const [id, ev] of Object.entries(EVO_SKILLS)){
     if ((g.skills[id] || 0) !== 3 || (g.evoSk && g.evoSk[id]) || !((g.upTaken || {})[ev.need] > 0)) continue;
     out.push({t: 'EVO: ' + ev.name, name: ev.name, evo: id, k: 'ofensiva', d: `Evolución de ${skillName(id)} (con ${ev.need}): nivel 4 y +50% de daño.`,
-      f: () => { g.skills[id] = 4; (g.evoSk || (g.evoSk = {}))[id] = 1.5; announce(ev.name + '!', 'Habilidad evolucionada', '#ffd54f'); }});
+      f: () => { g.skills[id] = 4; (g.evoSk || (g.evoSk = {}))[id] = 1.5; announce('¡' + ev.name + '!', 'Habilidad evolucionada', '#ffd54f'); }});
   }
   return out;
 }
@@ -9313,6 +9467,15 @@ function addHazard(x, z, r, t, kind, dmg, color){
   let rock = null;
   if (kind !== 'slow'){ rock = fxMesh('dark', 1.8, 0xffffff); world.add(rock); }
   (g.hazards || (g.hazards = [])).push({x, z, r, t, t0: t, kind, dmg, mesh, rock});
+}
+// Impacto puntual (balas y bombas): tras cada uno hay 0,4 s de invulnerabilidad a otros impactos puntuales,
+// para que varias balas o bombas que llegan en el mismo instante no sumen su daño de golpe
+const HIT_IFRAMES = 0.4;
+function hitPlayer(dmg){
+  if (g.hitI > 0) return false;
+  g.p.hp -= dmg * (g.p.armor || 1);
+  g.hitI = HIT_IFRAMES;
+  return true;
 }
 function enemyShot(x, z, an, spd, dmg, color){
   const shot = projMesh(color, 'dark');
@@ -9354,7 +9517,7 @@ function updateBossMechanics(dt){
       if (h.rock){ h.rock.position.set(h.x, terrainH(h.x, h.z) + 0.6 + 12*k, h.z); h.rock.rotation.y += dt*8; }
       if (h.t <= 0){
         burst(h.x, h.z, '#ff1744');
-        if (inside && g.dash <= 0){ g.p.hp -= h.dmg * (g.p.armor || 1); shake = Math.max(shake, 0.35); if (h.meteor && g.ev && g.ev.kind === 'meteor') g.ev.hits++; }
+        if (inside && g.dash <= 0 && hitPlayer(h.dmg)){ shake = Math.max(shake, 0.35); if (h.meteor && g.ev && g.ev.kind === 'meteor') g.ev.hits++; }
         // Los meteoros del evento también aplastan a la horda (no a jefes ni al Digimon salvaje)
         if (h.meteor) for (const e of g.enemies) if (!e.boss && e.kind !== 'mini' && !e.wild && !e.golden && dist2(h.x, h.z, e.x, e.z) < h.r + e.r*0.5) e.hp -= e.max*0.7;
       }
@@ -9462,7 +9625,7 @@ function startMapEvent(force){
     const e = spawnEnemy('elite');
     if (!e){ g.ev = null; return startMapEvent('double'); }
     const [x, z] = nodeNear(20, 26); e.x = x; e.z = z;
-    e.hp *= 2.5; e.max *= 2.5; e.spd *= 1.15; e.hunted = true;
+    e.hp *= 2.5; e.max *= 2.5; e.spd *= 1.15; e.hunted = true; e.mech = null;
     const mark = new THREE.Mesh(new THREE.RingGeometry(1.7, 2.1, 40), new THREE.MeshBasicMaterial({color: 0xff5252, transparent: true, opacity: 0.85, depthWrite: false, side: THREE.DoubleSide}));
     mark.rotation.x = -Math.PI/2; world.add(mark);
     g.ev = {kind, t: 50, foe: e, mark};
@@ -9755,7 +9918,8 @@ const ENC_TYPES = [
   {id:'chests', ns:[6, 8, 10], t: n => `Abre ${n} cofres en una partida`, ok: (n) => (g.chestsOpened || 0) >= n},
   {id:'bonk', ns:[6, 8, 10], t: n => `Usa el Bonk ${n} veces en una partida`, ok: (n) => (g.bonks || 0) >= n},
   {id:'level', ns:[35, 45, 55], t: n => `Llega al nivel ${n}`, ok: (n) => g.p.lvl >= n},
-  {id:'mini', ns:[0, 1, 2], t: n => `Derrota a ${MINIS[n].name}`, ok: (n) => (g.minisKilled || []).includes(MINIS[n].name)},
+  // El mapa 3 no tiene jefes menores: el texto dice dónde se cumple
+  {id:'mini', ns:[0, 1, 2], t: n => `Derrota a ${MINIS[n].name} en el mapa 1 o 2`, ok: (n) => (g.minisKilled || []).includes(MINIS[n].name)},
   {id:'with', ns:null, t: k => `Aguanta 10 minutos con ${CHARS[k].name}`, ok: (k) => g.ch.id === k && g.t >= 600}
 ];
 // Generador con semilla del día: todos los jugadores ven los mismos encargos ese día
@@ -10415,7 +10579,7 @@ function showPlayer(){
   const skinsRaw = loadJSON('digibonk3d-skins', []);
   const skinsOwned = Array.isArray(skinsRaw) ? skinsRaw.length : Object.keys(skinsRaw).length;
   const achDone = achDoneCount(), achTotal = achItems().length;
-  const digiOwned = unlockedSet().size, digiTotal = Object.keys(CHARS).length;
+  const {done: digiOwned, total: digiTotal} = pickProgress();   // mismo recuento que el inicio y los logros (12)
   const statList = [
     ['🎮', plays, 'Partidas'], ['⚔', kills, 'Bajas'], ['⏱', bestT ? fmtTime(bestT) : '—', 'Mejor tiempo'], ['⭐', bestL || '—', 'Mejor nivel'],
     ['🧬', evos, 'Evoluciones'], ['📘', `${digiOwned}/${digiTotal}`, 'Digimon'], ['Ⓑ', SAVE.bits, 'Bits'], ...(GACHA_SOON ? [] : [['🎟', SAVE.tickets, 'Tickets']]),
@@ -11358,10 +11522,11 @@ function frame(now){
     if (g.perfectCd > 0) g.perfectCd -= dt;
     if (!g.evoAnim) update(sdt);   // durante la digievolución el mundo se detiene y solo corre la animación
     if (g){
-      syncMeshes(); updateCamera(dt); updateHUD(); drawEdgeMarkers();
+      syncMeshes(); updateCamera(dt); updateHUD();
       if (g.aura){ g.aura.group.position.set(g.p.x, terrainH(g.p.x, g.p.z) + g.p.y, g.p.z); g.aura.update(g.t); }
     }
   }
+  drawEdgeMarkers();
   touchCtlSync();
   animateEvo(dt);
   updateFx(dt);
@@ -11391,7 +11556,7 @@ function frame(now){
   requestAnimationFrame(frame);
 }
 buildSkins();
-if (trainerName) showSelect(); else showRegister();
+if (trainerName && starterPending()) showStarter(); else if (trainerName) showSelect(); else showRegister();
 cloudBoot();
 // Modo demo (solo para grabar los vídeos del tutorial con ?demo=1): expone el estado y atajos de escena
 if (new URLSearchParams(location.search).has('demo')){

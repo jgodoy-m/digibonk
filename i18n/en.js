@@ -1328,5 +1328,13 @@ I18N.add('en', {
   "Continuar partida guardada": "Continue saved run",
   "Partida continuada": "Run continued",
   "El mapa se ha reconstruido con oleadas nuevas": "The map has been rebuilt with new waves",
-  "{0} · Nv {1} · {2}": "{0} · Lv {1} · {2}"
+  "{0} · Nv {1} · {2}": "{0} · Lv {1} · {2}",
+  "Logro: completar 5 partidas con Gatomon": "Achievement: finish 5 runs with Gatomon",
+  "invocar jefe": "summon boss",
+  "Derrota a {0} en el mapa 1 o 2": "Defeat {0} on map 1 or 2",
+  "Élite con escudo: atácala cuando no brille azul": "Shielded elite: hit it when it isn't glowing blue",
+  "Élite embestidora: se pone roja antes de cargar": "Charging elite: turns red before it charges",
+  "Élite invocadora: trae refuerzos cada pocos segundos": "Summoner elite: calls reinforcements every few seconds",
+  "¡Refuerzos!": "Reinforcements!",
+  "+25 vida máx.": "+25 max HP"
 });

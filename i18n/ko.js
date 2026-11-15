@@ -1342,5 +1342,13 @@ I18N.add('ko', {
   "Continuar partida guardada": "저장된 게임 이어하기",
   "Partida continuada": "게임 재개",
   "El mapa se ha reconstruido con oleadas nuevas": "맵이 새로운 웨이브로 다시 만들어졌습니다",
-  "{0} · Nv {1} · {2}": "{0} · Lv {1} · {2}"
+  "{0} · Nv {1} · {2}": "{0} · Lv {1} · {2}",
+  "Logro: completar 5 partidas con Gatomon": "업적: Gatomon으로 5판 완료",
+  "invocar jefe": "보스 소환",
+  "Derrota a {0} en el mapa 1 o 2": "맵 1 또는 2에서 {0} 처치",
+  "Élite con escudo: atácala cuando no brille azul": "방패 엘리트: 파랗게 빛나지 않을 때 공격",
+  "Élite embestidora: se pone roja antes de cargar": "돌진 엘리트: 돌진 전에 빨갛게 변함",
+  "Élite invocadora: trae refuerzos cada pocos segundos": "소환 엘리트: 몇 초마다 지원군을 부름",
+  "¡Refuerzos!": "지원군!",
+  "+25 vida máx.": "최대 체력 +25"
 });
