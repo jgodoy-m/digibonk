@@ -1186,3 +1186,12 @@ I18N.add('tr', {
   "Consigue todas las skins de un Digimon · {0}": "Bir Digimon'un tüm kostümlerini topla · {0}",
   "Acumula 300 bajas en total · {0}": "Toplam 300 düşman yen · {0}"
 });
+// Sin tickets mientras la Incubadora está en «Próximamente»
+I18N.add('tr', {
+  "El portal está abierto: ve al norte (flecha cian)": "Portal açık: kuzeye git (camgöbeği ok)",
+  "Un jefe menor se une a la horda": "Küçük bir boss sürüye katılıyor",
+  "Cofre dorado": "Altın sandık",
+  "Atrápalo antes de 30 s: Bits": "30 sn içinde yakala: Bit",
+  "Un cofre dorado": "Altın sandık",
+  "Cada partida da Bits y sube la maestría del Digimon con el que juegas, que regala títulos, marcos y skins. En la tienda los Bits compran lo de la línea de la semana, y en el laboratorio mejoran a todos tus Digimon para siempre.": "Her oyun Bit verir ve oynadığın Digimon'un ustalığını yükseltir; ustalık unvan, çerçeve ve kostüm hediye eder. Mağazada Bit'ler haftanın serisindeki eşyaları alır, laboratuvarda ise tüm Digimon'larını kalıcı olarak güçlendirir."
+});

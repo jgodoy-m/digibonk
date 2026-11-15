@@ -1193,3 +1193,12 @@ I18N.add('ko', {
   "Consigue todas las skins de un Digimon · {0}": "디지몬 하나의 스킨을 모두 모으기 · {0}",
   "Acumula 300 bajas en total · {0}": "총 300마리 처치 · {0}"
 });
+// Sin tickets mientras la Incubadora está en «Próximamente»
+I18N.add('ko', {
+  "El portal está abierto: ve al norte (flecha cian)": "포털이 열렸다: 북쪽으로 (청록색 화살표)",
+  "Un jefe menor se une a la horda": "중간 보스가 무리에 합류",
+  "Cofre dorado": "황금 상자",
+  "Atrápalo antes de 30 s: Bits": "30초 안에 잡아라: Bits",
+  "Un cofre dorado": "황금 상자",
+  "Cada partida da Bits y sube la maestría del Digimon con el que juegas, que regala títulos, marcos y skins. En la tienda los Bits compran lo de la línea de la semana, y en el laboratorio mejoran a todos tus Digimon para siempre.": "매 판마다 Bits를 얻고, 플레이한 디지몬의 숙련도가 올라 칭호, 프레임, 스킨을 받아요. 상점에서는 Bits로 이번 주 라인의 아이템을 사고, 연구소에서는 모든 디지몬을 영구히 강화해요."
+});

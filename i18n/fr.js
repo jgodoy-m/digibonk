@@ -1180,3 +1180,12 @@ I18N.add('fr', {
   "Consigue todas las skins de un Digimon · {0}": "Obtiens tous les skins d'un Digimon · {0}",
   "Acumula 300 bajas en total · {0}": "Cumule 300 éliminations au total · {0}"
 });
+// Sin tickets mientras la Incubadora está en «Próximamente»
+I18N.add('fr', {
+  "El portal está abierto: ve al norte (flecha cian)": "Le portail est ouvert : va au nord (flèche cyan)",
+  "Un jefe menor se une a la horda": "Un mini-boss rejoint la horde",
+  "Cofre dorado": "Coffre doré",
+  "Atrápalo antes de 30 s: Bits": "Attrape-le en moins de 30 s : Bits",
+  "Un cofre dorado": "Un coffre doré",
+  "Cada partida da Bits y sube la maestría del Digimon con el que juegas, que regala títulos, marcos y skins. En la tienda los Bits compran lo de la línea de la semana, y en el laboratorio mejoran a todos tus Digimon para siempre.": "Chaque partie donne des Bits et augmente la maîtrise du Digimon joué, qui offre titres, cadres et skins. En boutique, les Bits achètent les objets de la lignée de la semaine, et au laboratoire ils améliorent tous tes Digimon pour toujours."
+});

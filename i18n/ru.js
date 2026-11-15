@@ -1192,3 +1192,12 @@ I18N.add('ru', {
   "Consigue todas las skins de un Digimon · {0}": "Собери все скины одного Дигимона · {0}",
   "Acumula 300 bajas en total · {0}": "Набери всего 300 убийств · {0}"
 });
+// Sin tickets mientras la Incubadora está en «Próximamente»
+I18N.add('ru', {
+  "El portal está abierto: ve al norte (flecha cian)": "Портал открыт: иди на север (голубая стрелка)",
+  "Un jefe menor se une a la horda": "Мини-босс присоединяется к орде",
+  "Cofre dorado": "Золотой сундук",
+  "Atrápalo antes de 30 s: Bits": "Поймай его за 30 с: биты",
+  "Un cofre dorado": "Золотой сундук",
+  "Cada partida da Bits y sube la maestría del Digimon con el que juegas, que regala títulos, marcos y skins. En la tienda los Bits compran lo de la línea de la semana, y en el laboratorio mejoran a todos tus Digimon para siempre.": "Каждый забег даёт биты и повышает мастерство Дигимона, за которого ты играешь, а оно дарит титулы, рамки и скины. В магазине биты покупают предметы линии недели, а в лаборатории навсегда улучшают всех твоих Дигимонов."
+});

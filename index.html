@@ -453,6 +453,7 @@ canvas{display:block}
 .end3.lose h1{color:#ff6b6b;text-shadow:0 5px 0 #5a0d0d}
 .end3-sub{text-align:center;margin:4px 0 14px;font:14px system-ui,sans-serif;color:#9fd4ff}
 .end3-cells{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+#overlay .end3 .end3-cells.no-tix .end3-gain{grid-column:span 2}
 .end3-cells span{display:flex;flex-direction:column;align-items:center;font:11px system-ui,sans-serif;color:#9fd4ff;background:rgba(0,0,0,.3);padding:10px 4px}
 .end3-cells b{font:900 26px 'Orbitron',system-ui,sans-serif;color:#fff}
 .end3-cols{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
@@ -4738,7 +4739,7 @@ function refreshTopbar(){
       <span><b>${escHtml(trainerName || 'Entrenador')}</b><small>${isGuest() ? t('guestTag') : (tt ? tt.name : t('noTitle'))}</small></span></button>
     <span class="tb-sp"></span>
     <span class="tb-chip" title="Bits">Ⓑ ${SAVE.bits}</span>
-    <span class="tb-chip tix" title="Tickets">🎟 ${SAVE.tickets}</span>
+    ${GACHA_SOON ? '' : `<span class="tb-chip tix" title="Tickets">🎟 ${SAVE.tickets}</span>`}
     <button class="tb-btn" id="tbLang" title="Idioma / Language">${LANG.toUpperCase()}</button>
     <button class="tb-btn" id="tbSnd" title="Sonido">${Sfx.muted ? '🔇' : '🔊'}</button>
     <button class="tb-btn" id="tbFs" title="Pantalla completa">⛶</button>
@@ -4861,7 +4862,7 @@ function showSelect(){
         <div class="hb-user" role="toolbar" aria-label="Jugador">
           <button type="button" class="hb-me" id="rhProfile"><span class="hud-portrait mini hm-pl-frame${extra.frame ? ' fr-' + extra.frame : ''}"><img id="rhProfileImg" src="${avatarSrc()}" alt=""></span><span><strong>${safeText(trainerName || 'Invitado')}</strong><small>${isGuest() ? t('guestTag') : (extra.title ? (TITLES.find(x => x.id === extra.title) || {}).name || '' : t('noTitle'))}</small></span></button>
           <span class="hb-chip" title="Bits"><img src="ui/hud/ic_bits.webp" alt="">${SAVE.bits.toLocaleString('es-ES')}</span>
-          <span class="hb-chip" title="Tickets"><img src="ui/hud/ic_ticket.webp" alt="">${usableTickets('std')}</span>
+          ${GACHA_SOON ? '' : `<span class="hb-chip" title="Tickets"><img src="ui/hud/ic_ticket.webp" alt="">${usableTickets('std')}</span>`}
           <button type="button" class="hb-out" id="hmLogout">Cerrar sesión</button>
         </div>
       </header>
@@ -4967,7 +4968,7 @@ function showSelect(){
     let title,content;
     if(type==='mission'){
       title=t('daily');
-      content=`<p>${safeText(dailyText())}</p><div class="approved-info-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></div><p>${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits · +${DAILY.rewardTix} 🎟</p>`;
+      content=`<p>${safeText(dailyText())}</p><div class="approved-info-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></div><p>${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits${GACHA_SOON ? '' : ' · +' + DAILY.rewardTix + ' 🎟'}</p>`;
     }else{
       title=t('recs');
       content=recs.length?`<div class="approved-info-records">${recs.slice(0,10).map((r,i)=>`<div><b>${i+1}. ${safeText(r.name)}</b><span>${fmtTime(r.t)} · Nv. ${Number(r.lvl)||0} · ${Number(r.kills)||0} bajas</span></div>`).join('')}</div>`:`<p>${safeText(t('none'))}</p>`;
@@ -5025,7 +5026,7 @@ const GUIDE = [
     d: 'Jugar empieza con tu último Digimon y Supervivencia es el modo infinito. Los encargos diarios, semanales y de evento dan premios, y el evento trae skins de temporada. Abajo tienes el Digidex, el laboratorio, los mapas, los logros, los récords y tu perfil.',
     keys: []},
   {ch: 3, t: 'Bits, tienda y laboratorio', img: 'lab',
-    d: 'Cada partida da Bits y sube la maestría del Digimon con el que juegas, que regala títulos, marcos y skins. En la tienda los Bits compran lo de la línea de la semana, y en el laboratorio mejoran a todos tus Digimon para siempre. Guarda los tickets: la Incubadora llega pronto.',
+    d: 'Cada partida da Bits y sube la maestría del Digimon con el que juegas, que regala títulos, marcos y skins. En la tienda los Bits compran lo de la línea de la semana, y en el laboratorio mejoran a todos tus Digimon para siempre.',
     keys: []}
 ];
 let tutoIdx = 0;
@@ -6521,7 +6522,7 @@ const SHRINE_TYPES = [
   {id: 'saber',    name: 'Santuario del saber',   col: 0x6aa8ff, glyph: 'EXP',                       text: 'Subes un nivel',            w: 0.9, apply: g => { g.p.xp = Math.max(g.p.xp, g.p.nextXp); }},
   {id: 'bonk',     name: 'Santuario del Bonk',    col: 0xffb547, art: 'ui/hud/bonk_listo.webp',      text: 'Bonk cargado al 100%',      w: 0.7, apply: g => { addBonk(100); }},
   {id: 'fortuna',  name: 'Santuario de fortuna',  col: 0xffe082, art: 'ui/hud/ic_bits.webp',         text: '+60 Bits',                  w: 0.7, apply: g => { g.extraBits = (g.extraBits || 0) + 60; }},
-  {id: 'tickets',  name: 'Santuario de tickets',  col: 0xffd54f, art: 'ui/hud/ic_ticket.webp',       text: '+1 ticket del permanente',  w: 0.5, apply: () => addTickets('std', 1)},
+  {id: 'tickets',  name: 'Santuario de tickets',  col: 0xffd54f, art: 'ui/hud/ic_ticket.webp',       text: '+1 ticket del permanente',  w: 0.5, ok: () => !GACHA_SOON, apply: () => addTickets('std', 1)},
   {id: 'maldito',  name: 'Santuario maldito',     col: 0xb04ce0, art: 'ui/hud/carta_dano.webp',      text: '+25% daño · −20 vida máx.', w: 0.5, apply: g => { g.p.dmg *= 1.25; g.p.maxHp = Math.max(30, g.p.maxHp - 20); g.p.hp = Math.min(g.p.hp, g.p.maxHp); }},
   {id: 'desafio',  name: 'Santuario del desafío', col: 0xff5252, art: 'ui/hud/jefe.png',             text: 'Llegan 3 élites: vence en 45 s y gana un cofre dorado y 80 Bits', w: 0.8, apply: (g, sh) => startShrineTrial(sh)}
 ];
@@ -7011,8 +7012,8 @@ function update(dt){
     // 2% por baja, pero con enfriamiento de 45 s y un solo imán en el mapa a la vez
     if ((g.magnetT || 0) <= 0 && Math.random() < 0.02){ spawnMagnetDrop(e.x, e.z); g.magnetT = 45; }
     // Tickets de tirada: 25% de cada élite y 3 seguros del jefe
-    if (e.kind === 'elite' && Math.random() < 0.25){ g.tix++; popText(e.x, e.z, '+1 ticket', '#3de0ff', 1); }
-    if (e.kind === 'mini'){ g.tix++; announce('¡' + e.name + ' derrotado!', '+1 ticket de tirada · cofre dorado', '#3de0ff'); spawnChestAt(e.x, e.z, true); if (!e.special){ (g.minisKilled || (g.minisKilled = [])).push(e.name); grantEmblem(); } }
+    if (e.kind === 'elite' && Math.random() < 0.25){ g.tix++; if (!GACHA_SOON) popText(e.x, e.z, '+1 ticket', '#3de0ff', 1); }
+    if (e.kind === 'mini'){ g.tix++; announce('¡' + e.name + ' derrotado!', GACHA_SOON ? 'Cofre dorado' : '+1 ticket de tirada · cofre dorado', '#3de0ff'); spawnChestAt(e.x, e.z, true); if (!e.special){ (g.minisKilled || (g.minisKilled = [])).push(e.name); grantEmblem(); } }
     if (e.kind === 'elite' && Math.random() < 0.3) spawnChestAt(e.x, e.z, true);   // 30% de las élites dejan un cofre dorado
     if (e.boss) g.tix += 3;
     world.remove(e.mesh);
@@ -7669,16 +7670,16 @@ function endGame(win){
   const rewards = [`<li><b>+${g.earned - g.bonus - (g.extraBits || 0)}</b> Bits</li>`];
   if (g.extraBits) rewards.push(`<li><b>+${g.extraBits}</b> Bits de eventos del mapa</li>`);
   if (g.emblems && g.emblems.length) rewards.push(`<li>Emblemas: <b>${g.emblems.length}/8</b></li>`);
-  if (g.bonus) rewards.push(`<li><b>+${g.bonus}</b> Bits y <b>+${g.dailyTix}</b> tickets · misión diaria completada</li>`);
-  if (g.tix) rewards.push(`<li><b>+${g.tix}</b> tickets de tirada</li>`);
+  if (g.bonus) rewards.push(GACHA_SOON ? `<li><b>+${g.bonus}</b> Bits · misión diaria completada</li>` : `<li><b>+${g.bonus}</b> Bits y <b>+${g.dailyTix}</b> tickets · misión diaria completada</li>`);
+  if (g.tix && !GACHA_SOON) rewards.push(`<li><b>+${g.tix}</b> tickets de tirada</li>`);
   for (const u of g.unlocked) rewards.push(`<li>Skin nueva: <b>${u}</b></li>`);
   for (const tl of g.newTitles) rewards.push(tl.kind === 'Marco' ? `<li>Marco desbloqueado: <b>${tl.name}</b></li>` : `<li>Título desbloqueado: <b>${tl.name}</b></li>`);
   { const lv = masteryLv(g.ch.id); rewards.push(`<li>Maestría de ${g.ch.name}: <b>nivel ${lv}</b>${lv < masteryMax() ? ` · ${masteryPts(g.ch.id).toLocaleString('es-ES')}/${MASTERY_XP[lv].toLocaleString('es-ES')} puntos` : ''}</li>`); }
   for (const m of g.mastery) rewards.push(`<li>Premio de maestría: <b>${m}</b></li>`);
   for (const q of (g.vales || [])) rewards.push(`<li>Evento: <b>${q}</b></li>`);
   for (const d of g.newDigis) rewards.push(`<li>Digimon desbloqueado: <b>${d}</b></li>`);
-  for (const q of (g.questDone || [])) rewards.push(`<li>Encargo cumplido: <b>${q.t}</b> · +${q.bits} Bits y +${q.tix} tickets</li>`);
-  for (const e of g.encDone) rewards.push(`<li>Encargo cumplido: <b>${e}</b> · +${ENC_REWARD.bits} Bits y +${ENC_REWARD.tix} ticket</li>`);
+  for (const q of (g.questDone || [])) rewards.push(`<li>Encargo cumplido: <b>${q.t}</b> · +${q.bits} Bits${GACHA_SOON ? '' : ` y +${q.tix} tickets`}</li>`);
+  for (const e of g.encDone) rewards.push(`<li>Encargo cumplido: <b>${e}</b> · +${ENC_REWARD.bits} Bits${GACHA_SOON ? '' : ` y +${ENC_REWARD.tix} ticket`}</li>`);
   if (g.survBest) rewards.push(`<li>¡Nuevo récord de Supervivencia con ${g.ch.name}!</li>`);
   if (g.waveBest) rewards.push(`<li>¡Nueva mejor oleada en ${mapDef().name}: <b>${g.wave}</b>!</li>`);
   if (lvlDiff().reward !== 1) rewards.push(`<li>Dificultad ${lvlDiff().name}: premios ×${String(lvlDiff().reward).replace('.', ',')}</li>`);
@@ -7688,9 +7689,9 @@ function endGame(win){
       <div class="end3-top"><img class="end3-ic" src="${charIcon(g.ch.id)}" alt=""><h1>${g.mode === 'surv' ? 'FIN DE LA SUPERVIVENCIA' : win ? '¡VICTORIA!' : 'HAS CAÍDO'}</h1></div>
       <p class="end3-sub">${g.mode === 'surv' ? `Has aguantado ${fmtTime(Math.floor(g.t))} · récord con ${g.ch.name}: ${fmtTime(Math.floor(survBest(g.ch.id)))}` : win ? (g.bossName || 'Piedmon') + ' ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Laboratorio`} · ${mapDef().name} · ${zoneDef().name} · ${lvlDiff().name}${g.mode === 'surv' ? ' · Oleada ' + (g.wave || 1) : ''}</p>
       <p class="end3-sub end3-rank" id="end3Rank" aria-live="polite"></p>
-      <div class="end3-cells">
+      <div class="end3-cells${GACHA_SOON ? ' no-tix' : ''}">
         <span><i>⏱</i><b>${fmtTime(Math.floor(g.t))}</b>Tiempo</span><span><i>⭐</i><b>${g.p.lvl}</b>Nivel</span><span><i>⚔</i><b>${g.kills}</b>Bajas</span><span><i>✦</i><b>${Object.keys(g.skills).length}</b>Habilidades</span>
-        <span class="end3-gain"><i><img src="ui/hud/ic_bits.webp" alt=""></i><b>+${g.earned}</b>Bits ganados</span><span class="end3-gain"><i><img src="ui/hud/ic_ticket.webp" alt=""></i><b>+${(g.tix || 0) + g.encDone.length * ENC_REWARD.tix}</b>Tickets</span>
+        <span class="end3-gain"><i><img src="ui/hud/ic_bits.webp" alt=""></i><b>+${g.earned}</b>Bits ganados</span>${GACHA_SOON ? '' : `<span class="end3-gain"><i><img src="ui/hud/ic_ticket.webp" alt=""></i><b>+${(g.tix || 0) + g.encDone.length * ENC_REWARD.tix}</b>Tickets</span>`}
       </div>
       <div class="end3-cols">
         <section><h3>Daño por ataque</h3>
@@ -7832,7 +7833,7 @@ function openPortal(title, sub){
     spawnRing(PORTAL.x, PORTAL.z, 0x3de0ff, 8, 0.9);
   }
   sfx('victory');
-  announce(title, sub || 'El portal está abierto: ve al norte (flecha cian) · +2 tickets', '#3de0ff');
+  announce(title, sub || (GACHA_SOON ? 'El portal está abierto: ve al norte (flecha cian)' : 'El portal está abierto: ve al norte (flecha cian) · +2 tickets'), '#3de0ff');
 }
 function updatePortal(dt){
   const P = g.portal;
@@ -7967,7 +7968,7 @@ function updateWaves(){
   if (w % 5 === 0){
     spawnMini(MINIS[(w/5 - 1) % MINIS.length]);
     g.tix++;
-    announce('Oleada ' + w, 'Un jefe menor se une a la horda · +1 ticket', '#ce93d8');
+    announce('Oleada ' + w, GACHA_SOON ? 'Un jefe menor se une a la horda' : 'Un jefe menor se une a la horda · +1 ticket', '#ce93d8');
   } else announce('Oleada ' + w, 'La horda se hace más fuerte', '#ef5350');
 }
 // Objetivo actual, para el HUD
@@ -8021,7 +8022,7 @@ function updateHUD(){
   const chipKey = [g.kills, g.tix, shrinesDone, (g.shrines || []).length, (g.emblems || []).length].join('|'), chipsEl = document.getElementById('hudChips');
   if (chipsEl.dataset.k !== chipKey){
     chipsEl.dataset.k = chipKey;
-    chipsEl.innerHTML = `<span>${HUD_IC.kills}<b>${g.kills}</b></span><span class="c-tix">${HUD_IC.tix}<b>${g.tix}</b></span><span class="c-shr">${HUD_IC.shr}<b>${shrinesDone}/${(g.shrines || []).length}</b></span><span class="c-emb">${HUD_IC.emb}<b>${(g.emblems || []).length}/${EMBLEMS.length}</b></span>`;
+    chipsEl.innerHTML = `<span>${HUD_IC.kills}<b>${g.kills}</b></span>${GACHA_SOON ? '' : `<span class="c-tix">${HUD_IC.tix}<b>${g.tix}</b></span>`}<span class="c-shr">${HUD_IC.shr}<b>${shrinesDone}/${(g.shrines || []).length}</b></span><span class="c-emb">${HUD_IC.emb}<b>${(g.emblems || []).length}/${EMBLEMS.length}</b></span>`;
   }
   hudEmblems();
   document.querySelector('.hud-hp').classList.toggle('low', p.hp < p.maxHp*0.3);
@@ -8347,7 +8348,7 @@ function loadDaily(){
 function saveDaily(d){ localStorage.setItem('digibonk3d-daily', JSON.stringify(d)); }
 function dailyText(){
   const d = loadDaily();
-  return d.claimed ? 'Misión diaria completada' : `Misión diaria: ${Math.min(d.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits y ${DAILY.rewardTix} tickets`;
+  return d.claimed ? 'Misión diaria completada' : `Misión diaria: ${Math.min(d.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits${GACHA_SOON ? '' : ` y ${DAILY.rewardTix} tickets`}`;
 }
 
 
@@ -8638,7 +8639,7 @@ function startMapEvent(force){
     const e = {kind: 'basic', golden: true, sprite: 'sprites/numemon.png', mesh, shadow, x, z, hp, max: hp, spd: 6.2, r: 0.9, xp: 30, dmg: 0, cd: 0, attr: 'vir'};
     g.enemies.push(e);
     g.ev = {kind, t: 30, foe: e};
-    announce('Evento: ¡Numemon dorado!', 'Atrápalo antes de 30 s: Bits y un ticket', '#ffd54f');
+    announce('Evento: ¡Numemon dorado!', GACHA_SOON ? 'Atrápalo antes de 30 s: Bits' : 'Atrápalo antes de 30 s: Bits y un ticket', '#ffd54f');
   }
   sfx('boss');
 }
@@ -8654,12 +8655,12 @@ function endMapEvent(ok){
     return;
   }
   if (ev.kind === 'golden'){
-    if (ok){ g.extraBits = (g.extraBits || 0) + 80; g.tix++; announce('¡Numemon dorado atrapado!', '+80 Bits y +1 ticket', '#ffd54f'); }
+    if (ok){ g.extraBits = (g.extraBits || 0) + 80; g.tix++; announce('¡Numemon dorado atrapado!', GACHA_SOON ? '+80 Bits' : '+80 Bits y +1 ticket', '#ffd54f'); }
     else { dropFoe(ev.foe); announce('El Numemon dorado ha huido', '', '#9e9e9e'); }
     return;
   }
   if (ev.kind === 'hunt'){
-    if (ok){ g.tix++; spawnChestAt(ev.foe.x, ev.foe.z, true); announce('¡Presa abatida!', '+1 ticket y un cofre dorado', '#ff5252'); }
+    if (ok){ g.tix++; spawnChestAt(ev.foe.x, ev.foe.z, true); announce('¡Presa abatida!', GACHA_SOON ? 'Un cofre dorado' : '+1 ticket y un cofre dorado', '#ff5252'); }
     else { if (ev.foe.hp > 0) dropFoe(ev.foe); announce('La presa ha escapado', 'Se acabó el tiempo', '#9e9e9e'); }
     return;
   }
@@ -9016,7 +9017,7 @@ function questSummary(){
 function showEncargos(){
   const d = loadDaily(), enc = loadEncargos(), wk = weekState(), wq = weekQuestState(), ev = eventActive() ? eventQuestState() : null;
   const fmt = n => Number(n).toLocaleString('es-ES');
-  const rw = (b, t) => `${b ? '+' + fmt(b) + ' Bits · ' : ''}+${t} ${t === 1 ? 'ticket' : 'tickets'}`;
+  const rw = (b, t) => GACHA_SOON ? (b ? '+' + fmt(b) + ' Bits' : '') : `${b ? '+' + fmt(b) + ' Bits · ' : ''}+${t} ${t === 1 ? 'ticket' : 'tickets'}`;
   const row = (done, txt, prog, goal, reward) => `<div class="eq-row${done ? ' done' : ''}"><b aria-hidden="true">${done ? '✓' : ''}</b><span><span class="eq-t">${txt}</span>${goal > 1 ? `<span class="eq-bar"><i style="width:${Math.round(Math.min(prog, goal) / goal * 100)}%"></i></span><small>${fmt(Math.min(prog, goal))}/${fmt(goal)}</small>` : ''}</span><em>${reward}</em></div>`;
   const panel = (cls, icon, title, sub, rows, done, all) => `<section class="eq-panel ${cls}"><header><img src="ui/hub/${icon}.webp" alt=""><span><b>${title}</b><small>${sub}</small></span><em>${done}/${all}</em></header><div class="eq-rows">${rows.join('')}</div></section>`;
   const dayDone = d.claimed || d.runs >= DAILY.runsGoal;
@@ -9083,7 +9084,7 @@ function showShop(msg){
   menuModal('Tienda', `<p class="shop-top"><span>Tus Bits: <b>Ⓑ ${fmt(bits)}</b></span><span>Se renueva el lunes · ${days === 1 ? 'queda 1 día' : `quedan ${days} días`}</span></p>
     <div class="eq-rows shop-rows">${rows}</div>
     <div class="shop-code"><input id="shopCode" maxlength="24" placeholder="Código de recompensa" autocomplete="off"><button type="button" id="shopRedeem">Canjear</button></div>
-    <p class="enc-note shop-msg" aria-live="polite">${msg || 'La Incubadora llega pronto: guarda tus tickets para entonces.'}</p>`);
+    <p class="enc-note shop-msg" aria-live="polite">${msg || ''}</p>`);
   const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('shop-dialog');
   const reopen = m => { showSelect(); showShop(m); };
   document.querySelectorAll('#realModalHost .shop-buy').forEach(b => b.onclick = () => { const it = items[+b.dataset.n]; if (shopBuy(+b.dataset.n)){ sfx('evolve'); reopen('Comprado: ' + it.name + ' (' + CHARS[it.k].name + ')'); } });
@@ -9572,7 +9573,7 @@ function showPlayer(){
   const digiOwned = unlockedSet().size, digiTotal = Object.keys(CHARS).length;
   const statList = [
     ['🎮', plays, 'Partidas'], ['⚔', kills, 'Bajas'], ['⏱', bestT ? fmtTime(bestT) : '—', 'Mejor tiempo'], ['⭐', bestL || '—', 'Mejor nivel'],
-    ['🧬', evos, 'Evoluciones'], ['📘', `${digiOwned}/${digiTotal}`, 'Digimon'], ['Ⓑ', SAVE.bits, 'Bits'], ['🎟', SAVE.tickets, 'Tickets'],
+    ['🧬', evos, 'Evoluciones'], ['📘', `${digiOwned}/${digiTotal}`, 'Digimon'], ['Ⓑ', SAVE.bits, 'Bits'], ...(GACHA_SOON ? [] : [['🎟', SAVE.tickets, 'Tickets']]),
     ['🖼', (inv.frames || []).length, 'Marcos'], ['🏷', (inv.titles || []).length, 'Títulos'], ['🎨', skinsOwned, 'Skins'], ['🏆', achDone, 'Logros']
   ];
   const statTiles = statList.map(([ic, v, l]) => `<div class="pl4-stat"><i>${ic}</i><span><b${typeof v === 'number' ? ` data-n="${v}"` : ''}>${typeof v === 'number' ? '0' : v}</b><small>${l}</small></span></div>`).join('');
