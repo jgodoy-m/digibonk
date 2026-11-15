@@ -1015,4 +1015,18 @@ I18N.add('tr', {
   "¡Corrupción de datos!": "Veri bozulması!",
   "Si sigues quieto pierdes vida cada segundo": "Kıpırdamadan durursan her saniye can kaybedersin",
   "No se aplica en Fácil ni en tus {0} primeras partidas.": "Kolay modda ve ilk {0} oyununda uygulanmaz.",
+  // Tutorial de la primera partida y aviso de gráficos perdidos
+  "Objetivo": "Hedef",
+  "Desliza el pulgar en la mitad izquierda para moverte": "Hareket etmek için başparmağını sol yarıda kaydır",
+  "Muévete con WASD o las flechas": "WASD veya ok tuşlarıyla hareket et",
+  "Tu Digimon ataca solo. Tú esquiva a la horda y no te quedes quieto": "Digimon’un kendi kendine saldırır. Sen sürüden kaç ve durma",
+  "Recoge los datos que sueltan los enemigos para subir de nivel": "Seviye atlamak için düşmanların bıraktığı verileri topla",
+  "Pulsa DASH para esquivar rápido": "Hızlıca kaçmak için DASH’e dokun",
+  "Pulsa Shift para hacer un dash y esquivar": "Atılıp kaçmak için Shift’e bas",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»": "Hazır olduğunda kuzeydeki portala git (mini haritada) ve «Boss çağır»a dokun",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe": "Hazır olduğunda kuzeydeki portala git (mini haritada) ve boss’u çağırmak için B’ye bas",
+  "Recuperando los gráficos…": "Grafikler geri yükleniyor…",
+  "El navegador ha liberado la memoria gráfica. La partida está en pausa.": "Tarayıcı grafik belleğini boşalttı. Oyun duraklatıldı.",
+  "No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.": "Grafikler geri yüklenemedi. Oyunu yeniden yükle: kayıtlı ilerlemen korunur.",
+  "Recargar el juego": "Oyunu yeniden yükle",
 });

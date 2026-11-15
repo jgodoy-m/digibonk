@@ -1022,4 +1022,18 @@ I18N.add('ja', {
   "¡Corrupción de datos!": "データ破損！",
   "Si sigues quieto pierdes vida cada segundo": "止まったままだと毎秒HPが減っていく",
   "No se aplica en Fácil ni en tus {0} primeras partidas.": "イージーと最初の{0}回のプレイには適用されません。",
+  // Tutorial de la primera partida y aviso de gráficos perdidos
+  "Objetivo": "目標",
+  "Desliza el pulgar en la mitad izquierda para moverte": "左半分を親指でなぞって移動",
+  "Muévete con WASD o las flechas": "WASDか矢印キーで移動",
+  "Tu Digimon ataca solo. Tú esquiva a la horda y no te quedes quieto": "デジモンは自動で攻撃する。あなたは群れをよけて動き続けよう",
+  "Recoge los datos que sueltan los enemigos para subir de nivel": "敵が落とすデータを拾ってレベルアップ",
+  "Pulsa DASH para esquivar rápido": "DASHをタップして素早くよける",
+  "Pulsa Shift para hacer un dash y esquivar": "Shiftでダッシュしてよける",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»": "準備ができたら北のポータル（ミニマップに表示）へ行き「ボスを呼ぶ」をタップ",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe": "準備ができたら北のポータル（ミニマップに表示）へ行きBでボスを呼ぶ",
+  "Recuperando los gráficos…": "グラフィックを復旧中…",
+  "El navegador ha liberado la memoria gráfica. La partida está en pausa.": "ブラウザがグラフィックメモリを解放しました。プレイは一時停止中です。",
+  "No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.": "グラフィックを復旧できませんでした。ゲームを再読み込みしてください。保存した進行状況は残ります。",
+  "Recargar el juego": "ゲームを再読み込み",
 });

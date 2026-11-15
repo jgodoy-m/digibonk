@@ -59,6 +59,18 @@ canvas{display:block}
 #banner b{display:block;font-size:46px;letter-spacing:3px;color:inherit;text-shadow:0 4px 0 #000,0 0 24px currentColor}
 #banner small{display:block;margin-top:4px;font-size:15px;letter-spacing:1px;color:#e6f4ff;text-shadow:0 2px 4px #000}
 #banner.show{animation:bannerIn 2.4s ease both}
+/* Tutorial de la primera partida: consejo corto abajo en el centro, sin tapar al Digimon ni los controles */
+#tutoTip{position:fixed;left:50%;bottom:24%;transform:translate(-50%,8px);max-width:min(560px,86vw);padding:10px 18px;border-radius:16px;background:rgba(8,18,44,.86);border:1px solid rgba(154,239,255,.55);box-shadow:0 6px 20px rgba(0,0,0,.35);color:#fff;font:800 15px/1.35 'Nunito',system-ui,sans-serif;text-align:center;pointer-events:none;opacity:0;transition:opacity .35s,transform .35s;z-index:30}
+#tutoTip.show{opacity:1;transform:translate(-50%,0)}
+#tutoTip small{display:block;margin-bottom:2px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#9aefff}
+@media (max-height:500px){#tutoTip{bottom:auto;top:24%;font-size:13px;padding:7px 14px}}
+/* Aviso si el navegador pierde los gráficos (pasa en móviles al cambiar de app o con poca memoria) */
+#glLost{position:fixed;inset:0;z-index:10000;display:none;place-items:center;background:rgba(4,10,28,.92);color:#fff;font-family:'Nunito',system-ui,sans-serif;text-align:center;padding:20px}
+#glLost.show{display:grid}
+#glLost b{display:block;font-size:22px;margin-bottom:6px}
+#glLost p{margin:0 0 14px;color:#cfe3ff;font-weight:700}
+#glLost button{height:44px;padding:0 22px;border:0;border-radius:999px;background:#f08a24;color:#fff;font:900 16px 'Nunito',sans-serif;cursor:pointer}
+#glLost button[hidden]{display:none}
 @keyframes bannerIn{0%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}12%{opacity:1;transform:translate(-50%,-50%) scale(1)}78%{opacity:1}100%{opacity:0;transform:translate(-50%,-62%) scale(.98)}}
 #hurt{position:fixed;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(198,40,40,.9) 100%)}
 #prompt{position:fixed;left:0;top:0;transform:translate(-50%,-100%);display:none;padding:5px 12px;border-radius:10px;
@@ -3441,6 +3453,8 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 <div id="flash"style="position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none"></div>
 <div id="hurt"></div>
 <div id="banner"></div>
+<div id="tutoTip" aria-live="polite"></div>
+<div id="glLost" role="alertdialog" aria-live="assertive"><div><b>Recuperando los gráficos…</b><p id="glLostP">El navegador ha liberado la memoria gráfica. La partida está en pausa.</p><button type="button" id="glReload" hidden>Recargar el juego</button></div></div>
 <div id="prompt"></div>
 <canvas id="minimap" width="170" height="170"></canvas>
 <div id="mapview">
@@ -3688,6 +3702,26 @@ function applyRetroSize(){
   camera.updateProjectionMatrix();
 }
 document.body.prepend(renderer.domElement);
+// Si el navegador pierde el contexto WebGL (móvil al cambiar de app, poca memoria), se pausa y se avisa en vez de quedarse en negro.
+// preventDefault() permite que el navegador lo devuelva; Three.js vuelve a subir texturas y geometrías al recuperarlo.
+let glLostTimer = null;
+renderer.domElement.addEventListener('webglcontextlost', e => {
+  e.preventDefault();
+  if (state === 'play') pauseGame();
+  document.getElementById('glReload').hidden = true;
+  document.getElementById('glLostP').textContent = 'El navegador ha liberado la memoria gráfica. La partida está en pausa.';
+  document.getElementById('glLost').classList.add('show');
+  clearTimeout(glLostTimer);
+  glLostTimer = setTimeout(() => {   // si no vuelve en 6 s, se ofrece recargar (el progreso guardado no se pierde; la partida en curso sí)
+    document.getElementById('glLostP').textContent = 'No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.';
+    document.getElementById('glReload').hidden = false;
+  }, 6000);
+});
+renderer.domElement.addEventListener('webglcontextrestored', () => {
+  clearTimeout(glLostTimer);
+  document.getElementById('glLost').classList.remove('show');
+});
+document.getElementById('glReload').onclick = () => location.reload();
 
 const scene = new THREE.Scene();
 scene.background = skyTexture();
@@ -4443,6 +4477,7 @@ const fmtTime = s => `${Math.floor(s/60)}:${String(s%60).padStart(2, '0')}`;
 let selectedKey = (() => { try { const k = localStorage.getItem('digibonk3d-last-choice'); return k && CHARS[k] ? k : 'agumon'; } catch(e){ return 'agumon'; } })();
 // Oculta/muestra el HUD de partida (el menú no debe mostrar barras ni temporizador)
 function setHud(v){
+  if (!v) tipHide();
   { const shEl = document.getElementById('shrineHud'); if (shEl && !v) shEl.style.display = 'none'; }
   if (!v) evHud(null);
   // Fuera de partida no se dibujan flechas de radar (así no quedan las de la última partida)
@@ -5859,6 +5894,7 @@ function startGame(key){
   setHud(true);
   lockMouse();   // ratón integrado: la cámara sigue al ratón
   state = 'play';
+  tipStart();   // consejos de la primera partida
 }
 
 // ---------- Lógica ----------
@@ -6456,9 +6492,66 @@ function fireProjectile(x, z, vx, vz, dmg, life, color){
   sfx('shoot');
 }
 
+// ---------- Tutorial de la primera partida ----------
+// Consejos cortos que salen solo la primera vez (hasta terminarlos), con el texto del control que se usa: teclado o táctil
+const TUTO_KEY = 'digibonk3d-tuto';
+function tipShow(head, txt){
+  const el = document.getElementById('tutoTip');
+  el.innerHTML = `<small>${head}</small><span>${txt}</span>`;
+  el.classList.add('show');
+}
+function tipHide(){ const el = document.getElementById('tutoTip'); if (el) el.classList.remove('show'); }
+function tipStart(){
+  g.tuto = localStorage.getItem(TUTO_KEY) ? null : {step: 0, t: 0, x0: g.p.x, z0: g.p.z, lvl0: g.p.lvl};
+  tipHide();
+}
+function tipUpdate(dt){
+  const tu = g.tuto;
+  if (!tu) return;
+  const touch = isTouchUI();
+  tu.t += dt;
+  const next = () => { tu.step++; tu.t = 0; tipHide(); };
+  switch (tu.step){
+    case 0:   // esperar un momento antes del primer consejo
+      if (tu.t > 1.2){ tu.step = 1; tu.t = 0; tipShow('Consejo', touch ? 'Desliza el pulgar en la mitad izquierda para moverte' : 'Muévete con WASD o las flechas'); }
+      break;
+    case 1:   // moverse: hasta que se desplace unos metros
+      if (Math.hypot(g.p.x - tu.x0, g.p.z - tu.z0) > 6 || tu.t > 10){ next(); }
+      break;
+    case 2:
+      if (tu.t > 0.8){ tu.step = 3; tu.t = 0; tipShow('Consejo', 'Tu Digimon ataca solo. Tú esquiva a la horda y no te quedes quieto'); }
+      break;
+    case 3:
+      if (tu.t > 6) next();
+      break;
+    case 4:
+      if (tu.t > 0.8){ tu.step = 5; tu.t = 0; tipShow('Consejo', 'Recoge los datos que sueltan los enemigos para subir de nivel'); }
+      break;
+    case 5:   // hasta subir de nivel (la elección de mejora ya se explica sola)
+      if (g.p.lvl > tu.lvl0 || tu.t > 14) next();
+      break;
+    case 6:
+      if (tu.t > 1.5){ tu.step = 7; tu.t = 0; tipShow('Consejo', touch ? 'Pulsa DASH para esquivar rápido' : 'Pulsa Shift para hacer un dash y esquivar'); }
+      break;
+    case 7:
+      if (g.dash > 0 || tu.t > 8) next();
+      break;
+    case 8:   // el objetivo del mapa: el portal del norte (en Supervivencia no hay jefe que invocar)
+      if (g.mode === 'surv'){ tu.step = 10; break; }
+      if (g.t > 45 && tu.t > 2){ tu.step = 9; tu.t = 0; tipShow('Objetivo', touch ? 'Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»' : 'Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe'); }
+      break;
+    case 9:
+      if (tu.t > 9) next();
+      break;
+    default:   // terminado: no vuelve a salir
+      try { localStorage.setItem(TUTO_KEY, '1'); } catch(e){}
+      g.tuto = null; tipHide();
+  }
+}
 function update(dt){
   const p = g.p, ch = g.ch;
   g.t += dt;
+  tipUpdate(dt);
 
   // Movimiento (ejes del mundo)
   let mx = 0, mz = 0;

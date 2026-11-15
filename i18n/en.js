@@ -1007,4 +1007,18 @@ I18N.add('en', {
   "¡Corrupción de datos!": "Data corruption!",
   "Si sigues quieto pierdes vida cada segundo": "If you keep standing still you lose HP every second",
   "No se aplica en Fácil ni en tus {0} primeras partidas.": "Not applied on Easy or in your first {0} runs.",
+  // Tutorial de la primera partida y aviso de gráficos perdidos
+  "Objetivo": "Goal",
+  "Desliza el pulgar en la mitad izquierda para moverte": "Slide your thumb on the left half to move",
+  "Muévete con WASD o las flechas": "Move with WASD or the arrow keys",
+  "Tu Digimon ataca solo. Tú esquiva a la horda y no te quedes quieto": "Your Digimon attacks on its own. You dodge the horde and keep moving",
+  "Recoge los datos que sueltan los enemigos para subir de nivel": "Pick up the data enemies drop to level up",
+  "Pulsa DASH para esquivar rápido": "Tap DASH to dodge quickly",
+  "Pulsa Shift para hacer un dash y esquivar": "Press Shift to dash and dodge",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»": "Whenever you like, go to the north portal (on the minimap) and tap “Summon boss”",
+  "Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe": "Whenever you like, go to the north portal (on the minimap) and press B to summon the boss",
+  "Recuperando los gráficos…": "Recovering graphics…",
+  "El navegador ha liberado la memoria gráfica. La partida está en pausa.": "The browser freed the graphics memory. The run is paused.",
+  "No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.": "The graphics could not be recovered. Reload the game: your saved progress is kept.",
+  "Recargar el juego": "Reload the game",
 });
