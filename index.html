@@ -6295,7 +6295,7 @@ const MODELS = {}, modelMixers = new Set();
 function loadModel(name){
   return MODELS[name] || (MODELS[name] = new Promise(res => gltfLoader.load('models/' + name + '.glb', gl => res(gl), undefined, () => res(null))));
 }
-loadModel('santuario'); loadModel('cofre');
+loadModel('santuario'); loadModel('cofre');   // los portales se cargan al entrar en su mapa
 // Pone una copia del modelo dentro de parent (si carga) y devuelve su acción de animación por la promesa
 function modelInto(name, parent, scale){
   return loadModel(name).then(gl => {
@@ -6313,6 +6313,7 @@ function modelInto(name, parent, scale){
 function playModel(m){ if (!m || !m.action) return; m.action.reset().play(); modelMixers.add(m); }
 function tickModels(dt){
   for (const m of modelMixers){
+    if (m.keep && !m.keep.parent){ modelMixers.delete(m); continue; }   // el objeto ya no está en el mundo
     m.mixer.update(dt);
     if (!m.action.isRunning()) modelMixers.delete(m);
   }
@@ -8605,13 +8606,41 @@ function buildPortal(){
     new THREE.MeshBasicMaterial({color: 0x3de0ff, map: shrineBeamTex(), transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide}));
   beam.position.y = 30; grp.add(beam);
   world.add(grp);
-  g.portal = {grp, swirl, lock, ring, stone, beam};
+  const P = g.portal = {grp, swirl, lock, ring, stone, beam};
+  // Modelo 3D de Jaime para el bioma (con su candado y su remolino). Mientras carga, el sprite de siempre
+  const file = PORTAL_MODEL[g.map] || PORTAL_MODEL.desierto;
+  loadModel(file).then(gl => {
+    if (!gl || g.portal !== P) return;
+    const o = gl.scene.clone(true);
+    grp.add(o);
+    stone.visible = swirl.visible = lock.visible = false;
+    if (P.glow) P.glow.visible = false;
+    beam.position.z = -1.6; beam.scale.set(0.7, 1, 0.7);   // el haz detrás del arco, para que no tape el remolino
+    const mixer = new THREE.AnimationMixer(o), clip = n => gl.animations.find(a => a.name === n);
+    const open = clip('Abrir') && mixer.clipAction(clip('Abrir')), loop = clip('Activo') && mixer.clipAction(clip('Activo'));
+    if (open){ open.setLoop(THREE.LoopOnce, 1); open.clampWhenFinished = true; }
+    // Al terminar Abrir pasa al bucle Activo (remolino girando)
+    mixer.addEventListener('finished', e => { if (e.action === open && loop){ open.stop(); loop.reset().play(); } });
+    P.model = {o, mixer, action: open || loop, keep: grp, open, loop};
+    if (g.portalOpen) portalModelOpen(true);
+  });
+}
+const PORTAL_MODEL = {bosque: 'portal_bosque', desierto: 'portal_desierto', nevado: 'portal_nieve'};
+// Abre el portal 3D: clip Abrir una vez y luego Activo en bucle (al continuar una partida, directo al bucle)
+function portalModelOpen(instant){
+  const m = g.portal && g.portal.model; if (!m || m.opened) return;
+  m.opened = true;
+  if (instant && m.loop) m.loop.reset().play();
+  else if (m.open) m.open.reset().play();
+  else if (m.loop) m.loop.reset().play();
+  m.action = {isRunning: () => true};   // el bucle no se acaba: sigue en la lista hasta que el portal se quita
+  modelMixers.add(m);
 }
 function openPortal(title, sub){
   g.portalOpen = true;
   g.tix += 2;
   if (g.portal) spawnRing(PORTAL.x, PORTAL.z, 0x3de0ff, 8, 0.9);
-  portalOpenFx();
+  g.portalJustOpened = true; portalOpenFx(); g.portalJustOpened = false;
   sfx('victory');
   announce(title, sub || (GACHA_SOON ? 'El portal está abierto: ve al norte (flecha cian)' : 'El portal está abierto: ve al norte (flecha cian) · +2 tickets'), '#3de0ff');
 }
@@ -8624,6 +8653,7 @@ function portalOpenFx(){
     const glow = new THREE.Sprite(new THREE.SpriteMaterial({map: decoTex('ui/gacha/light_02.png'), color: 0x3de0ff, transparent: true, opacity: 0.8, depthWrite: false, blending: THREE.AdditiveBlending}));
     glow.scale.set(9, 9, 1); glow.position.set(0, 3.5, 1.4); g.portal.grp.add(glow); g.portal.glow = glow;
     g.portal.lock.visible = false;
+    if (g.portal.model){ g.portal.stone.visible = g.portal.swirl.visible = false; g.portal.glow.visible = false; portalModelOpen(!g.portalJustOpened); }
   }
 }
 function updatePortal(dt){
