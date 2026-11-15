@@ -64,16 +64,26 @@ canvas{display:block}
   font-weight:900;font-size:28px;box-shadow:0 0 14px rgba(255,213,79,.6);pointer-events:none}
 #combo:empty{display:none}
 /* Presentación y derrota de jefes: cartel grande con el sprite (pensado para que luzca en vídeos cortos) */
-#bossCard{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:8;opacity:0;transform:scale(1.5);transition:opacity .35s,transform .35s}
-#bossCard.show{opacity:1;transform:none;transition:opacity .12s,transform .18s cubic-bezier(.2,1.6,.4,1)}
-#bossCard .bc-band{position:absolute;left:-5%;right:-5%;top:50%;height:150px;transform:translateY(-50%) skewY(-4deg);background:linear-gradient(90deg,transparent,var(--bc,#ff1744) 18%,var(--bc,#ff1744) 82%,transparent);opacity:.82;box-shadow:0 0 40px var(--bc,#ff1744)}
-#bossCard .bc-in{position:relative;display:flex;align-items:center;gap:22px;transform:skewY(-4deg)}
-#bossCard img{width:170px;height:170px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 6px 0 #000) drop-shadow(0 0 18px #fff)}
-#bossCard .bc-t{font:900 clamp(30px,6vw,64px) 'Orbitron',system-ui,sans-serif;letter-spacing:4px;color:#fff;text-shadow:0 5px 0 #000,0 0 24px #000;line-height:1}
-#bossCard .bc-s{font:800 clamp(12px,1.8vw,18px) system-ui,sans-serif;letter-spacing:3px;color:#fff;text-transform:uppercase;margin-top:8px;text-shadow:0 2px 0 #000}
-#bossCard.ko .bc-t{color:#ffd54f}
-#bossCard.small .bc-band{height:100px}
-#bossCard.small img{width:110px;height:110px}
+/* Ruleta de Piximon y cartas de la tienda sin monedas */
+.wh-wrap{position:relative;width:260px;height:260px;margin:10px auto 16px}
+.wh{width:260px;height:260px;border-radius:50%;border:6px solid #fff;box-shadow:0 0 0 4px #0b1020,0 10px 30px rgba(0,0,0,.5);position:relative;transition:transform 2.1s cubic-bezier(.15,.85,.25,1)}
+.wh span{position:absolute;left:50%;top:50%;width:90px;margin-left:-45px;margin-top:-9px;text-align:center;font:800 12px system-ui,sans-serif;color:#0b1020;transform-origin:center}
+.wh-ptr{position:absolute;left:50%;top:-14px;margin-left:-12px;width:0;height:0;border:12px solid transparent;border-top:22px solid #fff;z-index:2;filter:drop-shadow(0 2px 0 #000)}
+.lv3-card.off{opacity:.45;filter:grayscale(.7);cursor:not-allowed}
+#bossCard{position:fixed;left:0;bottom:22%;display:flex;align-items:center;pointer-events:none;z-index:8;opacity:0;transform:translateX(-110%);transition:opacity .3s,transform .3s ease-in}
+#bossCard.show{opacity:1;transform:none;transition:opacity .12s,transform .28s cubic-bezier(.2,1.3,.4,1)}
+#bossCard .bc-band{position:absolute;inset:0 -60px 0 0;background:linear-gradient(90deg,var(--bc,#ff1744) 70%,transparent);opacity:.85;clip-path:polygon(0 0,100% 0,calc(100% - 40px) 100%,0 100%)}
+#bossCard .bc-in{position:relative;display:flex;align-items:center;gap:12px;padding:8px 26px 8px 16px}
+#bossCard img{width:72px;height:72px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 3px 0 #000)}
+#bossCard .bc-t{font:900 clamp(18px,2.6vw,28px) 'Orbitron',system-ui,sans-serif;letter-spacing:2px;color:#fff;text-shadow:0 3px 0 #000;line-height:1}
+#bossCard .bc-s{font:800 clamp(10px,1.2vw,13px) system-ui,sans-serif;letter-spacing:2px;color:#fff;text-transform:uppercase;margin-top:5px;text-shadow:0 2px 0 #000}
+#bossCard.ko .bc-t{color:#fff8e1}
+#bossCard.r{left:auto;right:0;transform:translateX(110%)}
+#bossCard.r.show{transform:none}
+#bossCard.r .bc-band{inset:0 0 0 -60px;background:linear-gradient(270deg,var(--bc,#ff1744) 70%,transparent);clip-path:polygon(40px 0,100% 0,100% 100%,0 100%)}
+#bossCard.r .bc-in{flex-direction:row-reverse;text-align:right;padding:8px 16px 8px 26px}
+#bossCard.small img{width:56px;height:56px}
+#bossCard.small .bc-t{font-size:clamp(15px,2vw,22px)}
 .reduce-motion #bossCard,.reduce-motion #bossCard.show{transform:none}
 #banner{position:fixed;left:50%;top:26%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;opacity:0;white-space:nowrap}
 #banner b{display:block;font-size:46px;letter-spacing:3px;color:inherit;text-shadow:0 4px 0 #000,0 0 24px currentColor}
@@ -5693,7 +5703,10 @@ function skillFacts(id){
     cuchilla: [['Daño', (11 + 4*L)*K], ['Recarga', '1,3 s'], ['Hojas', 2*L]],
     laser:    [['Daño', (16 + 6*L)*K], ['Recarga', '2,4 s'], ['Alcance', '18 m']],
     mina:     [['Daño', (10 + 3.5*L)*K], ['Radio', fmtN(2.2 + 0.35*L) + ' m'], ['Una cada', '2,2 m']],
-    meteoro:  [['Daño', (11 + 3.5*L)*K], ['Recarga', '3 s'], ['Impactos', L + 1]]
+    meteoro:  [['Daño', (11 + 3.5*L)*K], ['Recarga', '3 s'], ['Impactos', L + 1]],
+    luz:      [['Daño', (16 + 6*L)*K], ['Cura', (2 + L) + '% PS'], ['Cada', fmtN(6 - 0.6*L) + ' s']],
+    red:      [['Daño', (10 + 4*L)*K], ['Saltos', 2 + L], ['Cada', fmtN(2.2 - 0.2*L) + ' s']],
+    virus:    [['Daño', (3 + 1.5*L)*K], ['Cada', '0,5 s'], ['Nubes', 3 + L]]
   }[id] || [];
   return f.map(([k, v]) => [k, typeof v === 'number' ? fmtN(v) : v]);
 }
@@ -5719,7 +5732,7 @@ function recordCharRun(key, win, diff, kills, lvl){
   if (win){ st.wins = st.wins || {}; st.wins[diff] = (st.wins[diff] || 0) + 1; }
   try { localStorage.setItem('digibonk3d-stats', JSON.stringify(all)); } catch(e){}
 }
-const SKILL_ICON = {aura: '◎', tornado: '✦', pulso: '◉', espiral: '➹', cuchilla: '✧', laser: '⚡', mina: '✹', meteoro: '☄'};
+const SKILL_ICON = {aura: '◎', tornado: '✦', pulso: '◉', espiral: '➹', cuchilla: '✧', laser: '⚡', mina: '✹', meteoro: '☄', luz: '✚', red: 'ϟ', virus: '☣'};
 const KIND_ICON = {shot: '➹', ring: '◉', orbit: '✧', melee: '✊', turret: '⚙', frost: '❄', zone: '✦'};
 function showPicker(tab){
   if (tab) pickTab = tab === 'skins' ? 'personaje' : tab;
@@ -5866,7 +5879,7 @@ function renderPickPreview(){
       ${row('Prob. crítico', '12%')}
       ${row('Daño crítico', '×2')}
       ${row('Ventaja de tipo', '×' + fmtN(ATTR_ADV, 2))}
-      ${row('Ataques por partida', SKILL_SLOTS + ' de ' + (CHAR_SKILLS[k] || []).length)}
+      ${row('Ataques por partida', SKILL_SLOTS + ' de ' + (learnable(k).mine.length + learnable(k).type.length))}
     </div>`;
   el.querySelectorAll('.pk-stage').forEach(n => n.onclick = () => { pickStage = +n.dataset.stage; showPicker(); });
   const fb = document.getElementById('pkFav');
@@ -5884,14 +5897,14 @@ function renderPickPanels(){
     ${chipsHtml(baseFacts(c))}
     <hr class="ps-hr">
     <div class="ps-lbl">Kit de ataques <small>· cifras a nivel 1, sube hasta nivel ${SKILL_MAX}</small></div>
-    <div class="ps-kit">${(CHAR_SKILLS[k] || []).map(id => { const sk = SKILLS[id]; return `<div class="ps-atk k-${sk.k}"><i class="ps-ico">${SKILL_ICON[id] || '✦'}</i><div><div class="ps-atk-h"><b>${sk.name}</b></div><small class="ps-kind">${sk.k[0].toUpperCase() + sk.k.slice(1)}</small><p>${sk.d}</p>${chipsHtml(skillFacts(id))}</div></div>`; }).join('')}</div>`;
+    <div class="ps-kit">${[...learnable(k).mine, ...learnable(k).type.slice(0, 1)].map(id => { const sk = SKILLS[id], ty = !(CHAR_SKILLS[k] || []).includes(id); return `<div class="ps-atk k-${sk.k}"><i class="ps-ico">${SKILL_ICON[id] || '✦'}</i><div><div class="ps-atk-h"><b>${skillName(id, k)}</b>${ty ? ` <small>· de tipo ${ATTR_NAME[ATTR_OF[k]]}</small>` : ''}</div><small class="ps-kind">${sk.k[0].toUpperCase() + sk.k.slice(1)}</small><p>${sk.d}</p>${chipsHtml(skillFacts(id))}</div></div>`; }).join('')}</div>`;
   const at = ATTR_OF[k], beats = BEATS[at], loses = Object.keys(BEATS).find(a => BEATS[a] === at);
   const foes = a => Object.keys(FOE_ATTR).filter(n => FOE_ATTR[n] === a && n !== 'tank');
   const icons = a => { const l = foes(a); return `${l.slice(0, 7).map(n => `<img src="sprites/adventure/${n}.png" alt="" title="${n[0].toUpperCase() + n.slice(1)}" onerror="this.remove()">`).join('')}${l.length > 7 ? `<small>+${l.length - 7}</small>` : ''}`; };
   const trow = (lbl, cls, a, mul) => `<div class="ps-trow ${cls}"><span class="ps-tl">${lbl}</span><span class="ps-attr a-${a}">${ATTR_ICON[a]} ${ATTR_NAME[a]}</span><b>${mul}</b><span class="ps-foes">${icons(a)}</span></div>`;
   evo.innerHTML = `
     <div class="ps-ult"><i class="ps-ico r">R</i><div><b>Evolución de emergencia</b><p>Por debajo del 20% de PS tienes 6 s para pulsar R y evolucionar al instante durante 15 s. Una vez por partida.</p></div></div>
-    ${line.map((e, i) => `<div class="ps-ult"><span class="ps-node${pickStage === i + 1 ? ' on' : ''}">${sprEl(spriteOf(k, i + 1), 46)}</span><div><b>${e.name}</b><p>Nivel ${evoLevelFor(k, i)} · +20% daño, +5% área y +20 PS durante el resto de la partida.</p></div></div>`).join('')}
+    ${line.map((e, i) => `<div class="ps-ult"><span class="ps-node${pickStage === i + 1 ? ' on' : ''}">${sprEl(spriteOf(k, i + 1), 46)}</span><div><b>${e.name}</b><p>Nivel ${evoLevelFor(k, i)} · +${Math.round((Math.pow(EVO_TOTAL.dmg, 1/line.length) - 1)*100)}% daño y +${Math.round(60/line.length)} PS durante el resto de la partida. Al evolucionar, una onda arrasa a la horda cercana.</p></div></div>`).join('')}
     <hr class="ps-hr">
     <div class="ps-lbl">Tipos</div>
     ${trow('Eficaz contra', 'good', beats, '×' + fmtN(ATTR_ADV, 2) + ' daño')}
@@ -6487,7 +6500,7 @@ function openChest(c){
   g.chestsOpened = (g.chestsOpened || 0) + 1;
   sfx('chest');
   g.chestPick = {gold: !!c.gold};
-  g.choices = upgradeChoices();
+  g.choices = chestChoices();
   openUpgrades();
 }
 function spawnChestAt(x, z, gold){
@@ -6590,7 +6603,7 @@ const SHRINE_TYPES = [
   {id: 'maldito',  name: 'Santuario maldito',     col: 0xb04ce0, art: 'ui/hud/carta_dano.webp',      text: '+25% daño · −20 vida máx.', w: 0.5, apply: g => { g.p.dmg *= 1.25; g.p.maxHp = Math.max(30, g.p.maxHp - 20); g.p.hp = Math.min(g.p.hp, g.p.maxHp); }},
   {id: 'desafio',  name: 'Santuario del desafío', col: 0xff5252, art: 'ui/hud/jefe.png',             text: 'Llegan 3 élites: vence en 45 s y gana un cofre dorado y 80 Bits', w: 0.8, apply: (g, sh) => startShrineTrial(sh)}
 ];
-const SHRINE_CHARGE = 3, SHRINE_RANGE = 2.2, SHRINES_PER_SCREEN = 5;
+const SHRINE_CHARGE = 3, SHRINE_RANGE = 2.2, SHRINES_PER_SCREEN = 3;
 const SHRINE_STONE = {bosque: 0x9aa7b8, dunas: 0xd9bc8c, ruinas: 0xbfa27f, nieve: 0xc3d1e2, fortaleza: 0x6f6280};
 const shrineTexCache = {};
 // Halo suave (para el brillo del cristal) y degradado vertical (para el haz de luz)
@@ -6814,6 +6827,131 @@ function updateShrines(dt){
   }
   const tr = updateTrial(dt);
   shrineHud(hud || tr);
+}
+/* ---------- Monedas de partida, bayas, PNJ (tienda y ruleta) y cofres de tu Digimon ----------
+   Las monedas solo valen dentro de la partida: 1 por baja, 15 por élite, 40 por jefe menor. */
+function addCoins(n, x, z){ g.coins = (g.coins || 0) + n; if (x !== undefined && n >= 10) popText(x, z, '+' + n + ' monedas', '#ffd54f', 0.8); }
+// Bayas: aparecen cerca de ti cada ~20 s (máximo 4 en el mapa) y curan el 15% de la vida
+let berryMat = null;
+function spawnBerry(){
+  if (!berryMat){
+    const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d');
+    x.fillStyle = '#43a047'; x.beginPath(); x.ellipse(36, 14, 14, 6, -0.5, 0, Math.PI*2); x.fill();
+    for (const [bx, by] of [[22, 34], [40, 32], [31, 48]]){ const gr = x.createRadialGradient(bx - 4, by - 4, 1, bx, by, 12); gr.addColorStop(0, '#ff8a80'); gr.addColorStop(1, '#c62828'); x.fillStyle = gr; x.beginPath(); x.arc(bx, by, 11, 0, Math.PI*2); x.fill(); x.fillStyle = 'rgba(255,255,255,.8)'; x.beginPath(); x.arc(bx - 4, by - 4, 3, 0, Math.PI*2); x.fill(); }
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.magFilter = THREE.NearestFilter;
+    berryMat = new THREE.SpriteMaterial({map: t, transparent: true});
+  }
+  const [x, z] = nodeNear(10, 26);
+  const mesh = new THREE.Sprite(berryMat); mesh.scale.set(1.3, 1.3, 1);
+  world.add(mesh);
+  g.berries.push({x, z, mesh});
+}
+function updateBerries(dt){
+  if (!g.berries) g.berries = [];
+  if (!(g.mod && g.mod.noHeal)){
+    g.berryT = (g.berryT ?? 12) - dt;
+    if (g.berryT <= 0){ g.berryT = 20; if (g.berries.length < 4) spawnBerry(); }
+  }
+  for (const b of g.berries){
+    b.mesh.position.set(b.x, terrainH(b.x, b.z) + 0.8 + Math.sin(g.t*3 + b.x)*0.12, b.z);
+    if (dist2(b.x, b.z, g.p.x, g.p.z) < 1.4 + g.p.pickup*0.2){
+      b.taken = true; world.remove(b.mesh);
+      const h = Math.round(g.p.maxHp*0.15); g.p.hp = Math.min(g.p.maxHp, g.p.hp + h);
+      popText(b.x, b.z, '+' + h + ' PS', '#7cf29c', 0.9); burst(b.x, b.z, '#ff5252'); sfx('chest');
+    }
+  }
+  g.berries = g.berries.filter(b => !b.taken);
+}
+// PNJ: Digitamamon lleva la tienda y Piximon la ruleta. Uno de cada por pantalla
+const NPCS = [
+  {id: 'tienda', name: 'Tienda de Digitamamon', sprite: 'sprites/adventure/digitamamon.png', col: 0xffd54f, icon: '🛒'},
+  {id: 'ruleta', name: 'Ruleta de Piximon', sprite: 'sprites/adventure/piximon.png', col: 0xff80ab, icon: '🎡'}
+];
+function initNpcs(){
+  for (const n of g.npcs || []){ world.remove(n.mesh); world.remove(n.ring); }
+  g.npcs = [];
+  const taken = [...(g.shrines || [])];
+  for (const d of NPCS){
+    const {x, z} = shrineSpot(taken); taken.push({x, z});
+    const mesh = billboard(d.sprite, 2.6, false); world.add(mesh);
+    const ring = new THREE.Mesh(FX_PLANE, fxMatOwn('rune', d.col, 0.6)); ring.scale.set(5, 1, 5); ring.position.set(x, terrainH(x, z) + 0.06, z); world.add(ring);
+    g.npcs.push({...d, x, z, mesh, ring, armed: true, buys: 0, spins: 0});
+  }
+}
+function updateNpcs(dt){
+  if (!g.npcs) initNpcs();
+  for (const n of g.npcs){
+    n.mesh.position.set(n.x, terrainH(n.x, n.z) + 1.3 + Math.sin(g.t*2 + n.x)*0.1, n.z);
+    n.ring.rotation.y += dt*0.6;
+    const d = dist2(n.x, n.z, g.p.x, g.p.z);
+    if (d > 4) n.armed = true;
+    if (n.armed && d < 2.4 && state === 'play'){ n.armed = false; n.id === 'tienda' ? openShop(n) : openRoulette(n); return; }
+  }
+}
+// Carta de ataque: sube un ataque característico (o aprende uno nuevo si hay hueco)
+function sigCard(extra = {}){
+  const {mine, type} = learnable(g.ch.id), owned = Object.keys(g.skills).filter(id => g.skills[id] > 0);
+  const ok = [...mine, ...type].filter(id => (g.skills[id] || 0) < SKILL_MAX && ((g.skills[id] || 0) > 0 || owned.length < SKILL_SLOTS));
+  if (!ok.length) return null;
+  const pref = ok.filter(id => mine.includes(id)), id = (pref.length ? pref : ok)[Math.floor(Math.random()*(pref.length || ok.length))], lv = g.skills[id] || 0, s = SKILLS[id];
+  return {t: `${skillName(id)} · ${lv ? 'Nivel ' + (lv + 1) : 'Nueva'}`, name: skillName(id), skill: id, lv, k: s.k, d: s.d, typeSk: !mine.includes(id), f: () => addSkill(id), ...extra};
+}
+// Chip de datos de tu Digimon (según su tipo y su forma actual)
+function digiCard(extra = {}){
+  const at = ATTR_OF[g.ch.id], nm = stageName(g.ch.id, g.ch.evolved | 0);
+  const eff = {vac: ['+25 vida máx. y cura 25%', p => { p.maxHp += 25; if (!(g.mod && g.mod.noHeal)) p.hp = Math.min(p.maxHp, p.hp + p.maxHp*0.25); }],
+               dat: ['+12% cadencia y cura 15%', p => { p.cdMul /= 1.12; if (!(g.mod && g.mod.noHeal)) p.hp = Math.min(p.maxHp, p.hp + p.maxHp*0.15); }],
+               vir: ['+12% daño y cura 15%', p => { p.dmg *= 1.12; if (!(g.mod && g.mod.noHeal)) p.hp = Math.min(p.maxHp, p.hp + p.maxHp*0.15); }]}[at] || ['+10% daño', p => { p.dmg *= 1.1; }];
+  return {t: 'Chip de ' + nm, name: 'Chip de ' + nm, digi: true, k: 'defensiva', ic: 'red', d: `Datos de tipo ${ATTR_NAME[at]}: ${eff[0]}.`, f: eff[1], ...extra};
+}
+// Cofres: una carta de ataque de tu Digimon, un chip de sus datos y una mejora al azar
+function chestChoices(){
+  const base = upgradeChoices().filter(c => !c.skill);
+  const out = [sigCard(), digiCard(), base[0]].filter(Boolean);
+  while (out.length < 3 && base.length > out.length - 1) out.push(base[out.length - 1]);
+  return out;
+}
+const shopPrice = (n, base) => Math.round(base * (1 + 0.35*n.buys));
+function openShop(n){
+  const coins = g.coins || 0, items = [];
+  const heal = {t: 'Baya grande', name: 'Baya grande', k: 'defensiva', ic: 'luz', d: 'Cura el 50% de tu vida.', f: p => { p.hp = Math.min(p.maxHp, p.hp + p.maxHp*0.5); }, price: shopPrice(n, 60)};
+  if (g.mod && g.mod.noHeal) heal.d = 'Esta semana no se puede curar: +25 vida máx.', heal.f = p => { p.maxHp += 25; };
+  items.push(heal);
+  const sc = sigCard({price: shopPrice(n, 120)}); if (sc) items.push(sc);
+  items.push(digiCard({price: shopPrice(n, 160)}));
+  g.npcPick = {title: n.name, sub: `Tienes ${coins} monedas`};
+  g.choices = items.map(c => ({...c, shop: true, disabled: coins < c.price, f: (p) => { if ((g.coins || 0) < c.price) return; g.coins -= c.price; n.buys++; c.f(p); sfx('chest'); }}))
+    .concat([{t: 'Salir', name: 'Salir', k: 'utilidad', d: 'Vuelve a la partida. Acércate otra vez para comprar más.', shop: true, leave: true, f: () => {}}]);
+  openUpgrades();
+}
+// Ruleta: 40 monedas por tirada (la primera de cada Piximon es gratis)
+const WHEEL = [
+  {t: 'Cura 40%', col: '#7cf29c', f: () => { if (!(g.mod && g.mod.noHeal)) g.p.hp = Math.min(g.p.maxHp, g.p.hp + g.p.maxHp*0.4); }},
+  {t: '+80 monedas', col: '#ffd54f', f: () => addCoins(80)},
+  {t: 'Ataque +1', col: '#ff8a65', f: () => { const c = sigCard(); if (c) c.f(); }},
+  {t: 'Cofre dorado', col: '#ffca28', f: () => spawnChestAt(g.p.x + g.dir.x*3, g.p.z + g.dir.z*3, true)},
+  {t: 'Chip Digimon', col: '#80d8ff', f: () => digiCard().f(g.p)},
+  {t: '¡Élites!', col: '#ef5350', f: () => { for (let i = 0; i < 2; i++) spawnEnemy('elite'); }}
+];
+function openRoulette(n){
+  const cost = n.spins ? 40 : 0;
+  state = 'levelup'; unlockMouse(); g.choices = [];
+  const seg = 360/WHEEL.length;
+  showOverlay(`<div class="lv3 wheel3"><div class="lv3-head"><h2 class="lv3-banner">${n.name}</h2><p>${cost ? `Tirada: ${cost} monedas · tienes ${g.coins || 0}` : 'Primera tirada gratis'}</p></div>
+    <div class="wh-wrap"><div class="wh-ptr"></div><div class="wh" id="wh" style="background:conic-gradient(${WHEEL.map((w, i) => `${w.col} ${i*seg}deg ${(i + 1)*seg}deg`).join(',')})">${WHEEL.map((w, i) => `<span style="transform:rotate(${i*seg + seg/2}deg) translateY(-92px)">${w.t}</span>`).join('')}</div></div>
+    <div class="lv3-acts"><button class="lv3-act" id="whSpin" ${(g.coins || 0) < cost ? 'disabled' : ''}>Girar</button><button class="lv3-act" id="whLeave">Salir</button></div></div>`);
+  const close = () => { hideOverlay(); lockMouse(); state = 'play'; };
+  document.getElementById('whLeave').onclick = close;
+  document.getElementById('whSpin').onclick = () => {
+    if ((g.coins || 0) < cost) return;
+    g.coins = (g.coins || 0) - cost; n.spins++;
+    document.getElementById('whSpin').disabled = document.getElementById('whLeave').disabled = true;
+    const k = Math.floor(Math.random()*WHEEL.length), w = WHEEL[k];
+    const el = document.getElementById('wh');
+    el.style.transform = `rotate(${360*5 - (k*seg + seg/2)}deg)`;
+    sfx('levelup');
+    setTimeout(() => { close(); w.f(); announce('Ruleta: ' + w.t, '', w.col); sfx(k === 5 ? 'boss' : 'chest'); }, 2300);
+  };
 }
 function spawnChest(p){
   const a = Math.random()*Math.PI*2, R = 10 + Math.random()*8;
@@ -7128,6 +7266,7 @@ function update(dt){
     addBonk(0.35*dead.length);
   }
   g.kills += dead.length;
+  for (const e of dead) addCoins(e.boss ? 100 : e.kind === 'mini' ? 40 : e.kind === 'elite' ? 15 : 1, e.x, e.z);
   if (dead.length){ g.combo += dead.length; g.comboT = 3; }
   g.comboT -= dt;
   if (g.comboT <= 0) g.combo = 0;
@@ -7169,6 +7308,8 @@ function update(dt){
   g.gems = g.gems.filter(gm => !gm.taken);
 
   updateShrines(dt);
+  updateBerries(dt);
+  updateNpcs(dt);
   updateBossMechanics(dt);
   updateMapEvent(dt);
   updateSupport(dt);
@@ -7319,6 +7460,7 @@ function drawEdgeMarkers(){
   for (const n of eventTargets()) targets.push({x: n.x, z: n.z, col: EVENT_COL[g.ev.kind] || '#7cf29c'});
   for (const sh of g.shrines || []) if (!sh.used) targets.push({x: sh.x, z: sh.z, col: shrineHex(sh.type), far: 40});
   for (const e of g.eggs || []) targets.push({x: e.x, z: e.z, col: '#ffd54f'});
+  for (const n of g.npcs || []) targets.push({x: n.x, z: n.z, col: '#' + n.col.toString(16).padStart(6, '0'), far: 45});
   for (const e of g.enemies) if (e.kind === 'elite' || e.kind === 'mini') targets.push({x: e.x, z: e.z, col: e.kind === 'mini' ? '#ce93d8' : '#ff7043'});
   const W = cv.width, H = cv.height, cx = W/2, cy = H/2;
   // Las flechas de arriba van por debajo del panel central del HUD (si no, el portal del norte queda tapado)
@@ -7354,11 +7496,15 @@ const SKILLS = {
   cuchilla: {name:'Cuchilla Persiguiente', k:'ofensiva',  d:'Hojas de energía que buscan al enemigo más fuerte de la pantalla.'},
   laser:    {name:'Rayo Láser',            k:'ofensiva',  d:'Haz neón hacia el enemigo más cercano; atraviesa a los que están en línea.'},
   mina:     {name:'Mina Digital',          k:'utilidad',  d:'Dejas minas al moverte; explotan en área cuando un enemigo las pisa.'},
-  meteoro:  {name:'Lluvia de Meteoros',    k:'ofensiva',  d:'Impactos aleatorios cerca de ti, avisados con un círculo en el suelo.'}
+  meteoro:  {name:'Lluvia de Meteoros',    k:'ofensiva',  d:'Impactos aleatorios cerca de ti, avisados con un círculo en el suelo.'},
+  // Exclusivos de tipo
+  luz:      {name:'Luz Vacuna',            k:'defensiva', d:'Tipo Vacuna: cada pocos segundos un destello sagrado te cura y daña a tu alrededor.'},
+  red:      {name:'Red de Datos',          k:'ofensiva',  d:'Tipo Datos: un rayo salta de enemigo en enemigo.'},
+  virus:    {name:'Nube Vírica',           k:'utilidad',  d:'Tipo Virus: dejas nubes de virus que dañan sin parar a quien las pisa.'}
 };
 const SKILL_MAX = 3;      // niveles por habilidad
-const SKILL_K = 0.8;      // factor de daño de las habilidades: regulado para partidas de 20 minutos
-const SKILL_SLOTS = 3;   // habilidades distintas que puedes llevar en una partida
+const SKILL_K = 0.72;      // factor de daño de las habilidades: regulado para partidas de 20 minutos
+const SKILL_SLOTS = 4;   // habilidades distintas que puedes llevar en una partida
 // Cada Digimon tiene su propio grupo de 4 ataques (de los 8 disponibles)
 const CHAR_SKILLS = {
   agumon:   ['espiral', 'laser', 'meteoro', 'mina'],
@@ -7374,18 +7520,41 @@ const CHAR_SKILLS = {
   frigimon: ['aura', 'pulso', 'mina', 'tornado'],
   wizardmon:['meteoro', 'laser', 'espiral', 'aura']
 };
+// Ataques característicos: los 4 de cada Digimon tienen nombre, color y forma propios (la mecánica es la de SKILLS)
+const SIG = {
+  agumon:   {espiral: ['Llama Bebé', 0xff7043, 'fire'], laser: ['Lanzallamas', 0xff9100], meteoro: ['Mega Llama', 0xff7043, 'fire'], mina: ['Brasas', 0xff7043]},
+  gabumon:  {cuchilla: ['Cuerno Cortante', 0x90caf9, 'blade'], pulso: ['Aullido', 0x4fc3f7], aura: ['Fuego Azul', 0x2979ff], tornado: ['Colmillo Helado', 0xb3e5fc, 'snow']},
+  palmon:   {mina: ['Semillas Explosivas', 0x8bc34a], tornado: ['Hiedra Venenosa', 0x76ff03, 'leaf'], aura: ['Aroma Floral', 0xf48fb1], pulso: ['Polen', 0xfff176]},
+  gatomon:  {cuchilla: ['Golpe Felino', 0xfff59d, 'claw'], laser: ['Rayo Sagrado', 0xfff9c4], espiral: ['Flecha Celestial', 0xffffff, 'star'], pulso: ['Mirada Felina', 0xf8bbd0]},
+  gomamon:  {pulso: ['Marea', 0x29b6f6], tornado: ['Remolino Marino', 0x4fc3f7, 'bubble'], espiral: ['Burbuja Gigante', 0x80deea, 'bubble'], mina: ['Erizos de Mar', 0x80deea]},
+  patamon:  {aura: ['Aire Santo', 0xfff8e1], meteoro: ['Lluvia Celestial', 0xfff59d, 'star'], pulso: ['Burbuja de Aire', 0xffffff], laser: ['Puño del Cielo', 0xffecb3]},
+  biyomon:  {meteoro: ['Llama Fénix', 0x76ff03, 'greenfire'], espiral: ['Remolino Espiral', 0x76ff03, 'greenfire'], cuchilla: ['Pluma Afilada', 0xf48fb1, 'blade'], aura: ['Ala Ardiente', 0xff8a65]},
+  tentomon: {laser: ['Electrochoque', 0xffeb3b], mina: ['Trampa Eléctrica', 0xffeb3b], meteoro: ['Rayo Celeste', 0xffee58, 'spark'], tornado: ['Zumbido', 0xffee58, 'spark']},
+  leomon:   {espiral: ['Puño de Bestia', 0xffa726, 'fire'], tornado: ['Garra Giratoria', 0xffe0b2, 'claw'], pulso: ['Rugido', 0xffb74d], cuchilla: ['Espada de León', 0xffe0b2, 'blade']},
+  hagurumon:{mina: ['Engranaje Trampa', 0xffd54f], laser: ['Cañón Láser', 0x80deea], meteoro: ['Lluvia de Tuercas', 0xffd54f, 'gear'], aura: ['Campo Magnético', 0xb0bec5]},
+  frigimon: {aura: ['Aliento Helado', 0xb3e5fc], pulso: ['Puño Glacial', 0x81d4fa], mina: ['Cristales de Hielo', 0xe1f5fe], tornado: ['Ventisca', 0xe1f5fe, 'snow']},
+  wizardmon:{meteoro: ['Trueno Mágico', 0xb388ff, 'spark'], laser: ['Rayo Arcano', 0xb388ff], espiral: ['Estrella Mágica', 0xb388ff, 'star'], aura: ['Círculo Arcano', 0xb388ff]}
+};
+// Ataques que se aprenden según el tipo (Vacuna, Datos, Virus): uno exclusivo del tipo y dos ataques comunes afines
+const TYPE_SKILLS = {vac: ['luz', 'aura', 'pulso'], dat: ['red', 'laser', 'espiral'], vir: ['virus', 'mina', 'meteoro']};
+// Nombre del ataque para un Digimon (el característico si lo tiene)
+function skillName(id, key = g && g.ch && g.ch.id){ const sg = SIG[key] && SIG[key][id]; return sg ? sg[0] : (SKILLS[id] ? SKILLS[id].name : id); }
+// Color y forma del ataque (por defecto los de la habilidad)
+function skFx(id, col, fx){ const sg = g && SIG[g.ch.id] && SIG[g.ch.id][id]; return sg ? {col: sg[1], fx: sg[2] || fx} : {col, fx}; }
+// Lista de ataques que puede aprender este Digimon: sus 4 y los de su tipo que no tenga ya
+function learnable(key){ const mine = CHAR_SKILLS[key] || []; return {mine, type: (TYPE_SKILLS[ATTR_OF[key]] || []).filter(id => !mine.includes(id))}; }
 function addSkill(id){ g.skills[id] = Math.min(SKILL_MAX, (g.skills[id] || 0) + 1); }
 // Opciones del nivel: mejoras base + ataques de este Digimon (máximo SKILL_SLOTS distintos por partida)
 function upgradeChoices(){
   const pool = [...UPGRADES];
-  const mine = CHAR_SKILLS[g.ch.id] || Object.keys(SKILLS).slice(0, 4);
+  const {mine, type} = learnable(g.ch.id);
   const owned = Object.keys(g.skills).filter(id => g.skills[id] > 0);
-  for (const id of mine){
+  for (const id of [...mine, ...type]){
     const lv = g.skills[id] || 0;
     if (lv >= SKILL_MAX) continue;
     if (!lv && owned.length >= SKILL_SLOTS) continue;   // ya llevas el máximo de ataques distintos
-    const s = SKILLS[id];
-    pool.push({t: `${s.name} · ${lv ? 'Nivel ' + (lv + 1) : 'Nueva'}`, name: s.name, skill: id, lv, k: s.k, d: s.d, f: () => addSkill(id)});
+    const s = SKILLS[id], nm = skillName(id), isType = !mine.includes(id);
+    pool.push({t: `${nm} · ${lv ? 'Nivel ' + (lv + 1) : 'Nueva'}`, name: nm, skill: id, lv, k: s.k, d: s.d, typeSk: isType, f: () => addSkill(id)});
   }
   // Las cartas desterradas en esta partida no vuelven a salir
   const picks = pool.filter(c => !upRes().banned.includes(upKey(c))).sort(() => Math.random() - 0.5).slice(0, 3)
@@ -7400,18 +7569,18 @@ function upgradeChoices(){
 function upRes(){ return g.upRes || (g.upRes = {rer: 2, skip: 2, ban: 1, banned: []}); }
 function upKey(c){ return c.fusion ? 'fus:' + c.fusion : c.skill ? 'skill:' + c.skill : 'up:' + c.t; }
 function rerollUp(){
-  const r = upRes(); if (r.rer <= 0 || state !== 'levelup') return;
+  const r = upRes(); if (r.rer <= 0 || state !== 'levelup' || g.npcPick || !g.choices.length) return;
   r.rer--; g.upMode = null;
   g.choices = upgradeChoices(); openUpgrades();
 }
 function skipUp(){
-  const r = upRes(); if (r.skip <= 0 || state !== 'levelup') return;
+  const r = upRes(); if (r.skip <= 0 || state !== 'levelup' || g.npcPick || !g.choices.length) return;
   r.skip--; SAVE.bits = SAVE.bits + 15; g.chestPick = null;
   announce('+15 Bits', 'Carta saltada', '#ffd54f');
   hideOverlay(); lockMouse(); state = 'play';
 }
 function toggleBanish(){
-  if (upRes().ban <= 0 || state !== 'levelup') return;
+  if (upRes().ban <= 0 || state !== 'levelup' || g.npcPick || !g.choices.length) return;
   g.upMode = g.upMode === 'ban' ? null : 'ban'; openUpgrades();
 }
 function banishUp(i){
@@ -7574,13 +7743,14 @@ function nearestIn(x, z, R){
   return best;
 }
 function spawnSProj(x, z, vx, vz, dmg, life, pierce, homing, color, target = null){
-  const mesh = projMesh(color);
+  const v = skFx(dmgSrc, color, null);
+  const mesh = projMesh(color, v.fx);
   aimMesh(mesh, vx, vz);
   world.add(mesh);
   g.sk.proj.push({x, z, vx, vz, dmg, life, pierce, homing, target, hit: new Set(), mesh, src: dmgSrc});
 }
 function dropMine(x, z, lv){
-  const mesh = fxMesh('mine', 1.2, 0xff7043);
+  const mesh = fxMesh('mine', 1.2, skFx('mina', 0xff7043).col);
   mesh.position.set(x, 0.12 + terrainH(x, z), z);
   world.add(mesh);
   g.sk.mines.push({x, z, life: 14, mesh, lv});
@@ -7595,7 +7765,7 @@ function updateSkills(dt){
   if (lv('aura')){
     const R = (3.2 + 1.0*lv('aura')) * ar;
     if (!S.aura){
-      S.aura = new THREE.Mesh(FX_PLANE, fxMatOwn('rune', 0x4fc3f7, 0.55));   // círculo de datos que gira bajo el Digimon
+      S.aura = new THREE.Mesh(FX_PLANE, fxMatOwn('rune', skFx('aura', 0x4fc3f7).col, 0.55));   // círculo de datos que gira bajo el Digimon
       world.add(S.aura);
     }
     S.aura.scale.set(2*R, 1, 2*R);
@@ -7612,7 +7782,7 @@ function updateSkills(dt){
   dmgSrc = 'tornado';
   // Tornado Bit: bits que giran, empujan y frenan proyectiles del jefe
   const nT = lv('tornado') ? lv('tornado') + 1 : 0;
-  while (S.bits.length < nT){ const m = fxMesh('wind', 1.8, 0xea80fc); world.add(m); S.bits.push(m); }
+  while (S.bits.length < nT){ const v = skFx('tornado', 0xea80fc, 'wind'); const m = fxMesh(v.fx, 1.8, v.fx === 'wind' || v.fx === 'spark' || v.fx === 'snow' ? v.col : 0xffffff, v.fx !== 'leaf'); world.add(m); S.bits.push(m); }
   while (S.bits.length > nT) world.remove(S.bits.pop());
   if (nT){
     S.spin += dt*3.2;
@@ -7645,7 +7815,7 @@ function updateSkills(dt){
       const L2 = lv('pulso');
       S.pulseT = (4.2 - 0.4*L2) * cm;
       const R = (6.5 + 1.5*L2) * ar;
-      spawnRing(p.x, p.z, 0x4fc3f7, R, 0.5);
+      spawnRing(p.x, p.z, skFx('pulso', 0x4fc3f7).col, R, 0.5);
       for (const e of g.enemies){
         if (e.hp <= 0) continue;
         const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz);
@@ -7703,7 +7873,7 @@ function updateSkills(dt){
           if (along < 0 || along > len) continue;
           if (Math.abs(ex*uz - ez*ux) < e.r + 0.8) hurt(e, (16 + 6*L2) * dm);
         }
-        const beam = new THREE.Mesh(FX_PLANE, fxMat('beam', 0x40c4ff));
+        const beam = new THREE.Mesh(FX_PLANE, fxMat('beam', skFx('laser', 0x40c4ff).col));
         beam.position.set(p.x + ux*len/2, 0.9 + terrainH(p.x, p.z), p.z + uz*len/2);
         beam.rotation.y = -Math.atan2(uz, ux);
         beam.scale.set(len, 1, 1.6);
@@ -7750,11 +7920,11 @@ function updateSkills(dt){
         const an = Math.random()*Math.PI*2, rr = Math.sqrt(Math.random())*13;
         const [mx, mz] = clampArena(p.x + Math.cos(an)*rr, p.z + Math.sin(an)*rr, ARENA_R - 2);
         const R = 3.2 * ar;
-        const wm = new THREE.Mesh(FX_PLANE, fxMatOwn('target', 0xff5252, 0.6));
+        const wm = new THREE.Mesh(FX_PLANE, fxMatOwn('target', skFx('meteoro', 0xff5252).col, 0.6));
         wm.position.set(mx, terrainH(mx, mz) + 0.07, mz);
         wm.scale.set(2*R, 1, 2*R);
         world.add(wm);
-        const rock = fxMesh('fire', 2.4, 0xffffff); rock.rotation.z = Math.PI/2;   // bola de fuego que cae en vertical
+        const rock = fxMesh(skFx('meteoro', 0, 'fire').fx, 2.4, 0xffffff); rock.rotation.z = Math.PI/2;   // bola de fuego que cae en vertical
         world.add(rock);
         S.meteors.push({x: mx, z: mz, t: 0, R, mesh: wm, rock, dmg: (11 + 3.5*L2) * dm});
       }
@@ -7773,6 +7943,58 @@ function updateSkills(dt){
       }
     }
     S.meteors = S.meteors.filter(m => { if (!m.done) return true; world.remove(m.mesh); world.remove(m.rock); m.mesh.material.dispose(); return false; });
+  }
+
+  dmgSrc = 'luz';
+  // Luz Vacuna: destello que cura y daña alrededor
+  if (lv('luz')){
+    S.luzT = (S.luzT ?? 2) - dt;
+    if (S.luzT <= 0){
+      const L2 = lv('luz'), R = (5 + L2) * ar;
+      S.luzT = (6 - 0.6*L2) * cm;
+      if (!(g.mod && g.mod.noHeal)){ const h = p.maxHp*(0.02 + 0.01*L2); p.hp = Math.min(p.maxHp, p.hp + h); popText(p.x, p.z, '+' + Math.round(h) + ' PS', '#7cf29c', 0.8); }
+      for (const e of g.enemies) if (e.hp > 0 && dist2(p.x, p.z, e.x, e.z) < R + e.r) hurt(e, (16 + 6*L2) * dm);
+      spawnRing(p.x, p.z, 0xfff59d, R, 0.6); spawnRing(p.x, p.z, 0xffffff, R*0.5, 0.4);
+    }
+  }
+  dmgSrc = 'red';
+  // Red de Datos: rayo que salta entre enemigos
+  if (lv('red')){
+    S.redT = (S.redT ?? 1) - dt;
+    if (S.redT <= 0){
+      const L2 = lv('red');
+      let cur = nearestIn(p.x, p.z, 10);
+      S.redT = cur ? (2.2 - 0.2*L2) * cm : 0.3;
+      const hit = new Set(); let fx = p.x, fz = p.z;
+      for (let i = 0; i < 2 + L2 && cur; i++){
+        hit.add(cur); hurt(cur, (10 + 4*L2) * dm);
+        const len = Math.hypot(cur.x - fx, cur.z - fz) || 0.1, m = new THREE.Mesh(FX_PLANE, fxMat('beam', 0x40c4ff));
+        m.position.set((fx + cur.x)/2, 1 + terrainH(cur.x, cur.z), (fz + cur.z)/2); m.rotation.y = -Math.atan2(cur.z - fz, cur.x - fx); m.scale.set(len, 1, 0.9);
+        world.add(m); S.beams.push({m, t: 0});
+        fx = cur.x; fz = cur.z;
+        let nb = null, nd = 7;
+        for (const e of g.enemies){ if (e.hp <= 0 || hit.has(e) || e.wild) continue; const d = dist2(e.x, e.z, fx, fz); if (d < nd){ nd = d; nb = e; } }
+        cur = nb;
+      }
+    }
+  }
+  dmgSrc = 'virus';
+  // Nube Vírica: nubes que se quedan donde pasas y dañan cada 0,5 s
+  if (lv('virus')){
+    const L2 = lv('virus');
+    S.clouds = S.clouds || [];
+    S.virT = (S.virT ?? 0) - dt;
+    if (S.virT <= 0 && S.clouds.length < 3 + L2){
+      S.virT = 1.4;
+      const R = (2 + 0.3*L2) * ar, mesh = new THREE.Mesh(FX_PLANE, fxMatOwn('rune', 0x9ccc65, 0.5));
+      mesh.scale.set(2*R, 1, 2*R); mesh.position.set(p.x, terrainH(p.x, p.z) + 0.06, p.z); world.add(mesh);
+      S.clouds.push({x: p.x, z: p.z, R, t: 5, tick: 0, mesh});
+    }
+    for (const c of S.clouds){
+      c.t -= dt; c.tick -= dt; c.mesh.rotation.y -= dt; c.mesh.material.opacity = 0.5*Math.min(1, c.t);
+      if (c.tick <= 0){ c.tick = 0.5; for (const e of g.enemies) if (e.hp > 0 && dist2(c.x, c.z, e.x, e.z) < c.R + e.r) hurt(e, (3 + 1.5*L2) * dm); }
+    }
+    S.clouds = S.clouds.filter(c => { if (c.t > 0) return true; world.remove(c.mesh); c.mesh.material.dispose(); return false; });
   }
 
   // Proyectiles de Espiral y Cuchilla: avanzan, las cuchillas giran hacia su objetivo y atraviesan según su alcance
@@ -7818,6 +8040,7 @@ const ICON = {
   utilidad: '<path d="M12 2l3 7 7 1-5 5 1 7-6-4-6 4 1-7-5-5 7-1z" fill="currentColor"/>',
   base: '<circle cx="12" cy="12" r="5" fill="currentColor"/>'
 };
+ICON.luz = ICON.luz || ICON.aura; ICON.red = ICON.red || ICON.laser; ICON.virus = ICON.virus || ICON.mina;
 const svgIcon = id => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${ICON[id] || ICON.base}</svg>`;
 function openUpgrades(){
   state = 'levelup';
@@ -7828,18 +8051,18 @@ function openUpgrades(){
   const r = upRes(), banMode = g.upMode === 'ban';
   showOverlay(`
     <div class="lv3">
-      <div class="lv3-head"><h2 class="lv3-banner">${g.chestPick ? (g.chestPick.gold ? '¡Cofre dorado! Carta doble' : '¡Cofre abierto!') : `¡Nivel ${g.p.lvl}!`}</h2><p>${banMode ? 'Elige una carta para desterrarla' : 'Pulsa 1-3 o haz clic'}</p></div>
+      <div class="lv3-head"><h2 class="lv3-banner">${g.npcPick ? g.npcPick.title : g.chestPick ? (g.chestPick.gold ? '¡Cofre dorado! Carta doble' : '¡Cofre abierto!') : `¡Nivel ${g.p.lvl}!`}</h2><p>${g.npcPick ? g.npcPick.sub : banMode ? 'Elige una carta para desterrarla' : 'Pulsa 1-3 o haz clic'}</p></div>
       <div class="lv3-row">${g.choices.map((c, i) => `
-        <button class="lv3-card ${c.k || 'utilidad'}${c.rare ? ' rare' : ''}${c.fusion ? ' fusion' : ''}${banMode ? ' ban' : ''}" data-up="${i}" style="animation-delay:${i*0.09}s">
+        <button class="lv3-card ${c.k || 'utilidad'}${c.rare ? ' rare' : ''}${c.fusion ? ' fusion' : ''}${banMode ? ' ban' : ''}${c.disabled ? ' off' : ''}" data-up="${i}" ${c.disabled ? 'disabled' : ''} style="animation-delay:${i*0.09}s">
           <span class="lv3-key">${i + 1}</span>
           ${c.skill && !c.lv ? '<span class="lv3-new">NUEVO</span>' : ''}
-          <span class="lv3-tag">${c.fusion ? '✦ Fusión' : c.evo ? '★ Evolución' : c.skill ? (c.lv ? 'Mejora' : 'Nueva habilidad') : (c.rare ? '◆ Rara · ' : '') + (cat[c.k] || 'Mejora')}</span>
-          ${!c.skill && !c.evo && !c.fusion && CARD_ART[c.t] ? `<img class="lv3-art" src="ui/hud/carta_${CARD_ART[c.t]}.webp" alt="">` : `<span class="lv3-ic">${c.fusion ? c.fusion.split('+').map(svgIcon).join('') : svgIcon(c.evo || c.skill || c.k)}</span>`}
+          <span class="lv3-tag">${c.leave ? 'Volver a la partida' : c.shop ? 'Tienda · ' + c.price + ' monedas' : c.digi ? '◆ Datos Digimon' : c.fusion ? '✦ Fusión' : c.evo ? '★ Evolución' : c.skill ? (c.typeSk ? 'De tipo ' + ATTR_NAME[ATTR_OF[g.ch.id]] : c.lv ? 'Mejora' : 'Característico') : (c.rare ? '◆ Rara · ' : '') + (cat[c.k] || 'Mejora')}</span>
+          ${!c.skill && !c.evo && !c.fusion && CARD_ART[c.t] ? `<img class="lv3-art" src="ui/hud/carta_${CARD_ART[c.t]}.webp" alt="">` : `<span class="lv3-ic">${c.fusion ? c.fusion.split('+').map(svgIcon).join('') : svgIcon(c.ic || c.evo || c.skill || c.k)}</span>`}
           <b>${c.name || c.t}</b>
           <p>${c.d || ''}</p>
           ${c.fusion ? '<span class="lv3-pips pasiva">FUSIÓN · efecto nuevo</span>' : c.evo ? '<span class="lv3-pips pasiva">EVO · nivel 4</span>' : c.skill ? `<span class="lv3-pips">${[1, 2, 3].map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : (c.rare ? '<span class="lv3-pips pasiva rare">Rara · efecto doble</span>' : '<span class="lv3-pips pasiva">Pasiva</span>')}
         </button>`).join('')}</div>
-      <div class="lv3-acts">
+      <div class="lv3-acts"${g.npcPick ? ' style="display:none"' : ''}>
         <button class="lv3-act" id="upRer" ${r.rer > 0 ? '' : 'disabled'}>Refrescar (${r.rer}) <kbd>F</kbd></button>
         <button class="lv3-act" id="upSkip" ${r.skip > 0 ? '' : 'disabled'}>Saltar (${r.skip}) <kbd>X</kbd></button>
         <button class="lv3-act red${banMode ? ' on' : ''}" id="upBan" ${r.ban > 0 ? '' : 'disabled'}>Desterrar (${r.ban}) <kbd>Z</kbd></button>
@@ -7854,11 +8077,12 @@ function openUpgrades(){
 function pickUpgrade(i){
   if (state !== 'levelup') return;
   const ch = g.choices[i];
+  if (!ch || ch.disabled) return;
   ch.f(g.p);
   if (g.chestPick && g.chestPick.gold && !ch.evo && !ch.fusion) ch.f(g.p);
   if (ch.rare) ch.f(g.p);
-  if (!ch.skill && !ch.evo && !ch.fusion){ g.upTaken = g.upTaken || {}; g.upTaken[ch.t] = (g.upTaken[ch.t] || 0) + 1; }   // cofre dorado: la carta cuenta dos veces
-  g.chestPick = null;
+  if (!ch.skill && !ch.evo && !ch.fusion && !ch.shop && !ch.digi){ g.upTaken = g.upTaken || {}; g.upTaken[ch.t] = (g.upTaken[ch.t] || 0) + 1; }   // cofre dorado: la carta cuenta dos veces
+  g.chestPick = null; g.npcPick = null;
   hideOverlay();
   lockMouse();
   state = 'play';
@@ -7900,7 +8124,7 @@ function endGame(win){
   // Resumen de la partida: cifras, daño por habilidad y recompensas
   const dmgRows = Object.entries(g.dmgBy).sort((a, b) => b[1] - a[1]).slice(0, 6);
   const dmgMax = dmgRows.length ? dmgRows[0][1] : 1;
-  const dmgName = k => k === 'base' ? `Ataque de ${g.ch.name}` : k.startsWith('fus:') ? 'Fusión: ' + (FUSION_NAMES[k.slice(4)] || k.slice(4)) : (SKILLS[k] ? SKILLS[k].name : k);
+  const dmgName = k => k === 'base' ? `Ataque de ${g.ch.name}` : k.startsWith('fus:') ? 'Fusión: ' + (FUSION_NAMES[k.slice(4)] || k.slice(4)) : (SKILLS[k] ? skillName(k) : k);
   const rewards = [`<li><b>+${g.earned - g.bonus - (g.extraBits || 0)}</b> Bits</li>`];
   if (g.extraBits) rewards.push(`<li><b>+${g.extraBits}</b> Bits de eventos del mapa</li>`);
   if (g.emblems && g.emblems.length) rewards.push(`<li>Emblemas: <b>${g.emblems.length}/8</b></li>`);
@@ -8007,11 +8231,14 @@ function bossCard(name, sub, sprite, col, opt = {}){
   el.querySelector('img').src = sprite || '';
   el.querySelector('.bc-t').textContent = name;
   el.querySelector('.bc-s').textContent = sub || '';
-  el.className = (opt.ko ? 'ko ' : '') + (opt.small ? 'small' : '');
+  // Alterna lado y altura para que no salga siempre en el mismo sitio
+  bossCard.n = (bossCard.n || 0) + 1;
+  el.className = (opt.ko ? 'ko ' : '') + (opt.small ? 'small ' : '') + (bossCard.n % 2 ? '' : 'r');
+  el.style.bottom = [22, 30, 16][bossCard.n % 3] + '%';
   void el.offsetWidth;   // reinicia la transición
   el.classList.add('show');
   clearTimeout(bossCard.t);
-  bossCard.t = setTimeout(() => el.classList.remove('show'), 2100);   // tiempo real: también se va en cámara lenta
+  bossCard.t = setTimeout(() => el.classList.remove('show'), 1900);   // tiempo real: también se va en cámara lenta
 }
 // Entrada de jefe: cámara lenta, sacudida, onda roja y cartel
 function bossIntro(e, name, sub, col, small){
@@ -8142,6 +8369,8 @@ function enterScreen(n){
   for (const c of g.chests) if (c.group) world.remove(c.group);
   g.chests = [];
   for (const sh of g.shrines || []) removeShrine(sh);
+  for (const b of g.berries || []) world.remove(b.mesh); g.berries = [];
+  for (const n of g.npcs || []){ world.remove(n.mesh); world.remove(n.ring); } g.npcs = null;
   g.trial = null;
   if (g.ev) endMapEvent(false);
   if (g.portal){ world.remove(g.portal.grp); g.portal = null; }
@@ -8309,10 +8538,10 @@ function updateHUD(){
   document.getElementById('hudZone').textContent = `${mapDef().name} · ${zoneDef().name} · ${g.mode === 'surv' ? 'Oleada ' + (g.wave || 1) : 'Pantalla ' + g.zone + '/' + zonesOf().length}`;
   // Contadores de la partida: bajas, tickets ganados y santuarios cargados (como la fila de la referencia)
   const shrinesDone = (g.shrines || []).filter(s => s.used).length;
-  const chipKey = [g.kills, g.tix, shrinesDone, (g.shrines || []).length, (g.emblems || []).length].join('|'), chipsEl = document.getElementById('hudChips');
+  const chipKey = [g.kills, g.coins || 0, g.tix, shrinesDone, (g.shrines || []).length, (g.emblems || []).length].join('|'), chipsEl = document.getElementById('hudChips');
   if (chipsEl.dataset.k !== chipKey){
     chipsEl.dataset.k = chipKey;
-    chipsEl.innerHTML = `<span>${HUD_IC.kills}<b>${g.kills}</b></span>${GACHA_SOON ? '' : `<span class="c-tix">${HUD_IC.tix}<b>${g.tix}</b></span>`}<span class="c-shr">${HUD_IC.shr}<b>${shrinesDone}/${(g.shrines || []).length}</b></span><span class="c-emb">${HUD_IC.emb}<b>${(g.emblems || []).length}/${EMBLEMS.length}</b></span>`;
+    chipsEl.innerHTML = `<span>${HUD_IC.kills}<b>${g.kills}</b></span><span class="c-coin" title="Monedas de la partida (tienda y ruleta)">${hudArt('ic_bits')}<b>${g.coins || 0}</b></span>${GACHA_SOON ? '' : `<span class="c-tix">${HUD_IC.tix}<b>${g.tix}</b></span>`}<span class="c-shr">${HUD_IC.shr}<b>${shrinesDone}/${(g.shrines || []).length}</b></span><span class="c-emb">${HUD_IC.emb}<b>${(g.emblems || []).length}/${EMBLEMS.length}</b></span>`;
   }
   hudEmblems();
   document.querySelector('.hud-hp').classList.toggle('low', p.hp < p.maxHp*0.3);
@@ -8336,7 +8565,7 @@ function updateHUD(){
   const sbKey = Object.keys(g.skills).map(k => k + g.skills[k]).join(',') + '|' + (g.fus || []).length;
   if (g.sbKey !== sbKey){
     g.sbKey = sbKey;
-    document.getElementById('skillBar').innerHTML = Object.keys(g.skills).map(k => `<span class="sb-i ${SKILLS[k].k}" title="${SKILLS[k].name}">${svgIcon(k)}<em>${g.skills[k]}</em></span>`).join('') + (g.fus || []).map(f => `<span class="sb-i ofensiva sb-fus" title="Fusión: ${f.name}">✦</span>`).join('');
+    document.getElementById('skillBar').innerHTML = Object.keys(g.skills).map(k => `<span class="sb-i ${SKILLS[k].k}" title="${skillName(k)}">${svgIcon(k)}<em>${g.skills[k]}</em></span>`).join('') + (g.fus || []).map(f => `<span class="sb-i ofensiva sb-fus" title="Fusión: ${f.name}">✦</span>`).join('');
   }
   const bf = document.getElementById('bonkFill'), bbar = document.getElementById('bonkBar');
   if (bf){
@@ -8566,6 +8795,8 @@ function drawWorldMap(cv, size){
     c.fillText('🎁', X(ch.x), Y(ch.z));
   }
   for (const e of g.eggs || []) c.fillText('🥚', X(e.x), Y(e.z));
+  for (const n of g.npcs || []) c.fillText(n.icon, X(n.x), Y(n.z));
+  c.fillStyle = '#ff5252'; for (const b of g.berries || []){ c.beginPath(); c.arc(X(b.x), Y(b.z), 3*u, 0, Math.PI*2); c.fill(); }
   // Santuarios sin usar: su arco de piedra sobre un círculo del color de su efecto
   for (const sh of g.shrines || []){
     if (sh.used) continue;
@@ -8712,9 +8943,9 @@ function fusionCards(){
   for (let i = 0; i < have.length; i++) for (let j = i + 1; j < have.length; j++){
     const a = have[i], b = have[j], key = fusionKey(a, b);
     if ((g.fus || []).some(f => f.key === key)) continue;
-    const name = FUSION_NAMES[key] || `${SKILLS[a].name} + ${SKILLS[b].name}`, kind = fusionKind(a, b);
+    const name = FUSION_NAMES[key] || `${skillName(a)} + ${skillName(b)}`, kind = fusionKind(a, b);
     const what = kind === 'nova' ? 'una estrella de 10 proyectiles que atraviesan' : kind === 'homing' ? '4 proyectiles que persiguen al enemigo más fuerte' : 'una onda expansiva que daña y empuja';
-    out.push({t: 'FUSIÓN: ' + name, name, fusion: key, k: 'ofensiva', d: `${SKILLS[a].name} + ${SKILLS[b].name}: cada pocos segundos lanza ${what}. Los dos ataques siguen como estaban.`,
+    out.push({t: 'FUSIÓN: ' + name, name, fusion: key, k: 'ofensiva', d: `${skillName(a)} + ${skillName(b)}: cada pocos segundos lanza ${what}. Los dos ataques siguen como estaban.`,
       f: () => { (g.fus || (g.fus = [])).push({key, name, kind, t: 1, cd: kind === 'nova' ? 2.6 : kind === 'homing' ? 3 : 4}); announce(name + '!', 'Fusión de ataques', '#ff8a1e'); sfx('evolve'); }});
   }
   return out;
@@ -8748,7 +8979,7 @@ function evoSkillCards(){
   const out = [];
   for (const [id, ev] of Object.entries(EVO_SKILLS)){
     if ((g.skills[id] || 0) !== 3 || (g.evoSk && g.evoSk[id]) || !((g.upTaken || {})[ev.need] > 0)) continue;
-    out.push({t: 'EVO: ' + ev.name, name: ev.name, evo: id, k: 'ofensiva', d: `Evolución de ${SKILLS[id].name} (con ${ev.need}): nivel 4 y +50% de daño.`,
+    out.push({t: 'EVO: ' + ev.name, name: ev.name, evo: id, k: 'ofensiva', d: `Evolución de ${skillName(id)} (con ${ev.need}): nivel 4 y +50% de daño.`,
       f: () => { g.skills[id] = 4; (g.evoSk || (g.evoSk = {}))[id] = 1.5; announce(ev.name + '!', 'Habilidad evolucionada', '#ffd54f'); }});
   }
   return out;
