@@ -1329,5 +1329,13 @@ I18N.add('pt', {
   "Continuar partida guardada": "Continuar partida salva",
   "Partida continuada": "Partida continuada",
   "El mapa se ha reconstruido con oleadas nuevas": "O mapa foi reconstruído com novas ondas",
-  "{0} · Nv {1} · {2}": "{0} · Nv {1} · {2}"
+  "{0} · Nv {1} · {2}": "{0} · Nv {1} · {2}",
+  "Logro: completar 5 partidas con Gatomon": "Conquista: concluir 5 partidas com o Gatomon",
+  "invocar jefe": "invocar chefe",
+  "Derrota a {0} en el mapa 1 o 2": "Derrote {0} no mapa 1 ou 2",
+  "Élite con escudo: atácala cuando no brille azul": "Elite com escudo: ataque quando não brilhar azul",
+  "Élite embestidora: se pone roja antes de cargar": "Elite investidora: fica vermelha antes de investir",
+  "Élite invocadora: trae refuerzos cada pocos segundos": "Elite invocadora: traz reforços a cada poucos segundos",
+  "¡Refuerzos!": "Reforços!",
+  "+25 vida máx.": "+25 vida máx."
 });

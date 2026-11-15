@@ -1341,5 +1341,13 @@ I18N.add('ru', {
   "Continuar partida guardada": "Продолжить сохранённый забег",
   "Partida continuada": "Забег продолжен",
   "El mapa se ha reconstruido con oleadas nuevas": "Карта перестроена с новыми волнами",
-  "{0} · Nv {1} · {2}": "{0} · Ур. {1} · {2}"
+  "{0} · Nv {1} · {2}": "{0} · Ур. {1} · {2}",
+  "Logro: completar 5 partidas con Gatomon": "Достижение: завершить 5 забегов с Gatomon",
+  "invocar jefe": "призвать босса",
+  "Derrota a {0} en el mapa 1 o 2": "Победи {0} на карте 1 или 2",
+  "Élite con escudo: atácala cuando no brille azul": "Элита со щитом: бей, когда она не светится синим",
+  "Élite embestidora: se pone roja antes de cargar": "Таранящая элита: краснеет перед рывком",
+  "Élite invocadora: trae refuerzos cada pocos segundos": "Элита-призыватель: каждые несколько секунд зовёт подкрепление",
+  "¡Refuerzos!": "Подкрепление!",
+  "+25 vida máx.": "+25 к макс. здоровью"
 });

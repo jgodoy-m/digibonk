@@ -1334,5 +1334,13 @@ I18N.add('pl', {
   "Continuar partida guardada": "Kontynuuj zapisaną rozgrywkę",
   "Partida continuada": "Rozgrywka wznowiona",
   "El mapa se ha reconstruido con oleadas nuevas": "Mapa została odbudowana z nowymi falami",
-  "{0} · Nv {1} · {2}": "{0} · Poz. {1} · {2}"
+  "{0} · Nv {1} · {2}": "{0} · Poz. {1} · {2}",
+  "Logro: completar 5 partidas con Gatomon": "Osiągnięcie: ukończ 5 rozgrywek z Gatomonem",
+  "invocar jefe": "przywołaj bossa",
+  "Derrota a {0} en el mapa 1 o 2": "Pokonaj {0} na mapie 1 lub 2",
+  "Élite con escudo: atácala cuando no brille azul": "Elita z tarczą: atakuj, gdy nie świeci na niebiesko",
+  "Élite embestidora: se pone roja antes de cargar": "Elita szarżująca: czerwienieje przed szarżą",
+  "Élite invocadora: trae refuerzos cada pocos segundos": "Elita przywołująca: co kilka sekund wzywa posiłki",
+  "¡Refuerzos!": "Posiłki!",
+  "+25 vida máx.": "+25 maks. HP"
 });

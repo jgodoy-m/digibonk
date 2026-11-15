@@ -1332,5 +1332,13 @@ I18N.add('it', {
   "Continuar partida guardada": "Continua la partita salvata",
   "Partida continuada": "Partita ripresa",
   "El mapa se ha reconstruido con oleadas nuevas": "La mappa è stata ricostruita con nuove ondate",
-  "{0} · Nv {1} · {2}": "{0} · Lv {1} · {2}"
+  "{0} · Nv {1} · {2}": "{0} · Lv {1} · {2}",
+  "Logro: completar 5 partidas con Gatomon": "Obiettivo: completare 5 partite con Gatomon",
+  "invocar jefe": "evoca boss",
+  "Derrota a {0} en el mapa 1 o 2": "Sconfiggi {0} nella mappa 1 o 2",
+  "Élite con escudo: atácala cuando no brille azul": "Élite con scudo: colpiscila quando non brilla di blu",
+  "Élite embestidora: se pone roja antes de cargar": "Élite che carica: diventa rossa prima di caricare",
+  "Élite invocadora: trae refuerzos cada pocos segundos": "Élite evocatrice: chiama rinforzi ogni pochi secondi",
+  "¡Refuerzos!": "Rinforzi!",
+  "+25 vida máx.": "+25 vita max"
 });

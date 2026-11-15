@@ -1335,5 +1335,13 @@ I18N.add('tr', {
   "Continuar partida guardada": "Kayıtlı oyuna devam et",
   "Partida continuada": "Oyun sürdürüldü",
   "El mapa se ha reconstruido con oleadas nuevas": "Harita yeni dalgalarla yeniden kuruldu",
-  "{0} · Nv {1} · {2}": "{0} · Sv {1} · {2}"
+  "{0} · Nv {1} · {2}": "{0} · Sv {1} · {2}",
+  "Logro: completar 5 partidas con Gatomon": "Başarım: Gatomon ile 5 oyun bitir",
+  "invocar jefe": "patronu çağır",
+  "Derrota a {0} en el mapa 1 o 2": "{0} adlı patronu harita 1 veya 2'de yen",
+  "Élite con escudo: atácala cuando no brille azul": "Kalkanlı elit: mavi parlamıyorken saldır",
+  "Élite embestidora: se pone roja antes de cargar": "Hücumcu elit: saldırmadan önce kızarır",
+  "Élite invocadora: trae refuerzos cada pocos segundos": "Çağırıcı elit: birkaç saniyede bir takviye getirir",
+  "¡Refuerzos!": "Takviye!",
+  "+25 vida máx.": "+25 maks. can"
 });

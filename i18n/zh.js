@@ -1343,5 +1343,13 @@ I18N.add('zh', {
   "Continuar partida guardada": "继续已保存的游戏",
   "Partida continuada": "游戏已继续",
   "El mapa se ha reconstruido con oleadas nuevas": "地图已用新的波次重建",
-  "{0} · Nv {1} · {2}": "{0} · Lv {1} · {2}"
+  "{0} · Nv {1} · {2}": "{0} · Lv {1} · {2}",
+  "Logro: completar 5 partidas con Gatomon": "成就：用 Gatomon 完成 5 局",
+  "invocar jefe": "召唤首领",
+  "Derrota a {0} en el mapa 1 o 2": "在地图 1 或 2 击败 {0}",
+  "Élite con escudo: atácala cuando no brille azul": "护盾精英：在它不发蓝光时攻击",
+  "Élite embestidora: se pone roja antes de cargar": "冲锋精英：冲锋前会变红",
+  "Élite invocadora: trae refuerzos cada pocos segundos": "召唤精英：每隔几秒召来援军",
+  "¡Refuerzos!": "援军！",
+  "+25 vida máx.": "最大生命 +25"
 });

@@ -6839,6 +6839,7 @@ function hurt(e, dmg){
   if (BEATS[g.attr] === attrOf(e)) dmg *= ATTR_ADV;               // ventaja de atributo
   dmg *= (g.evoSk && g.evoSk[dmgSrc]) || 1;                        // habilidad evolucionada
   if (crit){ dmg *= g.p.critMul; shake = Math.max(shake, 0.2); }
+  if (e.shield) dmg *= 0.2;   // élite con el escudo activo
   e.hp -= dmg;
   g.dmgBy[dmgSrc] = (g.dmgBy[dmgSrc] || 0) + dmg;
   popText(e.x, e.z, Math.round(dmg), crit ? '#ffb300' : '#ffffff', crit ? 0.8 : 0.55);
@@ -6934,8 +6935,31 @@ function spawnEnemy(forced){
     kind, sprite, mesh, shadow, x: sp[0], z: sp[1],
     hp: d.hp*k*evoHp()*diffMul('hp'), max: d.hp*k*evoHp()*diffMul('hp'), spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300 + (tt/600)*(tt/600))*evoDmg()*diffMul('dmg'), cd: 0
   };
+  if (kind === 'elite'){ foe.mech = ELITE_MECHS[Math.floor(Math.random()*ELITE_MECHS.length)]; foe.st = 2 + Math.random()*2; }
   g.enemies.push(foe);
   return foe;
+}
+// Mecánicas de las élites: escudo que se activa a ratos (azul: casi no le hace daño), embestida como los
+// embestidores pero más fuerte, o invocación de 3 enemigos a su alrededor
+const ELITE_MECH = {
+  escudo:    {sub: 'Élite con escudo: atácala cuando no brille azul'},
+  embestida: {sub: 'Élite embestidora: se pone roja antes de cargar'},
+  invoca:    {sub: 'Élite invocadora: trae refuerzos cada pocos segundos'}
+};
+const ELITE_MECHS = Object.keys(ELITE_MECH);
+function eliteMech(e, d, dt){
+  if (e.mech === 'escudo'){
+    // 2,5 s con escudo y 3 s sin él
+    e.shT = (e.shT === undefined ? 3 : e.shT) - dt;
+    if (e.shT <= 0){ e.shield = !e.shield; e.shT = e.shield ? 2.5 : 3; e.mesh.material.color.set(e.shield ? 0x6ec6ff : 0xffffff); if (e.shield) spawnRing(e.x, e.z, 0x6ec6ff, 3, 0.4); }
+  } else if (e.mech === 'invoca'){
+    e.st -= dt;
+    if (e.st <= 0 && d < 24){
+      e.st = 8;
+      for (let i = 0; i < 3; i++){ const m = spawnEnemy('basic'), a = i/3*Math.PI*2; if (!m) break; [m.x, m.z] = clampArena(e.x + Math.cos(a)*2.5, e.z + Math.sin(a)*2.5, ARENA_R - 0.5); }
+      spawnRing(e.x, e.z, 0xce93d8, 4, 0.5); popText(e.x, e.z, '¡Refuerzos!', '#ce93d8', 1);
+    }
+  }
 }
 
 /* ---------- Santuarios ----------
@@ -7081,6 +7105,9 @@ function startShrineTrial(sh){
   const foes = [];
   for (let i = 0; i < 3; i++){
     const e = spawnEnemy('elite'); if (!e) continue;
+    // Sin mecánica y con menos vida al principio: antes casi nunca se superaba en los primeros minutos
+    const k = Math.min(1, 0.45 + g.t/600);
+    e.mech = null; e.hp *= k; e.max *= k;
     const a = i/3*Math.PI*2 + Math.random();
     [e.x, e.z] = clampArena(sh.x + Math.cos(a)*11, sh.z + Math.sin(a)*11, ARENA_R - 1);
     foes.push(e);
@@ -7463,13 +7490,13 @@ function update(dt){
   // Fase extra: un jefe especial cada 40 s
   if (g.extraOn && !g.extraSpawned && g.t >= g.extraNext){ spawnSpecial(); g.extraSpawned = true; }
 
-  // Élites: cada 45 s desde el minuto 1; a partir del minuto 5 salen de dos en dos
+  // Élites: una cada 45 s (40 s desde el minuto 10) desde el minuto 1
   g.eliteT -= dt;
   if (g.eliteT <= 0){
     g.eliteT = eliteGap();
-    const n = g.t >= 300 ? 2 : 1;
-    for (let i = 0; i < n; i++) spawnEnemy('elite');
-    announce('¡Élite!', n > 1 ? 'Dos Digimon élite se acercan' : 'Un Digimon élite se acerca', '#ff7043');
+    // Una sola élite cada vez (antes dos a partir del minuto 5) y cada una con su mecánica: se distingue el peligro
+    const el = spawnEnemy('elite');
+    if (el) announce('¡Élite!', ELITE_MECH[el.mech].sub, '#ff7043');
   }
 
   // Enemigos: persiguen y dañan por contacto
@@ -7489,14 +7516,15 @@ function update(dt){
       if (d < e.r + 0.8 && g.dash <= 0) p.hp -= e.dmg * foeMul(e) * (p.armor || 1) * idleMul() * dt;
       continue;
     }
-    // Embestidor: a menos de 10 m se para 0,7 s (se pone rojo) y carga 0,6 s hacia donde estabas
-    if (e.kind === 'charger'){
+    if (e.mech) eliteMech(e, d, dt);
+    // Embestidor (y élite embestidora, más rápida): a menos de 10 m se para 0,7 s (se pone rojo) y carga 0,6 s hacia donde estabas
+    if (e.kind === 'charger' || e.mech === 'embestida'){
       e.st = (e.st === undefined ? 2 : e.st) - dt;
       if (!e.ch && e.st <= 0 && d < 10){ e.ch = {w: 0.7, t: 0.6, dx: dx/d, dz: dz/d}; e.mesh.material.color.set(0xff5252); }
       if (e.ch){
         const c = e.ch;
         if (c.w > 0){ c.w -= dt; if (c.w > 0.25){ c.dx = dx/d; c.dz = dz/d; } }   // apunta y fija la dirección en el último cuarto de segundo
-        else { c.t -= dt; e.x += c.dx*15*dt; e.z += c.dz*15*dt; if (c.t <= 0){ e.ch = null; e.st = 3.5; e.mesh.material.color.set(0xffffff); } }
+        else { const v = e.mech ? 19 : 15; c.t -= dt; e.x += c.dx*v*dt; e.z += c.dz*v*dt; if (c.t <= 0){ e.ch = null; e.st = e.mech ? 4.5 : 3.5; e.mesh.material.color.set(0xffffff); } }
         [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5); resolveSolids(e, e.r*0.8);
         if (d < e.r + 0.8 && g.dash <= 0) p.hp -= e.dmg * (c.w > 0 ? 1 : 1.8) * foeMul(e) * (p.armor || 1) * idleMul() * dt;
         continue;
@@ -9597,7 +9625,7 @@ function startMapEvent(force){
     const e = spawnEnemy('elite');
     if (!e){ g.ev = null; return startMapEvent('double'); }
     const [x, z] = nodeNear(20, 26); e.x = x; e.z = z;
-    e.hp *= 2.5; e.max *= 2.5; e.spd *= 1.15; e.hunted = true;
+    e.hp *= 2.5; e.max *= 2.5; e.spd *= 1.15; e.hunted = true; e.mech = null;
     const mark = new THREE.Mesh(new THREE.RingGeometry(1.7, 2.1, 40), new THREE.MeshBasicMaterial({color: 0xff5252, transparent: true, opacity: 0.85, depthWrite: false, side: THREE.DoubleSide}));
     mark.rotation.x = -Math.PI/2; world.add(mark);
     g.ev = {kind, t: 50, foe: e, mark};

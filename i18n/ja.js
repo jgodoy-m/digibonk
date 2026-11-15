@@ -1343,5 +1343,13 @@ I18N.add('ja', {
   "Continuar partida guardada": "セーブしたプレイを再開",
   "Partida continuada": "プレイを再開しました",
   "El mapa se ha reconstruido con oleadas nuevas": "マップは新しいウェーブで再構築されました",
-  "{0} · Nv {1} · {2}": "{0} · Lv {1} · {2}"
+  "{0} · Nv {1} · {2}": "{0} · Lv {1} · {2}",
+  "Logro: completar 5 partidas con Gatomon": "実績：Gatomonで5回プレイを終える",
+  "invocar jefe": "ボス召喚",
+  "Derrota a {0} en el mapa 1 o 2": "マップ1か2で{0}を倒す",
+  "Élite con escudo: atácala cuando no brille azul": "シールド持ちエリート：青く光っていない時に攻撃",
+  "Élite embestidora: se pone roja antes de cargar": "突進エリート：突進前に赤くなる",
+  "Élite invocadora: trae refuerzos cada pocos segundos": "召喚エリート：数秒ごとに援軍を呼ぶ",
+  "¡Refuerzos!": "援軍！",
+  "+25 vida máx.": "最大HP+25"
 });
