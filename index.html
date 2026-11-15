@@ -3633,7 +3633,7 @@ const ARENA_R = 110;  // medio lado del escenario: el mapa es cuadrado y lo cier
 const ZONES = [
   {name:'Bosque Inicial',   at:0,   fog:0xbcd9e8, sky:['#4d86c9', '#a9d4ee', '#d8efff'], tint:0xffffff, color:'#ffd54f', biome:'bosque',
     boss: {name: 'Andromon', sprite: 'sprites/adventure/andromon.png', hp: 3000, dmg: 15, shots: 10, shotDmg: 8, gap: 2.5, col: '#ffd54f', sub: 'Guardián del Bosque Inicial'}},
-  {name:'Pantano de Datos', at:600, fog:0x8c7cb8, sky:['#241b4a', '#6a4f9e', '#c59ad6'], tint:0xd8c6ff, color:'#ce93d8', biome:'bosque',
+  {name:'Pantano de Datos', at:600, fog:0x8c7cb8, sky:['#241b4a', '#6a4f9e', '#c59ad6'], tint:0xd8c6ff, color:'#ce93d8', biome:'pantano',
     boss: {name: 'Piedmon', sprite: 'sprites/adventure/piedmon.png', hp: 6000, dmg: 20, shots: 12, shotDmg: 10, gap: 2.3, col: '#ce93d8', sub: 'Líder de los Dark Masters · jefe final', final: true}}
 ];
 const ZONE2_AT = ZONES[1].at;
@@ -4185,6 +4185,19 @@ const BIOMES = {
     water: {map: 'textures/agua_pixel.png', color: 0xff6a2a, shore: 0x5a2a1a, lava: true},
     deco: [['sprites/deco/nieve/muro.png', 1.78, 1, 10.0, 0, 3], ['sprites/deco/nieve/muro_estandarte.png', 1.57, 1, 8.0, 0, 3], ['sprites/deco/nieve/torre.png', 0.73, 1, 4.0, 1.6, 6], ['sprites/deco/nieve/valla_estandarte.png', 1.87, 1, 8.0, 0, 2], ['sprites/deco/nieve/pilar.png', 0.48, 1, 10.0, 0.6, 3.8], ['sprites/deco/nieve/pilar_tech.png', 0.66, 1, 6.0, 0.8, 3.2], ['sprites/deco/nieve/arco.png', 0.93, 1, 4.0, 1, 4.4], ['sprites/deco/nieve/ruina.png', 0.69, 1, 8.0, 0.8, 3], ['sprites/deco/nieve/altar.png', 1.00, 1, 3.0, 1, 2.4], ['sprites/deco/nieve/cristal1.png', 0.97, 1, 5.0, 0.6, 1.8], ['sprites/deco/nieve/cristal2.png', 1.38, 1, 5.0, 0.6, 1.8], ['sprites/deco/nieve/roca1.png', 1.65, 1, 3.3, 1.4, 1.4], ['sprites/deco/nieve/roca2.png', 1.46, 1, 3.3, 1.4, 1.4], ['sprites/deco/nieve/roca3.png', 1.43, 1, 3.3, 1.4, 1.4], ['sprites/deco/nieve/roca_grande1.png', 1.43, 1, 2.5, 2.4, 2.2], ['sprites/deco/nieve/roca_grande2.png', 1.65, 1, 2.5, 2.4, 2.2], ['sprites/deco/nieve/arbol_seco1.png', 0.88, 1, 2.5, 0.6, 5.5], ['sprites/deco/nieve/arbol_seco2.png', 0.94, 1, 2.5, 0.6, 5.5], ['sprites/deco/nieve/pino_hielo.png', 1.02, 1, 3.0, 1.1, 5.6]]}
 };
+// Pantano de Datos (mapa 1, pantalla 2): antes repetía el bioma del bosque con otro tinte. Ahora tiene suelo de barro,
+// caminos de hierba, agua verde turbia y un bosque más cerrado de árboles oscuros, troncos, tocones, setas y helechos
+// (sin flores). Usa los mismos sprites del bosque, así que no añade archivos; su semilla le da otra disposición.
+BIOMES.pantano = {...BIOMES.bosque,
+  path: 'textures/mapa_losas_musgo.png', stone: 'textures/mapa_hierba.png', mm: ['#4f5b3a', '#6b7a62'],
+  plaza: {fondo: ['arco'], centro: ['altar'], anillo: ['pilar', 'tocon2'], sueltos: ['ruina', 'roca_grande2', 'cristal', 'tronco', 'seta2']},
+  borde: ['seta1', 'seta2', 'seta3', 'helecho1', 'helecho2', 'tocon1', 'tocon2', 'arbusto1', 'arbusto3', 'roca1'],
+  floor: 'textures/mapa_tierra.png', rep: 70, center: [0.7, 0.8, 0.62], mount: 0x8a9a7a,
+  water: {map: 'textures/agua_verde_kenney.png', color: 0x8fbf7a, shore: 0x55603f},
+  deco: BIOMES.bosque.deco.filter(d => !/arbol_flor|arbol_otono|arbusto_flor|flores/.test(d[0])).map(d => {
+    const w = /arbol_azul|arbol_medio|tronco|tocon|seta|helecho/.test(d[0]) ? d[3]*2.2 : d[3];
+    return [d[0], d[1], d[2], w, d[4], d[5]];
+  })};
 const DECO_AR = {"bosque/arbol":1.12,"bosque/arbol_flor":1.04,"bosque/arbol_otono":1.18,"bosque/arbol_azul":1.09,"bosque/arbol_medio1":0.77,"bosque/arbol_medio2":0.83,"bosque/arbolito":0.78,"bosque/arbusto1":1.57,"bosque/arbusto2":1.35,"bosque/arbusto3":1.45,"bosque/arbusto_flor1":1.49,"bosque/arbusto_flor2":1.47,"bosque/arbusto_flor3":1.39,"bosque/helecho1":1.42,"bosque/helecho2":1.12,"bosque/flores1":1.58,"bosque/flores2":1.59,"bosque/flores3":1.06,"bosque/flores4":1.15,"bosque/seta1":1.42,"bosque/seta2":1.24,"bosque/seta3":1.24,"bosque/tocon1":1.42,"bosque/tocon2":1.28,"bosque/tronco":2.89,"bosque/roca1":1.45,"bosque/roca2":1.48,"bosque/roca_grande1":1.4,"bosque/roca_grande2":1.64,"bosque/cristal":1.03,"bosque/cartel":0.78,"bosque/pilar":0.57,"bosque/arco":1.24,"bosque/ruina":1.01,"bosque/altar":1.0,"bosque/portal":1.51,"bosque/puente":2.77,"bosque/valla":2.11,"bosque/escalera":1.86,"desierto/acacia1":1.37,"desierto/acacia2":1.39,"desierto/acacia_tech1":1.3,"desierto/acacia_tech2":1.27,"desierto/acacia_media1":0.89,"desierto/acacia_media2":0.86,"desierto/acacia_media3":0.94,"desierto/arbusto1":1.54,"desierto/arbusto2":1.57,"desierto/arbusto_flor1":1.48,"desierto/arbusto_flor2":1.35,"desierto/arbusto_flor3":1.27,"desierto/planta1":1.14,"desierto/planta2":1.4,"desierto/pasto_seco1":1.06,"desierto/pasto_seco2":1.27,"desierto/cactus1":0.84,"desierto/cactus2":0.86,"desierto/cactus3":0.88,"desierto/cactus4":1.13,"desierto/cactus_bola1":1.32,"desierto/cactus_bola2":1.54,"desierto/cactus_bola3":0.75,"desierto/arbol_muerto1":0.9,"desierto/arbol_muerto2":1.35,"desierto/arbol_muerto3":1.19,"desierto/huesos1":2.12,"desierto/huesos2":1.35,"desierto/roca1":1.72,"desierto/roca2":1.45,"desierto/roca3":1.28,"desierto/roca4":1.2,"desierto/roca_roja1":1.61,"desierto/roca_roja2":1.41,"desierto/roca_roja3":1.43,"desierto/cristal1":0.9,"desierto/cristal2":0.72,"desierto/cartel1":0.83,"desierto/cartel2":0.72,"desierto/valla":1.96,"desierto/pilar1":0.5,"desierto/pilar2":0.48,"desierto/arco":1.15,"desierto/ruina1":0.78,"desierto/ruina2":0.75,"desierto/escalera":1.54,"desierto/altar":1.0,"desierto/lapida":0.89,"desierto/puente":2.45,"desierto/ruina_arena1":1.77,"desierto/ruina_arena2":1.97,"desierto/ruina_arena3":1.87,"desierto/ruina_arena4":1.99,"desierto/ruina_arena5":1.64,"desierto/ruina_arena6":1.32,"desierto/ruina_arena7":1.19,"desierto/ruina_arena8":1.19,"desierto/portal":1.43,"nieve/pino1":1.02,"nieve/pino2":1.05,"nieve/pino_hielo":1.02,"nieve/arbol_seco1":0.88,"nieve/arbol_seco2":0.94,"nieve/arbolito_seco1":0.78,"nieve/arbolito_seco2":0.74,"nieve/arbusto1":1.62,"nieve/arbusto2":1.52,"nieve/arbusto3":1.57,"nieve/arbusto_bayas1":1.47,"nieve/arbusto_bayas2":1.43,"nieve/arbusto_hielo":1.45,"nieve/planta_hielo1":1.48,"nieve/planta_hielo2":1.49,"nieve/flores1":1.56,"nieve/flores2":1.36,"nieve/flores3":1.24,"nieve/flor_cristal":1.19,"nieve/seta1":1.4,"nieve/seta2":1.34,"nieve/seta3":1.3,"nieve/tocon1":1.38,"nieve/tocon2":1.3,"nieve/tronco":2.62,"nieve/roca1":1.65,"nieve/roca2":1.46,"nieve/roca3":1.43,"nieve/roca_grande1":1.43,"nieve/roca_grande2":1.65,"nieve/cristal1":0.97,"nieve/cristal2":1.38,"nieve/cartel":0.68,"nieve/valla_estandarte":1.87,"nieve/muro_estandarte":1.57,"nieve/muro":1.78,"nieve/torre":0.73,"nieve/pilar":0.48,"nieve/arco":0.93,"nieve/ruina":0.69,"nieve/altar":1.0,"nieve/pilar_tech":0.66,"nieve/portal":1.32,"nieve/puente":2.27,"nieve/escalera":1.48};
 const PROP_SIZE = {arco: 4.4, altar: 2.4, pilar: 3.8, pilar_tech: 3.2, ruina: 2.8, ruina_arena: 2.6, roca_grande: 2.2, roca_roja: 2.2, cristal: 1.8, roca: 1.4, flores: 0.9,
   arbusto: 1.6, arbusto_flor: 1.6, arbusto_bayas: 1.6, seta: 1.1, valla: 1.6, cartel: 1.8, torre: 6, muro: 3, muro_estandarte: 3, valla_estandarte: 2, lapida: 2.2,
@@ -4590,7 +4603,7 @@ function showPause(askQuit = false){
       ${actions}
       <div class="pz2-keys">
         <span><kbd>Esc</kbd> pausa</span><span><kbd>WASD</kbd> mover</span><span><kbd>Espacio</kbd> saltar</span><span><kbd>Shift</kbd> dash</span>
-        <span><kbd>E</kbd> cofres</span><span><kbd>Tab</kbd> mapa</span><span><kbd>N</kbd> sonido</span><span><kbd>R</kbd> evolucionar</span>
+        <span><kbd>E</kbd> cofres</span><span><kbd>Tab</kbd> mapa</span><span><kbd>N</kbd> sonido</span><span><kbd>R</kbd> evolucionar</span><span><kbd>Q</kbd> Bonk</span><span><kbd>B</kbd> invocar jefe</span>
       </div>
     </div>`;
   pauseEl.classList.remove('hidden');
@@ -5655,7 +5668,8 @@ const UNLOCK = {
   leomon:   {how: 'Logro: 1.000 bajas en total', prog: () => [Math.min(1000, sumStats('kills')), 1000]},
   hagurumon:{how: 'Logro: completar 25 partidas', prog: () => [Math.min(25, sumStats('plays')), 25]},
   frigimon: {how: 'Gana la Montaña Helada (o 5% por sorpresa al terminar cada partida)', prog: () => [wonMap('nevado'), 1], rnd: 0.05},
-  wizardmon:{how: 'Logro: tener a Gatomon', prog: () => [isUnlocked('gatomon') ? 1 : 0, 1]}
+  // Antes bastaba con tener a Gatomon y, si era el inicial, Wizardmon llegaba al momento
+  wizardmon:{how: 'Logro: completar 5 partidas con Gatomon', prog: () => [Math.min(5, isUnlocked('gatomon') ? statsOf('gatomon').plays || 0 : 0), 5]}
 };
 function sumStats(field){ return Object.values(loadJSON('digibonk3d-stats', {})).reduce((a, x) => a + (x[field] || 0), 0); }
 // Texto de cómo se consigue un Digimon bloqueado (los iniciales no tienen regla propia)
@@ -6279,7 +6293,7 @@ function startGame(key, resume){
   g = {
     mode: runMode,
     ch: {...c, id:key},
-    p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:2.5, critChance:0.12, critMul:2},
+    p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:3.5, critChance:0.12, critMul:2},
     t: 0, kills: 0, enemies: [], shots: [], gems: [], blades: [], turrets: [], zones: [],
     wCd: 0, spawnT: 0, orbitA: 0, choices: [],
     dash: 0, dashCd: 0, dir: {x:0, z:-1}, chests: [], chestT: 20, flash: '', flashT: 0,
@@ -6459,7 +6473,9 @@ function spawnMini(m){
   const shadow = makeShadow(4.4);
   world.add(shadow);
   const sp = clampArena(g.p.x + Math.cos(a)*24, g.p.z + Math.sin(a)*24, ARENA_R - 0.5);
-  const hp = m.hp*(1 + diffT(t)/90)*evoHp()*diffMul('hp');
+  // Misma curva de vida que la horda (foeHpK) y unas 3 élites de vida: antes un jefe menor tenía menos vida que
+  // una élite normal (Devimon 995 PS frente a 1.156 en el minuto 3). m.hp solo ordena a unos frente a otros
+  const hp = ENEMY.elite.hp*MINI_HP_K*(m.hp/340)*foeHpK(diffT(t))*evoHp()*diffMul('hp');
   g.enemies.push({kind: 'mini', name: m.name, sprite: m.sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 2.5, r: 1.9, xp: 60, dmg: 16*(1 + diffT(t)/300)*diffMul('dmg'), cd: 0});
   sfx('boss');
   bossIntro(g.enemies[g.enemies.length - 1], m.name, 'Jefe menor', '#ce93d8', true);
@@ -6525,7 +6541,7 @@ function digivolve(){
   g.evoAnim = {t: 0, dur: 2.6, swapped: false, sprite: spriteOf(g.ch.id, st), name: evo.name};
   shake = Math.max(shake, 0.5);
   sfx('evolve');
-  announce(evo.name + '!', `Digievolución · +${Math.round((Math.pow(EVO_TOTAL.dmg, 1/n) - 1)*100)}% daño, +${inc} vida`, '#ffd54f');
+  announce('¡' + evo.name + '!', `Digievolución · +${Math.round((Math.pow(EVO_TOTAL.dmg, 1/n) - 1)*100)}% daño, +${inc} vida`, '#ffd54f');
 }
 
 // Animación de digievolución: 0-0.6 s brillo y temblor, cambio de sprite con destello y anillo, 0.6-1.6 s asentamiento
@@ -6923,7 +6939,7 @@ function spawnEnemy(forced){
 }
 
 /* ---------- Santuarios ----------
-   Cada pantalla tiene 5 santuarios de tipos distintos, en suelo llano. Para activarlos hay que quedarse unos 3 s dentro de su círculo.
+   Cada pantalla tiene SHRINES_PER_SCREEN (3) santuarios de tipos distintos, en suelo llano. Para activarlos hay que quedarse unos 3 s dentro de su círculo.
    Aspecto (como el icono del HUD): plataforma de piedra con dos columnas y dintel, un haz de luz de su color que se ve desde lejos,
    un cristal flotante y, encima, la carta de su efecto para saber qué da antes de ir. Al usarlo, la piedra se queda apagada. */
 const SHRINE_TYPES = [
@@ -7258,7 +7274,8 @@ function openShop(n){
 }
 // Ruleta: 40 monedas por tirada (la primera de cada Piximon es gratis)
 const WHEEL = [
-  {t: 'Cura 40%', col: '#7cf29c', f: () => { if (!(g.mod && g.mod.noHeal)) g.p.hp = Math.min(g.p.maxHp, g.p.hp + g.p.maxHp*0.4); }},
+  // La semana «Sin curación» esta casilla da vida máxima en vez de curar (antes no hacía nada)
+  {get t(){ return g && g.mod && g.mod.noHeal ? '+25 vida máx.' : 'Cura 40%'; }, col: '#7cf29c', f: () => { if (g.mod && g.mod.noHeal) g.p.maxHp += 25; else g.p.hp = Math.min(g.p.maxHp, g.p.hp + g.p.maxHp*0.4); }},
   {t: '+80 monedas', col: '#ffd54f', f: () => addCoins(80)},
   {t: 'Ataque +1', col: '#ff8a65', f: () => { const c = sigCard(); if (c) c.f(); }},
   {t: 'Cofre dorado', col: '#ffca28', f: () => spawnChestAt(g.p.x + g.dir.x*3, g.p.z + g.dir.z*3, true)},
@@ -7618,10 +7635,16 @@ function update(dt){
   }
   g.drops = g.drops.filter(dr => !dr.taken);
 
-  // Gemas de XP
+  // Gemas de XP. Si hay demasiadas sueltas, las más lejanas se funden en una gema grande que vale por todas
+  // (antes no había límite: 230-360 gemas en el minuto 5, cada una con su objeto 3D, y miles en partidas largas)
+  if ((g.gemMergeT = (g.gemMergeT || 0) - dt) <= 0){ g.gemMergeT = 0.5; mergeGems(); }
   for (const gm of g.gems){
+    if (gm.born === undefined) gm.born = g.t;
+    // Las gemas que llevan 20 s en el suelo se acercan solas si estás a menos de 12 m (se quedaba mucha experiencia atrás)
+    if (!gm.attract && !gm.heal && g.t - gm.born > GEM_DRIFT_AFTER && dist2(gm.x, gm.z, p.x, p.z) < 12) gm.attract = true;
     if (!gm.mesh){
-      gm.mesh = new THREE.Mesh(gm.heal ? GEM_HEAL_GEO : GEM_GEO, matFor(gm.heal ? 0x66bb6a : 0x29b6f6));
+      gm.mesh = new THREE.Mesh(gm.heal ? GEM_HEAL_GEO : GEM_GEO, matFor(gm.heal ? 0x66bb6a : gm.big ? 0xff4081 : 0x29b6f6));
+      if (gm.big) gm.mesh.scale.setScalar(2.2);
       world.add(gm.mesh);
     }
     const d = dist2(gm.x, gm.z, p.x, p.z), dd = d || 1;
@@ -8063,6 +8086,20 @@ function projMesh(color, kind){
 function aimMesh(m, vx, vz){ m.rotation.y = -Math.atan2(vz, vx); }
 function matFor(color){ return matCache[color] || (matCache[color] = new THREE.MeshBasicMaterial({color})); }
 const RING_GEO = new THREE.RingGeometry(0.96, 1, 48);
+const GEM_CAP = 150, GEM_DRIFT_AFTER = 20;
+// Funde en una gema grande las gemas de experiencia que pasan de GEM_CAP, empezando por las más lejanas.
+// La gema grande se queda donde estaba la más lejana de las fundidas y suma su valor (se reutiliza si ya existe)
+function mergeGems(){
+  const xs = g.gems.filter(gm => !gm.heal && !gm.big && !gm.attract && !gm.taken);
+  if (xs.length <= GEM_CAP) return;
+  const p = g.p;
+  xs.sort((a, b) => dist2(b.x, b.z, p.x, p.z) - dist2(a.x, a.z, p.x, p.z));
+  const out = xs.slice(0, xs.length - GEM_CAP + 20);   // deja margen para no fundir en cada comprobación
+  let big = g.gems.find(gm => gm.big && !gm.taken && !gm.attract);
+  if (!big){ big = {x: out[0].x, z: out[0].z, v: 0, big: true, mesh: null, born: g.t}; g.gems.push(big); }
+  for (const gm of out){ big.v += gm.v; gm.taken = true; if (gm.mesh) world.remove(gm.mesh); }
+  g.gems = g.gems.filter(gm => !gm.taken);
+}
 const GEM_GEO = new THREE.OctahedronGeometry(0.25), GEM_HEAL_GEO = new THREE.OctahedronGeometry(0.32);
 const BIT_GEO = new THREE.SphereGeometry(0.3, 10, 10), BIT_MAT = new THREE.MeshBasicMaterial({color: 0xe040fb});
 const SPROJ_GEO = new THREE.SphereGeometry(0.28, 8, 8);
@@ -8812,7 +8849,9 @@ function bossPhases(dt){
 // evolución; el daño (contacto, disparos y golpes) sube como el de la horda pero más despacio.
 const BOSS_REF_T = 180;
 const foeHpK = tt => 1 + tt/45 + (tt/115)*(tt/115);
-function bossHpMul(){ return Math.max(1, foeHpK(diffT(g.t)) / foeHpK(BOSS_REF_T)) * evoHp(); }
+// ×1,3 desde que los jefes menores tienen unas 3 élites de vida: el jefe de zona sigue por encima de ellos
+const MINI_HP_K = 3, BOSS_HP_K = 1.3;
+function bossHpMul(){ return BOSS_HP_K * Math.max(1, foeHpK(diffT(g.t)) / foeHpK(BOSS_REF_T)) * evoHp(); }
 function bossDmgMul(){ return (lvlDiff().dmg || 1) * (1 + diffT(g.t)/300); }
 // Invoca al jefe de la pantalla cuando quieras: cuanto más tarde, más fuerte (ver bossHpMul)
 function summonBoss(){
@@ -9351,7 +9390,7 @@ function fusionCards(){
     const name = FUSION_NAMES[key] || `${skillName(a)} + ${skillName(b)}`, kind = fusionKind(a, b);
     const what = kind === 'nova' ? 'una estrella de 10 proyectiles que atraviesan' : kind === 'homing' ? '4 proyectiles que persiguen al enemigo más fuerte' : 'una onda expansiva que daña y empuja';
     out.push({t: 'FUSIÓN: ' + name, name, fusion: key, k: 'ofensiva', d: `${skillName(a)} + ${skillName(b)}: cada pocos segundos lanza ${what}. Los dos ataques siguen como estaban.`,
-      f: () => { (g.fus || (g.fus = [])).push({key, name, kind, t: 1, cd: kind === 'nova' ? 2.6 : kind === 'homing' ? 3 : 4}); announce(name + '!', 'Fusión de ataques', '#ff8a1e'); sfx('evolve'); }});
+      f: () => { (g.fus || (g.fus = [])).push({key, name, kind, t: 1, cd: kind === 'nova' ? 2.6 : kind === 'homing' ? 3 : 4}); announce('¡' + name + '!', 'Fusión de ataques', '#ff8a1e'); sfx('evolve'); }});
   }
   return out;
 }
@@ -9385,7 +9424,7 @@ function evoSkillCards(){
   for (const [id, ev] of Object.entries(EVO_SKILLS)){
     if ((g.skills[id] || 0) !== 3 || (g.evoSk && g.evoSk[id]) || !((g.upTaken || {})[ev.need] > 0)) continue;
     out.push({t: 'EVO: ' + ev.name, name: ev.name, evo: id, k: 'ofensiva', d: `Evolución de ${skillName(id)} (con ${ev.need}): nivel 4 y +50% de daño.`,
-      f: () => { g.skills[id] = 4; (g.evoSk || (g.evoSk = {}))[id] = 1.5; announce(ev.name + '!', 'Habilidad evolucionada', '#ffd54f'); }});
+      f: () => { g.skills[id] = 4; (g.evoSk || (g.evoSk = {}))[id] = 1.5; announce('¡' + ev.name + '!', 'Habilidad evolucionada', '#ffd54f'); }});
   }
   return out;
 }
@@ -9851,7 +9890,8 @@ const ENC_TYPES = [
   {id:'chests', ns:[6, 8, 10], t: n => `Abre ${n} cofres en una partida`, ok: (n) => (g.chestsOpened || 0) >= n},
   {id:'bonk', ns:[6, 8, 10], t: n => `Usa el Bonk ${n} veces en una partida`, ok: (n) => (g.bonks || 0) >= n},
   {id:'level', ns:[35, 45, 55], t: n => `Llega al nivel ${n}`, ok: (n) => g.p.lvl >= n},
-  {id:'mini', ns:[0, 1, 2], t: n => `Derrota a ${MINIS[n].name}`, ok: (n) => (g.minisKilled || []).includes(MINIS[n].name)},
+  // El mapa 3 no tiene jefes menores: el texto dice dónde se cumple
+  {id:'mini', ns:[0, 1, 2], t: n => `Derrota a ${MINIS[n].name} en el mapa 1 o 2`, ok: (n) => (g.minisKilled || []).includes(MINIS[n].name)},
   {id:'with', ns:null, t: k => `Aguanta 10 minutos con ${CHARS[k].name}`, ok: (k) => g.ch.id === k && g.t >= 600}
 ];
 // Generador con semilla del día: todos los jugadores ven los mismos encargos ese día
@@ -10511,7 +10551,7 @@ function showPlayer(){
   const skinsRaw = loadJSON('digibonk3d-skins', []);
   const skinsOwned = Array.isArray(skinsRaw) ? skinsRaw.length : Object.keys(skinsRaw).length;
   const achDone = achDoneCount(), achTotal = achItems().length;
-  const digiOwned = unlockedSet().size, digiTotal = Object.keys(CHARS).length;
+  const {done: digiOwned, total: digiTotal} = pickProgress();   // mismo recuento que el inicio y los logros (12)
   const statList = [
     ['🎮', plays, 'Partidas'], ['⚔', kills, 'Bajas'], ['⏱', bestT ? fmtTime(bestT) : '—', 'Mejor tiempo'], ['⭐', bestL || '—', 'Mejor nivel'],
     ['🧬', evos, 'Evoluciones'], ['📘', `${digiOwned}/${digiTotal}`, 'Digimon'], ['Ⓑ', SAVE.bits, 'Bits'], ...(GACHA_SOON ? [] : [['🎟', SAVE.tickets, 'Tickets']]),

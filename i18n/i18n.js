@@ -71,6 +71,13 @@
     cache.set(s, hit);
     return hit;
   }
+  // Números escritos a la española dentro de un hueco ("×0,75", "1.000"): en los idiomas con punto decimal se cambian
+  // ("×0.75", "1,000"). En los de coma decimal (francés, alemán...) se quedan igual
+  const DOT_DEC = ['en', 'ja', 'ko', 'zh'];
+  function locNum(g){
+    if (!DOT_DEC.includes(I18N.lang)) return g;
+    return g.replace(/\d{1,3}(?:\.\d{3})+(?:,\d+)?|\d+,\d+/g, m => m.replace(/\./g, '\u0000').replace(',', '.').replace(/\u0000/g, ','));
+  }
   function trCore(core, depth){
     const d = dicts[I18N.lang];
     if (!d) return null;
@@ -86,7 +93,7 @@
         const m = p.re.exec(core);
         if (!m) continue;
         const vals = {};
-        p.order.forEach((n, i) => { const g = m[i + 1]; vals[n] = LETTER.test(g) ? (trCore(g, depth + 1) ?? g) : g; });
+        p.order.forEach((n, i) => { const g = m[i + 1]; vals[n] = LETTER.test(g) ? (trCore(g, depth + 1) ?? g) : locNum(g); });
         return p.out.replace(/\{(\d+)\}/g, (_, n) => vals[n] ?? '');
       }
       const parts = core.split(/( · | → |: )/);
@@ -98,9 +105,11 @@
       const m = p.re.exec(core);
       if (!m) continue;
       const vals = {};
-      p.order.forEach((n, i) => { const g = m[i + 1]; vals[n] = LETTER.test(g) ? (trCore(g, depth + 1) ?? g) : g; });
+      p.order.forEach((n, i) => { const g = m[i + 1]; vals[n] = LETTER.test(g) ? (trCore(g, depth + 1) ?? g) : locNum(g); });
       return p.out.replace(/\{(\d+)\}/g, (_, n) => vals[n] ?? '');
     }
+    // Exclamación española sin patrón propio («¡Espiral Galáctica!»): fuera del español no lleva «¡»
+    if (/^¡[^¡!]+!$/.test(core)){ const inner = core.slice(1, -1); return (trCore(inner, depth + 1) ?? inner) + '!'; }
     // Sin clave exacta: separa por " · ", " → " o ": " y traduce cada parte ("Navidad · Reno", "Sin mejorar → +4%")
     const parts = core.split(/( · | → |: )/);
     if (parts.length > 1){
