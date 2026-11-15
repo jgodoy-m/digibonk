@@ -1194,3 +1194,12 @@ I18N.add('zh', {
   "Consigue todas las skins de un Digimon · {0}": "集齐一只数码宝贝的全部皮肤 · {0}",
   "Acumula 300 bajas en total · {0}": "累计击败 300 · {0}"
 });
+// Sin tickets mientras la Incubadora está en «Próximamente»
+I18N.add('zh', {
+  "El portal está abierto: ve al norte (flecha cian)": "传送门已打开：向北走（青色箭头）",
+  "Un jefe menor se une a la horda": "一个小头目加入敌群",
+  "Cofre dorado": "金宝箱",
+  "Atrápalo antes de 30 s: Bits": "30秒内抓住它:Bits",
+  "Un cofre dorado": "一个金宝箱",
+  "Cada partida da Bits y sube la maestría del Digimon con el que juegas, que regala títulos, marcos y skins. En la tienda los Bits compran lo de la línea de la semana, y en el laboratorio mejoran a todos tus Digimon para siempre.": "每局都会获得Bits,并提升所用数码宝贝的精通,精通会赠送称号、头像框和皮肤。商店里用Bits购买本周系列的物品,研究所里用它们永久强化所有数码宝贝。"
+});

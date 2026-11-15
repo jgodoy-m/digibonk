@@ -1185,3 +1185,12 @@ I18N.add('pl', {
   "Consigue todas las skins de un Digimon · {0}": "Zdobądź wszystkie skórki jednego Digimona · {0}",
   "Acumula 300 bajas en total · {0}": "Zdobądź łącznie 300 pokonanych · {0}"
 });
+// Sin tickets mientras la Incubadora está en «Próximamente»
+I18N.add('pl', {
+  "El portal está abierto: ve al norte (flecha cian)": "Portal jest otwarty: idź na północ (błękitna strzałka)",
+  "Un jefe menor se une a la horda": "Mniejszy boss dołącza do hordy",
+  "Cofre dorado": "Złota skrzynia",
+  "Atrápalo antes de 30 s: Bits": "Złap go w 30 s: Bity",
+  "Un cofre dorado": "Złota skrzynia",
+  "Cada partida da Bits y sube la maestría del Digimon con el que juegas, que regala títulos, marcos y skins. En la tienda los Bits compran lo de la línea de la semana, y en el laboratorio mejoran a todos tus Digimon para siempre.": "Każda rozgrywka daje Bity i podnosi mistrzostwo Digimona, którym grasz, a ono daje tytuły, ramki i skórki. W sklepie Bity kupują przedmioty linii tygodnia, a w laboratorium na zawsze ulepszają wszystkie twoje Digimony."
+});

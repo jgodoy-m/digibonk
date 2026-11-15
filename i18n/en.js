@@ -1178,3 +1178,12 @@ I18N.add('en', {
   "Consigue todas las skins de un Digimon · {0}": "Get every skin for one Digimon · {0}",
   "Acumula 300 bajas en total · {0}": "Reach 300 total kills · {0}"
 });
+// Sin tickets mientras la Incubadora está en «Próximamente»
+I18N.add('en', {
+  "El portal está abierto: ve al norte (flecha cian)": "The portal is open: head north (cyan arrow)",
+  "Un jefe menor se une a la horda": "A minor boss joins the horde",
+  "Cofre dorado": "Golden chest",
+  "Atrápalo antes de 30 s: Bits": "Catch it within 30 s: Bits",
+  "Un cofre dorado": "A golden chest",
+  "Cada partida da Bits y sube la maestría del Digimon con el que juegas, que regala títulos, marcos y skins. En la tienda los Bits compran lo de la línea de la semana, y en el laboratorio mejoran a todos tus Digimon para siempre.": "Every run gives Bits and raises the mastery of the Digimon you play, which rewards titles, frames and skins. In the shop, Bits buy items from the line of the week, and in the laboratory they upgrade all your Digimon for good."
+});

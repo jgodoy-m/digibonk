@@ -1194,3 +1194,12 @@ I18N.add('ja', {
   "Consigue todas las skins de un Digimon · {0}": "1体のデジモンのスキンをすべて集める · {0}",
   "Acumula 300 bajas en total · {0}": "累計300体撃破 · {0}"
 });
+// Sin tickets mientras la Incubadora está en «Próximamente»
+I18N.add('ja', {
+  "El portal está abierto: ve al norte (flecha cian)": "ポータルが開いた：北へ向かえ（水色の矢印）",
+  "Un jefe menor se une a la horda": "中ボスが群れに加わる",
+  "Cofre dorado": "金の宝箱",
+  "Atrápalo antes de 30 s: Bits": "30秒以内に捕まえろ:Bits",
+  "Un cofre dorado": "金の宝箱",
+  "Cada partida da Bits y sube la maestría del Digimon con el que juegas, que regala títulos, marcos y skins. En la tienda los Bits compran lo de la línea de la semana, y en el laboratorio mejoran a todos tus Digimon para siempre.": "プレイするたびにBitsがもらえ、使ったデジモンのマスタリーが上がり、称号・フレーム・スキンがもらえます。ショップではBitsで今週のラインのアイテムを買え、ラボではすべてのデジモンを永久に強化できます。"
+});
