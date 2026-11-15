@@ -465,6 +465,7 @@ canvas{display:block}
 .end3.lose h1{color:#ff6b6b;text-shadow:0 5px 0 #5a0d0d}
 .end3-sub{text-align:center;margin:4px 0 14px;font:14px system-ui,sans-serif;color:#9fd4ff}
 .end3-cells{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+#overlay .end3 .end3-cells.no-tix .end3-gain{grid-column:span 2}
 .end3-cells span{display:flex;flex-direction:column;align-items:center;font:11px system-ui,sans-serif;color:#9fd4ff;background:rgba(0,0,0,.3);padding:10px 4px}
 .end3-cells b{font:900 26px 'Orbitron',system-ui,sans-serif;color:#fff}
 .end3-cols{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
@@ -594,7 +595,7 @@ canvas{display:block}
 .cl4-skin.owned:hover{border-color:#4fc3f7}
 .cl4-skin.eq{border-color:#7cf29c;box-shadow:0 0 10px rgba(124,242,156,.4)}
 .cl4-skin.locked{opacity:.55}
-.cl4-skin.locked .spr{filter:grayscale(1) brightness(.3)}
+.cl4-skin.locked .spr,.cl4-skin.locked .ps-ic img{filter:grayscale(1) brightness(.55)}
 .cl4-skin small{font-size:10px;color:#9ad3e8;line-height:1.2}
 .cl4-empty{padding:30px;text-align:center;color:#bfe9ff}
 .cl4-other h3{margin:12px 0 8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#7fd0ff}
@@ -1095,14 +1096,49 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .cl4-st.off{cursor:default}
 .pk-stage{cursor:pointer}
 .pk-stage.on{outline:2px solid #ffd55e;border-radius:12px}
-.rw-frame.fr-wk0,.hud-portrait.fr-wk0{background:linear-gradient(160deg,#fff,#ff8a80 55%,#333);border:4px solid #ff8a80;border-radius:18px;box-shadow:0 0 16px #ff8a80}
-.rw-frame.fr-wk1,.hud-portrait.fr-wk1{background:linear-gradient(160deg,#fff,#80d8ff 55%,#333);border:4px solid #80d8ff;border-radius:18px;box-shadow:0 0 16px #80d8ff}
-.rw-frame.fr-wk2,.hud-portrait.fr-wk2{background:linear-gradient(160deg,#fff,#b9f6ca 55%,#333);border:4px solid #b9f6ca;border-radius:18px;box-shadow:0 0 16px #b9f6ca}
-.rw-frame.fr-wk3,.hud-portrait.fr-wk3{background:linear-gradient(160deg,#fff,#ffe57f 55%,#333);border:4px solid #ffe57f;border-radius:18px;box-shadow:0 0 16px #ffe57f}
-.rw-frame.fr-wk4,.hud-portrait.fr-wk4{background:linear-gradient(160deg,#fff,#ea80fc 55%,#333);border:4px solid #ea80fc;border-radius:18px;box-shadow:0 0 16px #ea80fc}
-.rw-frame.fr-wk5,.hud-portrait.fr-wk5{background:linear-gradient(160deg,#fff,#ffab40 55%,#333);border:4px solid #ffab40;border-radius:18px;box-shadow:0 0 16px #ffab40}
-.rw-frame.fr-wk6,.hud-portrait.fr-wk6{background:linear-gradient(160deg,#fff,#64ffda 55%,#333);border:4px solid #64ffda;border-radius:18px;box-shadow:0 0 16px #64ffda}
-.rw-frame.fr-wk7,.hud-portrait.fr-wk7{background:linear-gradient(160deg,#fff,#f8bbd0 55%,#333);border:4px solid #f8bbd0;border-radius:18px;box-shadow:0 0 16px #f8bbd0}
+.rw-frame[class].fr-wk0,.hud-portrait.fr-wk0{background:linear-gradient(160deg,#fff,#ff8a80 55%,#333)!important;border:4px solid #ff8a80!important;border-radius:18px;box-shadow:0 0 16px #ff8a80!important}
+.rw-frame[class].fr-wk1,.hud-portrait.fr-wk1{background:linear-gradient(160deg,#fff,#80d8ff 55%,#333)!important;border:4px solid #80d8ff!important;border-radius:18px;box-shadow:0 0 16px #80d8ff!important}
+.rw-frame[class].fr-wk2,.hud-portrait.fr-wk2{background:linear-gradient(160deg,#fff,#b9f6ca 55%,#333)!important;border:4px solid #b9f6ca!important;border-radius:18px;box-shadow:0 0 16px #b9f6ca!important}
+.rw-frame[class].fr-wk3,.hud-portrait.fr-wk3{background:linear-gradient(160deg,#fff,#ffe57f 55%,#333)!important;border:4px solid #ffe57f!important;border-radius:18px;box-shadow:0 0 16px #ffe57f!important}
+.rw-frame[class].fr-wk4,.hud-portrait.fr-wk4{background:linear-gradient(160deg,#fff,#ea80fc 55%,#333)!important;border:4px solid #ea80fc!important;border-radius:18px;box-shadow:0 0 16px #ea80fc!important}
+.rw-frame[class].fr-wk5,.hud-portrait.fr-wk5{background:linear-gradient(160deg,#fff,#ffab40 55%,#333)!important;border:4px solid #ffab40!important;border-radius:18px;box-shadow:0 0 16px #ffab40!important}
+.rw-frame[class].fr-wk6,.hud-portrait.fr-wk6{background:linear-gradient(160deg,#fff,#64ffda 55%,#333)!important;border:4px solid #64ffda!important;border-radius:18px;box-shadow:0 0 16px #64ffda!important}
+.rw-frame[class].fr-wk7,.hud-portrait.fr-wk7{background:linear-gradient(160deg,#fff,#f8bbd0 55%,#333)!important;border:4px solid #f8bbd0!important;border-radius:18px;box-shadow:0 0 16px #f8bbd0!important}
+.rw-frame[class].fr-wk8,.hud-portrait.fr-wk8{background:linear-gradient(160deg,#fff,#ffcc80 55%,#333)!important;border:4px solid #ffcc80!important;border-radius:18px;box-shadow:0 0 16px #ffcc80!important}
+.rw-frame[class].fr-wk9,.hud-portrait.fr-wk9{background:linear-gradient(160deg,#fff,#b0bec5 55%,#333)!important;border:4px solid #b0bec5!important;border-radius:18px;box-shadow:0 0 16px #b0bec5!important}
+.rw-frame[class].fr-wk10,.hud-portrait.fr-wk10{background:linear-gradient(160deg,#fff,#81d4fa 55%,#333)!important;border:4px solid #e1f5fe!important;border-radius:18px;box-shadow:0 0 16px #81d4fa!important}
+.rw-frame[class].fr-wk11,.hud-portrait.fr-wk11{background:linear-gradient(160deg,#fff,#d1c4e9 55%,#333)!important;border:4px solid #ffd54f!important;border-radius:18px;box-shadow:0 0 16px #b39ddb!important}
+.rw-frame[class].fr-mecenas,.hud-portrait.fr-mecenas{background:linear-gradient(160deg,#fff7e0,#ff5e5b 45%,#29abe0)!important;border:4px solid #ffd54f!important;border-radius:18px;box-shadow:0 0 18px #ff5e5b!important}
+/* Maestría (Colección), vales de evento y tienda */
+.ms-box{margin:10px 0 4px;padding:10px 12px;border-radius:12px;background:var(--m-sunk,#0c2430);border:1px solid var(--m-line,#2d5f78);color:var(--m-text,#fff)}
+.ms-box header{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.ms-box header b{font:900 15px/1.2 'Nunito',sans-serif}
+.ms-box header small,.ms-note{font:700 11.5px/1.3 'Nunito',sans-serif;color:var(--m-mute,#9ad3e8);margin:4px 0 0}
+.ms-bar{height:8px;margin-top:6px;border-radius:4px;background:var(--m-line,#2d5f78);overflow:hidden}
+.ms-bar i{display:block;height:100%;border-radius:4px;background:var(--m-meter,linear-gradient(90deg,#12b4c8,#4e63e8))}
+.cl4-empty .ms-bar{max-width:260px;margin:8px auto 4px}
+.ms-list{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:4px 10px}
+.ms-list li{display:grid;grid-template-columns:42px 1fr auto;gap:6px;align-items:center;font:700 12px/1.25 'Nunito',sans-serif;padding:4px 6px;border-radius:8px;background:var(--m-rowbg,rgba(255,255,255,.05))}
+.ms-list li b{font-weight:900;color:var(--m-acc,#8b9bff)}
+.ms-list li em{font-style:normal;font-weight:900;color:var(--m-mute,#9ad3e8)}
+.ms-list li.got em{color:var(--m-good,#4fd68e)}
+.ms-list li.noart{opacity:.6}
+.cl4-skin.vale{cursor:pointer;opacity:1;border-color:var(--m-gold,#ffc24f)!important;box-shadow:0 0 10px rgba(255,194,79,.45)}
+.cl4-skin.vale small{color:var(--m-gold,#ffc24f);font-weight:800}
+.eq-prize{color:var(--m-good,#4fd68e)}
+.shop-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin:0 0 10px;font:800 13px/1.3 'Nunito',sans-serif;color:var(--m-mute)}
+.shop-top b{color:var(--m-text)}
+.shop-rows{padding:0;max-height:min(52vh,420px);overflow:auto}
+.eq-row.shop-row{grid-template-columns:40px 1fr auto;align-items:center;text-align:left}
+.shop-ic{width:40px;height:40px;border-radius:50%;object-fit:cover;background:var(--m-sunk)}
+.eq-row.shop-row>em{grid-column:auto;color:var(--m-good)}
+.shop-row.done .eq-t{text-decoration:none}
+.shop-buy{padding:7px 12px;border:0;border-radius:999px;background:var(--m-cta,#ff8a1e);color:#fff;font:900 13px/1 'Nunito',sans-serif;cursor:pointer;box-shadow:0 3px 0 var(--m-cta-sh,#b44700);white-space:nowrap}
+.shop-buy:disabled{filter:grayscale(1);opacity:.5;cursor:default}
+.shop-code{display:flex;gap:8px;margin-top:12px}
+.shop-code input{flex:1;min-width:0;padding:8px 12px;border-radius:999px;border:1px solid var(--m-line);background:var(--m-sunk);color:var(--m-text);font:700 13px 'Nunito',sans-serif}
+.shop-code button{padding:8px 14px;border-radius:999px;border:1px solid var(--m-line);background:var(--m-btn);color:var(--m-text);font:800 13px 'Nunito',sans-serif;cursor:pointer}
+.approved-info-dialog.shop-dialog{width:min(560px,94vw)}
 @media (max-height:820px){.pk2-stage{height:110px!important}
 .anim.pk2-hero-img{width:100px!important;height:100px!important}
 .pk2-hero{padding:8px!important}
@@ -4583,10 +4619,11 @@ function showCollection(){
     <button class="cl4-tab${colTab === 'otros' ? ' on' : ''}" data-t="otros">Marcos y títulos</button></div>`;
   let body;
   if (colTab === 'otros'){
+    const progTxt = it => { const p = it.prog ? it.prog() : null; return p && p[1] > 1 ? ` · ${Math.min(p[0], p[1]).toLocaleString('es-ES')}/${p[1].toLocaleString('es-ES')}` : ''; };
     const frames = FRAMES.map(f => { const ok = inv.frames.includes(f.id);
-      return `<div class="cl4-card${ok ? ' ok' : ' locked'}"><div class="rw-frame${f.id ? ' fr-' + f.id : ''}"></div><b>${ok ? f.name : '???'}</b><small>${ok ? TIER_NAME[f.tier] : 'Incubadora'}</small></div>`; }).join('');
+      return `<div class="cl4-card${ok ? ' ok' : ' locked'}"><div class="rw-frame${f.id ? ' fr-' + f.id : ''}"></div><b>${f.name}</b><small>${ok ? TIER_NAME[f.tier] : f.how + progTxt(f)}</small></div>`; }).join('');
     const titles = TITLES.map(tl => { const ok = inv.titles.includes(tl.id);
-      return `<div class="cl4-card${ok ? ' ok' : ' locked'}"><span class="cl-medal">${svgIcon('utilidad')}</span><b>${ok ? tl.name : '???'}</b><small>${ok ? TIER_NAME[tl.tier] : tl.how}</small></div>`; }).join('');
+      return `<div class="cl4-card${ok ? ' ok' : ' locked'}"><span class="cl-medal">${svgIcon('utilidad')}</span><b>${tl.name}</b><small>${ok ? TIER_NAME[tl.tier] : tl.how + progTxt(tl)}</small></div>`; }).join('');
     body = `<div class="cl4-other"><h3>Marcos</h3><div class="cl4-cards">${frames}</div><h3>Títulos</h3><div class="cl4-cards">${titles}</div></div>`;
   } else {
     const list = chars.map(k => {
@@ -4595,23 +4632,25 @@ function showCollection(){
       for (const sk of lineSkins(k)){ all++; if (ownsAt(k, 0, sk.id)) own++; }
       return `<button class="cl4-item${k === colKey ? ' sel' : ''}${open ? '' : ' lock'}" data-k="${k}" ${open ? '' : 'disabled'}>
         <span class="ps-ic cl4-ic"><img src="${open ? charIcon(k) : 'ui/jugador/' + k + '.webp'}" alt=""></span>
-        <span><b>${open ? CHARS[k].name : '???'}</b><small>${open ? own + ' skins' : unlockHow(k)}</small></span></button>`;
+        <span><b>${open ? CHARS[k].name : '???'}</b><small>${open ? own + ' skins · Maestría ' + masteryLv(k) : unlockHowProg(k)}</small></span></button>`;
     }).join('');
     const k = colKey, open = isUnlocked(k);
     let detail;
     if (!open){
-      detail = `<div class="cl4-empty"><b>???</b><p>${unlockHow(k)}</p></div>`;
+      const up = unlockProg(k);
+      detail = `<div class="cl4-empty"><b>???</b><p>${unlockHow(k)}</p>${up ? `<div class="ms-bar"><i style="width:${Math.round(Math.min(1, up[0] / up[1]) * 100)}%"></i></div><small>${up[0].toLocaleString('es-ES')}/${up[1].toLocaleString('es-ES')}</small>` : ''}</div>`;
     } else {
       const n = stageCount(k);
       const stages = Array.from({length: n}, (_, i) => ({name: stageName(k, i), on: i === 0 || evolvedUnlocked(k)}));
       if (colStage >= n) colStage = 0;
       const st = colStage, eq = equippedAt(k, st);
       const evoRow = stages.map((x, i) => `${i ? '<span>➜</span>' : ''}<div class="cl4-st${x.on ? '' : ' off'}${i === st ? ' sel' : ''}" data-st="${i}">${sprEl(spriteWith(k, i, equippedAt(k, i)), 48)}<small>${x.on ? x.name : '???'}</small></div>`).join('');
-      const cards = lineSkins(k).filter(sk => ownsAt(k, 0, sk.id)).map(sk => {
-        const has = ownsAt(k, 0, sk.id), on = eq === sk.id;
-        return `<button class="cl4-skin${has ? ' owned' : ' locked'}${on ? ' eq' : ''}" data-skin="${sk.id}" ${has ? '' : 'disabled'}>
+      const vales = loadVales();
+      const cards = lineSkins(k).map(sk => {
+        const has = ownsAt(k, 0, sk.id), on = eq === sk.id, vale = !has && sk.src === 'evento' && eventActive() && vales[sk.id] > 0;
+        return `<button class="cl4-skin${has ? ' owned' : vale ? ' vale' : ' locked'}${on ? ' eq' : ''}" data-skin="${sk.id}" ${has || vale ? '' : 'disabled'}>
           ${skinThumb(k, sk)}
-          <b>${has ? sk.name : '???'}</b><small>${has ? (on ? 'Equipada' : 'Pulsa para equipar') : howTo(k, sk)}</small></button>`;
+          <b>${sk.name}</b><small>${has ? (on ? 'Equipada' : 'Pulsa para equipar') : howTo(k, sk)}</small></button>`;
       }).join('');
       detail = `
         <div class="cl4-hero">
@@ -4622,6 +4661,7 @@ function showCollection(){
             <div class="cl4-evo">${evoRow}</div>
           </div>
         </div>
+        ${masteryHtml(k)}
         <h4>Skins · toda la línea de ${CHARS[k].name}</h4>
         <div class="cl4-skins">${cards}</div>`;
     }
@@ -4638,6 +4678,25 @@ function showCollection(){
   overlay.querySelectorAll('.cl4-item:not(.lock)').forEach(b => b.onclick = () => { colKey = b.dataset.k; showCollection(); });
   overlay.querySelectorAll('.cl4-st:not(.off)').forEach(b => b.onclick = () => { colStage = +b.dataset.st; showCollection(); });
   overlay.querySelectorAll('.cl4-skin.owned').forEach(b => b.onclick = () => { equipSkinAt(colKey, 0, b.dataset.skin); showCollection(); });
+  // Vale de evento: da la skin a este Digimon (toda la línea) y la equipa
+  overlay.querySelectorAll('.cl4-skin.vale').forEach(b => b.onclick = () => {
+    const id = b.dataset.skin;
+    if (!(loadVales()[id] > 0)) return;
+    addVale(id, -1); grantSkinLine(colKey, id); equipSkinAt(colKey, 0, id); grantProgress();
+    sfx('evolve'); showCollection();
+  });
+}
+// Panel de maestría de un Digimon: nivel, barra de puntos y premios de cada nivel
+function masteryHtml(k){
+  const lv = masteryLv(k), pts = masteryPts(k), max = masteryMax();
+  const lo = MASTERY_XP[lv - 1], hi = lv < max ? MASTERY_XP[lv] : lo;
+  const pct = lv < max ? Math.round((pts - lo) / (hi - lo) * 100) : 100;
+  const rows = MASTERY_REWARDS.map(r => {
+    const art = masteryHasArt(k, r), got = art && masteryOwns(k, r);
+    return `<li class="${got ? 'got' : ''}${art ? '' : ' noart'}"><b>Nv ${r.lv}</b><span>${masteryRewardName(k, r)}</span><em>${got ? '✓' : art ? (lv >= r.lv ? '✓' : '🔒') : 'Arte en camino'}</em></li>`;
+  }).join('');
+  return `<section class="ms-box"><header><b>Maestría ${lv}/${max}</b><small>${lv < max ? `${pts.toLocaleString('es-ES')}/${hi.toLocaleString('es-ES')} puntos` : 'Nivel máximo'}</small></header>
+    <div class="ms-bar"><i style="width:${pct}%"></i></div><p class="ms-note">Sube jugando con ${CHARS[k].name}: cada partida y cada 100 bajas dan puntos.</p><ul class="ms-list">${rows}</ul></section>`;
 }
 // ---------- Navegación con flechas y Enter en los menús ----------
 // Las flechas mueven el foco al botón más cercano en esa dirección; Enter pulsa el botón enfocado
@@ -4696,7 +4755,7 @@ function refreshTopbar(){
       <span><b>${escHtml(trainerName || 'Entrenador')}</b><small>${isGuest() ? t('guestTag') : (tt ? tt.name : t('noTitle'))}</small></span></button>
     <span class="tb-sp"></span>
     <span class="tb-chip" title="Bits">Ⓑ ${SAVE.bits}</span>
-    <span class="tb-chip tix" title="Tickets">🎟 ${SAVE.tickets}</span>
+    ${GACHA_SOON ? '' : `<span class="tb-chip tix" title="Tickets">🎟 ${SAVE.tickets}</span>`}
     <button class="tb-btn" id="tbLang" title="Idioma / Language">${LANG.toUpperCase()}</button>
     <button class="tb-btn" id="tbSnd" title="Sonido">${Sfx.muted ? '🔇' : '🔊'}</button>
     <button class="tb-btn" id="tbFs" title="Pantalla completa">⛶</button>
@@ -4788,7 +4847,7 @@ function hubLife(){
 }
 function showSelect(){
   if (typeof Cloud !== 'undefined' && Cloud.pending){ cloudShowConflict(); return; }
-  if (!localStorage.getItem('digibonk3d-gift')){ localStorage.setItem('digibonk3d-gift', '1'); addTickets('std', 10); setTimeout(() => { const m = document.getElementById('hmMsg'); if (m) { m.textContent = '🎁 Regalo de bienvenida: 10 tickets para la Incubadora'; clearTimeout(m._t); m._t = setTimeout(() => { m.textContent = ''; }, 4500); } }, 300); }
+  if (!GACHA_SOON && !localStorage.getItem('digibonk3d-gift')){ localStorage.setItem('digibonk3d-gift', '1'); addTickets('std', 10); setTimeout(() => { const m = document.getElementById('hmMsg'); if (m) { m.textContent = '🎁 Regalo de bienvenida: 10 tickets para la Incubadora'; clearTimeout(m._t); m._t = setTimeout(() => { m.textContent = ''; }, 4500); } }, 300); }
   state = 'select';
   setHud(false);
   if (g){ scene.remove(world); world = new THREE.Group(); scene.add(world); g = null; }
@@ -4805,7 +4864,8 @@ function showSelect(){
   const dbEvDays = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
   const qs = questSummary();
   const labReady = LAB.filter(u => labLv(u.id) < labMax(u) && labCosts(u)[labLv(u.id)] <= SAVE.bits).length;
-  const achAll = TITLES.filter(tl => !tl.weekly && !tl.seasonal).length, achOwned = TITLES.filter(tl => !tl.weekly && !tl.seasonal && inv.titles.includes(tl.id)).length;
+  syncRewards();   // lo ya conseguido antes de existir estos premios se da al volver al menú
+  const achAll = achItems().length, achOwned = achDoneCount();
   const life = hubLife();
   showOverlay(`
     <main class="realhub hb" aria-label="Menú principal Digibonk">
@@ -4818,7 +4878,7 @@ function showSelect(){
         <div class="hb-user" role="toolbar" aria-label="Jugador">
           <button type="button" class="hb-me" id="rhProfile"><span class="hud-portrait mini hm-pl-frame${extra.frame ? ' fr-' + extra.frame : ''}"><img id="rhProfileImg" src="${avatarSrc()}" alt=""></span><span><strong>${safeText(trainerName || 'Invitado')}</strong><small>${isGuest() ? t('guestTag') : (extra.title ? (TITLES.find(x => x.id === extra.title) || {}).name || '' : t('noTitle'))}</small></span></button>
           <span class="hb-chip" title="Bits"><img src="ui/hud/ic_bits.webp" alt="">${SAVE.bits.toLocaleString('es-ES')}</span>
-          <span class="hb-chip" title="Tickets"><img src="ui/hud/ic_ticket.webp" alt="">${usableTickets('std')}</span>
+          ${GACHA_SOON ? '' : `<span class="hb-chip" title="Tickets"><img src="ui/hud/ic_ticket.webp" alt="">${usableTickets('std')}</span>`}
           <button type="button" class="hb-out" id="hmLogout">Cerrar sesión</button>
         </div>
       </header>
@@ -4834,11 +4894,11 @@ function showSelect(){
             </button>
             <div class="hb-stack nm-stack">
               <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i><img class="nm-ic" src="ui/hub/ic_supervivencia.webp" alt=""></i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
-              ${GACHA_SOON ? `<button type="button" class="hb-mode m-gacha hm-soon" id="hbGacha3" aria-label="Incubadora: Próximamente"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Incubadora</b><small>Próximamente</small></span></button>` : `<button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Incubadora: ${usableTickets('std')} tickets disponibles"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Incubadora</b><small><em class="nm-tix">${usableTickets('std')}</em> tickets<span class="nm-long"> disponibles</span></small></span></button>`}
+              ${!GACHA_SOON ? `<button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Incubadora: ${usableTickets('std')} tickets disponibles"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Incubadora</b><small><em class="nm-tix">${usableTickets('std')}</em> tickets<span class="nm-long"> disponibles</span></small></span></button>` : `<button type="button" class="hb-mode m-gacha" id="hbShop" aria-label="Tienda: rotación semanal"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Tienda</b><small>Rotación semanal</small></span></button>`}
             </div>
           </div>
           <button type="button" class="nm-quests nm-encard" id="mEnc" aria-label="Encargos: hoy ${qs.day.done} de ${qs.day.all}, semana ${qs.week.done} de ${qs.week.all}${qs.ev ? ', evento ' + qs.ev.done + ' de ' + qs.ev.all : ''}"><i><img class="nm-ic" src="ui/hub/ic_encargos.webp" alt=""></i><span class="nm-eh"><b>Encargos</b><small>${qs.ev ? 'Diarios, semanales y de evento' : 'Diarios y semanales'}</small></span><span class="nm-eqs">${[['Hoy', qs.day, 'q-d'], ['Semana', qs.week, 'q-w'], ...(qs.ev ? [['Evento', qs.ev, 'q-e']] : [])].map(([n, q, c]) => `<span class="nm-eq ${c}"><small>${n}</small><b>${q.done}/${q.all}</b><span class="hb-meter"><i style="width:${Math.round(q.done / q.all * 100)}%"></i></span></span>`).join('')}</span></button>
-          ${(!GACHA_SOON && (bannerOpen("navidadP") || bannerOpen("navidadR"))) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span class="lv-sheen"></span><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
+          ${(!GACHA_SOON ? (bannerOpen("navidadP") || bannerOpen("navidadR")) : eventActive()) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span class="lv-sheen"></span><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
           <div class="hb-tiles nm-tiles">
             <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex: ${pickProgress().done} de ${pickProgress().total} Digimon"><i><img class="nm-ic" src="ui/hub/ic_digidex.webp" alt=""></i><b>Digidex</b><small>${pickProgress().done}/${pickProgress().total} Digimon</small></button>
             <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio${labReady ? ': ' + labReady + ' mejoras disponibles' : ''}"><i><img class="nm-ic" src="ui/hub/ic_laboratorio.webp" alt=""></i><b>Laboratorio</b><small>${labReady ? labReady + (labReady === 1 ? ' mejora' : ' mejoras') : 'Mejoras'}</small>${labReady ? '<em class="nm-dot" aria-hidden="true"></em>' : ''}</button>
@@ -4883,7 +4943,8 @@ function showSelect(){
   // El botón Jugar siempre muestra el icono del compañero (no la skin equipada)
   if(!avatarIcon() && !PLAYER_ICONS.some(x => x.id === avatarKey())) headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
   document.getElementById('playBtn').onclick=()=>{ runMode='normal'; showPicker('personaje'); };
-  const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR'; showGacha(); };
+  const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { if (GACHA_SOON) return showEncargos(); gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR'; showGacha(); };
+  { const el = document.getElementById('hbShop'); if (el) el.onclick = () => showShop(); }
   document.getElementById('btnColl').onclick=showCollection;
   document.getElementById('btnPlayer').onclick=showPlayer;
   document.getElementById('btnGacha').onclick=showLab;
@@ -4923,7 +4984,7 @@ function showSelect(){
     let title,content;
     if(type==='mission'){
       title=t('daily');
-      content=`<p>${safeText(dailyText())}</p><div class="approved-info-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></div><p>${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits · +${DAILY.rewardTix} 🎟</p>`;
+      content=`<p>${safeText(dailyText())}</p><div class="approved-info-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></div><p>${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits${GACHA_SOON ? '' : ' · +' + DAILY.rewardTix + ' 🎟'}</p>`;
     }else{
       title=t('recs');
       content=recs.length?`<div class="approved-info-records">${recs.slice(0,10).map((r,i)=>`<div><b>${i+1}. ${safeText(r.name)}</b><span>${fmtTime(r.t)} · Nv. ${Number(r.lvl)||0} · ${Number(r.kills)||0} bajas</span></div>`).join('')}</div>`:`<p>${safeText(t('none'))}</p>`;
@@ -4980,8 +5041,8 @@ const GUIDE = [
   {ch: 3, t: 'El menú de inicio', img: 'menu',
     d: 'Jugar empieza con tu último Digimon y Supervivencia es el modo infinito. Los encargos diarios, semanales y de evento dan premios, y el evento trae skins de temporada. Abajo tienes el Digidex, el laboratorio, los mapas, los logros, los récords y tu perfil.',
     keys: []},
-  {ch: 3, t: 'Bits, Incubadora y laboratorio', img: 'lab',
-    d: 'Cada partida da Bits y a veces tickets. Con ellos tiras en la Incubadora para conseguir skins, marcos y títulos. En el laboratorio los Bits mejoran a todos tus Digimon para siempre. El Digidex guarda lo que has desbloqueado.',
+  {ch: 3, t: 'Bits, tienda y laboratorio', img: 'lab',
+    d: 'Cada partida da Bits y sube la maestría del Digimon con el que juegas, que regala títulos, marcos y skins. En la tienda los Bits compran lo de la línea de la semana, y en el laboratorio mejoran a todos tus Digimon para siempre.',
     keys: []}
 ];
 let tutoIdx = 0;
@@ -5037,7 +5098,7 @@ function showHelp(){
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
   'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
-  'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort'];
+  'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales'];
 // También cuentan los contadores por banner (pity) y la mejor oleada de cada mapa
 const isSaveKey = k => SAVE_KEYS.includes(k) || /^digibonk3d-(pity|surv-wave)-[A-Za-z0-9_]{1,32}$/.test(k);
 function saveData(){
@@ -5484,18 +5545,20 @@ let pickTab = 'personaje';
 // Colores de rareza de las skins (tc-n base, tc-c común, tc-r rara, tc-e épica)
 // ---------- Desbloqueo de Digimon: el inicial se elige al registrarse; el resto se consigue ----------
 // how: texto que se ve en la pantalla de selección. ok: logro cumplido. rnd: probabilidad por partida terminada
+// Cómo se desbloquea cada Digimon: una meta visible (prog → [actual, meta]). Los de rnd además pueden
+// aparecer por sorpresa (5% al terminar cada partida)
 const UNLOCK = {
-  gabumon:  {how: 'Logro: 300 bajas en total', ok: () => sumStats('kills') >= 300},
-  palmon:   {how: 'Logro: llegar a la zona 2', ok: () => !!loadAch().zone2},
-  gomamon:  {how: 'Logro: derrotar al jefe final', ok: () => !!loadAch().boss},
-  patamon:  {how: 'Logro: completar 10 partidas', ok: () => sumStats('plays') >= 10},
-  biyomon:  {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05},
-  tentomon: {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05},
-  gatomon:  {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05},
-  leomon:   {how: 'Logro: 1.000 bajas en total', ok: () => sumStats('kills') >= 1000},
-  hagurumon:{how: 'Logro: completar 25 partidas', ok: () => sumStats('plays') >= 25},
-  frigimon: {how: 'Aparición: 5% al terminar cada partida', rnd: 0.05},
-  wizardmon:{how: 'Logro: tener a Gatomon', ok: () => isUnlocked('gatomon')}
+  gabumon:  {how: 'Logro: 300 bajas en total', prog: () => [Math.min(300, sumStats('kills')), 300]},
+  palmon:   {how: 'Logro: llegar a la zona 2', prog: () => [loadAch().zone2 ? 1 : 0, 1]},
+  gomamon:  {how: 'Logro: derrotar al jefe final', prog: () => [loadAch().boss ? 1 : 0, 1]},
+  patamon:  {how: 'Logro: completar 10 partidas', prog: () => [Math.min(10, sumStats('plays')), 10]},
+  biyomon:  {how: 'Gana el Desierto de Datos (o 5% por sorpresa al terminar cada partida)', prog: () => [wonMap('desierto'), 1], rnd: 0.05},
+  tentomon: {how: 'Abre 50 cofres en total (o 5% por sorpresa al terminar cada partida)', prog: () => [Math.min(50, loadLife().chests), 50], rnd: 0.05},
+  gatomon:  {how: 'Aguanta 15 minutos en Supervivencia (o 5% por sorpresa al terminar cada partida)', prog: () => [Math.min(15, bestSurvMin()), 15], rnd: 0.05},
+  leomon:   {how: 'Logro: 1.000 bajas en total', prog: () => [Math.min(1000, sumStats('kills')), 1000]},
+  hagurumon:{how: 'Logro: completar 25 partidas', prog: () => [Math.min(25, sumStats('plays')), 25]},
+  frigimon: {how: 'Gana la Montaña Helada (o 5% por sorpresa al terminar cada partida)', prog: () => [wonMap('nevado'), 1], rnd: 0.05},
+  wizardmon:{how: 'Logro: tener a Gatomon', prog: () => [isUnlocked('gatomon') ? 1 : 0, 1]}
 };
 function sumStats(field){ return Object.values(loadJSON('digibonk3d-stats', {})).reduce((a, x) => a + (x[field] || 0), 0); }
 // Texto de cómo se consigue un Digimon bloqueado (los iniciales no tienen regla propia)
@@ -5507,13 +5570,18 @@ function unlockedSet(){
 }
 function isUnlocked(k){ return unlockedSet().has(k); }
 function unlockDigi(k){ localStorage.setItem('digibonk3d-unlocked', JSON.stringify([...new Set([...unlockedSet(), k])])); }
-// Tras cada partida: comprueba logros y apariciones aleatorias. Devuelve los Digimon nuevos
-function checkUnlocks(){
+// Progreso hacia el desbloqueo: [actual, meta] o null (iniciales)
+function unlockProg(k){ return UNLOCK[k] && UNLOCK[k].prog ? UNLOCK[k].prog() : null; }
+function unlockMet(k){ const p = unlockProg(k); return !!p && p[0] >= p[1]; }
+// Texto con el progreso: "Abre 50 cofres… · 12/50"
+function unlockHowProg(k){ const p = unlockProg(k); return unlockHow(k) + (p && p[1] > 1 ? ` · ${p[0].toLocaleString('es-ES')}/${p[1].toLocaleString('es-ES')}` : ''); }
+// Tras cada partida: comprueba logros y apariciones aleatorias (rnd = false en el menú: solo metas). Devuelve los Digimon nuevos
+function checkUnlocks(rnd = true){
   const won = [];
   for (const k of SEASONS.adventure.chars){
     const r = UNLOCK[k];
     if (!r || isUnlocked(k)) continue;
-    if ((r.ok && r.ok()) || (r.rnd && Math.random() < r.rnd)){ unlockDigi(k); won.push(CHARS[k].name); }
+    if (unlockMet(k) || (rnd && r.rnd && Math.random() < r.rnd)){ unlockDigi(k); won.push(CHARS[k].name); }
   }
   return won;
 }
@@ -5716,7 +5784,7 @@ function renderRoster(){
     const list = lineSkins(k).filter(sk => owned.includes(sk.id));
     el.innerHTML = `<div class="ps-lbl">La skin se aplica a toda la línea de ${CHARS[k].name}</div>
       <div class="ps-grid">${list.map(sk => `<button type="button" class="ps-tile${eq === sk.id ? ' sel' : ''}" data-skin="${sk.id}" title="${sk.name}">${skinThumb(k, sk)}<b>${sk.name}</b></button>`).join('')}</div>
-      ${list.length <= 1 ? '<p class="ps-note">Consigue skins en la Incubadora y con logros.</p>' : ''}`;
+      ${list.length <= 1 ? '<p class="ps-note">Consigue skins con la maestría, el evento y la tienda.</p>' : ''}`;
     el.querySelectorAll('[data-skin]').forEach(b => b.onclick = () => { equipSkinAt(k, 0, b.dataset.skin); showPicker(); });
     return;
   }
@@ -5724,7 +5792,7 @@ function renderRoster(){
   const favs = pickFavs(), sort = pickSort();
   const tiles = pickOrder().map((id, i) => {
     const open = isUnlocked(id), fav = open && favs.includes(id);
-    return `<button type="button" class="ps-tile${id === k ? ' sel' : ''}${open ? '' : ' lock'}${fav ? ' fav' : ''}" ${open ? `data-pick="${id}"` : 'disabled'} data-name="${open ? CHARS[id].name.toLowerCase() : '???'}" title="${open ? CHARS[id].name : unlockHow(id)}">
+    return `<button type="button" class="ps-tile${id === k ? ' sel' : ''}${open ? '' : ' lock'}${fav ? ' fav' : ''}" ${open ? `data-pick="${id}"` : 'disabled'} data-name="${open ? CHARS[id].name.toLowerCase() : '???'}" title="${open ? CHARS[id].name : unlockHowProg(id)}">
       <span class="ps-key">${i + 1}</span>${open ? `<span class="ps-fav${fav ? ' on' : ''}" data-fav="${id}" role="button" aria-pressed="${fav}" title="${fav ? 'Quitar de favoritos' : 'Marcar como favorito'}">${fav ? '★' : '☆'}</span>` : ''}${open && pickIsEvolved(id) ? '<span class="ps-evo-dot" title="Ya ha evolucionado"></span>' : ''}
       <span class="ps-ic"><img src="${open ? charIcon(id) : 'ui/jugador/' + id + '.webp'}" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
     </button>`;
@@ -6518,7 +6586,7 @@ const SHRINE_TYPES = [
   {id: 'saber',    name: 'Santuario del saber',   col: 0x6aa8ff, glyph: 'EXP',                       text: 'Subes un nivel',            w: 0.9, apply: g => { g.p.xp = Math.max(g.p.xp, g.p.nextXp); }},
   {id: 'bonk',     name: 'Santuario del Bonk',    col: 0xffb547, art: 'ui/hud/bonk_listo.webp',      text: 'Bonk cargado al 100%',      w: 0.7, apply: g => { addBonk(100); }},
   {id: 'fortuna',  name: 'Santuario de fortuna',  col: 0xffe082, art: 'ui/hud/ic_bits.webp',         text: '+60 Bits',                  w: 0.7, apply: g => { g.extraBits = (g.extraBits || 0) + 60; }},
-  {id: 'tickets',  name: 'Santuario de tickets',  col: 0xffd54f, art: 'ui/hud/ic_ticket.webp',       text: '+1 ticket del permanente',  w: 0.5, apply: () => addTickets('std', 1)},
+  {id: 'tickets',  name: 'Santuario de tickets',  col: 0xffd54f, art: 'ui/hud/ic_ticket.webp',       text: '+1 ticket del permanente',  w: 0.5, ok: () => !GACHA_SOON, apply: () => addTickets('std', 1)},
   {id: 'maldito',  name: 'Santuario maldito',     col: 0xb04ce0, art: 'ui/hud/carta_dano.webp',      text: '+25% daño · −20 vida máx.', w: 0.5, apply: g => { g.p.dmg *= 1.25; g.p.maxHp = Math.max(30, g.p.maxHp - 20); g.p.hp = Math.min(g.p.hp, g.p.maxHp); }},
   {id: 'desafio',  name: 'Santuario del desafío', col: 0xff5252, art: 'ui/hud/jefe.png',             text: 'Llegan 3 élites: vence en 45 s y gana un cofre dorado y 80 Bits', w: 0.8, apply: (g, sh) => startShrineTrial(sh)}
 ];
@@ -7044,8 +7112,8 @@ function update(dt){
     // 2% por baja, pero con enfriamiento de 45 s y un solo imán en el mapa a la vez
     if ((g.magnetT || 0) <= 0 && Math.random() < 0.02){ spawnMagnetDrop(e.x, e.z); g.magnetT = 45; }
     // Tickets de tirada: 25% de cada élite y 3 seguros del jefe
-    if (e.kind === 'elite' && Math.random() < 0.25){ g.tix++; popText(e.x, e.z, '+1 ticket', '#3de0ff', 1); }
-    if (e.kind === 'mini'){ g.tix++; announce('¡' + e.name + ' derrotado!', '+1 ticket de tirada · cofre dorado', '#3de0ff'); spawnChestAt(e.x, e.z, true); if (!e.special){ (g.minisKilled || (g.minisKilled = [])).push(e.name); grantEmblem(); } }
+    if (e.kind === 'elite' && Math.random() < 0.25){ g.tix++; if (!GACHA_SOON) popText(e.x, e.z, '+1 ticket', '#3de0ff', 1); }
+    if (e.kind === 'mini'){ g.tix++; announce('¡' + e.name + ' derrotado!', GACHA_SOON ? 'Cofre dorado' : '+1 ticket de tirada · cofre dorado', '#3de0ff'); spawnChestAt(e.x, e.z, true); if (!e.special){ (g.minisKilled || (g.minisKilled = [])).push(e.name); grantEmblem(); } }
     if (e.kind === 'elite' && Math.random() < 0.3) spawnChestAt(e.x, e.z, true);   // 30% de las élites dejan un cofre dorado
     if (e.boss) g.tix += 3;
     if (e.boss || (e.kind === 'mini' && !e.wild)) bossKO(e);
@@ -7817,8 +7885,6 @@ function endGame(win){
   g.earned = earned + bonus + (g.extraBits || 0);
   g.bonus = bonus;
   g.unlocked = recordRun(g.ch.id, g.kills, g.t);
-  g.newTitles = checkAchievements(win);
-  g.newDigis = checkUnlocks();
   g.survBest = g.mode === 'surv' ? recordSurv(g.ch.id, g.t) : null;
   g.encDone = checkEncargos();
   g.questDone = checkLongQuests(win);
@@ -7826,6 +7892,11 @@ function endGame(win){
   saveRecord(win);
   recordCharRun(g.ch.id, win && g.mode !== 'surv', g.diff, g.kills, g.p.lvl);
   if (win && g.mode !== 'surv'){ const mw = mapWins(), l = mw[g.map] || (mw[g.map] = []); if (!l.includes(g.diff)) l.push(g.diff); localStorage.setItem('digibonk3d-mapwins', JSON.stringify(mw)); }
+  // Con todo guardado: logros (marcos y títulos), Digimon nuevos y premios de maestría
+  g.newTitles = checkAchievements(win);
+  g.newDigis = checkUnlocks();
+  g.mastery = grantMastery();
+  g.newTitles.push(...grantProgress());   // «Leyenda digital» y «Coleccionista» pueden cumplirse con lo de arriba
   // Resumen de la partida: cifras, daño por habilidad y recompensas
   const dmgRows = Object.entries(g.dmgBy).sort((a, b) => b[1] - a[1]).slice(0, 6);
   const dmgMax = dmgRows.length ? dmgRows[0][1] : 1;
@@ -7833,13 +7904,16 @@ function endGame(win){
   const rewards = [`<li><b>+${g.earned - g.bonus - (g.extraBits || 0)}</b> Bits</li>`];
   if (g.extraBits) rewards.push(`<li><b>+${g.extraBits}</b> Bits de eventos del mapa</li>`);
   if (g.emblems && g.emblems.length) rewards.push(`<li>Emblemas: <b>${g.emblems.length}/8</b></li>`);
-  if (g.bonus) rewards.push(`<li><b>+${g.bonus}</b> Bits y <b>+${g.dailyTix}</b> tickets · misión diaria completada</li>`);
-  if (g.tix) rewards.push(`<li><b>+${g.tix}</b> tickets de tirada</li>`);
+  if (g.bonus) rewards.push(GACHA_SOON ? `<li><b>+${g.bonus}</b> Bits · misión diaria completada</li>` : `<li><b>+${g.bonus}</b> Bits y <b>+${g.dailyTix}</b> tickets · misión diaria completada</li>`);
+  if (g.tix && !GACHA_SOON) rewards.push(`<li><b>+${g.tix}</b> tickets de tirada</li>`);
   for (const u of g.unlocked) rewards.push(`<li>Skin nueva: <b>${u}</b></li>`);
-  for (const tl of g.newTitles) rewards.push(`<li>Título desbloqueado: <b>${tl.name}</b></li>`);
+  for (const tl of g.newTitles) rewards.push(tl.kind === 'Marco' ? `<li>Marco desbloqueado: <b>${tl.name}</b></li>` : `<li>Título desbloqueado: <b>${tl.name}</b></li>`);
+  { const lv = masteryLv(g.ch.id); rewards.push(`<li>Maestría de ${g.ch.name}: <b>nivel ${lv}</b>${lv < masteryMax() ? ` · ${masteryPts(g.ch.id).toLocaleString('es-ES')}/${MASTERY_XP[lv].toLocaleString('es-ES')} puntos` : ''}</li>`); }
+  for (const m of g.mastery) rewards.push(`<li>Premio de maestría: <b>${m}</b></li>`);
+  for (const q of (g.vales || [])) rewards.push(`<li>Evento: <b>${q}</b></li>`);
   for (const d of g.newDigis) rewards.push(`<li>Digimon desbloqueado: <b>${d}</b></li>`);
-  for (const q of (g.questDone || [])) rewards.push(`<li>Encargo cumplido: <b>${q.t}</b> · +${q.bits} Bits y +${q.tix} tickets</li>`);
-  for (const e of g.encDone) rewards.push(`<li>Encargo cumplido: <b>${e}</b> · +${ENC_REWARD.bits} Bits y +${ENC_REWARD.tix} ticket</li>`);
+  for (const q of (g.questDone || [])) rewards.push(`<li>Encargo cumplido: <b>${q.t}</b> · +${q.bits} Bits${GACHA_SOON ? '' : ` y +${q.tix} tickets`}</li>`);
+  for (const e of g.encDone) rewards.push(`<li>Encargo cumplido: <b>${e}</b> · +${ENC_REWARD.bits} Bits${GACHA_SOON ? '' : ` y +${ENC_REWARD.tix} ticket`}</li>`);
   if (g.survBest) rewards.push(`<li>¡Nuevo récord de Supervivencia con ${g.ch.name}!</li>`);
   if (g.waveBest) rewards.push(`<li>¡Nueva mejor oleada en ${mapDef().name}: <b>${g.wave}</b>!</li>`);
   if (lvlDiff().reward !== 1) rewards.push(`<li>Dificultad ${lvlDiff().name}: premios ×${String(lvlDiff().reward).replace('.', ',')}</li>`);
@@ -7849,9 +7923,9 @@ function endGame(win){
       <div class="end3-top"><img class="end3-ic" src="${charIcon(g.ch.id)}" alt=""><h1>${g.mode === 'surv' ? 'FIN DE LA SUPERVIVENCIA' : win ? '¡VICTORIA!' : 'HAS CAÍDO'}</h1></div>
       <p class="end3-sub">${g.mode === 'surv' ? `Has aguantado ${fmtTime(Math.floor(g.t))} · récord con ${g.ch.name}: ${fmtTime(Math.floor(survBest(g.ch.id)))}` : win ? (g.bossName || 'Piedmon') + ' ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Laboratorio`} · ${mapDef().name} · ${zoneDef().name} · ${lvlDiff().name}${g.mode === 'surv' ? ' · Oleada ' + (g.wave || 1) : ''}</p>
       <p class="end3-sub end3-rank" id="end3Rank" aria-live="polite"></p>
-      <div class="end3-cells">
+      <div class="end3-cells${GACHA_SOON ? ' no-tix' : ''}">
         <span><i>⏱</i><b>${fmtTime(Math.floor(g.t))}</b>Tiempo</span><span><i>⭐</i><b>${g.p.lvl}</b>Nivel</span><span><i>⚔</i><b>${g.kills}</b>Bajas</span><span><i>✦</i><b>${Object.keys(g.skills).length}</b>Habilidades</span>
-        <span class="end3-gain"><i><img src="ui/hud/ic_bits.webp" alt=""></i><b>+${g.earned}</b>Bits ganados</span><span class="end3-gain"><i><img src="ui/hud/ic_ticket.webp" alt=""></i><b>+${(g.tix || 0) + g.encDone.length * ENC_REWARD.tix}</b>Tickets</span>
+        <span class="end3-gain"><i><img src="ui/hud/ic_bits.webp" alt=""></i><b>+${g.earned}</b>Bits ganados</span>${GACHA_SOON ? '' : `<span class="end3-gain"><i><img src="ui/hud/ic_ticket.webp" alt=""></i><b>+${(g.tix || 0) + g.encDone.length * ENC_REWARD.tix}</b>Tickets</span>`}
       </div>
       <div class="end3-cols">
         <section><h3>Daño por ataque</h3>
@@ -8040,7 +8114,7 @@ function openPortal(title, sub){
     spawnRing(PORTAL.x, PORTAL.z, 0x3de0ff, 8, 0.9);
   }
   sfx('victory');
-  announce(title, sub || 'El portal está abierto: ve al norte (flecha cian) · +2 tickets', '#3de0ff');
+  announce(title, sub || (GACHA_SOON ? 'El portal está abierto: ve al norte (flecha cian)' : 'El portal está abierto: ve al norte (flecha cian) · +2 tickets'), '#3de0ff');
 }
 function updatePortal(dt){
   const P = g.portal;
@@ -8184,7 +8258,7 @@ function updateWaves(){
   if (w % 5 === 0){
     spawnMini(MINIS[(w/5 - 1) % MINIS.length]);
     g.tix++;
-    announce('Oleada ' + w, 'Un jefe menor se une a la horda · +1 ticket', '#ce93d8');
+    announce('Oleada ' + w, GACHA_SOON ? 'Un jefe menor se une a la horda' : 'Un jefe menor se une a la horda · +1 ticket', '#ce93d8');
   } else announce('Oleada ' + w, 'La horda se hace más fuerte', '#ef5350');
 }
 // Objetivo actual, para el HUD
@@ -8238,7 +8312,7 @@ function updateHUD(){
   const chipKey = [g.kills, g.tix, shrinesDone, (g.shrines || []).length, (g.emblems || []).length].join('|'), chipsEl = document.getElementById('hudChips');
   if (chipsEl.dataset.k !== chipKey){
     chipsEl.dataset.k = chipKey;
-    chipsEl.innerHTML = `<span>${HUD_IC.kills}<b>${g.kills}</b></span><span class="c-tix">${HUD_IC.tix}<b>${g.tix}</b></span><span class="c-shr">${HUD_IC.shr}<b>${shrinesDone}/${(g.shrines || []).length}</b></span><span class="c-emb">${HUD_IC.emb}<b>${(g.emblems || []).length}/${EMBLEMS.length}</b></span>`;
+    chipsEl.innerHTML = `<span>${HUD_IC.kills}<b>${g.kills}</b></span>${GACHA_SOON ? '' : `<span class="c-tix">${HUD_IC.tix}<b>${g.tix}</b></span>`}<span class="c-shr">${HUD_IC.shr}<b>${shrinesDone}/${(g.shrines || []).length}</b></span><span class="c-emb">${HUD_IC.emb}<b>${(g.emblems || []).length}/${EMBLEMS.length}</b></span>`;
   }
   hudEmblems();
   document.querySelector('.hud-hp').classList.toggle('low', p.hp < p.maxHp*0.3);
@@ -8564,7 +8638,7 @@ function loadDaily(){
 function saveDaily(d){ localStorage.setItem('digibonk3d-daily', JSON.stringify(d)); }
 function dailyText(){
   const d = loadDaily();
-  return d.claimed ? 'Misión diaria completada' : `Misión diaria: ${Math.min(d.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits y ${DAILY.rewardTix} tickets`;
+  return d.claimed ? 'Misión diaria completada' : `Misión diaria: ${Math.min(d.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits${GACHA_SOON ? '' : ` y ${DAILY.rewardTix} tickets`}`;
 }
 
 
@@ -8861,7 +8935,7 @@ function startMapEvent(force){
     const e = {kind: 'basic', golden: true, sprite: 'sprites/numemon.png', mesh, shadow, x, z, hp, max: hp, spd: 6.2, r: 0.9, xp: 30, dmg: 0, cd: 0, attr: 'vir'};
     g.enemies.push(e);
     g.ev = {kind, t: 30, foe: e};
-    announce('Evento: ¡Numemon dorado!', 'Atrápalo antes de 30 s: Bits y un ticket', '#ffd54f');
+    announce('Evento: ¡Numemon dorado!', GACHA_SOON ? 'Atrápalo antes de 30 s: Bits' : 'Atrápalo antes de 30 s: Bits y un ticket', '#ffd54f');
   }
   sfx('boss');
 }
@@ -8877,12 +8951,12 @@ function endMapEvent(ok){
     return;
   }
   if (ev.kind === 'golden'){
-    if (ok){ g.extraBits = (g.extraBits || 0) + 80; g.tix++; announce('¡Numemon dorado atrapado!', '+80 Bits y +1 ticket', '#ffd54f'); }
+    if (ok){ g.extraBits = (g.extraBits || 0) + 80; g.tix++; announce('¡Numemon dorado atrapado!', GACHA_SOON ? '+80 Bits' : '+80 Bits y +1 ticket', '#ffd54f'); }
     else { dropFoe(ev.foe); announce('El Numemon dorado ha huido', '', '#9e9e9e'); }
     return;
   }
   if (ev.kind === 'hunt'){
-    if (ok){ g.tix++; spawnChestAt(ev.foe.x, ev.foe.z, true); announce('¡Presa abatida!', '+1 ticket y un cofre dorado', '#ff5252'); }
+    if (ok){ g.tix++; spawnChestAt(ev.foe.x, ev.foe.z, true); announce('¡Presa abatida!', GACHA_SOON ? 'Un cofre dorado' : '+1 ticket y un cofre dorado', '#ff5252'); }
     else { if (ev.foe.hp > 0) dropFoe(ev.foe); announce('La presa ha escapado', 'Se acabó el tiempo', '#9e9e9e'); }
     return;
   }
@@ -9011,6 +9085,7 @@ function addSupport(k, x = g.p.x, z = g.p.z){
   world.add(mesh);
   const shadow = makeShadow(1.1); world.add(shadow);
   g.sups.push({key: k, st: 0, joinLvl: g.p.lvl, mesh, shadow, x, z, cd: 1});
+  g.supsJoined = (g.supsJoined || 0) + 1;
   spawnRing(x, z, 0x7cf29c, 6, 0.8); burst(x, z, '#7cf29c');
   sfx('victory');
   announce('¡' + CHARS[k].name + ' se une a ti!', `Digimon de apoyo ${g.sups.length}/${SUP_MAX} · evoluciona cada ${SUP_EVO_LVLS} niveles`, '#7cf29c');
@@ -9176,11 +9251,29 @@ const WEEK_QUESTS = [
   {id:'kills', goal:100000, t:'Derrota a 100.000 enemigos',        bits:500, tix:4},
   {id:'wins',  goal:3,      t:'Gana 3 partidas en cualquier mapa', bits:600, tix:5}
 ];
+// Los encargos de evento también dan las skins de temporada (un vale para el Digimon que elijas) y el marco y título navideños
 const EVENT_QUESTS = [
-  {id:'runs',  goal:40,     t:'Juega 40 partidas durante el evento', bits:800,  tix:6},
-  {id:'kills', goal:400000, t:'Derrota a 400.000 enemigos',          bits:1000, tix:8},
-  {id:'wins',  goal:10,     t:'Gana 10 partidas',                    bits:1200, tix:10}
+  {id:'runs',  goal:40,     t:'Juega 40 partidas durante el evento', bits:800,  tix:6,  vale:'festival'},
+  {id:'kills', goal:400000, t:'Derrota a 400.000 enemigos',          bits:1000, tix:8,  extra:'navidad'},
+  {id:'wins',  goal:10,     t:'Gana 10 partidas',                    bits:1200, tix:10, vale:'reno'}
 ];
+// Vales de skin de evento: {festival: n, reno: n}. Se canjean en la Colección por la skin del Digimon que quieras
+const loadVales = () => ({festival: 0, reno: 0, ...loadJSON('digibonk3d-vales', {})});
+function addVale(id, n){ const v = loadVales(); v[id] = Math.max(0, (v[id] || 0) + n); localStorage.setItem('digibonk3d-vales', JSON.stringify(v)); }
+function eventPrizeText(q){ return q.vale ? 'Vale de skin ' + SKIN_BY_ID[q.vale].name + ' para el Digimon que elijas' : q.extra ? 'Marco Navideño y título «Espíritu Navideño»' : ''; }
+// Paga el premio extra de los encargos de evento cumplidos (también los cumplidos antes de existir el premio)
+function payEventPrizes(st){
+  const out = [];
+  st.rw = st.rw || [];
+  for (const q of EVENT_QUESTS){
+    if (!st.done.includes(q.id) || st.rw.includes(q.id) || !(q.vale || q.extra)) continue;
+    st.rw.push(q.id);
+    if (q.vale) addVale(q.vale, 1);
+    if (q.extra){ if (!inv.frames.includes(q.extra)) inv.frames.push(q.extra); if (!inv.titles.includes(q.extra)) inv.titles.push(q.extra); saveInv(); }
+    out.push(eventPrizeText(q));
+  }
+  return out;
+}
 const questFresh = o => ({...o, runs: 0, kills: 0, wins: 0, done: []});
 function weekQuestState(){ const w = weekNum(), st = loadJSON('digibonk3d-wq3', null); return st && st.week === w ? st : questFresh({week: w}); }
 function eventQuestState(){ const k = EVENT.name + '-' + EVENT.start, st = loadJSON('digibonk3d-evq3', null); return st && st.ev === k ? st : questFresh({ev: k}); }
@@ -9200,14 +9293,19 @@ function checkLongQuests(win){
     localStorage.setItem(key, JSON.stringify(st));
   };
   run(weekQuestState(), WEEK_QUESTS, 'digibonk3d-wq3');
-  if (eventActive()) run(eventQuestState(), EVENT_QUESTS, 'digibonk3d-evq3');
+  if (eventActive()){
+    const ev = eventQuestState();
+    run(ev, EVENT_QUESTS, 'digibonk3d-evq3');
+    g.vales = payEventPrizes(ev);
+    localStorage.setItem('digibonk3d-evq3', JSON.stringify(ev));
+  }
   return won;
 }
 // Resumen para la tarjeta del menú: hechos/total de hoy, de la semana y del evento
 function questSummary(){
   const d = loadDaily(), enc = loadEncargos().list, wk = weekState(), wq = weekQuestState();
   const day = {done: (d.claimed || d.runs >= DAILY.runsGoal ? 1 : 0) + enc.filter(e => e.done).length, all: 1 + enc.length};
-  const week = {done: (wk.claimed ? 1 : 0) + wq.done.length, all: 1 + WEEK_QUESTS.length};
+  const week = {done: (!GACHA_SOON && wk.claimed ? 1 : 0) + wq.done.length, all: (!GACHA_SOON ? 1 : 0) + WEEK_QUESTS.length};
   const ev = eventActive() ? {done: eventQuestState().done.length, all: EVENT_QUESTS.length} : null;
   return {day, week, ev};
 }
@@ -9215,33 +9313,90 @@ function questSummary(){
 function showEncargos(){
   const d = loadDaily(), enc = loadEncargos(), wk = weekState(), wq = weekQuestState(), ev = eventActive() ? eventQuestState() : null;
   const fmt = n => Number(n).toLocaleString('es-ES');
-  const rw = (b, t) => `${b ? '+' + fmt(b) + ' Bits · ' : ''}+${t} ${t === 1 ? 'ticket' : 'tickets'}`;
+  const rw = (b, t) => GACHA_SOON ? (b ? '+' + fmt(b) + ' Bits' : '') : `${b ? '+' + fmt(b) + ' Bits · ' : ''}+${t} ${t === 1 ? 'ticket' : 'tickets'}`;
   const row = (done, txt, prog, goal, reward) => `<div class="eq-row${done ? ' done' : ''}"><b aria-hidden="true">${done ? '✓' : ''}</b><span><span class="eq-t">${txt}</span>${goal > 1 ? `<span class="eq-bar"><i style="width:${Math.round(Math.min(prog, goal) / goal * 100)}%"></i></span><small>${fmt(Math.min(prog, goal))}/${fmt(goal)}</small>` : ''}</span><em>${reward}</em></div>`;
   const panel = (cls, icon, title, sub, rows, done, all) => `<section class="eq-panel ${cls}"><header><img src="ui/hub/${icon}.webp" alt=""><span><b>${title}</b><small>${sub}</small></span><em>${done}/${all}</em></header><div class="eq-rows">${rows.join('')}</div></section>`;
   const dayDone = d.claimed || d.runs >= DAILY.runsGoal;
   const dayRows = [row(dayDone, `Juega ${DAILY.runsGoal} partidas`, d.runs, DAILY.runsGoal, rw(DAILY.reward, DAILY.rewardTix)), ...enc.list.map(e => row(e.done, encText(e), e.done ? 1 : 0, 1, rw(ENC_REWARD.bits, ENC_REWARD.tix)))];
-  const weekRows = [row(wk.claimed, `Haz ${WEEK_PULLS} tiradas en la Incubadora`, wk.pulls, WEEK_PULLS, rw(0, 1)), ...WEEK_QUESTS.map(q => row(wq.done.includes(q.id), q.t, questProg(wq, q), q.goal, rw(q.bits, q.tix)))];
+  const weekRows = [...(!GACHA_SOON ? [row(wk.claimed, `Haz ${WEEK_PULLS} tiradas en la Incubadora`, wk.pulls, WEEK_PULLS, rw(0, 1))] : []), ...WEEK_QUESTS.map(q => row(wq.done.includes(q.id), q.t, questProg(wq, q), q.goal, rw(q.bits, q.tix)))];
   const days = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
   const parts = [
     panel('eq-day', 'ic_mision', 'Diarios', 'Se renuevan cada día', dayRows, dayRows.filter(r => r.includes(' done"')).length, dayRows.length),
     panel('eq-week', 'ic_encargos', 'Semanales', `Se renuevan cada lunes · ${weeklyMod().name}`, weekRows, weekRows.filter(r => r.includes(' done"')).length, weekRows.length)
   ];
   if (ev){
-    const evRows = EVENT_QUESTS.map(q => row(ev.done.includes(q.id), q.t, questProg(ev, q), q.goal, rw(q.bits, q.tix)));
+    const evRows = EVENT_QUESTS.map(q => row(ev.done.includes(q.id), q.t, questProg(ev, q), q.goal, rw(q.bits, q.tix) + (q.vale || q.extra ? '<br><span class="eq-prize">+ ' + eventPrizeText(q) + '</span>' : '')));
     parts.push(panel('eq-ev', 'ic_evento', 'Evento', `${EVENT.name} · quedan ${days} ${days === 1 ? 'día' : 'días'}`, evRows, ev.done.length, evRows.length));
   }
   menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios se renuevan cada día. Los semanales y los de evento suman lo que haces en todas tus partidas. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d} <span>No se aplica en Fácil ni en tus ${WEEKLY_MIN_RUNS} primeras partidas.</span></p>`);
   const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('eq-dialog');
 }
+/* ---------- Tienda: gasta Bits en lo de la línea de la semana (cambia cada lunes) ---------- */
+// Mientras la Incubadora está en «Próximamente», la tienda es la otra forma de conseguir skins, marcos y títulos
+const SHOP_PRICE = {title: 600, frame: 1200, galactico: 2500, holografica: 5000, festival: 4000, reno: 4000};
+// Dos Digimon por semana: el de la semana del banner permanente y otro tres puestos más allá
+function shopItems(){
+  const chars = SEASONS.adventure.chars, i = weeklyIndex(), out = [];
+  for (const k of [...new Set([chars[i], chars[(i + 3) % chars.length]])]){
+    const w = 'wk' + wkIndex(k);
+    out.push({k, type: 'title', id: w, name: 'Título «' + TITLES.find(t => t.id === w).name + '»', price: SHOP_PRICE.title, owned: inv.titles.includes(w)});
+    out.push({k, type: 'frame', id: w, name: FRAMES.find(f => f.id === w).name, price: SHOP_PRICE.frame, owned: inv.frames.includes(w)});
+  }
+  // Skins: dos líneas por semana entre las que ya tienen hojas dibujadas (sin hoja no se vende)
+  const ids = ['galactico', 'holografica', ...(eventActive() ? ['festival', 'reno'] : [])];
+  const withArt = chars.filter(k => isUnlocked(k) && ids.some(sk => skinLineArt(k, sk) >= 0));
+  const n = withArt.length, wn = ((weekNum() % Math.max(1, n)) + n) % Math.max(1, n);
+  for (const k of [...new Set([withArt[wn], withArt[(wn + 1) % n]])].filter(Boolean))
+    for (const sk of ids) if (skinLineArt(k, sk) >= 0) out.push({k, type: 'skin', id: sk, name: 'Skin ' + SKIN_BY_ID[sk].name, price: SHOP_PRICE[sk], owned: ownsAnyStage(k, sk)});
+  return out;
+}
+function shopBuy(n){
+  const it = shopItems()[n];
+  if (!it || it.owned || SAVE.bits < it.price) return false;
+  SAVE.bits = SAVE.bits - it.price;
+  if (it.type === 'title') inv.titles.push(it.id);
+  else if (it.type === 'frame') inv.frames.push(it.id);
+  else grantSkinLine(it.k, it.id);
+  saveInv(); grantProgress();
+  return true;
+}
+// Códigos de recompensa (p. ej. el de Ko-fi). Se guarda solo su huella, no el código
+const REWARD_CODES = {'90ba4f7e': {frame: 'mecenas', title: 'mecenas'}};
+function codeHash(c){ let h = 2166136261; for (const ch of c) h = Math.imul(h ^ ch.charCodeAt(0), 16777619); return (h >>> 0).toString(16); }
+function redeemCode(raw){
+  const r = REWARD_CODES[codeHash(String(raw).toUpperCase().replace(/[^A-Z0-9]/g, ''))];
+  if (!r) return 'Código no válido';
+  let got = false;
+  if (r.frame && !inv.frames.includes(r.frame)){ inv.frames.push(r.frame); got = true; }
+  if (r.title && !inv.titles.includes(r.title)){ inv.titles.push(r.title); got = true; }
+  saveInv();
+  return got ? '¡Gracias! Marco y título «Mecenas» desbloqueados' : 'Ya tienes las recompensas de este código';
+}
+function showShop(msg){
+  const fmt = n => Number(n).toLocaleString('es-ES');
+  const next = (weekNum() + 1) * WEEK_MS + 4 * 86400000, days = Math.max(1, Math.ceil((next - Date.now()) / 86400000));
+  const bits = SAVE.bits, items = shopItems();
+  const rows = items.map((it, n) => `<div class="eq-row shop-row${it.owned ? ' done' : ''}"><img class="shop-ic" src="${charIcon(it.k, it.type === 'skin' ? it.id : 'clasico')}" alt=""><span><span class="eq-t">${it.name}</span><small>${CHARS[it.k].name}</small></span>${it.owned ? '<em>✓ Ya lo tienes</em>' : `<button type="button" class="shop-buy" data-n="${n}" ${bits < it.price ? 'disabled' : ''}>Ⓑ ${fmt(it.price)}</button>`}</div>`).join('');
+  menuModal('Tienda', `<p class="shop-top"><span>Tus Bits: <b>Ⓑ ${fmt(bits)}</b></span><span>Se renueva el lunes · ${days === 1 ? 'queda 1 día' : `quedan ${days} días`}</span></p>
+    <div class="eq-rows shop-rows">${rows}</div>
+    <div class="shop-code"><input id="shopCode" maxlength="24" placeholder="Código de recompensa" autocomplete="off"><button type="button" id="shopRedeem">Canjear</button></div>
+    <p class="enc-note shop-msg" aria-live="polite">${msg || ''}</p>`);
+  const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('shop-dialog');
+  const reopen = m => { showSelect(); showShop(m); };
+  document.querySelectorAll('#realModalHost .shop-buy').forEach(b => b.onclick = () => { const it = items[+b.dataset.n]; if (shopBuy(+b.dataset.n)){ sfx('evolve'); reopen('Comprado: ' + it.name + ' (' + CHARS[it.k].name + ')'); } });
+  const inp = document.getElementById('shopCode');
+  inp.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') document.getElementById('shopRedeem').click(); });
+  document.getElementById('shopRedeem').onclick = () => { if (inp.value.trim()) reopen(redeemCode(inp.value)); };
+}
 function showLogros(){
   const ach = loadAch();
   const kills = sumStats('kills'), plays = sumStats('plays');
   const best = Object.entries(loadJSON('digibonk3d-surv', {})).sort((a, b) => b[1] - a[1])[0];
-  const prog = {novato: [Math.min(1, ach.runs), 1], cazador: [Math.min(300, kills), 300], explorador: [ach.zone2 ? 1 : 0, 1], maestro: [ach.boss ? 1 : 0, 1]};
-  const rows = TITLES.filter(tl => !tl.weekly && !tl.seasonal).map(tl => {
-    const own = inv.titles.includes(tl.id), pr = prog[tl.id];
-    const bar = pr ? `<em class="ach-prog"><i class="ach-bar"><u style="width:${Math.round(pr[0]/pr[1]*100)}%"></u></i><small>${pr[0]}/${pr[1]}</small></em>` : '<em></em>';
-    return `<div class="enc-row ach-row${own ? ' got' : ''}"><b>${own ? '🏅' : '🔒'}</b><span><strong>${tl.name}</strong><br>${tl.how}</span>${own ? '<em class="ach-got">✓ Conseguido</em>' : bar}</div>`;
+  const fmt = n => Number(n).toLocaleString('es-ES');
+  const rows = achItems().map(tl => {
+    const isT = TITLES.includes(tl), own = (isT ? inv.titles : inv.frames).includes(tl.id), pr = tl.prog();
+    const bar = `<em class="ach-prog"><i class="ach-bar"><u style="width:${Math.round(Math.min(1, pr[0]/pr[1])*100)}%"></u></i><small>${fmt(Math.min(pr[0], pr[1]))}/${fmt(pr[1])}</small></em>`;
+    return `<div class="enc-row ach-row${own ? ' got' : ''}"><b>${own ? (isT ? '🏅' : '🖼') : '🔒'}</b><span><strong>${tl.name}</strong> <small>${isT ? 'Título' : 'Marco'}</small><br>${tl.how}</span>${own ? '<em class="ach-got">✓ Conseguido</em>' : bar}</div>`;
   }).join('');
   const stats = `<div class="ach-stats"><span>Partidas <b>${plays}</b></span><span>Bajas <b>${kills}</b></span><span>Supervivencia <b>${best ? fmtTime(best[1]) + ' · ' + CHARS[best[0]].name : '—'}</b></span></div>`;
   menuModal('Logros', stats + `<div class="enc-list">${rows}</div>`);
@@ -9357,11 +9512,11 @@ function showLab(){
       <div class="lab-grid">${cards}</div>
       <footer class="lab-foot">
         <button type="button" class="mini-btn" id="labRefund" ${labSpent() ? '' : 'disabled'}>Reembolsar todo (Ⓑ ${labSpent()})</button>
-        ${GACHA_SOON ? '' : '<button type="button" class="g-btn" id="labGacha">🎟 Ir a la Incubadora</button>'}
+        <button type="button" class="g-btn" id="labGacha">${!GACHA_SOON ? '🎟 Ir a la Incubadora' : '🛒 Ir a la tienda'}</button>
       </footer>
     </div>`);
   document.getElementById('labBack').onclick = () => showSelect();
-  { const lg = document.getElementById('labGacha'); if (lg) lg.onclick = () => showGacha(); }
+  document.getElementById('labGacha').onclick = () => { if (!GACHA_SOON) return showGacha(); showSelect(); showShop(); };
   document.getElementById('labRefund').onclick = () => { const b = labRefund(); announce('Reembolso', `+${b} Bits`, '#ffd54f'); showLab(); };
   overlay.querySelectorAll('.lab-buy').forEach(b => b.onclick = () => { if (labBuy(b.dataset.lab)) showLab(); });
 }
@@ -9414,11 +9569,11 @@ function eventActive(){ const now = Date.now(); return now >= EVENT.start && now
 // Cada skin usa sus hojas sprites/anim/<digimon>_<etapa>_<skin>.webp (importadas con importar_hoja.py); sin hoja no aparece
 const SKINS = [
   {id:'clasico',   name:'Clásico',    src:'base',   tier:'n', f:''},
-  {id:'galactico', name:'Galáctico',  src:'banner', tier:'r', desc:'Skin galáctica del banner permanente (cambia cada semana)'},
-  {id:'holografica', name:'Holográfica', src:'gacha', tier:'l', desc:'Incubadora (banner permanente)'},
+  {id:'galactico', name:'Galáctico',  src:'maestria', lv:6, tier:'r', desc:'Maestría 6 con este Digimon (o en la tienda en su semana)'},
+  {id:'holografica', name:'Holográfica', src:'maestria', lv:8, tier:'l', desc:'Maestría 8 con este Digimon (o en la tienda en su semana)'},
   {id:'lcd',       name:'Digivice LCD', src:'logro', tier:'e', req:{kills:100000}, desc:'Logro: 100.000 bajas con este Digimon'},
-  {id:'festival',  name:'Papá Noel',  src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)'},
-  {id:'reno',      name:'Reno',       src:'evento', tier:'l', desc:'Exclusiva del banner de evento de Navidad (legendaria)'},
+  {id:'festival',  name:'Papá Noel',  src:'evento', tier:'l', desc:'Evento de Navidad: encargo de 40 partidas (o en la tienda en su semana)'},
+  {id:'reno',      name:'Reno',       src:'evento', tier:'l', desc:'Evento de Navidad: encargo de 10 victorias (o en la tienda en su semana)'},
   {id:'variocolor', name:'Variocolor', src:'shiny', tier:'l', hidden: true, desc:'Versión variocolor'}
 ];
 const SKIN_BY_ID = Object.fromEntries(SKINS.map(sk => [sk.id, sk]));
@@ -9704,28 +9859,30 @@ function showPlayer(){
   const evos = Object.keys(loadJSON('digibonk3d-evo', {})).length;
   const ach = loadAch(), day = loadDaily();
   const pct = day.claimed ? 100 : Math.min(100, Math.round(day.runs / DAILY.runsGoal * 100));
-  const prog = {novato: [Math.min(ach.runs, 1), 1], cazador: [Math.min(kills, 300), 300], explorador: [ach.zone2 ? 1 : 0, 1], maestro: [ach.boss ? 1 : 0, 1]};
   const idNum = String([...(trainerName || 'x')].reduce((a, c) => (a*31 + c.charCodeAt(0)) % 99999, 7)).padStart(5, '0');
   const tt = extra.title ? TITLES.find(t => t.id === extra.title) : null;
   const recs = getRecords();
   const bestT = recs.reduce((a, r) => Math.max(a, r.t), 0), bestL = recs.reduce((a, r) => Math.max(a, r.lvl || 0), 0);
   const skinsRaw = loadJSON('digibonk3d-skins', []);
   const skinsOwned = Array.isArray(skinsRaw) ? skinsRaw.length : Object.keys(skinsRaw).length;
-  const achDone = Object.keys(prog).filter(k => prog[k][0] >= prog[k][1]).length;
+  const achDone = achDoneCount(), achTotal = achItems().length;
   const digiOwned = unlockedSet().size, digiTotal = Object.keys(CHARS).length;
   const statList = [
     ['🎮', plays, 'Partidas'], ['⚔', kills, 'Bajas'], ['⏱', bestT ? fmtTime(bestT) : '—', 'Mejor tiempo'], ['⭐', bestL || '—', 'Mejor nivel'],
-    ['🧬', evos, 'Evoluciones'], ['📘', `${digiOwned}/${digiTotal}`, 'Digimon'], ['Ⓑ', SAVE.bits, 'Bits'], ['🎟', SAVE.tickets, 'Tickets'],
+    ['🧬', evos, 'Evoluciones'], ['📘', `${digiOwned}/${digiTotal}`, 'Digimon'], ['Ⓑ', SAVE.bits, 'Bits'], ...(GACHA_SOON ? [] : [['🎟', SAVE.tickets, 'Tickets']]),
     ['🖼', (inv.frames || []).length, 'Marcos'], ['🏷', (inv.titles || []).length, 'Títulos'], ['🎨', skinsOwned, 'Skins'], ['🏆', achDone, 'Logros']
   ];
   const statTiles = statList.map(([ic, v, l]) => `<div class="pl4-stat"><i>${ic}</i><span><b${typeof v === 'number' ? ` data-n="${v}"` : ''}>${typeof v === 'number' ? '0' : v}</b><small>${l}</small></span></div>`).join('');
   const recRows = recs.slice(0, 5).map(r => `<div class="pl4-rec"><b>${String(r.name).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</b><span>${fmtTime(r.t)}</span><span>${r.kills} bajas</span><span>Nv. ${r.lvl}</span><em class="${r.win ? 'ok' : ''}">${r.win ? 'Victoria' : 'Derrota'}</em></div>`).join('') || '<p class="pl4-empty">Aún no hay partidas. Juega una para ver tus récords.</p>';
-  const achRows = Object.keys(prog).map(id => { const t = TITLES.find(x => x.id === id), [a, b] = prog[id], ok = a >= b; return `<div class="pl4-ach${ok ? ' done' : ''}"><div class="pl4-ach-top"><b>${t ? t.name : id}</b><em>${a}/${b}</em></div><small>${t ? t.how : ''}</small><i><u style="width:${Math.round(a / b * 100)}%"></u></i></div>`; }).join('');
+  // Vitrina: los 5 logros pendientes más cerca de cumplirse
+  const achRows = achItems().map(t => { const [a, b] = t.prog(); return {t, a: Math.min(a, b), b, own: (TITLES.includes(t) ? inv.titles : inv.frames).includes(t.id)}; })
+    .filter(x => !x.own).sort((x, y) => y.a / y.b - x.a / x.b).slice(0, 5)
+    .map(({t, a, b}) => `<div class="pl4-ach"><div class="pl4-ach-top"><b>${t.name}</b><em>${a.toLocaleString('es-ES')}/${b.toLocaleString('es-ES')}</em></div><small>${t.how}</small><i><u style="width:${Math.round(a / b * 100)}%"></u></i></div>`).join('') || '<p class="pl4-empty">¡Todos los logros conseguidos!</p>';
   const specRows = SEASONS.adventure.chars.map(k => ({k, s: statsOf(k)})).filter(x => x.s.plays || x.s.kills).sort((a, b) => b.s.kills - a.s.kills).slice(0, 8).map(({k, s}) => `<div class="pl4-spec"><img src="${headUrl(spriteOf(k, false))}" alt=""><span><b>${CHARS[k].name}</b><small>${s.kills} bajas · ${s.plays} partidas</small></span></div>`).join('') || '<p class="pl4-empty">Juega con un Digimon para ver su especialidad.</p>';
   const pct2 = day.claimed ? 100 : pct;
   const esc12 = v => String(v).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
   const medalIcon = {novato: '🏁', cazador: '⚔', explorador: '🧭', maestro: '👑', leyenda: '💎', navidad: '🎄'};
-  const medalDone = id => ['novato', 'cazador', 'explorador', 'maestro'].includes(id) ? prog[id][0] >= prog[id][1] : inv.titles.includes(id);
+  const medalDone = id => inv.titles.includes(id);
   const medals = Object.keys(medalIcon).map(id => { const ok = medalDone(id); return `<span class="pl5-medal${ok ? ' ok' : ''}" title="${esc12(TITLES.find(t => t.id === id)?.name || id)}"><i>${medalIcon[id]}</i><b>x${ok ? 1 : 0}</b></span>`; }).join('');
   const companion = CHARS[selectedKey] ? `<span>Compañero: ${esc12(CHARS[selectedKey].name)}</span>` : '';
   const recList = recs.slice(0, 4).map(r => `<div class="pl5-rec"><span class="pl5-acc${r.win ? ' win' : ''}"></span><span class="pl5-rn"><b>${esc12(r.name)}</b><small>${r.win ? 'Victoria' : 'Derrota'}</small></span><span class="pl5-rv">${r.kills} bajas</span><span class="pl5-rv">Nv. ${r.lvl}</span><span class="pl5-rt">${fmtTime(r.t)}</span></div>`).join('') || '<p class="pl4-empty">Aún no hay partidas. Juega una para ver tus récords.</p>';
@@ -9754,7 +9911,7 @@ function showPlayer(){
       <div class="pl5-grid">
         <section class="pl5-panel pl5-left"><h3>Récords <small>Bajas · contrarreloj</small></h3>${recList}
           <h4>Eventos <small>Piso · tiempo</small></h4><p class="pl4-empty">Sin eventos todavía.</p></section>
-        <section class="pl5-panel pl5-right"><h3>Vitrina de logros <small>${achDone} de 4</small></h3>${achRows}</section>
+        <section class="pl5-panel pl5-right"><h3>Vitrina de logros <small>${achDone} de ${achTotal}</small></h3>${achRows}</section>
         <section class="pl5-panel pl5-wide"><h3>Especialista en <small>Digimon con más bajas</small></h3><div class="pl4-specs">${specRows}</div></section>
       </div>
     </div></main>`);
@@ -9784,7 +9941,6 @@ function openCustomizer(){
   let tab = 'av';
   const ownsFrame = id => !id || inv.frames.includes(id);
   const ownsTitle = id => !id || inv.titles.includes(id);
-  const prog = (() => { const a = loadAch(), k = loadJSON('digibonk3d-stats', {}); const kills = Object.values(k).reduce((s, x) => s + (x.kills || 0), 0); return {novato: [Math.min(a.runs, 1), 1], cazador: [Math.min(kills, 300), 300], explorador: [a.zone2 ? 1 : 0, 1], maestro: [a.boss ? 1 : 0, 1]}; })();
   const back = document.createElement('div');
   back.id = 'czBack'; back.className = 'cz-back';
   back.innerHTML = '<div class="cz-box" role="dialog" aria-label="Avatar, marco y título"></div>';
@@ -9797,14 +9953,15 @@ function openCustomizer(){
     if (tab === 'av') return AVATAR_KIDS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av"><img src="${ic.src}" alt=""></span><b>${ic.name}</b>`, false, 'c')).join('');
     if (tab === 'dg') return PLAYER_ICONS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av">${ic.src ? `<img src="${ic.src}" alt="">` : sprEl(spriteWith(ic.id, false, 'clasico'), 44)}</span><b>${ic.name}</b>`, false, 'c')).join('')
       + SKIN_ICONS.filter(ic => ownsSkinIcon(ic) || !(SKINS.find(s => s.id === ic.skin) || {}).hidden).map(ic => { const ok = ownsSkinIcon(ic); return card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av"><img src="${ic.src}" alt=""${ok ? '' : ' style="filter:grayscale(1) brightness(.45)"'}></span><b>${skinIconName(ic)}</b>`, !ok, ok ? 'r' : 'c'); }).join('');
-    if (tab === 'frame') return [{id: '', name: 'Sin marco', tier: 'c'}, ...FRAMES.filter(f => !f.weekly && !f.seasonal)].map(f => {
-      const ok = ownsFrame(f.id);
-      return card(pFrame === f.id, 'fr:' + f.id, `<span class="cz-fr">${f.id ? `<span class="rw-frame fr-${f.id}"></span>` : '<span class="cz-none">∅</span>'}</span><b>${ok ? f.name : '???'}</b><small>${ok ? (f.id ? rar(f.tier) : 'Sin marco') : 'Gacha'}</small>`, !ok, ok ? f.tier : 'c');
+    if (tab === 'frame') return [{id: '', name: 'Sin marco', tier: 'c'}, ...FRAMES].map(f => {
+      const ok = ownsFrame(f.id), pg = !ok && f.prog ? f.prog() : null;
+      const bar = pg && pg[1] > 1 ? `<i class="cz-bar"><u style="width:${Math.round(Math.min(1, pg[0] / pg[1]) * 100)}%"></u></i><em>${Math.min(pg[0], pg[1])}/${pg[1]}</em>` : '';
+      return card(pFrame === f.id, 'fr:' + f.id, `<span class="cz-fr">${f.id ? `<span class="rw-frame fr-${f.id}"></span>` : '<span class="cz-none">∅</span>'}</span><b>${f.name}</b><small>${ok ? (f.id ? rar(f.tier) : 'Sin marco') : f.how}</small>${bar}`, !ok, ok ? f.tier : 'c');
     }).join('');
     return [{id: '', name: 'Sin título', how: '', tier: 'c'}, ...TITLES].map(t => {
-      const ok = ownsTitle(t.id), pg = prog[t.id];
-      const bar = !ok && pg ? `<i class="cz-bar"><u style="width:${Math.round(pg[0] / pg[1] * 100)}%"></u></i><em>${pg[0]}/${pg[1]}</em>` : '';
-      return card(pTitle === t.id, 'ti:' + t.id, `<b>${ok ? t.name : '???'}</b><small>${ok ? (t.id ? rar(t.tier) : 'Sin título') : t.how}</small>${bar}`, !ok, ok ? (t.tier || 'c') : 'c');
+      const ok = ownsTitle(t.id), pg = !ok && t.prog ? t.prog() : null;
+      const bar = pg && pg[1] > 1 ? `<i class="cz-bar"><u style="width:${Math.round(Math.min(1, pg[0] / pg[1]) * 100)}%"></u></i><em>${Math.min(pg[0], pg[1])}/${pg[1]}</em>` : '';
+      return card(pTitle === t.id, 'ti:' + t.id, `<b>${t.name}</b><small>${ok ? (t.id ? rar(t.tier) : 'Sin título') : t.how}</small>${bar}`, !ok, ok ? (t.tier || 'c') : 'c');
     }).join('');
   };
   const preview = () => {
@@ -9817,7 +9974,7 @@ function openCustomizer(){
     box.innerHTML = `
       <div class="cz-head">${preview()}
         <div class="cz-copy"><small>Tu imagen en la clasificación y en tu ficha</small><h2>Avatar, marco y título</h2>
-          <p>Los marcos y títulos se ganan en la Incubadora y con los logros. Los iconos de entrenador están disponibles desde el principio.</p></div></div>
+          <p>Los marcos y títulos se ganan con los logros, la maestría de cada Digimon, el evento y la tienda. Los iconos de entrenador están disponibles desde el principio.</p></div></div>
       <div class="cz-tabs">${[['av', 'Entrenadores'], ['dg', 'Digimon'], ['frame', 'Marcos'], ['title', 'Títulos']].map(([k, l]) => `<button type="button" class="cz-tab${tab === k ? ' on' : ''}" data-tab="${k}">${l}</button>`).join('')}</div>
       <div class="cz-grid">${grid()}</div>
       <div class="cz-foot"><button type="button" class="cz-btn" id="czCancel">Cancelar</button><button type="button" class="cz-btn ok" id="czSave">Guardar</button></div>`;
@@ -9845,51 +10002,151 @@ function openCustomizer(){
 
 /* ---------- Gacha: skins, marcos, títulos y objetos ---------- */
 // Catálogo de recompensas (lo que sale en las tiradas, además de las skins)
+// Marcos y títulos: solo cosmética (no dan bonus). Cada uno dice cómo se consigue (how) y, si sale de un logro,
+// su progreso (prog → [actual, meta]). Los que tienen prog se conceden solos al cumplir la meta (grantProgress)
+const winsWith = k => Object.values(statsOf(k).wins || {}).reduce((a, n) => a + n, 0);
+const wonMap = m => (mapWins()[m] || []).length ? 1 : 0;
+const wonDiff = ds => Object.values(mapWins()).some(l => l.some(d => ds.includes(d))) ? 1 : 0;
+const bestSurvMin = () => Math.floor(Math.max(0, ...Object.values(loadJSON('digibonk3d-surv', {}))) / 60);
+// Contadores de toda la vida del jugador (cofres, apoyos, fusiones, jefes menores, días seguidos)
+const LIFE_DEF = {chests: 0, sups: 0, fusions: 0, minis: [], streak: 0, best: 0, last: ''};
+function loadLife(){ return {...LIFE_DEF, ...loadJSON('digibonk3d-life', {})}; }
+function saveLife(l){ localStorage.setItem('digibonk3d-life', JSON.stringify(l)); }
+// Coleccionista: el Digimon con más skins conseguidas (sin contar las ocultas)
+function bestSkinSet(){
+  let best = [0, 1];
+  for (const k of SEASONS.adventure.chars){
+    const all = SKINS.filter(sk => sk.id !== 'clasico' && !sk.hidden && skinLineArt(k, sk.id) >= 0);
+    if (!all.length) continue;
+    const own = all.filter(sk => ownsAnyStage(k, sk.id)).length;
+    if (own / all.length > best[0] / best[1]) best = [own, all.length];
+  }
+  return best;
+}
 const FRAMES = [
-  {id:'angelical_dorado', name:'Angelical dorado', tier:'e'},
-  {id:'agua_fiabilidad', name:'Agua y fiabilidad', tier:'c'},
-  {id:'conocimiento_digital', name:'Conocimiento digital', tier:'c'},
-  {id:'digivice_azul', name:'Digivice azul neón', tier:'r'},
-  {id:'amistad_gabumon', name:'Amistad de Gabumon', tier:'c'},
-  {id:'alas_rosadas', name:'Alas rosadas y doradas', tier:'r'},
-  {id:'fenix_dorado', name:'Fénix dorado', tier:'e'},
-  {id:'esperanza_angelical', name:'Esperanza angelical', tier:'e'},
-  {id:'sinceridad_palmon', name:'Sinceridad de Palmon', tier:'r'},
-  {id:'bondad_botanica', name:'Bondad botánica', tier:'r'}
+  {id:'amistad_gabumon', name:'Amistad de Gabumon', tier:'c', how:'Gana una partida con Gabumon', prog: () => [Math.min(1, winsWith('gabumon')), 1]},
+  {id:'sinceridad_palmon', name:'Sinceridad de Palmon', tier:'c', how:'Gana una partida con Palmon', prog: () => [Math.min(1, winsWith('palmon')), 1]},
+  {id:'agua_fiabilidad', name:'Agua y fiabilidad', tier:'c', how:'Gana una partida con Gomamon', prog: () => [Math.min(1, winsWith('gomamon')), 1]},
+  {id:'conocimiento_digital', name:'Conocimiento digital', tier:'c', how:'Gana una partida con Tentomon', prog: () => [Math.min(1, winsWith('tentomon')), 1]},
+  {id:'alas_rosadas', name:'Alas rosadas y doradas', tier:'c', how:'Gana una partida con Biyomon', prog: () => [Math.min(1, winsWith('biyomon')), 1]},
+  {id:'esperanza_angelical', name:'Esperanza angelical', tier:'c', how:'Gana una partida con Patamon', prog: () => [Math.min(1, winsWith('patamon')), 1]},
+  {id:'bondad_botanica', name:'Bondad botánica', tier:'r', how:'Recluta 10 Digimon de apoyo', prog: () => [Math.min(10, loadLife().sups), 10]},
+  {id:'digivice_azul', name:'Digivice azul neón', tier:'r', how:'Consigue 10 fusiones de ataques', prog: () => [Math.min(10, loadLife().fusions), 10]},
+  {id:'fenix_dorado', name:'Fénix dorado', tier:'e', how:'Gana una partida en Difícil o Pesadilla', prog: () => [wonDiff(['dificil', 'pesadilla']), 1]},
+  {id:'angelical_dorado', name:'Angelical dorado', tier:'e', how:'Consigue todas las skins de un Digimon', prog: bestSkinSet},
+  {id:'mecenas', name:'Mecenas', tier:'e', how:'Código de recompensa para quien apoya el juego en Ko-fi'}
 ];
-// Títulos: solo cosmética (no dan bonus). Se consiguen con el gacha o con logros (ver checkAchievements)
 const TITLES = [
-  {id:'novato',     name:'Novato',           tier:'c', how:'Termina tu primera partida'},
-  {id:'cazador',    name:'Cazador de bajas', tier:'c', how:'Acumula 300 bajas en total'},
-  {id:'explorador', name:'Explorador',       tier:'r', how:'Llega a la zona 2 (Pantano de Datos)'},
-  {id:'maestro',    name:'Maestro Digimon',  tier:'r', how:'Derrota al jefe final'},
-  {id:'leyenda',    name:'Leyenda digital',  tier:'e', how:'Solo en la Incubadora (épico)'}
+  {id:'novato',     name:'Novato',           tier:'c', how:'Termina tu primera partida', prog: () => [Math.min(1, loadAch().runs), 1]},
+  {id:'cazador',    name:'Cazador de bajas', tier:'c', how:'Acumula 300 bajas en total', prog: () => [Math.min(300, sumStats('kills')), 300]},
+  {id:'explorador', name:'Explorador',       tier:'r', how:'Llega a la zona 2 (Pantano de Datos)', prog: () => [loadAch().zone2 ? 1 : 0, 1]},
+  {id:'maestro',    name:'Maestro Digimon',  tier:'r', how:'Derrota al jefe final', prog: () => [loadAch().boss ? 1 : 0, 1]},
+  {id:'t_bosque',   name:'Guardián del Bosque', tier:'r', how:'Gana el Bosque File', prog: () => [wonMap('bosque'), 1]},
+  {id:'t_desierto', name:'Señor de las Dunas', tier:'r', how:'Gana el Desierto de Datos', prog: () => [wonMap('desierto'), 1]},
+  {id:'t_nevado',   name:'Corazón Helado',   tier:'e', how:'Gana la Montaña Helada', prog: () => [wonMap('nevado'), 1]},
+  {id:'t_cazajefes', name:'Cazajefes',       tier:'r', how:'Derrota a los 6 jefes menores', prog: () => [Math.min(6, loadLife().minis.length), 6]},
+  {id:'t_surv',     name:'Superviviente',    tier:'e', how:'Aguanta 30 minutos en Supervivencia', prog: () => [Math.min(30, bestSurvMin()), 30]},
+  {id:'t_constante', name:'Constante',       tier:'r', how:'Juega 7 días seguidos', prog: () => [Math.min(7, loadLife().best), 7]},
+  {id:'t_pesadilla', name:'Pesadilla viviente', tier:'e', how:'Gana una partida en Pesadilla', prog: () => [wonDiff(['pesadilla']), 1]},
+  {id:'t_millon',   name:'Imparable',        tier:'e', how:'Acumula 1.000.000 de bajas', prog: () => [Math.min(1e6, sumStats('kills')), 1e6]},
+  {id:'leyenda',    name:'Leyenda digital',  tier:'e', how:'Desbloquea a todos los Digimon', prog: () => [SEASONS.adventure.chars.filter(isUnlocked).length, SEASONS.adventure.chars.length]},
+  {id:'mecenas',    name:'Mecenas',          tier:'e', how:'Código de recompensa para quien apoya el juego en Ko-fi'}
 ];
 // Progreso de logros guardado en 'digibonk3d-ach'
 function loadAch(){ return loadJSON('digibonk3d-ach', {runs: 0, zone2: false, boss: false}); }
-// Tras cada partida concede los títulos cuyo logro se ha cumplido (una sola vez). Devuelve los nuevos.
-function checkAchievements(win){
+// Tras cada partida: guarda lo que ha pasado en ella (logros, contadores y días seguidos)
+function recordRunProgress(win){
   const ach = loadAch();
   if (g.t >= 5) ach.runs += 1;
   if (g.zone >= 2) ach.zone2 = true;
   if (win && g.bossDown) ach.boss = true;
   localStorage.setItem('digibonk3d-ach', JSON.stringify(ach));
-  const all = loadJSON('digibonk3d-stats', {});
-  const totalKills = Object.values(all).reduce((a, s) => a + (s.kills || 0), 0);
-  const met = {novato: ach.runs >= 1, cazador: totalKills >= 300, explorador: ach.zone2, maestro: ach.boss};
+  const life = loadLife();
+  life.chests += g.chestsOpened || 0;
+  life.sups += (g.supsJoined || 0);
+  life.fusions += (g.fus || []).length;
+  life.minis = [...new Set([...life.minis, ...(g.minisKilled || [])])];
+  if (g.t >= 5){
+    const today = dayKey(), y = new Date(Date.now() - 86400000), yKey = `${y.getFullYear()}-${y.getMonth()+1}-${y.getDate()}`;
+    if (life.last !== today){ life.streak = life.last === yKey ? life.streak + 1 : 1; life.last = today; }
+    life.best = Math.max(life.best, life.streak);
+  }
+  saveLife(life);
+}
+// Concede los marcos y títulos cuya meta ya se cumple. Devuelve los nuevos ({name, kind})
+function grantProgress(){
   const won = [];
-  for (const t of TITLES){
-    if (met[t.id] && !inv.titles.includes(t.id)){ inv.titles.push(t.id); won.push(t); }
+  for (const [list, bag, kind] of [[TITLES, inv.titles, 'Título'], [FRAMES, inv.frames, 'Marco']]){
+    for (const it of list){
+      if (!it.prog || bag.includes(it.id)) continue;
+      const [a, b] = it.prog();
+      if (a >= b){ bag.push(it.id); won.push({name: it.name, kind}); }
+    }
   }
   if (won.length) saveInv();
   return won;
 }
+function checkAchievements(win){ recordRunProgress(win); return grantProgress(); }
+// En el menú: concede lo que ya se cumple sin jugar otra partida (skins por logro, premios de evento,
+// maestría, Digimon por meta y marcos/títulos). Sirve para las partidas jugadas antes de estos premios
+function syncRewards(){
+  if (isGuest()) return;
+  for (const k of SEASONS.adventure.chars){
+    const st = statsOf(k);
+    for (const sk of SKINS) if (sk.src === 'logro' && skinHasArt(k, 0, sk.id) && !ownsAt(k, 0, sk.id) && meetsReq(sk, st)) grantSkinLine(k, sk.id);
+  }
+  if (eventActive()){ const ev = eventQuestState(); if (payEventPrizes(ev).length) localStorage.setItem('digibonk3d-evq3', JSON.stringify(ev)); }
+  grantMastery(); checkUnlocks(false); grantProgress();
+}
+// Logros que se ven en la ventana Logros (los que salen jugando, no de la maestría ni del evento)
+const achItems = () => [...TITLES, ...FRAMES].filter(x => x.prog && !x.weekly && !x.seasonal);
+const achDoneCount = () => achItems().filter(x => (TITLES.includes(x) ? inv.titles : inv.frames).includes(x.id)).length;
 const TIER_NAME = {c:'Común', r:'Rara', e:'Épica', l:'Legendaria'};
-// Marcos y títulos semanales: uno por línea evolutiva, solo se consiguen en el banner permanente
-FRAMES.push(...SEASONS.adventure.chars.map((k, i) => ({id: 'wk' + i, name: 'Marco de ' + CHARS[k].name, tier: 'e', weekly: true})));
-FRAMES.push({id: 'navidad', name: 'Marco Navideño', tier: 'e', seasonal: true});
-TITLES.push({id: 'navidad', name: 'Espíritu Navideño', tier: 'e', how: 'Banner de Navidad · tiradas de Papá Noel o Reno', seasonal: true});
-TITLES.push(...SEASONS.adventure.chars.map((k, i) => ({id: 'wk' + i, name: 'Heraldo de ' + CHARS[k].name, tier: 'e', how: 'Banner permanente · semana de ' + CHARS[k].name, weekly: true})));
+/* ---------- Maestría: cada Digimon sube de nivel con las bajas y partidas que juegas con él ---------- */
+// Puntos = bajas/100 + 20 por partida (una partida completa da unos 120). Cuenta lo ya jugado
+const MASTERY_XP = [0, 100, 300, 600, 1000, 1500, 2200, 3000];   // puntos para los niveles 1 a 8
+const MASTERY_REWARDS = [
+  {lv: 2, type: 'title'}, {lv: 4, type: 'frame'}, {lv: 6, type: 'skin', skin: 'galactico'}, {lv: 8, type: 'skin', skin: 'holografica'}
+];
+function masteryPts(k){ const s = statsOf(k); return Math.floor((s.kills || 0) / 100) + (s.plays || 0) * 20; }
+function masteryLv(k){ const p = masteryPts(k); return MASTERY_XP.filter(x => p >= x).length; }
+const masteryMax = () => MASTERY_XP.length;
+const wkIndex = k => SEASONS.adventure.chars.indexOf(k);
+// Nombre del premio de un nivel de maestría
+function masteryRewardName(k, r){
+  if (r.type === 'title') return 'Título «' + TITLES.find(t => t.id === 'wk' + wkIndex(k)).name + '»';
+  if (r.type === 'frame') return FRAMES.find(f => f.id === 'wk' + wkIndex(k)).name;
+  return 'Skin ' + SKIN_BY_ID[r.skin].name;
+}
+const masteryHasArt = (k, r) => r.type !== 'skin' || skinLineArt(k, r.skin) >= 0;
+function masteryOwns(k, r){
+  if (r.type === 'title') return inv.titles.includes('wk' + wkIndex(k));
+  if (r.type === 'frame') return inv.frames.includes('wk' + wkIndex(k));
+  return ownsAnyStage(k, r.skin);
+}
+// Da una skin en todas las etapas que tengan hoja
+function grantSkinLine(k, id){ for (let s = 0; s < stageCount(k); s++) if (skinHasArt(k, s, id)) grantSkinAt(k, s, id); }
+// Concede lo que corresponda por maestría (todas las líneas). Devuelve los textos nuevos
+function grantMastery(){
+  const won = [];
+  for (const k of SEASONS.adventure.chars){
+    const lv = masteryLv(k), i = wkIndex(k);
+    for (const r of MASTERY_REWARDS){
+      if (lv < r.lv || masteryOwns(k, r) || !masteryHasArt(k, r)) continue;
+      if (r.type === 'title') inv.titles.push('wk' + i);
+      else if (r.type === 'frame') inv.frames.push('wk' + i);
+      else grantSkinLine(k, r.skin);
+      won.push(`${masteryRewardName(k, r)} (${CHARS[k].name})`);
+    }
+  }
+  if (won.length) saveInv();
+  return won;
+}
+// Marcos y títulos de cada línea evolutiva: salen de la maestría (o de la tienda en su semana)
+FRAMES.push(...SEASONS.adventure.chars.map((k, i) => ({id: 'wk' + i, name: 'Marco de ' + CHARS[k].name, tier: 'e', weekly: true, how: 'Maestría 4 con ' + CHARS[k].name})));
+FRAMES.push({id: 'navidad', name: 'Marco Navideño', tier: 'e', seasonal: true, how: 'Evento de Navidad: derrota a 400.000 enemigos'});
+TITLES.push({id: 'navidad', name: 'Espíritu Navideño', tier: 'e', how: 'Evento de Navidad: derrota a 400.000 enemigos', seasonal: true});
+TITLES.push(...SEASONS.adventure.chars.map((k, i) => ({id: 'wk' + i, name: 'Heraldo de ' + CHARS[k].name, tier: 'e', how: 'Maestría 2 con ' + CHARS[k].name, weekly: true})));
 let inv = loadJSON('digibonk3d-inv', {frames: [], titles: [], items: {}});
 let extra = loadJSON('digibonk3d-extra', {frame: null, title: null, item: null});
 function saveInv(){ localStorage.setItem('digibonk3d-inv', JSON.stringify(inv)); }
@@ -9960,7 +10217,7 @@ function bannerPool(bn = gxBanner){
 }
 // La Incubadora (gacha) queda en «Próximamente» hasta pulirla: el botón del inicio sale apagado y no se puede abrir.
 // Para volver a activarla basta con poner GACHA_SOON a false.
-const GACHA_SOON = true;
+const GACHA_SOON = true;   // mientras tanto, su hueco del menú es la Tienda y los tickets se guardan para cuando abra
 let gxBanner = 'std';
 // Garantía: si pasan PITY_AT tiradas sin legendaria, la siguiente lo es. Una legendaria repetida devuelve Bits
 const PITY_AT = 100, LEG_DUP_REFUND = 200;
@@ -10198,9 +10455,9 @@ function showPullResults(results){
 // Texto que explica cómo se consigue una skin que aún no tienes
 function howTo(key, sk){
   if (sk.src === 'base') return '';
+  if (sk.src === 'maestria') return `Maestría ${sk.lv} · ahora nivel ${masteryLv(key)}`;
+  if (sk.src === 'evento') return eventActive() ? (loadVales()[sk.id] ? 'Pulsa para usar tu vale' : sk.desc) : 'Evento terminado';
   if (!sk.req) return sk.desc || '';
-  if (sk.src === 'gacha') return 'Legendaria de la Incubadora';
-  if (sk.src === 'evento') return eventActive() ? 'Solo en el banner de evento' : 'Evento terminado';
   if (sk.src === 'shiny') return '1 entre 8192 al empezar una partida';
   const st = statsOf(key);
   if (sk.req.plays) return `${Math.min(st.plays, sk.req.plays)}/${sk.req.plays} partidas`;
@@ -10596,7 +10853,7 @@ if (new URLSearchParams(location.search).has('demo')){
     SKINS, EVO_LINE, CHARS, SEASONS, glitchPixels,
     headUrl, spriteWith,
     checkUnlocks, isUnlocked,
-    showSelect, showCollection, showPicker,
+    showSelect, showCollection, showPicker, showShop, showEncargos, showLogros, showPlayer, endGame, masteryLv,
     showSettings,
     rollTier,
     get music(){ return Music.file; },
