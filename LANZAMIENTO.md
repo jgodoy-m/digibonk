@@ -41,5 +41,6 @@ Con el dominio ya comprado, añádelo en Supabase → Authentication → URL Con
 1. Crea la página en https://ko-fi.com (gratis; Ko-fi no cobra comisión en las donaciones sueltas).
 2. En la descripción, deja claro para qué es: «DigiBonk es gratis. Las donaciones pagan el servidor del ranking y el dominio». No vendas nada a cambio (ni personajes ni ventajas): con un fan-game de Digimon, cobrar por contenido es lo que más riesgo tiene.
 3. Copia la URL de tu página en `kofi` y ejecuta `python3 tools/configurar.py`. El botón «Apoyar» del menú aparece solo.
+4. Agradecimiento opcional: el código `DIGIMECENAS` (se canjea en la Tienda del menú) da el marco y el título «Mecenas», solo cosméticos. Puedes ponerlo en el mensaje de gracias de Ko-fi. Ten en cuenta que, aunque sea solo estética, es algo a cambio de dinero; si prefieres no arriesgar, no lo publiques. Para cambiar el código, cambia su huella en `REWARD_CODES` de `index.html` (FNV-1a del código en mayúsculas sin guiones).
 
 Coste aproximado del servidor: Supabase es gratis hasta 500 MB de base de datos y 50.000 usuarios activos al mes. El plan de pago (25 $/mes) solo hace falta si se supera eso. El dominio son unos 10 € al año.
