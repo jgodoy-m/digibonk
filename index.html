@@ -6151,7 +6151,7 @@ function runApply(s){
   g.lastPos = {x: g.p.x, z: g.p.z};
   // Pantalla, portal e Infierno
   applyZoneVisuals(g.zone);
-  if (g.portal && g.zone !== 1){ world.remove(g.portal.grp); g.portal = null; }
+  if (g.zone !== 1){ if (g.portal) world.remove(g.portal.grp); buildPortal(); }   // la pantalla 2 tiene su propio portal (cerrado)
   if (g.portal && g.portalOpen) portalOpenFx();
   if (g.inferno) infernoFx();
   // Santuarios: los mismos, en el mismo sitio, y los usados siguen apagados
@@ -8584,7 +8584,8 @@ const PORTAL_ART = {bosque: {file: 'sprites/deco/bosque/portal.png', aspect: 1.5
 // Portal de piedra con un remolino. Cerrado: gris y con candado. Abierto: brilla y te lleva a la pantalla 2
 function buildPortal(){
   g.portal = null;
-  if (!isPortalMap() || g.mode === 'surv' || g.zone !== 1) return;
+  // También en la pantalla 2: allí no lleva a ningún sitio, pero es donde se invoca al jefe final
+  if (!isPortalMap() || g.mode === 'surv') return;
   const grp = new THREE.Group();
   const y0 = terrainH(PORTAL.x, PORTAL.z);
   grp.position.set(PORTAL.x, y0, PORTAL.z);
@@ -8658,6 +8659,7 @@ function enterScreen(n){
   if (g.portal){ world.remove(g.portal.grp); g.portal = null; }
   g.zone = n; g.screenT = 0; g.inferno = false; g.portalOpen = false; g.screenWarn = 0;
   applyZoneVisuals(n);
+  buildPortal();   // sin portal en la pantalla 2 no había dónde invocar al jefe final
   initShrines();
   g.p.x = 0; g.p.z = 0; g.p.y = 0; g.p.vy = 0;
   g.spawnT = 3; g.eliteT = Math.max(g.eliteT, 30);
