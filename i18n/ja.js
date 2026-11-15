@@ -1331,5 +1331,17 @@ I18N.add('ja', {
   "Trueno Mágico": "マジックサンダー",
   "Rayo Arcano": "アルカナレイ",
   "Estrella Mágica": "マジックスター",
-  "Círculo Arcano": "アルカナサークル"
+  "Círculo Arcano": "アルカナサークル",
+  // Punto de guardado de partida
+  "Esta partida se ha continuado en otra pestaña o ventana": "このプレイは別のタブまたはウィンドウで再開されました",
+  "Tienes una partida guardada. Si empiezas otra, se perderá. ¿Empezar una partida nueva?": "セーブしたプレイがあります。新しく始めると失われます。新しいプレイを始めますか？",
+  "Guardar y salir": "セーブして終了",
+  "Partida guardada: puedes cerrar el juego y continuarla desde el menú.": "プレイをセーブしました：ゲームを閉じて、メニューから再開できます。",
+  "Las partidas del ranking global no se guardan.": "世界ランキングのプレイはセーブされません。",
+  "Continuar partida": "プレイを再開",
+  "Partida guardada": "セーブしたプレイ",
+  "Continuar partida guardada": "セーブしたプレイを再開",
+  "Partida continuada": "プレイを再開しました",
+  "El mapa se ha reconstruido con oleadas nuevas": "マップは新しいウェーブで再構築されました",
+  "{0} · Nv {1} · {2}": "{0} · Lv {1} · {2}"
 });

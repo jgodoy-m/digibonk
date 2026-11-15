@@ -1322,5 +1322,17 @@ I18N.add('pl', {
   "Trueno Mágico": "Magiczny Grom",
   "Rayo Arcano": "Tajemny Promień",
   "Estrella Mágica": "Magiczna Gwiazda",
-  "Círculo Arcano": "Tajemny Krąg"
+  "Círculo Arcano": "Tajemny Krąg",
+  // Punto de guardado de partida
+  "Esta partida se ha continuado en otra pestaña o ventana": "Ta rozgrywka została wznowiona w innej karcie lub oknie",
+  "Tienes una partida guardada. Si empiezas otra, se perderá. ¿Empezar una partida nueva?": "Masz zapisaną rozgrywkę. Jeśli zaczniesz nową, zostanie utracona. Zacząć nową rozgrywkę?",
+  "Guardar y salir": "Zapisz i wyjdź",
+  "Partida guardada: puedes cerrar el juego y continuarla desde el menú.": "Rozgrywka zapisana: możesz zamknąć grę i wznowić ją z menu.",
+  "Las partidas del ranking global no se guardan.": "Rozgrywki rankingu globalnego nie są zapisywane.",
+  "Continuar partida": "Kontynuuj rozgrywkę",
+  "Partida guardada": "Zapisana rozgrywka",
+  "Continuar partida guardada": "Kontynuuj zapisaną rozgrywkę",
+  "Partida continuada": "Rozgrywka wznowiona",
+  "El mapa se ha reconstruido con oleadas nuevas": "Mapa została odbudowana z nowymi falami",
+  "{0} · Nv {1} · {2}": "{0} · Poz. {1} · {2}"
 });

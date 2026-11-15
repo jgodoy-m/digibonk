@@ -1317,5 +1317,17 @@ I18N.add('de', {
   "Trueno Mágico": "Magischer Donner",
   "Rayo Arcano": "Arkanstrahl",
   "Estrella Mágica": "Magischer Stern",
-  "Círculo Arcano": "Arkankreis"
+  "Círculo Arcano": "Arkankreis",
+  // Punto de guardado de partida
+  "Esta partida se ha continuado en otra pestaña o ventana": "Dieser Lauf wurde in einem anderen Tab oder Fenster fortgesetzt",
+  "Tienes una partida guardada. Si empiezas otra, se perderá. ¿Empezar una partida nueva?": "Du hast einen gespeicherten Lauf. Wenn du einen neuen beginnst, geht er verloren. Neuen Lauf starten?",
+  "Guardar y salir": "Speichern und beenden",
+  "Partida guardada: puedes cerrar el juego y continuarla desde el menú.": "Lauf gespeichert: Du kannst das Spiel schließen und ihn im Menü fortsetzen.",
+  "Las partidas del ranking global no se guardan.": "Läufe der globalen Rangliste werden nicht gespeichert.",
+  "Continuar partida": "Lauf fortsetzen",
+  "Partida guardada": "Gespeicherter Lauf",
+  "Continuar partida guardada": "Gespeicherten Lauf fortsetzen",
+  "Partida continuada": "Lauf fortgesetzt",
+  "El mapa se ha reconstruido con oleadas nuevas": "Die Karte wurde mit neuen Wellen neu aufgebaut",
+  "{0} · Nv {1} · {2}": "{0} · St. {1} · {2}"
 });

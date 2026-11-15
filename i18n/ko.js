@@ -1330,5 +1330,17 @@ I18N.add('ko', {
   "Trueno Mágico": "마법 천둥",
   "Rayo Arcano": "비전 광선",
   "Estrella Mágica": "마법의 별",
-  "Círculo Arcano": "비전 마법진"
+  "Círculo Arcano": "비전 마법진",
+  // Punto de guardado de partida
+  "Esta partida se ha continuado en otra pestaña o ventana": "이 게임은 다른 탭이나 창에서 이어서 진행되었습니다",
+  "Tienes una partida guardada. Si empiezas otra, se perderá. ¿Empezar una partida nueva?": "저장된 게임이 있습니다. 새로 시작하면 사라집니다. 새 게임을 시작할까요?",
+  "Guardar y salir": "저장하고 나가기",
+  "Partida guardada: puedes cerrar el juego y continuarla desde el menú.": "게임 저장됨: 게임을 닫고 메뉴에서 이어서 할 수 있습니다.",
+  "Las partidas del ranking global no se guardan.": "글로벌 랭킹 게임은 저장되지 않습니다.",
+  "Continuar partida": "이어하기",
+  "Partida guardada": "저장된 게임",
+  "Continuar partida guardada": "저장된 게임 이어하기",
+  "Partida continuada": "게임 재개",
+  "El mapa se ha reconstruido con oleadas nuevas": "맵이 새로운 웨이브로 다시 만들어졌습니다",
+  "{0} · Nv {1} · {2}": "{0} · Lv {1} · {2}"
 });

@@ -1323,5 +1323,17 @@ I18N.add('tr', {
   "Trueno Mágico": "Büyülü Gök Gürültüsü",
   "Rayo Arcano": "Gizemli Işın",
   "Estrella Mágica": "Büyülü Yıldız",
-  "Círculo Arcano": "Gizemli Çember"
+  "Círculo Arcano": "Gizemli Çember",
+  // Punto de guardado de partida
+  "Esta partida se ha continuado en otra pestaña o ventana": "Bu oyun başka bir sekmede veya pencerede sürdürüldü",
+  "Tienes una partida guardada. Si empiezas otra, se perderá. ¿Empezar una partida nueva?": "Kayıtlı bir oyunun var. Yenisine başlarsan kaybolacak. Yeni bir oyun başlatılsın mı?",
+  "Guardar y salir": "Kaydet ve çık",
+  "Partida guardada: puedes cerrar el juego y continuarla desde el menú.": "Oyun kaydedildi: oyunu kapatıp menüden devam edebilirsin.",
+  "Las partidas del ranking global no se guardan.": "Küresel sıralama oyunları kaydedilmez.",
+  "Continuar partida": "Oyuna devam et",
+  "Partida guardada": "Kayıtlı oyun",
+  "Continuar partida guardada": "Kayıtlı oyuna devam et",
+  "Partida continuada": "Oyun sürdürüldü",
+  "El mapa se ha reconstruido con oleadas nuevas": "Harita yeni dalgalarla yeniden kuruldu",
+  "{0} · Nv {1} · {2}": "{0} · Sv {1} · {2}"
 });

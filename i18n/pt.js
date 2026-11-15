@@ -1317,5 +1317,17 @@ I18N.add('pt', {
   "Trueno Mágico": "Trovão Mágico",
   "Rayo Arcano": "Raio Arcano",
   "Estrella Mágica": "Estrela Mágica",
-  "Círculo Arcano": "Círculo Arcano"
+  "Círculo Arcano": "Círculo Arcano",
+  // Punto de guardado de partida
+  "Esta partida se ha continuado en otra pestaña o ventana": "Esta partida foi continuada em outra aba ou janela",
+  "Tienes una partida guardada. Si empiezas otra, se perderá. ¿Empezar una partida nueva?": "Você tem uma partida salva. Se começar outra, ela será perdida. Começar uma nova partida?",
+  "Guardar y salir": "Salvar e sair",
+  "Partida guardada: puedes cerrar el juego y continuarla desde el menú.": "Partida salva: você pode fechar o jogo e continuá-la pelo menu.",
+  "Las partidas del ranking global no se guardan.": "As partidas do ranking global não são salvas.",
+  "Continuar partida": "Continuar partida",
+  "Partida guardada": "Partida salva",
+  "Continuar partida guardada": "Continuar partida salva",
+  "Partida continuada": "Partida continuada",
+  "El mapa se ha reconstruido con oleadas nuevas": "O mapa foi reconstruído com novas ondas",
+  "{0} · Nv {1} · {2}": "{0} · Nv {1} · {2}"
 });

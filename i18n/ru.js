@@ -1329,5 +1329,17 @@ I18N.add('ru', {
   "Trueno Mágico": "Магический Гром",
   "Rayo Arcano": "Тайный Луч",
   "Estrella Mágica": "Магическая Звезда",
-  "Círculo Arcano": "Тайный Круг"
+  "Círculo Arcano": "Тайный Круг",
+  // Punto de guardado de partida
+  "Esta partida se ha continuado en otra pestaña o ventana": "Этот забег продолжен в другой вкладке или окне",
+  "Tienes una partida guardada. Si empiezas otra, se perderá. ¿Empezar una partida nueva?": "У тебя есть сохранённый забег. Если начать новый, он будет потерян. Начать новый забег?",
+  "Guardar y salir": "Сохранить и выйти",
+  "Partida guardada: puedes cerrar el juego y continuarla desde el menú.": "Забег сохранён: можно закрыть игру и продолжить его из меню.",
+  "Las partidas del ranking global no se guardan.": "Забеги глобального рейтинга не сохраняются.",
+  "Continuar partida": "Продолжить забег",
+  "Partida guardada": "Сохранённый забег",
+  "Continuar partida guardada": "Продолжить сохранённый забег",
+  "Partida continuada": "Забег продолжен",
+  "El mapa se ha reconstruido con oleadas nuevas": "Карта перестроена с новыми волнами",
+  "{0} · Nv {1} · {2}": "{0} · Ур. {1} · {2}"
 });

@@ -2651,6 +2651,23 @@ html[lang] #overlay .end3 .mini-btn{background:var(--m-btn)!important;color:var(
 #overlay .realhub.hb .hb-row2{display:grid;grid-template-columns:1.35fr 1fr;gap:12px}
 #overlay .realhub.hb .hb-event{display:flex;align-items:center;gap:12px;padding:12px 14px;border:0;border-radius:18px;background:var(--m-head);color:#fff;text-align:left;box-shadow:0 5px 0 #2a3a9e;transition:transform .12s}
 #overlay .realhub.hb .hb-event small{text-transform:uppercase;letter-spacing:.05em;font-size:11px}
+/* Punto de guardado: «Continuar partida» encima de los modos de juego */
+#overlay .realhub.hb .hb-continue{display:flex;align-items:center;gap:12px;width:100%;padding:10px 14px;margin:0 0 12px;border:0;border-radius:18px;background:linear-gradient(135deg,#2fbf71,#1d9a57);color:#fff;text-align:left;font-family:'Nunito',sans-serif;box-shadow:0 5px 0 #157443;cursor:pointer;transition:transform .12s;animation:hbcPulse 2.4s ease-in-out infinite}
+#overlay .realhub.hb .hb-continue:hover{transform:translateY(-2px)}
+#overlay .realhub.hb .hb-continue:active{transform:translateY(1px)}
+#overlay .realhub.hb .hb-continue>i{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.22);overflow:hidden}
+#overlay .realhub.hb .hb-continue>i img{width:40px;height:40px;object-fit:contain;image-rendering:pixelated}
+#overlay .realhub.hb .hb-continue .hbc-txt{flex:none;display:flex;flex-direction:column}
+#overlay .realhub.hb .hb-continue .hbc-txt small{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;opacity:.9}
+#overlay .realhub.hb .hb-continue .hbc-txt b{font-size:18px;font-weight:900;line-height:1.1}
+#overlay .realhub.hb .hb-continue .hbc-info{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-end;text-align:right}
+#overlay .realhub.hb .hb-continue .hbc-info em{font-style:normal;font-weight:900;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#overlay .realhub.hb .hb-continue .hbc-info small{font-size:11.5px;font-weight:700;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#overlay .realhub.hb .hb-continue .hbc-go{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#1d9a57;font-size:14px}
+@keyframes hbcPulse{0%,100%{box-shadow:0 5px 0 #157443,0 0 0 0 rgba(47,191,113,.45)}50%{box-shadow:0 5px 0 #157443,0 0 0 8px rgba(47,191,113,0)}}
+@media (max-width:760px){#overlay .realhub.hb .hb-continue{padding:8px 10px;gap:10px}#overlay .realhub.hb .hb-continue .hbc-txt b{font-size:16px}#overlay .realhub.hb .hb-continue>i{width:40px;height:40px}}
+@media (prefers-reduced-motion:reduce){#overlay .realhub.hb .hb-continue{animation:none}}
+@media (max-width:520px){#overlay .realhub.hb .hb-continue{display:grid;grid-template-columns:auto 1fr auto;column-gap:10px;row-gap:1px}#overlay .realhub.hb .hb-continue>i{grid-row:1/3}#overlay .realhub.hb .hb-continue .hbc-txt small{display:none}#overlay .realhub.hb .hb-continue .hbc-info{grid-column:2;grid-row:2;align-items:flex-start;text-align:left}#overlay .realhub.hb .hb-continue .hbc-go{grid-column:3;grid-row:1/3}}
 #overlay .realhub.hb .hb-enc{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--m-cardline);border-radius:18px;background:var(--m-card);color:var(--m-text);text-align:left;box-shadow:var(--m-pillsh),0 6px 18px rgba(0,0,0,.12);transition:transform .12s}
 #overlay .realhub.hb .hb-enc>i{background:var(--m-selbg);color:var(--m-sel)}
 #overlay .realhub.hb .hb-enc small{color:var(--m-mute);opacity:1}
@@ -2867,6 +2884,12 @@ html[data-theme=oscuro] #overlay:has(.rg){background:radial-gradient(ellipse 60%
 .pz2-pill{height:44px;border-radius:999px;border:1px solid var(--m-cardline);background:var(--m-btn);color:var(--m-text);font:900 15px 'Nunito',sans-serif;box-shadow:var(--m-btnsh);cursor:pointer;transition:transform .12s}
 .pz2-pill:hover,.pz2-x:hover{transform:translateY(-2px)}
 .pz2-danger{color:var(--m-bad)}
+/* Punto de guardado: botón «Guardar y salir» y aviso en la pausa */
+.pz2-btns.has-save{grid-template-columns:repeat(3,1fr)}
+.pz2-save{margin:-4px 0 0;text-align:center;font-size:12.5px;font-weight:800;color:var(--m-mute)}
+.pz2-save.ok{color:#1d9a57}
+html[data-theme=oscuro] .pz2-save.ok{color:#5fe39a}
+@media (max-width:520px){.pz2-btns.has-save .pz2-pill{font-size:13.5px;padding:0 6px}}
 .pz2-confirm{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:16px;border:2px solid color-mix(in srgb,var(--m-bad) 50%,transparent);text-align:center}
 .pz2-confirm b{font-size:17px;color:var(--m-bad)}
 .pz2-confirm p{margin:0;color:var(--m-mute);font-weight:700}
@@ -2883,6 +2906,7 @@ body.is-touch .pz2-keys,body.is-touch .pz2-go kbd{display:none}
   .pz2-profile{padding:8px;gap:12px}.pz2-av{width:64px;height:64px}.pz2-av .anim{width:56px;height:56px}.pz2-quote{display:none}
   .pz2-stats div{padding:6px 4px}.pz2-stats b{font-size:16px}
   .pz2-btns{grid-template-columns:2fr 1fr 1fr}.pz2-btns .pz2-go{grid-column:auto}
+  .pz2-btns.has-save{grid-template-columns:1.6fr 1fr 1fr 1fr}
   .pz2-keys{display:none}
 }
 /* En los paneles con poco sitio la barra superior va sin la tarjeta del usuario */
@@ -4435,6 +4459,7 @@ const pauseEl = document.getElementById('pause');
 function pauseGame(){
   if (state !== 'play' || !g) return;
   state = 'paused';
+  runSave();   // punto de guardado: al pausar se guarda la partida
   for (const k in keys) keys[k] = false;   // que ninguna tecla quede "pulsada" al volver
   touchReset();
   unlockMouse();
@@ -4442,6 +4467,7 @@ function pauseGame(){
 }
 function resumeGame(){
   if (state !== 'paused') return;
+  if (runTakenOver()) return;
   hidePause();
   state = 'play';
   // Si el navegador rechaza el bloqueo (p. ej. tras pulsar Esc), se avisa para hacer un clic
@@ -4472,6 +4498,8 @@ function showPause(askQuit = false){
   const evoNext = evoLevelFor(c.id, evolved | 0), evoMax = (evolved | 0) >= EVO_LINE[c.id].length;
   const evoPct = evoMax ? 100 : Math.min(100, g.p.lvl / evoNext * 100);
   const evoTxt = evoMax ? 'Forma final alcanzada' : `Siguiente digievolución · Nv ${g.p.lvl}/${evoNext}`;
+  const saveNote = g.ranked ? '<p class="pz2-save">Las partidas del ranking global no se guardan.</p>'
+    : g.slotSaved ? '<p class="pz2-save ok">Partida guardada: puedes cerrar el juego y continuarla desde el menú.</p>' : '';
   const actions = askQuit ? `
     <div class="pz2-confirm">
       <b>¿Abandonar la partida?</b>
@@ -4481,11 +4509,12 @@ function showPause(askQuit = false){
         <button class="pz2-pill pz2-danger" id="pQuit">Abandonar</button>
       </div>
     </div>` : `
-    <div class="pz2-btns">
+    <div class="pz2-btns${g.slotSaved ? ' has-save' : ''}">
       <button class="pz2-go" id="pResume">▶ Volver a la batalla<kbd>Esc</kbd></button>
+      ${g.slotSaved ? '<button class="pz2-pill" id="pSaveQuit">Guardar y salir</button>' : ''}
       <button class="pz2-pill" id="pRestart">↻ Reiniciar</button>
       <button class="pz2-pill pz2-danger" id="pQuitAsk">Abandonar</button>
-    </div>`;
+    </div>${saveNote}`;
   pauseEl.innerHTML = `
     <div class="pz2" role="dialog" aria-modal="true" aria-label="Menú de pausa">
       <header class="pz2-head"><div class="pz2-banner"><h2>Pausa</h2><small>${(g ? zoneDef() : ZONES[0]).name}</small></div><button class="pz2-x" id="pClose" aria-label="Cerrar menú de pausa">✕</button></header>
@@ -4516,10 +4545,11 @@ function showPause(askQuit = false){
   const on = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = fn; };
   on('pClose', resumeGame);
   on('pResume', resumeGame);
-  on('pRestart', () => startGame(c.id));              // reinicia con el mismo Digimon; no guarda récord
+  on('pRestart', () => { runEnd(); startGame(c.id); });   // reinicia con el mismo Digimon; no guarda récord
+  on('pSaveQuit', () => { if (runSave()) showSelect(); });   // la partida queda en el hueco: «Continuar partida» en el menú
   on('pQuitAsk', () => showPause(true));
   on('pBack', () => showPause(false));
-  on('pQuit', () => showSelect());                    // vuelve al menú de inicio sin guardar récord
+  on('pQuit', () => { runEnd(); showSelect(); });     // vuelve al menú de inicio sin guardar récord y borra la partida guardada
 }
 // Si el bloqueo de ratón se pierde durante la partida (p. ej. Esc del navegador), se pausa
 document.addEventListener('pointerlockchange', () => {
@@ -4878,6 +4908,8 @@ function showSelect(){
   syncRewards();   // lo ya conseguido antes de existir estos premios se da al volver al menú
   const achAll = achItems().length, achOwned = achDoneCount();
   const life = hubLife();
+  const saved = runSlot();   // partida guardada con el punto de guardado
+  const savedTxt = saved ? `${safeText(stageName(saved.key, saved.evolved))} · Nv ${saved.g.p.lvl | 0} · ${fmtTime(Math.floor(+saved.g.t || 0))}` : '';
   showOverlay(`
     <main class="realhub hb" aria-label="Menú principal Digibonk">
       <div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><div class="rw-scenery-core"></div><div class="rw-aurora"></div><div class="rw-light"></div><div class="rw-water"></div><div class="rw-stars"></div>${life.stage}</div>
@@ -4897,6 +4929,7 @@ function showSelect(){
         <div class="hb-left">
           <h1 class="hb-brand"><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span><span class="hb-ver">BETA</span></h1>
           ${life.parade}
+          ${saved ? `<button type="button" class="hb-continue" id="hbContinue" aria-label="Continuar partida guardada"><i><img src="${charIcon(saved.key)}" alt=""></i><span class="hbc-txt"><small>Partida guardada</small><b>Continuar partida</b></span><span class="hbc-info"><em>${savedTxt}</em><small><span>${safeText(MAPS[saved.map].name)}</span> · <span>${safeText(DIFFS[saved.diff].name)}</span>${saved.mode === 'surv' ? ' · <span>Supervivencia</span>' : ''}</small></span><span class="hbc-go" aria-hidden="true">▶</span></button>` : ''}
           <div class="hb-modes nm-modes">
             <button type="button" id="playBtn" class="hb-play nm-play" aria-label="Jugar con ${safeText(choice.name)}">
               <span class="hb-play-txt"><b>Jugar</b></span>
@@ -4954,6 +4987,7 @@ function showSelect(){
   // El botón Jugar siempre muestra el icono del compañero (no la skin equipada)
   if(!avatarIcon() && !PLAYER_ICONS.some(x => x.id === avatarKey())) headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
   document.getElementById('playBtn').onclick=()=>{ runMode='normal'; showPicker('personaje'); };
+  { const el = document.getElementById('hbContinue'); if (el) el.onclick = runContinue; }
   const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { if (GACHA_SOON) return showEncargos(); gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR'; showGacha(); };
   { const el = document.getElementById('hbShop'); if (el) el.onclick = () => showShop(); }
   document.getElementById('btnColl').onclick=showCollection;
@@ -5289,7 +5323,7 @@ async function cloudSync({pull = false, force = false} = {}){
 }
 // Partidas pendientes de enviar al ranking (se guardan si no hay conexión y se envían luego)
 function cloudQueueScore(g){
-  if (!cloudEnabled() || Cloud.st.noRank || g.t < 30) return;
+  if (!cloudEnabled() || Cloud.st.noRank || g.t < 30 || !g.ranked || g.resumed) return;   // una partida continuada nunca entra en el ranking
   const q = Cloud.st.scores || [];
   q.push({p_mode: g.mode === 'surv' ? 'surv' : 'normal', p_map: g.map, p_diff: g.diff, p_digimon: g.ch.id, p_t: Math.floor(g.t), p_kills: g.kills | 0, p_lvl: g.p.lvl | 0, p_wave: g.mode === 'surv' ? (g.wave || 1) : 0, p_win: !!g.win});
   Cloud.st.scores = q.slice(-5); Cloud.save();
@@ -5971,7 +6005,203 @@ function lockLandscape(){
     if (!document.fullscreenElement && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().then(go).catch(go); else go();
   } catch(e){}
 }
-function startGame(key){
+// ---------- Punto de guardado de partida ----------
+// Al pausar, al cambiar de app o al cerrar el juego, la partida se guarda en un solo hueco de este navegador
+// (nunca en la nube ni en el código de guardado). Reglas para que no sirva para hacer trampa:
+// - Solo hay un hueco y siempre tiene el estado más reciente: al volver a la partida (o al morir) se borra,
+//   así que no se puede volver a un momento anterior.
+// - Cada partida tiene un identificador; solo la partida «viva» puede guardarse, terminar con premios o cargarse.
+//   Cargar o empezar otra partida cambia el identificador: una copia vieja del hueco o una segunda pestaña
+//   con la misma partida ya no valen.
+// - El hueco lleva una suma de control: si se edita a mano, se descarta.
+// - Las partidas que cuentan para el ranking global no se guardan, y una partida continuada nunca entra en él.
+// Al cargar, el mapa se reconstruye: los enemigos vuelven como oleadas nuevas (la misma cantidad y tipo, a
+// distancia) y los jefes vuelven con la vida que les quedaba.
+const RUN_SLOT = 'digibonk3d-run-slot', RUN_LIVE = 'digibonk3d-run-live', RUN_VER = 1;
+const RUN_STATES = ['play', 'paused', 'levelup', 'map'];
+// Partes de la partida que tienen objetos 3D o se reconstruyen al cargar (no se copian tal cual)
+const RUN_REBUILD = new Set(['ch', 'enemies', 'shots', 'gems', 'blades', 'turrets', 'zones', 'chests', 'texts', 'nearChest', 'boss', 'eshots',
+  'portal', 'drops', 'sk', 'playerMesh', 'aura', 'playerShadow', 'hiRing', 'sups', 'eggs', 'shrines', 'trial', 'ev', 'hazards', 'evoAnim',
+  'choices', 'chestPick', 'npcPick', 'npcs', 'berries', 'pendingUp', 'bossRing', 'runId', 'ranked', 'resumed', 'slotSaved', 'nearShrine', 'upMode']);
+function runRanked(){ try { return cloudEnabled() && !Cloud.st.noRank; } catch(e){ return false; } }
+function runNewId(){
+  const a = new Uint32Array(3);
+  try { crypto.getRandomValues(a); } catch(e){ for (let i = 0; i < 3; i++) a[i] = Math.random()*4294967296 >>> 0; }
+  return Array.from(a, n => n.toString(36)).join('');
+}
+const runSum = (id, body) => strHash('dbk-run|' + RUN_VER + '|' + id + '|' + body + '|' + strHash(body + id));
+function runLiveId(){ try { return localStorage.getItem(RUN_LIVE) || ''; } catch(e){ return ''; } }
+function runIsLive(){ return !!(g && g.runId && runLiveId() === g.runId); }
+function runSetLive(id){ try { if (id) localStorage.setItem(RUN_LIVE, id); else localStorage.removeItem(RUN_LIVE); } catch(e){} }
+function runDrop(){ try { localStorage.removeItem(RUN_SLOT); } catch(e){} if (g) g.slotSaved = false; }
+// La partida termina (muerte, victoria o abandono): se borra el hueco y deja de haber partida viva
+function runEnd(){ if (g && g.runId && runLiveId() === g.runId) runSetLive(''); runDrop(); }
+// Copia solo datos simples (números, textos, listas y objetos planos); con un objeto 3D o una función devuelve undefined
+function runPlain(v, d = 0){
+  if (v === null || typeof v === 'string' || typeof v === 'boolean') return v;
+  if (typeof v === 'number') return isFinite(v) ? v : {$n: String(v)};
+  if (typeof v !== 'object' || d > 8) return undefined;
+  if (v.isObject3D || v.isMaterial || v.isTexture || v.isBufferGeometry || (typeof Node !== 'undefined' && v instanceof Node)) return undefined;
+  if (Array.isArray(v)){
+    const out = [];
+    for (const x of v){ const c = runPlain(x, d + 1); if (c === undefined) return undefined; out.push(c); }
+    return out;
+  }
+  if (Object.getPrototypeOf(v) !== Object.prototype) return undefined;
+  const out = {};
+  for (const k of Object.keys(v)){ const c = runPlain(v[k], d + 1); if (c === undefined) return undefined; out[k] = c; }
+  return out;
+}
+function runRevive(v){
+  if (Array.isArray(v)) return v.map(runRevive);
+  if (v && typeof v === 'object'){
+    if (Object.keys(v).length === 1 && typeof v.$n === 'string') return Number(v.$n);
+    const out = {}; for (const k of Object.keys(v)) out[k] = runRevive(v[k]); return out;
+  }
+  return v;
+}
+// Clave de una carta de mejora para reconstruir la misma tirada al cargar (no se puede volver a tirar recargando)
+const runCardKey = c => c.fusion ? 'fus:' + c.fusion : c.evo ? 'evo:' + c.evo : c.skill ? 'skill:' + c.skill : 'up:' + c.t;
+function runSave(){
+  if (!g || !g.runId || g.ranked || !RUN_STATES.includes(state) || !runIsLive()) return false;
+  const data = {};
+  for (const k of Object.keys(g)){
+    if (RUN_REBUILD.has(k)) continue;
+    const c = runPlain(g[k]);
+    if (c !== undefined) data[k] = c;
+  }
+  const alive = e => e && e.hp > 0 && g.enemies.includes(e);
+  const foes = {};
+  for (const e of g.enemies) if (e.hp > 0 && !e.boss && e.kind !== 'mini' && ENEMY[e.kind]) foes[e.kind] = (foes[e.kind] || 0) + 1;
+  const s = {
+    v: RUN_VER, id: g.runId, at: Date.now(),
+    key: g.ch.id, evolved: g.ch.evolved | 0, map: g.map, diff: g.diff, mode: g.mode,
+    g: data,
+    sups: (g.sups || []).map(x => ({key: x.key, st: x.st | 0, joinLvl: x.joinLvl | 0})),
+    shrines: (g.shrines || []).map(x => ({id: x.type.id, x: x.x, z: x.z, used: !!x.used})),
+    npcs: g.npcs ? g.npcs.map(n => ({id: n.id, x: n.x, z: n.z, buys: n.buys | 0, spins: n.spins | 0})) : null,
+    boss: alive(g.boss) ? {hp: g.boss.hp, max: g.boss.max} : null,
+    minis: g.enemies.filter(e => e.kind === 'mini' && !e.special && e.hp > 0).map(e => ({name: e.name, k: e.hp / e.max})),
+    foes,
+    choices: (state === 'levelup' || g.pendingUp) && g.choices && g.choices.length && !g.npcPick ? g.choices.map(c => ({k: runCardKey(c), rare: !!c.rare})) : null,
+    chestPick: g.chestPick ? {gold: !!g.chestPick.gold} : null,
+    lvlup: state === 'levelup'
+  };
+  const body = JSON.stringify(s);
+  try { localStorage.setItem(RUN_SLOT, JSON.stringify({sum: runSum(s.id, body), body})); } catch(e){ return false; }
+  g.slotSaved = true;
+  return true;
+}
+// Lee el hueco y comprueba que es válido; si no lo es, lo borra
+function runSlot(){
+  let raw = null;
+  try { raw = localStorage.getItem(RUN_SLOT); } catch(e){ return null; }
+  if (!raw) return null;
+  let s = null;
+  try {
+    const w = JSON.parse(raw);
+    s = JSON.parse(w.body);
+    if (!s || s.v !== RUN_VER || typeof s.id !== 'string' || w.sum !== runSum(s.id, w.body)) s = null;
+  } catch(e){ s = null; }
+  // Solo vale el hueco de la partida viva: no una copia antigua ni el de una partida ya cargada o terminada
+  if (s && (s.id !== runLiveId() || !CHARS[s.key] || !MAPS[s.map] || !DIFFS[s.diff] || !s.g || !s.g.p)) s = null;
+  if (!s){ try { localStorage.removeItem(RUN_SLOT); } catch(e){} }
+  return s;
+}
+// Botón del menú: carga la partida guardada (el hueco se borra al cargarlo)
+function runContinue(){
+  const s = runSlot();
+  if (!s){ showSelect(); return; }
+  try { localStorage.removeItem(RUN_SLOT); } catch(e){}
+  runMode = s.mode === 'surv' ? 'surv' : 'normal'; runMap = s.map; runDiff = s.diff;
+  startGame(s.key, s);
+}
+// Otra pestaña ha cargado o empezado otra partida: esta deja de valer (sin premios) para no duplicarla
+function runTakenOver(){
+  if (!g || !g.runId || !RUN_STATES.includes(state)) return false;
+  if (runIsLive()) return false;
+  g.runId = null;
+  hidePause();
+  showSelect();
+  const m = document.getElementById('hmMsg');
+  if (m){ m.textContent = 'Esta partida se ha continuado en otra pestaña o ventana'; clearTimeout(m._t); m._t = setTimeout(() => { m.textContent = ''; }, 5000); }
+  return true;
+}
+addEventListener('storage', e => { if (e.key === RUN_LIVE || e.key === null) runTakenOver(); });
+// Cerrar o recargar la página: se guarda tal como está (si estaba jugando, la pausa ya lo había guardado)
+addEventListener('pagehide', () => { if (g && RUN_STATES.includes(state)) runSave(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden && g && RUN_STATES.includes(state)) runSave(); });
+// Reconstruye la partida guardada sobre una partida recién creada con el mismo Digimon, mapa y dificultad
+function runApply(s){
+  const fresh = g;
+  for (const [k, v] of Object.entries(s.g)){
+    if (RUN_REBUILD.has(k)) continue;
+    const cur = fresh[k];
+    if (cur && typeof cur === 'object' && runPlain(cur) === undefined) continue;   // nunca sustituye objetos 3D
+    fresh[k] = runRevive(v);
+  }
+  const line = EVO_LINE[s.key] || [];
+  g.ch.evolved = Math.max(0, Math.min(line.length, s.evolved | 0));
+  if (g.ch.evolved){
+    g.playerMesh.material.map = animTex(spriteOf(s.key, g.ch.evolved), true);
+    g.playerMesh.material.needsUpdate = true;
+  }
+  resolveSolids(g.p, 0.5);
+  g.sk = newSkillState(); g.sk.lastMine = {x: g.p.x, z: g.p.z};
+  g.lastPos = {x: g.p.x, z: g.p.z};
+  // Pantalla, portal e Infierno
+  applyZoneVisuals(g.zone);
+  if (g.portal && g.zone !== 1){ world.remove(g.portal.grp); g.portal = null; }
+  if (g.portal && g.portalOpen) portalOpenFx();
+  if (g.inferno) infernoFx();
+  // Santuarios: los mismos, en el mismo sitio, y los usados siguen apagados
+  if (s.shrines && s.shrines.length) initShrines(s.shrines);
+  if (s.npcs) initNpcs(s.npcs);   // tienda y ruleta: mismo sitio, compras y tiradas (la tirada gratis no vuelve)
+  // Digimon de apoyo
+  for (const x of s.sups || []){
+    if (!CHARS[x.key] || g.sups.length >= SUP_MAX) continue;
+    const mesh = billboard(spriteOf(x.key, x.st | 0), 1.7, false);
+    world.add(mesh);
+    const shadow = makeShadow(1.1); world.add(shadow);
+    const sc = 1.7*(1 + 0.18*(x.st | 0)); mesh.scale.set(sc, sc, 1);
+    const a = Math.random()*Math.PI*2;
+    g.sups.push({key: x.key, st: x.st | 0, joinLvl: x.joinLvl | 0, mesh, shadow, x: g.p.x + Math.cos(a)*2, z: g.p.z + Math.sin(a)*2, cd: 1});
+  }
+  // Jefes: vuelven con la vida que les quedaba (nunca con más)
+  g.boss = null;
+  if (s.boss){ g.bossSpawned = false; g.bossResume = Math.max(0.02, Math.min(1, s.boss.hp / s.boss.max)); }
+  for (const m of s.minis || []){
+    const def = MINIS.find(x => x.name === m.name);
+    if (!def) continue;
+    spawnMini(def);
+    const e = g.enemies[g.enemies.length - 1];
+    if (e && e.kind === 'mini'){ e.hp = e.max * Math.max(0.02, Math.min(1, +m.k || 1)); }
+  }
+  // La horda vuelve como oleadas nuevas: los mismos tipos y la misma cantidad, a distancia
+  for (const [kind, n] of Object.entries(s.foes || {})){
+    if (!ENEMY[kind]) continue;
+    for (let i = 0; i < Math.min(n | 0, MAX_ENEMIES); i++) if (!spawnEnemy(kind)) break;
+  }
+  // Subida de nivel o cofre a medias: las mismas cartas que había (recargar no vuelve a tirar)
+  if (s.choices && s.choices.length){
+    const pool = [...UPGRADES, ...skillCards(), digiCard(), ...evoSkillCards(), ...fusionCards()];
+    const out = [];
+    for (const c of s.choices){
+      const card = pool.find(x => runCardKey(x) === c.k);
+      if (card) out.push(c.rare && !card.skill ? {...card, rare: true} : card);
+    }
+    g.chestPick = s.chestPick ? {gold: !!s.chestPick.gold} : null;
+    g.choices = out.length ? out : upgradeChoices();
+    if (s.lvlup) g.reopenUp = true; else g.pendingUp = true;
+  }
+  g.resumed = true;
+}
+function startGame(key, resume){
+  // Hay una partida guardada: empezar otra la descarta (solo hay un hueco)
+  if (!resume && runSlot()){
+    if (!confirm(I18N.tr('Tienes una partida guardada. Si empiezas otra, se perderá. ¿Empezar una partida nueva?'))) return;
+    runDrop();
+  }
   lockLandscape();
   // El botón Jugar muestra el último Digimon con el que se jugó
   if (CHARS[key]) { selectedKey = key; try { localStorage.setItem('digibonk3d-last-choice', key); } catch(e){} }
@@ -5985,7 +6215,7 @@ function startGame(key){
   const c = CHARS[key];
   const sp = randomSpawn();   // aparición aleatoria en el mapa
   // Versión variocolor: 1 entre 8192 al empezar una partida; queda guardada como skin del Digimon
-  if (skinHasArt(key, 0, 'variocolor') && Math.random() < 1 / 8192){ grantSkinAt(key, 0, 'variocolor'); equipSkinAt(key, 0, 'variocolor'); }
+  if (!resume && skinHasArt(key, 0, 'variocolor') && Math.random() < 1 / 8192){ grantSkinAt(key, 0, 'variocolor'); equipSkinAt(key, 0, 'variocolor'); }
   g = {
     mode: runMode,
     ch: {...c, id:key},
@@ -6019,12 +6249,22 @@ function startGame(key){
   initSupport();
   evHud(null);
   world.add(g.hiRing);
+  // Identificador de la partida viva (punto de guardado) y si cuenta para el ranking global
+  g.runId = runNewId(); runSetLive(g.runId);
+  if (runLiveId() !== g.runId) g.runId = null;   // sin almacenamiento local: no se guarda ni se comprueba
+  g.ranked = !resume && runRanked();
+  if (resume) runApply(resume);
   hideOverlay();
   hidePause();
   setHud(true);
   lockMouse();   // ratón integrado: la cámara sigue al ratón
   state = 'play';
   tipStart();   // consejos de la primera partida
+  if (resume){
+    announce('Partida continuada', 'El mapa se ha reconstruido con oleadas nuevas', '#7cf29c');
+    if (g.reopenUp){ g.reopenUp = false; openUpgrades(); }
+    else if (!g.pendingUp) pauseGame();   // empieza en pausa para que dé tiempo a situarse
+  }
 }
 
 // ---------- Lógica ----------
@@ -6733,11 +6973,13 @@ function pickShrineTypes(n){
   return out;
 }
 function removeShrine(sh){ if (sh.v) world.remove(sh.v.grp); if (sh.ring) world.remove(sh.ring); if (sh.arc) world.remove(sh.arc); }
-function initShrines(){
+// saved: santuarios de una partida guardada (tipo, sitio y si ya se usó)
+function initShrines(saved){
   for (const sh of g.shrines || []) removeShrine(sh);
   g.shrines = [];
-  for (const type of pickShrineTypes(SHRINES_PER_SCREEN)){
-    const {x, z} = shrineSpot(g.shrines);
+  const list = saved ? saved.map(o => ({type: SHRINE_TYPES.find(t => t.id === o.id), o})).filter(o => o.type) : pickShrineTypes(SHRINES_PER_SCREEN).map(type => ({type}));
+  for (const {type, o} of list){
+    const {x, z} = o ? {x: +o.x || 0, z: +o.z || 0} : shrineSpot(g.shrines);
     const v = makeShrine(type, x, z);
     world.add(v.grp);
     // Círculo en el suelo con el radio real de carga y, encima, el arco que se llena al cargar
@@ -6747,7 +6989,14 @@ function initShrines(){
     const arc = new THREE.Mesh(new THREE.RingGeometry(SHRINE_RANGE - 0.05, SHRINE_RANGE + 0.25, 48, 1, Math.PI/2, 0.001), new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.95, side: THREE.DoubleSide, depthWrite: false}));
     arc.rotation.x = -Math.PI/2; arc.position.set(x, terrainH(x, z) + 0.08, z); arc.visible = false;
     world.add(arc);
-    g.shrines.push({x, z, type, v, ring, arc, used: false, charge: 0, ph: Math.random()*6});
+    const sh = {x, z, type, v, ring, arc, used: false, charge: 0, ph: Math.random()*6};
+    g.shrines.push(sh);
+    if (o && o.used){
+      sh.used = true; sh.fade = 1;
+      world.remove(ring); world.remove(arc);
+      if (v.m) playModel(v.m); else v.wantOn = true;   // se queda encendido, como al usarlo
+      v.beam.visible = v.glow.visible = v.card.visible = false;
+    }
   }
 }
 // Santuario del desafío: 3 élites rodean el santuario; si caen en 45 s, cofre dorado y Bits
@@ -6886,15 +7135,18 @@ const NPCS = [
   {id: 'tienda', name: 'Tienda de Digitamamon', sprite: 'sprites/adventure/digitamamon.png', col: 0xffd54f, icon: '🛒'},
   {id: 'ruleta', name: 'Ruleta de Piximon', sprite: 'sprites/adventure/piximon.png', col: 0xff80ab, icon: '🎡'}
 ];
-function initNpcs(){
+// saved: PNJ de una partida guardada (mismo sitio, compras y tiradas hechas)
+function initNpcs(saved){
   for (const n of g.npcs || []){ world.remove(n.mesh); world.remove(n.ring); }
   g.npcs = [];
   const taken = [...(g.shrines || [])];
   for (const d of NPCS){
-    const {x, z} = shrineSpot(taken); taken.push({x, z});
+    const o = saved && saved.find(x => x.id === d.id);
+    if (saved && !o) continue;
+    const {x, z} = o ? {x: +o.x || 0, z: +o.z || 0} : shrineSpot(taken); taken.push({x, z});
     const mesh = billboard(d.sprite, 2.6, false); world.add(mesh);
     const ring = new THREE.Mesh(FX_PLANE, fxMatOwn('rune', d.col, 0.6)); ring.scale.set(5, 1, 5); ring.position.set(x, terrainH(x, z) + 0.06, z); world.add(ring);
-    g.npcs.push({...d, x, z, mesh, ring, armed: true, buys: 0, spins: 0});
+    g.npcs.push({...d, x, z, mesh, ring, armed: !o, buys: o ? o.buys | 0 : 0, spins: o ? o.spins | 0 : 0});
   }
 }
 function updateNpcs(dt){
@@ -7376,6 +7628,7 @@ function update(dt){
     world.add(shadow);
     g.boss = {kind: 'boss', boss: true, mesh, shadow, x: p.x + 14, z: p.z, hp: 2400*evoHp(), max: 2400*evoHp(),
               spd: 2.2, r: 2.4, xp: 40, dmg: 15, cd: 0};
+    if (g.bossResume){ g.boss.hp = Math.max(1, g.boss.max * g.bossResume); g.bossResume = 0; }   // partida continuada: la vida que le quedaba
     g.enemies.push(g.boss);
     g.bossShotT = 2;
     sfx('boss');
@@ -7564,8 +7817,8 @@ function skFx(id, col, fx){ const sg = g && SIG[g.ch.id] && SIG[g.ch.id][id]; re
 function learnable(key){ const mine = CHAR_SKILLS[key] || []; return {mine, type: (TYPE_SKILLS[ATTR_OF[key]] || []).filter(id => !mine.includes(id))}; }
 function addSkill(id){ g.skills[id] = Math.min(SKILL_MAX, (g.skills[id] || 0) + 1); }
 // Opciones del nivel: mejoras base + ataques de este Digimon (máximo SKILL_SLOTS distintos por partida)
-function upgradeChoices(){
-  const pool = [...UPGRADES];
+function skillCards(){
+  const out = [];
   const {mine, type} = learnable(g.ch.id);
   const owned = Object.keys(g.skills).filter(id => g.skills[id] > 0);
   for (const id of [...mine, ...type]){
@@ -7573,8 +7826,12 @@ function upgradeChoices(){
     if (lv >= SKILL_MAX) continue;
     if (!lv && owned.length >= SKILL_SLOTS) continue;   // ya llevas el máximo de ataques distintos
     const s = SKILLS[id], nm = skillName(id), isType = !mine.includes(id);
-    pool.push({t: `${nm} · ${lv ? 'Nivel ' + (lv + 1) : 'Nueva'}`, name: nm, skill: id, lv, k: s.k, d: s.d, typeSk: isType, f: () => addSkill(id)});
+    out.push({t: `${nm} · ${lv ? 'Nivel ' + (lv + 1) : 'Nueva'}`, name: nm, skill: id, lv, k: s.k, d: s.d, typeSk: isType, f: () => addSkill(id)});
   }
+  return out;
+}
+function upgradeChoices(){
+  const pool = [...UPGRADES, ...skillCards()];
   // Las cartas desterradas en esta partida no vuelven a salir
   const picks = pool.filter(c => !upRes().banned.includes(upKey(c))).sort(() => Math.random() - 0.5).slice(0, 3)
     .map(c => !c.skill && Math.random() < 0.18 ? {...c, rare: true} : c);   // carta rara: la mejora pasiva cuenta doble
@@ -7594,7 +7851,7 @@ function rerollUp(){
 }
 function skipUp(){
   const r = upRes(); if (r.skip <= 0 || state !== 'levelup' || g.npcPick || !g.choices.length) return;
-  r.skip--; SAVE.bits = SAVE.bits + 15; g.chestPick = null;
+  r.skip--; SAVE.bits = SAVE.bits + 15; g.chestPick = null; runDrop();
   announce('+15 Bits', 'Carta saltada', '#ffd54f');
   hideOverlay(); lockMouse(); state = 'play';
 }
@@ -8108,6 +8365,8 @@ function pickUpgrade(i){
 }
 
 function endGame(win){
+  if (g.runId && !runIsLive()){ runTakenOver(); return; }   // la partida siguió en otra pestaña: aquí no da premios
+  runEnd();   // fin de la partida: se libera el hueco de guardado
   state = 'end';
   setHud(false); evHud(null); shrineHud(null);
   sfx(win ? 'victory' : 'defeat');
@@ -8350,17 +8609,21 @@ function buildPortal(){
 function openPortal(title, sub){
   g.portalOpen = true;
   g.tix += 2;
-  if (g.portal){
+  if (g.portal) spawnRing(PORTAL.x, PORTAL.z, 0x3de0ff, 8, 0.9);
+  portalOpenFx();
+  sfx('victory');
+  announce(title, sub || (GACHA_SOON ? 'El portal está abierto: ve al norte (flecha cian)' : 'El portal está abierto: ve al norte (flecha cian) · +2 tickets'), '#3de0ff');
+}
+// Aspecto del portal abierto (también al continuar una partida guardada)
+function portalOpenFx(){
+  if (g.portal && !g.portal.glow){
     g.portal.swirl.material.color.set(0x7ff3ff); g.portal.swirl.material.opacity = 0.95;
     g.portal.ring.material.color.set(0x3de0ff); g.portal.ring.material.opacity = 0.85;
     g.portal.stone.material.color.set(0xffffff);
     const glow = new THREE.Sprite(new THREE.SpriteMaterial({map: decoTex('ui/gacha/light_02.png'), color: 0x3de0ff, transparent: true, opacity: 0.8, depthWrite: false, blending: THREE.AdditiveBlending}));
     glow.scale.set(9, 9, 1); glow.position.set(0, 3.5, 1.4); g.portal.grp.add(glow); g.portal.glow = glow;
     g.portal.lock.visible = false;
-    spawnRing(PORTAL.x, PORTAL.z, 0x3de0ff, 8, 0.9);
   }
-  sfx('victory');
-  announce(title, sub || (GACHA_SOON ? 'El portal está abierto: ve al norte (flecha cian)' : 'El portal está abierto: ve al norte (flecha cian) · +2 tickets'), '#3de0ff');
 }
 function updatePortal(dt){
   const P = g.portal;
@@ -8452,7 +8715,8 @@ function summonBoss(){
   if (g.bossDown) return;
   if (!nearPortal()){ announce('Ve al portal', 'Invoca a ' + def.name + ' junto al portal del norte', '#3de0ff'); return; }
   const max = Math.round(def.hp * lvlDiff().boss * bossHpMul());
-  const hp = def.resume && g.bossLeftHp ? g.bossLeftHp : max;
+  let hp = def.resume && g.bossLeftHp ? g.bossLeftHp : max;
+  if (g.bossResume){ hp = Math.min(hp, Math.max(1, Math.round(max * g.bossResume))); g.bossResume = 0; }   // partida continuada: la vida que le quedaba
   // Aparece delante del portal, entre el portal y el jugador
   const away = Math.atan2(g.p.z - PORTAL.z, g.p.x - PORTAL.x);
   const [x, z] = clampArena(PORTAL.x + Math.cos(away)*7, PORTAL.z + Math.sin(away)*7, ARENA_R - 4);
@@ -8486,15 +8750,18 @@ function updateScreenClock(dt){
   if (g.screenT >= SCREEN_LIMIT){
     if (!g.inferno){
       g.inferno = true; g.revives = 0;
-      scene.fog.color.set(0x5a0a0a);
-      const old = scene.background; scene.background = skyTexture(['#1a0000', '#7a0d0d', '#ff3d00']); if (old && old.dispose) old.dispose();
-      floorMat.color.set(0xff8a80);
+      infernoFx();
       shake = Math.max(shake, 1); sfx('boss');
       announce('¡INFIERNO!', '20 minutos en esta pantalla: la dificultad no deja de subir', '#ff1744');
     }
     // Corrupción: daño directo que crece cada segundo (no lo reduce la armadura)
     g.p.hp -= (4 + (g.screenT - SCREEN_LIMIT) * 0.8) * dt;
   }
+}
+function infernoFx(){
+  scene.fog.color.set(0x5a0a0a);
+  const old = scene.background; scene.background = skyTexture(['#1a0000', '#7a0d0d', '#ff3d00']); if (old && old.dispose) old.dispose();
+  floorMat.color.set(0xff8a80);
 }
 // Supervivencia: una oleada por minuto; cada 5 oleadas, un jefe menor y un ticket
 function updateWaves(){
@@ -11052,6 +11319,7 @@ function frame(now){
   last = now;
   if (modelMixers.size) tickModels(dt);
   if (state === 'play' && g){
+    if (g.slotSaved) runDrop();   // se vuelve a jugar: el guardado ya no es el estado actual
     // Esquiva perfecta: 1 s de cámara lenta (el reloj real sigue)
     let sdt = dt;
     if (g.slowT > 0){ g.slowT -= dt; sdt = dt*0.35; }
@@ -11099,7 +11367,7 @@ if (new URLSearchParams(location.search).has('demo')){
     get g(){ return g; }, get state(){ return state; }, get scene(){ return scene; },
     rollReward, grantReward, setBanner: b => { gxBanner = b; }, playPullAnimation,
     hold(on){ demoSteps = on ? 0 : null; }, step(n = 1){ demoSteps = n; }, get pending(){ return demoSteps; },
-    startGame, spawnEnemy, spawnMagnetDrop, setZone, showGacha, addSkill, upgradeChoices,
+    startGame, spawnEnemy, spawnMagnetDrop, runSave, runSlot, runContinue, setZone, showGacha, addSkill, upgradeChoices,
     // Datos de skins y personajes
     SKINS, EVO_LINE, CHARS, SEASONS, glitchPixels,
     headUrl, spriteWith,
