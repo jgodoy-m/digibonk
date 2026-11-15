@@ -93,6 +93,7 @@ canvas{display:block}
 #tutoTip{position:fixed;left:50%;bottom:24%;transform:translate(-50%,8px);max-width:min(560px,86vw);padding:10px 18px;border-radius:16px;background:rgba(8,18,44,.86);border:1px solid rgba(154,239,255,.55);box-shadow:0 6px 20px rgba(0,0,0,.35);color:#fff;font:800 15px/1.35 'Nunito',system-ui,sans-serif;text-align:center;pointer-events:none;opacity:0;transition:opacity .35s,transform .35s;z-index:30}
 #tutoTip.show{opacity:1;transform:translate(-50%,0)}
 #tutoTip small{display:block;margin-bottom:2px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#9aefff}
+body.dbk-noplay #tutoTip{opacity:0!important}   /* el consejo no tapa las cartas de nivel, la pausa ni la tienda */
 @media (max-height:500px){#tutoTip{bottom:auto;top:24%;font-size:13px;padding:7px 14px}}
 /* Aviso si el navegador pierde los gráficos (pasa en móviles al cambiar de app o con poca memoria) */
 #glLost{position:fixed;inset:0;z-index:10000;display:none;place-items:center;background:rgba(4,10,28,.92);color:#fff;font-family:'Nunito',system-ui,sans-serif;text-align:center;padding:20px}
@@ -3523,6 +3524,49 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.min.js" } }
 </script>
+<style>
+/* Móvil en vertical, pantalla del inicial: los 8 caben en una cuadrícula de 4 y la ficha del elegido se ve encima
+   del botón fijo «Empezar con…» (antes el botón tapaba la última fila y la ficha quedaba debajo) */
+@media (orientation:portrait) and (max-width:760px){
+  #overlay .pk2-starter .pk2-top h2{font-size:clamp(17px,5.2vw,24px)!important;white-space:normal!important;max-width:100%}
+  #overlay .pk2-starter .pk2-body{gap:10px!important}
+  #overlay .pk2-starter .pk2-right{order:1}
+  #overlay .pk2-starter .pk2-left{order:2;display:block!important}
+  #overlay .pk2-starter .pk2-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}
+  #overlay .pk2-starter .pk2-tile{padding:6px 2px!important;gap:2px!important;min-height:0!important;height:auto!important}
+  #overlay .pk2-starter .pk2-face{width:46px!important;height:46px!important}
+  #overlay .pk2-starter .pk2-tile b{font-size:12px!important}
+  #overlay .pk2-starter .pk2-tile small{display:none!important}
+  #overlay .pk2-starter .pk2-hero{display:flex!important;flex-direction:row!important;align-items:center!important;gap:12px!important;min-height:0!important;height:auto!important;padding:10px!important}
+  #overlay .pk2-starter .pk2-stage{flex:none!important;width:84px!important;height:84px!important;min-height:0!important}
+  #overlay .pk2-starter .pk2-hero-img{width:84px!important;height:84px!important}
+  #overlay .pk2-starter .pk2-id{text-align:left!important}
+  #overlay .pk2-starter .pk2-id h2{font-size:20px!important;margin:0!important}
+  #overlay .pk2-starter .pk2-id p{font-size:13px!important;margin:2px 0 0!important}
+}
+/* Móvil en horizontal (poca altura): el inicio cabe sin desplazarse. Sin logo; a la izquierda Jugar y los modos,
+   a la derecha encargos, evento y accesos en una cuadrícula de 3×2 */
+@media (orientation:landscape) and (max-height:500px){
+  #overlay .realhub.hb .hb-brand{display:none!important}
+  #overlay .realhub.hb .hb-main{display:block!important;padding:6px 12px 6px!important}
+  #overlay .realhub.hb .hb-left{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;grid-auto-rows:auto;align-content:start;gap:7px 12px!important;width:100%!important;max-width:none!important;margin:0!important}
+  #overlay .realhub.hb .hb-left>*{margin:0!important;min-width:0}
+  #overlay .realhub.hb .hb-modes{grid-column:1;grid-row:1 / span 3;align-self:start}
+  #overlay .realhub.hb .hb-play{min-height:0!important;height:clamp(120px,40vh,170px)!important}
+  #overlay .realhub.hb #mEnc{grid-column:2;grid-row:1;padding:6px 10px!important;min-height:0!important}
+  #overlay .realhub.hb #mEnc .nm-eqs{font-size:11px!important;gap:2px!important}
+  #overlay .realhub.hb #rhEvent{grid-column:2;grid-row:2;min-height:0!important;height:34px!important}
+  #overlay .realhub.hb .hb-tiles{grid-column:2;grid-row:3;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile{min-height:0!important;height:50px!important;padding:3px 4px!important;flex-direction:row!important;gap:6px!important;justify-content:flex-start!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile i{margin:0!important;flex:none}
+  #overlay .realhub.hb .nm-tiles .hb-tile i img{width:24px!important;height:24px!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile b{font-size:12px!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  #overlay .realhub.hb .nm-tiles .hb-tile small{display:none!important}
+  #overlay .realhub.hb .hb-bar{grid-column:1;grid-row:3;align-self:end;margin:0!important;height:auto!important}
+  #overlay .realhub.hb .hb-bar .hb-btn{width:34px!important;height:34px!important}
+  #overlay .realhub.hb .hb-out{color:var(--m-text)!important;font-size:12px!important;opacity:.75}
+}
+</style>
 </head>
 <body>
 <div id="vignette"></div>
@@ -4465,6 +4509,14 @@ function pauseGame(){
   unlockMouse();
   showPause();
 }
+// Móvil girado a vertical en plena partida: el aviso «Gira el móvil» tapa el juego, así que se pausa
+// (antes la horda seguía haciendo daño debajo del aviso)
+{
+  const portraitMq = matchMedia('(orientation:portrait) and (pointer:coarse)');
+  const onPortrait = () => { if (portraitMq.matches && state === 'play') pauseGame(); };
+  if (portraitMq.addEventListener) portraitMq.addEventListener('change', onPortrait); else if (portraitMq.addListener) portraitMq.addListener(onPortrait);
+  addEventListener('resize', onPortrait);
+}
 function resumeGame(){
   if (state !== 'paused') return;
   if (runTakenOver()) return;
@@ -4601,7 +4653,7 @@ const fmtTime = s => `${Math.floor(s/60)}:${String(s%60).padStart(2, '0')}`;
 let selectedKey = (() => { try { const k = localStorage.getItem('digibonk3d-last-choice'); return k && CHARS[k] ? k : 'agumon'; } catch(e){ return 'agumon'; } })();
 // Oculta/muestra el HUD de partida (el menú no debe mostrar barras ni temporizador)
 function setHud(v){
-  if (!v) tipHide();
+  if (!v){ tipHide(); hideBossCard(); }
   { const shEl = document.getElementById('shrineHud'); if (shEl && !v) shEl.style.display = 'none'; }
   if (!v) evHud(null);
   // Fuera de partida no se dibujan flechas de radar (así no quedan las de la última partida)
@@ -7735,10 +7787,17 @@ function update(dt){
 function drawEdgeMarkers(){
   const cv = document.getElementById('edgeCv');
   if (!cv) return;
+  // Fuera de la partida en curso (subida de nivel, pausa, tienda, ruleta, fin) no se dibuja nada: las flechas tapaban esos menús
+  const inPlay = state === 'play' && !!g;
+  if (drawEdgeMarkers.body !== inPlay){ drawEdgeMarkers.body = inPlay; document.body.classList.toggle('dbk-noplay', !inPlay); }   // oculta el consejo del tutorial
+  if (!inPlay){
+    if (drawEdgeMarkers.on){ cv.getContext('2d').clearRect(0, 0, cv.width, cv.height); drawEdgeMarkers.on = false; }
+    return;
+  }
+  drawEdgeMarkers.on = true;
   if (cv.width !== innerWidth || cv.height !== innerHeight){ cv.width = innerWidth; cv.height = innerHeight; }
   const c = cv.getContext('2d');
   c.clearRect(0, 0, cv.width, cv.height);
-  if (state !== 'play' || !g) return;
   const targets = g.chests.filter(ch => !ch.open && !ch.gone).map(ch => ({x: ch.x, z: ch.z, col: '#ffd54f'}));
   if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
   if (g.portal) targets.push({x: PORTAL.x, z: PORTAL.z, col: g.portalOpen ? '#3de0ff' : '#8fe9ff', label: I18N.tr('Portal'), big: true});
@@ -8530,6 +8589,12 @@ function bossCard(name, sub, sprite, col, opt = {}){
   el.classList.add('show');
   clearTimeout(bossCard.t);
   bossCard.t = setTimeout(() => el.classList.remove('show'), 1900);   // tiempo real: también se va en cámara lenta
+}
+// Quita el cartel del jefe al momento (fin de partida o salir al menú: no debe quedarse encima)
+function hideBossCard(){
+  const el = document.getElementById('bossCard');
+  clearTimeout(bossCard.t);
+  if (el) el.classList.remove('show');
 }
 // Entrada de jefe: cámara lenta, sacudida, onda roja y cartel
 function bossIntro(e, name, sub, col, small){
@@ -11389,10 +11454,11 @@ function frame(now){
     if (g.perfectCd > 0) g.perfectCd -= dt;
     if (!g.evoAnim) update(sdt);   // durante la digievolución el mundo se detiene y solo corre la animación
     if (g){
-      syncMeshes(); updateCamera(dt); updateHUD(); drawEdgeMarkers();
+      syncMeshes(); updateCamera(dt); updateHUD();
       if (g.aura){ g.aura.group.position.set(g.p.x, terrainH(g.p.x, g.p.z) + g.p.y, g.p.z); g.aura.update(g.t); }
     }
   }
+  drawEdgeMarkers();
   touchCtlSync();
   animateEvo(dt);
   updateFx(dt);
