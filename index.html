@@ -5610,6 +5610,8 @@ function sumStats(field){ return Object.values(loadJSON('digibonk3d-stats', {}))
 function unlockHow(k){ return UNLOCK[k] ? UNLOCK[k].how : 'Compañero inicial: elígelo al registrarte'; }
 // Jugadores anteriores a este sistema (sin lista guardada): todo desbloqueado
 function unlockedSet(){
+  // Registrado pero sin elegir aún el inicial (cerró o recargó en esa pantalla): solo Agumon, nunca todo
+  if (starterPending()) return new Set(['agumon']);
   if (!localStorage.getItem('digibonk3d-unlocked')) return new Set(SEASONS.adventure.chars);
   return new Set([...loadJSON('digibonk3d-unlocked', []), 'agumon']); // Agumon es el inicial: siempre disponible
 }
@@ -5630,8 +5632,12 @@ function checkUnlocks(rnd = true){
   }
   return won;
 }
-// Pantalla de inicial: solo al registrarse
+// Pantalla de inicial: solo al registrarse. Mientras no se elige, queda apuntado que falta (si recarga, vuelve aquí)
+const STARTER_PENDING = 'digibonk3d-starter-pending';
+// Solo cuenta si aún no hay lista de desbloqueados (si llega una de la nube o de un código de guardado, manda esa)
+function starterPending(){ return !!localStorage.getItem(STARTER_PENDING) && !localStorage.getItem('digibonk3d-unlocked'); }
 function showStarter(){
+  try { localStorage.setItem(STARTER_PENDING, '1'); } catch(e){}
   state = 'starter';
   setHud(false);
   let pick = 'agumon';
@@ -5658,7 +5664,9 @@ function showStarter(){
     overlay.querySelectorAll('[data-st]').forEach(b => b.onclick = () => { pick = b.dataset.st; draw(); });
     document.getElementById('stGo').onclick = () => {
       localStorage.setItem('digibonk3d-unlocked', JSON.stringify([pick]));
+      localStorage.removeItem(STARTER_PENDING);
       selectedKey = pick;
+      try { localStorage.setItem('digibonk3d-last-choice', pick); } catch(e){}   // «Jugar» y los mapas muestran al elegido
       showSelect();
     };
   };
@@ -7320,6 +7328,7 @@ function update(dt){
   let amt = 1;   // joystick táctil: velocidad proporcional a cuánto se empuja
   if (!mx && !mz && tMove.m > 0){ mx = tMove.x; mz = tMove.z; amt = tMove.m; }
   g.dashCd = Math.max(0, g.dashCd - dt);
+  if (g.hitI > 0) g.hitI -= dt;
   if (g.dash > 0){
     g.dash -= dt;
     p.x += g.dir.x * 22 * dt;
@@ -7655,9 +7664,11 @@ function update(dt){
       for (let i = 0; i < ns; i++){
         const an = i/ns*Math.PI*2 + g.t;
         const shot = projMesh(0xff1744, 'dark'); shot.scale.multiplyScalar(1.3);
-        shot.position.set(b.x, 1 + terrainH(b.x, b.z), b.z);
+        // Salen desde el borde del jefe, no desde su centro: estar encima ya no recibe el anillo entero a la vez
+        const sx = b.x + Math.cos(an)*b.r, sz = b.z + Math.sin(an)*b.r;
+        shot.position.set(sx, 1 + terrainH(sx, sz), sz);
         world.add(shot);
-        g.eshots.push({x: b.x, z: b.z, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4, mesh: shot, dmg: (bd.shotDmg || 8) * bossDmgMul()});
+        g.eshots.push({x: sx, z: sz, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4, mesh: shot, dmg: (bd.shotDmg || 8) * bossDmgMul()});
       }
     }
     // Mapa 3: el jefe único huye por el portal a mitad de vida en la primera pantalla
@@ -7683,7 +7694,8 @@ function update(dt){
     s.mesh.position.set(s.x, 1 + terrainH(s.x, s.z), s.z);
     s.mesh.rotation.y += dt*5;
     if (s.life > 0 && dist2(s.x, s.z, p.x, p.z) < 0.9 && g.dash <= 0){
-      p.hp -= s.dmg * (p.armor || 1); s.life = 0; shake = Math.max(shake, 0.3);
+      s.life = 0;
+      if (hitPlayer(s.dmg)) shake = Math.max(shake, 0.3);
     }
   }
   g.eshots = g.eshots.filter(s => {
@@ -8747,7 +8759,10 @@ function summonBoss(){
   if (g.bossDown) return;
   if (!nearPortal()){ announce('Ve al portal', 'Invoca a ' + def.name + ' junto al portal del norte', '#3de0ff'); return; }
   const max = Math.round(def.hp * lvlDiff().boss * bossHpMul());
-  let hp = def.resume && g.bossLeftHp ? g.bossLeftHp : max;
+  // Jefe que huyó (Machinedramon): vuelve con la misma fracción de vida que tenía, aplicada a su nueva vida máxima.
+  // Antes se guardaba la vida en número y, como la vida máxima sube con el tiempo, volvía con un 13 % y en fase 3.
+  const left = def.resume ? leftFrac() : 0;
+  let hp = left ? Math.max(1, Math.round(max * left)) : max;
   if (g.bossResume){ hp = Math.min(hp, Math.max(1, Math.round(max * g.bossResume))); g.bossResume = 0; }   // partida continuada: la vida que le quedaba
   // Aparece delante del portal, entre el portal y el jugador
   const away = Math.atan2(g.p.z - PORTAL.z, g.p.x - PORTAL.x);
@@ -8760,12 +8775,19 @@ function summonBoss(){
   g.enemies.push(g.boss);
   g.bossSpawned = true; g.bossName = def.name; g.bossShotT = 2.2;
   sfx('boss');
-  bossIntro(g.boss, def.name, def.resume && g.bossLeftHp ? 'Vuelve con ' + Math.round(hp / max * 100) + '% de vida' : def.sub, def.col);
+  if (left){ const b = g.boss; b.phase = b.hp <= b.max*0.25 ? 3 : b.hp <= b.max*0.5 ? 2 : 1; b.slamT = 3; }   // sin cartel de fase al aparecer
+  bossIntro(g.boss, def.name, left ? 'Vuelve con ' + Math.round(hp / max * 100) + '% de vida' : def.sub, def.col);
+}
+// Vida que le quedaba al jefe que huyó, como fracción de su máximo (las partidas guardadas antes de este cambio
+// tenían el número absoluto: se toma la mitad, que es cuando huye)
+function leftFrac(){
+  if (g.bossLeftK) return Math.max(0.02, Math.min(1, g.bossLeftK));
+  return g.bossLeftHp ? 0.5 : 0;
 }
 // Mapa 3: el jefe único huye por el portal y espera al otro lado con la vida que le queda
 function bossRetreat(){
   const b = g.boss;
-  g.bossLeftHp = b.hp;
+  g.bossLeftK = b.hp / b.max;
   spawnRing(b.x, b.z, 0xb0bec5, 8, 0.8);
   world.remove(b.mesh); world.remove(b.shadow);
   g.enemies = g.enemies.filter(e => e !== b);
@@ -8847,7 +8869,7 @@ function updateHUD(){
   const canSummon = portalMap && canSummonBoss() && nearPortal();
   const sumEl = document.getElementById('hudSummon');
   sumEl.style.display = canSummon ? 'flex' : 'none';
-  if (canSummon) document.getElementById('hudSummonName').textContent = zoneDef().boss.name + (g.bossLeftHp && zoneDef().boss.resume ? ' · ' + Math.round(g.bossLeftHp / (zoneDef().boss.hp * lvlDiff().boss) * 100) + '%' : '');
+  if (canSummon) document.getElementById('hudSummonName').textContent = zoneDef().boss.name + (zoneDef().boss.resume && leftFrac() ? ' · ' + Math.round(leftFrac() * 100) + '%' : '');
   document.getElementById('xpTxt').textContent = `Nivel ${p.lvl} · EXP ${Math.floor(p.xp)} / ${p.nextXp}`;
   document.getElementById('hpTxt').textContent = `${Math.ceil(Math.max(0, p.hp))} / ${p.maxHp}`;
   document.getElementById('hudName').textContent = stageName(g.ch.id, g.ch.evolved);
@@ -9314,6 +9336,15 @@ function addHazard(x, z, r, t, kind, dmg, color){
   if (kind !== 'slow'){ rock = fxMesh('dark', 1.8, 0xffffff); world.add(rock); }
   (g.hazards || (g.hazards = [])).push({x, z, r, t, t0: t, kind, dmg, mesh, rock});
 }
+// Impacto puntual (balas y bombas): tras cada uno hay 0,4 s de invulnerabilidad a otros impactos puntuales,
+// para que varias balas o bombas que llegan en el mismo instante no sumen su daño de golpe
+const HIT_IFRAMES = 0.4;
+function hitPlayer(dmg){
+  if (g.hitI > 0) return false;
+  g.p.hp -= dmg * (g.p.armor || 1);
+  g.hitI = HIT_IFRAMES;
+  return true;
+}
 function enemyShot(x, z, an, spd, dmg, color){
   const shot = projMesh(color, 'dark');
   shot.position.set(x, 1 + terrainH(x, z), z);
@@ -9354,7 +9385,7 @@ function updateBossMechanics(dt){
       if (h.rock){ h.rock.position.set(h.x, terrainH(h.x, h.z) + 0.6 + 12*k, h.z); h.rock.rotation.y += dt*8; }
       if (h.t <= 0){
         burst(h.x, h.z, '#ff1744');
-        if (inside && g.dash <= 0){ g.p.hp -= h.dmg * (g.p.armor || 1); shake = Math.max(shake, 0.35); if (h.meteor && g.ev && g.ev.kind === 'meteor') g.ev.hits++; }
+        if (inside && g.dash <= 0 && hitPlayer(h.dmg)){ shake = Math.max(shake, 0.35); if (h.meteor && g.ev && g.ev.kind === 'meteor') g.ev.hits++; }
         // Los meteoros del evento también aplastan a la horda (no a jefes ni al Digimon salvaje)
         if (h.meteor) for (const e of g.enemies) if (!e.boss && e.kind !== 'mini' && !e.wild && !e.golden && dist2(h.x, h.z, e.x, e.z) < h.r + e.r*0.5) e.hp -= e.max*0.7;
       }
@@ -11391,7 +11422,7 @@ function frame(now){
   requestAnimationFrame(frame);
 }
 buildSkins();
-if (trainerName) showSelect(); else showRegister();
+if (trainerName && starterPending()) showStarter(); else if (trainerName) showSelect(); else showRegister();
 cloudBoot();
 // Modo demo (solo para grabar los vídeos del tutorial con ?demo=1): expone el estado y atajos de escena
 if (new URLSearchParams(location.search).has('demo')){
