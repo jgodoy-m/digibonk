@@ -1,5 +1,6 @@
 // Français: textos del juego (clave en español -> traducción). Lo que no está aquí se queda en español.
 I18N.add('fr', {
+  "Portal": "Portail",
   "Bosque Inicial": "Forêt Initiale",
   "Guardián del Bosque Inicial": "Gardien de la Forêt Initiale",
   "Pantano de Datos": "Marais de Données",
@@ -847,7 +848,7 @@ I18N.add('fr', {
   "Invocar al jefe (B)": "Invoquer le boss (B)",
   "Invocar jefe": "Invoquer le boss",
   "SALTO": "SAUT",
-  "Tú (tu Digimon) · 🎁 cofres · enemigos con su sprite · jefe": "Toi (ton Digimon) · 🎁 coffres · ennemis avec leur sprite · boss",
+  "Tú (tu Digimon) · 🎁 cofres · santuarios · ❗ eventos · portal (círculo cian) · jefe": "Toi (ton Digimon) · 🎁 coffres · sanctuaires · ❗ événements · portail (cercle cyan) · boss",
   "M o Esc para cerrar": "M ou Échap pour fermer",
   "tickets": "tickets",
   "disponibles": "disponibles",

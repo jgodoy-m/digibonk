@@ -853,7 +853,7 @@ I18N.add('pl', {
   "Invocar jefe": "Przywołaj bossa",
   "DASH": "ZRYW",
   "SALTO": "SKOK",
-  "Tú (tu Digimon) · 🎁 cofres · enemigos con su sprite · jefe": "Ty (twój Digimon) · 🎁 skrzynie · wrogowie ze swoim sprite'em · boss",
+  "Tú (tu Digimon) · 🎁 cofres · santuarios · ❗ eventos · portal (círculo cian) · jefe": "Ty (twój Digimon) · 🎁 skrzynie · kapliczki · ❗ wydarzenia · portal (błękitne koło) · boss",
   "M o Esc para cerrar": "M lub Esc, aby zamknąć",
   "tickets": "bilety",
   "disponibles": "dostępne",

@@ -846,7 +846,7 @@ I18N.add('en', {
   "Invocar al jefe (B)": "Summon the boss (B)",
   "Invocar jefe": "Summon boss",
   "SALTO": "JUMP",
-  "Tú (tu Digimon) · 🎁 cofres · enemigos con su sprite · jefe": "You (your Digimon) · 🎁 chests · enemies with their sprite · boss",
+  "Tú (tu Digimon) · 🎁 cofres · santuarios · ❗ eventos · portal (círculo cian) · jefe": "You (your Digimon) · 🎁 chests · shrines · ❗ events · portal (cyan circle) · boss",
   "M o Esc para cerrar": "M or Esc to close",
   "tickets": "tickets",
   "disponibles": "available",

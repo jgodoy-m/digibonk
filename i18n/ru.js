@@ -1,5 +1,6 @@
 // Русский: textos del juego (clave en español -> traducción). Lo que no está aquí se queda en español.
 I18N.add('ru', {
+  "Portal": "Портал",
   "Bosque Inicial": "Начальный лес",
   "Guardián del Bosque Inicial": "Страж Начального леса",
   "Pantano de Datos": "Болото данных",
@@ -859,7 +860,7 @@ I18N.add('ru', {
   "DASH": "РЫВОК",
   "SALTO": "ПРЫЖОК",
   "EVO": "ЭВО",
-  "Tú (tu Digimon) · 🎁 cofres · enemigos con su sprite · jefe": "Ты (твой Дигимон) · 🎁 сундуки · враги со своими спрайтами · босс",
+  "Tú (tu Digimon) · 🎁 cofres · santuarios · ❗ eventos · portal (círculo cian) · jefe": "Ты (твой Дигимон) · 🎁 сундуки · святилища · ❗ события · портал (голубой круг) · босс",
   "M o Esc para cerrar": "M или Esc — закрыть",
   "tickets": "билеты",
   "disponibles": "доступно",

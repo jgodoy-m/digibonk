@@ -1,5 +1,6 @@
 // 한국어: textos del juego (clave en español -> traducción). Lo que no está aquí se queda en español.
 I18N.add('ko', {
+  "Portal": "포털",
   "Bosque Inicial": "시작의 숲",
   "Guardián del Bosque Inicial": "시작의 숲의 수호자",
   "Pantano de Datos": "데이터 늪",
@@ -860,7 +861,7 @@ I18N.add('ko', {
   "Invocar jefe": "보스 소환",
   "DASH": "대시",
   "SALTO": "점프",
-  "Tú (tu Digimon) · 🎁 cofres · enemigos con su sprite · jefe": "나 (내 디지몬) · 🎁 상자 · 스프라이트로 표시된 적 · 보스",
+  "Tú (tu Digimon) · 🎁 cofres · santuarios · ❗ eventos · portal (círculo cian) · jefe": "나 (내 디지몬) · 🎁 상자 · 성소 · ❗ 이벤트 · 포털 (하늘색 원) · 보스",
   "M o Esc para cerrar": "M 또는 Esc로 닫기",
   "tickets": "티켓",
   "disponibles": "보유",
