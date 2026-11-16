@@ -2989,6 +2989,15 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
 #overlay .lv3-card.route .lv3-ic{color:#3de0ff}
 #overlay .lv3-card.relic{border-color:#ffd54f!important;box-shadow:0 0 0 3px rgba(255,213,79,.3),0 0 24px rgba(255,179,0,.45)!important}
 #overlay .lv3-card.relic .lv3-ic{color:#ffd54f}
+#overlay .lv3-card.item .it-img{width:84px;height:84px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px #80d8ff}
+.sb-obj .it-img{width:100%;height:100%;border-radius:inherit;object-fit:cover}
+.it-vit{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.it-v{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 10px;border-radius:16px;border:0;background:var(--m-card,#0e1a3a);box-shadow:inset 0 0 0 2px rgba(128,216,255,.35);text-align:center;color:inherit;font:inherit;cursor:pointer}
+.it-v .ico,.it-v .it-img{width:44px;height:44px;color:#80d8ff;border-radius:50%;object-fit:cover}
+.it-v.cursed .ico{color:#b388ff}
+.it-v.locked{cursor:default;opacity:.75}.it-v.locked .ico,.it-v.locked .it-img{filter:brightness(0) opacity(.45)}
+.it-v.ini{box-shadow:inset 0 0 0 3px #ffd54f}
+.it-v b{font-size:14px}.it-v small{font-size:11.5px;opacity:.8;line-height:1.3}.it-v em{font-style:normal;font-size:11px;font-weight:800;color:#ffd54f}
 #overlay .lv3-card.item{border-color:#80d8ff!important;box-shadow:0 0 0 3px rgba(128,216,255,.25),0 0 18px rgba(128,216,255,.35)!important}
 #overlay .lv3-card.item .lv3-ic{color:#80d8ff}
 #overlay .lv3-card.item.cursed{border-color:#b388ff!important;box-shadow:0 0 0 3px rgba(179,136,255,.3),0 0 22px rgba(120,40,200,.5)!important}
@@ -4795,9 +4804,17 @@ function showCollection(){
   const pct = Math.round(have / total * 100);
   const tabs = `<div class="cl4-tabs">
     <button class="cl4-tab${colTab === 'digimon' ? ' on' : ''}" data-t="digimon">Digimon y skins</button>
-    <button class="cl4-tab${colTab === 'otros' ? ' on' : ''}" data-t="otros">Marcos y títulos</button></div>`;
+    <button class="cl4-tab${colTab === 'otros' ? ' on' : ''}" data-t="otros">Marcos y títulos</button>
+    <button class="cl4-tab${colTab === 'objetos' ? ' on' : ''}" data-t="objetos">Objetos</button></div>`;
   let body;
-  if (colTab === 'otros'){
+  if (colTab === 'objetos'){
+    // Vitrina: los desbloqueados se ven con su efecto; los demás, en silueta con la pista para conseguirlos.
+    // Tocar uno desbloqueado lo marca como objeto inicial (la partida empieza con él a nivel 1)
+    const ini = startItem(), ids = Object.keys(ITEMS), got = ids.filter(itemUnlocked).length;
+    const cards = ids.map(id => { const it = ITEMS[id], ok = itemUnlocked(id);
+      return `<button type="button" class="it-v${ok ? '' : ' locked'}${it.cursed ? ' cursed' : ''}${id === ini ? ' ini' : ''}" data-obj="${id}" ${ok ? '' : 'disabled'}>${itemIcon(id)}<b>${ok ? it.name : '???'}</b><small>${ok ? it.d : itemHow(id)}</small>${id === ini ? '<em>Objeto inicial</em>' : ''}</button>`; }).join('');
+    body = `<div class="cl4-other"><h3>Vitrina de objetos · ${got}/${ids.length}</h3><p class="enc-note">Toca un objeto desbloqueado para empezar cada partida con él (vuelve a tocarlo para quitarlo).</p><div class="it-vit">${cards}</div></div>`;
+  } else if (colTab === 'otros'){
     const progTxt = it => { const p = it.prog ? it.prog() : null; return p && p[1] > 1 ? ` · ${Math.min(p[0], p[1]).toLocaleString('es-ES')}/${p[1].toLocaleString('es-ES')}` : ''; };
     const frames = FRAMES.map(f => { const ok = inv.frames.includes(f.id);
       return `<div class="cl4-card${ok ? ' ok' : ' locked'}"><div class="rw-frame${f.id ? ' fr-' + f.id : ''}"></div><b>${f.name}</b><small>${ok ? TIER_NAME[f.tier] : f.how + progTxt(f)}</small></div>`; }).join('');
@@ -4854,6 +4871,7 @@ function showCollection(){
     </div>`);
   document.getElementById('clBack').onclick = () => showSelect();
   overlay.querySelectorAll('.cl4-tab').forEach(b => b.onclick = () => { colTab = b.dataset.t; showCollection(); });
+  overlay.querySelectorAll('[data-obj]').forEach(b => b.onclick = () => { try { if (startItem() === b.dataset.obj) localStorage.removeItem(START_ITEM_KEY); else localStorage.setItem(START_ITEM_KEY, b.dataset.obj); } catch(e){} showCollection(); });
   overlay.querySelectorAll('.cl4-item:not(.lock)').forEach(b => b.onclick = () => { colKey = b.dataset.k; showCollection(); });
   overlay.querySelectorAll('.cl4-st:not(.off)').forEach(b => b.onclick = () => { colStage = +b.dataset.st; showCollection(); });
   overlay.querySelectorAll('.cl4-skin.owned').forEach(b => b.onclick = () => { equipSkinAt(colKey, 0, b.dataset.skin); showCollection(); });
@@ -5282,7 +5300,7 @@ function showHelp(){
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
   'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
-  'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales'];
+  'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales', 'digibonk3d-objetos', 'digibonk3d-obj-ini'];
 // También cuentan los contadores por banner (pity) y la mejor oleada de cada mapa
 const isSaveKey = k => SAVE_KEYS.includes(k) || /^digibonk3d-(pity|surv-wave)-[A-Za-z0-9_]{1,32}$/.test(k);
 function saveData(){
@@ -6443,6 +6461,7 @@ function startGame(key, resume){
   if (runLiveId() !== g.runId) g.runId = null;   // sin almacenamiento local: no se guarda ni se comprueba
   g.ranked = !resume && runRanked();
   if (resume) runApply(resume);
+  else { const si = startItem(); if (si) addItem(si); }   // objeto inicial elegido en la vitrina del Digidex
   hideOverlay();
   hidePause();
   setHud(true);
@@ -8195,9 +8214,60 @@ const ITEMS = {
   moneda: {name: 'Moneda de Digitamamon', ic: 'moneda', d: '+30% de monedas por nivel y la tienda un 10% más barata por nivel.',
     on: () => {}}
 };
+// Objetos propios de cada Digimon: se desbloquean con maestría 3 de ese Digimon y luego valen para cualquiera
+const MASTERY_ITEM_LV = 3;
+const OWN_ITEMS = {
+  agumon:    ['Colmillo de Agumon', '+12% daño por nivel.', () => { g.p.dmg *= 1.12; }],
+  gabumon:   ['Ocarina de Gabumon', '+10% cadencia por nivel.', () => { g.p.cdMul /= 1.1; }],
+  palmon:    ['Flor de Palmon', 'Regeneras 0,6 PS/s por nivel.', () => { g.regen = (g.regen || 0) + 0.6; }],
+  gatomon:   ['Anillo de Gatomon', '+6% de probabilidad crítica por nivel.', () => { g.p.critChance = Math.min(0.75, g.p.critChance + 0.06); }],
+  gomamon:   ['Concha de Gomamon', '+20 vida máx. por nivel.', () => { g.p.maxHp += 20; g.p.hp += 20; }],
+  patamon:   ['Ala de Patamon', '+8% velocidad por nivel.', () => { g.p.speed *= 1.08; }],
+  biyomon:   ['Pluma de Biyomon', '+12% área por nivel.', () => { g.p.area *= 1.12; }],
+  tentomon:  ['Antena de Tentomon', '+12% experiencia por nivel.', () => { g.labXp = (g.labXp || 1) * 1.12; }],
+  leomon:    ['Espada de Leomon', '+25% daño crítico por nivel.', () => { g.p.critMul += 0.25; }],
+  hagurumon: ['Engranaje de Hagurumon', 'El dash se recarga un 15% antes por nivel.', () => { g.p.dashMul = (g.p.dashMul || 1) * 0.85; }],
+  frigimon:  ['Copo de Frigimon', 'Recibes un 6% menos de daño por nivel.', () => { g.p.armor = (g.p.armor || 1) * 0.94; }],
+  wizardmon: ['Báculo de Wizardmon', '+6% daño y +6% área por nivel.', () => { g.p.dmg *= 1.06; g.p.area *= 1.06; }]
+};
+for (const [k, [name, d, on]] of Object.entries(OWN_ITEMS)) ITEMS['own_' + k] = {name, d, on, owner: k, img: 'ui/jugador/' + k + '.webp'};
+// Cómo se desbloquea cada objeto. Los de base salen desde el principio; el resto por hitos, maestría o el encargo semanal
+const ITEM_BASE = ['gafas', 'silbato', 'carne', 'moneda'];
+const ITEM_HITOS = {
+  digivice: {how: 'Llega al nivel 30 en una partida', ok: () => g.p.lvl >= 30},
+  disco:    {how: 'Abre 10 cofres en una partida', ok: () => (g.chestsOpened || 0) >= 10},
+  etiqueta: {how: 'Consigue 3 emblemas en una partida', ok: () => (g.emblems || []).length >= 3},
+  chip:     {how: 'Gana cualquier mapa en Difícil o Pesadilla', ok: win => win && g.mode !== 'surv' && (g.diff === 'dificil' || g.diff === 'pesadilla')}
+};
+const loadObjs = () => loadJSON('digibonk3d-objetos', []);
+function itemUnlocked(id){ return ITEM_BASE.includes(id) || loadObjs().includes(id); }
+function unlockItem(id){ const l = loadObjs(); if (l.includes(id) || ITEM_BASE.includes(id)) return false; l.push(id); localStorage.setItem('digibonk3d-objetos', JSON.stringify(l)); return true; }
+function itemHow(id){
+  const it = ITEMS[id];
+  if (ITEM_BASE.includes(id)) return 'Disponible desde el principio';
+  if (it.owner) return `Maestría ${MASTERY_ITEM_LV} con ${CHARS[it.owner].name}` + (isUnlocked(it.owner) ? ` · ahora ${masteryLv(it.owner)}` : '');
+  if (ITEM_HITOS[id]) return ITEM_HITOS[id].how;
+  return 'Encargo semanal';
+}
+// Objeto de la semana: premio del encargo semanal de cofres (rota entre los que aún no tienes; primero los de hitos)
+function weekItem(){
+  const left = Object.keys(ITEMS).filter(id => !itemUnlocked(id) && !ITEMS[id].owner);
+  const pool = left.length ? left : Object.keys(ITEMS).filter(id => !itemUnlocked(id));
+  return pool.length ? pool[((weekNum() % pool.length) + pool.length) % pool.length] : null;
+}
+// Al terminar la partida: hitos y maestría. Devuelve los nombres de los objetos nuevos
+function checkItemUnlocks(win){
+  const won = [];
+  for (const [id, h] of Object.entries(ITEM_HITOS)) if (!itemUnlocked(id) && h.ok(win) && unlockItem(id)) won.push(ITEMS[id].name);
+  for (const id of Object.keys(ITEMS)){ const o = ITEMS[id].owner; if (o && !itemUnlocked(id) && masteryLv(o) >= MASTERY_ITEM_LV && unlockItem(id)) won.push(ITEMS[id].name); }
+  return won;
+}
+// Objeto inicial: uno de los desbloqueados, elegido en la vitrina del Digidex; la partida empieza con él a nivel 1
+const START_ITEM_KEY = 'digibonk3d-obj-ini';
+function startItem(){ try { const id = localStorage.getItem(START_ITEM_KEY); return id && ITEMS[id] && itemUnlocked(id) ? id : null; } catch(e){ return null; } }
+const itemIcon = id => ITEMS[id].img ? `<img class="it-img" src="${ITEMS[id].img}" alt="">` : svgIcon(ITEMS[id].ic);
 const itemLv = id => (g && g.items && g.items[id]) || 0;
-function itemIds(){ return Object.keys(ITEMS).filter(id => itemAvail(id)); }
-function itemAvail(id){ return true; }   // la fase de desbloqueables decide cuáles salen
+function itemIds(){ return Object.keys(ITEMS).filter(id => itemUnlocked(id)); }
 function addItem(id){
   const it = g.items || (g.items = {}), lv = Math.min(ITEM_MAX, (it[id] || 0) + 1);
   if (lv === (it[id] || 0)) return;
@@ -8750,7 +8820,7 @@ function openUpgrades(){
           <span class="lv3-key">${i + 1}</span>
           ${c.skill && !c.lv ? '<span class="lv3-new">NUEVO</span>' : ''}
           <span class="lv3-tag">${c.leave ? 'Volver a la partida' : c.info ? 'Centarumon' : c.relic ? '♛ Reliquia' : c.route ? '➜ Ruta' : c.cons ? 'Consumible · ' + c.price + ' monedas' : c.shop && c.item ? 'Objeto · ' + c.price + ' monedas' : c.item ? (ITEMS[c.item].cursed ? '☠ Objeto maldito' : '◇ Objeto') : c.shop ? 'Tienda · ' + c.price + ' monedas' : c.digi ? '◆ Datos Digimon' : c.fusion ? '✦ Fusión' : c.fusLv ? (c.lv ? '✦ Fusión · mejora' : '✦ Fusión') : c.evo ? '★ Evolución' : c.skill ? (c.typeSk ? 'De tipo ' + ATTR_NAME[ATTR_OF[g.ch.id]] : c.lv ? 'Mejora' : 'Característico') : (c.rare ? '◆ Rara · ' : '') + (cat[c.k] || 'Mejora')}</span>
-          ${!c.skill && !c.evo && !c.fusion && !c.fusLv && !c.item && CARD_ART[c.t] ? `<img class="lv3-art" src="ui/hud/carta_${CARD_ART[c.t]}.webp" alt="">` : `<span class="lv3-ic">${c.fusion || c.fusLv ? (c.fusion || c.fusLv).split('+').map(svgIcon).join('') : svgIcon(c.ic || c.evo || c.skill || c.k)}</span>`}
+          ${!c.skill && !c.evo && !c.fusion && !c.fusLv && !c.item && CARD_ART[c.t] ? `<img class="lv3-art" src="ui/hud/carta_${CARD_ART[c.t]}.webp" alt="">` : `<span class="lv3-ic">${c.item ? itemIcon(c.item) : c.fusion || c.fusLv ? (c.fusion || c.fusLv).split('+').map(svgIcon).join('') : svgIcon(c.ic || c.evo || c.skill || c.k)}</span>`}
           <b>${c.name || c.t}</b>
           <p>${c.d || ''}</p>
           ${c.info || c.leave || c.cons ? '' : c.relic ? '<span class="lv3-pips pasiva">Toda la partida</span>' : c.route ? '<span class="lv3-pips pasiva">Pantalla 2</span>' : c.fusion ? '<span class="lv3-pips pasiva">FUSIÓN · ocupa 1 hueco</span>' : c.evo ? `<span class="lv3-pips pasiva">EVO · nivel ${SKILL_MAX + 1}</span>` : c.skill || c.fusLv || c.item ? `<span class="lv3-pips">${Array.from({length: c.item ? ITEM_MAX : SKILL_MAX}, (_, n) => n + 1).map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : (c.rare ? '<span class="lv3-pips pasiva rare">Rara · efecto doble</span>' : '<span class="lv3-pips pasiva">Pasiva</span>')}
@@ -8815,6 +8885,7 @@ function endGame(win){
   g.newTitles = checkAchievements(win);
   g.newDigis = checkUnlocks();
   g.mastery = grantMastery();
+  g.newItems = [...checkItemUnlocks(win), ...(g.newItems || [])];   // objetos nuevos por hitos, maestría o encargo semanal
   g.newTitles.push(...grantProgress());   // «Leyenda digital» y «Coleccionista» pueden cumplirse con lo de arriba
   // Resumen de la partida: cifras, daño por habilidad y recompensas
   const dmgRows = Object.entries(g.dmgBy).sort((a, b) => b[1] - a[1]).slice(0, 6);
@@ -8831,6 +8902,7 @@ function endGame(win){
   for (const m of g.mastery) rewards.push(`<li>Premio de maestría: <b>${m}</b></li>`);
   for (const q of (g.vales || [])) rewards.push(`<li>Evento: <b>${q}</b></li>`);
   for (const d of g.newDigis) rewards.push(`<li>Digimon desbloqueado: <b>${d}</b></li>`);
+  for (const it of g.newItems || []) rewards.push(`<li>Objeto desbloqueado: <b>${it}</b> · míralo en la vitrina del Digidex</li>`);
   for (const q of (g.questDone || [])) rewards.push(`<li>Encargo cumplido: <b>${q.t}</b> · +${q.bits} Bits${GACHA_SOON ? '' : ` y +${q.tix} tickets`}</li>`);
   for (const e of g.encDone) rewards.push(`<li>Encargo cumplido: <b>${e}</b> · +${ENC_REWARD.bits} Bits${GACHA_SOON ? '' : ` y +${ENC_REWARD.tix} ticket`}</li>`);
   if (g.survBest) rewards.push(`<li>¡Nuevo récord de Supervivencia con ${g.ch.name}!</li>`);
@@ -9333,7 +9405,7 @@ function updateHUD(){
     // Un icono por hueco: los ataques fusionados se ven dentro de su fusión (dos iconos pequeños y el nivel de la fusión)
     const fz = g.fusedSk || {};
     document.getElementById('skillBar').innerHTML = Object.keys(g.skills).filter(k => !fz[k]).map(k => `<span class="sb-i ${SKILLS[k].k}" title="${skillName(k)}">${svgIcon(k)}<em>${g.skills[k]}</em></span>`).join('') + (g.fus || []).map(f => `<span class="sb-i ofensiva sb-fus" title="Fusión: ${f.name} · nivel ${f.lv || 1}">${f.key.split('+').map(svgIcon).join('')}<em>${f.lv || 1}</em></span>`).join('')
-      + Object.entries(g.items || {}).map(([id, lv]) => `<span class="sb-i sb-obj${ITEMS[id].cursed ? ' cursed' : ''}" title="${ITEMS[id].name} · nivel ${lv}">${svgIcon(ITEMS[id].ic)}<em>${lv}</em></span>`).join('');
+      + Object.entries(g.items || {}).map(([id, lv]) => `<span class="sb-i sb-obj${ITEMS[id].cursed ? ' cursed' : ''}" title="${ITEMS[id].name} · nivel ${lv}">${itemIcon(id)}<em>${lv}</em></span>`).join('');
   }
   const bf = document.getElementById('bonkFill'), bbar = document.getElementById('bonkBar');
   if (bf){
@@ -10296,7 +10368,9 @@ function menuModal(title, content){
 const WEEK_QUESTS = [
   {id:'runs',  goal:15,     t:'Juega 15 partidas',                 bits:400, tix:3},
   {id:'kills', goal:100000, t:'Derrota a 100.000 enemigos',        bits:500, tix:4},
-  {id:'wins',  goal:3,      t:'Gana 3 partidas en cualquier mapa', bits:600, tix:5}
+  {id:'wins',  goal:3,      t:'Gana 3 partidas en cualquier mapa', bits:600, tix:5},
+  // Premio: el objeto de la semana (weekItem), uno de los que aún no tienes
+  {id:'cofres', goal:25,    t:'Abre 25 cofres',                    bits:300, tix:2, obj: true}
 ];
 // Los encargos de evento también dan las skins de temporada (un vale para el Digimon que elijas) y el marco y título navideños
 const EVENT_QUESTS = [
@@ -10331,11 +10405,13 @@ function checkLongQuests(win){
   const run = (st, list, key) => {
     if (g.t >= 5) st.runs += 1;
     st.kills += g.kills || 0;
+    st.cofres = (st.cofres || 0) + (g.chestsOpened || 0);
     if (win && g.mode !== 'surv') st.wins += 1;
     for (const q of list){
       if (st.done.includes(q.id) || questProg(st, q) < q.goal) continue;
       st.done.push(q.id); won.push(q);
       SAVE.bits = SAVE.bits + q.bits; addTickets('std', q.tix);
+      if (q.obj){ const id = weekItem(); if (id && unlockItem(id)) (g.newItems || (g.newItems = [])).push(ITEMS[id].name); }
     }
     localStorage.setItem(key, JSON.stringify(st));
   };
@@ -10365,7 +10441,7 @@ function showEncargos(){
   const panel = (cls, icon, title, sub, rows, done, all) => `<section class="eq-panel ${cls}"><header><img src="ui/hub/${icon}.webp" alt=""><span><b>${title}</b><small>${sub}</small></span><em>${done}/${all}</em></header><div class="eq-rows">${rows.join('')}</div></section>`;
   const dayDone = d.claimed || d.runs >= DAILY.runsGoal;
   const dayRows = [row(dayDone, `Juega ${DAILY.runsGoal} partidas`, d.runs, DAILY.runsGoal, rw(DAILY.reward, DAILY.rewardTix)), ...enc.list.map(e => row(e.done, encText(e), e.done ? 1 : 0, 1, rw(ENC_REWARD.bits, ENC_REWARD.tix)))];
-  const weekRows = [...(!GACHA_SOON ? [row(wk.claimed, `Haz ${WEEK_PULLS} tiradas en la Incubadora`, wk.pulls, WEEK_PULLS, rw(0, 1))] : []), ...WEEK_QUESTS.map(q => row(wq.done.includes(q.id), q.t, questProg(wq, q), q.goal, rw(q.bits, q.tix)))];
+  const weekRows = [...(!GACHA_SOON ? [row(wk.claimed, `Haz ${WEEK_PULLS} tiradas en la Incubadora`, wk.pulls, WEEK_PULLS, rw(0, 1))] : []), ...WEEK_QUESTS.map(q => row(wq.done.includes(q.id), q.t, questProg(wq, q), q.goal, rw(q.bits, q.tix) + (q.obj && !wq.done.includes(q.id) && weekItem() ? '<br><span class="eq-prize">+ Objeto: ' + ITEMS[weekItem()].name + '</span>' : '')))];
   const days = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
   const parts = [
     panel('eq-day', 'ic_mision', 'Diarios', 'Se renuevan cada día', dayRows, dayRows.filter(r => r.includes(' done"')).length, dayRows.length),
