@@ -10,6 +10,11 @@
 <link rel="icon" type="image/png" sizes="32x32" href="ui/icono_32.png">
 <link rel="apple-touch-icon" href="ui/icono_180.png">
 <link rel="manifest" href="manifest.webmanifest">
+<!-- Como app en la pantalla de inicio (iPhone/iPad ignoran casi todo el manifest y leen estas etiquetas) -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DigiBonk">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <!-- SITIO:inicio · lo escribe tools/configurar.py a partir de sitio.json (no lo edites a mano) -->
 <!-- Sin dominio en sitio.json: rutas relativas. Discord, X y WhatsApp solo muestran la imagen con URL absoluta. -->
 <meta property="og:type" content="website">
@@ -1864,6 +1869,12 @@ body:has(.tr11) #hudTop{display:none!important}
 #overlay.has-top:not(.menu-mode){--ui-top:76px;padding-top:var(--ui-top)}
 #overlay:not(.menu-mode)>:is(.picker-screen,.settings,.help-box,.lab-screen,.end3){flex:none;box-sizing:border-box;max-height:calc(100dvh - var(--ui-top) - var(--ui-bot))}
 #overlay:not(.menu-mode)>.picker-screen{width:min(1040px,96vw)}
+/* Móviles pequeños en horizontal (p. ej. 667×375): «Supervivencia» se cortaba en el inicio */
+@media (orientation:landscape) and (max-height:500px) and (max-width:760px){
+  #overlay .realhub.hb #mSurv b{font-size:12.5px!important}
+}
+/* Si no cabe (móvil en horizontal, ventanas bajas), Ajustes y Ayuda se desplazan dentro del panel en vez de salirse de él */
+#overlay:not(.menu-mode)>:is(.settings,.help-box){overflow-y:auto;overscroll-behavior:contain}
 #overlay:not(.menu-mode)>:is(.settings,.help-box){width:min(690px,94vw)}
 #overlay:not(.menu-mode)>.settings.sc-box{width:min(730px,94vw)}
 #overlay:not(.menu-mode)>.picker-screen.pk2{height:min(680px,calc(100dvh - var(--ui-top) - var(--ui-bot)))}
@@ -2161,14 +2172,16 @@ body.is-touch #touchCtl.on{display:block}
 #tDash{right:140px;bottom:34px}
 #tJump{right:40px;bottom:140px}
 #tPause{width:42px;height:42px;top:16px;left:calc(50% + 145px);font-size:14px}
-/* Aviso para girar el móvil: solo en pantallas táctiles en vertical y durante la partida */
+/* Aviso para girar el móvil: el juego entero (menús y partida) se usa en horizontal en pantallas táctiles.
+   iPhone no deja bloquear la orientación, así que en vertical se tapa todo con este aviso */
 #rotateHint{display:none;position:fixed;inset:0;z-index:60;place-items:center;background:rgba(6,12,30,.92);color:#fff;text-align:center;font-family:'Nunito',system-ui,sans-serif}
 #rotateHint div{display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px}
 #rotateHint b{font-size:64px;line-height:1;animation:rotHint 1.6s ease-in-out infinite}
 #rotateHint strong{font-size:22px;font-weight:900}
 #rotateHint span{font-size:14px;font-weight:700;opacity:.8}
 @keyframes rotHint{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(90deg)}}
-@media (orientation:portrait) and (pointer:coarse){body.playing #rotateHint{display:grid}}
+@media (orientation:portrait) and (pointer:coarse){#rotateHint{display:grid}}
+@media (orientation:portrait){body.is-touch #rotateHint{display:grid}}
 /* Móvil en horizontal: menú más compacto */
 @media (orientation:landscape) and (max-height:500px){
   #overlay .realhub.hb .hb-brand img{height:64px!important;width:auto!important;max-width:60vw!important}
@@ -4632,7 +4645,7 @@ function pauseGame(){
 // (antes la horda seguía haciendo daño debajo del aviso)
 {
   const portraitMq = matchMedia('(orientation:portrait) and (pointer:coarse)');
-  const onPortrait = () => { if (portraitMq.matches && state === 'play') pauseGame(); };
+  const onPortrait = () => { if ((portraitMq.matches || (isTouchUI() && matchMedia('(orientation:portrait)').matches)) && state === 'play') pauseGame(); };
   if (portraitMq.addEventListener) portraitMq.addEventListener('change', onPortrait); else if (portraitMq.addListener) portraitMq.addListener(onPortrait);
   addEventListener('resize', onPortrait);
 }
@@ -5758,6 +5771,7 @@ function showSettings(){
         <div><b>Reducir animaciones</b><small>Quita transiciones y movimientos de los menús.</small></div>
         <button class="set-toggle${reduceMotion() ? ' on' : ''}" id="tMotion">${reduceMotion() ? 'Activado' : 'Desactivado'}</button>
       </div>
+      ${appRow()}
       <div class="set-row">
         <div><b>Progreso</b><small>Exporta tu progreso a un código para usarlo en otro navegador.</small></div>
         <button class="mini-btn" id="btnSaveCode">Código de guardado</button>
@@ -5789,6 +5803,7 @@ function showSettings(){
   overlay.querySelectorAll('.set-seg[data-scale]').forEach(b => b.onclick = () => { localStorage.setItem('digibonk3d-uiscale', b.dataset.scale); applyUiPrefs(); showSettings(); });
   document.getElementById('tMotion').onclick = () => { localStorage.setItem('digibonk3d-reducemotion', reduceMotion() ? '0' : '1'); applyUiPrefs(); showSettings(); };
   document.getElementById('btnSaveCode').onclick = () => showSaveCode();
+  const ba = document.getElementById('btnApp'); if (ba) ba.onclick = () => installApp();
   document.getElementById('btnCloud').onclick = () => showCloud();
   document.getElementById('btnCredits').onclick = () => showCredits('settings');
   // Cerrar sesión: vuelve a la pantalla de registro; el progreso sigue en este navegador
@@ -6234,14 +6249,55 @@ function showMapSelect(){
   document.getElementById('msBack').onclick = () => showPicker();
   document.getElementById('msStart').onclick = () => startGame(selectedKey);
 }
-// Móvil: se juega en horizontal. Al empezar, intenta pantalla completa y bloquear la orientación (Android);
-// si el móvil sigue en vertical, un aviso pide girarlo mientras dure la partida
+// Móvil: se juega siempre en horizontal. Al empezar la partida y en cada toque de los menús (si se salió de la
+// pantalla completa), intenta pantalla completa y bloquear la orientación (Android). Instalado como app no hace
+// falta pantalla completa: el manifest ya la pide y fija el horizontal. iPhone no permite nada de esto, así que
+// en vertical el aviso «Gira el móvil» tapa todo el juego.
 function lockLandscape(){
   if (!isTouchUI() && !matchMedia('(pointer:coarse)').matches) return;
+  if (isStandalone()){ try { screen.orientation.lock('landscape').catch(() => {}); } catch(e){} return; }
   try {
     const go = () => { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); };
     if (!document.fullscreenElement && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().then(go).catch(go); else go();
   } catch(e){}
+}
+{
+  let last = 0;
+  addEventListener('click', () => {
+    if (!isTouchUI() || document.fullscreenElement || isStandalone() || Date.now() - last < 4000) return;
+    last = Date.now();
+    lockLandscape();
+  }, true);
+}
+// ---------- DigiBonk como app (PWA) ----------
+// El service worker (sw.js) guarda el juego para abrirlo sin conexión. Android y ordenador ofrecen «Instalar»
+// (beforeinstallprompt); en iPhone/iPad se instala a mano desde Compartir → «Añadir a pantalla de inicio».
+function isStandalone(){
+  // Ojo: en el navegador, la pantalla completa también cumple display-mode: fullscreen; eso no es estar instalado
+  return (matchMedia('(display-mode: fullscreen)').matches && !document.fullscreenElement) || matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+}
+let installEvt = null;
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; if (state === 'settings') showSettings(); });
+addEventListener('appinstalled', () => { installEvt = null; if (state === 'settings') showSettings(); });
+const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+function appRow(){
+  if (isStandalone()) return '';
+  const how = installEvt ? 'Juega a pantalla completa y en horizontal desde un icono, también sin conexión.'
+    : isIOS() ? 'En Safari: botón Compartir y «Añadir a pantalla de inicio». Se abre a pantalla completa y sin conexión.'
+    : 'Usa «Instalar app» o «Añadir a pantalla de inicio» en el menú del navegador.';
+  return `<div class="set-row">
+        <div><b>Instalar como app</b><small>${how}</small></div>
+        ${installEvt ? '<button class="mini-btn" id="btnApp">Instalar</button>' : ''}
+      </div>`;
+}
+async function installApp(){
+  if (!installEvt) return;
+  const e = installEvt; installEvt = null;
+  try { e.prompt(); await e.userChoice; } catch(err){}
+  if (state === 'settings') showSettings();
+}
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && !/[?&]test\b/.test(location.search)){
+  addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
 // ---------- Punto de guardado de partida ----------
 // Al pausar, al cambiar de app o al cerrar el juego, la partida se guarda en un solo hueco de este navegador

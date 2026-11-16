@@ -1531,5 +1531,10 @@ I18N.add('en', {
   "Gana la Montaña Helada en Difícil o Pesadilla": "Win Frozen Mountain on Hard or Nightmare",
   "Domador de lo imposible": "Tamer of the Impossible",
   "Gana los 3 mapas en Difícil o Pesadilla": "Win all 3 maps on Hard or Nightmare",
-  "Pesadilla eterna": "Eternal Nightmare"
+  "Pesadilla eterna": "Eternal Nightmare",
+  "Instalar como app": "Install as an app",
+  "Instalar": "Install",
+  "Juega a pantalla completa y en horizontal desde un icono, también sin conexión.": "Play fullscreen and in landscape from an icon, even offline.",
+  "En Safari: botón Compartir y «Añadir a pantalla de inicio». Se abre a pantalla completa y sin conexión.": "In Safari: tap Share, then “Add to Home Screen”. It opens fullscreen and works offline.",
+  "Usa «Instalar app» o «Añadir a pantalla de inicio» en el menú del navegador.": "Use “Install app” or “Add to Home screen” in your browser menu."
 });

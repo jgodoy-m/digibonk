@@ -1371,7 +1371,12 @@ I18N.add('pl', {
   "Tipografías": "Czcionki",
   "Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).": "Orbitron (Matt McInerney) i Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).",
   "Motor gráfico": "Silnik graficzny",
-  "Bandai (sprites Dot)": "Bandai (sprite'y Dot)"
+  "Bandai (sprites Dot)": "Bandai (sprite'y Dot)",
+  "Instalar como app": "Zainstaluj jako aplikację",
+  "Instalar": "Zainstaluj",
+  "Juega a pantalla completa y en horizontal desde un icono, también sin conexión.": "Graj na pełnym ekranie i poziomo z ikony, także offline.",
+  "En Safari: botón Compartir y «Añadir a pantalla de inicio». Se abre a pantalla completa y sin conexión.": "W Safari: Udostępnij, potem „Do ekranu początkowego”. Otwiera się na pełnym ekranie, także offline.",
+  "Usa «Instalar app» o «Añadir a pantalla de inicio» en el menú del navegador.": "Użyj „Zainstaluj aplikację” lub „Dodaj do ekranu głównego” w menu przeglądarki."
 });
 
 I18N.add('pl', {"Logro: completar 5 partidas con Gatomon · {0}": "Osiągnięcie: ukończ 5 rozgrywek z Gatomonem · {0}"});
