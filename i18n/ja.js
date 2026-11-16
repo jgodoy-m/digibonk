@@ -434,7 +434,7 @@ I18N.add('ja', {
   "Disparo Espiral": "スパイラルショット",
   "Proyectil rápido que atraviesa a los enemigos (2 al nivel 1).": "敵を貫通する高速弾（Lv1で2発）。",
   "Cuchilla Persiguiente": "追尾ブレード",
-  "Hojas de energía que buscan al enemigo más fuerte de la pantalla.": "画面上で最も強い敵を狙うエネルギーの葉。",
+  "Cuchillas de energía que buscan al enemigo más fuerte de la pantalla.": "画面上で最も強い敵を狙うエネルギーの刃。",
   "Rayo Láser": "レーザービーム",
   "Haz neón hacia el enemigo más cercano; atraviesa a los que están en línea.": "一番近い敵へのネオンビーム。直線上の敵を貫通する。",
   "Mina Digital": "デジタルマイン",
@@ -1353,3 +1353,33 @@ I18N.add('ja', {
   "¡Refuerzos!": "援軍！",
   "+25 vida máx.": "最大HP+25"
 });
+
+// Pantalla de créditos y licencias
+I18N.add('ja', {
+  "Créditos": "クレジット",
+  "Autores, licencias y aviso de fan-game.": "作者、ライセンス、ファンゲームについて。",
+  "Fan-game gratuito y no oficial, hecho por fans y sin ánimo de lucro. No tiene relación con Bandai Namco ni con Toei Animation.": "ファンが非営利で作った、無料の非公式ファンゲームです。バンダイナムコおよび東映アニメーションとは関係ありません。",
+  "Digimon, sus nombres y sus diseños son propiedad de Bandai Namco, Toei Animation y Akiyoshi Hongo.": "デジモン、その名前とデザインはバンダイナムコ、東映アニメーション、本郷あきよしに帰属します。",
+  "Autor del juego": "ゲームの作者",
+  "Pendiente: falta poner el nombre o alias del autor.": "未記入：作者の名前またはニックネームがまだありません。",
+  "Digimon jugables y skins": "プレイアブルデジモンとスキン",
+  "Hojas de animación de las líneas jugables, Leomon, Hagurumon, Frigimon y Wizardmon, retratos e iconos de skin: aportados por el autor del juego (generados con IA).": "プレイアブル系統、Leomon、Hagurumon、Frigimon、Wizardmonのアニメーションシート、肖像、スキンアイコン：ゲームの作者が提供（AI生成）。",
+  "Enemigos y jefes": "敵とボス",
+  "Sprites de la base «Digimon / Pendulum Color Mod Sprite Database», recortados y ampliados.": "「Digimon / Pendulum Color Mod Sprite Database」のスプライトを切り抜き、拡大したもの。",
+  "Cargando autores…": "作者を読み込み中…",
+  "Pendiente de verificar": "確認待ち",
+  "La base de sprites no publica licencia. Falta el permiso de sus autores (tero0x, tortoisehel, Ray y phrogmentado) para usar sus sprites; los sprites «Dot» originales son de Bandai.": "スプライトデータベースはライセンスを公開していません。作者（tero0x、tortoisehel、Ray、phrogmentado）からのスプライト使用許可はまだ得ていません。オリジナルの「ドット」スプライトはバンダイのものです。",
+  "Música": "音楽",
+  "«Together we are strong» de ThisIsBeatKitchen, en Pixabay.": "ThisIsBeatKitchen「Together we are strong」（Pixabay）。",
+  "Los efectos de sonido se generan en el propio juego.": "効果音はゲーム内で生成しています。",
+  "Mapas, decoración y modelos 3D": "マップ、装飾、3Dモデル",
+  "Suelos, decoración, portales, santuario y cofre: aportados por el autor del juego (generados con IA). Agua y piedra en pixel art: generadas dentro del proyecto.": "地面、装飾、ポータル、祠、宝箱：ゲームの作者が提供（AI生成）。ピクセルアートの水と石：プロジェクト内で作成。",
+  "Texturas «Retro Textures Fantasy», iconos de «Tiny Dungeon» y «Tiny Battle» y partículas de «Particle Pack».": "「Retro Textures Fantasy」のテクスチャ、「Tiny Dungeon」と「Tiny Battle」のアイコン、「Particle Pack」のパーティクル。",
+  "Tipografías": "フォント",
+  "Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).": "Orbitron（Matt McInerney）と Nunito（Vernon Adams、Cyreal、Jacques Le Bailly）。",
+  "Motor gráfico": "グラフィックエンジン",
+  "Bandai (sprites Dot)": "バンダイ（ドットスプライト）"
+});
+
+I18N.add('ja', {"Logro: completar 5 partidas con Gatomon · {0}": "実績：Gatomonで5回プレイを終える · {0}"});
+I18N.add('ja', {"×{0} daño": "ダメージ ×{0}", "×{0} recibido": "被ダメージ ×{0}"});

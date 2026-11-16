@@ -108,6 +108,9 @@ def main():
     discord = url_https('discord', g('discord'))
     bugs = url_https('discord_bugs', g('discord_bugs'))
     x = url_https('x', g('x'))
+    autor = g('autor').strip()
+    if len(autor) > 60 or re.search(r'[<>\n]', autor):
+        fallo('"autor" debe ser un nombre o alias corto (máximo 60 caracteres, sin < ni >)')
 
     estado = [
         ('Dominio', dom or None),
@@ -115,6 +118,7 @@ def main():
         ('Ko-fi', kofi or None),
         ('Discord', discord or None),
         ('X', x or None),
+        ('Autor en Créditos', autor or None),
     ]
     for nombre, v in estado:
         print(f'{"✓" if v else "·"} {nombre}: {v or "vacío (apagado)"}')
@@ -128,6 +132,8 @@ def main():
     s = sustituir(s, r"const HM_DISCORD_URL=[^\n]*?;(?=\s*// SITIO:enlaces)",
                   f"const HM_DISCORD_URL='{discord}', HM_DISCORD_BUGS_URL='{bugs}', HM_X_URL='{x}', HM_KOFI_URL='{kofi}';",
                   'SITIO:enlaces')
+    s = sustituir(s, r"const CREDIT_AUTHOR = [^\n]*?;(?=\s*// SITIO:autor)",
+                  f"const CREDIT_AUTHOR = {json.dumps(autor, ensure_ascii=False)};", 'SITIO:autor')
     HTML.write_text(s, encoding='utf-8')
 
     robots, sitemap, cname = RAIZ / 'robots.txt', RAIZ / 'sitemap.xml', RAIZ / 'CNAME'

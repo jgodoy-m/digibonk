@@ -432,7 +432,7 @@ I18N.add('ru', {
   "Disparo Espiral": "Спиральный выстрел",
   "Proyectil rápido que atraviesa a los enemigos (2 al nivel 1).": "Быстрый снаряд, пронзающий врагов (2 на уровне 1).",
   "Cuchilla Persiguiente": "Самонаводящийся клинок",
-  "Hojas de energía que buscan al enemigo más fuerte de la pantalla.": "Энергетические листья, ищущие сильнейшего врага на экране.",
+  "Cuchillas de energía que buscan al enemigo más fuerte de la pantalla.": "Энергетические клинки, ищущие сильнейшего врага на экране.",
   "Rayo Láser": "Лазерный луч",
   "Haz neón hacia el enemigo más cercano; atraviesa a los que están en línea.": "Неоновый луч в ближайшего врага; пронзает всех на линии.",
   "Mina Digital": "Цифровая мина",
@@ -1351,3 +1351,33 @@ I18N.add('ru', {
   "¡Refuerzos!": "Подкрепление!",
   "+25 vida máx.": "+25 к макс. здоровью"
 });
+
+// Pantalla de créditos y licencias
+I18N.add('ru', {
+  "Créditos": "Авторы",
+  "Autores, licencias y aviso de fan-game.": "Авторы, лицензии и пометка о фанатской игре.",
+  "Fan-game gratuito y no oficial, hecho por fans y sin ánimo de lucro. No tiene relación con Bandai Namco ni con Toei Animation.": "Бесплатная неофициальная фанатская игра, сделанная фанатами без цели извлечения прибыли. Не связана с Bandai Namco и Toei Animation.",
+  "Digimon, sus nombres y sus diseños son propiedad de Bandai Namco, Toei Animation y Akiyoshi Hongo.": "Digimon, их имена и дизайн принадлежат Bandai Namco, Toei Animation и Акиёси Хонго.",
+  "Autor del juego": "Автор игры",
+  "Pendiente: falta poner el nombre o alias del autor.": "Ожидается: имя или псевдоним автора ещё не указаны.",
+  "Digimon jugables y skins": "Игровые Digimon и скины",
+  "Hojas de animación de las líneas jugables, Leomon, Hagurumon, Frigimon y Wizardmon, retratos e iconos de skin: aportados por el autor del juego (generados con IA).": "Листы анимации игровых линий, Leomon, Hagurumon, Frigimon и Wizardmon, портреты и значки скинов: предоставлены автором игры (созданы ИИ).",
+  "Enemigos y jefes": "Враги и боссы",
+  "Sprites de la base «Digimon / Pendulum Color Mod Sprite Database», recortados y ampliados.": "Спрайты из базы «Digimon / Pendulum Color Mod Sprite Database», обрезаны и увеличены.",
+  "Cargando autores…": "Загрузка авторов…",
+  "Pendiente de verificar": "Требует проверки",
+  "La base de sprites no publica licencia. Falta el permiso de sus autores (tero0x, tortoisehel, Ray y phrogmentado) para usar sus sprites; los sprites «Dot» originales son de Bandai.": "База спрайтов не публикует лицензию. Разрешения её авторов (tero0x, tortoisehel, Ray и phrogmentado) на использование спрайтов пока нет; оригинальные спрайты «Dot» принадлежат Bandai.",
+  "Música": "Музыка",
+  "«Together we are strong» de ThisIsBeatKitchen, en Pixabay.": "«Together we are strong» от ThisIsBeatKitchen, на Pixabay.",
+  "Los efectos de sonido se generan en el propio juego.": "Звуковые эффекты создаёт сама игра.",
+  "Mapas, decoración y modelos 3D": "Карты, декор и 3D-модели",
+  "Suelos, decoración, portales, santuario y cofre: aportados por el autor del juego (generados con IA). Agua y piedra en pixel art: generadas dentro del proyecto.": "Поверхности, декор, порталы, святилище и сундук: предоставлены автором игры (созданы ИИ). Пиксельные вода и камень: сделаны в рамках проекта.",
+  "Texturas «Retro Textures Fantasy», iconos de «Tiny Dungeon» y «Tiny Battle» y partículas de «Particle Pack».": "Текстуры «Retro Textures Fantasy», значки из «Tiny Dungeon» и «Tiny Battle» и частицы из «Particle Pack».",
+  "Tipografías": "Шрифты",
+  "Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).": "Orbitron (Matt McInerney) и Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).",
+  "Motor gráfico": "Графический движок",
+  "Bandai (sprites Dot)": "Bandai (спрайты Dot)"
+});
+
+I18N.add('ru', {"Logro: completar 5 partidas con Gatomon · {0}": "Достижение: завершить 5 забегов с Gatomon · {0}"});
+I18N.add('ru', {"×{0} daño": "×{0} урона", "×{0} recibido": "×{0} получаемого"});

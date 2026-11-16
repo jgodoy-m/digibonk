@@ -15,6 +15,7 @@ Lo que se deja vacío sigue apagado: el juego funciona igual que ahora. Se puede
 | `supabase_url` y `supabase_anon_key` | Guardado en la nube y ranking mundial y por regiones | Supabase → Project Settings → API |
 | `kofi` | Botón «Apoyar» del menú (mantenimiento del servidor) | Tu página de Ko-fi, p. ej. `https://ko-fi.com/digibonk` |
 | `discord`, `discord_bugs`, `x` | Botones de Discord, X y de reportar bugs | Más adelante |
+| `autor` | Nombre o alias que sale como autor en la pantalla de Créditos (vacío: se ve el aviso «Pendiente») | Tu nombre o alias público |
 
 ## 1. Dominio y alojamiento
 
