@@ -3693,6 +3693,31 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
   #overlay .realhub.hb .hb-bar .hb-btn{width:34px!important;height:34px!important}
   #overlay .realhub.hb .hb-out{color:var(--m-text)!important;font-size:12px!important;opacity:.75}
 }
+/* Revisión 2026-11-16: móvil en horizontal (p. ej. 844×390). La ficha del Digimon se desplaza por dentro y
+   «¡Elegir mapa!» queda siempre a la vista (antes quedaba fuera de la pantalla y no se podía empezar);
+   la cabecera de la ficha pasa a dos columnas para que el nombre no pise las estadísticas. */
+@media (orientation:landscape) and (max-height:500px) and (min-width:761px){
+  .ps-main{overflow-y:auto!important}
+  .ps-foot{position:sticky;bottom:0;z-index:5;background:var(--ps-cardb)}
+  .ps-sum{grid-template-columns:110px minmax(0,1fr)!important;gap:12px!important;padding:10px 12px!important}
+  .ps-stats{grid-column:1/-1}
+  .ps-hero{min-height:110px!important}
+  .anim.ps-hero-img{width:90px!important;height:90px!important;margin-top:-10px}
+  #overlay .ps-id h3{font-size:24px!important}
+  .ps-cols{grid-template-columns:1fr!important}
+}
+/* Inicio en móvil horizontal: Ajustes y Guía son botones de icono (el texto se salía y pisaba los accesos) */
+@media (orientation:landscape) and (max-height:500px){
+  #overlay .realhub.hb .hb-bar .nm-lbl{display:none!important}
+  #overlay .realhub.hb .hb-bar .hb-btn{padding:0!important;justify-content:center}
+}
+/* Avisos (announce) en los menús: por encima de la capa del menú para que se vean */
+#banner.over-menu{z-index:60}
+/* Registro: aviso de nombre vacío junto al campo (antes salía en un cartel tapado por el menú) */
+.rg-err{margin:6px 0 0;min-height:1.2em;font:800 13px 'Nunito',system-ui,sans-serif;color:#e53935;text-align:center}
+.rg-err:empty{display:none}
+.rg-err.show{animation:rgShake .35s ease}
+@keyframes rgShake{25%{transform:translateX(-6px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
 </style>
 </head>
 <body>
@@ -5369,7 +5394,7 @@ function showSelect(){
   // Sin enlace, el botón no lleva a ningún sitio: se oculta y vuelve solo al rellenar su URL en sitio.json
   [['mBug', HM_DISCORD_BUGS_URL || HM_DISCORD_URL], ['mKofi', HM_KOFI_URL], ['mDiscord', HM_DISCORD_URL], ['mX', HM_X_URL]].forEach(([id, url]) => { if (!url) document.getElementById(id).hidden = true; });
   document.getElementById('hmCredits').onclick=()=>showCredits('hub');
-  document.getElementById('hmLogout').onclick=()=>{localStorage.removeItem('digibonk3d-name');localStorage.removeItem('digibonk3d-guest');location.reload();};
+  document.getElementById('hmLogout').onclick=()=>{if(isGuest()){try{runEnd();}catch(e){}Object.keys(localStorage).filter(isSaveKey).forEach(k=>localStorage.removeItem(k));}localStorage.removeItem('digibonk3d-name');localStorage.removeItem('digibonk3d-guest');location.reload();};   // el invitado de pruebas lo tiene todo desbloqueado: al salir se borra para que no pase a una cuenta normal
   document.getElementById('rhProfile').onclick=showPlayer;
   document.getElementById('rhLang').onclick=toggleLang;
   document.getElementById('rhApp').onclick=()=>installEvt?installApp():openInfo('app');
@@ -9414,6 +9439,7 @@ function evoBlast(st){
 }
 function announce(title, sub, color = '#ffd54f'){
   const el = document.getElementById('banner');
+  el.classList.toggle('over-menu', !g || state === 'end');   // en los menús la capa del menú lo tapaba
   el.style.color = color;
   el.innerHTML = `<b>${title}</b><small>${sub || ''}</small>`;
   el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
@@ -11270,6 +11296,7 @@ function showRegister(){
           <p class="rg-saved">${t('saved')}</p>
           <input id="regName" class="rg-input" maxlength="16" placeholder="${t('ph')}" autocomplete="off">
           <button class="rg-go" id="regGo">${t('enter')}<kbd>Enter</kbd></button>
+          <p class="rg-err" id="regErr" role="alert"></p>
           ${TEST_MODE ? `<div class="rg-or"><span>o</span></div>
           <button class="rg-pill rg-guest" id="regGuest">${t('guest')}</button>` : ''}
         </div>
@@ -11278,7 +11305,7 @@ function showRegister(){
   document.getElementById('regLang').onclick = toggleLang;
   const go = () => {
     const v = document.getElementById('regName').value.trim();
-    if (!v){ announce(t('needName'), '', '#ef5350'); return; }
+    if (!v){ const er = document.getElementById('regErr'); er.textContent = t('needName'); er.classList.remove('show'); void er.offsetWidth; er.classList.add('show'); document.getElementById('regName').focus(); return; }
     setTrainerName(v);
     if (localStorage.getItem('digibonk3d-unlocked')) showSelect(); else showStarter();
   };
@@ -11288,7 +11315,8 @@ function showRegister(){
     location.reload();
   };
   document.getElementById('regName').addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') go(); });
-  setTimeout(() => document.getElementById('regName').focus(), 50);
+  // En móvil no se enfoca solo: abriría el teclado y taparía la pantalla nada más entrar
+  if (!isTouchUI() && !matchMedia('(pointer:coarse)').matches) setTimeout(() => document.getElementById('regName').focus(), 50);
 }
 
 /* ---------- Menú Jugador: perfil, Digimon desbloqueados, skins, marcos y títulos ---------- */
