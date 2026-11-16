@@ -1384,4 +1384,34 @@ I18N.add('zh', {
 });
 
 I18N.add('zh', {"Logro: completar 5 partidas con Gatomon · {0}": "成就：用 Gatomon 完成 5 局 · {0}"});
-I18N.add('zh', {"×{0} daño": "伤害 ×{0}", "×{0} recibido": "受到伤害 ×{0}"});
+I18N.add('zh', {"×{0} daño": "伤害 ×{0}", "×{0} recibido": "受到伤害 ×{0}",
+  // Reto semanal (reglas nuevas, Digimon de la semana, hitos) y premios de Difícil y Pesadilla
+  "Gigantes": "巨人",
+  "Los enemigos tienen un 60% más de vida, pero dan un 50% más de experiencia.": "敌人生命值增加60%，但经验值也多50%。",
+  "A toda prisa": "全速前进",
+  "Corres un 20% más, pero los enemigos corren un 25% más.": "你的移动速度提高20%，但敌人提高25%。",
+  "Noche de élites": "精英之夜",
+  "Las élites salen el doble de a menudo.": "精英出现的频率翻倍。",
+  "Lluvia de cofres": "宝箱雨",
+  "Los cofres salen el doble de a menudo.": "宝箱出现的频率翻倍。",
+  "Imán gigante": "巨型磁铁",
+  "Recoges la experiencia desde el triple de distancia, pero haces un 15% menos de daño.": "可从三倍距离拾取经验，但伤害降低15%。",
+  "Sin dash": "无冲刺",
+  "No puedes hacer dash, pero corres un 15% más.": "无法冲刺，但移动速度提高15%。",
+  "Digimon de la semana": "本周数码宝贝",
+  "Hitos": "目标",
+  "Hitos {0}": "目标 {0}",
+  "Hito del reto": "挑战目标",
+  "Aguanta 10 minutos en el reto": "在挑战中坚持10分钟",
+  "Gana el reto": "赢下挑战",
+  "Gana el reto con el Digimon de la semana": "用本周数码宝贝赢下挑战",
+  "Azote del Bosque": "森林之灾",
+  "Gana el Bosque File en Difícil o Pesadilla": "在困难或噩梦难度通关文件森林",
+  "Tormenta de Arena": "沙尘暴",
+  "Gana el Desierto de Datos en Difícil o Pesadilla": "在困难或噩梦难度通关数据沙漠",
+  "Ventisca Eterna": "永恒暴风雪",
+  "Gana la Montaña Helada en Difícil o Pesadilla": "在困难或噩梦难度通关冰封山脉",
+  "Domador de lo imposible": "驾驭不可能之人",
+  "Gana los 3 mapas en Difícil o Pesadilla": "在困难或噩梦难度通关全部3张地图",
+  "Pesadilla eterna": "永恒噩梦"
+});

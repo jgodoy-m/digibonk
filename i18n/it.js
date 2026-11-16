@@ -1373,4 +1373,34 @@ I18N.add('it', {
 });
 
 I18N.add('it', {"Logro: completar 5 partidas con Gatomon · {0}": "Obiettivo: completare 5 partite con Gatomon · {0}"});
-I18N.add('it', {"×{0} daño": "×{0} danni", "×{0} recibido": "×{0} subiti"});
+I18N.add('it', {"×{0} daño": "×{0} danni", "×{0} recibido": "×{0} subiti",
+  // Reto semanal (reglas nuevas, Digimon de la semana, hitos) y premios de Difícil y Pesadilla
+  "Gigantes": "Giganti",
+  "Los enemigos tienen un 60% más de vida, pero dan un 50% más de experiencia.": "I nemici hanno il 60% di vita in più, ma danno il 50% di esperienza in più.",
+  "A toda prisa": "A tutta velocità",
+  "Corres un 20% más, pero los enemigos corren un 25% más.": "Corri il 20% in più, ma i nemici corrono il 25% in più.",
+  "Noche de élites": "Notte delle élite",
+  "Las élites salen el doble de a menudo.": "Le élite compaiono il doppio delle volte.",
+  "Lluvia de cofres": "Pioggia di forzieri",
+  "Los cofres salen el doble de a menudo.": "I forzieri compaiono il doppio delle volte.",
+  "Imán gigante": "Calamita gigante",
+  "Recoges la experiencia desde el triple de distancia, pero haces un 15% menos de daño.": "Raccogli l'esperienza dal triplo della distanza, ma fai il 15% di danni in meno.",
+  "Sin dash": "Niente scatto",
+  "No puedes hacer dash, pero corres un 15% más.": "Non puoi scattare, ma corri il 15% in più.",
+  "Digimon de la semana": "Digimon della settimana",
+  "Hitos": "Traguardi",
+  "Hitos {0}": "Traguardi {0}",
+  "Hito del reto": "Traguardo della sfida",
+  "Aguanta 10 minutos en el reto": "Resisti 10 minuti nella sfida",
+  "Gana el reto": "Vinci la sfida",
+  "Gana el reto con el Digimon de la semana": "Vinci la sfida con il Digimon della settimana",
+  "Azote del Bosque": "Flagello della Foresta",
+  "Gana el Bosque File en Difícil o Pesadilla": "Vinci la Foresta File in Difficile o Incubo",
+  "Tormenta de Arena": "Tempesta di sabbia",
+  "Gana el Desierto de Datos en Difícil o Pesadilla": "Vinci il Deserto dei Dati in Difficile o Incubo",
+  "Ventisca Eterna": "Bufera eterna",
+  "Gana la Montaña Helada en Difícil o Pesadilla": "Vinci la Montagna Gelata in Difficile o Incubo",
+  "Domador de lo imposible": "Domatore dell'impossibile",
+  "Gana los 3 mapas en Difícil o Pesadilla": "Vinci le 3 mappe in Difficile o Incubo",
+  "Pesadilla eterna": "Incubo eterno"
+});

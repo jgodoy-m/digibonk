@@ -1376,4 +1376,34 @@ I18N.add('tr', {
 });
 
 I18N.add('tr', {"Logro: completar 5 partidas con Gatomon · {0}": "Başarım: Gatomon ile 5 oyun bitir · {0}"});
-I18N.add('tr', {"×{0} daño": "×{0} hasar", "×{0} recibido": "×{0} alınan"});
+I18N.add('tr', {"×{0} daño": "×{0} hasar", "×{0} recibido": "×{0} alınan",
+  // Reto semanal (reglas nuevas, Digimon de la semana, hitos) y premios de Difícil y Pesadilla
+  "Gigantes": "Devler",
+  "Los enemigos tienen un 60% más de vida, pero dan un 50% más de experiencia.": "Düşmanların canı %60 fazla, ama %50 fazla deneyim verirler.",
+  "A toda prisa": "Tam hız",
+  "Corres un 20% más, pero los enemigos corren un 25% más.": "%20 daha hızlı koşarsın, ama düşmanlar %25 daha hızlı koşar.",
+  "Noche de élites": "Seçkinler gecesi",
+  "Las élites salen el doble de a menudo.": "Seçkinler iki kat daha sık çıkar.",
+  "Lluvia de cofres": "Sandık yağmuru",
+  "Los cofres salen el doble de a menudo.": "Sandıklar iki kat daha sık çıkar.",
+  "Imán gigante": "Dev mıknatıs",
+  "Recoges la experiencia desde el triple de distancia, pero haces un 15% menos de daño.": "Deneyimi üç kat uzaktan toplarsın, ama %15 daha az hasar verirsin.",
+  "Sin dash": "Atılma yok",
+  "No puedes hacer dash, pero corres un 15% más.": "Atılma yapamazsın, ama %15 daha hızlı koşarsın.",
+  "Digimon de la semana": "Haftanın Digimon'u",
+  "Hitos": "Aşamalar",
+  "Hitos {0}": "Aşamalar {0}",
+  "Hito del reto": "Meydan okuma aşaması",
+  "Aguanta 10 minutos en el reto": "Meydan okumada 10 dakika dayan",
+  "Gana el reto": "Meydan okumayı kazan",
+  "Gana el reto con el Digimon de la semana": "Meydan okumayı haftanın Digimon'u ile kazan",
+  "Azote del Bosque": "Ormanın Belası",
+  "Gana el Bosque File en Difícil o Pesadilla": "File Ormanı'nı Zor veya Kâbus'ta kazan",
+  "Tormenta de Arena": "Kum Fırtınası",
+  "Gana el Desierto de Datos en Difícil o Pesadilla": "Veri Çölü'nü Zor veya Kâbus'ta kazan",
+  "Ventisca Eterna": "Sonsuz Tipi",
+  "Gana la Montaña Helada en Difícil o Pesadilla": "Buzlu Dağ'ı Zor veya Kâbus'ta kazan",
+  "Domador de lo imposible": "İmkânsızın Terbiyecisi",
+  "Gana los 3 mapas en Difícil o Pesadilla": "3 haritayı Zor veya Kâbus'ta kazan",
+  "Pesadilla eterna": "Sonsuz Kâbus"
+});
