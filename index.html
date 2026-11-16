@@ -3763,19 +3763,55 @@ function pondWeight(x, z){
   for (const P of PONDS) w = Math.max(w, 1 - smooth01(pondDist(P, x, z)/3));
   return w;
 }
+// Forma de las colinas: cada partida cambia fases, frecuencias y orientación (ver genWorld)
+const WORLD = {p: [1.3, 0, 0.7, 0], f: [1, 1], d: 1};
 // Llanuras y laderas: las colinas suben en terrazas planas unidas por cuestas cortas (las cuestas llevan roca)
 const TERRACE = 2.2;
 function hillBase(x, z){
   const r = Math.hypot(x, z);
   const flat = smooth01((r - 26)/14);                          // 0 en el claro central, 1 fuera
   const edge = 1 - smooth01((sqDist(x, z) - (ARENA_R - 18))/8);  // vuelve a 0 junto a las montañas
-  const hills = 4.5*Math.sin(x*0.05 + 1.3)*Math.cos(z*0.043) + 3*Math.sin((x - z)*0.11 + 0.7) + 1.5*Math.cos(x*0.13 + z*0.09);
+  const W = WORLD, hills = 4.5*Math.sin(x*0.05*W.f[0] + W.p[0])*Math.cos(z*0.043*W.f[1] + W.p[1]) + 3*Math.sin((x*W.d - z)*0.11 + W.p[2]) + 1.5*Math.cos(x*0.13 + z*0.09 + W.p[3]);
   const q = hills/TERRACE, fl = Math.floor(q);
   return (fl + smooth01((q - fl - 0.62)/0.38))*TERRACE * flat * edge;
 }
 // Sitios de plaza (donde van las ruinas): el suelo se aplana a la altura de su centro
 const PLAZA_SPOTS = [[-64, -38, 11], [76, 24, 10], [-28, 84, 9], [-86, 18, 9], [66, 72, 8.5], [-44, -82, 9], [30, -62, 8], [-88, -88, 9], [88, -86, 9], [86, 92, 9], [-88, 88, 9]];
-const FLAT_SPOTS = [...PLAZA_SPOTS, [0, -(ARENA_R - 32) + 4, 9]].map(([x, z, r]) => [x, z, r, hillBase(x, z)]);
+let FLAT_SPOTS = [];
+const flatSpots = () => { FLAT_SPOTS = [...PLAZA_SPOTS, [0, -(ARENA_R - 32) + 4, 9]].map(([x, z, r]) => [x, z, r, hillBase(x, z)]); };
+flatSpots();
+/* Mapa aleatorio: con la semilla de la partida (y el bioma de cada pantalla) se eligen las colinas,
+   de 2 a 4 lagos y 6 plazas con ruinas. El portal sigue al norte y el centro sigue llano para aparecer.
+   Los lagos y plazas guardan distancia entre sí, con el centro, con el portal y con las montañas. */
+function genWorld(key){
+  const rnd = seededRng(key), TAU = Math.PI*2;
+  WORLD.p = [rnd()*TAU, rnd()*TAU, rnd()*TAU, rnd()*TAU];
+  WORLD.f = [0.8 + rnd()*0.4, 0.8 + rnd()*0.4];
+  WORLD.d = rnd() < 0.5 ? 1 : -1;
+  const portalZ = -(ARENA_R - 32);
+  const ponds = [], nP = 2 + Math.floor(rnd()*3);
+  for (let i = 0; i < 400 && ponds.length < nP; i++){
+    const rx = 6 + rnd()*5, rz = 6 + rnd()*6, m = Math.max(rx, rz) + 2;
+    const x = (rnd()*2 - 1)*(ARENA_R - 22 - m), z = (rnd()*2 - 1)*(ARENA_R - 22 - m);
+    if (Math.hypot(x, z) < 30 + m) continue;                     // el claro del centro queda seco
+    if (Math.hypot(x, z - portalZ) < 26 + m) continue;           // y la plaza del portal también
+    if (ponds.some(P => Math.hypot(P.x - x, P.z - z) < Math.max(P.rx, P.rz) + m + 16)) continue;
+    ponds.push({x, z, rx, rz, s: rnd()*TAU});
+  }
+  PONDS.length = 0; PONDS.push(...ponds);
+  const plazas = [];
+  for (let i = 0; i < 600 && plazas.length < 6; i++){
+    const r = 8 + rnd()*3;
+    const x = (rnd()*2 - 1)*(ARENA_R - 14 - r), z = (rnd()*2 - 1)*(ARENA_R - 14 - r);
+    if (Math.hypot(x, z) < 36 + r) continue;
+    if (Math.hypot(x, z - portalZ) < 24 + r) continue;
+    if (PONDS.some(P => pondDist(P, x, z) < r + 8)) continue;
+    if (plazas.some(([px, pz, pr]) => Math.hypot(px - x, pz - z) < pr + r + 18)) continue;
+    plazas.push([x, z, r]);
+  }
+  PLAZA_SPOTS.length = 0; PLAZA_SPOTS.push(...plazas);
+  flatSpots();
+}
 function terrainH(x, z){
   let base = hillBase(x, z);
   for (const [px, pz, pr, ph] of FLAT_SPOTS){
@@ -3967,7 +4003,8 @@ camera.position.set(0, 16, 11);
 const TERRAIN_SIZE = ARENA_R*2 + 20, TERRAIN_SEG = 320;
 const terrainGeo = new THREE.PlaneGeometry(TERRAIN_SIZE, TERRAIN_SIZE, TERRAIN_SEG, TERRAIN_SEG);
 terrainGeo.rotateX(-Math.PI/2);
-{
+// Alturas del suelo según terrainH (se repite al generar un mapa nuevo)
+function shapeTerrain(){
   const pos = terrainGeo.attributes.position;
   // Fuera del escenario el suelo baja con suavidad: así la línea donde nace la montaña queda limpia
   for (let i = 0; i < pos.count; i++){
@@ -3975,13 +4012,15 @@ terrainGeo.rotateX(-Math.PI/2);
     const k = smooth01((sqDist(x, z) - ARENA_R) / 5);
     pos.setY(i, terrainH(x, z)*(1 - k) + (-1.5)*k);
   }
-}
-terrainGeo.computeVertexNormals();
-{ // Inclinación de cada vértice (0 = llano): el suelo pinta roca en las laderas
+  pos.needsUpdate = true;
+  terrainGeo.computeVertexNormals();
+  // Inclinación de cada vértice (0 = llano): el suelo pinta roca en las laderas
   const n = terrainGeo.attributes.normal, sl = new Float32Array(n.count);
   for (let i = 0; i < n.count; i++) sl[i] = 1 - n.getY(i);
   terrainGeo.setAttribute('aSlope', new THREE.BufferAttribute(sl, 1));
+  terrainGeo.computeBoundingSphere();
 }
+shapeTerrain();
 // Pendiente del terreno en un punto (0 = llano); la decoración evita las cuestas
 function slopeAt(x, z){ return Math.hypot(terrainH(x + 0.5, z) - terrainH(x - 0.5, z), terrainH(x, z + 0.5) - terrainH(x, z - 0.5)); }
 // Color por zona: tierra en el claro central, bosque más oscuro hacia las montañas y variación suave
@@ -4041,10 +4080,13 @@ float tHash(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233)))*43758.5453)
 const floor = new THREE.Mesh(terrainGeo, floorMat);
 let pondWater = null, pondShore = null, mountMesh = null, wallMat = null;
 scene.add(floor);
-{
-  // Agua y orilla de cada lago (comparten material: el bioma cambia todos a la vez)
-  const waterMat = new THREE.MeshStandardMaterial({color: 0xffffff, map: loadTex('textures/agua_pixel.png', 0.5, 0.5, true), roughness: 0.15, metalness: 0.1, transparent: true, opacity: 0.92});
-  const shoreMat = new THREE.MeshBasicMaterial({color: 0xcfe9d0, transparent: true, opacity: 0.55, depthWrite: false});
+const pondMeshes = [];
+// Agua y orilla de cada lago (comparten material: el bioma cambia todos a la vez); se rehace con cada mapa nuevo
+function buildPonds(){
+  const waterMat = pondWater ? pondWater.material : new THREE.MeshStandardMaterial({color: 0xffffff, map: loadTex('textures/agua_pixel.png', 0.5, 0.5, true), roughness: 0.15, metalness: 0.1, transparent: true, opacity: 0.92});
+  const shoreMat = pondShore ? pondShore.material : new THREE.MeshBasicMaterial({color: 0xcfe9d0, transparent: true, opacity: 0.55, depthWrite: false});
+  for (const m of pondMeshes){ scene.remove(m); m.geometry.dispose(); }
+  pondMeshes.length = 0;
   const outline = (P, extra, hole) => {
     const m = Math.min(P.rx, P.rz), pts = [];
     for (let i = 0; i < 64; i++){
@@ -4061,9 +4103,11 @@ scene.add(floor);
     const shore = new THREE.Mesh(new THREE.ShapeGeometry(ring), shoreMat);
     shore.rotation.x = -Math.PI/2; shore.position.set(P.x, POND.water + 0.05, P.z);
     scene.add(shore);
+    pondMeshes.push(water, shore);
     if (!pondWater){ pondWater = water; pondShore = shore; }
   }
 }
+buildPonds();
 // Montañas altas que cierran el escenario (dos anillos, el exterior más alto)
 function buildMountains(){
   // Una sola malla continua de crestas: no hay conos que se crucen, así que no parpadea
@@ -4189,9 +4233,10 @@ function animEl(url, cls = '', style = ''){
   return sh ? `<i class="anim ${cls}" style="background-image:url('${sh}');${style}"></i>` : `<img class="${cls}" src="${url}" alt="" style="${style}">`;
 }
 const spriteMats = {};
+// alphaTest: lo transparente del sprite no escribe profundidad, así no tapa el agua (antes salía un cuadrado al entrar en un lago)
 function billboard(url, scale, shared = true){
   let mat = shared ? spriteMats[url] : null;
-  if (!mat){ mat = new THREE.SpriteMaterial({map: animTex(url, !shared), transparent: true}); if (shared){ spriteMats[url] = mat; sharedMats.add(mat); } }
+  if (!mat){ mat = new THREE.SpriteMaterial({map: animTex(url, !shared), transparent: true, alphaTest: 0.1}); if (shared){ spriteMats[url] = mat; sharedMats.add(mat); } }
   const s = new THREE.Sprite(mat);
   s.scale.set(scale, scale, 1);
   return s;
@@ -4248,25 +4293,25 @@ function decoSprite(tex, w, h, x, y, z){
    y Retro Textures Fantasy); ver textures/CREDITOS.txt. deco: [archivo, ancho, alto, peso, sombra] */
 const BIOMES = {
   bosque: {rock: 'textures/mapa_roca_bosque.png', set: 'bosque', path: 'textures/mapa_tierra.png', stone: 'textures/mapa_losas_musgo.png', mm: ['#8b6b47', '#7d8a78'],
-    plaza: {fondo: ['arco'], centro: ['altar'], anillo: ['pilar'], sueltos: ['ruina', 'roca_grande1', 'cristal', 'escalera', 'roca2']},
-    borde: ['flores1', 'flores2', 'flores3', 'flores4', 'arbusto_flor1', 'arbusto_flor2', 'arbusto_flor3', 'seta1', 'seta2', 'seta3', 'roca1', 'valla', 'helecho1', 'tocon1'],
+    plaza: {fondo: ['arco'], centro: ['altar'], anillo: ['pilar'], sueltos: ['ruina', 'roca_grande1', 'cristal', 'roca2']},
+    borde: ['flores1', 'flores2', 'flores3', 'flores4', 'arbusto_flor1', 'arbusto_flor2', 'arbusto_flor3', 'seta1', 'seta2', 'seta3', 'roca1', 'helecho1', 'tocon1'],
     floor: 'textures/mapa_hierba.png', rep: 80, center: [1.05, 0.86, 0.6], wall: 'textures/piedra_pixel.png', mount: 0xffffff,
     water: {map: 'textures/agua_pixel.png', color: 0xffffff, shore: 0xcfe9d0},
     deco: [['sprites/deco/bosque/arbol.png', 1.12, 1, 14.0, 1.1, 5.6], ['sprites/deco/bosque/arbol_flor.png', 1.04, 1, 5.0, 1.1, 5.6], ['sprites/deco/bosque/arbol_otono.png', 1.18, 1, 5.0, 1.1, 5.6], ['sprites/deco/bosque/arbol_azul.png', 1.09, 1, 4.0, 1.1, 5.6], ['sprites/deco/bosque/arbol_medio1.png', 0.77, 1, 7.0, 0.6, 4.2], ['sprites/deco/bosque/arbol_medio2.png', 0.83, 1, 7.0, 0.6, 4.2], ['sprites/deco/bosque/arbolito.png', 0.78, 1, 6.0, 0.4, 3], ['sprites/deco/bosque/arbusto1.png', 1.57, 1, 5.3, 0, 1.6], ['sprites/deco/bosque/arbusto2.png', 1.35, 1, 5.3, 0, 1.6], ['sprites/deco/bosque/arbusto3.png', 1.45, 1, 5.3, 0, 1.6], ['sprites/deco/bosque/arbusto_flor1.png', 1.49, 1, 3.3, 0, 1.6], ['sprites/deco/bosque/arbusto_flor2.png', 1.47, 1, 3.3, 0, 1.6], ['sprites/deco/bosque/arbusto_flor3.png', 1.39, 1, 3.3, 0, 1.6], ['sprites/deco/bosque/helecho1.png', 1.42, 1, 5.0, 0, 1.5], ['sprites/deco/bosque/helecho2.png', 1.12, 1, 5.0, 0, 1.5], ['sprites/deco/bosque/flores1.png', 1.58, 1, 5.5, 0, 0.9], ['sprites/deco/bosque/flores2.png', 1.59, 1, 5.5, 0, 0.9], ['sprites/deco/bosque/flores3.png', 1.06, 1, 5.5, 0, 0.9], ['sprites/deco/bosque/flores4.png', 1.15, 1, 5.5, 0, 0.9], ['sprites/deco/bosque/seta1.png', 1.42, 1, 2.0, 0, 1.1], ['sprites/deco/bosque/seta2.png', 1.24, 1, 2.0, 0, 1.1], ['sprites/deco/bosque/seta3.png', 1.24, 1, 2.0, 0, 1.1], ['sprites/deco/bosque/tocon1.png', 1.42, 1, 2.5, 0.6, 1.5], ['sprites/deco/bosque/tocon2.png', 1.28, 1, 2.5, 0.6, 1.5], ['sprites/deco/bosque/tronco.png', 2.89, 1, 3.0, 1.2, 1.2], ['sprites/deco/bosque/roca1.png', 1.45, 1, 4.0, 1.4, 1.3], ['sprites/deco/bosque/roca2.png', 1.48, 1, 4.0, 1.4, 1.3], ['sprites/deco/bosque/roca_grande1.png', 1.40, 1, 2.5, 2.4, 2.2], ['sprites/deco/bosque/roca_grande2.png', 1.64, 1, 2.5, 2.4, 2.2], ['sprites/deco/bosque/cristal.png', 1.03, 1, 3.0, 0.6, 1.8], ['sprites/deco/bosque/cartel.png', 0.78, 1, 1.5, 0.3, 1.8], ['sprites/deco/bosque/pilar.png', 0.57, 1, 2.0, 0.6, 3.6], ['sprites/deco/bosque/arco.png', 1.24, 1, 1.0, 1, 4.2], ['sprites/deco/bosque/ruina.png', 1.01, 1, 2.0, 0.8, 2.6], ['sprites/deco/bosque/altar.png', 1.00, 1, 1.0, 1, 2.2]]},
   dunas: {rock: 'textures/mapa_roca_desierto.png', set: 'desierto', path: 'textures/mapa_agrietado.png', stone: 'textures/mapa_losas_arena.png', mm: ['#b5714a', '#9c8470'],
     plaza: {fondo: ['arco'], centro: ['altar', 'lapida'], anillo: ['pilar1', 'pilar2'], sueltos: ['ruina_arena1', 'ruina_arena2', 'ruina_arena5', 'roca_roja1', 'cristal1', 'ruina1']},
-    borde: ['cactus_bola1', 'cactus_bola2', 'cactus_bola3', 'pasto_seco1', 'pasto_seco2', 'roca1', 'roca2', 'huesos2', 'valla', 'cactus3', 'arbusto_flor1'],
+    borde: ['cactus_bola1', 'cactus_bola2', 'cactus_bola3', 'pasto_seco1', 'pasto_seco2', 'roca1', 'roca2', 'huesos2', 'cactus3', 'arbusto_flor1'],
     floor: 'textures/mapa_arena.png', rep: 72, center: [1.08, 0.98, 0.82], wall: 'textures/muro_arena_kenney.png', mount: 0xf0c890,
     water: {map: 'textures/agua_verde_kenney.png', color: 0xbff7e0, shore: 0xe9d9a0},
-    deco: [['sprites/deco/desierto/cactus1.png', 0.84, 1, 6.0, 0.4, 2.8], ['sprites/deco/desierto/cactus2.png', 0.86, 1, 6.0, 0.4, 2.8], ['sprites/deco/desierto/cactus3.png', 0.88, 1, 6.0, 0.4, 2.8], ['sprites/deco/desierto/cactus4.png', 1.13, 1, 6.0, 0.4, 2.8], ['sprites/deco/desierto/cactus_bola1.png', 1.32, 1, 4.0, 0.4, 1.4], ['sprites/deco/desierto/cactus_bola2.png', 1.54, 1, 4.0, 0.4, 1.4], ['sprites/deco/desierto/cactus_bola3.png', 0.75, 1, 4.0, 0.4, 1.4], ['sprites/deco/desierto/acacia1.png', 1.37, 1, 2.0, 1.3, 5.4], ['sprites/deco/desierto/acacia2.png', 1.39, 1, 2.0, 1.3, 5.4], ['sprites/deco/desierto/acacia_tech1.png', 1.30, 1, 1.5, 1.3, 5.4], ['sprites/deco/desierto/acacia_tech2.png', 1.27, 1, 1.5, 1.3, 5.4], ['sprites/deco/desierto/acacia_media1.png', 0.89, 1, 2.7, 0.7, 4], ['sprites/deco/desierto/acacia_media2.png', 0.86, 1, 2.7, 0.7, 4], ['sprites/deco/desierto/acacia_media3.png', 0.94, 1, 2.7, 0.7, 4], ['sprites/deco/desierto/arbol_muerto1.png', 0.90, 1, 2.7, 0, 2], ['sprites/deco/desierto/arbol_muerto2.png', 1.35, 1, 2.7, 0, 2], ['sprites/deco/desierto/arbol_muerto3.png', 1.19, 1, 2.7, 0, 2], ['sprites/deco/desierto/arbusto1.png', 1.54, 1, 4.0, 0, 1.5], ['sprites/deco/desierto/arbusto2.png', 1.57, 1, 4.0, 0, 1.5], ['sprites/deco/desierto/arbusto_flor1.png', 1.48, 1, 2.0, 0, 1.5], ['sprites/deco/desierto/arbusto_flor2.png', 1.35, 1, 2.0, 0, 1.5], ['sprites/deco/desierto/arbusto_flor3.png', 1.27, 1, 2.0, 0, 1.5], ['sprites/deco/desierto/planta1.png', 1.14, 1, 3.0, 0, 1.4], ['sprites/deco/desierto/planta2.png', 1.40, 1, 3.0, 0, 1.4], ['sprites/deco/desierto/pasto_seco1.png', 1.06, 1, 7.0, 0, 1], ['sprites/deco/desierto/pasto_seco2.png', 1.27, 1, 7.0, 0, 1], ['sprites/deco/desierto/huesos1.png', 2.12, 1, 2.0, 0.6, 1.4], ['sprites/deco/desierto/huesos2.png', 1.35, 1, 2.0, 0.6, 1.4], ['sprites/deco/desierto/roca1.png', 1.72, 1, 3.5, 1.4, 1.4], ['sprites/deco/desierto/roca2.png', 1.45, 1, 3.5, 1.4, 1.4], ['sprites/deco/desierto/roca3.png', 1.28, 1, 3.5, 1.4, 1.4], ['sprites/deco/desierto/roca4.png', 1.20, 1, 3.5, 1.4, 1.4], ['sprites/deco/desierto/roca_roja1.png', 1.61, 1, 3.3, 2.2, 2.4], ['sprites/deco/desierto/roca_roja2.png', 1.41, 1, 3.3, 2.2, 2.4], ['sprites/deco/desierto/roca_roja3.png', 1.43, 1, 3.3, 2.2, 2.4], ['sprites/deco/desierto/cristal1.png', 0.90, 1, 1.5, 0.6, 1.8], ['sprites/deco/desierto/cristal2.png', 0.72, 1, 1.5, 0.6, 1.8], ['sprites/deco/desierto/cartel1.png', 0.83, 1, 1.0, 0.3, 1.8], ['sprites/deco/desierto/cartel2.png', 0.72, 1, 1.0, 0.3, 1.8], ['sprites/deco/desierto/valla.png', 1.96, 1, 1.5, 0, 1.6]]},
+    deco: [['sprites/deco/desierto/cactus1.png', 0.84, 1, 6.0, 0.4, 2.8], ['sprites/deco/desierto/cactus2.png', 0.86, 1, 6.0, 0.4, 2.8], ['sprites/deco/desierto/cactus3.png', 0.88, 1, 6.0, 0.4, 2.8], ['sprites/deco/desierto/cactus4.png', 1.13, 1, 6.0, 0.4, 2.8], ['sprites/deco/desierto/cactus_bola1.png', 1.32, 1, 4.0, 0.4, 1.4], ['sprites/deco/desierto/cactus_bola2.png', 1.54, 1, 4.0, 0.4, 1.4], ['sprites/deco/desierto/cactus_bola3.png', 0.75, 1, 4.0, 0.4, 1.4], ['sprites/deco/desierto/acacia1.png', 1.37, 1, 2.0, 1.3, 5.4], ['sprites/deco/desierto/acacia2.png', 1.39, 1, 2.0, 1.3, 5.4], ['sprites/deco/desierto/acacia_tech1.png', 1.30, 1, 1.5, 1.3, 5.4], ['sprites/deco/desierto/acacia_tech2.png', 1.27, 1, 1.5, 1.3, 5.4], ['sprites/deco/desierto/acacia_media1.png', 0.89, 1, 2.7, 0.7, 4], ['sprites/deco/desierto/acacia_media2.png', 0.86, 1, 2.7, 0.7, 4], ['sprites/deco/desierto/acacia_media3.png', 0.94, 1, 2.7, 0.7, 4], ['sprites/deco/desierto/arbol_muerto1.png', 0.90, 1, 2.7, 0, 2], ['sprites/deco/desierto/arbol_muerto2.png', 1.35, 1, 2.7, 0, 2], ['sprites/deco/desierto/arbol_muerto3.png', 1.19, 1, 2.7, 0, 2], ['sprites/deco/desierto/arbusto1.png', 1.54, 1, 4.0, 0, 1.5], ['sprites/deco/desierto/arbusto2.png', 1.57, 1, 4.0, 0, 1.5], ['sprites/deco/desierto/arbusto_flor1.png', 1.48, 1, 2.0, 0, 1.5], ['sprites/deco/desierto/arbusto_flor2.png', 1.35, 1, 2.0, 0, 1.5], ['sprites/deco/desierto/arbusto_flor3.png', 1.27, 1, 2.0, 0, 1.5], ['sprites/deco/desierto/planta1.png', 1.14, 1, 3.0, 0, 1.4], ['sprites/deco/desierto/planta2.png', 1.40, 1, 3.0, 0, 1.4], ['sprites/deco/desierto/pasto_seco1.png', 1.06, 1, 7.0, 0, 1], ['sprites/deco/desierto/pasto_seco2.png', 1.27, 1, 7.0, 0, 1], ['sprites/deco/desierto/huesos1.png', 2.12, 1, 2.0, 0.6, 1.4], ['sprites/deco/desierto/huesos2.png', 1.35, 1, 2.0, 0.6, 1.4], ['sprites/deco/desierto/roca1.png', 1.72, 1, 3.5, 1.4, 1.4], ['sprites/deco/desierto/roca2.png', 1.45, 1, 3.5, 1.4, 1.4], ['sprites/deco/desierto/roca3.png', 1.28, 1, 3.5, 1.4, 1.4], ['sprites/deco/desierto/roca4.png', 1.20, 1, 3.5, 1.4, 1.4], ['sprites/deco/desierto/roca_roja1.png', 1.61, 1, 3.3, 2.2, 2.4], ['sprites/deco/desierto/roca_roja2.png', 1.41, 1, 3.3, 2.2, 2.4], ['sprites/deco/desierto/roca_roja3.png', 1.43, 1, 3.3, 2.2, 2.4], ['sprites/deco/desierto/cristal1.png', 0.90, 1, 1.5, 0.6, 1.8], ['sprites/deco/desierto/cristal2.png', 0.72, 1, 1.5, 0.6, 1.8], ['sprites/deco/desierto/cartel1.png', 0.83, 1, 1.0, 0.3, 1.8], ['sprites/deco/desierto/cartel2.png', 0.72, 1, 1.0, 0.3, 1.8]]},
   ruinas: {rock: 'textures/mapa_roca_desierto.png', set: 'desierto', path: 'textures/mapa_arena_lisa.png', stone: 'textures/mapa_losas_tech_arena.png', mm: ['#e0b04e', '#7d8a8a'],
-    plaza: {fondo: ['arco'], centro: ['altar', 'lapida'], anillo: ['pilar1', 'pilar2', 'ruina2'], sueltos: ['ruina_arena3', 'ruina_arena4', 'ruina_arena6', 'escalera', 'cristal1', 'ruina1']},
+    plaza: {fondo: ['arco'], centro: ['altar', 'lapida'], anillo: ['pilar1', 'pilar2', 'ruina2'], sueltos: ['ruina_arena3', 'ruina_arena4', 'ruina_arena6', 'cristal1', 'ruina1']},
     borde: ['pasto_seco1', 'pasto_seco2', 'ruina_arena7', 'ruina_arena8', 'huesos2', 'roca3', 'cactus_bola3', 'lapida', 'cristal2'],
     floor: 'textures/mapa_losas_arena.png', rep: 110, center: [1.0, 0.9, 0.8], wall: 'textures/muro_arena_kenney.png', mount: 0xc9a27a,
     water: {map: 'textures/agua_verde_kenney.png', color: 0x9fdcae, shore: 0xbfa77a},
-    deco: [['sprites/deco/desierto/ruina_arena1.png', 1.77, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena2.png', 1.97, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena3.png', 1.87, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena4.png', 1.99, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena5.png', 1.64, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena6.png', 1.32, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena7.png', 1.19, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena8.png', 1.19, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/pilar1.png', 0.50, 1, 6.0, 0.6, 3.8], ['sprites/deco/desierto/pilar2.png', 0.48, 1, 6.0, 0.6, 3.8], ['sprites/deco/desierto/arco.png', 1.15, 1, 4.0, 1, 4.4], ['sprites/deco/desierto/ruina1.png', 0.78, 1, 5.0, 0.8, 3], ['sprites/deco/desierto/ruina2.png', 0.75, 1, 5.0, 0.8, 3], ['sprites/deco/desierto/escalera.png', 1.54, 1, 3.0, 0, 2.6], ['sprites/deco/desierto/altar.png', 1.00, 1, 3.0, 1, 2.4], ['sprites/deco/desierto/lapida.png', 0.89, 1, 6.0, 0.6, 2.2], ['sprites/deco/desierto/cactus1.png', 0.84, 1, 2.5, 0.4, 2.8], ['sprites/deco/desierto/cactus2.png', 0.86, 1, 2.5, 0.4, 2.8], ['sprites/deco/desierto/cactus3.png', 0.88, 1, 2.5, 0.4, 2.8], ['sprites/deco/desierto/cactus4.png', 1.13, 1, 2.5, 0.4, 2.8], ['sprites/deco/desierto/pasto_seco1.png', 1.06, 1, 6.0, 0, 1], ['sprites/deco/desierto/pasto_seco2.png', 1.27, 1, 6.0, 0, 1], ['sprites/deco/desierto/huesos1.png', 2.12, 1, 3.0, 0.6, 1.4], ['sprites/deco/desierto/huesos2.png', 1.35, 1, 3.0, 0.6, 1.4], ['sprites/deco/desierto/roca1.png', 1.72, 1, 2.0, 1.4, 1.4], ['sprites/deco/desierto/roca2.png', 1.45, 1, 2.0, 1.4, 1.4], ['sprites/deco/desierto/roca3.png', 1.28, 1, 2.0, 1.4, 1.4], ['sprites/deco/desierto/roca4.png', 1.20, 1, 2.0, 1.4, 1.4], ['sprites/deco/desierto/cristal1.png', 0.90, 1, 2.0, 0.6, 1.8], ['sprites/deco/desierto/cristal2.png', 0.72, 1, 2.0, 0.6, 1.8]]},
+    deco: [['sprites/deco/desierto/ruina_arena1.png', 1.77, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena2.png', 1.97, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena3.png', 1.87, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena4.png', 1.99, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena5.png', 1.64, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena6.png', 1.32, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena7.png', 1.19, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/ruina_arena8.png', 1.19, 1, 3.2, 0, 2.6], ['sprites/deco/desierto/pilar1.png', 0.50, 1, 6.0, 0.6, 3.8], ['sprites/deco/desierto/pilar2.png', 0.48, 1, 6.0, 0.6, 3.8], ['sprites/deco/desierto/arco.png', 1.15, 1, 4.0, 1, 4.4], ['sprites/deco/desierto/ruina1.png', 0.78, 1, 5.0, 0.8, 3], ['sprites/deco/desierto/ruina2.png', 0.75, 1, 5.0, 0.8, 3], ['sprites/deco/desierto/altar.png', 1.00, 1, 3.0, 1, 2.4], ['sprites/deco/desierto/lapida.png', 0.89, 1, 6.0, 0.6, 2.2], ['sprites/deco/desierto/cactus1.png', 0.84, 1, 2.5, 0.4, 2.8], ['sprites/deco/desierto/cactus2.png', 0.86, 1, 2.5, 0.4, 2.8], ['sprites/deco/desierto/cactus3.png', 0.88, 1, 2.5, 0.4, 2.8], ['sprites/deco/desierto/cactus4.png', 1.13, 1, 2.5, 0.4, 2.8], ['sprites/deco/desierto/pasto_seco1.png', 1.06, 1, 6.0, 0, 1], ['sprites/deco/desierto/pasto_seco2.png', 1.27, 1, 6.0, 0, 1], ['sprites/deco/desierto/huesos1.png', 2.12, 1, 3.0, 0.6, 1.4], ['sprites/deco/desierto/huesos2.png', 1.35, 1, 3.0, 0.6, 1.4], ['sprites/deco/desierto/roca1.png', 1.72, 1, 2.0, 1.4, 1.4], ['sprites/deco/desierto/roca2.png', 1.45, 1, 2.0, 1.4, 1.4], ['sprites/deco/desierto/roca3.png', 1.28, 1, 2.0, 1.4, 1.4], ['sprites/deco/desierto/roca4.png', 1.20, 1, 2.0, 1.4, 1.4], ['sprites/deco/desierto/cristal1.png', 0.90, 1, 2.0, 0.6, 1.8], ['sprites/deco/desierto/cristal2.png', 0.72, 1, 2.0, 0.6, 1.8]]},
   nieve: {rock: 'textures/mapa_roca_nieve.png', set: 'nieve', path: 'textures/mapa_tierra_nieve.png', stone: 'textures/mapa_adoquin.png', mm: ['#9a7f74', '#8d93a8'],
-    plaza: {fondo: ['arco'], centro: ['altar'], anillo: ['pilar'], sueltos: ['ruina', 'cristal1', 'roca_grande1', 'pilar_tech', 'escalera']},
+    plaza: {fondo: ['arco'], centro: ['altar'], anillo: ['pilar'], sueltos: ['ruina', 'cristal1', 'roca_grande1', 'pilar_tech']},
     borde: ['flores1', 'flores2', 'flores3', 'arbusto1', 'arbusto_bayas1', 'roca1', 'roca2', 'seta3', 'flor_cristal', 'planta_hielo1', 'tocon2'],
     floor: 'textures/mapa_nieve.png', rep: 80, center: [0.96, 0.98, 1.04], wall: 'textures/piedra_pixel.png', mount: 0xdfe9ff,
     water: {map: 'textures/agua_pixel.png', color: 0xe6f6ff, shore: 0xffffff},
@@ -4291,23 +4336,24 @@ BIOMES.pantano = {...BIOMES.bosque,
     const w = /arbol_azul|arbol_medio|tronco|tocon|seta|helecho/.test(d[0]) ? d[3]*2.2 : d[3];
     return [d[0], d[1], d[2], w, d[4], d[5]];
   })};
-const DECO_AR = {"bosque/arbol":1.12,"bosque/arbol_flor":1.04,"bosque/arbol_otono":1.18,"bosque/arbol_azul":1.09,"bosque/arbol_medio1":0.77,"bosque/arbol_medio2":0.83,"bosque/arbolito":0.78,"bosque/arbusto1":1.57,"bosque/arbusto2":1.35,"bosque/arbusto3":1.45,"bosque/arbusto_flor1":1.49,"bosque/arbusto_flor2":1.47,"bosque/arbusto_flor3":1.39,"bosque/helecho1":1.42,"bosque/helecho2":1.12,"bosque/flores1":1.58,"bosque/flores2":1.59,"bosque/flores3":1.06,"bosque/flores4":1.15,"bosque/seta1":1.42,"bosque/seta2":1.24,"bosque/seta3":1.24,"bosque/tocon1":1.42,"bosque/tocon2":1.28,"bosque/tronco":2.89,"bosque/roca1":1.45,"bosque/roca2":1.48,"bosque/roca_grande1":1.4,"bosque/roca_grande2":1.64,"bosque/cristal":1.03,"bosque/cartel":0.78,"bosque/pilar":0.57,"bosque/arco":1.24,"bosque/ruina":1.01,"bosque/altar":1.0,"bosque/portal":1.51,"bosque/puente":2.77,"bosque/valla":2.11,"bosque/escalera":1.86,"desierto/acacia1":1.37,"desierto/acacia2":1.39,"desierto/acacia_tech1":1.3,"desierto/acacia_tech2":1.27,"desierto/acacia_media1":0.89,"desierto/acacia_media2":0.86,"desierto/acacia_media3":0.94,"desierto/arbusto1":1.54,"desierto/arbusto2":1.57,"desierto/arbusto_flor1":1.48,"desierto/arbusto_flor2":1.35,"desierto/arbusto_flor3":1.27,"desierto/planta1":1.14,"desierto/planta2":1.4,"desierto/pasto_seco1":1.06,"desierto/pasto_seco2":1.27,"desierto/cactus1":0.84,"desierto/cactus2":0.86,"desierto/cactus3":0.88,"desierto/cactus4":1.13,"desierto/cactus_bola1":1.32,"desierto/cactus_bola2":1.54,"desierto/cactus_bola3":0.75,"desierto/arbol_muerto1":0.9,"desierto/arbol_muerto2":1.35,"desierto/arbol_muerto3":1.19,"desierto/huesos1":2.12,"desierto/huesos2":1.35,"desierto/roca1":1.72,"desierto/roca2":1.45,"desierto/roca3":1.28,"desierto/roca4":1.2,"desierto/roca_roja1":1.61,"desierto/roca_roja2":1.41,"desierto/roca_roja3":1.43,"desierto/cristal1":0.9,"desierto/cristal2":0.72,"desierto/cartel1":0.83,"desierto/cartel2":0.72,"desierto/valla":1.96,"desierto/pilar1":0.5,"desierto/pilar2":0.48,"desierto/arco":1.15,"desierto/ruina1":0.78,"desierto/ruina2":0.75,"desierto/escalera":1.54,"desierto/altar":1.0,"desierto/lapida":0.89,"desierto/puente":2.45,"desierto/ruina_arena1":1.77,"desierto/ruina_arena2":1.97,"desierto/ruina_arena3":1.87,"desierto/ruina_arena4":1.99,"desierto/ruina_arena5":1.64,"desierto/ruina_arena6":1.32,"desierto/ruina_arena7":1.19,"desierto/ruina_arena8":1.19,"desierto/portal":1.43,"nieve/pino1":1.02,"nieve/pino2":1.05,"nieve/pino_hielo":1.02,"nieve/arbol_seco1":0.88,"nieve/arbol_seco2":0.94,"nieve/arbolito_seco1":0.78,"nieve/arbolito_seco2":0.74,"nieve/arbusto1":1.62,"nieve/arbusto2":1.52,"nieve/arbusto3":1.57,"nieve/arbusto_bayas1":1.47,"nieve/arbusto_bayas2":1.43,"nieve/arbusto_hielo":1.45,"nieve/planta_hielo1":1.48,"nieve/planta_hielo2":1.49,"nieve/flores1":1.56,"nieve/flores2":1.36,"nieve/flores3":1.24,"nieve/flor_cristal":1.19,"nieve/seta1":1.4,"nieve/seta2":1.34,"nieve/seta3":1.3,"nieve/tocon1":1.38,"nieve/tocon2":1.3,"nieve/tronco":2.62,"nieve/roca1":1.65,"nieve/roca2":1.46,"nieve/roca3":1.43,"nieve/roca_grande1":1.43,"nieve/roca_grande2":1.65,"nieve/cristal1":0.97,"nieve/cristal2":1.38,"nieve/cartel":0.68,"nieve/valla_estandarte":1.87,"nieve/muro_estandarte":1.57,"nieve/muro":1.78,"nieve/torre":0.73,"nieve/pilar":0.48,"nieve/arco":0.93,"nieve/ruina":0.69,"nieve/altar":1.0,"nieve/pilar_tech":0.66,"nieve/portal":1.32,"nieve/puente":2.27,"nieve/escalera":1.48};
+const DECO_AR = {"bosque/arbol":1.12,"bosque/arbol_flor":1.04,"bosque/arbol_otono":1.18,"bosque/arbol_azul":1.09,"bosque/arbol_medio1":0.77,"bosque/arbol_medio2":0.83,"bosque/arbolito":0.78,"bosque/arbusto1":1.57,"bosque/arbusto2":1.35,"bosque/arbusto3":1.45,"bosque/arbusto_flor1":1.49,"bosque/arbusto_flor2":1.47,"bosque/arbusto_flor3":1.39,"bosque/helecho1":1.42,"bosque/helecho2":1.12,"bosque/flores1":1.58,"bosque/flores2":1.59,"bosque/flores3":1.06,"bosque/flores4":1.15,"bosque/seta1":1.42,"bosque/seta2":1.24,"bosque/seta3":1.24,"bosque/tocon1":1.42,"bosque/tocon2":1.28,"bosque/tronco":2.89,"bosque/roca1":1.45,"bosque/roca2":1.48,"bosque/roca_grande1":1.4,"bosque/roca_grande2":1.64,"bosque/cristal":1.03,"bosque/cartel":0.78,"bosque/pilar":0.57,"bosque/arco":1.24,"bosque/ruina":1.01,"bosque/altar":1.0,"bosque/portal":1.51,"bosque/puente":2.77,"desierto/acacia1":1.37,"desierto/acacia2":1.39,"desierto/acacia_tech1":1.3,"desierto/acacia_tech2":1.27,"desierto/acacia_media1":0.89,"desierto/acacia_media2":0.86,"desierto/acacia_media3":0.94,"desierto/arbusto1":1.54,"desierto/arbusto2":1.57,"desierto/arbusto_flor1":1.48,"desierto/arbusto_flor2":1.35,"desierto/arbusto_flor3":1.27,"desierto/planta1":1.14,"desierto/planta2":1.4,"desierto/pasto_seco1":1.06,"desierto/pasto_seco2":1.27,"desierto/cactus1":0.84,"desierto/cactus2":0.86,"desierto/cactus3":0.88,"desierto/cactus4":1.13,"desierto/cactus_bola1":1.32,"desierto/cactus_bola2":1.54,"desierto/cactus_bola3":0.75,"desierto/arbol_muerto1":0.9,"desierto/arbol_muerto2":1.35,"desierto/arbol_muerto3":1.19,"desierto/huesos1":2.12,"desierto/huesos2":1.35,"desierto/roca1":1.72,"desierto/roca2":1.45,"desierto/roca3":1.28,"desierto/roca4":1.2,"desierto/roca_roja1":1.61,"desierto/roca_roja2":1.41,"desierto/roca_roja3":1.43,"desierto/cristal1":0.9,"desierto/cristal2":0.72,"desierto/cartel1":0.83,"desierto/cartel2":0.72,"desierto/pilar1":0.5,"desierto/pilar2":0.48,"desierto/arco":1.15,"desierto/ruina1":0.78,"desierto/ruina2":0.75,"desierto/altar":1.0,"desierto/lapida":0.89,"desierto/puente":2.45,"desierto/ruina_arena1":1.77,"desierto/ruina_arena2":1.97,"desierto/ruina_arena3":1.87,"desierto/ruina_arena4":1.99,"desierto/ruina_arena5":1.64,"desierto/ruina_arena6":1.32,"desierto/ruina_arena7":1.19,"desierto/ruina_arena8":1.19,"desierto/portal":1.43,"nieve/pino1":1.02,"nieve/pino2":1.05,"nieve/pino_hielo":1.02,"nieve/arbol_seco1":0.88,"nieve/arbol_seco2":0.94,"nieve/arbolito_seco1":0.78,"nieve/arbolito_seco2":0.74,"nieve/arbusto1":1.62,"nieve/arbusto2":1.52,"nieve/arbusto3":1.57,"nieve/arbusto_bayas1":1.47,"nieve/arbusto_bayas2":1.43,"nieve/arbusto_hielo":1.45,"nieve/planta_hielo1":1.48,"nieve/planta_hielo2":1.49,"nieve/flores1":1.56,"nieve/flores2":1.36,"nieve/flores3":1.24,"nieve/flor_cristal":1.19,"nieve/seta1":1.4,"nieve/seta2":1.34,"nieve/seta3":1.3,"nieve/tocon1":1.38,"nieve/tocon2":1.3,"nieve/tronco":2.62,"nieve/roca1":1.65,"nieve/roca2":1.46,"nieve/roca3":1.43,"nieve/roca_grande1":1.43,"nieve/roca_grande2":1.65,"nieve/cristal1":0.97,"nieve/cristal2":1.38,"nieve/cartel":0.68,"nieve/valla_estandarte":1.87,"nieve/muro_estandarte":1.57,"nieve/muro":1.78,"nieve/torre":0.73,"nieve/pilar":0.48,"nieve/arco":0.93,"nieve/ruina":0.69,"nieve/altar":1.0,"nieve/pilar_tech":0.66,"nieve/portal":1.32,"nieve/puente":2.27};
 const PROP_SIZE = {arco: 4.4, altar: 2.4, pilar: 3.8, pilar_tech: 3.2, ruina: 2.8, ruina_arena: 2.6, roca_grande: 2.2, roca_roja: 2.2, cristal: 1.8, roca: 1.4, flores: 0.9,
   arbusto: 1.6, arbusto_flor: 1.6, arbusto_bayas: 1.6, seta: 1.1, valla: 1.6, cartel: 1.8, torre: 6, muro: 3, muro_estandarte: 3, valla_estandarte: 2, lapida: 2.2,
-  escalera: 2.4, cactus: 2.8, cactus_bola: 1.4, pasto_seco: 1, huesos: 1.4, planta_hielo: 1.4, flor_cristal: 1, helecho: 1.5, tocon: 1.5};
+  cactus: 2.8, cactus_bola: 1.4, pasto_seco: 1, huesos: 1.4, planta_hielo: 1.4, flor_cristal: 1, helecho: 1.5, tocon: 1.5};
 function seededRng(str){
   let h = 1779033703;
   for (const ch of str) h = Math.imul(h ^ ch.charCodeAt(0), 3432918353), h = h << 13 | h >>> 19;
   return () => { h = Math.imul(h ^ h >>> 16, 2246822507); h = Math.imul(h ^ h >>> 13, 3266489909); return ((h ^= h >>> 16) >>> 0)/4294967296; };
 }
-/* Disposición de cada pantalla: un claro central del que salen caminos hacia las plazas de piedra con ruinas,
-   los lagos, el puente y el portal. La misma semilla da siempre el mismo mapa para un bioma. */
+/* Disposición de cada pantalla: el claro central, las plazas de piedra con ruinas, los lagos y el portal,
+   unidos por caminos. Los caminos van de un sitio a otro (árbol de caminos más cortos y un par de atajos),
+   así que todos llevan a algo. La misma semilla da siempre el mismo mapa para un bioma. */
 let layout = null, layoutMini = null, maskData = null;
-function buildLayout(name, B){
-  const rnd = seededRng(name), L = {plazas: [], paths: []};
-  const spots = PLAZA_SPOTS.slice().sort(() => rnd() - 0.5).slice(0, 6);
-  for (const [x, z, r] of spots) L.plazas.push({x, z, r});
-  if (name !== 'bosque') L.plazas.push({x: PORTAL.x, z: PORTAL.z + 4, r: 9, portal: true});
+function buildLayout(name, B, seed = 0){
+  const rnd = seededRng(name + (seed ? ':' + seed : '')), L = {plazas: [], paths: []};
+  const spots = seed ? PLAZA_SPOTS.slice() : PLAZA_SPOTS.slice().sort(() => rnd() - 0.5).slice(0, 6);
+  for (const [x, z, r] of spots) L.plazas.push({x, z, r, ends: []});
+  if (name !== 'bosque') L.plazas.push({x: PORTAL.x, z: PORTAL.z + 4, r: 9, portal: true, ends: []});
   const wobble = (ax, az, bx, bz, amp) => {
     const n = Math.max(2, Math.ceil(Math.hypot(bx - ax, bz - az)/3)), f = 1 + rnd()*1.5, ph = rnd()*6, pts = [];
     const nx = -(bz - az), nz = bx - ax, nl = Math.hypot(nx, nz) || 1;
@@ -4317,8 +4363,50 @@ function buildLayout(name, B){
     }
     return pts;
   };
-  for (const P of L.plazas) L.paths.push(wobble(0, 0, P.x, P.z, 5));
-  for (const i of [0, 1, 2]){ const P = PONDS[i], d = Math.hypot(P.x, P.z), k = 1 - (Math.max(P.rx, P.rz) + 3)/d; L.paths.push(wobble(0, 0, P.x*k, P.z*k, 3)); }
+  // Sitios que unen los caminos: el centro, cada plaza, el portal y la orilla de cada lago
+  const nodes = [{x: 0, z: 0}];
+  for (const P of L.plazas) nodes.push({x: P.x, z: P.z, P});
+  if (name === 'bosque') nodes.push({x: PORTAL.x, z: PORTAL.z + 6});
+  for (const P of PONDS) nodes.push({x: P.x, z: P.z, pond: P, stop: Math.max(P.rx, P.rz)*1.15 + 2});
+  // Coste de un tramo: la distancia, más caro si cruza otro lago o dos lagos se unen entre sí
+  const cost = (a, b) => {
+    let c = Math.hypot(b.x - a.x, b.z - a.z);
+    if (a.pond && b.pond) c *= 2.5;
+    for (let t = 0.1; t < 0.95; t += 0.1){
+      const x = a.x + (b.x - a.x)*t, z = a.z + (b.z - a.z)*t;
+      if (PONDS.some(P => P !== a.pond && P !== b.pond && pondDist(P, x, z) < 2)){ c *= 3; break; }
+    }
+    return c;
+  };
+  const edges = [], inTree = [0], key = (i, j) => Math.min(i, j) + '-' + Math.max(i, j), used = new Set();
+  while (inTree.length < nodes.length){
+    let best = null;
+    for (const i of inTree) for (let j = 0; j < nodes.length; j++){
+      if (inTree.includes(j)) continue;
+      const c = cost(nodes[i], nodes[j]);
+      if (!best || c < best.c) best = {i, j, c};
+    }
+    inTree.push(best.j); edges.push([best.i, best.j]); used.add(key(best.i, best.j));
+  }
+  // Uno o dos atajos entre plazas cercanas para que haya rutas en círculo
+  const extra = [];
+  for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++){
+    if (used.has(key(i, j)) || nodes[i].pond || nodes[j].pond) continue;
+    const c = cost(nodes[i], nodes[j]); if (c < 85) extra.push([i, j, c + rnd()*20]);
+  }
+  extra.sort((a, b) => a[2] - b[2]).slice(0, 1 + Math.floor(rnd()*2)).forEach(([i, j]) => edges.push([i, j]));
+  // Punto donde empieza o acaba el camino en un sitio: los lagos, en la orilla
+  const endAt = (n, o) => {
+    if (!n.stop) return [n.x, n.z];
+    const d = Math.hypot(o.x - n.x, o.z - n.z) || 1;
+    return [n.x + (o.x - n.x)/d*n.stop, n.z + (o.z - n.z)/d*n.stop];
+  };
+  for (const [i, j] of edges){
+    const A = nodes[i], Bn = nodes[j], [ax, az] = endAt(A, Bn), [bx, bz] = endAt(Bn, A);
+    L.paths.push(wobble(ax, az, bx, bz, A.pond || Bn.pond ? 3 : 5));
+    if (A.P) A.P.ends.push(Math.atan2(Bn.z - A.z, Bn.x - A.x));
+    if (Bn.P) Bn.P.ends.push(Math.atan2(A.z - Bn.z, A.x - Bn.x));
+  }
   // Máscara: canal rojo = camino, verde = losas (con un poco de desenfoque para bordes suaves)
   const c = maskCanvas.getContext('2d'), N = MASK_N, S = TERRAIN_SIZE, px = v => (v + S/2)/S*N;
   c.globalCompositeOperation = 'source-over'; c.filter = 'none';
@@ -4366,7 +4454,7 @@ function propSprite(set, name, x, z, scale = 1, shadow = 0){
 const biomeTexCache = {};
 function biomeTex(path, rx, ry){ return biomeTexCache[path + rx + ':' + ry] || (biomeTexCache[path + rx + ':' + ry] = loadTex(path, rx, ry, true)); }
 let curBiome = null;
-function buildEnvironment(name = 'bosque'){
+function buildEnvironment(name = 'bosque', seed = 0){
   const B = BIOMES[name] || BIOMES.bosque;
   curBiome = name;
   // Vacía la decoración anterior (los materiales de cada sprite son propios; las texturas se reutilizan)
@@ -4375,18 +4463,24 @@ function buildEnvironment(name = 'bosque'){
   const total = B.deco.reduce((a, d) => a + d[3], 0);
   // Suelo por capas y disposición del mapa
   floorU.uPathTex.value = biomeTex(B.path, 1, 1); floorU.uStoneTex.value = biomeTex(B.stone, 1, 1); floorU.uRockTex.value = biomeTex(B.rock, 1, 1);
-  layout = buildLayout(name, B);
-  const rnd = seededRng(name + '-deco'), set = B.set;
+  layout = buildLayout(name, B, seed);
+  const rnd = seededRng(name + (seed ? ':' + seed : '') + '-deco'), set = B.set;
   // Plazas: arco o torre al fondo, altar en el centro, columnas o muros en corro y restos sueltos
   for (const P of layout.plazas){
     if (P.portal){ for (const sx of [-1, 1]) propSprite(set, B.plaza.anillo[0], P.x + sx*(P.r - 1.5), P.z + 2, 1, 0.5); continue; }
     const pick = arr => arr[Math.floor(rnd()*arr.length)];
-    propSprite(set, pick(B.plaza.fondo), P.x, P.z - P.r*0.7, 1, 0.6);
+    // Entradas: por donde llegan los caminos. El arco va en el hueco más grande, lejos de ellas
+    const ends = P.ends.length ? P.ends : [Math.atan2(-P.z, -P.x)];
+    const gap = a => Math.min(...ends.map(e => Math.abs(Math.atan2(Math.sin(a - e), Math.cos(a - e)))));
+    let back = -Math.PI/2;
+    for (let i = 0, best = -1; i < 16; i++){ const a = i/16*Math.PI*2, gp = gap(a) + (Math.sin(a) < 0 ? 0.3 : 0); if (gp > best){ best = gp; back = a; } }
+    propSprite(set, pick(B.plaza.fondo), P.x + Math.cos(back)*P.r*0.7, P.z + Math.sin(back)*P.r*0.7, 1, 0.6);
     propSprite(set, pick(B.plaza.centro), P.x + (rnd() - 0.5)*2, P.z + (rnd() - 0.5)*2, 1, 0.6);
-    const toHub = Math.atan2(-P.z, -P.x), n = 6 + Math.floor(rnd()*3);
+    const n = 8 + Math.floor(rnd()*3), a0 = rnd()*Math.PI*2;
     for (let i = 0; i < n; i++){
-      const a = toHub + 0.7 + i/(n - 1)*(Math.PI*2 - 1.4);    // deja libre la entrada del camino
-      if (Math.abs(Math.sin(a) + 1) < 0.15) continue;         // no tapa el arco del fondo
+      const a = a0 + i/n*Math.PI*2;
+      if (gap(a) < 0.6) continue;                                                     // deja libre la entrada del camino
+      if (Math.abs(Math.atan2(Math.sin(a - back), Math.cos(a - back))) < 0.45) continue;   // no tapa el arco del fondo
       propSprite(set, pick(B.plaza.anillo), P.x + Math.cos(a)*P.r*0.88, P.z + Math.sin(a)*P.r*0.88, 0.9 + rnd()*0.2, 0.4);
     }
     for (let i = 0; i < 3; i++){ const a = rnd()*Math.PI*2, rr = P.r*(0.35 + rnd()*0.3); propSprite(set, pick(B.plaza.sueltos), P.x + Math.cos(a)*rr, P.z + Math.sin(a)*rr, 0.9, 0.4); }
@@ -4424,9 +4518,14 @@ function buildEnvironment(name = 'bosque'){
   }
 }
 // Aplica un bioma al escenario: suelo, centro, muro, montañas, agua y decoración
+let curWorld = 'bosque:0';
 function applyBiome(name){
   const B = BIOMES[name] || BIOMES.bosque;
-  if (curBiome === name) return;
+  const seed = (g && g.seed) || 0, key = name + ':' + seed;
+  if (curWorld === key) return;
+  curWorld = key;
+  // Cada partida (y cada pantalla) tiene su propio mapa; sin semilla se queda el mapa de siempre
+  if (seed){ genWorld('mapa:' + key); shapeTerrain(); buildPonds(); }
   floorMat.map = biomeTex(B.floor, B.rep, B.rep); floorMat.needsUpdate = true;
   tintCenter = B.center; paintTerrain();
   wallMat.map = biomeTex(B.wall, 14, 1); wallMat.needsUpdate = true;
@@ -4435,7 +4534,7 @@ function applyBiome(name){
   pondWater.material.emissive = new THREE.Color(B.water.lava ? 0x992200 : 0x000000);
   pondWater.material.needsUpdate = true;
   pondShore.material.color.set(B.water.shore);
-  buildEnvironment(name);
+  buildEnvironment(name, seed);
 }
 buildEnvironment('bosque');
 
@@ -6445,6 +6544,8 @@ function startGame(key, resume){
   g = {
     mode: runMode,
     weekly: runWeekly && runMode !== 'surv',
+    // Semilla del mapa: una nueva en cada partida; el reto semanal usa la de la semana (mismo mapa para todos)
+    seed: (resume && resume.g && resume.g.seed) || (runWeekly && runMode !== 'surv' ? 7919*(weekNum() + 1000) : 1 + Math.floor(Math.random()*2e9)),
     ch: {...c, id:key},
     p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:3.5, critChance:0.12, critMul:2},
     t: 0, kills: 0, enemies: [], shots: [], gems: [], blades: [], turrets: [], zones: [],
@@ -7366,7 +7467,7 @@ function spawnBerry(){
     x.fillStyle = '#43a047'; x.beginPath(); x.ellipse(36, 14, 14, 6, -0.5, 0, Math.PI*2); x.fill();
     for (const [bx, by] of [[22, 34], [40, 32], [31, 48]]){ const gr = x.createRadialGradient(bx - 4, by - 4, 1, bx, by, 12); gr.addColorStop(0, '#ff8a80'); gr.addColorStop(1, '#c62828'); x.fillStyle = gr; x.beginPath(); x.arc(bx, by, 11, 0, Math.PI*2); x.fill(); x.fillStyle = 'rgba(255,255,255,.8)'; x.beginPath(); x.arc(bx - 4, by - 4, 3, 0, Math.PI*2); x.fill(); }
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.magFilter = THREE.NearestFilter;
-    berryMat = new THREE.SpriteMaterial({map: t, transparent: true});
+    berryMat = new THREE.SpriteMaterial({map: t, transparent: true, alphaTest: 0.1});
   }
   const [x, z] = nodeNear(10, 26);
   const mesh = new THREE.Sprite(berryMat); mesh.scale.set(1.3, 1.3, 1);
@@ -11905,7 +12006,7 @@ if (new URLSearchParams(location.search).has('demo')){
     rollTier,
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
-    spawnMini, MINIS, PORTAL, startMapEvent, SHRINE_TYPES, initShrines, summonBoss, openPortal, enterScreen, openRelics, useCons, openRoutes, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
+    spawnMini, MINIS, PORTAL, PONDS, PLAZA_SPOTS, get layout(){ return layout; }, openMap, closeMap, topView(h = 230){ camera.position.set(0, h, 40); camera.lookAt(0, 0, 0); const f = camera.far; camera.far = 600; camera.updateProjectionMatrix(); renderer.render(scene, camera); camera.far = f; camera.updateProjectionMatrix(); }, startMapEvent, SHRINE_TYPES, initShrines, summonBoss, openPortal, enterScreen, openRelics, useCons, openRoutes, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
     stepUpdate: dt => update(dt), animateEvo, updateFx, syncMeshes, tryDash, openChest,
     resume(){ if (state === 'paused'){ state = 'play'; hideOverlay(); hidePause(); } },
     // Simulación rápida sin dibujar (para medir el equilibrio): avanza sec segundos y elige la carta pick en cada subida
