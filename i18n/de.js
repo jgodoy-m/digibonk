@@ -426,7 +426,7 @@ I18N.add('de', {
   "Disparo Espiral": "Spiralschuss",
   "Proyectil rápido que atraviesa a los enemigos (2 al nivel 1).": "Schnelles Projektil, das Gegner durchdringt (2 auf Level 1).",
   "Cuchilla Persiguiente": "Jagdklinge",
-  "Hojas de energía que buscan al enemigo más fuerte de la pantalla.": "Energieblätter, die den stärksten Gegner auf dem Bildschirm suchen.",
+  "Cuchillas de energía que buscan al enemigo más fuerte de la pantalla.": "Energieklingen, die den stärksten Gegner auf dem Bildschirm suchen.",
   "Rayo Láser": "Laserstrahl",
   "Haz neón hacia el enemigo más cercano; atraviesa a los que están en línea.": "Neonstrahl auf den nächsten Gegner; durchdringt alle in einer Linie.",
   "Mina Digital": "Digitale Mine",
@@ -1339,3 +1339,33 @@ I18N.add('de', {
   "¡Refuerzos!": "Verstärkung!",
   "+25 vida máx.": "+25 max. LP"
 });
+
+// Pantalla de créditos y licencias
+I18N.add('de', {
+  "Créditos": "Credits",
+  "Autores, licencias y aviso de fan-game.": "Autoren, Lizenzen und Fan-Game-Hinweis.",
+  "Fan-game gratuito y no oficial, hecho por fans y sin ánimo de lucro. No tiene relación con Bandai Namco ni con Toei Animation.": "Kostenloses, inoffizielles Fan-Game von Fans, ohne Gewinnabsicht. Es steht in keiner Verbindung zu Bandai Namco oder Toei Animation.",
+  "Digimon, sus nombres y sus diseños son propiedad de Bandai Namco, Toei Animation y Akiyoshi Hongo.": "Digimon, ihre Namen und Designs sind Eigentum von Bandai Namco, Toei Animation und Akiyoshi Hongo.",
+  "Autor del juego": "Autor des Spiels",
+  "Pendiente: falta poner el nombre o alias del autor.": "Ausstehend: Name oder Alias des Autors fehlt noch.",
+  "Digimon jugables y skins": "Spielbare Digimon und Skins",
+  "Hojas de animación de las líneas jugables, Leomon, Hagurumon, Frigimon y Wizardmon, retratos e iconos de skin: aportados por el autor del juego (generados con IA).": "Animationsbögen der spielbaren Linien, Leomon, Hagurumon, Frigimon und Wizardmon, Porträts und Skin-Symbole: vom Autor des Spiels bereitgestellt (KI-generiert).",
+  "Enemigos y jefes": "Gegner und Bosse",
+  "Sprites de la base «Digimon / Pendulum Color Mod Sprite Database», recortados y ampliados.": "Sprites aus der „Digimon / Pendulum Color Mod Sprite Database“, zugeschnitten und vergrößert.",
+  "Cargando autores…": "Autoren werden geladen…",
+  "Pendiente de verificar": "Noch zu prüfen",
+  "La base de sprites no publica licencia. Falta el permiso de sus autores (tero0x, tortoisehel, Ray y phrogmentado) para usar sus sprites; los sprites «Dot» originales son de Bandai.": "Die Sprite-Datenbank veröffentlicht keine Lizenz. Die Erlaubnis ihrer Autoren (tero0x, tortoisehel, Ray und phrogmentado) zur Nutzung ihrer Sprites fehlt noch; die originalen „Dot“-Sprites gehören Bandai.",
+  "Música": "Musik",
+  "«Together we are strong» de ThisIsBeatKitchen, en Pixabay.": "„Together we are strong“ von ThisIsBeatKitchen, auf Pixabay.",
+  "Los efectos de sonido se generan en el propio juego.": "Die Soundeffekte erzeugt das Spiel selbst.",
+  "Mapas, decoración y modelos 3D": "Karten, Deko und 3D-Modelle",
+  "Suelos, decoración, portales, santuario y cofre: aportados por el autor del juego (generados con IA). Agua y piedra en pixel art: generadas dentro del proyecto.": "Böden, Deko, Portale, Schrein und Truhe: vom Autor des Spiels bereitgestellt (KI-generiert). Wasser und Stein in Pixel-Art: im Projekt erstellt.",
+  "Texturas «Retro Textures Fantasy», iconos de «Tiny Dungeon» y «Tiny Battle» y partículas de «Particle Pack».": "Texturen aus „Retro Textures Fantasy“, Symbole aus „Tiny Dungeon“ und „Tiny Battle“ und Partikel aus „Particle Pack“.",
+  "Tipografías": "Schriftarten",
+  "Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).": "Orbitron (Matt McInerney) und Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).",
+  "Motor gráfico": "Grafik-Engine",
+  "Bandai (sprites Dot)": "Bandai (Dot-Sprites)"
+});
+
+I18N.add('de', {"Logro: completar 5 partidas con Gatomon · {0}": "Erfolg: 5 Runden mit Gatomon beenden · {0}"});
+I18N.add('de', {"×{0} daño": "×{0} Schaden", "×{0} recibido": "×{0} erhalten"});

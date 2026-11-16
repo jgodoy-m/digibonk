@@ -433,7 +433,7 @@ I18N.add('zh', {
   "Disparo Espiral": "螺旋射击",
   "Proyectil rápido que atraviesa a los enemigos (2 al nivel 1).": "穿透敌人的快速弹体（1 级时 2 发）。",
   "Cuchilla Persiguiente": "追踪刀刃",
-  "Hojas de energía que buscan al enemigo más fuerte de la pantalla.": "寻找屏幕上最强敌人的能量叶片。",
+  "Cuchillas de energía que buscan al enemigo más fuerte de la pantalla.": "寻找屏幕上最强敌人的能量刀刃。",
   "Rayo Láser": "激光束",
   "Haz neón hacia el enemigo más cercano; atraviesa a los que están en línea.": "射向最近敌人的霓虹光束；穿透直线上的敌人。",
   "Mina Digital": "数字地雷",
@@ -1353,3 +1353,33 @@ I18N.add('zh', {
   "¡Refuerzos!": "援军！",
   "+25 vida máx.": "最大生命 +25"
 });
+
+// Pantalla de créditos y licencias
+I18N.add('zh', {
+  "Créditos": "制作人员",
+  "Autores, licencias y aviso de fan-game.": "作者、许可与同人游戏声明。",
+  "Fan-game gratuito y no oficial, hecho por fans y sin ánimo de lucro. No tiene relación con Bandai Namco ni con Toei Animation.": "由粉丝制作的免费、非官方、非营利同人游戏。与万代南梦宫及东映动画无关。",
+  "Digimon, sus nombres y sus diseños son propiedad de Bandai Namco, Toei Animation y Akiyoshi Hongo.": "数码宝贝及其名称和设计归万代南梦宫、东映动画和本乡明义所有。",
+  "Autor del juego": "游戏作者",
+  "Pendiente: falta poner el nombre o alias del autor.": "待补充：尚未填写作者的名字或昵称。",
+  "Digimon jugables y skins": "可玩数码宝贝与皮肤",
+  "Hojas de animación de las líneas jugables, Leomon, Hagurumon, Frigimon y Wizardmon, retratos e iconos de skin: aportados por el autor del juego (generados con IA).": "可玩进化线、Leomon、Hagurumon、Frigimon 和 Wizardmon的动画图、头像和皮肤图标：由游戏作者提供（AI 生成）。",
+  "Enemigos y jefes": "敌人与首领",
+  "Sprites de la base «Digimon / Pendulum Color Mod Sprite Database», recortados y ampliados.": "来自「Digimon / Pendulum Color Mod Sprite Database」的像素图，经裁剪和放大。",
+  "Cargando autores…": "正在加载作者…",
+  "Pendiente de verificar": "待核实",
+  "La base de sprites no publica licencia. Falta el permiso de sus autores (tero0x, tortoisehel, Ray y phrogmentado) para usar sus sprites; los sprites «Dot» originales son de Bandai.": "该像素图数据库未公布许可。尚未获得其作者（tero0x、tortoisehel、Ray 和 phrogmentado）使用像素图的许可；原版「点阵」像素图归万代所有。",
+  "Música": "音乐",
+  "«Together we are strong» de ThisIsBeatKitchen, en Pixabay.": "ThisIsBeatKitchen 的「Together we are strong」，来自 Pixabay。",
+  "Los efectos de sonido se generan en el propio juego.": "音效由游戏自身生成。",
+  "Mapas, decoración y modelos 3D": "地图、装饰与 3D 模型",
+  "Suelos, decoración, portales, santuario y cofre: aportados por el autor del juego (generados con IA). Agua y piedra en pixel art: generadas dentro del proyecto.": "地面、装饰、传送门、神殿和宝箱：由游戏作者提供（AI 生成）。像素风水和石头：在项目内制作。",
+  "Texturas «Retro Textures Fantasy», iconos de «Tiny Dungeon» y «Tiny Battle» y partículas de «Particle Pack».": "「Retro Textures Fantasy」纹理、「Tiny Dungeon」和「Tiny Battle」图标以及「Particle Pack」粒子。",
+  "Tipografías": "字体",
+  "Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).": "Orbitron（Matt McInerney）和 Nunito（Vernon Adams、Cyreal、Jacques Le Bailly）。",
+  "Motor gráfico": "图形引擎",
+  "Bandai (sprites Dot)": "万代（点阵像素图）"
+});
+
+I18N.add('zh', {"Logro: completar 5 partidas con Gatomon · {0}": "成就：用 Gatomon 完成 5 局 · {0}"});
+I18N.add('zh', {"×{0} daño": "伤害 ×{0}", "×{0} recibido": "受到伤害 ×{0}"});

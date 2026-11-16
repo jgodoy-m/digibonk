@@ -426,7 +426,7 @@ I18N.add('pt', {
   "Disparo Espiral": "Disparo Espiral",
   "Proyectil rápido que atraviesa a los enemigos (2 al nivel 1).": "Projétil rápido que atravessa os inimigos (2 no nível 1).",
   "Cuchilla Persiguiente": "Lâmina Perseguidora",
-  "Hojas de energía que buscan al enemigo más fuerte de la pantalla.": "Folhas de energia que buscam o inimigo mais forte da tela.",
+  "Cuchillas de energía que buscan al enemigo más fuerte de la pantalla.": "Lâminas de energia que buscam o inimigo mais forte da tela.",
   "Rayo Láser": "Raio Laser",
   "Haz neón hacia el enemigo más cercano; atraviesa a los que están en línea.": "Feixe neon no inimigo mais próximo; atravessa os que estão em linha.",
   "Mina Digital": "Mina Digital",
@@ -1339,3 +1339,33 @@ I18N.add('pt', {
   "¡Refuerzos!": "Reforços!",
   "+25 vida máx.": "+25 vida máx."
 });
+
+// Pantalla de créditos y licencias
+I18N.add('pt', {
+  "Créditos": "Créditos",
+  "Autores, licencias y aviso de fan-game.": "Autores, licenças e aviso de fan-game.",
+  "Fan-game gratuito y no oficial, hecho por fans y sin ánimo de lucro. No tiene relación con Bandai Namco ni con Toei Animation.": "Fan-game gratuito e não oficial, feito por fãs e sem fins lucrativos. Não tem relação com a Bandai Namco nem com a Toei Animation.",
+  "Digimon, sus nombres y sus diseños son propiedad de Bandai Namco, Toei Animation y Akiyoshi Hongo.": "Digimon, os seus nomes e designs são propriedade da Bandai Namco, Toei Animation e Akiyoshi Hongo.",
+  "Autor del juego": "Autor do jogo",
+  "Pendiente: falta poner el nombre o alias del autor.": "Pendente: falta o nome ou alias do autor.",
+  "Digimon jugables y skins": "Digimon jogáveis e skins",
+  "Hojas de animación de las líneas jugables, Leomon, Hagurumon, Frigimon y Wizardmon, retratos e iconos de skin: aportados por el autor del juego (generados con IA).": "Folhas de animação das linhas jogáveis, Leomon, Hagurumon, Frigimon e Wizardmon, retratos e ícones de skin: fornecidos pelo autor do jogo (gerados com IA).",
+  "Enemigos y jefes": "Inimigos e chefes",
+  "Sprites de la base «Digimon / Pendulum Color Mod Sprite Database», recortados y ampliados.": "Sprites da base «Digimon / Pendulum Color Mod Sprite Database», recortados e ampliados.",
+  "Cargando autores…": "Carregando autores…",
+  "Pendiente de verificar": "Pendente de verificação",
+  "La base de sprites no publica licencia. Falta el permiso de sus autores (tero0x, tortoisehel, Ray y phrogmentado) para usar sus sprites; los sprites «Dot» originales son de Bandai.": "A base de sprites não publica licença. Falta a permissão dos seus autores (tero0x, tortoisehel, Ray e phrogmentado) para usar os sprites; os sprites «Dot» originais são da Bandai.",
+  "Música": "Música",
+  "«Together we are strong» de ThisIsBeatKitchen, en Pixabay.": "«Together we are strong» de ThisIsBeatKitchen, no Pixabay.",
+  "Los efectos de sonido se generan en el propio juego.": "Os efeitos sonoros são gerados pelo próprio jogo.",
+  "Mapas, decoración y modelos 3D": "Mapas, decoração e modelos 3D",
+  "Suelos, decoración, portales, santuario y cofre: aportados por el autor del juego (generados con IA). Agua y piedra en pixel art: generadas dentro del proyecto.": "Chão, decoração, portais, santuário e baú: fornecidos pelo autor do jogo (gerados com IA). Água e pedra em pixel art: feitas dentro do projeto.",
+  "Texturas «Retro Textures Fantasy», iconos de «Tiny Dungeon» y «Tiny Battle» y partículas de «Particle Pack».": "Texturas «Retro Textures Fantasy», ícones de «Tiny Dungeon» e «Tiny Battle» e partículas de «Particle Pack».",
+  "Tipografías": "Tipografias",
+  "Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).": "Orbitron (Matt McInerney) e Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).",
+  "Motor gráfico": "Motor gráfico",
+  "Bandai (sprites Dot)": "Bandai (sprites Dot)"
+});
+
+I18N.add('pt', {"Logro: completar 5 partidas con Gatomon · {0}": "Conquista: concluir 5 partidas com o Gatomon · {0}"});
+I18N.add('pt', {"×{0} daño": "×{0} dano", "×{0} recibido": "×{0} recebido"});

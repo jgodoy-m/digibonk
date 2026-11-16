@@ -428,7 +428,7 @@ I18N.add('pl', {
   "Disparo Espiral": "Spiralny Strzał",
   "Proyectil rápido que atraviesa a los enemigos (2 al nivel 1).": "Szybki pocisk przebijający wrogów (2 na poziomie 1).",
   "Cuchilla Persiguiente": "Ścigające Ostrze",
-  "Hojas de energía que buscan al enemigo más fuerte de la pantalla.": "Liście energii szukające najsilniejszego wroga na ekranie.",
+  "Cuchillas de energía que buscan al enemigo más fuerte de la pantalla.": "Ostrza energii szukające najsilniejszego wroga na ekranie.",
   "Rayo Láser": "Promień Lasera",
   "Haz neón hacia el enemigo más cercano; atraviesa a los que están en línea.": "Neonowa wiązka w najbliższego wroga; przebija wszystkich w linii.",
   "Mina Digital": "Cyfrowa Mina",
@@ -1344,3 +1344,33 @@ I18N.add('pl', {
   "¡Refuerzos!": "Posiłki!",
   "+25 vida máx.": "+25 maks. HP"
 });
+
+// Pantalla de créditos y licencias
+I18N.add('pl', {
+  "Créditos": "Twórcy",
+  "Autores, licencias y aviso de fan-game.": "Autorzy, licencje i informacja o grze fanowskiej.",
+  "Fan-game gratuito y no oficial, hecho por fans y sin ánimo de lucro. No tiene relación con Bandai Namco ni con Toei Animation.": "Darmowa, nieoficjalna gra fanowska, stworzona przez fanów bez celu zarobkowego. Nie jest powiązana z Bandai Namco ani Toei Animation.",
+  "Digimon, sus nombres y sus diseños son propiedad de Bandai Namco, Toei Animation y Akiyoshi Hongo.": "Digimony, ich nazwy i projekty są własnością Bandai Namco, Toei Animation i Akiyoshiego Hongo.",
+  "Autor del juego": "Autor gry",
+  "Pendiente: falta poner el nombre o alias del autor.": "Do uzupełnienia: brakuje imienia lub pseudonimu autora.",
+  "Digimon jugables y skins": "Grywalne Digimony i skórki",
+  "Hojas de animación de las líneas jugables, Leomon, Hagurumon, Frigimon y Wizardmon, retratos e iconos de skin: aportados por el autor del juego (generados con IA).": "Arkusze animacji grywalnych linii, Leomon, Hagurumon, Frigimon i Wizardmon, portrety i ikony skórek: dostarczone przez autora gry (wygenerowane przez AI).",
+  "Enemigos y jefes": "Wrogowie i bossowie",
+  "Sprites de la base «Digimon / Pendulum Color Mod Sprite Database», recortados y ampliados.": "Sprite'y z bazy „Digimon / Pendulum Color Mod Sprite Database”, przycięte i powiększone.",
+  "Cargando autores…": "Wczytywanie autorów…",
+  "Pendiente de verificar": "Do sprawdzenia",
+  "La base de sprites no publica licencia. Falta el permiso de sus autores (tero0x, tortoisehel, Ray y phrogmentado) para usar sus sprites; los sprites «Dot» originales son de Bandai.": "Baza sprite'ów nie publikuje licencji. Brakuje zgody jej autorów (tero0x, tortoisehel, Ray i phrogmentado) na użycie ich sprite'ów; oryginalne sprite'y „Dot” należą do Bandai.",
+  "Música": "Muzyka",
+  "«Together we are strong» de ThisIsBeatKitchen, en Pixabay.": "„Together we are strong” autorstwa ThisIsBeatKitchen, na Pixabay.",
+  "Los efectos de sonido se generan en el propio juego.": "Efekty dźwiękowe są generowane przez samą grę.",
+  "Mapas, decoración y modelos 3D": "Mapy, dekoracje i modele 3D",
+  "Suelos, decoración, portales, santuario y cofre: aportados por el autor del juego (generados con IA). Agua y piedra en pixel art: generadas dentro del proyecto.": "Podłoża, dekoracje, portale, sanktuarium i skrzynia: dostarczone przez autora gry (wygenerowane przez AI). Woda i kamień w pixel arcie: wykonane w projekcie.",
+  "Texturas «Retro Textures Fantasy», iconos de «Tiny Dungeon» y «Tiny Battle» y partículas de «Particle Pack».": "Tekstury „Retro Textures Fantasy”, ikony z „Tiny Dungeon” i „Tiny Battle” oraz cząsteczki z „Particle Pack”.",
+  "Tipografías": "Czcionki",
+  "Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).": "Orbitron (Matt McInerney) i Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).",
+  "Motor gráfico": "Silnik graficzny",
+  "Bandai (sprites Dot)": "Bandai (sprite'y Dot)"
+});
+
+I18N.add('pl', {"Logro: completar 5 partidas con Gatomon · {0}": "Osiągnięcie: ukończ 5 rozgrywek z Gatomonem · {0}"});
+I18N.add('pl', {"×{0} daño": "×{0} obrażeń", "×{0} recibido": "×{0} otrzymywanych"});

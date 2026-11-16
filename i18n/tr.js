@@ -429,7 +429,7 @@ I18N.add('tr', {
   "Disparo Espiral": "Sarmal Atış",
   "Proyectil rápido que atraviesa a los enemigos (2 al nivel 1).": "Düşmanları delen hızlı mermi (1. seviyede 2).",
   "Cuchilla Persiguiente": "Takipçi Bıçak",
-  "Hojas de energía que buscan al enemigo más fuerte de la pantalla.": "Ekrandaki en güçlü düşmanı arayan enerji yaprakları.",
+  "Cuchillas de energía que buscan al enemigo más fuerte de la pantalla.": "Ekrandaki en güçlü düşmanı arayan enerji bıçakları.",
   "Rayo Láser": "Lazer Işını",
   "Haz neón hacia el enemigo más cercano; atraviesa a los que están en línea.": "En yakın düşmana neon ışın; hattaki herkesi deler.",
   "Mina Digital": "Dijital Mayın",
@@ -1345,3 +1345,33 @@ I18N.add('tr', {
   "¡Refuerzos!": "Takviye!",
   "+25 vida máx.": "+25 maks. can"
 });
+
+// Pantalla de créditos y licencias
+I18N.add('tr', {
+  "Créditos": "Emeği geçenler",
+  "Autores, licencias y aviso de fan-game.": "Yazarlar, lisanslar ve hayran oyunu bildirimi.",
+  "Fan-game gratuito y no oficial, hecho por fans y sin ánimo de lucro. No tiene relación con Bandai Namco ni con Toei Animation.": "Ücretsiz, resmî olmayan, hayranlar tarafından kâr amacı gütmeden yapılmış bir hayran oyunu. Bandai Namco veya Toei Animation ile bir bağlantısı yoktur.",
+  "Digimon, sus nombres y sus diseños son propiedad de Bandai Namco, Toei Animation y Akiyoshi Hongo.": "Digimon'lar, adları ve tasarımları Bandai Namco, Toei Animation ve Akiyoshi Hongo'ya aittir.",
+  "Autor del juego": "Oyunun yazarı",
+  "Pendiente: falta poner el nombre o alias del autor.": "Bekliyor: yazarın adı veya takma adı henüz eklenmedi.",
+  "Digimon jugables y skins": "Oynanabilir Digimon'lar ve görünümler",
+  "Hojas de animación de las líneas jugables, Leomon, Hagurumon, Frigimon y Wizardmon, retratos e iconos de skin: aportados por el autor del juego (generados con IA).": "Oynanabilir serilerin, Leomon, Hagurumon, Frigimon ve Wizardmon'un animasyon sayfaları, portreler ve görünüm simgeleri: oyunun yazarı tarafından sağlandı (yapay zekâ ile üretildi).",
+  "Enemigos y jefes": "Düşmanlar ve patronlar",
+  "Sprites de la base «Digimon / Pendulum Color Mod Sprite Database», recortados y ampliados.": "“Digimon / Pendulum Color Mod Sprite Database” veritabanından sprite'lar, kırpılıp büyütüldü.",
+  "Cargando autores…": "Yazarlar yükleniyor…",
+  "Pendiente de verificar": "Doğrulanacak",
+  "La base de sprites no publica licencia. Falta el permiso de sus autores (tero0x, tortoisehel, Ray y phrogmentado) para usar sus sprites; los sprites «Dot» originales son de Bandai.": "Sprite veritabanı bir lisans yayınlamıyor. Yazarlarının (tero0x, tortoisehel, Ray ve phrogmentado) sprite'larını kullanma izni henüz alınmadı; orijinal “Dot” sprite'ları Bandai'ye aittir.",
+  "Música": "Müzik",
+  "«Together we are strong» de ThisIsBeatKitchen, en Pixabay.": "ThisIsBeatKitchen'dan “Together we are strong”, Pixabay'de.",
+  "Los efectos de sonido se generan en el propio juego.": "Ses efektleri oyunun kendisi tarafından üretilir.",
+  "Mapas, decoración y modelos 3D": "Haritalar, dekor ve 3D modeller",
+  "Suelos, decoración, portales, santuario y cofre: aportados por el autor del juego (generados con IA). Agua y piedra en pixel art: generadas dentro del proyecto.": "Zeminler, dekor, portallar, tapınak ve sandık: oyunun yazarı tarafından sağlandı (yapay zekâ ile üretildi). Piksel sanatı su ve taş: proje içinde yapıldı.",
+  "Texturas «Retro Textures Fantasy», iconos de «Tiny Dungeon» y «Tiny Battle» y partículas de «Particle Pack».": "“Retro Textures Fantasy” dokuları, “Tiny Dungeon” ve “Tiny Battle” simgeleri ve “Particle Pack” parçacıkları.",
+  "Tipografías": "Yazı tipleri",
+  "Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).": "Orbitron (Matt McInerney) ve Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).",
+  "Motor gráfico": "Grafik motoru",
+  "Bandai (sprites Dot)": "Bandai (Dot sprite'ları)"
+});
+
+I18N.add('tr', {"Logro: completar 5 partidas con Gatomon · {0}": "Başarım: Gatomon ile 5 oyun bitir · {0}"});
+I18N.add('tr', {"×{0} daño": "×{0} hasar", "×{0} recibido": "×{0} alınan"});

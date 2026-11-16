@@ -433,7 +433,7 @@ I18N.add('ko', {
   "Disparo Espiral": "나선 사격",
   "Proyectil rápido que atraviesa a los enemigos (2 al nivel 1).": "적을 관통하는 빠른 투사체 (Lv 1에서 2발).",
   "Cuchilla Persiguiente": "추적 칼날",
-  "Hojas de energía que buscan al enemigo más fuerte de la pantalla.": "화면에서 가장 강한 적을 찾아가는 에너지 잎.",
+  "Cuchillas de energía que buscan al enemigo más fuerte de la pantalla.": "화면에서 가장 강한 적을 찾아가는 에너지 칼날.",
   "Rayo Láser": "레이저 빔",
   "Haz neón hacia el enemigo más cercano; atraviesa a los que están en línea.": "가장 가까운 적에게 네온 빔. 일직선상의 적을 관통.",
   "Mina Digital": "디지털 지뢰",
@@ -1352,3 +1352,33 @@ I18N.add('ko', {
   "¡Refuerzos!": "지원군!",
   "+25 vida máx.": "최대 체력 +25"
 });
+
+// Pantalla de créditos y licencias
+I18N.add('ko', {
+  "Créditos": "크레딧",
+  "Autores, licencias y aviso de fan-game.": "제작자, 라이선스, 팬 게임 안내.",
+  "Fan-game gratuito y no oficial, hecho por fans y sin ánimo de lucro. No tiene relación con Bandai Namco ni con Toei Animation.": "팬들이 비영리로 만든 무료 비공식 팬 게임입니다. 반다이남코 및 토에이 애니메이션과 관련이 없습니다.",
+  "Digimon, sus nombres y sus diseños son propiedad de Bandai Namco, Toei Animation y Akiyoshi Hongo.": "디지몬과 그 이름, 디자인은 반다이남코, 토에이 애니메이션, 혼고 아키요시의 소유입니다.",
+  "Autor del juego": "게임 제작자",
+  "Pendiente: falta poner el nombre o alias del autor.": "미정: 제작자 이름 또는 별명이 아직 없습니다.",
+  "Digimon jugables y skins": "플레이 가능한 디지몬과 스킨",
+  "Hojas de animación de las líneas jugables, Leomon, Hagurumon, Frigimon y Wizardmon, retratos e iconos de skin: aportados por el autor del juego (generados con IA).": "플레이 가능한 계열, Leomon, Hagurumon, Frigimon, Wizardmon의 애니메이션 시트, 초상화, 스킨 아이콘: 게임 제작자 제공(AI 생성).",
+  "Enemigos y jefes": "적과 보스",
+  "Sprites de la base «Digimon / Pendulum Color Mod Sprite Database», recortados y ampliados.": "「Digimon / Pendulum Color Mod Sprite Database」의 스프라이트를 잘라 확대했습니다.",
+  "Cargando autores…": "제작자 불러오는 중…",
+  "Pendiente de verificar": "확인 필요",
+  "La base de sprites no publica licencia. Falta el permiso de sus autores (tero0x, tortoisehel, Ray y phrogmentado) para usar sus sprites; los sprites «Dot» originales son de Bandai.": "스프라이트 데이터베이스는 라이선스를 공개하지 않습니다. 제작자(tero0x, tortoisehel, Ray, phrogmentado)의 스프라이트 사용 허락을 아직 받지 못했습니다. 원본 「도트」 스프라이트는 반다이의 것입니다.",
+  "Música": "음악",
+  "«Together we are strong» de ThisIsBeatKitchen, en Pixabay.": "ThisIsBeatKitchen의 「Together we are strong」(Pixabay).",
+  "Los efectos de sonido se generan en el propio juego.": "효과음은 게임에서 직접 만듭니다.",
+  "Mapas, decoración y modelos 3D": "맵, 장식, 3D 모델",
+  "Suelos, decoración, portales, santuario y cofre: aportados por el autor del juego (generados con IA). Agua y piedra en pixel art: generadas dentro del proyecto.": "바닥, 장식, 포털, 성소, 상자: 게임 제작자 제공(AI 생성). 픽셀 아트 물과 돌: 프로젝트 안에서 제작.",
+  "Texturas «Retro Textures Fantasy», iconos de «Tiny Dungeon» y «Tiny Battle» y partículas de «Particle Pack».": "「Retro Textures Fantasy」 텍스처, 「Tiny Dungeon」과 「Tiny Battle」 아이콘, 「Particle Pack」 파티클.",
+  "Tipografías": "글꼴",
+  "Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).": "Orbitron(Matt McInerney)과 Nunito(Vernon Adams, Cyreal, Jacques Le Bailly).",
+  "Motor gráfico": "그래픽 엔진",
+  "Bandai (sprites Dot)": "반다이(도트 스프라이트)"
+});
+
+I18N.add('ko', {"Logro: completar 5 partidas con Gatomon · {0}": "업적: Gatomon으로 5판 완료 · {0}"});
+I18N.add('ko', {"×{0} daño": "피해 ×{0}", "×{0} recibido": "받는 피해 ×{0}"});

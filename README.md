@@ -28,6 +28,11 @@ Luego abre `http://localhost:8765/` en el navegador.
 - Supervivencia: cualquier mapa, una oleada por minuto y un jefe menor cada 5 oleadas.
 - Assets de ambientación de los mapas 2 y 3, iconos del HUD y partículas del gacha: Kenney, CC0 (ver `textures/CREDITOS.txt`).
 
+## Créditos
+
+- Pantalla de Créditos en Ajustes → Créditos y en el enlace del pie del menú. Recoge lo que consta en `sprites/CREDITS.txt`, `textures/CREDITOS.txt` y `fonts/LICENCIAS.txt`; los autores de los sprites de enemigos salen de `sprites/adventure/indice.json`.
+- Lo que falta verificar se ve en un recuadro naranja: el permiso de los autores de la base de sprites y el nombre del autor del juego (campo `autor` de `sitio.json`).
+
 ## Idiomas
 
 - El juego está en español, inglés, portugués, francés, alemán, italiano, polaco, turco, ruso, japonés, coreano y chino. Al entrar detecta el idioma del navegador (si no está en la lista, usa inglés) y se puede cambiar con el botón del globo; la opción «Auto» vuelve a la detección.

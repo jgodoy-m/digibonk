@@ -428,7 +428,7 @@ I18N.add('it', {
   "Disparo Espiral": "Colpo a Spirale",
   "Proyectil rápido que atraviesa a los enemigos (2 al nivel 1).": "Proiettile rapido che trapassa i nemici (2 al livello 1).",
   "Cuchilla Persiguiente": "Lama Inseguitrice",
-  "Hojas de energía que buscan al enemigo más fuerte de la pantalla.": "Foglie di energia che cercano il nemico più forte sullo schermo.",
+  "Cuchillas de energía que buscan al enemigo más fuerte de la pantalla.": "Lame di energia che cercano il nemico più forte sullo schermo.",
   "Rayo Láser": "Raggio Laser",
   "Haz neón hacia el enemigo más cercano; atraviesa a los que están en línea.": "Fascio neon verso il nemico più vicino; trapassa quelli in linea.",
   "Mina Digital": "Mina Digitale",
@@ -1342,3 +1342,33 @@ I18N.add('it', {
   "¡Refuerzos!": "Rinforzi!",
   "+25 vida máx.": "+25 vita max"
 });
+
+// Pantalla de créditos y licencias
+I18N.add('it', {
+  "Créditos": "Crediti",
+  "Autores, licencias y aviso de fan-game.": "Autori, licenze e avviso di fan-game.",
+  "Fan-game gratuito y no oficial, hecho por fans y sin ánimo de lucro. No tiene relación con Bandai Namco ni con Toei Animation.": "Fan-game gratuito e non ufficiale, fatto da fan e senza scopo di lucro. Non ha alcun legame con Bandai Namco né con Toei Animation.",
+  "Digimon, sus nombres y sus diseños son propiedad de Bandai Namco, Toei Animation y Akiyoshi Hongo.": "Digimon, i loro nomi e i loro design sono di proprietà di Bandai Namco, Toei Animation e Akiyoshi Hongo.",
+  "Autor del juego": "Autore del gioco",
+  "Pendiente: falta poner el nombre o alias del autor.": "In sospeso: manca il nome o l'alias dell'autore.",
+  "Digimon jugables y skins": "Digimon giocabili e skin",
+  "Hojas de animación de las líneas jugables, Leomon, Hagurumon, Frigimon y Wizardmon, retratos e iconos de skin: aportados por el autor del juego (generados con IA).": "Fogli di animazione delle linee giocabili, Leomon, Hagurumon, Frigimon e Wizardmon, ritratti e icone delle skin: forniti dall'autore del gioco (generati con IA).",
+  "Enemigos y jefes": "Nemici e boss",
+  "Sprites de la base «Digimon / Pendulum Color Mod Sprite Database», recortados y ampliados.": "Sprite dal database «Digimon / Pendulum Color Mod Sprite Database», ritagliati e ingranditi.",
+  "Cargando autores…": "Caricamento autori…",
+  "Pendiente de verificar": "Da verificare",
+  "La base de sprites no publica licencia. Falta el permiso de sus autores (tero0x, tortoisehel, Ray y phrogmentado) para usar sus sprites; los sprites «Dot» originales son de Bandai.": "Il database di sprite non pubblica alcuna licenza. Manca il permesso dei suoi autori (tero0x, tortoisehel, Ray e phrogmentado) per usare i loro sprite; gli sprite «Dot» originali sono di Bandai.",
+  "Música": "Musica",
+  "«Together we are strong» de ThisIsBeatKitchen, en Pixabay.": "«Together we are strong» di ThisIsBeatKitchen, su Pixabay.",
+  "Los efectos de sonido se generan en el propio juego.": "Gli effetti sonori sono generati dal gioco stesso.",
+  "Mapas, decoración y modelos 3D": "Mappe, decorazioni e modelli 3D",
+  "Suelos, decoración, portales, santuario y cofre: aportados por el autor del juego (generados con IA). Agua y piedra en pixel art: generadas dentro del proyecto.": "Terreni, decorazioni, portali, santuario e forziere: forniti dall'autore del gioco (generati con IA). Acqua e pietra in pixel art: create nel progetto.",
+  "Texturas «Retro Textures Fantasy», iconos de «Tiny Dungeon» y «Tiny Battle» y partículas de «Particle Pack».": "Texture «Retro Textures Fantasy», icone di «Tiny Dungeon» e «Tiny Battle» e particelle di «Particle Pack».",
+  "Tipografías": "Caratteri",
+  "Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).": "Orbitron (Matt McInerney) e Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).",
+  "Motor gráfico": "Motore grafico",
+  "Bandai (sprites Dot)": "Bandai (sprite Dot)"
+});
+
+I18N.add('it', {"Logro: completar 5 partidas con Gatomon · {0}": "Obiettivo: completare 5 partite con Gatomon · {0}"});
+I18N.add('it', {"×{0} daño": "×{0} danni", "×{0} recibido": "×{0} subiti"});
