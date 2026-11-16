@@ -25,6 +25,7 @@ I18N.add('de', {
   "Más vida, más daño y más hordas. Premios ×1,5.": "Mehr Leben, mehr Schaden und größere Horden. Belohnungen ×1,5.",
   "Pesadilla": "Albtraum",
   "Solo para expertos. Premios ×2,2.": "Nur für Profis. Belohnungen ×2,2.",
+  "Hordas de hasta 140 y jefes más rápidos, pero +20% de experiencia. Premios ×2,2.": "Horden bis zu 140 und schnellere Bosse, aber +20 % Erfahrung. Belohnungen ×2,2.",
   "Dispara al enemigo más cercano": "Schießt auf den nächsten Gegner",
   "Onda de energía alrededor": "Energiewelle rundherum",
   "Cuchillas giratorias": "Rotierende Klingen",

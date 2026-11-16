@@ -27,6 +27,7 @@ I18N.add('ru', {
   "Más vida, más daño y más hordas. Premios ×1,5.": "Больше здоровья, урона и орд. Награды ×1,5.",
   "Pesadilla": "Кошмар",
   "Solo para expertos. Premios ×2,2.": "Только для экспертов. Награды ×2,2.",
+  "Hordas de hasta 140 y jefes más rápidos, pero +20% de experiencia. Premios ×2,2.": "Орды до 140 и более быстрые боссы, но +20% опыта. Награды ×2,2.",
   "Dispara al enemigo más cercano": "Стреляет в ближайшего врага",
   "Onda de energía alrededor": "Энергетическая волна вокруг",
   "Cuchillas giratorias": "Вращающиеся клинки",

@@ -27,6 +27,7 @@ I18N.add('ja', {
   "Más vida, más daño y más hordas. Premios ×1,5.": "敵のHP・ダメージ・群れが増加。報酬×1.5。",
   "Pesadilla": "ナイトメア",
   "Solo para expertos. Premios ×2,2.": "上級者向け。報酬×2.2。",
+  "Hordas de hasta 140 y jefes más rápidos, pero +20% de experiencia. Premios ×2,2.": "最大140体の群れと速いボス。ただし経験値+20%。報酬×2.2。",
   "Dispara al enemigo más cercano": "一番近い敵を撃つ",
   "Onda de energía alrededor": "周囲にエネルギー波",
   "Cuchillas giratorias": "回転する刃",

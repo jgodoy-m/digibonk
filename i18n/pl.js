@@ -25,6 +25,7 @@ I18N.add('pl', {
   "Más vida, más daño y más hordas. Premios ×1,5.": "Więcej zdrowia, obrażeń i hord. Nagrody ×1,5.",
   "Pesadilla": "Koszmar",
   "Solo para expertos. Premios ×2,2.": "Tylko dla ekspertów. Nagrody ×2,2.",
+  "Hordas de hasta 140 y jefes más rápidos, pero +20% de experiencia. Premios ×2,2.": "Hordy do 140 i szybsi bossowie, ale +20% doświadczenia. Nagrody ×2,2.",
   "Dispara al enemigo más cercano": "Strzela w najbliższego wroga",
   "Onda de energía alrededor": "Fala energii dookoła",
   "Cuchillas giratorias": "Wirujące ostrza",

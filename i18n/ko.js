@@ -27,6 +27,7 @@ I18N.add('ko', {
   "Más vida, más daño y más hordas. Premios ×1,5.": "체력, 피해, 무리가 증가. 보상 ×1.5.",
   "Pesadilla": "악몽",
   "Solo para expertos. Premios ×2,2.": "숙련자 전용. 보상 ×2.2.",
+  "Hordas de hasta 140 y jefes más rápidos, pero +20% de experiencia. Premios ×2,2.": "최대 140마리의 무리와 더 빠른 보스, 대신 경험치 +20%. 보상 ×2.2.",
   "Dispara al enemigo más cercano": "가장 가까운 적을 쏜다",
   "Onda de energía alrededor": "주변에 에너지 파동",
   "Cuchillas giratorias": "회전하는 칼날",

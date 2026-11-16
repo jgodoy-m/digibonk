@@ -25,6 +25,7 @@ I18N.add('pt', {
   "Más vida, más daño y más hordas. Premios ×1,5.": "Mais vida, mais dano e mais hordas. Prêmios ×1,5.",
   "Pesadilla": "Pesadelo",
   "Solo para expertos. Premios ×2,2.": "Só para especialistas. Prêmios ×2,2.",
+  "Hordas de hasta 140 y jefes más rápidos, pero +20% de experiencia. Premios ×2,2.": "Hordas de até 140 e chefes mais rápidos, mas +20% de experiência. Prêmios ×2,2.",
   "Dispara al enemigo más cercano": "Atira no inimigo mais próximo",
   "Onda de energía alrededor": "Onda de energia ao redor",
   "Cuchillas giratorias": "Lâminas giratórias",
