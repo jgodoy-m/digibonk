@@ -1370,4 +1370,34 @@ I18N.add('de', {
 });
 
 I18N.add('de', {"Logro: completar 5 partidas con Gatomon · {0}": "Erfolg: 5 Runden mit Gatomon beenden · {0}"});
-I18N.add('de', {"×{0} daño": "×{0} Schaden", "×{0} recibido": "×{0} erhalten"});
+I18N.add('de', {"×{0} daño": "×{0} Schaden", "×{0} recibido": "×{0} erhalten",
+  // Reto semanal (reglas nuevas, Digimon de la semana, hitos) y premios de Difícil y Pesadilla
+  "Gigantes": "Riesen",
+  "Los enemigos tienen un 60% más de vida, pero dan un 50% más de experiencia.": "Gegner haben 60 % mehr Leben, geben aber 50 % mehr Erfahrung.",
+  "A toda prisa": "Volles Tempo",
+  "Corres un 20% más, pero los enemigos corren un 25% más.": "Du läufst 20 % schneller, die Gegner aber 25 % schneller.",
+  "Noche de élites": "Nacht der Eliten",
+  "Las élites salen el doble de a menudo.": "Eliten erscheinen doppelt so oft.",
+  "Lluvia de cofres": "Truhenregen",
+  "Los cofres salen el doble de a menudo.": "Truhen erscheinen doppelt so oft.",
+  "Imán gigante": "Riesenmagnet",
+  "Recoges la experiencia desde el triple de distancia, pero haces un 15% menos de daño.": "Du sammelst Erfahrung aus dreifacher Entfernung, machst aber 15 % weniger Schaden.",
+  "Sin dash": "Kein Dash",
+  "No puedes hacer dash, pero corres un 15% más.": "Du kannst nicht dashen, läufst aber 15 % schneller.",
+  "Digimon de la semana": "Digimon der Woche",
+  "Hitos": "Meilensteine",
+  "Hitos {0}": "Meilensteine {0}",
+  "Hito del reto": "Meilenstein der Herausforderung",
+  "Aguanta 10 minutos en el reto": "Halte 10 Minuten in der Herausforderung durch",
+  "Gana el reto": "Gewinne die Herausforderung",
+  "Gana el reto con el Digimon de la semana": "Gewinne die Herausforderung mit dem Digimon der Woche",
+  "Azote del Bosque": "Geißel des Waldes",
+  "Gana el Bosque File en Difícil o Pesadilla": "Gewinne den File-Wald auf Schwer oder Albtraum",
+  "Tormenta de Arena": "Sandsturm",
+  "Gana el Desierto de Datos en Difícil o Pesadilla": "Gewinne die Datenwüste auf Schwer oder Albtraum",
+  "Ventisca Eterna": "Ewiger Schneesturm",
+  "Gana la Montaña Helada en Difícil o Pesadilla": "Gewinne den Eisberg auf Schwer oder Albtraum",
+  "Domador de lo imposible": "Bändiger des Unmöglichen",
+  "Gana los 3 mapas en Difícil o Pesadilla": "Gewinne alle 3 Karten auf Schwer oder Albtraum",
+  "Pesadilla eterna": "Ewiger Albtraum"
+});
