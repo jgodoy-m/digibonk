@@ -1415,5 +1415,7 @@ I18N.add('tr', {"×{0} daño": "×{0} hasar", "×{0} recibido": "×{0} alınan",
   "App": "Uygulama",
   "Abre Digibonk en Safari.": "Digibonk’u Safari’de aç.",
   "Toca el botón Compartir (el cuadrado con la flecha hacia arriba).": "Paylaş düğmesine dokun (yukarı oklu kare).",
-  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "“Ana Ekrana Ekle”yi seç ve “Ekle” ile onayla."
+  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "“Ana Ekrana Ekle”yi seç ve “Ekle” ile onayla.",
+  "Cargando el Mundo Digital…": "Dijital Dünya yükleniyor…",
+  "Cargando el mapa": "Harita yükleniyor"
 });

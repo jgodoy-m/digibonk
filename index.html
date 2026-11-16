@@ -2182,6 +2182,54 @@ body.is-touch #touchCtl.on{display:block}
 @keyframes rotHint{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(90deg)}}
 @media (orientation:portrait) and (pointer:coarse){#rotateHint{display:grid}}
 @media (orientation:portrait){body.is-touch #rotateHint{display:grid}}
+/* Pantalla de carga al entrar en un mapa: fondo del destino, logo, nombre y barra segmentada de Digivice.
+   Por debajo del aviso «Gira el móvil» (z 60): en vertical táctil manda el aviso, como en el resto del juego */
+#mapLoad{display:none;position:fixed;inset:0;z-index:50;background:#0a1730;color:#f5e4b7;font-family:'Nunito',system-ui,sans-serif;overflow:hidden;--ml-pos:69% 50%}
+#mapLoad.on{display:block}
+#mapLoad .ml-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--ml-pos);opacity:0;transition:opacity .25s ease-out}
+#mapLoad .ml-bg.ok{opacity:1}
+#mapLoad.ml-noart .ml-bg{display:none}
+#mapLoad .ml-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(10,23,48,.55) 0,rgba(10,23,48,0) 22%,rgba(10,23,48,0) 52%,rgba(10,23,48,.82) 84%,#0a1730 100%)}
+#mapLoad .ml-logo{position:absolute;left:max(22px,env(safe-area-inset-left));top:max(18px,env(safe-area-inset-top));width:clamp(120px,17vw,250px);height:auto;filter:drop-shadow(0 3px 10px rgba(0,0,0,.55))}
+#mapLoad .ml-foot{position:absolute;left:max(24px,env(safe-area-inset-left));right:max(24px,env(safe-area-inset-right));bottom:max(22px,env(safe-area-inset-bottom));display:flex;align-items:flex-end;gap:clamp(16px,3vw,44px)}
+#mapLoad .ml-txt{display:flex;flex-direction:column;gap:2px;min-width:0;flex:0 1 auto;text-shadow:0 2px 6px rgba(0,0,0,.6)}
+#mapLoad .ml-txt b{font-size:clamp(24px,3.4vw,46px);font-weight:900;line-height:1.05;letter-spacing:.01em}
+#mapLoad .ml-txt span{font-size:clamp(13px,1.35vw,18px);font-weight:800;opacity:.85}
+#mapLoad .ml-meter{flex:1 1 320px;max-width:560px;margin-left:auto;display:flex;align-items:center;gap:12px}
+#mapLoad .ml-track{position:relative;flex:1;height:clamp(18px,2vw,26px);border-radius:8px;background:#0a1730;border:3px solid #f5e4b7;box-shadow:inset 0 0 0 2px #0a1730,inset 0 3px 0 rgba(255,255,255,.12),0 3px 0 rgba(0,0,0,.45),0 0 18px rgba(59,233,245,.25);overflow:hidden}
+#mapLoad .ml-track::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 calc(100%/14 - 3px),#0a1730 calc(100%/14 - 3px) calc(100%/14))}
+#mapLoad .ml-fill{position:absolute;left:0;top:0;bottom:0;width:var(--ml-p,0%);background:linear-gradient(180deg,#a6f8fd 0,#3be9f5 45%,#1bb7c7 100%);transition:width .2s linear}
+#mapLoad .ml-fill::after{content:'';position:absolute;right:0;top:0;bottom:0;width:5px;background:#ffac49;box-shadow:0 0 8px #ffac49}
+#mapLoad .ml-cap{flex:0 0 auto;width:12px;height:clamp(12px,1.3vw,16px);border-radius:0 5px 5px 0;background:#ffac49;border:2px solid #f5e4b7;border-left:0;margin-left:-14px;box-shadow:0 0 10px rgba(255,172,73,.55)}
+#mapLoad .ml-pct{min-width:3.2em;text-align:right;font-size:clamp(15px,1.5vw,20px);font-weight:900;font-variant-numeric:tabular-nums}
+#mapLoad.ml-ind .ml-pct{display:none}
+#mapLoad.ml-ind .ml-fill{width:32%;animation:mlInd 1.2s ease-in-out infinite alternate}
+@keyframes mlInd{from{transform:translateX(-10%)}to{transform:translateX(222%)}}
+/* Brillo tenue del portal (está pintado en el fondo, a la derecha) y pulso de la barra */
+#mapLoad .ml-glow{position:absolute;left:var(--ml-gx,72%);top:46%;width:34vmin;height:34vmin;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(59,233,245,.32) 0,rgba(59,233,245,0) 70%);mix-blend-mode:screen;animation:mlPulse 2.2s ease-in-out infinite}
+#mapLoad .ml-track{animation:mlBar 2.2s ease-in-out infinite}
+@keyframes mlPulse{0%,100%{opacity:.35}50%{opacity:.85}}
+@keyframes mlBar{0%,100%{box-shadow:inset 0 0 0 2px #0a1730,0 3px 0 rgba(0,0,0,.45),0 0 12px rgba(59,233,245,.18)}50%{box-shadow:inset 0 0 0 2px #0a1730,0 3px 0 rgba(0,0,0,.45),0 0 22px rgba(59,233,245,.45)}}
+/* Al quedar listo: destello corto y la capa se desvanece */
+#mapLoad.ml-out{animation:mlOut .32s ease-out forwards;pointer-events:none}
+#mapLoad.ml-out::after{content:'';position:absolute;inset:0;background:#bff9ff;animation:mlFlash .32s ease-out forwards;pointer-events:none}
+@keyframes mlOut{from{opacity:1}to{opacity:0}}
+@keyframes mlFlash{0%{opacity:.35}100%{opacity:0}}
+/* Pantallas estrechas o en vertical: el bloque inferior se apila y la barra va debajo del nombre */
+@media (max-width:760px),(orientation:portrait){
+  #mapLoad .ml-foot{flex-direction:column;align-items:stretch;gap:12px}
+  #mapLoad .ml-meter{flex:0 0 auto;max-width:none;margin-left:0;width:100%}
+  #mapLoad .ml-glow{width:48vmin;height:48vmin}
+}
+@media (orientation:landscape) and (max-height:500px){
+  #mapLoad .ml-logo{width:clamp(96px,16vw,170px)}
+  #mapLoad .ml-txt b{font-size:24px}
+}
+@media (prefers-reduced-motion:reduce){
+  #mapLoad .ml-glow,#mapLoad .ml-track{animation:none}
+  #mapLoad.ml-ind .ml-fill{animation:none;width:100%;opacity:.45}
+  #mapLoad .ml-fill,#mapLoad .ml-bg{transition:none}
+}
 /* Móvil en horizontal: menú más compacto */
 @media (orientation:landscape) and (max-height:500px){
   #overlay .realhub.hb .hb-brand img{height:64px!important;width:auto!important;max-width:60vw!important}
@@ -3674,6 +3722,7 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 <div id="skillBar"></div>
 <div id="consBar"></div>
 <div id="bonkBar" style="display:none"><div id="bonkFill"></div><span id="bonkTxt">BONK 0%</span></div>
+<div id="mapLoad" aria-hidden="true"><img class="ml-bg" alt="" decoding="async"><div class="ml-glow"></div><div class="ml-shade"></div><img class="ml-logo" src="ui/logo_digibonk.webp" alt="DigiBonk"><div class="ml-foot"><div class="ml-txt"><b id="mlName"></b><span id="mlStatus">Cargando el Mundo Digital…</span></div><div class="ml-meter"><div class="ml-track" id="mlBar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="ml-fill"></div></div><span class="ml-cap"></span><span class="ml-pct" id="mlPct"></span></div></div></div>
 <div id="rotateHint" aria-live="polite"><div><b>⟳</b><strong>Gira el móvil</strong><span>DigiBonk se juega en horizontal</span></div></div>
 <div id="touchCtl">
   <div id="tZone"><div id="tJoy"><div id="tKnob"></div></div></div>
@@ -5182,6 +5231,7 @@ function hubLife(){
   };
 }
 function showSelect(){
+  if (mapLoad.on) mapLoadCancel();   // se vuelve al menú con una carga a medias: la capa no puede quedarse encima
   if (typeof Cloud !== 'undefined' && Cloud.pending){ cloudShowConflict(); return; }
   if (!GACHA_SOON && !localStorage.getItem('digibonk3d-gift')){ localStorage.setItem('digibonk3d-gift', '1'); addTickets('std', 10); setTimeout(() => { const m = document.getElementById('hmMsg'); if (m) { m.textContent = '🎁 Regalo de bienvenida: 10 tickets para la Incubadora'; clearTimeout(m._t); m._t = setTimeout(() => { m.textContent = ''; }, 4500); } }, 300); }
   state = 'select';
@@ -6322,6 +6372,7 @@ function pickMove(delta){
 const mapWins = () => loadJSON('digibonk3d-mapwins', {});
 function showMapSelect(){
   state = 'mapsel';
+  preloadLoadArt(runMap);   // destino conocido: el fondo de su pantalla de carga se pide ya
   setHud(false);
   try { localStorage.setItem('digibonk3d-map', runMap); localStorage.setItem('digibonk3d-diff', runDiff); } catch(e){}
   const surv = runMode === 'surv', weekly = runWeekly && !surv, wins = mapWins();
@@ -6601,13 +6652,119 @@ function runApply(s){
   }
   g.resumed = true;
 }
+/* ---------- Pantalla de carga al entrar en un mapa ----------
+   Destino: runMap (id interno de MAPS). Empieza al pulsar Empezar/Reintentar/Continuar (startGame): la capa se pinta
+   primero y el mapa se construye en el fotograma siguiente. Listo: cuando terminan todas las texturas y modelos que
+   ha pedido la construcción (los cargadores de Three usan DefaultLoadingManager) y se ha dibujado un fotograma.
+   Un fallo de carga sigue la ruta de siempre (textura vacía, sprite en lugar del modelo) y cuenta como terminado. */
+const LOAD_ART = {
+  bosque:   {src: 'ui/pantallas-carga/carga_bosque.webp',   pos: '69% 50%'},
+  desierto: {src: 'ui/pantallas-carga/carga_desierto.webp', pos: '68% 50%'},
+  nevado:   {src: 'ui/pantallas-carga/carga_nieve.webp',    pos: '71% 50%'}
+};
+const loadArt = id => LOAD_ART[id] || LOAD_ART.bosque;   // sin fondo propio: el del bosque, con el nombre real del mapa
+const loadArtImg = {};
+function preloadLoadArt(id){
+  const {src} = loadArt(id);
+  if (!loadArtImg[src]){ const im = new Image(); im.decoding = 'async'; im.src = src; loadArtImg[src] = im; }
+}
+const mlReduced = matchMedia('(prefers-reduced-motion: reduce)');
+const mapLoad = {tok: 0, on: false, armed: false, pend: new Map(), total: 0, done: 0, safety: 0, outT: 0};
+{
+  const LM = THREE.DefaultLoadingManager, st = LM.itemStart.bind(LM), en = LM.itemEnd.bind(LM);
+  LM.itemStart = url => { if (mapLoad.on){ mapLoad.pend.set(url, (mapLoad.pend.get(url) || 0) + 1); mapLoad.total++; mapLoadTick(); } st(url); };
+  LM.itemEnd = url => {
+    en(url);
+    const n = mapLoad.pend.get(url);
+    if (!mapLoad.on || !n) return;   // empezó antes de esta carga: no cuenta
+    if (n > 1) mapLoad.pend.set(url, n - 1); else mapLoad.pend.delete(url);
+    mapLoad.done++; mapLoadTick();
+  };
+}
+function mapLoadBegin(id){
+  const tok = ++mapLoad.tok;   // un destino nuevo cancela lo que quedara de la carga anterior
+  clearTimeout(mapLoad.safety); clearTimeout(mapLoad.outT);
+  Object.assign(mapLoad, {on: true, armed: false, pend: new Map(), total: 0, done: 0});
+  const el = document.getElementById('mapLoad'), art = loadArt(id), img = el.querySelector('.ml-bg');
+  preloadLoadArt(id);
+  el.classList.remove('ml-out', 'ml-noart');
+  el.style.setProperty('--ml-pos', art.pos);
+  el.style.setProperty('--ml-gx', art.pos.split(' ')[0]);
+  if (img.getAttribute('src') !== art.src){
+    img.classList.remove('ok');
+    img.onload = () => img.classList.add('ok');
+    img.onerror = () => el.classList.add('ml-noart');   // sin ilustración: queda el azul noche y la carga sigue
+    img.src = art.src;
+  } else if (img.complete && img.naturalWidth) img.classList.add('ok');
+  document.getElementById('mlName').textContent = I18N.tr((MAPS[id] || MAPS.bosque).name);
+  document.getElementById('mlStatus').textContent = I18N.tr('Cargando el Mundo Digital…');
+  document.getElementById('mlBar').setAttribute('aria-label', I18N.tr('Cargando el mapa'));
+  mapLoadShow(null);
+  el.classList.add('on'); el.setAttribute('aria-hidden', 'false');
+  // Nunca bloquea el juego: si algo no responde en 20 s, se entra igual (lo que falte aparece al llegar)
+  mapLoad.safety = setTimeout(() => mapLoadFinish(tok), 20000);
+  return tok;
+}
+// p: 0-1 (barra y porcentaje) o null (barra indeterminada, sin porcentaje ni aria-valuenow)
+function mapLoadShow(p){
+  const el = document.getElementById('mapLoad'), bar = document.getElementById('mlBar');
+  el.classList.toggle('ml-ind', p === null);
+  if (p === null){ bar.removeAttribute('aria-valuenow'); document.getElementById('mlPct').textContent = ''; return; }
+  const v = Math.round(Math.max(0, Math.min(1, p))*100);
+  el.style.setProperty('--ml-p', v + '%');
+  bar.setAttribute('aria-valuenow', v);
+  document.getElementById('mlPct').textContent = v + ' %';
+}
+function mapLoadTick(){
+  if (!mapLoad.on || !mapLoad.armed) return;
+  if (mapLoad.total) mapLoadShow(mapLoad.done/mapLoad.total);
+  if (mapLoad.pend.size) return;
+  const tok = mapLoad.tok;
+  // Todo cargado: se espera a que se dibuje un fotograma con el mapa nuevo (sube las texturas a la GPU)
+  requestAnimationFrame(() => requestAnimationFrame(() => { if (!mapLoad.pend.size) mapLoadFinish(tok); }));
+}
+// La construcción del mapa ha terminado: desde aquí manda lo que falte por cargar
+function mapLoadArm(tok){
+  if (tok !== mapLoad.tok || !mapLoad.on) return;
+  mapLoad.armed = true;
+  mapLoadTick();
+}
+function mapLoadFinish(tok){
+  if (tok !== mapLoad.tok || !mapLoad.on) return;
+  mapLoad.on = false; mapLoad.armed = false;
+  clearTimeout(mapLoad.safety);
+  const el = document.getElementById('mapLoad');
+  if (mapLoad.total) mapLoadShow(1);
+  const hide = () => { if (tok !== mapLoad.tok) return; el.classList.remove('on', 'ml-out'); el.setAttribute('aria-hidden', 'true'); };
+  if (mlReduced.matches) return hide();   // movimiento reducido: cambio directo
+  el.classList.add('ml-out');
+  mapLoad.outT = setTimeout(hide, 340);
+}
+// Cancela la carga en curso (error al construir el mapa o salida al menú) y retira la capa
+function mapLoadCancel(){
+  mapLoad.tok++;
+  mapLoad.on = false; mapLoad.armed = false;
+  clearTimeout(mapLoad.safety); clearTimeout(mapLoad.outT);
+  const el = document.getElementById('mapLoad');
+  el.classList.remove('on', 'ml-out'); el.setAttribute('aria-hidden', 'true');
+}
 function startGame(key, resume){
   // Hay una partida guardada: empezar otra la descarta (solo hay un hueco)
   if (!resume && runSlot()){
     if (!confirm(I18N.tr('Tienes una partida guardada. Si empiezas otra, se perderá. ¿Empezar una partida nueva?'))) return;
     runDrop();
   }
-  lockLandscape();
+  lockLandscape();   // necesita el gesto del jugador: antes de esperar a la pantalla de carga
+  const tok = mapLoadBegin(runMap);
+  // Dos vueltas: el navegador pinta la pantalla de carga antes de que la construcción del mapa ocupe el hilo
+  requestAnimationFrame(() => setTimeout(() => {
+    if (tok !== mapLoad.tok) return;   // otro destino o cancelada mientras tanto
+    try { buildRun(key, resume); }
+    catch(e){ mapLoadCancel(); throw e; }
+    mapLoadArm(tok);
+  }, 0));
+}
+function buildRun(key, resume){
   // El botón Jugar muestra el último Digimon con el que se jugó
   if (CHARS[key]) { selectedKey = key; try { localStorage.setItem('digibonk3d-last-choice', key); } catch(e){} }
   // El botón de volver del navegador no saca de la partida: queda una entrada de historial que lo absorbe
@@ -12064,7 +12221,7 @@ function frame(now){
   const dt = Math.min(0.05, (now-last)/1000);
   last = now;
   if (modelMixers.size) tickModels(dt);
-  if (state === 'play' && g){
+  if (state === 'play' && g && !mapLoad.on){   // con la pantalla de carga encima, el mundo espera
     if (g.slotSaved) runDrop();   // se vuelve a jugar: el guardado ya no es el estado actual
     // Esquiva perfecta: 1 s de cámara lenta (el reloj real sigue)
     let sdt = dt;
@@ -12117,7 +12274,7 @@ if (new URLSearchParams(location.search).has('demo')){
     get g(){ return g; }, get state(){ return state; }, get scene(){ return scene; },
     rollReward, grantReward, setBanner: b => { gxBanner = b; }, playPullAnimation, endGame, retoState, retoStar, WEEKLY_MODS,
     hold(on){ demoSteps = on ? 0 : null; }, step(n = 1){ demoSteps = n; }, get pending(){ return demoSteps; },
-    startGame, spawnEnemy, spawnMagnetDrop, runSave, runSlot, runContinue, setZone, showGacha, addSkill, upgradeChoices,
+    startGame: (k, r) => { mapLoadCancel(); buildRun(k, r); }, spawnEnemy, spawnMagnetDrop, runSave, runSlot, runContinue, setZone, showGacha, addSkill, upgradeChoices,
     // Datos de skins y personajes
     SKINS, EVO_LINE, CHARS, SEASONS,
     headUrl, spriteWith,

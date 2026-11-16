@@ -1423,5 +1423,7 @@ I18N.add('zh', {"×{0} daño": "伤害 ×{0}", "×{0} recibido": "受到伤害 �
   "App": "应用",
   "Abre Digibonk en Safari.": "在 Safari 中打开 Digibonk。",
   "Toca el botón Compartir (el cuadrado con la flecha hacia arriba).": "点按“分享”按钮（带向上箭头的方框）。",
-  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "选择“添加到主屏幕”，然后点按“添加”确认。"
+  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "选择“添加到主屏幕”，然后点按“添加”确认。",
+  "Cargando el Mundo Digital…": "正在载入数码世界…",
+  "Cargando el mapa": "正在载入地图"
 });

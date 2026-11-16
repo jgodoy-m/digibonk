@@ -1421,5 +1421,7 @@ I18N.add('ru', {"×{0} daño": "×{0} урона", "×{0} recibido": "×{0} по
   "App": "Приложение",
   "Abre Digibonk en Safari.": "Откройте Digibonk в Safari.",
   "Toca el botón Compartir (el cuadrado con la flecha hacia arriba).": "Нажмите «Поделиться» (квадрат со стрелкой вверх).",
-  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "Выберите «На экран „Домой“» и подтвердите кнопкой «Добавить»."
+  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "Выберите «На экран „Домой“» и подтвердите кнопкой «Добавить».",
+  "Cargando el Mundo Digital…": "Загрузка Цифрового мира…",
+  "Cargando el mapa": "Загрузка карты"
 });
