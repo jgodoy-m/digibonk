@@ -3804,7 +3804,11 @@ const SCREEN_LIMIT = 1200;   // 20 minutos en una misma pantalla: empieza el Inf
    apariciones y entre élites; menor = más enemigos), vida de los jefes de zona y premio de Bits y tickets.
    Además, en todos los niveles la presión sube con el tiempo de partida (ver diffMul y spawnEnemy). */
 const DIFFS = {
-  facil:     {name: 'Fácil',     hp: 0.75, dmg: 0.7, spawn: 1.25, elite: 1.3,  boss: 0.75, reward: 0.75, col: '#7cf29c', d: 'Para aprender: enemigos más flojos y menos numerosos.'},
+  // ring: anillo de disparos de los jefes (n = número de balas, spd = velocidad, gap = tiempo entre anillos, wait = segundos que las
+  // balas se quedan quietas alrededor del jefe antes de salir, para ver los huecos). slamWarn alarga el aviso de los golpes en el suelo.
+  // Solo Fácil los cambia: en el resto de dificultades el anillo sigue igual que antes.
+  facil:     {name: 'Fácil',     hp: 0.75, dmg: 0.7, spawn: 1.25, elite: 1.3,  boss: 0.75, reward: 0.75, col: '#7cf29c', d: 'Para aprender: enemigos más flojos y menos numerosos.',
+              ring: {n: 0.6, spd: 0.75, gap: 1.3, wait: 0.55}, slamWarn: 1.35},
   normal:    {name: 'Normal',    hp: 1,    dmg: 1,   spawn: 1,    elite: 1,    boss: 1,    reward: 1,    col: '#4fc3f7', d: 'La experiencia equilibrada del juego.'},
   dificil:   {name: 'Difícil',   hp: 1.35, dmg: 1.3, spawn: 0.8,  elite: 0.8,  boss: 1.3,  reward: 1.5,  col: '#ffb74d', d: 'Más vida, más daño y más hordas. Premios ×1,5.'},
   pesadilla: {name: 'Pesadilla', hp: 1.8,  dmg: 1.6, spawn: 0.65, elite: 0.65, boss: 1.7,  reward: 2.2,  col: '#ef5350', d: 'Solo para expertos. Premios ×2,2.'}
@@ -8344,9 +8348,10 @@ function update(dt){
     if (g.bossShotT <= 0){
       const bd = g.boss.def || {};
       const b = g.boss, ph = b.phase || 1;
-      g.bossShotT = (bd.gap || 2.5) * (ph === 3 ? 0.75 : 1);
+      const dr = lvlDiff().ring || {}, wait = dr.wait || 0;
+      g.bossShotT = (bd.gap || 2.5) * (ph === 3 ? 0.75 : 1) * (dr.gap || 1);
       clearBossRing();
-      const ns = Math.round((bd.shots || 10) * [1, 1, 1.4, 1.7][ph]), spd = 6 + (ph - 1) * 1.2;
+      const ns = Math.round((bd.shots || 10) * (dr.n || 1) * [1, 1, 1.4, 1.7][ph]), spd = (6 + (ph - 1) * 1.2) * (dr.spd || 1);
       for (let i = 0; i < ns; i++){
         const an = i/ns*Math.PI*2 + g.t;
         const shot = projMesh(0xff1744, 'dark'); shot.scale.multiplyScalar(1.3);
@@ -8354,7 +8359,8 @@ function update(dt){
         const sx = b.x + Math.cos(an)*b.r, sz = b.z + Math.sin(an)*b.r;
         shot.position.set(sx, 1 + terrainH(sx, sz), sz);
         world.add(shot);
-        g.eshots.push({x: sx, z: sz, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4, mesh: shot, dmg: (bd.shotDmg || 8) * bossDmgMul()});
+        // En Fácil las balas esperan un momento alrededor del jefe antes de salir: se ven los huecos y da tiempo a meterse en uno
+        g.eshots.push({x: sx, z: sz, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4 + wait, wait, mesh: shot, dmg: (bd.shotDmg || 8) * bossDmgMul()});
       }
     }
     // Mapa 3: el jefe único huye por el portal a mitad de vida en la primera pantalla
@@ -8376,6 +8382,7 @@ function update(dt){
     }
   }
   for (const s of g.eshots){
+    if (s.wait > 0){ s.wait -= dt; s.life -= dt; s.mesh.rotation.y += dt*9; continue; }   // bala del jefe cargando: quieta y sin dañar
     s.x += s.vx*dt; s.z += s.vz*dt; s.life -= dt;
     s.mesh.position.set(s.x, 1 + terrainH(s.x, s.z), s.z);
     s.mesh.rotation.y += dt*5;
@@ -9576,13 +9583,13 @@ function bossPhases(dt){
   b.slamT -= dt;
   if (b.slamT > 0) return;
   b.slamT = b.phase === 3 ? 4 : 6;
-  const n = b.phase === 3 ? 5 : 3, dmg = 14 * bossDmgMul() * (b.phase === 3 ? 1.25 : 1);
+  const n = b.phase === 3 ? 5 : 3, dmg = 14 * bossDmgMul() * (b.phase === 3 ? 1.25 : 1), warn = lvlDiff().slamWarn || 1;
   b.slamN = (b.slamN || 0) + 1;
   if (b.slamN % 2 === 0){
     // Ataque en línea: una fila de golpes desde el jefe hacia ti (y en fase 3 otra en cruz). Esquiva de lado
     const a0 = Math.atan2(g.p.z - b.z, g.p.x - b.x);
     for (const a of b.phase === 3 ? [a0, a0 + Math.PI/2, a0 - Math.PI/2] : [a0]){
-      for (let i = 1; i <= 7; i++){ const [x, z] = clampArena(b.x + Math.cos(a)*i*3, b.z + Math.sin(a)*i*3, ARENA_R - 1); addHazard(x, z, 1.8, 0.9 + i*0.12, 'bomb', dmg, 0xff1744); }
+      for (let i = 1; i <= 7; i++){ const [x, z] = clampArena(b.x + Math.cos(a)*i*3, b.z + Math.sin(a)*i*3, ARENA_R - 1); addHazard(x, z, 1.8, (0.9 + i*0.12) * warn, 'bomb', dmg, 0xff1744); }
     }
     popText(b.x, b.z, '¡Ataque en línea!', '#ff5a6e', 1.2);
     return;
@@ -9590,7 +9597,7 @@ function bossPhases(dt){
   for (let i = 0; i < n; i++){
     const a = Math.random() * Math.PI * 2, r = i ? 2.5 + Math.random() * 4 : 0;
     const [x, z] = clampArena(g.p.x + Math.cos(a) * r, g.p.z + Math.sin(a) * r, ARENA_R - 1);
-    addHazard(x, z, 2.6, 1.3, 'bomb', dmg, 0xff1744);
+    addHazard(x, z, 2.6, 1.3 * warn, 'bomb', dmg, 0xff1744);
   }
 }
 // Fuerza de los jefes de zona según el momento en que se invocan. Antes era fija y, a partir del minuto 5,
