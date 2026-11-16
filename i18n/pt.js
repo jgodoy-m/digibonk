@@ -1404,5 +1404,10 @@ I18N.add('pt', {"×{0} daño": "×{0} dano", "×{0} recibido": "×{0} recebido",
   "Gana la Montaña Helada en Difícil o Pesadilla": "Ganha a Montanha Gelada em Difícil ou Pesadelo",
   "Domador de lo imposible": "Domador do impossível",
   "Gana los 3 mapas en Difícil o Pesadilla": "Ganha os 3 mapas em Difícil ou Pesadelo",
-  "Pesadilla eterna": "Pesadelo eterno"
+  "Pesadilla eterna": "Pesadelo eterno",
+  "Instalar la app": "Instalar a app",
+  "App": "App",
+  "Abre Digibonk en Safari.": "Abre o Digibonk no Safari.",
+  "Toca el botón Compartir (el cuadrado con la flecha hacia arriba).": "Toca no botão Partilhar (o quadrado com a seta para cima).",
+  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "Escolhe «Adicionar ao ecrã principal» e confirma com «Adicionar»."
 });

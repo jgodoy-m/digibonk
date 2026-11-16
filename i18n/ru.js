@@ -1416,5 +1416,10 @@ I18N.add('ru', {"×{0} daño": "×{0} урона", "×{0} recibido": "×{0} по
   "Gana la Montaña Helada en Difícil o Pesadilla": "Выиграй Ледяную гору на Сложном или Кошмаре",
   "Domador de lo imposible": "Укротитель невозможного",
   "Gana los 3 mapas en Difícil o Pesadilla": "Выиграй все 3 карты на Сложном или Кошмаре",
-  "Pesadilla eterna": "Вечный кошмар"
+  "Pesadilla eterna": "Вечный кошмар",
+  "Instalar la app": "Установить приложение",
+  "App": "Приложение",
+  "Abre Digibonk en Safari.": "Откройте Digibonk в Safari.",
+  "Toca el botón Compartir (el cuadrado con la flecha hacia arriba).": "Нажмите «Поделиться» (квадрат со стрелкой вверх).",
+  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "Выберите «На экран „Домой“» и подтвердите кнопкой «Добавить»."
 });

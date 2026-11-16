@@ -1410,5 +1410,10 @@ I18N.add('tr', {"×{0} daño": "×{0} hasar", "×{0} recibido": "×{0} alınan",
   "Gana la Montaña Helada en Difícil o Pesadilla": "Buzlu Dağ'ı Zor veya Kâbus'ta kazan",
   "Domador de lo imposible": "İmkânsızın Terbiyecisi",
   "Gana los 3 mapas en Difícil o Pesadilla": "3 haritayı Zor veya Kâbus'ta kazan",
-  "Pesadilla eterna": "Sonsuz Kâbus"
+  "Pesadilla eterna": "Sonsuz Kâbus",
+  "Instalar la app": "Uygulamayı yükle",
+  "App": "Uygulama",
+  "Abre Digibonk en Safari.": "Digibonk’u Safari’de aç.",
+  "Toca el botón Compartir (el cuadrado con la flecha hacia arriba).": "Paylaş düğmesine dokun (yukarı oklu kare).",
+  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "“Ana Ekrana Ekle”yi seç ve “Ekle” ile onayla."
 });
