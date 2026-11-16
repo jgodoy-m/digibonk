@@ -6362,14 +6362,12 @@ function startGame(key, resume){
   applyZoneVisuals(1);
   buildPortal();
   applyBalance(key);
-  applySkinFx(key);
   applyLab();
   applyWeekly();
   g.attr = ATTR_OF[key] || 'vac';
   resolveSolids(g.p, 0.5);   // aparición aleatoria: fuera de los obstáculos
   g.playerMesh = billboard(spriteOf(key, false), 2.6, false);   // sprite propio: la digievolución cambia su textura
   world.add(g.playerMesh);
-  g.aura = makeAura(equippedAt(key, 0), key);
   g.playerShadow = makeShadow(1.6);
   world.add(g.playerShadow);
   // Contorno de legibilidad: anillo brillante en el suelo bajo el Digimon
@@ -10271,7 +10269,7 @@ function labRefund(){
   localStorage.removeItem('digibonk3d-lab');
   return back;
 }
-// Aplica el Laboratorio al empezar la partida (después de balance y skin)
+// Aplica el Laboratorio al empezar la partida (después del equilibrio)
 // Modificador de la semana: una regla distinta cada semana con +25% de Bits
 const WEEKLY_MODS = [
   {id:'rapidos', name:'Semana veloz', d:'Solo aparecen enemigos rápidos.', apply: () => { g.mod.fastOnly = true; }},
@@ -10348,14 +10346,6 @@ function showLab(){
   document.getElementById('labRefund').onclick = () => { const b = labRefund(); announce('Reembolso', `+${b} Bits`, '#ffd54f'); showLab(); };
   overlay.querySelectorAll('.lab-buy').forEach(b => b.onclick = () => { if (labBuy(b.dataset.lab)) showLab(); });
 }
-// Efectos de cada skin: bonus de estadísticas y aura visual
-const SKIN_FX = {
-  galactico: {bonus:{speed:1.06}, aura:'stars',   text:'+6% velocidad · estrellas'},
-  glitch:    {bonus:{dmg:1.08},   aura:'ghost',   text:'+8% daño · ecos glitch'},
-  holografica: {bonus:{pickup:1.2}, aura:'shards', text:'+20% imán · destellos'},
-  festival:  {bonus:{maxHp:15},   aura:'confetti',text:'+15 PS máx. · confeti'},
-  reno:      {bonus:{speed:1.06}, aura:'confetti',text:'+6% velocidad · confeti'}
-};
 const SAVE = {
   get bits(){ return +(localStorage.getItem('digibonk3d-bits') || 0); },
   set bits(v){ localStorage.setItem('digibonk3d-bits', String(Math.max(0, Math.floor(v)))); },
@@ -10393,7 +10383,7 @@ function spendUsable(bn, n){
 // Evento temporal: mientras dura, el gacha tiene el banner de Navidad (cambia aquí las fechas)
 const EVENT = {name:'Navidad Digital', start: Date.parse('2026-11-01T00:00:00'), end: Date.parse('2026-12-31T23:59:59')};
 function eventActive(){ const now = Date.now(); return now >= EVENT.start && now <= EVENT.end; }
-// Skins por personaje (recoloreados). src: 'base' | 'logro' | 'gacha' | 'evento'
+// Skins por personaje, solo estéticas (sin bonus de juego). src: 'base' | 'maestria' | 'logro' | 'evento' | 'shiny'
 // Cada skin usa sus hojas sprites/anim/<digimon>_<etapa>_<skin>.webp (importadas con importar_hoja.py); sin hoja no aparece
 const SKINS = [
   {id:'clasico',   name:'Clásico',    src:'base',   tier:'n', f:''},
@@ -10481,26 +10471,8 @@ function recordRun(key, kills, t){
   return unlocked;
 }
 
-// Sprites recoloreados o con efecto, generados en un canvas al arrancar
+// Hojas de cada skin (las skins son solo estéticas: no cambian estadísticas ni añaden efectos)
 const skinURL = {};   // clave: personaje|evolucionado|skin
-// Efecto glitch: desfase de canales R y B y algunas líneas desplazadas
-function glitchPixels(x, w, h){
-  const d = x.getImageData(0, 0, w, h), src = new Uint8ClampedArray(d.data), sh = Math.max(1, Math.round(w/64));
-  for (let y = 0; y < h; y++){
-    const rowShift = (y*37) % 23 === 0 ? sh*2 : 0;   // algunas filas se desplazan más
-    for (let xx = 0; xx < w; xx++){
-      const i = (y*w + xx) * 4;
-      const xr = Math.min(w-1, Math.max(0, xx - sh - rowShift));
-      const xb = Math.min(w-1, Math.max(0, xx + sh + rowShift));
-      const ir = (y*w + xr) * 4, ib = (y*w + xb) * 4;
-      d.data[i]   = src[ir];       // rojo desplazado a la izquierda
-      d.data[i+1] = src[i+1];      // verde en su sitio
-      d.data[i+2] = src[ib+2];     // azul desplazado a la derecha
-      d.data[i+3] = src[i+3];
-    }
-  }
-  x.putImageData(d, 0, 0);
-}
 function buildSkins(){
   for (const key of SEASONS.adventure.chars){
     for (let st = 0; st <= EVO_LINE[key].length; st++){
@@ -11371,79 +11343,6 @@ function showGacha(){
   $('trPull10').onclick = () => doPulls(10);
 }
 
-/* ---------- Efectos de skin: bonus de estadísticas y aura alrededor del Digimon ---------- */
-const dotTexCache = {};
-function dotTex(kind, color){
-  const k = kind + color;
-  if (dotTexCache[k]) return dotTexCache[k];
-  const c = document.createElement('canvas'); c.width = c.height = 32;
-  const x = c.getContext('2d');
-  x.fillStyle = color;
-  if (kind === 'star'){
-    x.beginPath();
-    for (let i = 0; i < 10; i++){ const r = i % 2 ? 6 : 14, a = -Math.PI/2 + i*Math.PI/5; x.lineTo(16 + Math.cos(a)*r, 16 + Math.sin(a)*r); }
-    x.closePath(); x.fill();
-  } else if (kind === 'shard'){
-    x.beginPath(); x.moveTo(16, 2); x.lineTo(26, 16); x.lineTo(16, 30); x.lineTo(6, 16); x.closePath(); x.fill();
-  } else {
-    x.beginPath(); x.arc(16, 16, 9, 0, Math.PI*2); x.fill();
-  }
-  const t = new THREE.CanvasTexture(c);
-  dotTexCache[k] = t;
-  return t;
-}
-// Bonus permanente: cada skin conseguida da su bonus a ese Digimon, equipada o no
-function applySkinFx(key){
-  const p = g.p;
-  for (const id of ownedSkins(key)){
-    const fx = SKIN_FX[id];
-    if (!fx) continue;
-    const b = fx.bonus;
-    if (b.speed) p.speed *= b.speed;
-    if (b.dmg) p.dmg *= b.dmg;
-    if (b.pickup) p.pickup *= b.pickup;
-    if (b.maxHp){ p.maxHp += b.maxHp; }
-  }
-  p.hp = p.maxHp;
-}
-function makeAura(skinId, key){
-  const fx = SKIN_FX[skinId];
-  if (!fx) return null;
-  const group = new THREE.Group();
-  world.add(group);
-  const sprite = (map, color, scale) => {
-    const sp = new THREE.Sprite(new THREE.SpriteMaterial({map, color: color || 0xffffff, transparent: true, depthWrite: false}));
-    sp.scale.set(scale, scale, 1);
-    group.add(sp);
-    return sp;
-  };
-  let update = () => {};
-  if (fx.aura === 'stars'){
-    const st = Array.from({length: 6}, () => sprite(dotTex('star', '#d1a3ff'), 0xffffff, .45));
-    update = t => st.forEach((s, i) => { const a = t*1.6 + i*Math.PI/3; s.position.set(Math.cos(a)*1.2, 2.2 + Math.sin(t*2 + i)*.15, Math.sin(a)*1.2); });
-  } else if (fx.aura === 'shards'){
-    const sh = Array.from({length: 6}, () => sprite(dotTex('shard', '#bff6ff'), 0xffffff, .4));
-    update = t => sh.forEach((s, i) => { const a = -t + i*Math.PI/3; s.position.set(Math.cos(a)*1.0, 1.6 + Math.sin(t*3 + i)*.2, Math.sin(a)*1.0); });
-  } else if (fx.aura === 'confetti'){
-    const cols = ['#ffd54f', '#ff7043', '#81d4fa', '#aed581'];
-    const cf = Array.from({length: 12}, (_, i) => sprite(dotTex('dot', cols[i % 4]), 0xffffff, .25));
-    update = t => cf.forEach((s, i) => {
-      const f = (t*0.5 + i/12) % 1;
-      s.position.set(Math.sin(i*2.3)*1.1, .3 + f*2.4, Math.cos(i*1.7)*1.1);
-      s.material.opacity = 1 - f;
-    });
-  } else if (fx.aura === 'ghost'){
-    const url = spriteOf(key, false);
-    const g1 = sprite(tex(url), 0xff4d6d, 2.2), g2 = sprite(tex(url), 0x4dd0ff, 2.2);
-    g1.material.opacity = g2.material.opacity = .45;
-    update = t => {
-      const j = Math.sin(t*23) > .8 ? .14 : 0;   // parpadeo: el eco se separa de vez en cuando
-      g1.position.set(-.12 - j, 1.1, 0);
-      g2.position.set(.12 + j, 1.1, 0);
-    };
-  }
-  return {group, update};
-}
 
 /* ---------- Equilibrio: perfil de cada Digimon según la dificultad ----------
    Valores iniciales basados en el daño por segundo (daño / recarga × multiplicador)
@@ -11638,7 +11537,6 @@ function frame(now){
     if (!g.evoAnim) update(sdt);   // durante la digievolución el mundo se detiene y solo corre la animación
     if (g){
       syncMeshes(); updateCamera(dt); updateHUD();
-      if (g.aura){ g.aura.group.position.set(g.p.x, terrainH(g.p.x, g.p.z) + g.p.y, g.p.z); g.aura.update(g.t); }
     }
   }
   drawEdgeMarkers();
@@ -11681,7 +11579,7 @@ if (new URLSearchParams(location.search).has('demo')){
     hold(on){ demoSteps = on ? 0 : null; }, step(n = 1){ demoSteps = n; }, get pending(){ return demoSteps; },
     startGame, spawnEnemy, spawnMagnetDrop, runSave, runSlot, runContinue, setZone, showGacha, addSkill, upgradeChoices,
     // Datos de skins y personajes
-    SKINS, EVO_LINE, CHARS, SEASONS, glitchPixels,
+    SKINS, EVO_LINE, CHARS, SEASONS,
     headUrl, spriteWith,
     checkUnlocks, isUnlocked,
     showSelect, showCollection, showPicker, showShop, showEncargos, showLogros, showPlayer, endGame, masteryLv,
