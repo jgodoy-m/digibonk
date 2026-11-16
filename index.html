@@ -4097,9 +4097,43 @@ function animTex(url, own = false){
   t.magFilter = THREE.NearestFilter;
   t.repeat.set(1/ANIM_N, 1);
   t.isAnim = true;
-  if (!own){ texCache['a:' + sh] = t; animTexs.push(t); }
+  if (own) t.own = true; else { texCache['a:' + sh] = t; animTexs.push(t); }
   return t;
 }
+// Espejo: las hojas miran a la izquierda; quien va hacia la derecha de la pantalla usa la imagen invertida.
+// En THREE.Sprite una escala negativa no voltea (el shader usa su longitud), así que se invierte la textura.
+function setTexFlip(t, fr){
+  if (!!t.fr === fr) return;
+  const n = t.isAnim ? ANIM_N : 1, f = Math.round(t.offset.x*n) - (t.fr ? 1 : 0);
+  t.fr = fr; t.repeat.x = (fr ? -1 : 1)/n; t.offset.x = (f + (fr ? 1 : 0))/n;
+}
+// Gemela invertida de una textura compartida: comparte la imagen (sin coste de memoria) y marca el paso con las demás
+function twinTex(t){
+  if (t.twin) return t.twin;
+  const w = t.clone();
+  w.isAnim = t.isAnim; w.fr = !!t.fr; setTexFlip(w, !t.fr);
+  t.twin = w; w.twin = t;
+  if (animTexs.includes(t)) animTexs.push(w);
+  return w;
+}
+const sharedMats = new Set();   // materiales compartidos por todos los enemigos del mismo sprite
+function twinMat(m){
+  if (m.twin) return m.twin;
+  const w = m.clone();
+  w.map = twinTex(m.map); w.fr = !m.fr;
+  sharedMats.add(w); m.twin = w; w.twin = m;
+  return w;
+}
+// Orienta un sprite: fr = true mira a la derecha
+function faceSprite(mesh, fr){
+  const m = mesh && mesh.material, t = m && m.map;
+  if (!t) return;
+  if (t.own){ if (t.isAnim) setTexFlip(t, fr); }        // textura propia (jugador, apoyos, salvajes): se invierte en el sitio
+  else if (sharedMats.has(m)){ if (!!m.fr !== fr) mesh.material = twinMat(m); }   // material compartido: se cambia por su gemelo
+  else if (!!t.fr !== fr) m.map = twinTex(t);            // material propio con textura compartida (élites, cargadores)
+}
+// Componente horizontal en pantalla de un desplazamiento del mundo (positivo = hacia la derecha)
+function screenDx(dx, dz){ return dx*Math.cos(camYaw) - dz*Math.sin(camYaw); }
 // Sprite de tamaño fijo para cualquier vista: animado si es hoja de fotogramas, fijo si no
 function sprEl(url, size = 56, cls = ''){ return animEl(url, 'spr ' + cls, `--s:${size}px`); }
 // Elemento animado para los menús (dos fotogramas de reposo) o imagen fija si no hay hoja
@@ -4110,7 +4144,7 @@ function animEl(url, cls = '', style = ''){
 const spriteMats = {};
 function billboard(url, scale, shared = true){
   let mat = shared ? spriteMats[url] : null;
-  if (!mat){ mat = new THREE.SpriteMaterial({map: animTex(url, !shared), transparent: true}); if (shared) spriteMats[url] = mat; }
+  if (!mat){ mat = new THREE.SpriteMaterial({map: animTex(url, !shared), transparent: true}); if (shared){ spriteMats[url] = mat; sharedMats.add(mat); } }
   const s = new THREE.Sprite(mat);
   s.scale.set(scale, scale, 1);
   return s;
@@ -8668,6 +8702,9 @@ function syncMeshes(){
     const ge = terrainH(e.x, e.z);
     e.mesh.position.set(e.x, ge + e.mesh.scale.y/2, e.z);
     e.shadow.position.set(e.x, ge + 0.02, e.z);
+    // Los enemigos miran hacia el jugador (margen para que no tiemblen cuando está justo encima o debajo)
+    const sx = screenDx(p.x - e.x, p.z - e.z);
+    if (Math.abs(sx) > 0.6) faceSprite(e.mesh, sx > 0);
   }
 }
 // Cámara orbital integrada con el ratón: el ratón bloqueado (pointer lock) gira la vista sin pulsar nada.
@@ -9969,7 +10006,12 @@ function updateSupport(dt){
     supEvolve(s);
     const sk = i ? -1 : 1, side = {x: -g.dir.z*sk, z: g.dir.x*sk};
     const tx = p.x + side.x*1.8 - g.dir.x*0.8, tz = p.z + side.z*1.8 - g.dir.z*0.8;
+    const ox = s.x, oz = s.z;
     s.x += (tx - s.x)*Math.min(1, dt*5); s.z += (tz - s.z)*Math.min(1, dt*5);
+    // El apoyo mira hacia donde se mueve; parado, hacia donde mira el jugador
+    const sx = screenDx(s.x - ox, s.z - oz)/Math.max(dt, 1e-3);
+    s.faceR = Math.abs(sx) > 1.2 ? sx > 0 : Math.hypot(s.x - ox, s.z - oz) < 0.01*dt*60 ? !!g.faceR : s.faceR;
+    faceSprite(s.mesh, !!s.faceR);
     const gy = terrainH(s.x, s.z), hh = s.mesh.scale.y/2;
     s.mesh.position.set(s.x, gy + hh + Math.sin(g.t*6 + i)*0.05, s.z);
     s.shadow.position.set(s.x, gy + 0.02, s.z);
@@ -11651,17 +11693,21 @@ function frame(now){
   // Animación: los enemigos alternan sus dos fotogramas de reposo; el jugador además ataca y recibe daño
   if (state !== 'map') animMs += dt*1000;   // reloj de animación: se congela con el mapa abierto
   const idleF = Math.floor(animMs/380) % 2;
-  for (const tx of animTexs) tx.offset.x = idleF/ANIM_N;
+  for (const tx of animTexs) tx.offset.x = (idleF + (tx.fr ? 1 : 0))/ANIM_N;
   if (g && g.playerMesh){
     const pm = g.playerMesh.material.map;
     if (pm && pm.isAnim){
       if (state === 'play'){
         g.atkT = Math.max(0, (g.atkT || 0) - dt);
         const lp = g.lastPos || (g.lastPos = {x: g.p.x, z: g.p.z});
-        g.moving = Math.hypot(g.p.x - lp.x, g.p.z - lp.z) > 0.004; lp.x = g.p.x; lp.z = g.p.z;
+        const dx = g.p.x - lp.x, dz = g.p.z - lp.z, mv = Math.hypot(dx, dz), sx = screenDx(dx, dz);
+        g.moving = mv > 0.004; lp.x = g.p.x; lp.z = g.p.z;
+        // Mira hacia donde va; al ir recto hacia arriba o abajo conserva la última dirección
+        if (g.moving && Math.abs(sx) > 0.35*mv) g.faceR = sx > 0;
       }
+      faceSprite(g.playerMesh, !!g.faceR);
       const f = hurtT > 0.25 ? 4 : g.atkT > 0.13 ? 2 : g.atkT > 0 ? 3 : Math.floor(animMs/(g.moving ? 150 : 380)) % 2;
-      pm.offset.x = f/ANIM_N;
+      pm.offset.x = (f + (pm.fr ? 1 : 0))/ANIM_N;
     }
   }
   frameNo++;
