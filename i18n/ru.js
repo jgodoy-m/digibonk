@@ -1378,8 +1378,43 @@ I18N.add('ru', {
   "Tipografías": "Шрифты",
   "Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).": "Orbitron (Matt McInerney) и Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).",
   "Motor gráfico": "Графический движок",
-  "Bandai (sprites Dot)": "Bandai (спрайты Dot)"
+  "Bandai (sprites Dot)": "Bandai (спрайты Dot)",
+  "Instalar como app": "Установить как приложение",
+  "Instalar": "Установить",
+  "Juega a pantalla completa y en horizontal desde un icono, también sin conexión.": "Играй на весь экран и горизонтально с иконки, даже без интернета.",
+  "En Safari: botón Compartir y «Añadir a pantalla de inicio». Se abre a pantalla completa y sin conexión.": "В Safari: «Поделиться», затем «На экран „Домой“». Открывается на весь экран, даже без интернета.",
+  "Usa «Instalar app» o «Añadir a pantalla de inicio» en el menú del navegador.": "Выбери «Установить приложение» или «Добавить на главный экран» в меню браузера."
 });
 
 I18N.add('ru', {"Logro: completar 5 partidas con Gatomon · {0}": "Достижение: завершить 5 забегов с Gatomon · {0}"});
-I18N.add('ru', {"×{0} daño": "×{0} урона", "×{0} recibido": "×{0} получаемого"});
+I18N.add('ru', {"×{0} daño": "×{0} урона", "×{0} recibido": "×{0} получаемого",
+  // Reto semanal (reglas nuevas, Digimon de la semana, hitos) y premios de Difícil y Pesadilla
+  "Gigantes": "Великаны",
+  "Los enemigos tienen un 60% más de vida, pero dan un 50% más de experiencia.": "У врагов на 60% больше здоровья, но они дают на 50% больше опыта.",
+  "A toda prisa": "Во весь опор",
+  "Corres un 20% más, pero los enemigos corren un 25% más.": "Ты бегаешь на 20% быстрее, но враги — на 25% быстрее.",
+  "Noche de élites": "Ночь элиты",
+  "Las élites salen el doble de a menudo.": "Элитные враги появляются вдвое чаще.",
+  "Lluvia de cofres": "Дождь сундуков",
+  "Los cofres salen el doble de a menudo.": "Сундуки появляются вдвое чаще.",
+  "Imán gigante": "Гигантский магнит",
+  "Recoges la experiencia desde el triple de distancia, pero haces un 15% menos de daño.": "Ты собираешь опыт втрое дальше, но наносишь на 15% меньше урона.",
+  "Sin dash": "Без рывка",
+  "No puedes hacer dash, pero corres un 15% más.": "Ты не можешь делать рывок, но бегаешь на 15% быстрее.",
+  "Digimon de la semana": "Дигимон недели",
+  "Hitos": "Этапы",
+  "Hitos {0}": "Этапы {0}",
+  "Hito del reto": "Этап испытания",
+  "Aguanta 10 minutos en el reto": "Продержись 10 минут в испытании",
+  "Gana el reto": "Выиграй испытание",
+  "Gana el reto con el Digimon de la semana": "Выиграй испытание с Дигимоном недели",
+  "Azote del Bosque": "Бич Леса",
+  "Gana el Bosque File en Difícil o Pesadilla": "Выиграй Лес File на Сложном или Кошмаре",
+  "Tormenta de Arena": "Песчаная буря",
+  "Gana el Desierto de Datos en Difícil o Pesadilla": "Выиграй Пустыню данных на Сложном или Кошмаре",
+  "Ventisca Eterna": "Вечная вьюга",
+  "Gana la Montaña Helada en Difícil o Pesadilla": "Выиграй Ледяную гору на Сложном или Кошмаре",
+  "Domador de lo imposible": "Укротитель невозможного",
+  "Gana los 3 mapas en Difícil o Pesadilla": "Выиграй все 3 карты на Сложном или Кошмаре",
+  "Pesadilla eterna": "Вечный кошмар"
+});

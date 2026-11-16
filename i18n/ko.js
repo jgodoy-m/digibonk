@@ -1379,8 +1379,43 @@ I18N.add('ko', {
   "Tipografías": "글꼴",
   "Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).": "Orbitron(Matt McInerney)과 Nunito(Vernon Adams, Cyreal, Jacques Le Bailly).",
   "Motor gráfico": "그래픽 엔진",
-  "Bandai (sprites Dot)": "반다이(도트 스프라이트)"
+  "Bandai (sprites Dot)": "반다이(도트 스프라이트)",
+  "Instalar como app": "앱으로 설치",
+  "Instalar": "설치",
+  "Juega a pantalla completa y en horizontal desde un icono, también sin conexión.": "아이콘으로 전체 화면·가로 모드로 플레이, 오프라인에서도 가능.",
+  "En Safari: botón Compartir y «Añadir a pantalla de inicio». Se abre a pantalla completa y sin conexión.": "Safari에서 공유 → '홈 화면에 추가'. 전체 화면으로 열리고 오프라인에서도 돼요.",
+  "Usa «Instalar app» o «Añadir a pantalla de inicio» en el menú del navegador.": "브라우저 메뉴에서 '앱 설치' 또는 '홈 화면에 추가'를 사용하세요."
 });
 
 I18N.add('ko', {"Logro: completar 5 partidas con Gatomon · {0}": "업적: Gatomon으로 5판 완료 · {0}"});
-I18N.add('ko', {"×{0} daño": "피해 ×{0}", "×{0} recibido": "받는 피해 ×{0}"});
+I18N.add('ko', {"×{0} daño": "피해 ×{0}", "×{0} recibido": "받는 피해 ×{0}",
+  // Reto semanal (reglas nuevas, Digimon de la semana, hitos) y premios de Difícil y Pesadilla
+  "Gigantes": "거인",
+  "Los enemigos tienen un 60% más de vida, pero dan un 50% más de experiencia.": "적의 체력이 60% 늘지만 경험치도 50% 더 준다.",
+  "A toda prisa": "전속력",
+  "Corres un 20% más, pero los enemigos corren un 25% más.": "이동 속도가 20% 빨라지지만 적은 25% 빨라진다.",
+  "Noche de élites": "엘리트의 밤",
+  "Las élites salen el doble de a menudo.": "엘리트가 두 배로 자주 나온다.",
+  "Lluvia de cofres": "상자 비",
+  "Los cofres salen el doble de a menudo.": "상자가 두 배로 자주 나온다.",
+  "Imán gigante": "거대 자석",
+  "Recoges la experiencia desde el triple de distancia, pero haces un 15% menos de daño.": "경험치를 세 배 거리에서 줍지만 피해가 15% 줄어든다.",
+  "Sin dash": "대시 없음",
+  "No puedes hacer dash, pero corres un 15% más.": "대시를 쓸 수 없지만 이동 속도가 15% 빨라진다.",
+  "Digimon de la semana": "이번 주 디지몬",
+  "Hitos": "목표",
+  "Hitos {0}": "목표 {0}",
+  "Hito del reto": "도전 목표",
+  "Aguanta 10 minutos en el reto": "도전에서 10분 버티기",
+  "Gana el reto": "도전 승리",
+  "Gana el reto con el Digimon de la semana": "이번 주 디지몬으로 도전 승리",
+  "Azote del Bosque": "숲의 재앙",
+  "Gana el Bosque File en Difícil o Pesadilla": "어려움 또는 악몽에서 파일 숲 승리",
+  "Tormenta de Arena": "모래 폭풍",
+  "Gana el Desierto de Datos en Difícil o Pesadilla": "어려움 또는 악몽에서 데이터 사막 승리",
+  "Ventisca Eterna": "영원한 눈보라",
+  "Gana la Montaña Helada en Difícil o Pesadilla": "어려움 또는 악몽에서 얼음 산 승리",
+  "Domador de lo imposible": "불가능의 조련사",
+  "Gana los 3 mapas en Difícil o Pesadilla": "어려움 또는 악몽에서 3개 맵 모두 승리",
+  "Pesadilla eterna": "영원한 악몽"
+});

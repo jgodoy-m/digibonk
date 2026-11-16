@@ -10,6 +10,11 @@
 <link rel="icon" type="image/png" sizes="32x32" href="ui/icono_32.png">
 <link rel="apple-touch-icon" href="ui/icono_180.png">
 <link rel="manifest" href="manifest.webmanifest">
+<!-- Como app en la pantalla de inicio (iPhone/iPad ignoran casi todo el manifest y leen estas etiquetas) -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DigiBonk">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <!-- SITIO:inicio · lo escribe tools/configurar.py a partir de sitio.json (no lo edites a mano) -->
 <!-- Sin dominio en sitio.json: rutas relativas. Discord, X y WhatsApp solo muestran la imagen con URL absoluta. -->
 <meta property="og:type" content="website">
@@ -1511,6 +1516,7 @@ body:has(.tr11) #hudTop{display:none!important}
 .hud-portrait.fr-amistad_gabumon::before,.rw-frame.fr-amistad_gabumon{background-image:url(ui/marcos/amistad_gabumon.webp)}
 .hud-portrait.fr-alas_rosadas::before,.rw-frame.fr-alas_rosadas{background-image:url(ui/marcos/alas_rosadas.webp)}
 .hud-portrait.fr-fenix_dorado::before,.rw-frame.fr-fenix_dorado{background-image:url(ui/marcos/fenix_dorado.webp)}
+.hud-portrait.fr-pesadilla_eterna::before,.rw-frame.fr-pesadilla_eterna{background-image:url(ui/marcos/pesadilla_eterna.webp)}
 .hud-portrait.fr-esperanza_angelical::before,.rw-frame.fr-esperanza_angelical{background-image:url(ui/marcos/esperanza_angelical.webp)}
 .hud-portrait.fr-sinceridad_palmon::before,.rw-frame.fr-sinceridad_palmon{background-image:url(ui/marcos/sinceridad_palmon.webp)}
 .hud-portrait.fr-bondad_botanica::before,.rw-frame.fr-bondad_botanica{background-image:url(ui/marcos/bondad_botanica.webp)}
@@ -1572,6 +1578,7 @@ body:has(.tr11) #hudTop{display:none!important}
 .realhub .hm-pl-frame.fr-amistad_gabumon::before{background-image:url(ui/marcos/amistad_gabumon.webp)!important}
 .realhub .hm-pl-frame.fr-alas_rosadas::before{background-image:url(ui/marcos/alas_rosadas.webp)!important}
 .realhub .hm-pl-frame.fr-fenix_dorado::before{background-image:url(ui/marcos/fenix_dorado.webp)!important}
+.realhub .hm-pl-frame.fr-pesadilla_eterna::before{background-image:url(ui/marcos/pesadilla_eterna.webp)!important}
 .realhub .hm-pl-frame.fr-esperanza_angelical::before{background-image:url(ui/marcos/esperanza_angelical.webp)!important}
 .realhub .hm-pl-frame.fr-sinceridad_palmon::before{background-image:url(ui/marcos/sinceridad_palmon.webp)!important}
 .realhub .hm-pl-frame.fr-bondad_botanica::before{background-image:url(ui/marcos/bondad_botanica.webp)!important}
@@ -1862,6 +1869,12 @@ body:has(.tr11) #hudTop{display:none!important}
 #overlay.has-top:not(.menu-mode){--ui-top:76px;padding-top:var(--ui-top)}
 #overlay:not(.menu-mode)>:is(.picker-screen,.settings,.help-box,.lab-screen,.end3){flex:none;box-sizing:border-box;max-height:calc(100dvh - var(--ui-top) - var(--ui-bot))}
 #overlay:not(.menu-mode)>.picker-screen{width:min(1040px,96vw)}
+/* Móviles pequeños en horizontal (p. ej. 667×375): «Supervivencia» se cortaba en el inicio */
+@media (orientation:landscape) and (max-height:500px) and (max-width:760px){
+  #overlay .realhub.hb #mSurv b{font-size:12.5px!important}
+}
+/* Si no cabe (móvil en horizontal, ventanas bajas), Ajustes y Ayuda se desplazan dentro del panel en vez de salirse de él */
+#overlay:not(.menu-mode)>:is(.settings,.help-box){overflow-y:auto;overscroll-behavior:contain}
 #overlay:not(.menu-mode)>:is(.settings,.help-box){width:min(690px,94vw)}
 #overlay:not(.menu-mode)>.settings.sc-box{width:min(730px,94vw)}
 #overlay:not(.menu-mode)>.picker-screen.pk2{height:min(680px,calc(100dvh - var(--ui-top) - var(--ui-bot)))}
@@ -2159,14 +2172,16 @@ body.is-touch #touchCtl.on{display:block}
 #tDash{right:140px;bottom:34px}
 #tJump{right:40px;bottom:140px}
 #tPause{width:42px;height:42px;top:16px;left:calc(50% + 145px);font-size:14px}
-/* Aviso para girar el móvil: solo en pantallas táctiles en vertical y durante la partida */
+/* Aviso para girar el móvil: el juego entero (menús y partida) se usa en horizontal en pantallas táctiles.
+   iPhone no deja bloquear la orientación, así que en vertical se tapa todo con este aviso */
 #rotateHint{display:none;position:fixed;inset:0;z-index:60;place-items:center;background:rgba(6,12,30,.92);color:#fff;text-align:center;font-family:'Nunito',system-ui,sans-serif}
 #rotateHint div{display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px}
 #rotateHint b{font-size:64px;line-height:1;animation:rotHint 1.6s ease-in-out infinite}
 #rotateHint strong{font-size:22px;font-weight:900}
 #rotateHint span{font-size:14px;font-weight:700;opacity:.8}
 @keyframes rotHint{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(90deg)}}
-@media (orientation:portrait) and (pointer:coarse){body.playing #rotateHint{display:grid}}
+@media (orientation:portrait) and (pointer:coarse){#rotateHint{display:grid}}
+@media (orientation:portrait){body.is-touch #rotateHint{display:grid}}
 /* Móvil en horizontal: menú más compacto */
 @media (orientation:landscape) and (max-height:500px){
   #overlay .realhub.hb .hb-brand img{height:64px!important;width:auto!important;max-width:60vw!important}
@@ -3219,9 +3234,18 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
 #overlay .realhub.hb .nm-weekly>em{background:rgba(0,0,0,.22)}
 #overlay .realhub.hb .nm-weekly>span>small{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
 #overlay .realhub.hb .nm-weekly>span>b{flex:0 0 auto;max-width:70%}
+@media (orientation:landscape) and (max-height:500px){#overlay .realhub.hb .nm-weekly .nm-wk-lbl{display:none}}
 .picker-screen.ms .ms-weekly{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 10px;padding:8px 14px;border-radius:999px;background:linear-gradient(90deg,#0f8a5f,#2bb673);color:#fff;font:700 13px/1.3 'Nunito',sans-serif}
 #overlay:not(.menu-mode) .picker-screen.ms p.ms-weekly,#overlay:not(.menu-mode) .picker-screen.ms p.ms-weekly :is(b,span,em){color:#fff!important;opacity:1!important}
 .picker-screen.ms .ms-weekly b{font-weight:900;font-size:14px}
+.picker-screen.ms .ms-hitos{list-style:none;margin:0 0 10px;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px}
+.picker-screen.ms .ms-hitos li{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:12px;background:var(--m-sunk,#eef1f6);color:var(--m-text,#172036);font:700 12.5px/1.25 'Nunito',sans-serif}
+.picker-screen.ms .ms-hitos li i{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:900;background:#2bb673;color:#fff}
+.picker-screen.ms .ms-hitos li.star i{background:#ffb300}
+.picker-screen.ms .ms-hitos li span{flex:1;min-width:0}
+.picker-screen.ms .ms-hitos li em{flex:none;font-style:normal;font-weight:900;color:#0f8a5f}
+.picker-screen.ms .ms-hitos li.ok{outline:2px solid #2bb673}
+.picker-screen.ms .ms-hitos li:not(.ok):not(.star) i{background:var(--m-mute,#8a93a6)}
 .picker-screen.ms .ms-weekly span{flex:1;min-width:160px;opacity:.95}
 .picker-screen.ms .ms-weekly em{font-style:normal;font-weight:900;padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.22)}
 #overlay .realhub.hb .nm-event.hm-soon{background:var(--m-sunk)!important;color:var(--m-mute)!important;box-shadow:none!important}
@@ -4720,7 +4744,7 @@ function pauseGame(){
 // (antes la horda seguía haciendo daño debajo del aviso)
 {
   const portraitMq = matchMedia('(orientation:portrait) and (pointer:coarse)');
-  const onPortrait = () => { if (portraitMq.matches && state === 'play') pauseGame(); };
+  const onPortrait = () => { if ((portraitMq.matches || (isTouchUI() && matchMedia('(orientation:portrait)').matches)) && state === 'play') pauseGame(); };
   if (portraitMq.addEventListener) portraitMq.addEventListener('change', onPortrait); else if (portraitMq.addListener) portraitMq.addListener(onPortrait);
   addEventListener('resize', onPortrait);
 }
@@ -5209,7 +5233,7 @@ function showSelect(){
               ${!GACHA_SOON ? `<button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Incubadora: ${usableTickets('std')} tickets disponibles"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Incubadora</b><small><em class="nm-tix">${usableTickets('std')}</em> tickets<span class="nm-long"> disponibles</span></small></span></button>` : `<button type="button" class="hb-mode m-gacha" id="hbShop" aria-label="Tienda: rotación semanal"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Tienda</b><small>Rotación semanal</small></span></button>`}
             </div>
           </div>
-          <button type="button" class="hb-event nm-event nm-weekly" id="mWeekly" aria-label="Reto semanal: ${safeText(weeklyMod().name)}" title="${safeText(weeklyMod().d)}"><i><img class="nm-ic" src="ui/hub/ic_mision.webp" alt=""></i><span><small>Reto semanal</small><b>${weeklyMod().name}</b></span><em>+25% Bits</em></button>
+          <button type="button" class="hb-event nm-event nm-weekly" id="mWeekly" aria-label="Reto semanal: ${safeText(weeklyMod().name)}" title="${safeText(weeklyMod().d)}"><i><img class="nm-ic" src="ui/hub/ic_mision.webp" alt=""></i><span><small>Reto semanal</small><b>${weeklyMod().name}</b></span><em><span class="nm-wk-lbl">Hitos</span> ${retoState().done.length}/${RETO_HITOS.length}</em></button>
           <button type="button" class="nm-quests nm-encard" id="mEnc" aria-label="Encargos: hoy ${qs.day.done} de ${qs.day.all}, semana ${qs.week.done} de ${qs.week.all}${qs.ev ? ', evento ' + qs.ev.done + ' de ' + qs.ev.all : ''}"><i><img class="nm-ic" src="ui/hub/ic_encargos.webp" alt=""></i><span class="nm-eh"><b>Encargos</b><small>${qs.ev ? 'Diarios, semanales y de evento' : 'Diarios y semanales'}</small></span><span class="nm-eqs">${[['Hoy', qs.day, 'q-d'], ['Semana', qs.week, 'q-w'], ...(qs.ev ? [['Evento', qs.ev, 'q-e']] : [])].map(([n, q, c]) => `<span class="nm-eq ${c}"><small>${n}</small><b>${q.done}/${q.all}</b><span class="hb-meter"><i style="width:${Math.round(q.done / q.all * 100)}%"></i></span></span>`).join('')}</span></button>
           ${(!GACHA_SOON ? (bannerOpen("navidadP") || bannerOpen("navidadR")) : eventActive()) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span class="lv-sheen"></span><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
           <div class="hb-tiles nm-tiles">
@@ -5415,7 +5439,7 @@ function showHelp(){
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
   'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
-  'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales', 'digibonk3d-objetos', 'digibonk3d-obj-ini'];
+  'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales', 'digibonk3d-objetos', 'digibonk3d-obj-ini', 'digibonk3d-reto'];
 // También cuentan los contadores por banner (pity) y la mejor oleada de cada mapa
 const isSaveKey = k => SAVE_KEYS.includes(k) || /^digibonk3d-(pity|surv-wave)-[A-Za-z0-9_]{1,32}$/.test(k);
 function saveData(){
@@ -5846,6 +5870,7 @@ function showSettings(){
         <div><b>Reducir animaciones</b><small>Quita transiciones y movimientos de los menús.</small></div>
         <button class="set-toggle${reduceMotion() ? ' on' : ''}" id="tMotion">${reduceMotion() ? 'Activado' : 'Desactivado'}</button>
       </div>
+      ${appRow()}
       <div class="set-row">
         <div><b>Progreso</b><small>Exporta tu progreso a un código para usarlo en otro navegador.</small></div>
         <button class="mini-btn" id="btnSaveCode">Código de guardado</button>
@@ -5877,6 +5902,7 @@ function showSettings(){
   overlay.querySelectorAll('.set-seg[data-scale]').forEach(b => b.onclick = () => { localStorage.setItem('digibonk3d-uiscale', b.dataset.scale); applyUiPrefs(); showSettings(); });
   document.getElementById('tMotion').onclick = () => { localStorage.setItem('digibonk3d-reducemotion', reduceMotion() ? '0' : '1'); applyUiPrefs(); showSettings(); };
   document.getElementById('btnSaveCode').onclick = () => showSaveCode();
+  const ba = document.getElementById('btnApp'); if (ba) ba.onclick = () => installApp();
   document.getElementById('btnCloud').onclick = () => showCloud();
   document.getElementById('btnCredits').onclick = () => showCredits('settings');
   // Cerrar sesión: vuelve a la pantalla de registro; el progreso sigue en este navegador
@@ -6109,7 +6135,7 @@ function showPicker(tab){
     <div class="picker-screen pk2 ps">
       <header class="ps-top">
         <button class="g-back" id="pkBack"><kbd>Esc</kbd> Volver</button>
-        <div class="ps-banner"><h2>${runMode === 'surv' ? 'Supervivencia' : runWeekly ? 'Reto semanal' : 'Elige tu Digimon'}</h2><small>${pr.done}/${pr.total} Digimon</small></div>
+        <div class="ps-banner"><h2>${runMode === 'surv' ? 'Supervivencia' : runWeekly ? 'Reto semanal' : 'Elige tu Digimon'}</h2><small>${runWeekly && runMode !== 'surv' ? `Digimon de la semana: ${CHARS[retoStar()].name} · +25% Bits` : `${pr.done}/${pr.total} Digimon`}</small></div>
         
       </header>
       <div class="ps-body">
@@ -6308,7 +6334,8 @@ function showMapSelect(){
     <div class="picker-screen ms">
       <header class="pk2-top"><button class="g-back" id="msBack">← Digimon</button><h2>${surv ? 'Supervivencia · elige mapa' : weekly ? 'Reto semanal · elige mapa' : 'Elige mapa y dificultad'}</h2><span class="pk2-sub">${CHARS[selectedKey].name} · ←→ mapa · ↑↓ dificultad · Enter empezar</span></header>
       <div class="ms-maps">${cards}</div>
-      ${weekly ? `<p class="ms-weekly"><b>${weeklyMod().name}</b><span>${weeklyMod().d}</span><em>+25% Bits</em></p>` : ''}
+      ${weekly ? `<p class="ms-weekly"><b>${weeklyMod().name}</b><span>${weeklyMod().d}</span><em>+25% Bits</em></p>
+      <ul class="ms-hitos"><li class="star${selectedKey === retoStar() ? ' ok' : ''}"><i>★</i><span>Digimon de la semana: ${CHARS[retoStar()].name}</span><em>+25% Bits</em></li>${RETO_HITOS.map(h => { const ok = retoState().done.includes(h.id); return `<li class="${ok ? 'ok' : ''}"><i>${ok ? '✓' : '○'}</i><span>${h.t}</span><em>+${h.bits} Bits</em></li>`; }).join('')}</ul>` : ''}
       <section class="ms-dsec"><div class="ms-diffs">${diffs}</div>
         <div class="ms-table" style="--dc:${d.col}"><b>${d.name}</b><span>${d.d}</span>
           <ul><li>Vida enemigos <em>${pct(d.hp)}</em></li><li>Daño enemigos <em>${pct(d.dmg)}</em></li><li>Enemigos <em>${pct(1 / d.spawn)}</em></li><li>Élites <em>${pct(1 / d.elite)}</em></li><li>Jefes de zona <em>${pct(d.boss)}</em></li><li>Bits y tickets <em>×${String(d.reward).replace('.', ',')}</em></li></ul>
@@ -6321,14 +6348,55 @@ function showMapSelect(){
   document.getElementById('msBack').onclick = () => showPicker();
   document.getElementById('msStart').onclick = () => startGame(selectedKey);
 }
-// Móvil: se juega en horizontal. Al empezar, intenta pantalla completa y bloquear la orientación (Android);
-// si el móvil sigue en vertical, un aviso pide girarlo mientras dure la partida
+// Móvil: se juega siempre en horizontal. Al empezar la partida y en cada toque de los menús (si se salió de la
+// pantalla completa), intenta pantalla completa y bloquear la orientación (Android). Instalado como app no hace
+// falta pantalla completa: el manifest ya la pide y fija el horizontal. iPhone no permite nada de esto, así que
+// en vertical el aviso «Gira el móvil» tapa todo el juego.
 function lockLandscape(){
   if (!isTouchUI() && !matchMedia('(pointer:coarse)').matches) return;
+  if (isStandalone()){ try { screen.orientation.lock('landscape').catch(() => {}); } catch(e){} return; }
   try {
     const go = () => { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); };
     if (!document.fullscreenElement && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().then(go).catch(go); else go();
   } catch(e){}
+}
+{
+  let last = 0;
+  addEventListener('click', () => {
+    if (!isTouchUI() || document.fullscreenElement || isStandalone() || Date.now() - last < 4000) return;
+    last = Date.now();
+    lockLandscape();
+  }, true);
+}
+// ---------- DigiBonk como app (PWA) ----------
+// El service worker (sw.js) guarda el juego para abrirlo sin conexión. Android y ordenador ofrecen «Instalar»
+// (beforeinstallprompt); en iPhone/iPad se instala a mano desde Compartir → «Añadir a pantalla de inicio».
+function isStandalone(){
+  // Ojo: en el navegador, la pantalla completa también cumple display-mode: fullscreen; eso no es estar instalado
+  return (matchMedia('(display-mode: fullscreen)').matches && !document.fullscreenElement) || matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+}
+let installEvt = null;
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; if (state === 'settings') showSettings(); });
+addEventListener('appinstalled', () => { installEvt = null; if (state === 'settings') showSettings(); });
+const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+function appRow(){
+  if (isStandalone()) return '';
+  const how = installEvt ? 'Juega a pantalla completa y en horizontal desde un icono, también sin conexión.'
+    : isIOS() ? 'En Safari: botón Compartir y «Añadir a pantalla de inicio». Se abre a pantalla completa y sin conexión.'
+    : 'Usa «Instalar app» o «Añadir a pantalla de inicio» en el menú del navegador.';
+  return `<div class="set-row">
+        <div><b>Instalar como app</b><small>${how}</small></div>
+        ${installEvt ? '<button class="mini-btn" id="btnApp">Instalar</button>' : ''}
+      </div>`;
+}
+async function installApp(){
+  if (!installEvt) return;
+  const e = installEvt; installEvt = null;
+  try { e.prompt(); await e.userChoice; } catch(err){}
+  if (state === 'settings') showSettings();
+}
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && !/[?&]test\b/.test(location.search)){
+  addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
 // ---------- Punto de guardado de partida ----------
 // Al pausar, al cambiar de app o al cerrar el juego, la partida se guarda en un solo hueco de este navegador
@@ -6546,6 +6614,7 @@ function startGame(key, resume){
     weekly: runWeekly && runMode !== 'surv',
     // Semilla del mapa: una nueva en cada partida; el reto semanal usa la de la semana (mismo mapa para todos)
     seed: (resume && resume.g && resume.g.seed) || (runWeekly && runMode !== 'surv' ? 7919*(weekNum() + 1000) : 1 + Math.floor(Math.random()*2e9)),
+    star: runWeekly && runMode !== 'surv' ? retoStar() : null,
     ch: {...c, id:key},
     p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:3.5, critChance:0.12, critMul:2},
     t: 0, kills: 0, enemies: [], shots: [], gems: [], blades: [], turrets: [], zones: [],
@@ -7126,7 +7195,7 @@ function spawnChestAt(x, z, gold){
   g.chests.push({x: cx, z: cz, group, pivot, open: false, openT: 0, gone: false, gold: !!gold});
 }
 function tryDash(){
-  if (!g || g.dashCd > 0 || g.dash > 0) return;
+  if (!g || g.dashCd > 0 || g.dash > 0 || (g.mod && g.mod.noDash)) return;   // regla semanal «Sin dash»
   g.dash = 0.18;   // segundos de dash (invulnerable)
   g.dashCd = 2.5*(g.p.dashMul || 1);  // cooldown
   g.dashUsed = true;
@@ -7155,7 +7224,7 @@ function evoDmg(){ return 1; }
 const DIFF = {hp: 1.35, dmg: 1.35, spawn: 0.75, eliteT: 35, spawnMin: 0.22};
 // La dificultad sube poco a poco: al principio es la normal y llega a la del modo difícil en el minuto 10
 const diffMul = k => (lvlDiff()[k] || 1) * (1 + (DIFF[k] - 1) * Math.min(1, (g ? g.t : 0) / 600)) * (k === 'spawn' ? 1 / infMul() : infMul());
-const eliteGap = () => (45 + (DIFF.eliteT - 45) * Math.min(1, (g ? g.t : 0) / 600)) * lvlDiff().elite / infMul() * (g && g.route === 'elites' ? 0.5 : 1);
+const eliteGap = () => (45 + (DIFF.eliteT - 45) * Math.min(1, (g ? g.t : 0) / 600)) * lvlDiff().elite / infMul() * (g && g.route === 'elites' ? 0.5 : 1) * ((g && g.mod && g.mod.eliteMul) || 1);
 // Infierno: tras 20 minutos en la misma pantalla todo se multiplica sin parar (+100% cada 15 s)
 const infMul = () => (g && g.inferno) ? 1 + Math.max(0, g.screenT - SCREEN_LIMIT) / 15 : 1;
 // Tiempo que cuenta para la dificultad: igual que el tiempo real hasta el minuto 10 (la dificultad de siempre)
@@ -8048,7 +8117,7 @@ function update(dt){
   g.chestT -= dt;
   g.magnetT = Math.max(0, (g.magnetT || 0) - dt);
   if (g.chestT <= 0){
-    g.chestT = 50;
+    g.chestT = (g.mod && g.mod.chestGap) || 50;
     // Como mucho 2 cofres vivos a la vez: si ya hay dos en el mapa, no sale otro
     if (g.chests.filter(c => !c.gone && !c.open).length < 2) spawnChest(p);
   }
@@ -8978,7 +9047,7 @@ function endGame(win){
   setHud(false); evHud(null); shrineHud(null);
   sfx(win ? 'victory' : 'defeat');
   const daily = loadDaily();
-  const raw = Math.floor((g.kills/2 + g.t/10) * labMul('bits') * 1.25 * (g.mode === 'surv' ? 1.5 : 1) * lvlDiff().reward * (win && isPortalMap() ? 1.5 : 1) * (g.weekly ? 1.25 : 1));   // ×1,25 de base; el Reto semanal suma otro +25%
+  const raw = Math.floor((g.kills/2 + g.t/10) * labMul('bits') * 1.25 * (g.mode === 'surv' ? 1.5 : 1) * lvlDiff().reward * (win && isPortalMap() ? 1.5 : 1) * (g.weekly ? 1.25 : 1) * (g.weekly && g.ch.id === g.star ? 1.25 : 1));   // ×1,25 de base; el Reto semanal suma otro +25% y su Digimon de la semana otro
   const earned = Math.min(raw, Math.max(0, DAILY.runCap - daily.runBits));
   if (g.t >= 5) daily.runs += 1;
   daily.runBits += earned;
@@ -8987,11 +9056,14 @@ function endGame(win){
   // Toda partida larga da al menos un ticket, aunque no caiga ningún jefe
   if (g.t >= DAILY.runTixAt && g.tix < DAILY.runTix) g.tix = DAILY.runTix;
   saveDaily(daily);
-  SAVE.bits = SAVE.bits + earned + bonus + (g.extraBits || 0);
+  g.retoDone = checkReto(win);
+  g.retoBits = g.retoDone.reduce((n, h) => n + h.bits, 0); g.retoTix = g.retoDone.reduce((n, h) => n + h.tix, 0);
+  SAVE.bits = SAVE.bits + earned + bonus + (g.extraBits || 0) + g.retoBits;
+  if (g.retoTix) addTickets('std', g.retoTix);
   g.tix = Math.round(g.tix * lvlDiff().reward);   // la dificultad también multiplica los tickets
   addTickets('std', g.tix);   // élites y jefe: monedero del permanente
   if (g.mode === 'surv'){ const wk = 'digibonk3d-surv-wave-' + g.map; g.waveBest = (g.wave || 1) > +(localStorage.getItem(wk) || 0); if (g.waveBest) localStorage.setItem(wk, String(g.wave || 1)); }
-  g.earned = earned + bonus + (g.extraBits || 0);
+  g.earned = earned + bonus + (g.extraBits || 0) + g.retoBits;
   g.bonus = bonus;
   g.unlocked = recordRun(g.ch.id, g.kills, g.t);
   g.survBest = g.mode === 'surv' ? recordSurv(g.ch.id, g.t) : null;
@@ -9011,7 +9083,9 @@ function endGame(win){
   const dmgRows = Object.entries(g.dmgBy).sort((a, b) => b[1] - a[1]).slice(0, 6);
   const dmgMax = dmgRows.length ? dmgRows[0][1] : 1;
   const dmgName = k => k === 'base' ? `Ataque de ${g.ch.name}` : k.startsWith('fus:') ? 'Fusión: ' + (FUSION_NAMES[k.slice(4)] || k.slice(4)) : (SKILLS[k] ? skillName(k) : k);
-  const rewards = [`<li><b>+${g.earned - g.bonus - (g.extraBits || 0)}</b> Bits</li>`];
+  const rewards = [`<li><b>+${g.earned - g.bonus - (g.extraBits || 0) - (g.retoBits || 0)}</b> Bits</li>`];
+  if (g.weekly && g.ch.id === g.star) rewards.push(`<li>Digimon de la semana: <b>+25%</b> Bits</li>`);
+  for (const h of g.retoDone || []) rewards.push(`<li>Hito del reto: <b>${h.t}</b> · +${h.bits} Bits${GACHA_SOON ? '' : ` y +${h.tix} tickets`}</li>`);
   if (g.extraBits) rewards.push(`<li><b>+${g.extraBits}</b> Bits de eventos del mapa</li>`);
   if (g.emblems && g.emblems.length) rewards.push(`<li>Emblemas: <b>${g.emblems.length}/8</b></li>`);
   if (g.bonus) rewards.push(GACHA_SOON ? `<li><b>+${g.bonus}</b> Bits · misión diaria completada</li>` : `<li><b>+${g.bonus}</b> Bits y <b>+${g.dailyTix}</b> tickets · misión diaria completada</li>`);
@@ -9036,7 +9110,7 @@ function endGame(win){
       <p class="end3-sub end3-rank" id="end3Rank" aria-live="polite"></p>
       <div class="end3-cells${GACHA_SOON ? ' no-tix' : ''}">
         <span><i>⏱</i><b>${fmtTime(Math.floor(g.t))}</b>Tiempo</span><span><i>⭐</i><b>${g.p.lvl}</b>Nivel</span><span><i>⚔</i><b>${g.kills}</b>Bajas</span><span><i>✦</i><b>${Object.keys(g.skills).length}</b>Habilidades</span>
-        <span class="end3-gain"><i><img src="ui/hud/ic_bits.webp" alt=""></i><b>+${g.earned}</b>Bits ganados</span>${GACHA_SOON ? '' : `<span class="end3-gain"><i><img src="ui/hud/ic_ticket.webp" alt=""></i><b>+${(g.tix || 0) + g.encDone.length * ENC_REWARD.tix}</b>Tickets</span>`}
+        <span class="end3-gain"><i><img src="ui/hud/ic_bits.webp" alt=""></i><b>+${g.earned}</b>Bits ganados</span>${GACHA_SOON ? '' : `<span class="end3-gain"><i><img src="ui/hud/ic_ticket.webp" alt=""></i><b>+${(g.tix || 0) + (g.retoTix || 0) + g.encDone.length * ENC_REWARD.tix}</b>Tickets</span>`}
       </div>
       <div class="end3-cols">
         <section><h3>Daño por ataque</h3>
@@ -9511,7 +9585,7 @@ function updateHUD(){
   const kc = document.getElementById('hudKillsChip'); if (!kc.dataset.ic){ kc.dataset.ic = 1; kc.innerHTML = HUD_IC.kills + '<b id="hudKills">0</b>'; }
   document.getElementById('hudKills').textContent = g.kills;
   const dash = document.getElementById('hudDash');
-  dash.innerHTML = HUD_IC.dash + (g.dashCd > 0 ? `Dash ${g.dashCd.toFixed(1)} s` : 'Dash listo');
+  dash.innerHTML = HUD_IC.dash + (g.mod && g.mod.noDash ? 'Sin dash' : g.dashCd > 0 ? `Dash ${g.dashCd.toFixed(1)} s` : 'Dash listo');
   dash.classList.toggle('ready', g.dashCd <= 0);
   const dashReady = g.dashCd <= 0;
   if (dashReady && !g.dashReady && g.t > 1){
@@ -10693,8 +10767,35 @@ const WEEKLY_MODS = [
   {id:'sincura', name:'Sin curación', d:'No hay orbes, cofres ni santuarios que curen.', apply: () => { g.mod.noHeal = true; }},
   {id:'bonk',    name:'Bonk turbo', d:'El medidor Bonk se carga el doble de rápido.', apply: () => { g.labBonk *= 2; }},
   {id:'cristal', name:'Cañón de cristal', d:'Haces un 50% más de daño pero tienes un 40% menos de vida.', apply: () => { g.p.dmg *= 1.5; g.p.maxHp = Math.round(g.p.maxHp*0.6); g.p.hp = g.p.maxHp; }},
-  {id:'horda',   name:'Horda', d:'Aparecen enemigos un 40% más a menudo.', apply: () => { g.mod.spawnMul = 0.6; }}
+  {id:'horda',   name:'Horda', d:'Aparecen enemigos un 40% más a menudo.', apply: () => { g.mod.spawnMul = 0.6; }},
+  {id:'gigantes', name:'Gigantes', d:'Los enemigos tienen un 60% más de vida, pero dan un 50% más de experiencia.', apply: () => { g.foeHp = (g.foeHp || 1) * 1.6; g.labXp = (g.labXp || 1) * 1.5; }},
+  {id:'prisa',   name:'A toda prisa', d:'Corres un 20% más, pero los enemigos corren un 25% más.', apply: () => { g.p.speed *= 1.2; g.foeSpd = (g.foeSpd || 1) * 1.25; }},
+  {id:'elites',  name:'Noche de élites', d:'Las élites salen el doble de a menudo.', apply: () => { g.mod.eliteMul = 0.5; }},
+  {id:'cofres',  name:'Lluvia de cofres', d:'Los cofres salen el doble de a menudo.', apply: () => { g.mod.chestGap = 25; }},
+  {id:'iman',    name:'Imán gigante', d:'Recoges la experiencia desde el triple de distancia, pero haces un 15% menos de daño.', apply: () => { g.p.pickup *= 3; g.p.dmg *= 0.85; }},
+  {id:'sindash', name:'Sin dash', d:'No puedes hacer dash, pero corres un 15% más.', apply: () => { g.mod.noDash = true; g.p.speed *= 1.15; }}
 ];
+// Digimon de la semana: el de la rotación de la tienda o, si no lo tienes, el siguiente que sí tengas.
+// Jugar el reto con él da +25% de Bits y cuenta para el tercer hito
+function retoStar(){
+  const ch = SEASONS.adventure.chars, n = ch.length, i = weeklyIndex();
+  for (let j = 0; j < n; j++){ const k = ch[(i + j) % n]; if (isUnlocked(k)) return k; }
+  return ch[i];
+}
+// Hitos del reto: tres metas por semana, cada una se cobra una vez
+const RETO_HITOS = [
+  {id:'aguanta',  t:'Aguanta 10 minutos en el reto', bits: 150, tix: 1, ok: win => g.t >= 600},
+  {id:'gana',     t:'Gana el reto', bits: 300, tix: 2, ok: win => !!win},
+  {id:'estrella', t:'Gana el reto con el Digimon de la semana', bits: 400, tix: 3, ok: win => !!win && g.ch.id === g.star}
+];
+function retoState(){ const w = weekNum(), st = loadJSON('digibonk3d-reto', null); return st && st.w === w && Array.isArray(st.done) ? st : {w, done: []}; }
+function checkReto(win){
+  if (!g.weekly) return [];
+  const st = retoState(), out = [];
+  for (const h of RETO_HITOS) if (!st.done.includes(h.id) && h.ok(win)){ st.done.push(h.id); out.push(h); }
+  if (out.length){ try { localStorage.setItem('digibonk3d-reto', JSON.stringify(st)); } catch(e){} }
+  return out;
+}
 function weeklyMod(){ const n = WEEKLY_MODS.length; return WEEKLY_MODS[((weekNum() % n) + n) % n]; }
 // El modificador solo se aplica en el Reto semanal, que se elige con su propio botón del menú:
 // Jugar, Mapas y Supervivencia nunca lo activan, así nadie empieza sin curación o con menos vida sin saberlo
@@ -11222,6 +11323,8 @@ function openCustomizer(){
 const winsWith = k => Object.values(statsOf(k).wins || {}).reduce((a, n) => a + n, 0);
 const wonMap = m => (mapWins()[m] || []).length ? 1 : 0;
 const wonDiff = ds => Object.values(mapWins()).some(l => l.some(d => ds.includes(d))) ? 1 : 0;
+const HARD_DIFFS = ['dificil', 'pesadilla'];
+const wonMapDiff = (m, ds) => (mapWins()[m] || []).some(d => ds.includes(d)) ? 1 : 0;
 const bestSurvMin = () => Math.floor(Math.max(0, ...Object.values(loadJSON('digibonk3d-surv', {}))) / 60);
 // Contadores de toda la vida del jugador (cofres, apoyos, fusiones, jefes menores, días seguidos)
 const LIFE_DEF = {chests: 0, sups: 0, fusions: 0, minis: [], streak: 0, best: 0, last: ''};
@@ -11248,6 +11351,7 @@ const FRAMES = [
   {id:'bondad_botanica', name:'Bondad botánica', tier:'r', how:'Recluta 10 Digimon de apoyo', prog: () => [Math.min(10, loadLife().sups), 10]},
   {id:'digivice_azul', name:'Digivice azul neón', tier:'r', how:'Consigue 10 fusiones de ataques', prog: () => [Math.min(10, loadLife().fusions), 10]},
   {id:'fenix_dorado', name:'Fénix dorado', tier:'e', how:'Gana una partida en Difícil o Pesadilla', prog: () => [wonDiff(['dificil', 'pesadilla']), 1]},
+  {id:'pesadilla_eterna', name:'Pesadilla eterna', tier:'e', how:'Gana una partida en Pesadilla', prog: () => [wonDiff(['pesadilla']), 1]},
   {id:'angelical_dorado', name:'Angelical dorado', tier:'e', how:'Consigue todas las skins de un Digimon', prog: bestSkinSet},
   {id:'mecenas', name:'Mecenas', tier:'e', how:'Código de recompensa para quien apoya el juego en Ko-fi'}
 ];
@@ -11263,6 +11367,11 @@ const TITLES = [
   {id:'t_surv',     name:'Superviviente',    tier:'e', how:'Aguanta 30 minutos en Supervivencia', prog: () => [Math.min(30, bestSurvMin()), 30]},
   {id:'t_constante', name:'Constante',       tier:'r', how:'Juega 7 días seguidos', prog: () => [Math.min(7, loadLife().best), 7]},
   {id:'t_pesadilla', name:'Pesadilla viviente', tier:'e', how:'Gana una partida en Pesadilla', prog: () => [wonDiff(['pesadilla']), 1]},
+  // Títulos por pasarse cada mapa en Difícil (Pesadilla también cuenta) y por pasárselos todos
+  {id:'t_dif_bosque',   name:'Azote del Bosque', tier:'r', how:'Gana el Bosque File en Difícil o Pesadilla', prog: () => [wonMapDiff('bosque', HARD_DIFFS), 1]},
+  {id:'t_dif_desierto', name:'Tormenta de Arena', tier:'r', how:'Gana el Desierto de Datos en Difícil o Pesadilla', prog: () => [wonMapDiff('desierto', HARD_DIFFS), 1]},
+  {id:'t_dif_nevado',   name:'Ventisca Eterna', tier:'e', how:'Gana la Montaña Helada en Difícil o Pesadilla', prog: () => [wonMapDiff('nevado', HARD_DIFFS), 1]},
+  {id:'t_dif_todo',     name:'Domador de lo imposible', tier:'e', how:'Gana los 3 mapas en Difícil o Pesadilla', prog: () => [MAP_ORDER.filter(m => wonMapDiff(m, HARD_DIFFS)).length, MAP_ORDER.length]},
   {id:'t_millon',   name:'Imparable',        tier:'e', how:'Acumula 1.000.000 de bajas', prog: () => [Math.min(1e6, sumStats('kills')), 1e6]},
   {id:'leyenda',    name:'Leyenda digital',  tier:'e', how:'Desbloquea a todos los Digimon', prog: () => [SEASONS.adventure.chars.filter(isUnlocked).length, SEASONS.adventure.chars.length]},
   {id:'mecenas',    name:'Mecenas',          tier:'e', how:'Código de recompensa para quien apoya el juego en Ko-fi'}
@@ -11994,7 +12103,7 @@ cloudBoot();
 if (new URLSearchParams(location.search).has('demo')){
   window.__dbk = {
     get g(){ return g; }, get state(){ return state; }, get scene(){ return scene; },
-    rollReward, grantReward, setBanner: b => { gxBanner = b; }, playPullAnimation,
+    rollReward, grantReward, setBanner: b => { gxBanner = b; }, playPullAnimation, endGame, retoState, retoStar, WEEKLY_MODS,
     hold(on){ demoSteps = on ? 0 : null; }, step(n = 1){ demoSteps = n; }, get pending(){ return demoSteps; },
     startGame, spawnEnemy, spawnMagnetDrop, runSave, runSlot, runContinue, setZone, showGacha, addSkill, upgradeChoices,
     // Datos de skins y personajes

@@ -1380,8 +1380,43 @@ I18N.add('ja', {
   "Tipografías": "フォント",
   "Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).": "Orbitron（Matt McInerney）と Nunito（Vernon Adams、Cyreal、Jacques Le Bailly）。",
   "Motor gráfico": "グラフィックエンジン",
-  "Bandai (sprites Dot)": "バンダイ（ドットスプライト）"
+  "Bandai (sprites Dot)": "バンダイ（ドットスプライト）",
+  "Instalar como app": "アプリとしてインストール",
+  "Instalar": "インストール",
+  "Juega a pantalla completa y en horizontal desde un icono, también sin conexión.": "アイコンから全画面・横画面で遊べます。オフラインでもOK。",
+  "En Safari: botón Compartir y «Añadir a pantalla de inicio». Se abre a pantalla completa y sin conexión.": "Safariで共有ボタン→「ホーム画面に追加」。全画面で開き、オフラインでも遊べます。",
+  "Usa «Instalar app» o «Añadir a pantalla de inicio» en el menú del navegador.": "ブラウザのメニューから「アプリをインストール」または「ホーム画面に追加」を選んでね。"
 });
 
 I18N.add('ja', {"Logro: completar 5 partidas con Gatomon · {0}": "実績：Gatomonで5回プレイを終える · {0}"});
-I18N.add('ja', {"×{0} daño": "ダメージ ×{0}", "×{0} recibido": "被ダメージ ×{0}"});
+I18N.add('ja', {"×{0} daño": "ダメージ ×{0}", "×{0} recibido": "被ダメージ ×{0}",
+  // Reto semanal (reglas nuevas, Digimon de la semana, hitos) y premios de Difícil y Pesadilla
+  "Gigantes": "巨人",
+  "Los enemigos tienen un 60% más de vida, pero dan un 50% más de experiencia.": "敵の体力が60%増えるが、経験値も50%増える。",
+  "A toda prisa": "全速力",
+  "Corres un 20% más, pero los enemigos corren un 25% más.": "移動速度が20%上がるが、敵は25%速くなる。",
+  "Noche de élites": "エリートの夜",
+  "Las élites salen el doble de a menudo.": "エリートが2倍の頻度で出現する。",
+  "Lluvia de cofres": "宝箱の雨",
+  "Los cofres salen el doble de a menudo.": "宝箱が2倍の頻度で出現する。",
+  "Imán gigante": "巨大マグネット",
+  "Recoges la experiencia desde el triple de distancia, pero haces un 15% menos de daño.": "経験値を3倍の距離から拾えるが、与ダメージが15%下がる。",
+  "Sin dash": "ダッシュなし",
+  "No puedes hacer dash, pero corres un 15% más.": "ダッシュできないが、移動速度が15%上がる。",
+  "Digimon de la semana": "今週のデジモン",
+  "Hitos": "目標",
+  "Hitos {0}": "目標 {0}",
+  "Hito del reto": "チャレンジ目標",
+  "Aguanta 10 minutos en el reto": "チャレンジで10分耐える",
+  "Gana el reto": "チャレンジに勝つ",
+  "Gana el reto con el Digimon de la semana": "今週のデジモンでチャレンジに勝つ",
+  "Azote del Bosque": "森の災厄",
+  "Gana el Bosque File en Difícil o Pesadilla": "ハードかナイトメアでファイルの森をクリア",
+  "Tormenta de Arena": "砂嵐",
+  "Gana el Desierto de Datos en Difícil o Pesadilla": "ハードかナイトメアでデータ砂漠をクリア",
+  "Ventisca Eterna": "永遠の吹雪",
+  "Gana la Montaña Helada en Difícil o Pesadilla": "ハードかナイトメアで氷の山をクリア",
+  "Domador de lo imposible": "不可能を制す者",
+  "Gana los 3 mapas en Difícil o Pesadilla": "ハードかナイトメアで3つのマップをすべてクリア",
+  "Pesadilla eterna": "永遠の悪夢"
+});

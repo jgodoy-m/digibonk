@@ -1371,8 +1371,43 @@ I18N.add('pl', {
   "Tipografías": "Czcionki",
   "Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).": "Orbitron (Matt McInerney) i Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).",
   "Motor gráfico": "Silnik graficzny",
-  "Bandai (sprites Dot)": "Bandai (sprite'y Dot)"
+  "Bandai (sprites Dot)": "Bandai (sprite'y Dot)",
+  "Instalar como app": "Zainstaluj jako aplikację",
+  "Instalar": "Zainstaluj",
+  "Juega a pantalla completa y en horizontal desde un icono, también sin conexión.": "Graj na pełnym ekranie i poziomo z ikony, także offline.",
+  "En Safari: botón Compartir y «Añadir a pantalla de inicio». Se abre a pantalla completa y sin conexión.": "W Safari: Udostępnij, potem „Do ekranu początkowego”. Otwiera się na pełnym ekranie, także offline.",
+  "Usa «Instalar app» o «Añadir a pantalla de inicio» en el menú del navegador.": "Użyj „Zainstaluj aplikację” lub „Dodaj do ekranu głównego” w menu przeglądarki."
 });
 
 I18N.add('pl', {"Logro: completar 5 partidas con Gatomon · {0}": "Osiągnięcie: ukończ 5 rozgrywek z Gatomonem · {0}"});
-I18N.add('pl', {"×{0} daño": "×{0} obrażeń", "×{0} recibido": "×{0} otrzymywanych"});
+I18N.add('pl', {"×{0} daño": "×{0} obrażeń", "×{0} recibido": "×{0} otrzymywanych",
+  // Reto semanal (reglas nuevas, Digimon de la semana, hitos) y premios de Difícil y Pesadilla
+  "Gigantes": "Olbrzymy",
+  "Los enemigos tienen un 60% más de vida, pero dan un 50% más de experiencia.": "Wrogowie mają 60% więcej zdrowia, ale dają 50% więcej doświadczenia.",
+  "A toda prisa": "Pełnym pędem",
+  "Corres un 20% más, pero los enemigos corren un 25% más.": "Biegasz o 20% szybciej, ale wrogowie o 25% szybciej.",
+  "Noche de élites": "Noc elit",
+  "Las élites salen el doble de a menudo.": "Elity pojawiają się dwa razy częściej.",
+  "Lluvia de cofres": "Deszcz skrzyń",
+  "Los cofres salen el doble de a menudo.": "Skrzynie pojawiają się dwa razy częściej.",
+  "Imán gigante": "Wielki magnes",
+  "Recoges la experiencia desde el triple de distancia, pero haces un 15% menos de daño.": "Zbierasz doświadczenie z trzy razy większej odległości, ale zadajesz 15% mniej obrażeń.",
+  "Sin dash": "Bez zrywu",
+  "No puedes hacer dash, pero corres un 15% más.": "Nie możesz robić zrywu, ale biegasz o 15% szybciej.",
+  "Digimon de la semana": "Digimon tygodnia",
+  "Hitos": "Etapy",
+  "Hitos {0}": "Etapy {0}",
+  "Hito del reto": "Etap wyzwania",
+  "Aguanta 10 minutos en el reto": "Przetrwaj 10 minut w wyzwaniu",
+  "Gana el reto": "Wygraj wyzwanie",
+  "Gana el reto con el Digimon de la semana": "Wygraj wyzwanie z Digimonem tygodnia",
+  "Azote del Bosque": "Postrach Lasu",
+  "Gana el Bosque File en Difícil o Pesadilla": "Wygraj Las File na Trudnym lub Koszmarze",
+  "Tormenta de Arena": "Burza piaskowa",
+  "Gana el Desierto de Datos en Difícil o Pesadilla": "Wygraj Pustynię Danych na Trudnym lub Koszmarze",
+  "Ventisca Eterna": "Wieczna zamieć",
+  "Gana la Montaña Helada en Difícil o Pesadilla": "Wygraj Lodową Górę na Trudnym lub Koszmarze",
+  "Domador de lo imposible": "Pogromca niemożliwego",
+  "Gana los 3 mapas en Difícil o Pesadilla": "Wygraj 3 mapy na Trudnym lub Koszmarze",
+  "Pesadilla eterna": "Wieczny koszmar"
+});
