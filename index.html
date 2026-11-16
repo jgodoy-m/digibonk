@@ -2976,6 +2976,11 @@ html.reduce-motion .logo-fx::after{display:none}
 #overlay .lv3-card.fusion .lv3-tag{background:var(--m-cta)!important;color:#fff!important}
 #overlay .lv3-card.fusion .lv3-ic{display:inline-flex;gap:4px}
 .sb-fus{display:grid;place-items:center;font:900 20px 'Nunito',sans-serif;color:#fff;background:linear-gradient(180deg,#ffc24f,#ef6400)!important;box-shadow:0 0 12px rgba(255,138,30,.6)}
+#overlay .lv3-card.item{border-color:#80d8ff!important;box-shadow:0 0 0 3px rgba(128,216,255,.25),0 0 18px rgba(128,216,255,.35)!important}
+#overlay .lv3-card.item .lv3-ic{color:#80d8ff}
+#overlay .lv3-card.item.cursed{border-color:#b388ff!important;box-shadow:0 0 0 3px rgba(179,136,255,.3),0 0 22px rgba(120,40,200,.5)!important}
+#overlay .lv3-card.item.cursed .lv3-ic{color:#b388ff}
+.sb-obj{--c:#80d8ff;color:#80d8ff!important;transform:scale(.82)}.sb-obj.cursed{--c:#b388ff;color:#b388ff!important}
 .sb-fus{color:#fff!important;display:flex!important;gap:0;align-items:center;justify-content:center}.sb-fus .ico{width:46%;height:46%;margin:0 -1px}
 /* ---------- Formas de los menús: esquinas asimétricas, botones de color en diagonal y cabeceras en ángulo ---------- */
 :root{--sh-big:30px 10px 30px 10px;--sh-mid:22px 7px 22px 7px;--sh-sm:16px 5px 16px 5px;--sh-skew:-8deg}
@@ -3849,7 +3854,13 @@ const UPGRADES = [
   {t:'Dash −20% espera',        k:'utilidad', d:'El dash se recarga un 20% más rápido.',            f:p=>{p.dashMul=(p.dashMul||1)*0.8;}},
   {t:'Armadura +8%',            k:'defensiva', d:'Recibes un 8% menos de daño.',                    f:p=>{p.armor=(p.armor||1)*0.92;}},
   {t:'Probabilidad crítica +8%', k:'ofensiva', d:'Más golpes críticos (naranjas).', f:p=>{p.critChance=Math.min(0.75, p.critChance+0.08);}},
-  {t:'Daño crítico +25%',       k:'ofensiva', d:'Los críticos hacen un 25% más de daño.', f:p=>{p.critMul+=0.25;}}
+  {t:'Daño crítico +25%',       k:'ofensiva', d:'Los críticos hacen un 25% más de daño.', f:p=>{p.critMul+=0.25;}},
+  // Cartas nuevas (2026-11-16)
+  {t:'Regeneración',            k:'defensiva', d:'Recuperas 0,5 PS por segundo.',                 f:p=>{ g.regen = (g.regen || 0) + 0.5; }},
+  {t:'Experiencia +12%',        k:'utilidad', d:'Los orbes te dan un 12% más de experiencia.',    f:p=>{ g.labXp = (g.labXp || 1) * 1.12; }},
+  {t:'Monedas +25%',            k:'utilidad', d:'Ganas un 25% más de monedas por cada baja.',      f:p=>{ g.coinMul = (g.coinMul || 1) * 1.25; }},
+  {t:'Suerte +6%',              k:'utilidad', d:'Más cartas raras (efecto doble) al subir de nivel.', f:p=>{ g.luck = Math.min(0.3, (g.luck || 0) + 0.06); }},
+  {t:'Bonk +20%',               k:'utilidad', d:'El medidor Bonk se carga un 20% más rápido.',     f:p=>{ g.labBonk = (g.labBonk || 1) * 1.2; }}
 ];
 
 // ---------- Escena ----------
@@ -6226,7 +6237,7 @@ function runRevive(v){
   return v;
 }
 // Clave de una carta de mejora para reconstruir la misma tirada al cargar (no se puede volver a tirar recargando)
-const runCardKey = c => c.fusion ? 'fus:' + c.fusion : c.fusLv ? 'fuslv:' + c.fusLv : c.evo ? 'evo:' + c.evo : c.skill ? 'skill:' + c.skill : 'up:' + c.t;
+const runCardKey = c => c.item ? 'item:' + c.item : c.fusion ? 'fus:' + c.fusion : c.fusLv ? 'fuslv:' + c.fusLv : c.evo ? 'evo:' + c.evo : c.skill ? 'skill:' + c.skill : 'up:' + c.t;
 function runSave(){
   if (!g || !g.runId || g.ranked || !RUN_STATES.includes(state) || !runIsLive()) return false;
   const data = {};
@@ -6349,7 +6360,7 @@ function runApply(s){
   }
   // Subida de nivel o cofre a medias: las mismas cartas que había (recargar no vuelve a tirar)
   if (s.choices && s.choices.length){
-    const pool = [...UPGRADES, ...skillCards(), digiCard(), ...evoSkillCards(), ...fusionLvCards()];
+    const pool = [...UPGRADES, ...skillCards(), digiCard(), ...evoSkillCards(), ...fusionLvCards(), ...itemCards()];
     const out = [];
     for (const c of s.choices){
       const card = pool.find(x => runCardKey(x) === c.k);
@@ -6627,6 +6638,7 @@ function digivolve(){
   g.p.area *= Math.pow(EVO_TOTAL.area, 1/n);
   g.p.maxHp += inc; g.p.hp += inc;
   if (st === 1) g.p.count += 1;
+  if (itemLv('digivice')){ g.p.count += 1; setTimeout(() => { if (g) announce('Digivice', '+1 proyectil', '#80d8ff'); }, 2800); }
   g.evoAnim = {t: 0, dur: 2.6, swapped: false, sprite: spriteOf(g.ch.id, st), name: evo.name};
   shake = Math.max(shake, 0.5);
   sfx('evolve');
@@ -7023,7 +7035,7 @@ function spawnEnemy(forced){
   world.add(shadow);
   const foe = {
     kind, sprite, mesh, shadow, x: sp[0], z: sp[1],
-    hp: d.hp*k*evoHp()*diffMul('hp'), max: d.hp*k*evoHp()*diffMul('hp'), spd: d.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300 + (tt/600)*(tt/600))*evoDmg()*diffMul('dmg'), cd: 0
+    hp: d.hp*k*evoHp()*diffMul('hp'), max: d.hp*k*evoHp()*diffMul('hp'), spd: d.spd*(g.foeSpd || 1), r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300 + (tt/600)*(tt/600))*evoDmg()*diffMul('dmg'), cd: 0
   };
   if (kind === 'elite'){ foe.mech = ELITE_MECHS[Math.floor(Math.random()*ELITE_MECHS.length)]; foe.st = 2 + Math.random()*2; }
   g.enemies.push(foe);
@@ -7292,7 +7304,7 @@ function updateShrines(dt){
 }
 /* ---------- Monedas de partida, bayas, PNJ (tienda y ruleta) y cofres de tu Digimon ----------
    Las monedas solo valen dentro de la partida: 1 por baja, 15 por élite, 40 por jefe menor. */
-function addCoins(n, x, z){ g.coins = (g.coins || 0) + n; if (x !== undefined && n >= 10) popText(x, z, '+' + n + ' monedas', '#ffd54f', 0.8); }
+function addCoins(n, x, z){ n = Math.round(n * (1 + 0.3*itemLv('moneda')) * (g.coinMul || 1)); g.coins = (g.coins || 0) + n; if (x !== undefined && n >= 10) popText(x, z, '+' + n + ' monedas', '#ffd54f', 0.8); }
 // Bayas: aparecen cerca de ti cada ~20 s (máximo 4 en el mapa) y curan el 15% de la vida
 let berryMat = null;
 function spawnBerry(){
@@ -7318,7 +7330,7 @@ function updateBerries(dt){
     b.mesh.position.set(b.x, terrainH(b.x, b.z) + 0.8 + Math.sin(g.t*3 + b.x)*0.12, b.z);
     if (dist2(b.x, b.z, g.p.x, g.p.z) < 1.4 + g.p.pickup*0.2){
       b.taken = true; world.remove(b.mesh);
-      const h = Math.round(g.p.maxHp*0.15); g.p.hp = Math.min(g.p.maxHp, g.p.hp + h);
+      const h = Math.round(g.p.maxHp*0.15*(1 + 0.5*itemLv('carne'))); g.p.hp = Math.min(g.p.maxHp, g.p.hp + h);
       popText(b.x, b.z, '+' + h + ' PS', '#7cf29c', 0.9); burst(b.x, b.z, '#ff5252'); sfx('chest');
     }
   }
@@ -7383,12 +7395,12 @@ function digiCard(extra = {}){
 }
 // Cofres: una carta de ataque de tu Digimon, un chip de sus datos y una mejora al azar
 function chestChoices(){
-  const base = upgradeChoices().filter(c => !c.skill);
-  const out = [sigCard(), digiCard(), base[0]].filter(Boolean);
+  const base = upgradeChoices().filter(c => !c.skill && !c.item && !c.fusLv), its = itemCards();
+  const out = [sigCard(), digiCard(), its.length && Math.random() < 0.5 ? its[Math.floor(Math.random()*its.length)] : base[0]].filter(Boolean);
   while (out.length < 3 && base.length > out.length - 1) out.push(base[out.length - 1]);
   return out;
 }
-const shopPrice = (n, base) => Math.round(base * (1 + 0.35*n.buys));
+const shopPrice = (n, base) => Math.round(base * (1 + 0.35*n.buys) * (1 - 0.1*itemLv('moneda')));
 function openShop(n){
   const coins = g.coins || 0, items = [];
   const heal = {t: 'Baya grande', name: 'Baya grande', k: 'defensiva', ic: 'luz', d: 'Cura el 50% de tu vida.', f: p => { p.hp = Math.min(p.maxHp, p.hp + p.maxHp*0.5); }, price: shopPrice(n, 60)};
@@ -7396,6 +7408,7 @@ function openShop(n){
   items.push(heal);
   const sc = sigCard({price: shopPrice(n, 120)}); if (sc) items.push(sc);
   items.push(digiCard({price: shopPrice(n, 160)}));
+  const its = itemCards(); if (its.length){ const ic = its[Math.abs(n.buys + Math.floor(n.x*7)) % its.length]; items.push({...ic, price: shopPrice(n, 140)}); }
   g.npcPick = {title: n.name, sub: `Tienes ${coins} monedas`};
   g.choices = items.map(c => ({...c, shop: true, disabled: coins < c.price, f: (p) => { if ((g.coins || 0) < c.price) return; g.coins -= c.price; n.buys++; c.f(p); sfx('chest'); }}))
     .concat([{t: 'Salir', name: 'Salir', k: 'utilidad', d: 'Vuelve a la partida. Acércate otra vez para comprar más.', shop: true, leave: true, f: () => {}}]);
@@ -7788,7 +7801,7 @@ function update(dt){
     gm.mesh.rotation.y += dt*3;
     if (d < 0.9){
       gm.taken = true; world.remove(gm.mesh);
-      if (gm.heal){ p.hp = Math.min(p.maxHp, p.hp + 10); popText(gm.x, gm.z, '+10', '#7cf29c'); sfx('chest'); }
+      if (gm.heal){ const hh = Math.round(10*(1 + 0.5*itemLv('carne'))); p.hp = Math.min(p.maxHp, p.hp + hh); popText(gm.x, gm.z, '+' + hh, '#7cf29c'); sfx('chest'); }
       else { p.xp += gm.v * (g.labXp || 1) * (g.ev && g.ev.kind === 'double' ? 2 : 1); addBonk(0.02); }
     }
   }
@@ -7933,6 +7946,13 @@ function update(dt){
     spawnRing(p.x, p.z, 0x7cf29c, 10, 0.6); screenFlash = 0.5;
     announce('¡Segunda oportunidad!', 'Laboratorio · 50% de vida', '#7cf29c');
   }
+  if (p.hp <= 0 && itemLv('disco') && !g.discoUsed){
+    // Disco de memoria: una vez por partida
+    g.discoUsed = true; p.hp = Math.round(p.maxHp * (0.2 + 0.1*itemLv('disco')));
+    for (const e of g.enemies){ if (e.boss || e.kind === 'mini') continue; const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz) || 1; if (d < 10) [e.x, e.z] = clampArena(e.x + dx/d*8, e.z + dz/d*8, ARENA_R - 0.5); }
+    spawnRing(p.x, p.z, 0x80d8ff, 10, 0.6); screenFlash = 0.5;
+    announce('¡Disco de memoria!', 'Vuelves con ' + Math.round((0.2 + 0.1*itemLv('disco'))*100) + '% de vida', '#80d8ff');
+  }
   if (p.hp <= 0){ p.hp = 0; endGame(false); }
   else if (g.bossDown && (!g.extraOn || (g.extraSpawned && !g.enemies.some(e => e.special && e.hp > 0)))) endGame(true);
 }
@@ -8061,11 +8081,50 @@ function skillCards(){
   }
   return out;
 }
+/* ---------- Objetos pasivos de partida: se llevan en ITEM_SLOTS huecos y suben hasta ITEM_MAX ----------
+   Salen en las cartas al subir de nivel, en los cofres y en la tienda de Digitamamon. Cada nivel aplica su efecto una vez (on). */
+const ITEM_SLOTS = 4, ITEM_MAX = 3;
+const ITEMS = {
+  digivice: {name: 'Digivice', ic: 'digivice', d: '+10% daño por nivel. Cada digievolución con el Digivice da +1 proyectil.',
+    on: () => { g.p.dmg *= 1.1; }},
+  etiqueta: {name: 'Etiqueta del Emblema', ic: 'etiqueta', d: 'Los emblemas que consigas valen +50% por nivel. Al cogerla: +8% daño, cadencia y área.',
+    on: lv => { if (lv === 1){ g.p.dmg *= 1.08; g.p.cdMul /= 1.08; g.p.area *= 1.08; } }},
+  gafas: {name: 'Gafas de Tai', ic: 'gafas', d: '+20% de imán por nivel. Con el Rayo Láser, el haz es un 25% más largo por nivel.',
+    on: () => { g.p.pickup *= 1.2; }},
+  silbato: {name: 'Silbato de Sora', ic: 'silbato', d: 'El Bonk se carga un 25% más rápido por nivel.',
+    on: () => { g.labBonk = (g.labBonk || 1) * 1.25; }},
+  disco: {name: 'Disco de memoria', ic: 'disco', d: 'Una vez por partida, al caer vuelves con un 30% de vida (+10% por nivel). Nivel 1: +15 vida máx.',
+    on: lv => { if (lv === 1){ g.p.maxHp += 15; g.p.hp += 15; } }},
+  carne: {name: 'Carne digital', ic: 'carne', d: 'Bayas y orbes de cura curan un 50% más por nivel. +10 vida máx. por nivel.',
+    on: () => { g.p.maxHp += 10; g.p.hp += 10; }},
+  chip: {name: 'Chip negro', ic: 'chip', cursed: true, d: 'Maldito: +25% daño por nivel, pero los enemigos van un 8% más rápido por nivel.',
+    on: () => { g.p.dmg *= 1.25; g.foeSpd = (g.foeSpd || 1) * 1.08; for (const e of g.enemies) e.spd *= 1.08; }},
+  moneda: {name: 'Moneda de Digitamamon', ic: 'moneda', d: '+30% de monedas por nivel y la tienda un 10% más barata por nivel.',
+    on: () => {}}
+};
+const itemLv = id => (g && g.items && g.items[id]) || 0;
+function itemIds(){ return Object.keys(ITEMS).filter(id => itemAvail(id)); }
+function itemAvail(id){ return true; }   // la fase de desbloqueables decide cuáles salen
+function addItem(id){
+  const it = g.items || (g.items = {}), lv = Math.min(ITEM_MAX, (it[id] || 0) + 1);
+  if (lv === (it[id] || 0)) return;
+  it[id] = lv; ITEMS[id].on(lv);
+  if (lv === 1) (g.itemsGot || (g.itemsGot = [])).push(id);
+}
+function itemCard(id, extra = {}){
+  const lv = itemLv(id), it = ITEMS[id];
+  return {t: `${it.name} · ${lv ? 'Nivel ' + (lv + 1) : 'Nuevo'}`, name: it.name, item: id, lv, k: it.cursed ? 'ofensiva' : 'utilidad', ic: it.ic,
+    d: it.d, f: () => addItem(id), ...extra};
+}
+function itemCards(){
+  const have = Object.keys(g.items || {}).length;
+  return itemIds().filter(id => itemLv(id) < ITEM_MAX && (itemLv(id) > 0 || have < ITEM_SLOTS)).map(id => itemCard(id));
+}
 function upgradeChoices(){
-  const pool = [...UPGRADES, ...skillCards(), ...fusionLvCards()];
+  const pool = [...UPGRADES, ...skillCards(), ...fusionLvCards(), ...itemCards()];
   // Las cartas desterradas en esta partida no vuelven a salir
   const picks = pool.filter(c => !upRes().banned.includes(upKey(c))).sort(() => Math.random() - 0.5).slice(0, 3)
-    .map(c => !c.skill && !c.fusLv && Math.random() < 0.18 ? {...c, rare: true} : c);   // carta rara: la mejora pasiva cuenta doble
+    .map(c => !c.skill && !c.fusLv && !c.item && Math.random() < 0.18 + (g.luck || 0) ? {...c, rare: true} : c);   // carta rara: la mejora pasiva cuenta doble
   const evo = g.chestPick ? [] : evoSkillCards();   // si hay una evolución disponible, ocupa la primera carta
   if (evo.length) picks[0] = evo[0];
   // Las fusiones ya no salen como carta: se hacen hablando con Centarumon (ver openFusion)
@@ -8073,7 +8132,7 @@ function upgradeChoices(){
 }
 // Recursos de la subida de nivel por partida: refrescar 2, saltar 2, desterrar 1
 function upRes(){ return g.upRes || (g.upRes = {rer: 2, skip: 2, ban: 1, banned: []}); }
-function upKey(c){ return c.fusion ? 'fus:' + c.fusion : c.fusLv ? 'fuslv:' + c.fusLv : c.skill ? 'skill:' + c.skill : 'up:' + c.t; }
+function upKey(c){ return c.item ? 'item:' + c.item : c.fusion ? 'fus:' + c.fusion : c.fusLv ? 'fuslv:' + c.fusLv : c.skill ? 'skill:' + c.skill : 'up:' + c.t; }
 function rerollUp(){
   const r = upRes(); if (r.rer <= 0 || state !== 'levelup' || g.npcPick || !g.choices.length) return;
   r.rer--; g.upMode = null;
@@ -8384,7 +8443,7 @@ function updateSkills(dt){
     if (S.laserT <= 0){
       const t = nearestIn(p.x, p.z, 36);
       if (t){
-        const L2 = lv('laser'), len = 18;
+        const L2 = lv('laser'), len = 18*(1 + 0.25*itemLv('gafas'));
         S.laserT = 2.4 * cm;
         const dx = t.x - p.x, dz = t.z - p.z, d = Math.hypot(dx, dz) || 1, ux = dx/d, uz = dz/d;
         for (const e of g.enemies){
@@ -8560,6 +8619,17 @@ const ICON = {
   utilidad: '<path d="M12 2l3 7 7 1-5 5 1 7-6-4-6 4 1-7-5-5 7-1z" fill="currentColor"/>',
   base: '<circle cx="12" cy="12" r="5" fill="currentColor"/>'
 };
+// Objetos pasivos
+Object.assign(ICON, {
+  digivice: '<rect x="5" y="3" width="14" height="18" rx="4" fill="none" stroke="currentColor" stroke-width="2.2"/><rect x="8" y="6" width="8" height="6" rx="1.5" fill="currentColor"/><circle cx="12" cy="16.5" r="1.8" fill="currentColor"/>',
+  etiqueta: '<path d="M7 3h10v12l-5 6-5-6z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/>',
+  gafas: '<circle cx="7.5" cy="13" r="4" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="16.5" cy="13" r="4" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M11.5 13h1M2 10l2-3M22 10l-2-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  silbato: '<circle cx="9" cy="14" r="5.5" fill="currentColor"/><path d="M12 9h9v4h-6" fill="currentColor"/><path d="M5 5l2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  disco: '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><path d="M12 5a7 7 0 0 1 7 7" fill="none" stroke="currentColor" stroke-width="1.6"/>',
+  carne: '<path d="M14 4c4 0 6 3 6 6 0 5-6 8-9 8l-3 3-2-1 1-2-3-1 1-2 2-1c0-4 3-10 7-10z" fill="currentColor"/>',
+  chip: '<rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  moneda: '<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 7v10M9.5 9.5h4a1.8 1.8 0 0 1 0 3.5h-3a1.8 1.8 0 0 0 0 3.5h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'
+});
 ICON.luz = ICON.luz || ICON.aura; ICON.red = ICON.red || ICON.laser; ICON.virus = ICON.virus || ICON.mina;
 const svgIcon = id => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${ICON[id] || ICON.base}</svg>`;
 function openUpgrades(){
@@ -8573,14 +8643,14 @@ function openUpgrades(){
     <div class="lv3">
       <div class="lv3-head"><h2 class="lv3-banner">${g.npcPick ? g.npcPick.title : g.chestPick ? (g.chestPick.gold ? '¡Cofre dorado! Carta doble' : '¡Cofre abierto!') : `¡Nivel ${g.p.lvl}!`}</h2><p>${g.npcPick ? g.npcPick.sub : banMode ? 'Elige una carta para desterrarla' : 'Pulsa 1-3 o haz clic'}</p></div>
       <div class="lv3-row">${g.choices.map((c, i) => `
-        <button class="lv3-card ${c.k || 'utilidad'}${c.rare ? ' rare' : ''}${c.fusion || c.fusLv ? ' fusion' : ''}${banMode ? ' ban' : ''}${c.disabled ? ' off' : ''}" data-up="${i}" ${c.disabled ? 'disabled' : ''} style="animation-delay:${i*0.09}s">
+        <button class="lv3-card ${c.k || 'utilidad'}${c.rare ? ' rare' : ''}${c.fusion || c.fusLv ? ' fusion' : ''}${c.item ? ' item' + (ITEMS[c.item].cursed ? ' cursed' : '') : ''}${banMode ? ' ban' : ''}${c.disabled ? ' off' : ''}" data-up="${i}" ${c.disabled ? 'disabled' : ''} style="animation-delay:${i*0.09}s">
           <span class="lv3-key">${i + 1}</span>
           ${c.skill && !c.lv ? '<span class="lv3-new">NUEVO</span>' : ''}
-          <span class="lv3-tag">${c.leave ? 'Volver a la partida' : c.info ? 'Centarumon' : c.shop ? 'Tienda · ' + c.price + ' monedas' : c.digi ? '◆ Datos Digimon' : c.fusion ? '✦ Fusión' : c.fusLv ? (c.lv ? '✦ Fusión · mejora' : '✦ Fusión') : c.evo ? '★ Evolución' : c.skill ? (c.typeSk ? 'De tipo ' + ATTR_NAME[ATTR_OF[g.ch.id]] : c.lv ? 'Mejora' : 'Característico') : (c.rare ? '◆ Rara · ' : '') + (cat[c.k] || 'Mejora')}</span>
-          ${!c.skill && !c.evo && !c.fusion && !c.fusLv && CARD_ART[c.t] ? `<img class="lv3-art" src="ui/hud/carta_${CARD_ART[c.t]}.webp" alt="">` : `<span class="lv3-ic">${c.fusion || c.fusLv ? (c.fusion || c.fusLv).split('+').map(svgIcon).join('') : svgIcon(c.ic || c.evo || c.skill || c.k)}</span>`}
+          <span class="lv3-tag">${c.leave ? 'Volver a la partida' : c.info ? 'Centarumon' : c.shop && c.item ? 'Objeto · ' + c.price + ' monedas' : c.item ? (ITEMS[c.item].cursed ? '☠ Objeto maldito' : '◇ Objeto') : c.shop ? 'Tienda · ' + c.price + ' monedas' : c.digi ? '◆ Datos Digimon' : c.fusion ? '✦ Fusión' : c.fusLv ? (c.lv ? '✦ Fusión · mejora' : '✦ Fusión') : c.evo ? '★ Evolución' : c.skill ? (c.typeSk ? 'De tipo ' + ATTR_NAME[ATTR_OF[g.ch.id]] : c.lv ? 'Mejora' : 'Característico') : (c.rare ? '◆ Rara · ' : '') + (cat[c.k] || 'Mejora')}</span>
+          ${!c.skill && !c.evo && !c.fusion && !c.fusLv && !c.item && CARD_ART[c.t] ? `<img class="lv3-art" src="ui/hud/carta_${CARD_ART[c.t]}.webp" alt="">` : `<span class="lv3-ic">${c.fusion || c.fusLv ? (c.fusion || c.fusLv).split('+').map(svgIcon).join('') : svgIcon(c.ic || c.evo || c.skill || c.k)}</span>`}
           <b>${c.name || c.t}</b>
           <p>${c.d || ''}</p>
-          ${c.info || c.leave ? '' : c.fusion ? '<span class="lv3-pips pasiva">FUSIÓN · ocupa 1 hueco</span>' : c.evo ? `<span class="lv3-pips pasiva">EVO · nivel ${SKILL_MAX + 1}</span>` : c.skill || c.fusLv ? `<span class="lv3-pips">${Array.from({length: SKILL_MAX}, (_, n) => n + 1).map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : (c.rare ? '<span class="lv3-pips pasiva rare">Rara · efecto doble</span>' : '<span class="lv3-pips pasiva">Pasiva</span>')}
+          ${c.info || c.leave ? '' : c.fusion ? '<span class="lv3-pips pasiva">FUSIÓN · ocupa 1 hueco</span>' : c.evo ? `<span class="lv3-pips pasiva">EVO · nivel ${SKILL_MAX + 1}</span>` : c.skill || c.fusLv || c.item ? `<span class="lv3-pips">${Array.from({length: c.item ? ITEM_MAX : SKILL_MAX}, (_, n) => n + 1).map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : (c.rare ? '<span class="lv3-pips pasiva rare">Rara · efecto doble</span>' : '<span class="lv3-pips pasiva">Pasiva</span>')}
         </button>`).join('')}</div>
       <div class="lv3-acts"${g.npcPick ? ' style="display:none"' : ''}>
         <button class="lv3-act" id="upRer" ${r.rer > 0 ? '' : 'disabled'}>Refrescar (${r.rer}) <kbd>F</kbd></button>
@@ -8599,9 +8669,9 @@ function pickUpgrade(i){
   const ch = g.choices[i];
   if (!ch || ch.disabled) return;
   ch.f(g.p);
-  if (g.chestPick && g.chestPick.gold && !ch.evo && !ch.fusion && !ch.fusLv) ch.f(g.p);
+  if (g.chestPick && g.chestPick.gold && !ch.evo && !ch.fusion && !ch.fusLv) ch.f(g.p);   // un objeto sube dos niveles
   if (ch.rare) ch.f(g.p);
-  if (!ch.skill && !ch.evo && !ch.fusion && !ch.fusLv && !ch.shop && !ch.digi && !ch.info){ g.upTaken = g.upTaken || {}; g.upTaken[ch.t] = (g.upTaken[ch.t] || 0) + 1; }   // cofre dorado: la carta cuenta dos veces
+  if (!ch.skill && !ch.evo && !ch.fusion && !ch.fusLv && !ch.item && !ch.shop && !ch.digi && !ch.info){ g.upTaken = g.upTaken || {}; g.upTaken[ch.t] = (g.upTaken[ch.t] || 0) + 1; }   // cofre dorado: la carta cuenta dos veces
   g.chestPick = null; g.npcPick = null;
   hideOverlay();
   lockMouse();
@@ -9149,12 +9219,13 @@ function updateHUD(){
     dash.classList.remove('flash'); void dash.offsetWidth; dash.classList.add('flash');
   }
   g.dashReady = dashReady;
-  const sbKey = Object.keys(g.skills).map(k => k + g.skills[k]).join(',') + '|' + (g.fus || []).map(f => f.key + (f.lv || 1)).join(',');
+  const sbKey = Object.keys(g.skills).map(k => k + g.skills[k]).join(',') + '|' + (g.fus || []).map(f => f.key + (f.lv || 1)).join(',') + '|' + Object.entries(g.items || {}).join(',');
   if (g.sbKey !== sbKey){
     g.sbKey = sbKey;
     // Un icono por hueco: los ataques fusionados se ven dentro de su fusión (dos iconos pequeños y el nivel de la fusión)
     const fz = g.fusedSk || {};
-    document.getElementById('skillBar').innerHTML = Object.keys(g.skills).filter(k => !fz[k]).map(k => `<span class="sb-i ${SKILLS[k].k}" title="${skillName(k)}">${svgIcon(k)}<em>${g.skills[k]}</em></span>`).join('') + (g.fus || []).map(f => `<span class="sb-i ofensiva sb-fus" title="Fusión: ${f.name} · nivel ${f.lv || 1}">${f.key.split('+').map(svgIcon).join('')}<em>${f.lv || 1}</em></span>`).join('');
+    document.getElementById('skillBar').innerHTML = Object.keys(g.skills).filter(k => !fz[k]).map(k => `<span class="sb-i ${SKILLS[k].k}" title="${skillName(k)}">${svgIcon(k)}<em>${g.skills[k]}</em></span>`).join('') + (g.fus || []).map(f => `<span class="sb-i ofensiva sb-fus" title="Fusión: ${f.name} · nivel ${f.lv || 1}">${f.key.split('+').map(svgIcon).join('')}<em>${f.lv || 1}</em></span>`).join('')
+      + Object.entries(g.items || {}).map(([id, lv]) => `<span class="sb-i sb-obj${ITEMS[id].cursed ? ' cursed' : ''}" title="${ITEMS[id].name} · nivel ${lv}">${svgIcon(ITEMS[id].ic)}<em>${lv}</em></span>`).join('');
   }
   const bf = document.getElementById('bonkFill'), bbar = document.getElementById('bonkBar');
   if (bf){
@@ -9479,7 +9550,7 @@ function foeMul(e){ return BEATS[attrOf(e)] === g.attr ? ATTR_HURT : 1; }
 /* ---------- Emblemas: cada jefe menor deja uno con un efecto para el resto de la partida ---------- */
 const EMBLEMS = [
   {id:'valor',        name:'Emblema del Valor',        owner:'agumon',   text:'+15% daño',           f: k => { g.p.dmg *= 1 + 0.15*k; }},
-  {id:'amistad',      name:'Emblema de la Amistad',    owner:'gabumon',  text:'+1 proyectil',         f: k => { g.p.count += k; }},
+  {id:'amistad',      name:'Emblema de la Amistad',    owner:'gabumon',  text:'+1 proyectil',         f: k => { g.p.count += Math.round(k); }},
   {id:'amor',         name:'Emblema del Amor',         owner:'biyomon',  text:'Regenera 1 PS/s',      f: k => { g.regen = (g.regen || 0) + k; }},
   {id:'conocimiento', name:'Emblema del Conocimiento', owner:'tentomon', text:'+15% experiencia',     f: k => { g.labXp = (g.labXp || 1) * (1 + 0.15*k); }},
   {id:'pureza',       name:'Emblema de la Pureza',     owner:'palmon',   text:'+20% área',            f: k => { g.p.area *= 1 + 0.2*k; }},
@@ -9494,10 +9565,10 @@ function grantEmblem(){
   // El emblema de tu compañero sale antes y vale el doble
   const own = left.find(em => em.owner === g.ch.id);
   const em = own && Math.random() < 0.4 ? own : left[Math.floor(Math.random()*left.length)];
-  const k = em.owner === g.ch.id ? 2 : 1;
+  const k = (em.owner === g.ch.id ? 2 : 1) * (1 + 0.5*itemLv('etiqueta'));
   em.f(k);
   g.emblems.push(em.id);
-  setTimeout(() => { if (g) announce(em.name, em.text + (k > 1 ? ' ×2 (el de tu compañero)' : ''), '#ffd54f'); }, 1400);
+  setTimeout(() => { if (g) announce(em.name, em.text + (k > 1 ? ' ×' + (+k.toFixed(1)).toLocaleString('es-ES') + (em.owner === g.ch.id ? ' (el de tu compañero)' : ' (Etiqueta)') : ''), '#ffd54f'); }, 1400);
 }
 
 /* ---------- Habilidades evolucionadas: habilidad a nivel máximo (SKILL_MAX) + su mejora pasiva ---------- */
