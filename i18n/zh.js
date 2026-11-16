@@ -27,6 +27,7 @@ I18N.add('zh', {
   "Más vida, más daño y más hordas. Premios ×1,5.": "更多生命值、伤害和敌群。奖励 ×1.5。",
   "Pesadilla": "噩梦",
   "Solo para expertos. Premios ×2,2.": "仅限高手。奖励 ×2.2。",
+  "Hordas de hasta 140 y jefes más rápidos, pero +20% de experiencia. Premios ×2,2.": "敌群最多 140 个、首领更快，但经验 +20%。奖励 ×2.2。",
   "Dispara al enemigo más cercano": "射击最近的敌人",
   "Onda de energía alrededor": "四周能量波",
   "Cuchillas giratorias": "旋转刀刃",

@@ -2129,6 +2129,8 @@ body:has(.ga) #topbar{display:none!important}
 .ms-table ul{list-style:none;margin:8px 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .ms-table li{font-size:12px;background:#ffffff0d;border-radius:8px;padding:5px 8px;display:flex;justify-content:space-between;gap:6px}.ms-table li em{font-style:normal;font-weight:900;color:var(--dc)}
 .ms-table small{font-size:11px;color:#9fb8d8;line-height:1.35;display:block}
+/* Escritorio bajo (1280×720, 1366×768): «¡Empezar!» quedaba cortado abajo. Tarjetas más bajas y menos aire entre bloques */
+@media (min-width:761px) and (max-height:820px){.ms-maps{margin-top:8px;gap:12px}.ms-art{height:108px}.ms-boss{height:100px}.ms-deco{width:52px;height:52px}.ms-deco.d2{left:60px;width:40px;height:40px}.ms-txt{padding:8px 12px 10px;gap:3px}.ms-txt p{min-height:0}.ms-rec{margin-top:2px}.ms-dsec{margin-top:10px}.ms-diff{padding:8px 10px}}
 @media (max-width:760px){.ms{padding:10px}.ms-maps{grid-template-columns:1fr;gap:10px}.ms-art{height:110px}.ms-boss{height:104px}.ms-txt p{min-height:0}.ms-dsec{grid-template-columns:1fr}.ms-table ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
 /* Objetivo de la pantalla y botón para invocar al jefe de zona */
 #hudObj{margin-top:6px;font:700 12px var(--h-font);color:#bfe9ff;letter-spacing:.3px;text-align:center;white-space:nowrap}
@@ -2264,6 +2266,7 @@ body.is-touch #skillBar{bottom:176px!important}
 @media (max-width:760px){#xpTxt{top:84px!important;left:12px!important}#hudEmb{top:110px;left:12px}}
 #hudEmb{position:fixed;left:18px;top:150px;display:flex;gap:4px;pointer-events:none;z-index:5}
 #hudEmb:empty{display:none}
+body.dbk-noplay #hudEmb{visibility:hidden}   /* subida de nivel, pausa y demás menús: el retrato del apoyo pisaba la primera carta en móvil */
 #hudEmb .hud-sup{position:relative;width:40px;height:40px;border-radius:50%;box-shadow:0 0 0 2px #7cf29c,0 2px 6px rgba(0,0,0,.5);background:#0e1220;margin-right:2px}
 #hudEmb .hud-sup img{width:100%;height:100%;border-radius:50%;object-fit:cover;animation:none}
 #hudEmb .hud-sup i{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);font-style:normal;font-size:9px;color:#ffd54f;text-shadow:0 1px 2px #000;white-space:nowrap}
@@ -3835,8 +3838,13 @@ const DIFFS = {
   facil:     {name: 'Fácil',     hp: 0.75, dmg: 0.7, spawn: 1.25, elite: 1.3,  boss: 0.75, reward: 0.75, col: '#7cf29c', d: 'Para aprender: enemigos más flojos y menos numerosos.',
               ring: {n: 0.6, spd: 0.75, gap: 1.3, wait: 0.55}, slamWarn: 1.35},
   normal:    {name: 'Normal',    hp: 1,    dmg: 1,   spawn: 1,    elite: 1,    boss: 1,    reward: 1,    col: '#4fc3f7', d: 'La experiencia equilibrada del juego.'},
-  dificil:   {name: 'Difícil',   hp: 1.35, dmg: 1.3, spawn: 0.8,  elite: 0.8,  boss: 1.3,  reward: 1.5,  col: '#ffb74d', d: 'Más vida, más daño y más hordas. Premios ×1,5.'},
-  pesadilla: {name: 'Pesadilla', hp: 1.8,  dmg: 1.6, spawn: 0.65, elite: 0.65, boss: 1.7,  reward: 2.2,  col: '#ef5350', d: 'Solo para expertos. Premios ×2,2.'}
+  // cap: horda máxima en pantalla (sin él, MAX_ENEMIES). xp: multiplicador de la experiencia de los orbes.
+  dificil:   {name: 'Difícil',   hp: 1.35, dmg: 1.3, spawn: 0.8,  elite: 0.8,  boss: 1.3,  reward: 1.5,  col: '#ffb74d', d: 'Más vida, más daño y más hordas. Premios ×1,5.',
+              cap: 120},
+  // Pesadilla tiene mecánica propia: la horda llega a 140, los anillos de los jefes van un 25 % más rápido y salen un 15 % más a menudo,
+  // y la experiencia sube un 20 % para que se pueda llegar a digievolucionar (con el bot se quedaba en el nivel 12 en el minuto 12)
+  pesadilla: {name: 'Pesadilla', hp: 1.8,  dmg: 1.6, spawn: 0.65, elite: 0.65, boss: 1.7,  reward: 2.2,  col: '#ef5350', d: 'Hordas de hasta 140 y jefes más rápidos, pero +20% de experiencia. Premios ×2,2.',
+              cap: 140, xp: 1.2, ring: {spd: 1.25, gap: 0.85}}
 };
 const DIFF_ORDER = ['facil', 'normal', 'dificil', 'pesadilla'];
 let runMap = MAPS[localStorage.getItem('digibonk3d-map')] ? localStorage.getItem('digibonk3d-map') : 'bosque';
@@ -3846,6 +3854,7 @@ const zonesOf = () => mapDef().zones;
 const zoneDef = (n = g ? g.zone : 1) => zonesOf()[n - 1];
 const isPortalMap = () => !!g && mapDef().kind === 'portal';
 const lvlDiff = () => DIFFS[(g && g.diff) || 'normal'];
+const maxFoes = () => lvlDiff().cap || MAX_ENEMIES;   // tope de la horda según la dificultad (100, 120 en Difícil, 140 en Pesadilla)
 // Recorta un punto al círculo de radio m (para aparecer y moverse dentro del escenario)
 function clampArena(x, z, m){
   return [Math.max(-m, Math.min(m, x)), Math.max(-m, Math.min(m, z))];
@@ -6665,7 +6674,7 @@ function runApply(s){
   // La horda vuelve como oleadas nuevas: los mismos tipos y la misma cantidad, a distancia
   for (const [kind, n] of Object.entries(s.foes || {})){
     if (!ENEMY[kind]) continue;
-    for (let i = 0; i < Math.min(n | 0, MAX_ENEMIES); i++) if (!spawnEnemy(kind)) break;
+    for (let i = 0; i < Math.min(n | 0, maxFoes()); i++) if (!spawnEnemy(kind)) break;
   }
   // Subida de nivel o cofre a medias: las mismas cartas que había (recargar no vuelve a tirar)
   if (s.choices && s.choices.length){
@@ -6710,10 +6719,12 @@ const mapLoad = {tok: 0, on: false, armed: false, pend: new Map(), total: 0, don
     mapLoad.done++; mapLoadTick();
   };
 }
-function mapLoadBegin(id){
+// opts.status: texto bajo el nombre (por defecto «Cargando el Mundo Digital…»). opts.after: se llama al quitar la capa.
+// opts.minMs: tiempo mínimo en pantalla (el cambio de pantalla carga casi al instante y la capa solo parpadeaba)
+function mapLoadBegin(id, opts = {}){
   const tok = ++mapLoad.tok;   // un destino nuevo cancela lo que quedara de la carga anterior
   clearTimeout(mapLoad.safety); clearTimeout(mapLoad.outT);
-  Object.assign(mapLoad, {on: true, armed: false, pend: new Map(), total: 0, done: 0});
+  Object.assign(mapLoad, {on: true, armed: false, pend: new Map(), total: 0, done: 0, after: opts.after || null, t0: performance.now(), min: opts.minMs || 0});
   const el = document.getElementById('mapLoad'), art = loadArt(id), img = el.querySelector('.ml-bg');
   preloadLoadArt(id);
   el.classList.remove('ml-out', 'ml-noart');
@@ -6726,7 +6737,7 @@ function mapLoadBegin(id){
     img.src = art.src;
   } else if (img.complete && img.naturalWidth) img.classList.add('ok');
   document.getElementById('mlName').textContent = I18N.tr((MAPS[id] || MAPS.bosque).name);
-  document.getElementById('mlStatus').textContent = I18N.tr('Cargando el Mundo Digital…');
+  document.getElementById('mlStatus').textContent = opts.status || I18N.tr('Cargando el Mundo Digital…');
   document.getElementById('mlBar').setAttribute('aria-label', I18N.tr('Cargando el mapa'));
   mapLoadShow(null);
   el.classList.add('on'); el.setAttribute('aria-hidden', 'false');
@@ -6760,10 +6771,14 @@ function mapLoadArm(tok){
 }
 function mapLoadFinish(tok){
   if (tok !== mapLoad.tok || !mapLoad.on) return;
+  const wait = mapLoad.min - (performance.now() - mapLoad.t0);
+  if (wait > 30){ if (mapLoad.total) mapLoadShow(1); mapLoad.outT = setTimeout(() => { mapLoad.min = 0; mapLoadFinish(tok); }, wait); return; }
   mapLoad.on = false; mapLoad.armed = false;
   clearTimeout(mapLoad.safety);
   const el = document.getElementById('mapLoad');
   if (mapLoad.total) mapLoadShow(1);
+  const after = mapLoad.after; mapLoad.after = null;
+  if (after) try { after(); } catch(e){ console.error(e); }   // p. ej. el cartel de la pantalla 2: sale mientras se desvanece la capa
   const hide = () => { if (tok !== mapLoad.tok) return; el.classList.remove('on', 'ml-out'); el.setAttribute('aria-hidden', 'true'); };
   if (mlReduced.matches) return hide();   // movimiento reducido: cambio directo
   el.classList.add('ml-out');
@@ -6772,7 +6787,7 @@ function mapLoadFinish(tok){
 // Cancela la carga en curso (error al construir el mapa o salida al menú) y retira la capa
 function mapLoadCancel(){
   mapLoad.tok++;
-  mapLoad.on = false; mapLoad.armed = false;
+  mapLoad.on = false; mapLoad.armed = false; mapLoad.after = null;
   clearTimeout(mapLoad.safety); clearTimeout(mapLoad.outT);
   const el = document.getElementById('mapLoad');
   el.classList.remove('on', 'ml-out'); el.setAttribute('aria-hidden', 'true');
@@ -7433,7 +7448,7 @@ let runMode = 'normal';   // 'normal' o 'surv' (lo elige el menú antes del sele
 let runWeekly = false;    // Reto semanal: solo lo activa su propio botón del menú, nunca Jugar
 function spawnEnemy(forced){
   // Tope de enemigos para todas las fuentes (horda, élites, invocaciones, eventos); las élites tienen 20 de margen
-  if (g.enemies.length >= MAX_ENEMIES + (forced === 'elite' ? 20 : 0)) return null;
+  if (g.enemies.length >= maxFoes() + (forced === 'elite' ? 20 : 0)) return null;
   const t = g.t, r = Math.random(), a = Math.random()*Math.PI*2, R = (g.idleT || 0) > 2.5 ? 13 : 25;
   let kind = 'basic';
   const z2 = g.zone >= 2;   // la zona 2 trae más tanques y rápidos
@@ -8088,8 +8103,8 @@ function update(dt){
   // Aparición
   g.spawnT -= dt * (g.idleT > 2.5 ? 1.8 : 1);
   if (g.spawnT <= 0){
-    // Horda máxima en pantalla: 40 al empezar y sube hasta MAX_ENEMIES en el minuto 5 (antes eran 100 desde el minuto 2)
-    const cap = g.mode === 'surv' ? MAX_ENEMIES : Math.min(MAX_ENEMIES, 40 + g.t/5);
+    // Horda máxima en pantalla: 40 al empezar y sube hasta el tope de la dificultad (100 en el minuto 5; 140 en Pesadilla en el 8)
+    const cap = g.mode === 'surv' ? maxFoes() : Math.min(maxFoes(), 40 + g.t/5);
     if (g.enemies.length < cap) spawnEnemy();
     // Presión creciente: tras 45 s salen más enemigos por tanda (1 extra, +1 cada 120 s, máximo 3)
     const extra = g.t > 45 ? Math.min(3, 1 + Math.floor(diffT(g.t)/120)) : 0;
@@ -8486,6 +8501,13 @@ function drawEdgeMarkers(){
   // Las flechas de arriba van por debajo del panel central del HUD (si no, el portal del norte queda tapado)
   const ht = document.getElementById('hudTop'), hr = ht && ht.getClientRects().length ? ht.getBoundingClientRect() : null;
   const top = hr && hr.bottom < H/2 ? Math.max(40, hr.bottom + 28) : 40;
+  // Botones táctiles, minimapa y barra de Bonk: las flechas (y sus metros) no pueden quedar encima (en móvil tapaban SALTO)
+  const avoid = [];
+  for (const el of document.querySelectorAll('#touchCtl .t-btn, #minimap, #bonkBar')){
+    if (!el.getClientRects().length) continue;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) avoid.push({l: r.left - 16, r: r.right + 16, t: r.top - 18, b: r.bottom + 30});   // margen para la flecha y el texto
+  }
   for (const t of targets){
     if (t.far && Math.hypot(t.x - g.p.x, t.z - g.p.z) > t.far) continue;   // santuarios: solo los cercanos
     const v = new THREE.Vector3(t.x, terrainH(t.x, t.z) + 1.5, t.z).project(camera);
@@ -8495,7 +8517,15 @@ function drawEdgeMarkers(){
     let dx = sx - cx, dy = sy - cy;
     if (v.z > 1){ dx = -dx; dy = -dy; }          // detrás de la cámara: la flecha apunta al lado correcto
     const k = Math.min((cx - 40)/Math.abs(dx || 1e-6), (dy < 0 ? cy - top : cy - 40)/Math.abs(dy || 1e-6));
-    const px = cx + dx*k, py = cy + dy*k;
+    let px = cx + dx*k, py = cy + dy*k;
+    // Si cae sobre un botón, se desliza por el mismo borde hasta salir de él (por los lados, hacia arriba; abajo, hacia el centro)
+    for (let it = 0; it < 4; it++){
+      const a = avoid.find(r => px > r.l && px < r.r && py > r.t && py < r.b);
+      if (!a) break;
+      if (px <= 41 || px >= W - 41) py = a.t - 1;
+      else if (py >= H - 41) px = px > cx ? a.l - 1 : a.r + 1;
+      else py = a.b + 1;
+    }
     c.save(); c.translate(px, py); c.rotate(Math.atan2(dy, dx));
     c.fillStyle = t.col; c.strokeStyle = '#000'; c.lineWidth = 2;
     if (t.big) c.scale(1.4, 1.4);
@@ -9564,11 +9594,27 @@ function updatePortal(dt){
     if (Math.hypot(g.p.x - PORTAL.x, g.p.z - PORTAL.z) < PORTAL.r) enterScreen(2);
   }
 }
-// Cambio de pantalla: limpia la pantalla anterior, aplica el bioma nuevo y reinicia el reloj del Infierno
-function enterScreen(n){
+// Cambio de pantalla (portal, o por tiempo en Supervivencia): sale la pantalla de carga del mapa con el nombre de la
+// pantalla nueva y el cambio se hace en el fotograma siguiente, igual que al empezar. Mientras está la capa el mundo espera.
+// instant: sin pantalla de carga (atajo del modo demo para grabar vídeos)
+function enterScreen(n, instant){
+  if (!g || g.zone >= n || g.screenLoad) return;
+  if (instant) return swapScreen(n);
+  const z = zoneDef(n), gg = g;
+  g.screenLoad = true;
+  const tok = mapLoadBegin(g.map || runMap, {status: I18N.tr('Pantalla') + ' ' + n + ': ' + I18N.tr(z.name), minMs: 1300, after: () => { if (g === gg) screenBanner(n); }});
+  requestAnimationFrame(() => setTimeout(() => {
+    if (g !== gg){ return; }   // se salió de la partida mientras tanto
+    gg.screenLoad = false;
+    try { swapScreen(n, true); }
+    catch(e){ mapLoadCancel(); throw e; }
+    if (tok === mapLoad.tok) mapLoadArm(tok); else screenBanner(n);
+  }, 0));
+}
+// Limpia la pantalla anterior, aplica el bioma nuevo y reinicia el reloj del Infierno. quiet: el cartel lo pone la pantalla de carga al irse
+function swapScreen(n, quiet){
   if (g.zone >= n) return;
-  const fl = document.getElementById('flash');
-  fl.animate([{opacity: 1}, {opacity: 0}], {duration: 1100});
+  if (!quiet){ const fl = document.getElementById('flash'); fl.animate([{opacity: 1}, {opacity: 0}], {duration: 1100}); }
   for (const e of g.enemies){ world.remove(e.mesh); world.remove(e.shadow); }
   g.enemies = []; g.boss = null; g.bossSpawned = false; clearBossRing();
   for (const s of g.eshots) world.remove(s.mesh); g.eshots = [];
@@ -9589,10 +9635,13 @@ function enterScreen(n){
   initShrines();
   g.p.x = 0; g.p.z = 0; g.p.y = 0; g.p.vy = 0;
   g.spawnT = 3; g.eliteT = Math.max(g.eliteT, 30);
+  if (g.mode !== 'surv' && !g.route) g.routeT = 1.4;   // carta de ruta para esta pantalla
+  if (!quiet) screenBanner(n);
+}
+function screenBanner(n){
   shake = Math.max(shake, 0.5);
   sfx('evolve');
   const z = zoneDef(n);
-  if (g.mode !== 'surv' && !g.route) g.routeT = 1.4;   // carta de ruta para esta pantalla
   announce('Pantalla ' + n + ': ' + z.name, g.mode === 'surv' ? 'Supervivencia: el escenario cambia, la horda no' : z.boss ? 'Ve al portal del norte para invocar a ' + z.boss.name : '', z.color);
 }
 // Fases de los jefes: al 50% y al 25% de vida cambian de ritmo y añaden golpes en el suelo avisados con círculos
@@ -9714,7 +9763,7 @@ function updateWaves(){
   const w = 1 + Math.floor(g.t / 60);
   if (w <= (g.wave || 1)) return;
   g.wave = w;
-  const n = Math.min(MAX_ENEMIES - g.enemies.length, 6 + w*2);
+  const n = Math.min(maxFoes() - g.enemies.length, 6 + w*2);
   for (let i = 0; i < n; i++) spawnEnemy(i < Math.floor(w/3) ? 'elite' : null);
   if (w % 5 === 0){
     spawnMini(MINIS[(w/5 - 1) % MINIS.length]);
@@ -11014,7 +11063,7 @@ function applyLab(){
   p.dmg *= labMul('dmg');
   p.speed *= labMul('speed');
   p.pickup *= labMul('pickup');
-  g.labXp = labMul('xp');
+  g.labXp = labMul('xp') * (lvlDiff().xp || 1);   // Pesadilla: +20 %
   g.labBonk = labMul('bonk');
   upRes().rer += labFlat('rer');
   g.revives = labLv('revive');
@@ -12319,7 +12368,7 @@ if (new URLSearchParams(location.search).has('demo')){
     rollTier,
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
-    spawnMini, MINIS, PORTAL, PONDS, PLAZA_SPOTS, get layout(){ return layout; }, openMap, closeMap, topView(h = 230){ camera.position.set(0, h, 40); camera.lookAt(0, 0, 0); const f = camera.far; camera.far = 600; camera.updateProjectionMatrix(); renderer.render(scene, camera); camera.far = f; camera.updateProjectionMatrix(); }, startMapEvent, SHRINE_TYPES, initShrines, summonBoss, openPortal, enterScreen, openRelics, useCons, openRoutes, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
+    spawnMini, MINIS, PORTAL, PONDS, PLAZA_SPOTS, get layout(){ return layout; }, openMap, closeMap, topView(h = 230){ camera.position.set(0, h, 40); camera.lookAt(0, 0, 0); const f = camera.far; camera.far = 600; camera.updateProjectionMatrix(); renderer.render(scene, camera); camera.far = f; camera.updateProjectionMatrix(); }, startMapEvent, SHRINE_TYPES, initShrines, summonBoss, openPortal, enterScreen: n => enterScreen(n, true), openRelics, useCons, openRoutes, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
     stepUpdate: dt => update(dt), animateEvo, updateFx, syncMeshes, tryDash, openChest,
     resume(){ if (state === 'paused'){ state = 'play'; hideOverlay(); hidePause(); } },
     // Simulación rápida sin dibujar (para medir el equilibrio): avanza sec segundos y elige la carta pick en cada subida

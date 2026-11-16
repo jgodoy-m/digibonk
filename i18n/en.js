@@ -25,6 +25,7 @@ I18N.add('en', {
   "Más vida, más daño y más hordas. Premios ×1,5.": "More health, more damage and bigger hordes. Rewards ×1.5.",
   "Pesadilla": "Nightmare",
   "Solo para expertos. Premios ×2,2.": "Experts only. Rewards ×2.2.",
+  "Hordas de hasta 140 y jefes más rápidos, pero +20% de experiencia. Premios ×2,2.": "Hordes of up to 140 and faster bosses, but +20% experience. Rewards ×2.2.",
   "Dispara al enemigo más cercano": "Shoots the nearest enemy",
   "Onda de energía alrededor": "Energy wave all around",
   "Cuchillas giratorias": "Spinning blades",

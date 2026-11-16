@@ -26,6 +26,7 @@ I18N.add('fr', {
   "Más vida, más daño y más hordas. Premios ×1,5.": "Plus de vie, plus de dégâts et plus de hordes. Récompenses ×1,5.",
   "Pesadilla": "Cauchemar",
   "Solo para expertos. Premios ×2,2.": "Réservé aux experts. Récompenses ×2,2.",
+  "Hordas de hasta 140 y jefes más rápidos, pero +20% de experiencia. Premios ×2,2.": "Hordes jusqu'à 140 et boss plus rapides, mais +20 % d'expérience. Récompenses ×2,2.",
   "Dispara al enemigo más cercano": "Tire sur l'ennemi le plus proche",
   "Onda de energía alrededor": "Onde d'énergie tout autour",
   "Cuchillas giratorias": "Lames tournoyantes",

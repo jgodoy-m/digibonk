@@ -25,6 +25,7 @@ I18N.add('tr', {
   "Más vida, más daño y más hordas. Premios ×1,5.": "Daha fazla can, hasar ve sürü. Ödüller ×1,5.",
   "Pesadilla": "Kâbus",
   "Solo para expertos. Premios ×2,2.": "Sadece uzmanlar için. Ödüller ×2,2.",
+  "Hordas de hasta 140 y jefes más rápidos, pero +20% de experiencia. Premios ×2,2.": "140'a kadar sürüler ve daha hızlı patronlar, ama +%20 deneyim. Ödüller ×2,2.",
   "Dispara al enemigo más cercano": "En yakın düşmana ateş eder",
   "Onda de energía alrededor": "Etrafa enerji dalgası",
   "Cuchillas giratorias": "Dönen bıçaklar",
