@@ -1417,5 +1417,10 @@ I18N.add('ko', {"×{0} daño": "피해 ×{0}", "×{0} recibido": "받는 피해 
   "Gana la Montaña Helada en Difícil o Pesadilla": "어려움 또는 악몽에서 얼음 산 승리",
   "Domador de lo imposible": "불가능의 조련사",
   "Gana los 3 mapas en Difícil o Pesadilla": "어려움 또는 악몽에서 3개 맵 모두 승리",
-  "Pesadilla eterna": "영원한 악몽"
+  "Pesadilla eterna": "영원한 악몽",
+  "Instalar la app": "앱 설치",
+  "App": "앱",
+  "Abre Digibonk en Safari.": "Safari에서 Digibonk를 엽니다.",
+  "Toca el botón Compartir (el cuadrado con la flecha hacia arriba).": "공유 버튼(위쪽 화살표가 있는 사각형)을 누릅니다.",
+  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "‘홈 화면에 추가’를 선택하고 ‘추가’를 눌러 확인합니다."
 });

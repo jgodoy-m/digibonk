@@ -1405,5 +1405,10 @@ I18N.add('fr', {"×{0} daño": "×{0} dégâts", "×{0} recibido": "×{0} reçus
   "Gana la Montaña Helada en Difícil o Pesadilla": "Gagne la Montagne Gelée en Difficile ou Cauchemar",
   "Domador de lo imposible": "Dompteur de l'impossible",
   "Gana los 3 mapas en Difícil o Pesadilla": "Gagne les 3 cartes en Difficile ou Cauchemar",
-  "Pesadilla eterna": "Cauchemar éternel"
+  "Pesadilla eterna": "Cauchemar éternel",
+  "Instalar la app": "Installer l’appli",
+  "App": "Appli",
+  "Abre Digibonk en Safari.": "Ouvre Digibonk dans Safari.",
+  "Toca el botón Compartir (el cuadrado con la flecha hacia arriba).": "Touche le bouton Partager (le carré avec une flèche vers le haut).",
+  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "Choisis « Sur l’écran d’accueil » et confirme avec « Ajouter »."
 });

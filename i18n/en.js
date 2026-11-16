@@ -1536,5 +1536,10 @@ I18N.add('en', {
   "Instalar": "Install",
   "Juega a pantalla completa y en horizontal desde un icono, también sin conexión.": "Play fullscreen and in landscape from an icon, even offline.",
   "En Safari: botón Compartir y «Añadir a pantalla de inicio». Se abre a pantalla completa y sin conexión.": "In Safari: tap Share, then “Add to Home Screen”. It opens fullscreen and works offline.",
-  "Usa «Instalar app» o «Añadir a pantalla de inicio» en el menú del navegador.": "Use “Install app” or “Add to Home screen” in your browser menu."
+  "Usa «Instalar app» o «Añadir a pantalla de inicio» en el menú del navegador.": "Use “Install app” or “Add to Home screen” in your browser menu.",
+  "Instalar la app": "Install the app",
+  "App": "App",
+  "Abre Digibonk en Safari.": "Open Digibonk in Safari.",
+  "Toca el botón Compartir (el cuadrado con la flecha hacia arriba).": "Tap the Share button (the square with an arrow pointing up).",
+  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "Choose “Add to Home Screen” and confirm with “Add”."
 });
