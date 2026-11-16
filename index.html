@@ -2985,6 +2985,8 @@ body:has(#overlay:not(.hidden)) #consBar{visibility:hidden}
 .cons-b kbd{position:absolute;left:-4px;top:-6px;font:800 10px system-ui,sans-serif;background:#06102b;color:#fff;border-radius:6px;padding:1px 5px}
 body.is-touch .cons-b kbd{display:none}
 body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;flex-direction:column;gap:8px}body.is-touch .cons-b{width:42px;height:42px;border-radius:13px}body.is-touch .cons-b .ico{width:22px;height:22px}
+#overlay .lv3-card.route{border-color:#3de0ff!important;box-shadow:0 0 0 3px rgba(61,224,255,.25),0 0 22px rgba(61,224,255,.4)!important}
+#overlay .lv3-card.route .lv3-ic{color:#3de0ff}
 #overlay .lv3-card.relic{border-color:#ffd54f!important;box-shadow:0 0 0 3px rgba(255,213,79,.3),0 0 24px rgba(255,179,0,.45)!important}
 #overlay .lv3-card.relic .lv3-ic{color:#ffd54f}
 #overlay .lv3-card.item{border-color:#80d8ff!important;box-shadow:0 0 0 3px rgba(128,216,255,.25),0 0 18px rgba(128,216,255,.35)!important}
@@ -7015,7 +7017,7 @@ function evoDmg(){ return 1; }
 const DIFF = {hp: 1.35, dmg: 1.35, spawn: 0.75, eliteT: 35, spawnMin: 0.22};
 // La dificultad sube poco a poco: al principio es la normal y llega a la del modo difícil en el minuto 10
 const diffMul = k => (lvlDiff()[k] || 1) * (1 + (DIFF[k] - 1) * Math.min(1, (g ? g.t : 0) / 600)) * (k === 'spawn' ? 1 / infMul() : infMul());
-const eliteGap = () => (45 + (DIFF.eliteT - 45) * Math.min(1, (g ? g.t : 0) / 600)) * lvlDiff().elite / infMul();
+const eliteGap = () => (45 + (DIFF.eliteT - 45) * Math.min(1, (g ? g.t : 0) / 600)) * lvlDiff().elite / infMul() * (g && g.route === 'elites' ? 0.5 : 1);
 // Infierno: tras 20 minutos en la misma pantalla todo se multiplica sin parar (+100% cada 15 s)
 const infMul = () => (g && g.inferno) ? 1 + Math.max(0, g.screenT - SCREEN_LIMIT) / 15 : 1;
 // Tiempo que cuenta para la dificultad: igual que el tiempo real hasta el minuto 10 (la dificultad de siempre)
@@ -7048,7 +7050,7 @@ function spawnEnemy(forced){
   world.add(shadow);
   const foe = {
     kind, sprite, mesh, shadow, x: sp[0], z: sp[1],
-    hp: d.hp*k*evoHp()*diffMul('hp'), max: d.hp*k*evoHp()*diffMul('hp'), spd: d.spd*(g.foeSpd || 1), r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300 + (tt/600)*(tt/600))*evoDmg()*diffMul('dmg'), cd: 0
+    hp: d.hp*k*evoHp()*diffMul('hp')*(g.foeHp || 1), max: d.hp*k*evoHp()*diffMul('hp')*(g.foeHp || 1), spd: d.spd*(g.foeSpd || 1), r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300 + (tt/600)*(tt/600))*evoDmg()*diffMul('dmg'), cd: 0
   };
   if (kind === 'elite'){ foe.mech = ELITE_MECHS[Math.floor(Math.random()*ELITE_MECHS.length)]; foe.st = 2 + Math.random()*2; }
   g.enemies.push(foe);
@@ -7337,7 +7339,7 @@ function updateBerries(dt){
   if (!g.berries) g.berries = [];
   if (!(g.mod && g.mod.noHeal)){
     g.berryT = (g.berryT ?? 12) - dt;
-    if (g.berryT <= 0){ g.berryT = 20; if (g.berries.length < 4) spawnBerry(); }
+    if (g.berryT <= 0){ const jd = g.route === 'jardin'; g.berryT = jd ? 8 : 20; if (g.berries.length < (jd ? 6 : 4)) spawnBerry(); }
   }
   for (const b of g.berries){
     b.mesh.position.set(b.x, terrainH(b.x, b.z) + 0.8 + Math.sin(g.t*3 + b.x)*0.12, b.z);
@@ -7465,6 +7467,25 @@ function openRelics(){
   g.npcPick = {title: 'Reliquia del jefe', sub: 'Elige una: dura toda la partida'};
   g.choices = left.map(id => ({t: RELICS[id].name, name: RELICS[id].name, relic: id, k: 'ofensiva', ic: 'relic', d: RELICS[id].d,
     f: () => { RELICS[id].f(); (g.relics || (g.relics = [])).push(id); announce(RELICS[id].name, 'Reliquia', '#ffd54f'); }}));
+  openUpgrades();
+}
+// ---------- Cartas de ruta: al cruzar el portal eliges 1 de 2 rutas con su modificador para la pantalla 2 ----------
+const ROUTES = {
+  tesoro: {name: 'Ruta del tesoro', d: 'Aparecen 3 cofres a tu alrededor y ganas un 50% más de monedas.', col: '#ffd54f',
+    f: () => { for (let i = 0; i < 3; i++) spawnChest(g.p); g.coinMul = (g.coinMul || 1) * 1.5; }},
+  elites: {name: 'Ruta de las élites', d: 'Salen élites el doble de a menudo, pero cada una da 55 monedas (en vez de 15).', col: '#ff7043', f: () => {}},
+  niebla: {name: 'Ruta de la niebla', d: 'Una niebla espesa no te deja ver lejos, pero ganas un 30% más de experiencia.', col: '#b0bec5',
+    f: () => { g.labXp = (g.labXp || 1) * 1.3; }},
+  jardin: {name: 'Ruta del jardín', d: 'Salen bayas cada 8 s (hasta 6), pero los enemigos tienen un 20% más de vida.', col: '#7cf29c',
+    f: () => { g.foeHp = (g.foeHp || 1) * 1.2; }},
+  horda:  {name: 'Ruta de la horda', d: 'Un 30% más de enemigos y un 40% más de experiencia.', col: '#ef5350',
+    f: () => { g.labXp = (g.labXp || 1) * 1.4; }}
+};
+function openRoutes(){
+  const two = Object.keys(ROUTES).sort(() => Math.random() - 0.5).slice(0, 2);
+  g.npcPick = {title: 'Elige tu ruta', sub: 'El modificador dura toda la pantalla 2'};
+  g.choices = two.map(id => ({t: ROUTES[id].name, name: ROUTES[id].name, route: id, k: 'utilidad', ic: 'route', d: ROUTES[id].d,
+    f: () => { g.route = id; ROUTES[id].f(); applyZoneVisuals(g.zone); announce(ROUTES[id].name, '', ROUTES[id].col); }}));
   openUpgrades();
 }
 const shopPrice = (n, base) => Math.round(base * (1 + 0.35*n.buys) * (1 - 0.1*itemLv('moneda')) * (g.shopDisc || 1));
@@ -7667,7 +7688,7 @@ function update(dt){
     // Presión creciente: tras 45 s salen más enemigos por tanda (1 extra, +1 cada 120 s, máximo 3)
     const extra = g.t > 45 ? Math.min(3, 1 + Math.floor(diffT(g.t)/120)) : 0;
     for (let i = 0; i < extra && g.enemies.length < cap; i++) spawnEnemy();
-    g.spawnT = Math.max(DIFF.spawnMin, (1.1 - diffT(g.t)/300) * diffMul('spawn')) * ((g.mod && g.mod.spawnMul) || 1);
+    g.spawnT = Math.max(DIFF.spawnMin, (1.1 - diffT(g.t)/300) * diffMul('spawn')) * ((g.mod && g.mod.spawnMul) || 1) * (g.route === 'horda' ? 0.7 : 1);
   }
 
   // Minijefes en sus minutos
@@ -7829,7 +7850,7 @@ function update(dt){
     addBonk(0.35*dead.length);
   }
   g.kills += dead.length;
-  for (const e of dead) addCoins(e.boss ? 100 : e.kind === 'mini' ? 40 : e.kind === 'elite' ? 15 : 1, e.x, e.z);
+  for (const e of dead) addCoins(e.boss ? 100 : e.kind === 'mini' ? 40 : e.kind === 'elite' ? (g.route === 'elites' ? 55 : 15) : 1, e.x, e.z);
   if (dead.length){ g.combo += dead.length; g.comboT = 3; }
   g.comboT -= dt;
   if (g.comboT <= 0) g.combo = 0;
@@ -8016,6 +8037,7 @@ function update(dt){
     announce('¡Segunda oportunidad!', 'Laboratorio · 50% de vida', '#7cf29c');
   }
   if (g.shieldT > 0){ g.shieldT -= dt; if (p.hp < hp0) p.hp = hp0; }
+  if (g.routeT > 0 && !g.evoAnim){ g.routeT -= dt; if (g.routeT <= 0 && !g.pendingUp && state === 'play'){ openRoutes(); return; } else if (g.routeT <= 0) g.routeT = 0.5; }
   if (g.relicT > 0 && !g.evoAnim){ g.relicT -= dt; if (g.relicT <= 0 && !g.pendingUp && state === 'play'){ openRelics(); return; } else if (g.relicT <= 0) g.relicT = 0.5; }
   if (p.hp <= 0 && itemLv('disco') && !g.discoUsed){
     // Disco de memoria: una vez por partida
@@ -8708,6 +8730,7 @@ Object.assign(ICON, {
   cons_bomba: '<circle cx="11" cy="14" r="7" fill="currentColor"/><path d="M15 8l3-3M18 3v2M20 5h2M19.5 2.5l1 1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
   cons_escudo: '<path d="M12 2l8 3v7c0 5-4 8.5-8 10-4-1.5-8-5-8-10V5z" fill="currentColor"/><path d="M8.5 12l2.5 2.5 4.5-5" fill="none" stroke="#06102b" stroke-width="2" stroke-linecap="round"/>',
   cons_reloj: '<circle cx="12" cy="13" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 9v4l3 2M9 2h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
+  route: '<path d="M5 21V9l7-6 7 6v12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M9 21v-6h6v6" fill="currentColor"/>',
   relic: '<path d="M3 8l4 4 5-7 5 7 4-4-2 11H5z" fill="currentColor"/><rect x="5" y="20" width="14" height="2" rx="1" fill="currentColor"/>'
 });
 ICON.luz = ICON.luz || ICON.aura; ICON.red = ICON.red || ICON.laser; ICON.virus = ICON.virus || ICON.mina;
@@ -8723,14 +8746,14 @@ function openUpgrades(){
     <div class="lv3">
       <div class="lv3-head"><h2 class="lv3-banner">${g.npcPick ? g.npcPick.title : g.chestPick ? (g.chestPick.gold ? '¡Cofre dorado! Carta doble' : '¡Cofre abierto!') : `¡Nivel ${g.p.lvl}!`}</h2><p>${g.npcPick ? g.npcPick.sub : banMode ? 'Elige una carta para desterrarla' : 'Pulsa 1-3 o haz clic'}</p></div>
       <div class="lv3-row">${g.choices.map((c, i) => `
-        <button class="lv3-card ${c.k || 'utilidad'}${c.rare ? ' rare' : ''}${c.fusion || c.fusLv ? ' fusion' : ''}${c.item ? ' item' + (ITEMS[c.item].cursed ? ' cursed' : '') : ''}${c.relic ? ' relic' : ''}${banMode ? ' ban' : ''}${c.disabled ? ' off' : ''}" data-up="${i}" ${c.disabled ? 'disabled' : ''} style="animation-delay:${i*0.09}s">
+        <button class="lv3-card ${c.k || 'utilidad'}${c.rare ? ' rare' : ''}${c.fusion || c.fusLv ? ' fusion' : ''}${c.item ? ' item' + (ITEMS[c.item].cursed ? ' cursed' : '') : ''}${c.relic ? ' relic' : ''}${c.route ? ' route' : ''}${banMode ? ' ban' : ''}${c.disabled ? ' off' : ''}" data-up="${i}" ${c.disabled ? 'disabled' : ''} style="animation-delay:${i*0.09}s">
           <span class="lv3-key">${i + 1}</span>
           ${c.skill && !c.lv ? '<span class="lv3-new">NUEVO</span>' : ''}
-          <span class="lv3-tag">${c.leave ? 'Volver a la partida' : c.info ? 'Centarumon' : c.relic ? '♛ Reliquia' : c.cons ? 'Consumible · ' + c.price + ' monedas' : c.shop && c.item ? 'Objeto · ' + c.price + ' monedas' : c.item ? (ITEMS[c.item].cursed ? '☠ Objeto maldito' : '◇ Objeto') : c.shop ? 'Tienda · ' + c.price + ' monedas' : c.digi ? '◆ Datos Digimon' : c.fusion ? '✦ Fusión' : c.fusLv ? (c.lv ? '✦ Fusión · mejora' : '✦ Fusión') : c.evo ? '★ Evolución' : c.skill ? (c.typeSk ? 'De tipo ' + ATTR_NAME[ATTR_OF[g.ch.id]] : c.lv ? 'Mejora' : 'Característico') : (c.rare ? '◆ Rara · ' : '') + (cat[c.k] || 'Mejora')}</span>
+          <span class="lv3-tag">${c.leave ? 'Volver a la partida' : c.info ? 'Centarumon' : c.relic ? '♛ Reliquia' : c.route ? '➜ Ruta' : c.cons ? 'Consumible · ' + c.price + ' monedas' : c.shop && c.item ? 'Objeto · ' + c.price + ' monedas' : c.item ? (ITEMS[c.item].cursed ? '☠ Objeto maldito' : '◇ Objeto') : c.shop ? 'Tienda · ' + c.price + ' monedas' : c.digi ? '◆ Datos Digimon' : c.fusion ? '✦ Fusión' : c.fusLv ? (c.lv ? '✦ Fusión · mejora' : '✦ Fusión') : c.evo ? '★ Evolución' : c.skill ? (c.typeSk ? 'De tipo ' + ATTR_NAME[ATTR_OF[g.ch.id]] : c.lv ? 'Mejora' : 'Característico') : (c.rare ? '◆ Rara · ' : '') + (cat[c.k] || 'Mejora')}</span>
           ${!c.skill && !c.evo && !c.fusion && !c.fusLv && !c.item && CARD_ART[c.t] ? `<img class="lv3-art" src="ui/hud/carta_${CARD_ART[c.t]}.webp" alt="">` : `<span class="lv3-ic">${c.fusion || c.fusLv ? (c.fusion || c.fusLv).split('+').map(svgIcon).join('') : svgIcon(c.ic || c.evo || c.skill || c.k)}</span>`}
           <b>${c.name || c.t}</b>
           <p>${c.d || ''}</p>
-          ${c.info || c.leave || c.cons ? '' : c.relic ? '<span class="lv3-pips pasiva">Toda la partida</span>' : c.fusion ? '<span class="lv3-pips pasiva">FUSIÓN · ocupa 1 hueco</span>' : c.evo ? `<span class="lv3-pips pasiva">EVO · nivel ${SKILL_MAX + 1}</span>` : c.skill || c.fusLv || c.item ? `<span class="lv3-pips">${Array.from({length: c.item ? ITEM_MAX : SKILL_MAX}, (_, n) => n + 1).map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : (c.rare ? '<span class="lv3-pips pasiva rare">Rara · efecto doble</span>' : '<span class="lv3-pips pasiva">Pasiva</span>')}
+          ${c.info || c.leave || c.cons ? '' : c.relic ? '<span class="lv3-pips pasiva">Toda la partida</span>' : c.route ? '<span class="lv3-pips pasiva">Pantalla 2</span>' : c.fusion ? '<span class="lv3-pips pasiva">FUSIÓN · ocupa 1 hueco</span>' : c.evo ? `<span class="lv3-pips pasiva">EVO · nivel ${SKILL_MAX + 1}</span>` : c.skill || c.fusLv || c.item ? `<span class="lv3-pips">${Array.from({length: c.item ? ITEM_MAX : SKILL_MAX}, (_, n) => n + 1).map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : (c.rare ? '<span class="lv3-pips pasiva rare">Rara · efecto doble</span>' : '<span class="lv3-pips pasiva">Pasiva</span>')}
         </button>`).join('')}</div>
       <div class="lv3-acts"${g.npcPick ? ' style="display:none"' : ''}>
         <button class="lv3-act" id="upRer" ${r.rer > 0 ? '' : 'disabled'}>Refrescar (${r.rer}) <kbd>F</kbd></button>
@@ -8751,7 +8774,7 @@ function pickUpgrade(i){
   ch.f(g.p);
   if (g.chestPick && g.chestPick.gold && !ch.evo && !ch.fusion && !ch.fusLv) ch.f(g.p);   // un objeto sube dos niveles
   if (ch.rare) ch.f(g.p);
-  if (!ch.skill && !ch.evo && !ch.fusion && !ch.fusLv && !ch.item && !ch.shop && !ch.digi && !ch.info && !ch.relic){ g.upTaken = g.upTaken || {}; g.upTaken[ch.t] = (g.upTaken[ch.t] || 0) + 1; }   // cofre dorado: la carta cuenta dos veces
+  if (!ch.skill && !ch.evo && !ch.fusion && !ch.fusLv && !ch.item && !ch.shop && !ch.digi && !ch.info && !ch.relic && !ch.route){ g.upTaken = g.upTaken || {}; g.upTaken[ch.t] = (g.upTaken[ch.t] || 0) + 1; }   // cofre dorado: la carta cuenta dos veces
   g.chestPick = null; g.npcPick = null;
   hideOverlay();
   lockMouse();
@@ -8965,6 +8988,8 @@ function applyZoneVisuals(n){
   const z = zoneDef(n);
   applyBiome(z.biome || 'bosque');
   scene.fog.color.set(z.fog);
+  // Ruta de la niebla: se ve mucho menos (el resto de rutas y pantallas usan la niebla normal)
+  scene.fog.near = g && g.route === 'niebla' ? 10 : 110; scene.fog.far = g && g.route === 'niebla' ? 38 : 250;
   const old = scene.background;
   scene.background = skyTexture(z.sky);
   if (old && old.dispose) old.dispose();
@@ -9099,6 +9124,7 @@ function enterScreen(n){
   shake = Math.max(shake, 0.5);
   sfx('evolve');
   const z = zoneDef(n);
+  if (g.mode !== 'surv' && !g.route) g.routeT = 1.4;   // carta de ruta para esta pantalla
   announce('Pantalla ' + n + ': ' + z.name, g.mode === 'surv' ? 'Supervivencia: el escenario cambia, la horda no' : z.boss ? 'Ve al portal del norte para invocar a ' + z.boss.name : '', z.color);
 }
 // Fases de los jefes: al 50% y al 25% de vida cambian de ritmo y añaden golpes en el suelo avisados con círculos
@@ -11786,7 +11812,7 @@ if (new URLSearchParams(location.search).has('demo')){
     rollTier,
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
-    spawnMini, MINIS, PORTAL, startMapEvent, SHRINE_TYPES, initShrines, summonBoss, openPortal, enterScreen, openRelics, useCons, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
+    spawnMini, MINIS, PORTAL, startMapEvent, SHRINE_TYPES, initShrines, summonBoss, openPortal, enterScreen, openRelics, useCons, openRoutes, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
     stepUpdate: dt => update(dt), animateEvo, updateFx, syncMeshes, tryDash, openChest,
     resume(){ if (state === 'paused'){ state = 'play'; hideOverlay(); hidePause(); } },
     // Simulación rápida sin dibujar (para medir el equilibrio): avanza sec segundos y elige la carta pick en cada subida
