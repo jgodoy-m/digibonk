@@ -2976,6 +2976,7 @@ html.reduce-motion .logo-fx::after{display:none}
 #overlay .lv3-card.fusion .lv3-tag{background:var(--m-cta)!important;color:#fff!important}
 #overlay .lv3-card.fusion .lv3-ic{display:inline-flex;gap:4px}
 .sb-fus{display:grid;place-items:center;font:900 20px 'Nunito',sans-serif;color:#fff;background:linear-gradient(180deg,#ffc24f,#ef6400)!important;box-shadow:0 0 12px rgba(255,138,30,.6)}
+.sb-fus{color:#fff!important;display:flex!important;gap:0;align-items:center;justify-content:center}.sb-fus .ico{width:46%;height:46%;margin:0 -1px}
 /* ---------- Formas de los menús: esquinas asimétricas, botones de color en diagonal y cabeceras en ángulo ---------- */
 :root{--sh-big:30px 10px 30px 10px;--sh-mid:22px 7px 22px 7px;--sh-sm:16px 5px 16px 5px;--sh-skew:-8deg}
 /* Tarjetas grandes */
@@ -5153,7 +5154,7 @@ const GUIDE = [
     d: 'Abre los cofres para curarte y elegir una mejora. Cada baja carga el BONK: al 100 % suéltalo para dañar y empujar todo lo que te rodea y borrar los disparos del jefe.',
     keys: [{k: 'E', tc: 'Toca el aviso', d: 'Abrir cofre'}, {k: 'Q', tc: 'Toca BONK', d: 'Soltar el BONK'}]},
   {ch: 1, t: 'Digievoluciona', clip: 'evo',
-    d: 'Tu Digimon digievoluciona al subir de nivel (15, 30 y 45). Si tu vida baja del 20 %, una vez por partida puedes evolucionar de emergencia durante 15 s. Con dos habilidades al máximo salen cartas de fusión.',
+    d: 'Tu Digimon digievoluciona al subir de nivel (15, 30 y 45). Si tu vida baja del 20 %, una vez por partida puedes evolucionar de emergencia durante 15 s. Con dos habilidades al nivel máximo, habla con Centarumon (✦ en el mapa) para fusionarlas: la fusión ocupa un hueco de ataque y también sube de nivel.',
     keys: [{k: 'R', tc: 'EVO', d: 'Evolución de emergencia (tienes 6 s)'}]},
   {ch: 2, t: 'Jefe y portal', clip: 'jefe',
     d: 'Cada mapa tiene dos pantallas. Cuando estés listo, ve al portal del norte (el minimapa lo marca) e invoca allí al jefe: al derrotarlo se abre el portal. Si pasas 20 minutos en una pantalla empieza el Infierno. Atento a los eventos: nodos que defender, datos corruptos y Numemon dorados.',
@@ -6191,7 +6192,7 @@ function runRevive(v){
   return v;
 }
 // Clave de una carta de mejora para reconstruir la misma tirada al cargar (no se puede volver a tirar recargando)
-const runCardKey = c => c.fusion ? 'fus:' + c.fusion : c.evo ? 'evo:' + c.evo : c.skill ? 'skill:' + c.skill : 'up:' + c.t;
+const runCardKey = c => c.fusion ? 'fus:' + c.fusion : c.fusLv ? 'fuslv:' + c.fusLv : c.evo ? 'evo:' + c.evo : c.skill ? 'skill:' + c.skill : 'up:' + c.t;
 function runSave(){
   if (!g || !g.runId || g.ranked || !RUN_STATES.includes(state) || !runIsLive()) return false;
   const data = {};
@@ -6314,7 +6315,7 @@ function runApply(s){
   }
   // Subida de nivel o cofre a medias: las mismas cartas que había (recargar no vuelve a tirar)
   if (s.choices && s.choices.length){
-    const pool = [...UPGRADES, ...skillCards(), digiCard(), ...evoSkillCards(), ...fusionCards()];
+    const pool = [...UPGRADES, ...skillCards(), digiCard(), ...evoSkillCards(), ...fusionLvCards()];
     const out = [];
     for (const c of s.choices){
       const card = pool.find(x => runCardKey(x) === c.k);
@@ -7291,10 +7292,11 @@ function updateBerries(dt){
   }
   g.berries = g.berries.filter(b => !b.taken);
 }
-// PNJ: Digitamamon lleva la tienda y Piximon la ruleta. Uno de cada por pantalla
+// PNJ: Digitamamon lleva la tienda, Piximon la ruleta y Centarumon las fusiones. Uno de cada por pantalla
 const NPCS = [
   {id: 'tienda', name: 'Tienda de Digitamamon', sprite: 'sprites/adventure/digitamamon.png', col: 0xffd54f, icon: '🛒'},
-  {id: 'ruleta', name: 'Ruleta de Piximon', sprite: 'sprites/adventure/piximon.png', col: 0xff80ab, icon: '🎡'}
+  {id: 'ruleta', name: 'Ruleta de Piximon', sprite: 'sprites/adventure/piximon.png', col: 0xff80ab, icon: '🎡'},
+  {id: 'fusion', name: 'Templo de Centarumon', sprite: 'sprites/adventure/centarumon.png', col: 0xff8a1e, icon: '✦'}
 ];
 // saved: PNJ de una partida guardada (mismo sitio, compras y tiradas hechas)
 function initNpcs(saved){
@@ -7317,13 +7319,24 @@ function updateNpcs(dt){
     n.ring.rotation.y += dt*0.6;
     const d = dist2(n.x, n.z, g.p.x, g.p.z);
     if (d > 4) n.armed = true;
-    if (n.armed && d < 2.4 && state === 'play'){ n.armed = false; n.id === 'tienda' ? openShop(n) : openRoulette(n); return; }
+    if (n.armed && d < 2.4 && state === 'play'){ n.armed = false; n.id === 'tienda' ? openShop(n) : n.id === 'fusion' ? openFusion(n) : openRoulette(n); return; }
   }
+  fusionHint();
+}
+// Centarumon: fusiona dos ataques a nivel máximo (gratis, una fusión por visita: hay que alejarse y volver para otra)
+function openFusion(n){
+  const cards = fusionCards(), ready = fusionReady();
+  g.npcPick = {title: n.name, sub: cards.length ? 'Elige dos ataques a nivel ' + SKILL_MAX + ' para fusionarlos. La fusión ocupa 1 hueco de ataque.' : 'Aún no puedes fusionar'};
+  const info = {t: 'Cómo fusionar', name: 'Cómo fusionar', k: 'utilidad', info: true, disabled: true,
+    d: `Sube dos ataques a nivel ${SKILL_MAX} y vuelve. ${ready.length === 1 ? 'Ya tienes uno: ' + skillName(ready[0]) + '.' : ready.length ? '' : 'Ahora no tienes ninguno.'} Un ataque que ya está en una fusión no puede entrar en otra.`, f: () => {}};
+  g.choices = (cards.length ? cards.slice(0, 6) : [info]).map(c => ({...c, shop: false}))
+    .concat([{t: 'Salir', name: 'Salir', k: 'utilidad', d: 'Vuelve a la partida. Acércate otra vez para fusionar más tarde.', leave: true, f: () => {}}]);
+  openUpgrades();
 }
 // Carta de ataque: sube un ataque característico (o aprende uno nuevo si hay hueco)
 function sigCard(extra = {}){
-  const {mine, type} = learnable(g.ch.id), owned = Object.keys(g.skills).filter(id => g.skills[id] > 0);
-  const ok = [...mine, ...type].filter(id => (g.skills[id] || 0) < SKILL_MAX && ((g.skills[id] || 0) > 0 || owned.length < SKILL_SLOTS));
+  const {mine, type} = learnable(g.ch.id), used = slotsUsed();
+  const ok = [...mine, ...type].filter(id => (g.skills[id] || 0) < SKILL_MAX && ((g.skills[id] || 0) > 0 || used < SKILL_SLOTS));
   if (!ok.length) return null;
   const pref = ok.filter(id => mine.includes(id)), id = (pref.length ? pref : ok)[Math.floor(Math.random()*(pref.length || ok.length))], lv = g.skills[id] || 0, s = SKILLS[id];
   return {t: `${skillName(id)} · ${lv ? 'Nivel ' + (lv + 1) : 'Nueva'}`, name: skillName(id), skill: id, lv, k: s.k, d: s.d, typeSk: !mine.includes(id), f: () => addSkill(id), ...extra};
@@ -7940,7 +7953,7 @@ function drawEdgeMarkers(){
     c.strokeText(txt, px, ty); c.fillText(txt, px, ty);
   }
 }
-// ---------- Habilidades de ataque: se eligen al subir de nivel (hasta nivel 3) ----------
+// ---------- Habilidades de ataque: se eligen al subir de nivel (hasta nivel SKILL_MAX) ----------
 const SKILLS = {
   aura:     {name:'Aura de Datos',         k:'defensiva', d:'Anillo digital alrededor del Digimon: daña cada 0,25 s a quien entra en él.'},
   tornado:  {name:'Tornado Bit',           k:'defensiva', d:'Bits que giran a tu alrededor: empujan enemigos y frenan proyectiles del jefe.'},
@@ -7955,9 +7968,14 @@ const SKILLS = {
   red:      {name:'Red de Datos',          k:'ofensiva',  d:'Tipo Datos: un rayo salta de enemigo en enemigo.'},
   virus:    {name:'Nube Vírica',           k:'utilidad',  d:'Tipo Virus: dejas nubes de virus que dañan sin parar a quien las pisa.'}
 };
-const SKILL_MAX = 3;      // niveles por habilidad
+const SKILL_MAX = 5;      // niveles por habilidad (antes 3: Jaime pidió más niveles)
 const SKILL_K = 0.72;      // factor de daño de las habilidades: regulado para partidas de 20 minutos
-const SKILL_SLOTS = 4;   // habilidades distintas que puedes llevar en una partida
+const SKILL_SLOTS = 4;   // huecos de ataque por partida: cada ataque suelto ocupa uno y cada fusión también (sus dos ataques dejan de ocupar)
+// Huecos ocupados: ataques sin fusionar + fusiones
+function slotsUsed(){
+  const fz = g.fusedSk || {};
+  return Object.keys(g.skills).filter(id => g.skills[id] > 0 && !fz[id]).length + (g.fus || []).length;
+}
 // Cada Digimon tiene su propio grupo de 4 ataques (de los 8 disponibles)
 const CHAR_SKILLS = {
   agumon:   ['espiral', 'laser', 'meteoro', 'mina'],
@@ -8001,30 +8019,29 @@ function addSkill(id){ g.skills[id] = Math.min(SKILL_MAX, (g.skills[id] || 0) + 
 function skillCards(){
   const out = [];
   const {mine, type} = learnable(g.ch.id);
-  const owned = Object.keys(g.skills).filter(id => g.skills[id] > 0);
+  const used = slotsUsed();
   for (const id of [...mine, ...type]){
     const lv = g.skills[id] || 0;
     if (lv >= SKILL_MAX) continue;
-    if (!lv && owned.length >= SKILL_SLOTS) continue;   // ya llevas el máximo de ataques distintos
+    if (!lv && used >= SKILL_SLOTS) continue;   // no queda hueco de ataque libre
     const s = SKILLS[id], nm = skillName(id), isType = !mine.includes(id);
     out.push({t: `${nm} · ${lv ? 'Nivel ' + (lv + 1) : 'Nueva'}`, name: nm, skill: id, lv, k: s.k, d: s.d, typeSk: isType, f: () => addSkill(id)});
   }
   return out;
 }
 function upgradeChoices(){
-  const pool = [...UPGRADES, ...skillCards()];
+  const pool = [...UPGRADES, ...skillCards(), ...fusionLvCards()];
   // Las cartas desterradas en esta partida no vuelven a salir
   const picks = pool.filter(c => !upRes().banned.includes(upKey(c))).sort(() => Math.random() - 0.5).slice(0, 3)
-    .map(c => !c.skill && Math.random() < 0.18 ? {...c, rare: true} : c);   // carta rara: la mejora pasiva cuenta doble
+    .map(c => !c.skill && !c.fusLv && Math.random() < 0.18 ? {...c, rare: true} : c);   // carta rara: la mejora pasiva cuenta doble
   const evo = g.chestPick ? [] : evoSkillCards();   // si hay una evolución disponible, ocupa la primera carta
   if (evo.length) picks[0] = evo[0];
-  const fus = g.chestPick ? [] : fusionCards().filter(c => !upRes().banned.includes('fus:' + c.fusion));   // y una fusión, la segunda
-  if (fus.length) picks[evo.length && picks.length > 1 ? 1 : 0] = fus[Math.floor(Math.random() * fus.length)];
+  // Las fusiones ya no salen como carta: se hacen hablando con Centarumon (ver openFusion)
   return picks;
 }
 // Recursos de la subida de nivel por partida: refrescar 2, saltar 2, desterrar 1
 function upRes(){ return g.upRes || (g.upRes = {rer: 2, skip: 2, ban: 1, banned: []}); }
-function upKey(c){ return c.fusion ? 'fus:' + c.fusion : c.skill ? 'skill:' + c.skill : 'up:' + c.t; }
+function upKey(c){ return c.fusion ? 'fus:' + c.fusion : c.fusLv ? 'fuslv:' + c.fusLv : c.skill ? 'skill:' + c.skill : 'up:' + c.t; }
 function rerollUp(){
   const r = upRes(); if (r.rer <= 0 || state !== 'levelup' || g.npcPick || !g.choices.length) return;
   r.rer--; g.upMode = null;
@@ -8524,14 +8541,14 @@ function openUpgrades(){
     <div class="lv3">
       <div class="lv3-head"><h2 class="lv3-banner">${g.npcPick ? g.npcPick.title : g.chestPick ? (g.chestPick.gold ? '¡Cofre dorado! Carta doble' : '¡Cofre abierto!') : `¡Nivel ${g.p.lvl}!`}</h2><p>${g.npcPick ? g.npcPick.sub : banMode ? 'Elige una carta para desterrarla' : 'Pulsa 1-3 o haz clic'}</p></div>
       <div class="lv3-row">${g.choices.map((c, i) => `
-        <button class="lv3-card ${c.k || 'utilidad'}${c.rare ? ' rare' : ''}${c.fusion ? ' fusion' : ''}${banMode ? ' ban' : ''}${c.disabled ? ' off' : ''}" data-up="${i}" ${c.disabled ? 'disabled' : ''} style="animation-delay:${i*0.09}s">
+        <button class="lv3-card ${c.k || 'utilidad'}${c.rare ? ' rare' : ''}${c.fusion || c.fusLv ? ' fusion' : ''}${banMode ? ' ban' : ''}${c.disabled ? ' off' : ''}" data-up="${i}" ${c.disabled ? 'disabled' : ''} style="animation-delay:${i*0.09}s">
           <span class="lv3-key">${i + 1}</span>
           ${c.skill && !c.lv ? '<span class="lv3-new">NUEVO</span>' : ''}
-          <span class="lv3-tag">${c.leave ? 'Volver a la partida' : c.shop ? 'Tienda · ' + c.price + ' monedas' : c.digi ? '◆ Datos Digimon' : c.fusion ? '✦ Fusión' : c.evo ? '★ Evolución' : c.skill ? (c.typeSk ? 'De tipo ' + ATTR_NAME[ATTR_OF[g.ch.id]] : c.lv ? 'Mejora' : 'Característico') : (c.rare ? '◆ Rara · ' : '') + (cat[c.k] || 'Mejora')}</span>
-          ${!c.skill && !c.evo && !c.fusion && CARD_ART[c.t] ? `<img class="lv3-art" src="ui/hud/carta_${CARD_ART[c.t]}.webp" alt="">` : `<span class="lv3-ic">${c.fusion ? c.fusion.split('+').map(svgIcon).join('') : svgIcon(c.ic || c.evo || c.skill || c.k)}</span>`}
+          <span class="lv3-tag">${c.leave ? 'Volver a la partida' : c.info ? 'Centarumon' : c.shop ? 'Tienda · ' + c.price + ' monedas' : c.digi ? '◆ Datos Digimon' : c.fusion ? '✦ Fusión' : c.fusLv ? (c.lv ? '✦ Fusión · mejora' : '✦ Fusión') : c.evo ? '★ Evolución' : c.skill ? (c.typeSk ? 'De tipo ' + ATTR_NAME[ATTR_OF[g.ch.id]] : c.lv ? 'Mejora' : 'Característico') : (c.rare ? '◆ Rara · ' : '') + (cat[c.k] || 'Mejora')}</span>
+          ${!c.skill && !c.evo && !c.fusion && !c.fusLv && CARD_ART[c.t] ? `<img class="lv3-art" src="ui/hud/carta_${CARD_ART[c.t]}.webp" alt="">` : `<span class="lv3-ic">${c.fusion || c.fusLv ? (c.fusion || c.fusLv).split('+').map(svgIcon).join('') : svgIcon(c.ic || c.evo || c.skill || c.k)}</span>`}
           <b>${c.name || c.t}</b>
           <p>${c.d || ''}</p>
-          ${c.fusion ? '<span class="lv3-pips pasiva">FUSIÓN · efecto nuevo</span>' : c.evo ? '<span class="lv3-pips pasiva">EVO · nivel 4</span>' : c.skill ? `<span class="lv3-pips">${[1, 2, 3].map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : (c.rare ? '<span class="lv3-pips pasiva rare">Rara · efecto doble</span>' : '<span class="lv3-pips pasiva">Pasiva</span>')}
+          ${c.info || c.leave ? '' : c.fusion ? '<span class="lv3-pips pasiva">FUSIÓN · ocupa 1 hueco</span>' : c.evo ? `<span class="lv3-pips pasiva">EVO · nivel ${SKILL_MAX + 1}</span>` : c.skill || c.fusLv ? `<span class="lv3-pips">${Array.from({length: SKILL_MAX}, (_, n) => n + 1).map(n => `<i class="${n <= c.lv ? 'on' : n === c.lv + 1 ? 'next' : ''}"></i>`).join('')}</span>` : (c.rare ? '<span class="lv3-pips pasiva rare">Rara · efecto doble</span>' : '<span class="lv3-pips pasiva">Pasiva</span>')}
         </button>`).join('')}</div>
       <div class="lv3-acts"${g.npcPick ? ' style="display:none"' : ''}>
         <button class="lv3-act" id="upRer" ${r.rer > 0 ? '' : 'disabled'}>Refrescar (${r.rer}) <kbd>F</kbd></button>
@@ -8550,9 +8567,9 @@ function pickUpgrade(i){
   const ch = g.choices[i];
   if (!ch || ch.disabled) return;
   ch.f(g.p);
-  if (g.chestPick && g.chestPick.gold && !ch.evo && !ch.fusion) ch.f(g.p);
+  if (g.chestPick && g.chestPick.gold && !ch.evo && !ch.fusion && !ch.fusLv) ch.f(g.p);
   if (ch.rare) ch.f(g.p);
-  if (!ch.skill && !ch.evo && !ch.fusion && !ch.shop && !ch.digi){ g.upTaken = g.upTaken || {}; g.upTaken[ch.t] = (g.upTaken[ch.t] || 0) + 1; }   // cofre dorado: la carta cuenta dos veces
+  if (!ch.skill && !ch.evo && !ch.fusion && !ch.fusLv && !ch.shop && !ch.digi && !ch.info){ g.upTaken = g.upTaken || {}; g.upTaken[ch.t] = (g.upTaken[ch.t] || 0) + 1; }   // cofre dorado: la carta cuenta dos veces
   g.chestPick = null; g.npcPick = null;
   hideOverlay();
   lockMouse();
@@ -9097,10 +9114,12 @@ function updateHUD(){
     dash.classList.remove('flash'); void dash.offsetWidth; dash.classList.add('flash');
   }
   g.dashReady = dashReady;
-  const sbKey = Object.keys(g.skills).map(k => k + g.skills[k]).join(',') + '|' + (g.fus || []).length;
+  const sbKey = Object.keys(g.skills).map(k => k + g.skills[k]).join(',') + '|' + (g.fus || []).map(f => f.key + (f.lv || 1)).join(',');
   if (g.sbKey !== sbKey){
     g.sbKey = sbKey;
-    document.getElementById('skillBar').innerHTML = Object.keys(g.skills).map(k => `<span class="sb-i ${SKILLS[k].k}" title="${skillName(k)}">${svgIcon(k)}<em>${g.skills[k]}</em></span>`).join('') + (g.fus || []).map(f => `<span class="sb-i ofensiva sb-fus" title="Fusión: ${f.name}">✦</span>`).join('');
+    // Un icono por hueco: los ataques fusionados se ven dentro de su fusión (dos iconos pequeños y el nivel de la fusión)
+    const fz = g.fusedSk || {};
+    document.getElementById('skillBar').innerHTML = Object.keys(g.skills).filter(k => !fz[k]).map(k => `<span class="sb-i ${SKILLS[k].k}" title="${skillName(k)}">${svgIcon(k)}<em>${g.skills[k]}</em></span>`).join('') + (g.fus || []).map(f => `<span class="sb-i ofensiva sb-fus" title="Fusión: ${f.name} · nivel ${f.lv || 1}">${f.key.split('+').map(svgIcon).join('')}<em>${f.lv || 1}</em></span>`).join('');
   }
   const bf = document.getElementById('bonkFill'), bbar = document.getElementById('bonkBar');
   if (bf){
@@ -9446,7 +9465,7 @@ function grantEmblem(){
   setTimeout(() => { if (g) announce(em.name, em.text + (k > 1 ? ' ×2 (el de tu compañero)' : ''), '#ffd54f'); }, 1400);
 }
 
-/* ---------- Habilidades evolucionadas: habilidad a nivel 3 + su mejora pasiva ---------- */
+/* ---------- Habilidades evolucionadas: habilidad a nivel máximo (SKILL_MAX) + su mejora pasiva ---------- */
 const EVO_SKILLS = {
   espiral:  {need:'Proyectil / cuchilla +1',  name:'Espiral Galáctica'},
   laser:    {need:'Cadencia +15%',            name:'Nova Láser'},
@@ -9473,33 +9492,66 @@ function fusionKind(a, b){
   if (a === 'cuchilla' || b === 'cuchilla') return 'homing';
   return SKILLS[a].k === 'ofensiva' && SKILLS[b].k === 'ofensiva' ? 'nova' : 'blast';
 }
+// Fusiones (reglas de Jaime, 2026-11-16):
+// - Se hacen hablando con Centarumon (PNJ del mapa), no salen como carta al subir de nivel.
+// - Hacen falta dos ataques a nivel máximo (SKILL_MAX) que no hayan entrado nunca en otra fusión.
+// - Un ataque fusionado no puede volver a usarse en otra fusión (g.fusedSk lo apunta para toda la partida).
+// - La fusión ocupa un hueco de ataque; sus dos ataques siguen funcionando dentro de ella y dejan de ocupar hueco.
+// - La fusión sube de nivel (1 a SKILL_MAX) con cartas al subir de nivel, como un ataque.
+const fusDesc = kind => kind === 'nova' ? 'una estrella de proyectiles que atraviesan' : kind === 'homing' ? 'proyectiles que persiguen al enemigo más fuerte' : 'una onda expansiva que daña y empuja';
+const fusMul = lv => 1 + 0.35*((lv || 1) - 1);   // daño de la fusión según su nivel
+function fusionReady(){
+  const fz = g.fusedSk || {};
+  return Object.keys(g.skills).filter(id => (g.skills[id] || 0) >= SKILL_MAX && !fz[id]);
+}
 function fusionCards(){
-  const have = Object.keys(g.skills).filter(id => (g.skills[id] || 0) >= SKILL_MAX), out = [];
+  const have = fusionReady(), out = [];
   for (let i = 0; i < have.length; i++) for (let j = i + 1; j < have.length; j++){
     const a = have[i], b = have[j], key = fusionKey(a, b);
-    if ((g.fus || []).some(f => f.key === key)) continue;
     const name = FUSION_NAMES[key] || `${skillName(a)} + ${skillName(b)}`, kind = fusionKind(a, b);
-    const what = kind === 'nova' ? 'una estrella de 10 proyectiles que atraviesan' : kind === 'homing' ? '4 proyectiles que persiguen al enemigo más fuerte' : 'una onda expansiva que daña y empuja';
-    out.push({t: 'FUSIÓN: ' + name, name, fusion: key, k: 'ofensiva', d: `${skillName(a)} + ${skillName(b)}: cada pocos segundos lanza ${what}. Los dos ataques siguen como estaban.`,
-      f: () => { (g.fus || (g.fus = [])).push({key, name, kind, t: 1, cd: kind === 'nova' ? 2.6 : kind === 'homing' ? 3 : 4}); announce('¡' + name + '!', 'Fusión de ataques', '#ff8a1e'); sfx('evolve'); }});
+    out.push({t: 'FUSIÓN: ' + name, name, fusion: key, k: 'ofensiva', d: `${skillName(a)} + ${skillName(b)}: cada pocos segundos lanza ${fusDesc(kind)}. Los dos ataques siguen dentro de la fusión y ya no podrán fusionarse con otro.`,
+      f: () => {
+        (g.fus || (g.fus = [])).push({key, name, kind, lv: 1, t: 1, cd: kind === 'nova' ? 2.6 : kind === 'homing' ? 3 : 4});
+        const fz = g.fusedSk || (g.fusedSk = {}); fz[a] = key; fz[b] = key;
+        g.fusHint = false;
+        announce('¡' + name + '!', 'Fusión de ataques · ocupa 1 hueco', '#ff8a1e'); sfx('evolve');
+      }});
   }
   return out;
 }
+// Cartas para subir de nivel una fusión
+function fusionLvCards(){
+  return (g.fus || []).filter(f => (f.lv || 1) < SKILL_MAX).map(f => {
+    const lv = f.lv || 1;
+    return {t: `${f.name} · Nivel ${lv + 1}`, name: f.name, fusLv: f.key, lv, k: 'ofensiva',
+      d: `Fusión: ${fusDesc(f.kind)}. Nivel ${lv + 1}: +35% de daño${f.kind === 'nova' ? ' y 2 proyectiles más' : f.kind === 'homing' ? ' y 1 proyectil más' : ' y más alcance'}.`,
+      f: () => { const x = (g.fus || []).find(y => y.key === f.key); if (x) x.lv = Math.min(SKILL_MAX, (x.lv || 1) + 1); }};
+  });
+}
+// Aviso (una vez por pareja disponible) para que el jugador vaya a hablar con Centarumon
+function fusionHint(){
+  if (!g || state !== 'play') return;
+  const n = fusionReady().length >= 2 && slotsUsed() <= SKILL_SLOTS;
+  if (n && !g.fusHint){ g.fusHint = true; announce('¡Fusión disponible!', 'Habla con Centarumon (✦ en el mapa)', '#ff8a1e'); }
+  if (!n) g.fusHint = false;
+}
 function updateFusions(dt){
   if (!g.fus) return;
-  const p = g.p, dm = p.dmg * SKILL_K, ar = p.area;
+  const p = g.p, ar = p.area;
   for (const f of g.fus){
     f.t -= dt;
     if (f.t > 0) continue;
     f.t = f.cd * p.cdMul;
+    const lv = f.lv || 1, dm = p.dmg * SKILL_K * fusMul(lv);
     dmgSrc = 'fus:' + f.key;
     if (f.kind === 'nova'){
-      for (let i = 0; i < 10; i++){ const an = i / 10 * Math.PI * 2; spawnSProj(p.x, p.z, Math.cos(an)*20, Math.sin(an)*20, 16 * dm, 1.4, 4, false, 0xff8a1e); }
+      const n = 10 + 2*(lv - 1);
+      for (let i = 0; i < n; i++){ const an = i / n * Math.PI * 2; spawnSProj(p.x, p.z, Math.cos(an)*20, Math.sin(an)*20, 16 * dm, 1.4, 4, false, 0xff8a1e); }
     } else if (f.kind === 'homing'){
       const t = strongestIn(p.x, p.z, 45);
-      for (let i = 0; i < 4; i++){ const an = Math.random() * Math.PI * 2; spawnSProj(p.x, p.z, Math.cos(an)*10, Math.sin(an)*10, 18 * dm, 4, 2, true, 0x8576ff, t); }
+      for (let i = 0; i < 3 + lv; i++){ const an = Math.random() * Math.PI * 2; spawnSProj(p.x, p.z, Math.cos(an)*10, Math.sin(an)*10, 18 * dm, 4, 2, true, 0x8576ff, t); }
     } else {
-      const R = 8.5 * ar;
+      const R = (8.5 + 0.6*(lv - 1)) * ar;
       spawnRing(p.x, p.z, 0xff8a1e, R, 0.6);
       for (const e of g.enemies){
         if (e.hp <= 0) continue;
@@ -9513,9 +9565,9 @@ function updateFusions(dt){
 function evoSkillCards(){
   const out = [];
   for (const [id, ev] of Object.entries(EVO_SKILLS)){
-    if ((g.skills[id] || 0) !== 3 || (g.evoSk && g.evoSk[id]) || !((g.upTaken || {})[ev.need] > 0)) continue;
-    out.push({t: 'EVO: ' + ev.name, name: ev.name, evo: id, k: 'ofensiva', d: `Evolución de ${skillName(id)} (con ${ev.need}): nivel 4 y +50% de daño.`,
-      f: () => { g.skills[id] = 4; (g.evoSk || (g.evoSk = {}))[id] = 1.5; announce('¡' + ev.name + '!', 'Habilidad evolucionada', '#ffd54f'); }});
+    if ((g.skills[id] || 0) !== SKILL_MAX || (g.evoSk && g.evoSk[id]) || !((g.upTaken || {})[ev.need] > 0)) continue;
+    out.push({t: 'EVO: ' + ev.name, name: ev.name, evo: id, k: 'ofensiva', d: `Evolución de ${skillName(id)} (con ${ev.need}): nivel ${SKILL_MAX + 1} y +50% de daño.`,
+      f: () => { g.skills[id] = SKILL_MAX + 1; (g.evoSk || (g.evoSk = {}))[id] = 1.5; announce('¡' + ev.name + '!', 'Habilidad evolucionada', '#ffd54f'); }});
   }
   return out;
 }
