@@ -1423,5 +1423,7 @@ I18N.add('ja', {"×{0} daño": "ダメージ ×{0}", "×{0} recibido": "被ダ�
   "App": "アプリ",
   "Abre Digibonk en Safari.": "SafariでDigibonkを開きます。",
   "Toca el botón Compartir (el cuadrado con la flecha hacia arriba).": "共有ボタン（上向き矢印の付いた四角）をタップします。",
-  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "「ホーム画面に追加」を選び、「追加」で確定します。"
+  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "「ホーム画面に追加」を選び、「追加」で確定します。",
+  "Cargando el Mundo Digital…": "デジタルワールドを読み込み中…",
+  "Cargando el mapa": "マップを読み込み中"
 });

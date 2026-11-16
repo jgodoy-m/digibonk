@@ -1422,5 +1422,7 @@ I18N.add('ko', {"×{0} daño": "피해 ×{0}", "×{0} recibido": "받는 피해 
   "App": "앱",
   "Abre Digibonk en Safari.": "Safari에서 Digibonk를 엽니다.",
   "Toca el botón Compartir (el cuadrado con la flecha hacia arriba).": "공유 버튼(위쪽 화살표가 있는 사각형)을 누릅니다.",
-  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "‘홈 화면에 추가’를 선택하고 ‘추가’를 눌러 확인합니다."
+  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "‘홈 화면에 추가’를 선택하고 ‘추가’를 눌러 확인합니다.",
+  "Cargando el Mundo Digital…": "디지털 월드 불러오는 중…",
+  "Cargando el mapa": "맵 불러오는 중"
 });

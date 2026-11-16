@@ -1412,5 +1412,7 @@ I18N.add('it', {"×{0} daño": "×{0} danni", "×{0} recibido": "×{0} subiti",
   "App": "App",
   "Abre Digibonk en Safari.": "Apri Digibonk in Safari.",
   "Toca el botón Compartir (el cuadrado con la flecha hacia arriba).": "Tocca il pulsante Condividi (il quadrato con la freccia verso l’alto).",
-  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "Scegli «Aggiungi alla schermata Home» e conferma con «Aggiungi»."
+  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "Scegli «Aggiungi alla schermata Home» e conferma con «Aggiungi».",
+  "Cargando el Mundo Digital…": "Caricamento di Digiworld…",
+  "Cargando el mapa": "Caricamento della mappa"
 });

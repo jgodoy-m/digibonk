@@ -1410,5 +1410,7 @@ I18N.add('fr', {"×{0} daño": "×{0} dégâts", "×{0} recibido": "×{0} reçus
   "App": "Appli",
   "Abre Digibonk en Safari.": "Ouvre Digibonk dans Safari.",
   "Toca el botón Compartir (el cuadrado con la flecha hacia arriba).": "Touche le bouton Partager (le carré avec une flèche vers le haut).",
-  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "Choisis « Sur l’écran d’accueil » et confirme avec « Ajouter »."
+  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "Choisis « Sur l’écran d’accueil » et confirme avec « Ajouter ».",
+  "Cargando el Mundo Digital…": "Chargement du Monde Digital…",
+  "Cargando el mapa": "Chargement de la carte"
 });

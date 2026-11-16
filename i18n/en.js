@@ -1541,5 +1541,7 @@ I18N.add('en', {
   "App": "App",
   "Abre Digibonk en Safari.": "Open Digibonk in Safari.",
   "Toca el botón Compartir (el cuadrado con la flecha hacia arriba).": "Tap the Share button (the square with an arrow pointing up).",
-  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "Choose “Add to Home Screen” and confirm with “Add”."
+  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "Choose “Add to Home Screen” and confirm with “Add”.",
+  "Cargando el Mundo Digital…": "Loading the Digital World…",
+  "Cargando el mapa": "Loading the map"
 });
