@@ -1380,7 +1380,12 @@ I18N.add('zh', {
   "Tipografías": "字体",
   "Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).": "Orbitron（Matt McInerney）和 Nunito（Vernon Adams、Cyreal、Jacques Le Bailly）。",
   "Motor gráfico": "图形引擎",
-  "Bandai (sprites Dot)": "万代（点阵像素图）"
+  "Bandai (sprites Dot)": "万代（点阵像素图）",
+  "Instalar como app": "安装为应用",
+  "Instalar": "安装",
+  "Juega a pantalla completa y en horizontal desde un icono, también sin conexión.": "从图标以全屏横屏游玩，离线也可以。",
+  "En Safari: botón Compartir y «Añadir a pantalla de inicio». Se abre a pantalla completa y sin conexión.": "在 Safari 中：点“分享”，再点“添加到主屏幕”。全屏打开，离线也能玩。",
+  "Usa «Instalar app» o «Añadir a pantalla de inicio» en el menú del navegador.": "在浏览器菜单中使用“安装应用”或“添加到主屏幕”。"
 });
 
 I18N.add('zh', {"Logro: completar 5 partidas con Gatomon · {0}": "成就：用 Gatomon 完成 5 局 · {0}"});
