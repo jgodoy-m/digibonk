@@ -3214,6 +3214,16 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
 #overlay .realhub.hb .nm-event small{margin:0!important;font-size:10.5px!important;letter-spacing:.08em;opacity:.85}
 #overlay .realhub.hb .nm-event b{font-size:14px!important;overflow:hidden;text-overflow:ellipsis}
 #overlay .realhub.hb .nm-event>em{flex:none;font:900 12px/1 'Nunito',sans-serif;font-style:normal;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.25)}
+/* Reto semanal: botón propio, aparte de Jugar (verde para no confundirlo con el evento ni con Jugar) */
+#overlay .realhub.hb .nm-weekly{background:linear-gradient(90deg,#0f8a5f,#2bb673)!important;box-shadow:0 3px 0 #0a5c3f,0 6px 16px rgba(0,0,0,.18)!important}
+#overlay .realhub.hb .nm-weekly>em{background:rgba(0,0,0,.22)}
+#overlay .realhub.hb .nm-weekly>span>small{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+#overlay .realhub.hb .nm-weekly>span>b{flex:0 0 auto;max-width:70%}
+.picker-screen.ms .ms-weekly{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 10px;padding:8px 14px;border-radius:999px;background:linear-gradient(90deg,#0f8a5f,#2bb673);color:#fff;font:700 13px/1.3 'Nunito',sans-serif}
+#overlay:not(.menu-mode) .picker-screen.ms p.ms-weekly,#overlay:not(.menu-mode) .picker-screen.ms p.ms-weekly :is(b,span,em){color:#fff!important;opacity:1!important}
+.picker-screen.ms .ms-weekly b{font-weight:900;font-size:14px}
+.picker-screen.ms .ms-weekly span{flex:1;min-width:160px;opacity:.95}
+.picker-screen.ms .ms-weekly em{font-style:normal;font-weight:900;padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.22)}
 #overlay .realhub.hb .nm-event.hm-soon{background:var(--m-sunk)!important;color:var(--m-mute)!important;box-shadow:none!important}
 #overlay .realhub.hb .nm-tiles{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important}
 #overlay .realhub.hb .nm-tiles .hb-tile{padding:8px 4px 7px!important;gap:1px!important;border:1px solid var(--m-cardline)!important;border-bottom:3px solid var(--tc)!important;transition:transform .14s,box-shadow .14s!important}
@@ -3590,7 +3600,10 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
   #overlay .realhub.hb .hb-main{display:block!important;padding:6px 12px 6px!important}
   #overlay .realhub.hb .hb-left{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;grid-auto-rows:auto;align-content:start;gap:7px 12px!important;width:100%!important;max-width:none!important;margin:0!important}
   #overlay .realhub.hb .hb-left>*{margin:0!important;min-width:0}
-  #overlay .realhub.hb .hb-modes{grid-column:1;grid-row:1 / span 3;align-self:start}
+  #overlay .realhub.hb .hb-modes{grid-column:1;grid-row:1 / span 2;align-self:start}
+  #overlay .realhub.hb #mWeekly{grid-column:1;grid-row:3;align-self:start;min-height:0!important;height:34px!important}
+  #overlay .realhub.hb .hb-left:has(#mWeekly) .hb-play{height:clamp(96px,29vh,132px)!important}
+  #overlay .realhub.hb .hb-left:has(#mWeekly) .nm-play .hb-play-face>*{width:min(116px,calc(29vh - 22px))!important;height:min(116px,calc(29vh - 22px))!important}
   #overlay .realhub.hb .hb-play{min-height:0!important;height:clamp(120px,40vh,170px)!important}
   #overlay .realhub.hb #mEnc{grid-column:2;grid-row:1;padding:6px 10px!important;min-height:0!important}
   #overlay .realhub.hb #mEnc .nm-eqs{font-size:11px!important;gap:2px!important}
@@ -5085,7 +5098,7 @@ function showSelect(){
         <div class="hb-left">
           <h1 class="hb-brand"><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span><span class="hb-ver">BETA</span></h1>
           ${life.parade}
-          ${saved ? `<button type="button" class="hb-continue" id="hbContinue" aria-label="Continuar partida guardada"><i><img src="${charIcon(saved.key)}" alt=""></i><span class="hbc-txt"><small>Partida guardada</small><b>Continuar partida</b></span><span class="hbc-info"><em>${savedTxt}</em><small><span>${safeText(MAPS[saved.map].name)}</span> · <span>${safeText(DIFFS[saved.diff].name)}</span>${saved.mode === 'surv' ? ' · <span>Supervivencia</span>' : ''}</small></span><span class="hbc-go" aria-hidden="true">▶</span></button>` : ''}
+          ${saved ? `<button type="button" class="hb-continue" id="hbContinue" aria-label="Continuar partida guardada"><i><img src="${charIcon(saved.key)}" alt=""></i><span class="hbc-txt"><small>Partida guardada</small><b>Continuar partida</b></span><span class="hbc-info"><em>${savedTxt}</em><small><span>${safeText(MAPS[saved.map].name)}</span> · <span>${safeText(DIFFS[saved.diff].name)}</span>${saved.mode === 'surv' ? ' · <span>Supervivencia</span>' : saved.weekly ? ' · <span>Reto semanal</span>' : ''}</small></span><span class="hbc-go" aria-hidden="true">▶</span></button>` : ''}
           <div class="hb-modes nm-modes">
             <button type="button" id="playBtn" class="hb-play nm-play" aria-label="Jugar con ${safeText(choice.name)}">
               <span class="hb-play-txt"><b>Jugar</b></span>
@@ -5097,6 +5110,7 @@ function showSelect(){
               ${!GACHA_SOON ? `<button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Incubadora: ${usableTickets('std')} tickets disponibles"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Incubadora</b><small><em class="nm-tix">${usableTickets('std')}</em> tickets<span class="nm-long"> disponibles</span></small></span></button>` : `<button type="button" class="hb-mode m-gacha" id="hbShop" aria-label="Tienda: rotación semanal"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Tienda</b><small>Rotación semanal</small></span></button>`}
             </div>
           </div>
+          <button type="button" class="hb-event nm-event nm-weekly" id="mWeekly" aria-label="Reto semanal: ${safeText(weeklyMod().name)}" title="${safeText(weeklyMod().d)}"><i><img class="nm-ic" src="ui/hub/ic_mision.webp" alt=""></i><span><small>Reto semanal</small><b>${weeklyMod().name}</b></span><em>+25% Bits</em></button>
           <button type="button" class="nm-quests nm-encard" id="mEnc" aria-label="Encargos: hoy ${qs.day.done} de ${qs.day.all}, semana ${qs.week.done} de ${qs.week.all}${qs.ev ? ', evento ' + qs.ev.done + ' de ' + qs.ev.all : ''}"><i><img class="nm-ic" src="ui/hub/ic_encargos.webp" alt=""></i><span class="nm-eh"><b>Encargos</b><small>${qs.ev ? 'Diarios, semanales y de evento' : 'Diarios y semanales'}</small></span><span class="nm-eqs">${[['Hoy', qs.day, 'q-d'], ['Semana', qs.week, 'q-w'], ...(qs.ev ? [['Evento', qs.ev, 'q-e']] : [])].map(([n, q, c]) => `<span class="nm-eq ${c}"><small>${n}</small><b>${q.done}/${q.all}</b><span class="hb-meter"><i style="width:${Math.round(q.done / q.all * 100)}%"></i></span></span>`).join('')}</span></button>
           ${(!GACHA_SOON ? (bannerOpen("navidadP") || bannerOpen("navidadR")) : eventActive()) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span class="lv-sheen"></span><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
           <div class="hb-tiles nm-tiles">
@@ -5142,14 +5156,16 @@ function showSelect(){
   // The equipped skin may have a unique appearance; if so, use that sprite's first frame.
   // El botón Jugar siempre muestra el icono del compañero (no la skin equipada)
   if(!avatarIcon() && !PLAYER_ICONS.some(x => x.id === avatarKey())) headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
-  document.getElementById('playBtn').onclick=()=>{ runMode='normal'; showPicker('personaje'); };
+  document.getElementById('playBtn').onclick=()=>{ runMode='normal'; runWeekly=false; showPicker('personaje'); };
+  // Reto semanal: botón aparte, partida clásica con la regla de la semana
+  document.getElementById('mWeekly').onclick=()=>{ runMode='normal'; runWeekly=true; showPicker('personaje'); };
   { const el = document.getElementById('hbContinue'); if (el) el.onclick = runContinue; }
   const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { if (GACHA_SOON) return showEncargos(); gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR'; showGacha(); };
   { const el = document.getElementById('hbShop'); if (el) el.onclick = () => showShop(); }
   document.getElementById('btnColl').onclick=showCollection;
   document.getElementById('btnPlayer').onclick=showPlayer;
   document.getElementById('btnGacha').onclick=showLab;
-  document.getElementById('mMaps').onclick=()=>{ runMode='normal'; showMapSelect(); };
+  document.getElementById('mMaps').onclick=()=>{ runMode='normal'; runWeekly=false; showMapSelect(); };
   ['hbGacha2','hbGacha3'].forEach(id => { const el = document.getElementById(id); if (el) el.onclick = () => { if (GACHA_SOON) { hmSoon('Incubadora: Próximamente'); return; } gxBanner = 'std'; showGacha(); }; });
   { const el = document.getElementById('hbLab2'); if (el) el.onclick = showLab; }
   document.getElementById('btnHelp').onclick=showHelp;
@@ -5157,7 +5173,7 @@ function showSelect(){
   // Botones del menú principal aún sin contenido: muestran un aviso breve en lugar de abrir nada
   const hmSoon=(msg)=>{const m=document.getElementById('hmMsg'); if(!m) return; m.textContent=msg||'Próximamente'; clearTimeout(m._t); m._t=setTimeout(()=>{m.textContent='';},1800);};
   ['mEvent','mRank','mBuild'].forEach(id=>{const el=document.getElementById(id); if(el) el.onclick=()=>hmSoon('Próximamente');});
-  document.getElementById('mSurv').onclick=()=>{ runMode='surv'; showPicker('personaje'); };
+  document.getElementById('mSurv').onclick=()=>{ runMode='surv'; runWeekly=false; showPicker('personaje'); };
   document.getElementById('mEnc').onclick=showEncargos;
   document.getElementById('mLog').onclick=showLogros;
   document.getElementById('mBug').onclick=()=>{
@@ -5241,7 +5257,7 @@ const GUIDE = [
     d: 'Después de elegir Digimon eliges mapa (Bosque File, Desierto de Datos o Montaña Helada) y dificultad. Cuanto más difícil, más premios: hasta ×2,2 Bits y tickets en Pesadilla. En Supervivencia no hay jefe final: llega una oleada por minuto y un jefe menor cada 5.',
     keys: [{k: '← →', tc: null, d: 'Cambiar de mapa'}, {k: '↑ ↓', tc: null, d: 'Dificultad'}, {k: 'Enter', tc: null, d: 'Empezar'}]},
   {ch: 3, t: 'El menú de inicio', img: 'menu',
-    d: 'Jugar empieza con tu último Digimon y Supervivencia es el modo infinito. Los encargos diarios, semanales y de evento dan premios, y el evento trae skins de temporada. Abajo tienes el Digidex, el laboratorio, los mapas, los logros, los récords y tu perfil.',
+    d: 'Jugar empieza con tu último Digimon, Supervivencia es el modo infinito y el Reto semanal cambia una regla cada semana a cambio de más Bits. Los encargos diarios, semanales y de evento dan premios, y el evento trae skins de temporada. Abajo tienes el Digidex, el laboratorio, los mapas, los logros, los récords y tu perfil.',
     keys: []},
   {ch: 3, t: 'Bits, tienda y laboratorio', img: 'lab',
     d: 'Cada partida da Bits y sube la maestría del Digimon con el que juegas, que regala títulos, marcos y skins. En la tienda los Bits compran lo de la línea de la semana, y en el laboratorio mejoran a todos tus Digimon para siempre.',
@@ -5994,7 +6010,7 @@ function showPicker(tab){
     <div class="picker-screen pk2 ps">
       <header class="ps-top">
         <button class="g-back" id="pkBack"><kbd>Esc</kbd> Volver</button>
-        <div class="ps-banner"><h2>${runMode === 'surv' ? 'Supervivencia' : 'Elige tu Digimon'}</h2><small>${pr.done}/${pr.total} Digimon</small></div>
+        <div class="ps-banner"><h2>${runMode === 'surv' ? 'Supervivencia' : runWeekly ? 'Reto semanal' : 'Elige tu Digimon'}</h2><small>${pr.done}/${pr.total} Digimon</small></div>
         
       </header>
       <div class="ps-body">
@@ -6174,7 +6190,7 @@ function showMapSelect(){
   state = 'mapsel';
   setHud(false);
   try { localStorage.setItem('digibonk3d-map', runMap); localStorage.setItem('digibonk3d-diff', runDiff); } catch(e){}
-  const surv = runMode === 'surv', wins = mapWins();
+  const surv = runMode === 'surv', weekly = runWeekly && !surv, wins = mapWins();
   const pct = v => (v >= 1 ? '+' : '−') + Math.round(Math.abs(v - 1) * 100) + '%';
   const cards = MAP_ORDER.map(id => {
     const m = MAPS[id], [floorTx, decoPng, bossPng] = m.preview, won = (wins[id] || []);
@@ -6191,14 +6207,15 @@ function showMapSelect(){
   const diffs = DIFF_ORDER.map(id => `<button type="button" class="ms-diff${id === runDiff ? ' on' : ''}" data-diff="${id}" style="--dc:${DIFFS[id].col}" aria-pressed="${id === runDiff}"><b>${DIFFS[id].name}</b><small>Premios ×${String(DIFFS[id].reward).replace('.', ',')}</small></button>`).join('');
   showOverlay(`
     <div class="picker-screen ms">
-      <header class="pk2-top"><button class="g-back" id="msBack">← Digimon</button><h2>${surv ? 'Supervivencia · elige mapa' : 'Elige mapa y dificultad'}</h2><span class="pk2-sub">${CHARS[selectedKey].name} · ←→ mapa · ↑↓ dificultad · Enter empezar</span></header>
+      <header class="pk2-top"><button class="g-back" id="msBack">← Digimon</button><h2>${surv ? 'Supervivencia · elige mapa' : weekly ? 'Reto semanal · elige mapa' : 'Elige mapa y dificultad'}</h2><span class="pk2-sub">${CHARS[selectedKey].name} · ←→ mapa · ↑↓ dificultad · Enter empezar</span></header>
       <div class="ms-maps">${cards}</div>
+      ${weekly ? `<p class="ms-weekly"><b>${weeklyMod().name}</b><span>${weeklyMod().d}</span><em>+25% Bits</em></p>` : ''}
       <section class="ms-dsec"><div class="ms-diffs">${diffs}</div>
         <div class="ms-table" style="--dc:${d.col}"><b>${d.name}</b><span>${d.d}</span>
           <ul><li>Vida enemigos <em>${pct(d.hp)}</em></li><li>Daño enemigos <em>${pct(d.dmg)}</em></li><li>Enemigos <em>${pct(1 / d.spawn)}</em></li><li>Élites <em>${pct(1 / d.elite)}</em></li><li>Jefes de zona <em>${pct(d.boss)}</em></li><li>Bits y tickets <em>×${String(d.reward).replace('.', ',')}</em></li></ul>
           <small>En todos los niveles la presión sube con el tiempo: más vida, daño y hordas hasta el minuto 10. En todos los mapas, a los 20 minutos en una pantalla empieza el Infierno.</small></div>
       </section>
-      <footer class="pk2-foot"><button class="btn btn-primary pk-start" id="msStart">¡Empezar! <small>(Enter)</small></button><span class="pk-hint">${surv ? 'Supervivencia' : 'Partida'} en ${MAPS[runMap].name} · ${d.name}</span></footer>
+      <footer class="pk2-foot"><button class="btn btn-primary pk-start" id="msStart">¡Empezar! <small>(Enter)</small></button><span class="pk-hint">${surv ? 'Supervivencia' : weekly ? 'Reto semanal' : 'Partida'} en ${MAPS[runMap].name} · ${d.name}</span></footer>
     </div>`);
   overlay.querySelectorAll('.ms-card').forEach(b => b.onclick = () => { runMap = b.dataset.map; showMapSelect(); });
   overlay.querySelectorAll('.ms-diff').forEach(b => b.onclick = () => { runDiff = b.dataset.diff; showMapSelect(); });
@@ -6284,7 +6301,7 @@ function runSave(){
   for (const e of g.enemies) if (e.hp > 0 && !e.boss && e.kind !== 'mini' && ENEMY[e.kind]) foes[e.kind] = (foes[e.kind] || 0) + 1;
   const s = {
     v: RUN_VER, id: g.runId, at: Date.now(),
-    key: g.ch.id, evolved: g.ch.evolved | 0, map: g.map, diff: g.diff, mode: g.mode,
+    key: g.ch.id, evolved: g.ch.evolved | 0, map: g.map, diff: g.diff, mode: g.mode, weekly: !!g.weekly,
     g: data,
     sups: (g.sups || []).map(x => ({key: x.key, st: x.st | 0, joinLvl: x.joinLvl | 0})),
     shrines: (g.shrines || []).map(x => ({id: x.type.id, x: x.x, z: x.z, used: !!x.used})),
@@ -6322,7 +6339,7 @@ function runContinue(){
   const s = runSlot();
   if (!s){ showSelect(); return; }
   try { localStorage.removeItem(RUN_SLOT); } catch(e){}
-  runMode = s.mode === 'surv' ? 'surv' : 'normal'; runMap = s.map; runDiff = s.diff;
+  runMode = s.mode === 'surv' ? 'surv' : 'normal'; runWeekly = !!s.weekly; runMap = s.map; runDiff = s.diff;
   startGame(s.key, s);
 }
 // Otra pestaña ha cargado o empezado otra partida: esta deja de valer (sin premios) para no duplicarla
@@ -6427,6 +6444,7 @@ function startGame(key, resume){
   if (!resume && skinHasArt(key, 0, 'variocolor') && Math.random() < 1 / 8192){ grantSkinAt(key, 0, 'variocolor'); equipSkinAt(key, 0, 'variocolor'); }
   g = {
     mode: runMode,
+    weekly: runWeekly && runMode !== 'surv',
     ch: {...c, id:key},
     p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:3.5, critChance:0.12, critMul:2},
     t: 0, kills: 0, enemies: [], shots: [], gems: [], blades: [], turrets: [], zones: [],
@@ -7044,6 +7062,7 @@ const infMul = () => (g && g.inferno) ? 1 + Math.max(0, g.screenT - SCREEN_LIMIT
 // En Supervivencia no hay jefe final: la dificultad no se suaviza tras el minuto 10
 const diffT = t => (g && g.mode === 'surv') ? t : (t <= 600 ? t : 600 + (t - 600) * 0.6);
 let runMode = 'normal';   // 'normal' o 'surv' (lo elige el menú antes del selector)
+let runWeekly = false;    // Reto semanal: solo lo activa su propio botón del menú, nunca Jugar
 function spawnEnemy(forced){
   // Tope de enemigos para todas las fuentes (horda, élites, invocaciones, eventos); las élites tienen 20 de margen
   if (g.enemies.length >= MAX_ENEMIES + (forced === 'elite' ? 20 : 0)) return null;
@@ -8858,7 +8877,7 @@ function endGame(win){
   setHud(false); evHud(null); shrineHud(null);
   sfx(win ? 'victory' : 'defeat');
   const daily = loadDaily();
-  const raw = Math.floor((g.kills/2 + g.t/10) * labMul('bits') * 1.25 * (g.mode === 'surv' ? 1.5 : 1) * lvlDiff().reward * (win && isPortalMap() ? 1.5 : 1));   // +25% por el modificador semanal
+  const raw = Math.floor((g.kills/2 + g.t/10) * labMul('bits') * 1.25 * (g.mode === 'surv' ? 1.5 : 1) * lvlDiff().reward * (win && isPortalMap() ? 1.5 : 1) * (g.weekly ? 1.25 : 1));   // ×1,25 de base; el Reto semanal suma otro +25%
   const earned = Math.min(raw, Math.max(0, DAILY.runCap - daily.runBits));
   if (g.t >= 5) daily.runs += 1;
   daily.runBits += earned;
@@ -8912,7 +8931,7 @@ function endGame(win){
   showOverlay(`
     <div class="end3 ${win ? 'win' : 'lose'}">
       <div class="end3-top"><img class="end3-ic" src="${charIcon(g.ch.id)}" alt=""><h1>${g.mode === 'surv' ? 'FIN DE LA SUPERVIVENCIA' : win ? '¡VICTORIA!' : 'HAS CAÍDO'}</h1></div>
-      <p class="end3-sub">${g.mode === 'surv' ? `Has aguantado ${fmtTime(Math.floor(g.t))} · récord con ${g.ch.name}: ${fmtTime(Math.floor(survBest(g.ch.id)))}` : win ? (g.bossName || 'Piedmon') + ' ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Laboratorio`} · ${mapDef().name} · ${zoneDef().name} · ${lvlDiff().name}${g.mode === 'surv' ? ' · Oleada ' + (g.wave || 1) : ''}</p>
+      <p class="end3-sub">${g.mode === 'surv' ? `Has aguantado ${fmtTime(Math.floor(g.t))} · récord con ${g.ch.name}: ${fmtTime(Math.floor(survBest(g.ch.id)))}` : win ? (g.bossName || 'Piedmon') + ' ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Laboratorio`} · ${mapDef().name} · ${zoneDef().name} · ${lvlDiff().name}${g.mode === 'surv' ? ' · Oleada ' + (g.wave || 1) : ''}${g.weekly ? ' · Reto semanal' : ''}</p>
       <p class="end3-sub end3-rank" id="end3Rank" aria-live="polite"></p>
       <div class="end3-cells${GACHA_SOON ? ' no-tix' : ''}">
         <span><i>⏱</i><b>${fmtTime(Math.floor(g.t))}</b>Tiempo</span><span><i>⭐</i><b>${g.p.lvl}</b>Nivel</span><span><i>⚔</i><b>${g.kills}</b>Bajas</span><span><i>✦</i><b>${Object.keys(g.skills).length}</b>Habilidades</span>
@@ -10451,7 +10470,7 @@ function showEncargos(){
     const evRows = EVENT_QUESTS.map(q => row(ev.done.includes(q.id), q.t, questProg(ev, q), q.goal, rw(q.bits, q.tix) + (q.vale || q.extra ? '<br><span class="eq-prize">+ ' + eventPrizeText(q) + '</span>' : '')));
     parts.push(panel('eq-ev', 'ic_evento', 'Evento', `${EVENT.name} · quedan ${days} ${days === 1 ? 'día' : 'días'}`, evRows, ev.done.length, evRows.length));
   }
-  menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios se renuevan cada día. Los semanales y los de evento suman lo que haces en todas tus partidas. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d} <span>No se aplica en Fácil ni en tus ${WEEKLY_MIN_RUNS} primeras partidas.</span></p>`);
+  menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios se renuevan cada día. Los semanales y los de evento suman lo que haces en todas tus partidas. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d} <span>Solo se aplica en el Reto semanal, que tiene su propio botón en el menú.</span></p>`);
   const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('eq-dialog');
 }
 /* ---------- Tienda: gasta Bits en lo de la línea de la semana (cambia cada lunes) ---------- */
@@ -10576,13 +10595,11 @@ const WEEKLY_MODS = [
   {id:'horda',   name:'Horda', d:'Aparecen enemigos un 40% más a menudo.', apply: () => { g.mod.spawnMul = 0.6; }}
 ];
 function weeklyMod(){ const n = WEEKLY_MODS.length; return WEEKLY_MODS[((weekNum() % n) + n) % n]; }
-// El modificador no se aplica en Fácil ni en las 3 primeras partidas de la cuenta: un jugador nuevo no debe
-// empezar sin curación o con un 40% menos de vida sin saberlo
-const WEEKLY_MIN_RUNS = 3;
-function totalPlays(){ return Object.values(loadJSON('digibonk3d-stats', {})).reduce((n, s) => n + ((s && s.plays) || 0), 0); }
+// El modificador solo se aplica en el Reto semanal, que se elige con su propio botón del menú:
+// Jugar, Mapas y Supervivencia nunca lo activan, así nadie empieza sin curación o con menos vida sin saberlo
 function applyWeekly(){
   g.mod = {spawnMul: 1};
-  if (g.diff === 'facil' || totalPlays() < WEEKLY_MIN_RUNS) return;
+  if (!g.weekly) return;
   const m = weeklyMod();
   m.apply();
   g.mod.id = m.id;
