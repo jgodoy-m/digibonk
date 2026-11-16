@@ -3263,6 +3263,9 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
 #overlay .realhub.hb .nm-tiles .hb-tile.hm-soon:hover{transform:none!important;box-shadow:none!important}
 #overlay .realhub.hb .nm-ic{display:block;width:24px;height:24px;object-fit:contain;flex:none;transform:none!important;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
 #overlay .realhub.hb :is(.hb-pill,.hb-ic,.hb-btn) .nm-ic{width:26px;height:26px}
+#overlay .realhub.hb .hb-app .nm-logo{width:18px;height:18px}
+#overlay .realhub.hb .hb-app[hidden]{display:none}
+.approved-info-dialog .hb-app-steps{margin:0 auto 14px;padding-left:22px;line-height:1.5;text-align:left;width:fit-content;max-width:100%}
 #overlay .realhub.hb .hb-btn .nm-ic{width:28px;height:28px;margin-left:-6px}
 #overlay .realhub.hb .hb-btn.hb-sq .nm-ic{margin:0;width:30px;height:30px}
 #overlay .realhub.hb .nm-stack .hb-mode>i{background:rgba(255,255,255,.2)!important}
@@ -5109,6 +5112,7 @@ function showSelect(){
       <header class="hb-top">
         <div class="hb-utils">
           <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma"><img class="nm-ic" src="ui/hub/ic_idioma.webp" alt="">${LANG.toUpperCase()}</button>
+          <button class="hb-pill hb-app" type="button" id="rhApp" aria-label="Instalar la app" title="Instalar la app"${appCanInstall() ? '' : ' hidden'}><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m-5-5 5 5 5-5M5 20h14"/></svg><span>App</span></button>
           <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>
         </div>
         <div class="hb-user" role="toolbar" aria-label="Jugador">
@@ -5219,12 +5223,17 @@ function showSelect(){
   document.getElementById('hmLogout').onclick=()=>{localStorage.removeItem('digibonk3d-name');localStorage.removeItem('digibonk3d-guest');location.reload();};
   document.getElementById('rhProfile').onclick=showPlayer;
   document.getElementById('rhLang').onclick=toggleLang;
+  document.getElementById('rhApp').onclick=()=>installEvt?installApp():openInfo('app');
   document.getElementById('rhFullscreen').onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{})};
   bindMenuFX();
   const openInfo=type=>{
     const host=document.getElementById('realModalHost');if(!host)return;
     let title,content;
-    if(type==='mission'){
+    if(type==='app'){
+      // iPhone/iPad no tienen botón de instalar: se explica cómo añadirla a la pantalla de inicio
+      title='Instalar la app';
+      content=`<p>Juega a pantalla completa y en horizontal desde un icono, también sin conexión.</p><ol class="hb-app-steps"><li>Abre Digibonk en Safari.</li><li>Toca el botón Compartir (el cuadrado con la flecha hacia arriba).</li><li>Elige «Añadir a pantalla de inicio» y confirma con «Añadir».</li></ol>`;
+    }else if(type==='mission'){
       title=t('daily');
       content=`<p>${safeText(dailyText())}</p><div class="approved-info-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></div><p>${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits${GACHA_SOON ? '' : ' · +' + DAILY.rewardTix + ' 🎟'}</p>`;
     }else{
@@ -6277,8 +6286,11 @@ function isStandalone(){
   return (matchMedia('(display-mode: fullscreen)').matches && !document.fullscreenElement) || matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 }
 let installEvt = null;
-addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; if (state === 'settings') showSettings(); });
-addEventListener('appinstalled', () => { installEvt = null; if (state === 'settings') showSettings(); });
+// El botón «App» del menú de inicio solo sale si este navegador puede instalarla (o es un iPhone/iPad, que lo hace a mano)
+function appCanInstall(){ return !isStandalone() && (!!installEvt || isIOS()); }
+function appSync(){ if (state === 'settings') showSettings(); const b = document.getElementById('rhApp'); if (b) b.hidden = !appCanInstall(); }
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; appSync(); });
+addEventListener('appinstalled', () => { installEvt = null; appSync(); });
 const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
 function appRow(){
   if (isStandalone()) return '';
@@ -6294,7 +6306,7 @@ async function installApp(){
   if (!installEvt) return;
   const e = installEvt; installEvt = null;
   try { e.prompt(); await e.userChoice; } catch(err){}
-  if (state === 'settings') showSettings();
+  appSync();
 }
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && !/[?&]test\b/.test(location.search)){
   addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));

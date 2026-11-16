@@ -1404,5 +1404,10 @@ I18N.add('de', {"×{0} daño": "×{0} Schaden", "×{0} recibido": "×{0} erhalte
   "Gana la Montaña Helada en Difícil o Pesadilla": "Gewinne den Eisberg auf Schwer oder Albtraum",
   "Domador de lo imposible": "Bändiger des Unmöglichen",
   "Gana los 3 mapas en Difícil o Pesadilla": "Gewinne alle 3 Karten auf Schwer oder Albtraum",
-  "Pesadilla eterna": "Ewiger Albtraum"
+  "Pesadilla eterna": "Ewiger Albtraum",
+  "Instalar la app": "App installieren",
+  "App": "App",
+  "Abre Digibonk en Safari.": "Öffne Digibonk in Safari.",
+  "Toca el botón Compartir (el cuadrado con la flecha hacia arriba).": "Tippe auf Teilen (das Quadrat mit dem Pfeil nach oben).",
+  "Elige «Añadir a pantalla de inicio» y confirma con «Añadir».": "Wähle „Zum Home-Bildschirm“ und bestätige mit „Hinzufügen“."
 });
