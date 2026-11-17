@@ -6627,7 +6627,7 @@ function showMapSelect(){
       <section class="ms-dsec"><div class="ms-diffs">${diffs}</div>
         <div class="ms-table" style="--dc:${d.col}" title="En todos los niveles la presión sube con el tiempo: más vida, daño y hordas hasta el minuto 10. En todos los mapas, a los 20 minutos en una pantalla empieza el Infierno."><b>${d.name}</b><span>${d.d}</span>
           <ul><li>Vida enemigos <em>${pct(d.hp)}</em></li><li>Daño enemigos <em>${pct(d.dmg)}</em></li><li>Enemigos <em>${pct(1 / d.spawn)}</em></li><li>Élites <em>${pct(1 / d.elite)}</em></li><li>Jefes de zona <em>${pct(d.boss)}</em></li><li>Bits y tickets <em>×${String(d.reward).replace('.', ',')}</em></li></ul></div>
-        <footer class="pk2-foot ms-foot"><span class="pk-hint">${surv ? 'Supervivencia' : 'Partida'} en ${MAPS[runMap].name} · ${d.name}</span><button class="btn btn-primary pk-start" id="msStart">¡Empezar! <small>(Enter)</small></button></footer>
+        <footer class="pk2-foot ms-foot"><span class="pk-hint">${surv ? 'Supervivencia' : 'Partida'} en ${MAPS[runMap].name} · ${d.name}</span><button class="btn btn-primary pk-start" id="msStart">¡Empezar!</button></footer>
       </section>
     </div>`);
   overlay.querySelectorAll('.ms-card').forEach(b => b.onclick = () => { runMap = b.dataset.map; showMapSelect(); });
