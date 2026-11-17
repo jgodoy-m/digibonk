@@ -45,6 +45,22 @@ Lo marcado con 🔒 es secreto: va a un gestor de contraseñas, nunca a un chat 
 8. En el plan gratis, Supabase pausa el proyecto tras 7 días sin ninguna visita. Con jugadores no pasa;
    si se pausa, se reactiva desde el panel con un clic.
 
+## Tu cuenta de desarrollador (todo desbloqueado)
+
+El juego publicado no tiene ningún atajo ni código para desbloquearlo todo: lo decide el servidor.
+
+1. Entra en el juego online, ve a **Ajustes → Nube y ranking** y vincula tu email (así la cuenta es permanente y la usas en cualquier dispositivo).
+2. En Supabase, **Authentication → Users**, busca tu email y copia su **User UID**.
+3. **SQL Editor** → ejecuta (cambiando el UID):
+   ```sql
+   insert into public.devs (user_id, note) values ('00000000-0000-0000-0000-000000000000', 'Jaime');
+   ```
+4. Recarga el juego. Al sincronizar con la nube, tu cuenta recibe todos los Digimon, skins, evoluciones, marcos, títulos,
+   objetos y 99.999 Bits. Si más adelante se añade contenido nuevo, lo recibe al cargar el juego.
+
+Las partidas de una cuenta de desarrollador no entran en el ranking. Para quitarla: `delete from public.devs where user_id = '...';`
+(lo ya desbloqueado se queda en esa cuenta).
+
 ## Cómo funciona
 
 - Al entrar, el juego crea una cuenta anónima y sube el progreso (el mismo contenido que el código DBK1-).
