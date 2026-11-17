@@ -5710,6 +5710,7 @@ async function cloudSync({pull = false, force = false} = {}){
     await cloudSession();
     await cloudProfile();
     if (pull || !Cloud.st.hash){ const r = await cloudPull(); if (r === 'applied' || r === 'conflict') return; }
+    await cloudDevGrant();
     await cloudPush(force);
     await cloudFlushScores();
     cloudSetMsg('Guardado en la nube ' + new Date(Cloud.st.syncedAt || Date.now()).toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'}));
@@ -5744,6 +5745,17 @@ async function cloudAfterRun(win){
     const me = (rows || []).find(r => r.me);
     if (me && document.getElementById('end3Rank')) el.textContent = `Ranking de ${REGIONS[Cloud.st.region]}: tu mejor marca está en el puesto ${me.pos}`;
   } catch(e){}
+}
+// Cuenta de desarrollador: solo si el servidor la tiene en la tabla devs (la añade Jaime a mano en Supabase).
+// En el juego no hay ningún código ni atajo: la decisión está en el servidor. Se mira una vez por carga
+let cloudDevChecked = false;
+async function cloudDevGrant(){
+  if (cloudDevChecked) return;
+  let dev = false;
+  try { dev = (await cloudRpc('am_i_dev', {})) === true; } catch(e){ return; }   // sin conexión o servidor sin la función: se reintenta
+  cloudDevChecked = true;
+  Cloud.st.dev = dev; Cloud.save();
+  if (dev && grantAllContent() && state === 'select') showSelect();
 }
 function cloudBoot(){
   if (!cloudEnabled()) return;
@@ -11310,20 +11322,27 @@ function headUrl(src, onReady){
 
 /* ---------- Pruebas en local: todo desbloqueado ---------- */
 // asGuest = false: cuenta propia con el nombre escrito (se lleva al dominio publicado con el código de guardado DBK1-)
-function unlockAllForTesting(asGuest = true, name = 'Invitado'){
-  const skins = {};
-  for (const key of SEASONS.adventure.chars) skins[key] = SKINS.filter(sk => sk.id !== 'clasico').map(sk => sk.id);
+// Da todo el contenido sin quitar nada de lo que ya hay. Devuelve true si ha cambiado algo
+function grantAllContent(){
+  const before = JSON.stringify(saveData());
+  const skins = loadJSON('digibonk3d-skins', {});
+  for (const key of SEASONS.adventure.chars) skins[key] = [...new Set([...(skins[key] || []), ...SKINS.filter(sk => sk.id !== 'clasico').map(sk => sk.id)])];
   localStorage.setItem('digibonk3d-skins', JSON.stringify(skins));
   localStorage.setItem('digibonk3d-evo', JSON.stringify(Object.fromEntries(SEASONS.adventure.chars.map(k => [k, true]))));
-  localStorage.setItem('digibonk3d-inv', JSON.stringify({
-    frames: FRAMES.map(f => f.id),
-    titles: TITLES.map(t => t.id),
-    items: {}
+  const inv = loadJSON('digibonk3d-inv', {});
+  localStorage.setItem('digibonk3d-inv', JSON.stringify({...inv,
+    frames: [...new Set([...(inv.frames || []), ...FRAMES.map(f => f.id)])],
+    titles: [...new Set([...(inv.titles || []), ...TITLES.map(t => t.id)])],
+    items: inv.items || {}
   }));
-  localStorage.setItem('digibonk3d-bits', '99999');
+  localStorage.setItem('digibonk3d-bits', String(Math.max(99999, +(localStorage.getItem('digibonk3d-bits') || 0))));
   localStorage.setItem('digibonk3d-unlocked', JSON.stringify(SEASONS.adventure.chars));
   localStorage.setItem('digibonk3d-objetos', JSON.stringify(Object.keys(ITEMS).filter(id => !ITEM_BASE.includes(id))));
   localStorage.removeItem(STARTER_PENDING);
+  return JSON.stringify(saveData()) !== before;
+}
+function unlockAllForTesting(asGuest = true, name = 'Invitado'){
+  grantAllContent();
   localStorage.setItem('digibonk3d-name', name);
   if (asGuest) localStorage.setItem('digibonk3d-guest', '1'); else localStorage.removeItem('digibonk3d-guest');
 }
