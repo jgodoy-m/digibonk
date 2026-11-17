@@ -6116,12 +6116,13 @@ function showStarter(){
 let pickQuery = '';
 let pickStage = 0, pickStageFor = null;   // etapa de la línea que se previsualiza y se viste
 // Compañeros jugables en preparación: se ven en el selector como bloqueados hasta que estén terminados
-// Resto de Digimon de Adventure (sin bebés): se ven bloqueados con su nombre hasta que tengan hoja y jugabilidad
+// Resto de Digimon de Adventure (sin bebés ni evoluciones de los jugables: SkullGreymon, Salamon, Guardromon y Andromon
+// van en la línea de Agumon, Gatomon y Hagurumon): se ven bloqueados con su nombre hasta que tengan hoja y jugabilidad
 const COMING_SOON = [
-  ['skullgreymon','SkullGreymon'], ['salamon','Salamon'], ['devimon','Devimon'], ['etemon','Etemon'], ['metaletemon','MetalEtemon'],
+  ['devimon','Devimon'], ['etemon','Etemon'], ['metaletemon','MetalEtemon'],
   ['myotismon','Myotismon'], ['venommyotismon','VenomMyotismon'], ['demidevimon','DemiDevimon'], ['metalseadramon','MetalSeadramon'],
   ['puppetmon','Puppetmon'], ['machinedramon','Machinedramon'], ['piedmon','Piedmon'], ['apocalymon','Apocalymon'], ['ladydevimon','LadyDevimon'],
-  ['ogremon','Ogremon'], ['kuwagamon','Kuwagamon'], ['shellmon','Shellmon'], ['seadramon','Seadramon'], ['meramon','Meramon'], ['andromon','Andromon'],
+  ['ogremon','Ogremon'], ['kuwagamon','Kuwagamon'], ['shellmon','Shellmon'], ['seadramon','Seadramon'], ['meramon','Meramon'],
   ['monzaemon','Monzaemon'], ['numemon','Numemon'], ['unimon','Unimon'], ['centarumon','Centarumon'], ['mojyamon','Mojyamon'], ['bakemon','Bakemon'],
   ['elecmon','Elecmon'], ['whamon','Whamon'], ['gazimon','Gazimon'], ['tyrannomon','Tyrannomon'], ['monochromon','Monochromon'],
   ['drimogemon','Drimogemon'], ['sukamon','Sukamon'], ['chuumon','Chuumon'], ['piximon','Piximon'], ['gekomon','Gekomon'],
@@ -6132,7 +6133,7 @@ const COMING_SOON = [
   ['deramon','Deramon'], ['floramon','Floramon'], ['mushroomon','Mushroomon'], ['redvegiemon','RedVegiemon'], ['blossomon','Blossomon'],
   ['mekanorimon','Mekanorimon'], ['tankmon','Tankmon'], ['megadramon','Megadramon'], ['gigadramon','Gigadramon'], ['warumonzaemon','WaruMonzaemon'],
   ['pumpkinmon','Pumpkinmon'], ['gotsumon','Gotsumon'], ['dokugumon','Dokugumon'], ['flymon','Flymon'], ['snimon','Snimon'], ['tortomon','Tortomon'],
-  ['guardromon','Guardromon'], ['giromon','Giromon'], ['ebidramon','Ebidramon']
+  ['giromon','Giromon'], ['ebidramon','Ebidramon']
 ].map(([id, name]) => ({id, name}));
 // Favoritos del jugador (se guardan con el progreso) y orden del plantel; los favoritos van siempre primero
 const PICK_SORTS = [['num', 'Número'], ['name', 'Nombre'], ['plays', 'Más jugados']];
@@ -6382,7 +6383,7 @@ function renderPickPanels(){
     <div class="ps-kit">${[...learnable(k).mine, ...learnable(k).type.slice(0, 1)].map(id => { const sk = SKILLS[id], ty = !(CHAR_SKILLS[k] || []).includes(id); return `<div class="ps-atk k-${sk.k}"><i class="ps-ico">${SKILL_ICON[id] || '✦'}</i><div><div class="ps-atk-h"><b>${skillName(id, k)}</b>${ty ? ` <small>· de tipo ${ATTR_NAME[ATTR_OF[k]]}</small>` : ''}</div><small class="ps-kind">${sk.k[0].toUpperCase() + sk.k.slice(1)}</small><p>${sk.d}</p>${chipsHtml(skillFacts(id))}</div></div>`; }).join('')}</div>`;
   const at = ATTR_OF[k], beats = BEATS[at], loses = Object.keys(BEATS).find(a => BEATS[a] === at);
   const foes = a => Object.keys(FOE_ATTR).filter(n => FOE_ATTR[n] === a && n !== 'tank');
-  const icons = a => { const l = foes(a); return `${l.slice(0, 7).map(n => `<img src="sprites/adventure/${n}.png" alt="" title="${(COMING_SOON.find(c => c[0] === n) || [0, n[0].toUpperCase() + n.slice(1)])[1]}" onerror="this.remove()">`).join('')}${l.length > 7 ? `<small>+${l.length - 7}</small>` : ''}`; };
+  const icons = a => { const l = foes(a); return `${l.slice(0, 7).map(n => `<img src="sprites/adventure/${n}.png" alt="" title="${(COMING_SOON.find(c => c.id === n) || {name: n[0].toUpperCase() + n.slice(1)}).name}" onerror="this.remove()">`).join('')}${l.length > 7 ? `<small>+${l.length - 7}</small>` : ''}`; };
   const trow = (lbl, cls, a, mul) => `<div class="ps-trow ${cls}"><span class="ps-tl">${lbl}</span><span class="ps-attr a-${a}">${ATTR_ICON[a]} ${ATTR_NAME[a]}</span><b>${mul}</b><span class="ps-foes">${icons(a)}</span></div>`;
   evo.innerHTML = `
     <div class="ps-ult"><i class="ps-ico r">R</i><div><b>Evolución de emergencia</b><p>Por debajo del 20% de PS tienes 6 s para pulsar R y evolucionar al instante durante 15 s. Una vez por partida.</p></div></div>
