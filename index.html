@@ -4669,7 +4669,9 @@ addEventListener('popstate', () => {
 });
 // Cambiar de pestaña, de app o de ventana pausa la partida (al volver no te encuentras rodeado)
 document.addEventListener('visibilitychange', () => { if (document.hidden && state === 'play') pauseGame(); });
-addEventListener('blur', () => { if (state === 'play' && !new URLSearchParams(location.search).has('demo')) pauseGame(); });
+// Solo en el ordenador del desarrollador (localhost o archivo): en el dominio publicado ?test y ?demo no hacen nada
+const LOCAL_DEV = location.protocol === 'file:' || /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+addEventListener('blur', () => { if (state === 'play' && !(LOCAL_DEV && new URLSearchParams(location.search).has('demo'))) pauseGame(); });
 document.getElementById('hudSummon').onclick = e => { e.stopPropagation(); summonBoss(); };
 addEventListener('keydown', e => {
   const k = e.key.toLowerCase();
@@ -11306,8 +11308,9 @@ function headUrl(src, onReady){
   return src;
 }
 
-/* ---------- Invitado de pruebas: todo desbloqueado ---------- */
-function unlockAllForTesting(){
+/* ---------- Pruebas en local: todo desbloqueado ---------- */
+// asGuest = false: cuenta propia con el nombre escrito (se lleva al dominio publicado con el código de guardado DBK1-)
+function unlockAllForTesting(asGuest = true, name = 'Invitado'){
   const skins = {};
   for (const key of SEASONS.adventure.chars) skins[key] = SKINS.filter(sk => sk.id !== 'clasico').map(sk => sk.id);
   localStorage.setItem('digibonk3d-skins', JSON.stringify(skins));
@@ -11318,11 +11321,14 @@ function unlockAllForTesting(){
     items: {}
   }));
   localStorage.setItem('digibonk3d-bits', '99999');
-  localStorage.setItem('digibonk3d-name', 'Invitado');
-  localStorage.setItem('digibonk3d-guest', '1');
+  localStorage.setItem('digibonk3d-unlocked', JSON.stringify(SEASONS.adventure.chars));
+  localStorage.setItem('digibonk3d-objetos', JSON.stringify(Object.keys(ITEMS).filter(id => !ITEM_BASE.includes(id))));
+  localStorage.removeItem(STARTER_PENDING);
+  localStorage.setItem('digibonk3d-name', name);
+  if (asGuest) localStorage.setItem('digibonk3d-guest', '1'); else localStorage.removeItem('digibonk3d-guest');
 }
-// El modo invitado (todo desbloqueado) es solo para pruebas: aparece con ?test o ?demo en la dirección
-const TEST_MODE = /[?&](test|demo)\b/.test(location.search);
+// El modo invitado (todo desbloqueado) es solo para pruebas: aparece con ?test o ?demo en la dirección, y solo en local
+const TEST_MODE = LOCAL_DEV && /[?&](test|demo)\b/.test(location.search);
 const isGuest = () => localStorage.getItem('digibonk3d-guest') === '1';
 
 /* ---------- Entrenador: nombre elegido al registrarse ---------- */
@@ -11355,7 +11361,8 @@ function showRegister(){
           <button class="rg-go" id="regGo">${t('enter')}<kbd>Enter</kbd></button>
           <p class="rg-err" id="regErr" role="alert"></p>
           ${TEST_MODE ? `<div class="rg-or"><span>o</span></div>
-          <button class="rg-pill rg-guest" id="regGuest">${t('guest')}</button>` : ''}
+          <button class="rg-pill rg-guest" id="regGuest">${t('guest')}</button>
+          <button class="rg-pill rg-guest" id="regDev">Entrar con mi nombre y todo desbloqueado</button>` : ''}
         </div>
       </section>
     </div>`);
@@ -11369,6 +11376,13 @@ function showRegister(){
   document.getElementById('regGo').onclick = go;
   if (TEST_MODE) document.getElementById('regGuest').onclick = () => {
     unlockAllForTesting();
+    location.reload();
+  };
+  // Cuenta del desarrollador: tu nombre, todo desbloqueado y sin marca de invitado (sí guarda en la nube y sale en el ranking)
+  if (TEST_MODE) document.getElementById('regDev').onclick = () => {
+    const v = document.getElementById('regName').value.trim().slice(0, 16);
+    if (!v){ const er = document.getElementById('regErr'); er.textContent = t('needName'); er.classList.remove('show'); void er.offsetWidth; er.classList.add('show'); document.getElementById('regName').focus(); return; }
+    unlockAllForTesting(false, v);
     location.reload();
   };
   document.getElementById('regName').addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') go(); });
@@ -12354,7 +12368,7 @@ buildSkins();
 if (trainerName && starterPending()) showStarter(); else if (trainerName) showSelect(); else showRegister();
 cloudBoot();
 // Modo demo (solo para grabar los vídeos del tutorial con ?demo=1): expone el estado y atajos de escena
-if (new URLSearchParams(location.search).has('demo')){
+if (LOCAL_DEV && new URLSearchParams(location.search).has('demo')){
   window.__dbk = {
     get g(){ return g; }, get state(){ return state; }, get scene(){ return scene; },
     rollReward, grantReward, setBanner: b => { gxBanner = b; }, playPullAnimation, endGame, retoState, retoStar, WEEKLY_MODS,
