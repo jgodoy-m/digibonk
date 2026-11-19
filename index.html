@@ -5797,7 +5797,7 @@ function showSaveCode(){
 // La URL del proyecto y la clave "anon public" (Supabase → Project Settings → API) se ponen en sitio.json y las copia aquí tools/configurar.py.
 // La clave anon es pública por diseño: la seguridad está en las reglas de supabase/schema.sql.
 // Vacío = nube apagada: el juego guarda solo en este navegador, como antes, y el código DBK1- sigue sirviendo.
-const CLOUD_CFG = {url: '', key: ''};   // SITIO:nube (lo rellena tools/configurar.py desde sitio.json)
+const CLOUD_CFG = {url: 'https://lsmakqxoculfqfgygdgh.supabase.co', key: 'sb_publishable_CawVIBrwhedIxGlH6DevBg_xvgNj5UZ'};   // SITIO:nube (lo rellena tools/configurar.py desde sitio.json)
 const CLOUD_ON = !!(CLOUD_CFG.url && CLOUD_CFG.key);
 const REGIONS = {EU: 'Europa', NA: 'Norteamérica', LATAM: 'Latinoamérica', ASIA: 'Asia y Oriente Medio', OCE: 'Oceanía', AFR: 'África'};
 // La región se deduce de la zona horaria del navegador (sin pedir ubicación ni mirar la IP); el jugador puede cambiarla
@@ -6085,7 +6085,7 @@ async function showRanking(from){
 }
 // Créditos y licencias: lo que consta en sprites/CREDITS.txt, textures/CREDITOS.txt y fonts/LICENCIAS.txt.
 // Los recuadros naranjas marcan lo que falta verificar antes de publicar (permisos de sprites y autoría)
-const CREDIT_AUTHOR = '';   // SITIO:autor (campo "autor" de sitio.json; vacío: hueco visible por rellenar)
+const CREDIT_AUTHOR = "";   // SITIO:autor (campo "autor" de sitio.json; vacío: hueco visible por rellenar)
 let creditsFrom = 'settings';
 async function showCredits(from){
   if (from) creditsFrom = from;
