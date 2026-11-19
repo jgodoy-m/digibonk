@@ -948,6 +948,8 @@ I18N.add('tr', {
   "junto al portal del norte": "kuzey portalının yanında",
   "Ve al portal del norte para invocar a {0}": "{0} çağırmak için kuzey portalına git",
   "Gira el móvil": "Telefonunu çevir",
+  "¿No gira? Quita el bloqueo de rotación del móvil": "Dönmüyor mu? Döndürme kilidini kapat",
+  "En iPhone, para jugar a pantalla completa: Compartir y «Añadir a pantalla de inicio»": "iPhone'da tam ekran için: Paylaş ve «Ana Ekrana Ekle»",
   "DigiBonk se juega en horizontal": "DigiBonk yatay oynanır"
 });
 

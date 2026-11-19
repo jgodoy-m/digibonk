@@ -3908,6 +3908,54 @@ body.reto-run #hudZone{color:#7cf2b4!important}
 .rg-profiles .rg-prof{height:32px;padding:0 12px;font-size:13px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rg-err.show{animation:rgShake .35s ease}
 @keyframes rgShake{25%{transform:translateX(-6px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+/* ---------- Móvil pequeño en horizontal (iPhone SE 667×375 y parecidos), 2026-11-19 ----------
+   iOS no deja bloquear la orientación: el aviso «Gira el móvil» explica el bloqueo de rotación y, en iPhone,
+   cómo instalarlo para jugar a pantalla completa. Si el teclado está abierto (Android encoge la pantalla y
+   parece vertical) el aviso no tapa el campo de texto. */
+#rotateHint small{max-width:300px;font-size:12px;font-weight:700;line-height:1.35;opacity:.65}
+#rotateHint small.rh-ios{display:none;margin-top:4px;padding:8px 12px;border-radius:12px;background:rgba(255,255,255,.1);opacity:.9}
+html.is-ios #rotateHint small.rh-ios{display:block}
+@media (display-mode:standalone),(display-mode:fullscreen){html.is-ios #rotateHint small.rh-ios{display:none}}
+body:has(:is(input:not([type]),input[type=text],input[type=search],textarea):focus) #rotateHint{display:none!important}
+/* En táctil no hay teclado: fuera las pistas de teclas (Esc, Enter, C…) de los botones de los menús */
+body.is-touch #overlay :is(button,.g-back) kbd{display:none!important}
+@media (orientation:landscape) and (max-height:500px){
+  /* Notch y esquinas del iPhone (viewport-fit=cover): el HUD y los botones se apartan de los bordes */
+  #hud,#xpTxt,#tZone{translate:env(safe-area-inset-left,0px) 0}
+  #minimap,#bonkBar,#tDash,#tJump,#tPause{translate:calc(-1 * env(safe-area-inset-right,0px)) 0}
+  #overlay{padding-left:max(8px,env(safe-area-inset-left,0px))!important;padding-right:max(8px,env(safe-area-inset-right,0px))!important}
+  #overlay .realhub{box-sizing:border-box;padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+  /* Menos hueco arriba en Ajustes, Colección y Elige tu Digimon (antes 48 px vacíos) */
+  #overlay:not(.menu-mode):not(.has-top) :is(.picker-screen.pk2,.picker-screen.cl4,.settings){margin-top:6px!important}
+  /* Inicio: «Laboratorio» y «Reto semanal» ya no se cortan */
+  #overlay .realhub.hb .nm-tiles .hb-tile{gap:4px!important;padding:3px!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile i{width:34px!important;height:34px!important;margin:0!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile i .nm-ic{width:34px!important;height:34px!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile b{font-size:11px!important;letter-spacing:-.1px}
+  #overlay .realhub.hb .nm-weekly>span>small{flex:none!important;overflow:visible!important}
+  #overlay .realhub.hb .nm-weekly>span>b{flex:0 1 auto!important;min-width:0;max-width:none!important}
+  /* Reto semanal: los hitos se leen enteros (dos líneas si hace falta) */
+  .rt-hitos span{white-space:normal!important;overflow:visible!important;line-height:1.15}
+  /* Laboratorio y Ficha: cabeceras más bajas */
+  #overlay:not(.menu-mode)>.lab-screen{padding:10px 14px!important}
+  #overlay .lab-top .lab-host,#overlay .lab-top .lab-head small{display:none!important}
+  #overlay .lab-top{margin-bottom:6px!important;gap:8px!important;flex-wrap:nowrap!important}
+  #overlay .lab-top .lab-head{flex:1 1 auto!important}
+  #overlay .lab-say{margin:0 0 8px!important;padding:6px 10px!important;font-size:12px!important}
+  .pl4 .pl4-top{margin-bottom:8px!important;gap:6px!important}
+  .pl4 .pl4-top small,.pl4 .pl4-banner p{display:none!important}
+  /* Registro: logo a la izquierda y el formulario a la derecha, a la vista sin desplazarse */
+  .rg{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;align-items:center!important;min-height:100dvh!important;height:100dvh!important;padding:8px 16px!important;gap:12px!important;box-sizing:border-box}
+  .rg .rg-pitch,.rg .rg-boot,.rg .rg-saved{display:none!important}
+  .rg .rg-lang{top:auto!important;right:auto!important;bottom:max(10px,env(safe-area-inset-bottom,0px))!important;left:max(12px,env(safe-area-inset-left,0px))!important}
+  .rg .rg-duo .anim{width:70px!important;height:70px!important}
+  .rg .rg-logo{width:min(300px,100%)!important}
+  .rg .rg-card{width:100%!important;gap:8px!important;padding:0 16px 14px!important}
+  .rg .rg-banner h2{font-size:18px!important}
+  .rg .rg-input{height:40px!important;min-height:0!important}
+  .rg .rg-go{padding-top:10px!important;padding-bottom:10px!important;font-size:18px!important}
+  .rg .rg-guest{padding-top:6px!important;padding-bottom:6px!important}
+}
 </style>
 </head>
 <body>
@@ -3938,7 +3986,7 @@ body.reto-run #hudZone{color:#7cf2b4!important}
 <div id="consBar"></div>
 <div id="bonkBar" style="display:none"><div id="bonkFill"></div><span id="bonkTxt">BONK 0%</span></div>
 <div id="mapLoad" aria-hidden="true"><img class="ml-bg" alt="" decoding="async"><div class="ml-glow"></div><div class="ml-shade"></div><img class="ml-logo" src="ui/logo_digibonk.webp" alt="DigiBonk"><div class="ml-foot"><div class="ml-txt"><b id="mlName"></b><span id="mlStatus">Cargando el Mundo Digital…</span></div><div class="ml-meter"><div class="ml-track" id="mlBar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="ml-fill"></div></div><span class="ml-cap"></span><span class="ml-pct" id="mlPct"></span></div></div></div>
-<div id="rotateHint" aria-live="polite"><div><b>⟳</b><strong>Gira el móvil</strong><span>DigiBonk se juega en horizontal</span></div></div>
+<div id="rotateHint" aria-live="polite"><div><b>⟳</b><strong>Gira el móvil</strong><span>DigiBonk se juega en horizontal</span><small>¿No gira? Quita el bloqueo de rotación del móvil</small><small class="rh-ios">En iPhone, para jugar a pantalla completa: Compartir y «Añadir a pantalla de inicio»</small></div></div>
 <div id="touchCtl">
   <div id="tZone"><div id="tJoy"><div id="tKnob"></div></div></div>
   <button type="button" class="t-btn" id="tDash" aria-label="Dash">DASH</button>
@@ -6753,6 +6801,8 @@ function appSync(){ if (state === 'settings') showSettings(); const b = document
 addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; appSync(); });
 addEventListener('appinstalled', () => { installEvt = null; appSync(); });
 const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+// iPhone/iPad: el aviso «Gira el móvil» añade cómo jugar a pantalla completa (Safari no deja pedirla desde la web)
+if (isIOS()) document.documentElement.classList.add('is-ios');
 function appRow(){
   if (isStandalone()) return '';
   const how = installEvt ? 'Juega a pantalla completa y en horizontal desde un icono, también sin conexión.'

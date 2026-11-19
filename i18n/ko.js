@@ -955,6 +955,8 @@ I18N.add('ko', {
   "junto al portal del norte": "북쪽 포털 옆에서",
   "Ve al portal del norte para invocar a {0}": "북쪽 포털로 가서 {0} 소환",
   "Gira el móvil": "휴대폰을 돌려 주세요",
+  "¿No gira? Quita el bloqueo de rotación del móvil": "회전되지 않나요? 화면 회전 잠금을 꺼 주세요",
+  "En iPhone, para jugar a pantalla completa: Compartir y «Añadir a pantalla de inicio»": "iPhone 전체 화면: 공유 → '홈 화면에 추가'",
   "DigiBonk se juega en horizontal": "DigiBonk는 가로 화면으로 플레이합니다"
 });
 
