@@ -3992,7 +3992,7 @@ const MAPS = {
   bosque: {n: 1, name: 'Bosque File', kind: 'portal', zones: ZONES, minis: true, preview: ['textures/mapa_hierba.png', 'sprites/deco/bosque/arbol.png', AD('piedmon')],
     desc: 'Bosque y Pantano de Datos. Andromon abre el portal y Piedmon es el jefe final. Seis jefes menores por el camino.'},
   desierto: {n: 2, name: 'Desierto de Datos', kind: 'portal', minis: true, preview: ['textures/mapa_arena.png', 'sprites/deco/desierto/cactus1.png', AD('metaletemon')],
-    desc: 'Dunas y ruinas. Cada pantalla tiene su jefe: Scorpiomon abre el portal y MetalEtemon cierra el mapa.',
+    desc: 'Dunas y ruinas. Cada pantalla tiene su jefe: Scorpiomon abre el portal y MetalEtemon cierra el mapa. Ritmo rápido: hordas veloces y embestidores desde el minuto 2.',
     zones: [
       {name: 'Dunas de Datos', biome: 'dunas', fog: 0xe9cf9a, sky: ['#e08a3c', '#f4c27a', '#fde6b8'], tint: 0xffd08a, color: '#ffb74d',
         foes: {basic: [AD('gotsumon'), AD('kokatorimon')], fast: [AD('flymon'), AD('snimon')], tank: [AD('drimogemon'), AD('monochromon')], elite: [AD('tyrannomon')]},
@@ -4002,7 +4002,7 @@ const MAPS = {
         boss: {name: 'MetalEtemon', sprite: AD('metaletemon'), hp: 6000, dmg: 20, shots: 14, shotDmg: 10, gap: 2.2, col: '#ef9a9a', sub: 'Jefe final del Desierto de Datos', final: true}}
     ]},
   nevado: {n: 3, name: 'Montaña Helada', kind: 'portal', single: true, minis: false, preview: ['textures/mapa_nieve.png', 'sprites/deco/nieve/pino1.png', AD('machinedramon')],
-    desc: 'Nieve y una fortaleza oscura. Sin jefes menores: solo Machinedramon, el único jefe final, que te espera en las dos pantallas.',
+    desc: 'Nieve y una fortaleza oscura. Sin jefes menores: solo Machinedramon, el único jefe final, que te espera en las dos pantallas. Ritmo pesado: menos enemigos, más tanques y tiradores desde el principio.',
     zones: [
       {name: 'Valle Nevado', biome: 'nieve', fog: 0xe4eefa, sky: ['#7fa6d6', '#c4dcf2', '#f2f8ff'], tint: 0xffffff, color: '#81d4fa',
         foes: {basic: [AD('gotsumon'), AD('otamamon')], fast: [AD('gazimon'), AD('kokatorimon')], tank: [AD('mojyamon'), AD('mammothmon')], elite: [AD('skullgreymon'), AD('darktyrannomon')]},
@@ -4013,6 +4013,21 @@ const MAPS = {
     ]}
 };
 const MAP_ORDER = ['bosque', 'desierto', 'nevado'];
+/* Ritmo y enemigos propios de cada mapa (sobre la dificultad elegida):
+   spawn = intervalo entre tandas (menor = más enemigos), fast/tank = cuánto pesan rápidos y tanques en la mezcla,
+   shooterAt/chargerAt = segundo en que empiezan tiradores y embestidores, hp/spd = vida y velocidad de la horda,
+   elite = intervalo entre élites, foes = aspecto de tiradores y embestidores en ese mapa.
+   El Bosque es el ritmo de siempre; el Desierto, hordas rápidas y frágiles que embisten pronto;
+   la Montaña, menos enemigos pero más duros y lentos, con tiradores desde el principio. */
+const MAP_PACE = {
+  bosque:   {spawn: 1, fast: 1, tank: 1, shooterAt: 150, chargerAt: 240, hp: 1, spd: 1, elite: 1,
+             foes: {shooter: [AD('mushroomon'), AD('floramon'), AD('redvegiemon')], charger: [AD('kuwagamon'), AD('unimon')]}},
+  desierto: {spawn: 0.85, fast: 1.8, tank: 0.6, shooterAt: 210, chargerAt: 120, hp: 0.88, spd: 1.08, elite: 1.1,
+             foes: {shooter: [AD('tankmon'), AD('mekanorimon'), AD('nanomon')], charger: [AD('tuskmon'), AD('giromon')]}},
+  nevado:   {spawn: 1.2, fast: 0.6, tank: 1.7, shooterAt: 75, chargerAt: 300, hp: 1.15, spd: 0.9, elite: 0.85,
+             foes: {shooter: [AD('shellmon'), AD('tortomon'), AD('gekomon')], charger: [AD('unimon'), AD('tuskmon')]}}
+};
+const mapPace = () => MAP_PACE[(g && g.map) || 'bosque'] || MAP_PACE.bosque;
 const SCREEN_LIMIT = 1200;   // 20 minutos en una misma pantalla: empieza el Infierno
 /* ---------- Dificultad ----------
    Multiplicadores fijos de cada nivel sobre la base (vida y daño de enemigos y jefes menores, intervalo entre
@@ -4026,12 +4041,13 @@ const DIFFS = {
               ring: {n: 0.6, spd: 0.75, gap: 1.3, wait: 0.55}, slamWarn: 1.35},
   normal:    {name: 'Normal',    hp: 1,    dmg: 1,   spawn: 1,    elite: 1,    boss: 1,    reward: 1,    col: '#4fc3f7', d: 'La experiencia equilibrada del juego.'},
   // cap: horda máxima en pantalla (sin él, MAX_ENEMIES). xp: multiplicador de la experiencia de los orbes.
-  dificil:   {name: 'Difícil',   hp: 1.35, dmg: 1.3, spawn: 0.8,  elite: 0.8,  boss: 1.3,  reward: 1.5,  col: '#ffb74d', d: 'Más vida, más daño y más hordas. Premios ×1,5.',
-              cap: 120},
+  // evo: factor del nivel de cada digievolución (Difícil: 14/27/41; Pesadilla: 12/24/36) para que se pueda evolucionar
+  dificil:   {name: 'Difícil',   hp: 1.35, dmg: 1.3, spawn: 0.8,  elite: 0.8,  boss: 1.3,  reward: 1.5,  col: '#ffb74d', d: 'Más vida, más daño y más hordas, pero evolucionas antes y +25% de experiencia. Premios ×1,5.',
+              cap: 120, xp: 1.25, evo: 0.9},
   // Pesadilla tiene mecánica propia: la horda llega a 140, los anillos de los jefes van un 25 % más rápido y salen un 15 % más a menudo,
   // y la experiencia sube un 20 % para que se pueda llegar a digievolucionar (con el bot se quedaba en el nivel 12 en el minuto 12)
-  pesadilla: {name: 'Pesadilla', hp: 1.8,  dmg: 1.6, spawn: 0.65, elite: 0.65, boss: 1.7,  reward: 2.2,  col: '#ef5350', d: 'Hordas de hasta 140 y jefes más rápidos, pero +20% de experiencia. Premios ×2,2.',
-              cap: 140, xp: 1.2, ring: {spd: 1.25, gap: 0.85}}
+  pesadilla: {name: 'Pesadilla', hp: 1.8,  dmg: 1.6, spawn: 0.65, elite: 0.65, boss: 1.7,  reward: 2.2,  col: '#ef5350', d: 'Hordas de hasta 140 y jefes más rápidos, pero evolucionas mucho antes y +40% de experiencia. Premios ×2,2.',
+              cap: 140, xp: 1.4, evo: 0.8, ring: {spd: 1.25, gap: 0.85}}
 };
 const DIFF_ORDER = ['facil', 'normal', 'dificil', 'pesadilla'];
 let runMap = MAPS[localStorage.getItem('digibonk3d-map')] ? localStorage.getItem('digibonk3d-map') : 'bosque';
@@ -4170,6 +4186,9 @@ const CHARS = {
 // Etapas de digievolución: se alcanzan a estos niveles (las que tenga cada línea en Digimon Adventure)
 const EVO_LEVELS = [15, 30, 45];   // nivel de cada evolución de una línea; las líneas con una sola evolución evolucionan al 30
 function evoLevelFor(key, idx){ return EVO_LINE[key] && EVO_LINE[key].length === 1 ? 30 : (EVO_LEVELS[idx] || 54); }
+// En partida, Difícil y Pesadilla bajan el nivel de cada evolución (DIFFS.evo): con enemigos más duros se mata menos
+// y, sin esto, la segunda y la tercera evolución casi nunca llegaban
+const runEvoLevel = (key, idx) => Math.round(evoLevelFor(key, idx) * ((g && lvlDiff().evo) || 1));
 const EVO_LINE = {
   agumon:   [{name:'Greymon',     sprite:'sprites/adventure/greymon.png'},   {name:'MetalGreymon',    sprite:'sprites/adventure/metalgreymon.png'},    {name:'WarGreymon',     sprite:'sprites/adventure/wargreymon.png'}],
   gabumon:  [{name:'Garurumon',   sprite:'sprites/adventure/garurumon.png'}, {name:'WereGarurumon',   sprite:'sprites/adventure/weregarurumon.png'},   {name:'MetalGarurumon', sprite:'sprites/adventure/metalgarurumon.png'}],
@@ -5062,7 +5081,7 @@ function showPause(askQuit = false){
   const sprite = spriteOf(c.id, evolved);
   const hpPct = Math.max(0, 100 * g.p.hp / g.p.maxHp);
   const expPct = Math.min(100, 100 * g.p.xp / g.p.nextXp);
-  const evoNext = evoLevelFor(c.id, evolved | 0), evoMax = (evolved | 0) >= EVO_LINE[c.id].length;
+  const evoNext = runEvoLevel(c.id, evolved | 0), evoMax = (evolved | 0) >= EVO_LINE[c.id].length;
   const evoPct = evoMax ? 100 : Math.min(100, g.p.lvl / evoNext * 100);
   const evoTxt = evoMax ? 'Forma final alcanzada' : `Siguiente digievolución · Nv ${g.p.lvl}/${evoNext}`;
   const saveNote = g.ranked ? '<p class="pz2-save">Las partidas del ranking global no se guardan.</p>'
@@ -5731,7 +5750,7 @@ function showHelp(){
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
   'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
-  'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales', 'digibonk3d-objetos', 'digibonk3d-obj-ini', 'digibonk3d-reto'];
+  'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales', 'digibonk3d-objetos', 'digibonk3d-obj-ini', 'digibonk3d-reto', 'digibonk3d-sist'];
 // También cuentan los contadores por banner (pity) y la mejor oleada de cada mapa
 const isSaveKey = k => SAVE_KEYS.includes(k) || /^digibonk3d-(pity|surv-wave)-[A-Za-z0-9_]{1,32}$/.test(k);
 function saveData(){
@@ -7700,7 +7719,7 @@ function evoDmg(){ return 1; }
 const DIFF = {hp: 1.35, dmg: 1.35, spawn: 0.75, eliteT: 35, spawnMin: 0.22};
 // La dificultad sube poco a poco: al principio es la normal y llega a la del modo difícil en el minuto 10
 const diffMul = k => (lvlDiff()[k] || 1) * (1 + (DIFF[k] - 1) * Math.min(1, (g ? g.t : 0) / 600)) * (k === 'spawn' ? 1 / infMul() : infMul());
-const eliteGap = () => (45 + (DIFF.eliteT - 45) * Math.min(1, (g ? g.t : 0) / 600)) * lvlDiff().elite / infMul() * (g && g.route === 'elites' ? 0.5 : 1) * ((g && g.mod && g.mod.eliteMul) || 1);
+const eliteGap = () => (45 + (DIFF.eliteT - 45) * Math.min(1, (g ? g.t : 0) / 600)) * lvlDiff().elite / infMul() * (g && g.route === 'elites' ? 0.5 : 1) * ((g && g.mod && g.mod.eliteMul) || 1) * (g ? mapPace().elite : 1);
 // Infierno: tras 20 minutos en la misma pantalla todo se multiplica sin parar (+100% cada 15 s)
 const infMul = () => (g && g.inferno) ? 1 + Math.max(0, g.screenT - SCREEN_LIMIT) / 15 : 1;
 // Tiempo que cuenta para la dificultad: igual que el tiempo real hasta el minuto 10 (la dificultad de siempre)
@@ -7715,16 +7734,17 @@ function spawnEnemy(forced){
   const t = g.t, r = Math.random(), a = Math.random()*Math.PI*2, R = (g.idleT || 0) > 2.5 ? 13 : 25;
   let kind = 'basic';
   const z2 = g.zone >= 2;   // la zona 2 trae más tanques y rápidos
+  const pc = mapPace(), tankP = (z2 ? 0.3 : 0.2)*pc.tank, fastP = 0.2*pc.fast;   // mezcla según el mapa (MAP_PACE)
   if (forced) kind = forced;
   else if (g.mod && g.mod.fastOnly && t > 20) kind = 'fast';
-  else if (t > 150 && r < 0.07 && g.enemies.filter(e => e.kind === 'shooter').length < 8) kind = 'shooter';
-  else if (t > 240 && r < 0.15 && g.enemies.filter(e => e.kind === 'charger').length < 10) kind = 'charger';
-  else if (t > 120 && r < (z2 ? 0.3 : 0.2)) kind = 'tank';
-  else if (t > 60 && r < (z2 ? 0.5 : 0.4)) kind = 'fast';
+  else if (t > pc.shooterAt && r < 0.07 && g.enemies.filter(e => e.kind === 'shooter').length < 8) kind = 'shooter';
+  else if (t > pc.chargerAt && r < 0.15 && g.enemies.filter(e => e.kind === 'charger').length < 10) kind = 'charger';
+  else if (t > 120 && r < tankP) kind = 'tank';
+  else if (t > 60 && r < tankP + fastP) kind = 'fast';
   const tt = diffT(t);
   // vida: crece más deprisa a partir del minuto 5 (antes /170: a nivel 20 nada aguantaba). Las élites siguen una curva más suave
   const d = ENEMY[kind], k = kind === 'elite' ? eliteHpK(tt) : foeHpK(tt);
-  const pool = (zoneDef().foes || ZONE_FOES[g.zone - 1])[kind] || EXTRA_FOES[kind], sprite = pool ? pool[Math.floor(Math.random()*pool.length)] : d.sprite;
+  const pool = (zoneDef().foes || ZONE_FOES[g.zone - 1])[kind] || (pc.foes && pc.foes[kind]) || EXTRA_FOES[kind], sprite = pool ? pool[Math.floor(Math.random()*pool.length)] : d.sprite;
   const mesh = billboard(sprite, d.scale);
   if (kind === 'charger' || forced === 'elite') mesh.material = mesh.material.clone();   // material propio: se tiñe al cargar o al ser el Digimon buscado
   mesh.position.y = d.scale/2;
@@ -7734,7 +7754,7 @@ function spawnEnemy(forced){
   world.add(shadow);
   const foe = {
     kind, sprite, mesh, shadow, x: sp[0], z: sp[1],
-    hp: d.hp*k*evoHp()*diffMul('hp')*(g.foeHp || 1), max: d.hp*k*evoHp()*diffMul('hp')*(g.foeHp || 1), spd: d.spd*(g.foeSpd || 1), r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300 + (tt/600)*(tt/600))*evoDmg()*diffMul('dmg'), cd: 0
+    hp: d.hp*k*evoHp()*diffMul('hp')*(g.foeHp || 1)*(kind === 'elite' ? 1 : pc.hp), max: d.hp*k*evoHp()*diffMul('hp')*(g.foeHp || 1)*(kind === 'elite' ? 1 : pc.hp), spd: d.spd*(g.foeSpd || 1)*pc.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300 + (tt/600)*(tt/600))*evoDmg()*diffMul('dmg'), cd: 0
   };
   if (kind === 'elite'){ foe.mech = ELITE_MECHS[Math.floor(Math.random()*ELITE_MECHS.length)]; foe.st = 2 + Math.random()*2; markDanger(foe, 0xff5722); }
   g.enemies.push(foe);
@@ -8035,6 +8055,38 @@ function updateBerries(dt){
   }
   g.berries = g.berries.filter(b => !b.taken);
 }
+/* ---------- Sistemas que se desbloquean poco a poco ----------
+   La primera partida es solo moverse, subir de nivel y vencer. Cada sistema aparece al completar unas partidas
+   (las que cuentan en las estadísticas: 5 s o más) y se anuncia la primera vez que sale. La cuenta con todo
+   desbloqueado los tiene todos desde el principio ('digibonk3d-sist'.all). */
+const SYSTEMS = [
+  {id: 'tienda',  plays: 1, name: 'Tienda de Digitamamon', d: 'Gasta las monedas de la partida en curas, ataques, consumibles y objetos (🛒 en el mapa).', col: '#ffd54f'},
+  {id: 'ruleta',  plays: 2, name: 'Ruleta de Piximon', d: 'La primera tirada es gratis: premios o élites (🎡 en el mapa).', col: '#ff80ab'},
+  {id: 'reliquia', plays: 3, name: 'Reliquias', d: 'Al vencer al jefe de la primera pantalla eliges una mejora para toda la partida.', col: '#ffd54f'},
+  {id: 'ruta',    plays: 5, name: 'Cartas de ruta', d: 'Al cruzar el portal eliges cómo será la segunda pantalla.', col: '#80d8ff'},
+  {id: 'fusion',  plays: 7, name: 'Templo de Centarumon', d: 'Fusiona dos ataques a nivel 5 en uno más fuerte (✦ en el mapa).', col: '#ff8a1e'}
+];
+const sysData = () => ({seen: [], ...loadJSON('digibonk3d-sist', {})});
+const sysPlays = () => sumStats('plays');
+function sysOn(id, plays = sysPlays()){
+  const s = SYSTEMS.find(x => x.id === id);
+  return !s || !!sysData().all || plays >= s.plays;
+}
+// Primera vez que se ve: aviso en pantalla (una sola vez por sistema)
+function sysFirst(id){
+  const d = sysData();
+  if (d.seen.includes(id)) return false;
+  d.seen.push(id); localStorage.setItem('digibonk3d-sist', JSON.stringify(d));
+  return true;
+}
+function sysNotice(){
+  const s = SYSTEMS.find(x => ['tienda', 'ruleta', 'fusion'].includes(x.id) && sysOn(x.id) && !sysData().seen.includes(x.id));
+  if (!s || state !== 'play') return false;
+  sysFirst(s.id); announce('¡Nuevo! ' + s.name, s.d, s.col);
+  return true;
+}
+// Sistemas que se acaban de abrir con esta partida (para el resumen final)
+const sysNewSince = before => SYSTEMS.filter(s => !sysData().all && before < s.plays && sysPlays() >= s.plays);
 // PNJ: Digitamamon lleva la tienda, Piximon la ruleta y Centarumon las fusiones. Uno de cada por pantalla
 const NPCS = [
   {id: 'tienda', name: 'Tienda de Digitamamon', sprite: 'sprites/adventure/digitamamon.png', col: 0xffd54f, icon: '🛒'},
@@ -8046,9 +8098,11 @@ function initNpcs(saved){
   for (const n of g.npcs || []){ world.remove(n.mesh); world.remove(n.ring); }
   g.npcs = [];
   const taken = [...(g.shrines || [])];
+  const plays = sysPlays();
   for (const d of NPCS){
     const o = saved && saved.find(x => x.id === d.id);
     if (saved && !o) continue;
+    if (!o && !sysOn(d.id, plays)) continue;
     const {x, z} = o ? {x: +o.x || 0, z: +o.z || 0} : shrineSpot(taken); taken.push({x, z});
     const mesh = billboard(d.sprite, 2.6, false); world.add(mesh);
     const ring = new THREE.Mesh(FX_PLANE, fxMatOwn('rune', d.col, 0.6)); ring.scale.set(5, 1, 5); ring.position.set(x, terrainH(x, z) + 0.06, z); world.add(ring);
@@ -8056,7 +8110,8 @@ function initNpcs(saved){
   }
 }
 function updateNpcs(dt){
-  if (!g.npcs) initNpcs();
+  if (!g.npcs){ initNpcs(); g.sysNoteT = 4; }
+  if (g.sysNoteT > 0 && (g.sysNoteT -= dt) <= 0) g.sysNoteT = sysNotice() ? 6 : 0;   // un aviso cada vez, separados
   for (const n of g.npcs){
     n.mesh.position.set(n.x, terrainH(n.x, n.z) + 1.3 + Math.sin(g.t*2 + n.x)*0.1, n.z);
     n.ring.rotation.y += dt*0.6;
@@ -8148,7 +8203,7 @@ const RELICS = {
 function openRelics(){
   const left = Object.keys(RELICS).filter(id => !(g.relics || []).includes(id)).sort(() => Math.random() - 0.5).slice(0, 3);
   if (!left.length) return;
-  g.npcPick = {title: 'Reliquia del jefe', sub: 'Elige una: dura toda la partida'};
+  g.npcPick = {title: (sysFirst('reliquia') ? '¡Nuevo! ' : '') + 'Reliquia del jefe', sub: 'Elige una: dura toda la partida'};
   g.choices = left.map(id => ({t: RELICS[id].name, name: RELICS[id].name, relic: id, k: 'ofensiva', ic: 'relic', d: RELICS[id].d,
     f: () => { RELICS[id].f(); (g.relics || (g.relics = [])).push(id); announce(RELICS[id].name, 'Reliquia', '#ffd54f'); }}));
   openUpgrades();
@@ -8167,7 +8222,7 @@ const ROUTES = {
 };
 function openRoutes(){
   const two = Object.keys(ROUTES).sort(() => Math.random() - 0.5).slice(0, 2);
-  g.npcPick = {title: 'Elige tu ruta', sub: 'El modificador dura toda la pantalla 2'};
+  g.npcPick = {title: (sysFirst('ruta') ? '¡Nuevo! ' : '') + 'Elige tu ruta', sub: 'El modificador dura toda la pantalla 2'};
   g.choices = two.map(id => ({t: ROUTES[id].name, name: ROUTES[id].name, route: id, k: 'utilidad', ic: 'route', d: ROUTES[id].d,
     f: () => { g.route = id; ROUTES[id].f(); applyZoneVisuals(g.zone); announce(ROUTES[id].name, '', ROUTES[id].col); }}));
   openUpgrades();
@@ -8372,7 +8427,7 @@ function update(dt){
     // Presión creciente: tras 45 s salen más enemigos por tanda (1 extra, +1 cada 120 s, máximo 3)
     const extra = g.t > 45 ? Math.min(3, 1 + Math.floor(diffT(g.t)/120)) : 0;
     for (let i = 0; i < extra && g.enemies.length < cap; i++) spawnEnemy();
-    g.spawnT = Math.max(DIFF.spawnMin, (1.1 - diffT(g.t)/300) * diffMul('spawn')) * ((g.mod && g.mod.spawnMul) || 1) * (g.route === 'horda' ? 0.7 : 1);
+    g.spawnT = Math.max(DIFF.spawnMin, (1.1 - diffT(g.t)/300) * diffMul('spawn')) * ((g.mod && g.mod.spawnMul) || 1) * (g.route === 'horda' ? 0.7 : 1) * mapPace().spawn;
   }
 
   // Minijefes en sus minutos
@@ -8706,7 +8761,7 @@ function update(dt){
     p.lvl++;
     p.nextXp = Math.floor(2*(10 + 4*(p.lvl - 1) + 0.9*(p.lvl - 1)*(p.lvl - 1)));   // curva para 20 minutos: evoluciones hacia los minutos 3-4, 8 y 13 (medido con __dbk.sim)
     g.choices = upgradeChoices();
-    const evoAt = evoLevelFor(g.ch.id, g.ch.evolved | 0);
+    const evoAt = runEvoLevel(g.ch.id, g.ch.evolved | 0);
     if (evoAt && p.lvl >= evoAt && (g.ch.evolved | 0) < EVO_LINE[g.ch.id].length) digivolve();
     g.pendingUp = true;
   }
@@ -9601,7 +9656,9 @@ function endGame(win){
   if (g.mode === 'surv'){ const wk = 'digibonk3d-surv-wave-' + g.map; g.waveBest = (g.wave || 1) > +(localStorage.getItem(wk) || 0); if (g.waveBest) localStorage.setItem(wk, String(g.wave || 1)); }
   g.earned = earned + bonus + (g.extraBits || 0) + g.retoBits;
   g.bonus = bonus;
+  const playsBefore = sysPlays();
   g.unlocked = recordRun(g.ch.id, g.kills, g.t);
+  g.newSys = sysNewSince(playsBefore);
   g.survBest = g.mode === 'surv' ? recordSurv(g.ch.id, g.t) : null;
   g.encDone = checkEncargos();
   g.questDone = checkLongQuests(win);
@@ -9633,6 +9690,7 @@ function endGame(win){
   for (const m of g.mastery) rewards.push(`<li>Premio de maestría: <b>${m}</b></li>`);
   for (const q of (g.vales || [])) rewards.push(`<li>Evento: <b>${q}</b></li>`);
   for (const d of g.newDigis) rewards.push(`<li>Digimon desbloqueado: <b>${d}</b></li>`);
+  for (const sy of g.newSys || []) rewards.push(`<li>Nuevo en tus partidas: <b>${sy.name}</b> · ${sy.d}</li>`);
   for (const it of g.newItems || []) rewards.push(`<li>Objeto desbloqueado: <b>${it}</b> · míralo en la vitrina del Digidex</li>`);
   for (const q of (g.questDone || [])) rewards.push(`<li>Encargo cumplido: <b>${q.t}</b> · +${q.bits} Bits${GACHA_SOON ? '' : ` y +${q.tix} tickets`}</li>`);
   for (const e of g.encDone) rewards.push(`<li>Encargo cumplido: <b>${e}</b> · +${ENC_REWARD.bits} Bits${GACHA_SOON ? '' : ` y +${ENC_REWARD.tix} ticket`}</li>`);
@@ -9871,7 +9929,7 @@ function portalModelOpen(instant){
 }
 function openPortal(title, sub){
   g.portalOpen = true;
-  if (g.mode !== 'surv' && !(g.relics || []).length) g.relicT = 2.5;   // reliquia del jefe: se elige poco después del KO
+  if (g.mode !== 'surv' && !(g.relics || []).length && sysOn('reliquia')) g.relicT = 2.5;   // reliquia del jefe: se elige poco después del KO
   g.tix += 2;
   if (g.portal) spawnRing(PORTAL.x, PORTAL.z, 0x3de0ff, 8, 0.9);
   g.portalJustOpened = true; portalOpenFx(); g.portalJustOpened = false;
@@ -9943,7 +10001,7 @@ function swapScreen(n, quiet){
   initShrines();
   g.p.x = 0; g.p.z = 0; g.p.y = 0; g.p.vy = 0;
   g.spawnT = 3; g.eliteT = Math.max(g.eliteT, 30);
-  if (g.mode !== 'surv' && !g.route) g.routeT = 1.4;   // carta de ruta para esta pantalla
+  if (g.mode !== 'surv' && !g.route && sysOn('ruta')) g.routeT = 1.4;   // carta de ruta para esta pantalla
   if (!quiet) screenBanner(n);
 }
 function screenBanner(n){
@@ -10603,7 +10661,7 @@ function fusionLvCards(){
 // Aviso (una vez por pareja disponible) para que el jugador vaya a hablar con Centarumon
 function fusionHint(){
   if (!g || state !== 'play') return;
-  const n = fusionReady().length >= 2 && slotsUsed() <= SKILL_SLOTS;
+  const n = fusionReady().length >= 2 && slotsUsed() <= SKILL_SLOTS && (g.npcs || []).some(x => x.id === 'fusion');
   if (n && !g.fusHint){ g.fusHint = true; announce('¡Fusión disponible!', 'Habla con Centarumon (✦ en el mapa)', '#ff8a1e'); }
   if (!n) g.fusHint = false;
 }
@@ -11084,7 +11142,7 @@ function triggerEmergency(){
 function endEmergency(){
   const prev = g.emergPrev, id = g.ch.id;
   // Si mientras tanto llegaste al nivel de esa evolución, te la quedas
-  if (g.p.lvl >= evoLevelFor(id, prev)) return;
+  if (g.p.lvl >= runEvoLevel(id, prev)) return;
   const st = g.ch.evolved | 0;
   g.ch.evolved = prev;
   g.p.dmg /= 1.2; g.p.area /= 1.05; g.p.maxHp -= 20; g.p.hp = Math.min(g.p.hp, g.p.maxHp);
@@ -11433,7 +11491,7 @@ function applyLab(){
   p.dmg *= labMul('dmg');
   p.speed *= labMul('speed');
   p.pickup *= labMul('pickup');
-  g.labXp = labMul('xp') * (lvlDiff().xp || 1);   // Pesadilla: +20 %
+  g.labXp = labMul('xp') * (lvlDiff().xp || 1);   // Difícil +25 %, Pesadilla +40 %
   g.labBonk = labMul('bonk');
   upRes().rer += labFlat('rer');
   g.revives = labLv('revive');
@@ -11693,6 +11751,7 @@ function grantAllContent(){
   localStorage.setItem('digibonk3d-bits', String(Math.max(99999, +(localStorage.getItem('digibonk3d-bits') || 0))));
   localStorage.setItem('digibonk3d-unlocked', JSON.stringify(SEASONS.adventure.chars));
   localStorage.setItem('digibonk3d-objetos', JSON.stringify(Object.keys(ITEMS).filter(id => !ITEM_BASE.includes(id))));
+  localStorage.setItem('digibonk3d-sist', JSON.stringify({...loadJSON('digibonk3d-sist', {}), all: true}));
   localStorage.removeItem(STARTER_PENDING);
   return JSON.stringify(saveData()) !== before;
 }
