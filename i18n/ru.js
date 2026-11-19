@@ -1514,5 +1514,10 @@ I18N.add('ru', {"×{0} daño": "×{0} урона", "×{0} recibido": "×{0} по
   "Ranking de {0}: tu mejor marca está en el puesto {1}": "Рейтинг {0}: твой лучший рекорд на {1} месте",
   "Ya jugaron en este navegador:": "Уже играли в этом браузере:",
   "No hay espacio para guardar aparte tu progreso. Si cierras sesión, se perderá el progreso de este navegador. ¿Cerrar sesión igualmente?": "Нет места, чтобы отдельно сохранить твой прогресс. Если выйти, прогресс в этом браузере пропадёт. Всё равно выйти?",
-  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "Выход сохраняет твой прогресс в этом браузере: войди снова с тем же именем, чтобы вернуть его. Удаление аккаунта стирает весь прогресс."
+  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "Выход сохраняет твой прогресс в этом браузере: войди снова с тем же именем, чтобы вернуть его. Удаление аккаунта стирает весь прогресс.",
+  "Tú": "Ты",
+  "Cofre": "Сундук",
+  "Santuario": "Святилище",
+  "Élite": "Элита",
+  "Jefe": "Босс"
 });

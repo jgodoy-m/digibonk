@@ -1516,5 +1516,10 @@ I18N.add('zh', {"×{0} daño": "伤害 ×{0}", "×{0} recibido": "受到伤害 �
   "Ranking de {0}: tu mejor marca está en el puesto {1}": "{0}排行榜:你的最佳记录排在第 {1} 名",
   "Ya jugaron en este navegador:": "曾在此浏览器中玩过:",
   "No hay espacio para guardar aparte tu progreso. Si cierras sesión, se perderá el progreso de este navegador. ¿Cerrar sesión igualmente?": "没有空间单独保存你的进度。如果退出登录,此浏览器中的进度将丢失。仍要退出吗?",
-  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "退出登录会把进度保存在此浏览器中:用同一个名字再次进入即可找回。删除账号会清除你的全部进度。"
+  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "退出登录会把进度保存在此浏览器中:用同一个名字再次进入即可找回。删除账号会清除你的全部进度。",
+  "Tú": "你",
+  "Cofre": "宝箱",
+  "Santuario": "神殿",
+  "Élite": "精英",
+  "Jefe": "首领"
 });

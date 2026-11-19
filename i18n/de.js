@@ -1502,5 +1502,11 @@ I18N.add('de', {"×{0} daño": "×{0} Schaden", "×{0} recibido": "×{0} erhalte
   "Ranking de {0}: tu mejor marca está en el puesto {1}": "Rangliste {0}: Dein bester Rekord steht auf Platz {1}",
   "Ya jugaron en este navegador:": "Haben in diesem Browser schon gespielt:",
   "No hay espacio para guardar aparte tu progreso. Si cierras sesión, se perderá el progreso de este navegador. ¿Cerrar sesión igualmente?": "Kein Platz, um deinen Fortschritt getrennt zu speichern. Wenn du dich abmeldest, geht der Fortschritt in diesem Browser verloren. Trotzdem abmelden?",
-  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "Abmelden behält deinen Fortschritt in diesem Browser: Melde dich mit demselben Namen wieder an, um ihn zurückzubekommen. Konto löschen entfernt deinen gesamten Fortschritt."
+  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "Abmelden behält deinen Fortschritt in diesem Browser: Melde dich mit demselben Namen wieder an, um ihn zurückzubekommen. Konto löschen entfernt deinen gesamten Fortschritt.",
+  "Tú": "Du",
+  "Cofre": "Truhe",
+  "Santuario": "Schrein",
+  "Élite": "Elite",
+  "Jefe": "Boss",
+  "Portal": "Portal"
 });

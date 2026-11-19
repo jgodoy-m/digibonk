@@ -1516,5 +1516,10 @@ I18N.add('ja', {"×{0} daño": "ダメージ ×{0}", "×{0} recibido": "被ダ�
   "Ranking de {0}: tu mejor marca está en el puesto {1}": "{0}のランキング:あなたの最高記録は{1}位です",
   "Ya jugaron en este navegador:": "このブラウザで遊んだことがある人:",
   "No hay espacio para guardar aparte tu progreso. Si cierras sesión, se perderá el progreso de este navegador. ¿Cerrar sesión igualmente?": "進行状況を別に保存する空き容量がありません。ログアウトすると、このブラウザの進行状況は失われます。それでもログアウトしますか?",
-  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "ログアウトしても進行状況はこのブラウザに残ります。同じ名前でもう一度入ると戻ります。アカウントを削除すると、すべての進行状況が消えます。"
+  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "ログアウトしても進行状況はこのブラウザに残ります。同じ名前でもう一度入ると戻ります。アカウントを削除すると、すべての進行状況が消えます。",
+  "Tú": "自分",
+  "Cofre": "宝箱",
+  "Santuario": "祠",
+  "Élite": "エリート",
+  "Jefe": "ボス"
 });

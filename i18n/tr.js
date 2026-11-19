@@ -1508,5 +1508,11 @@ I18N.add('tr', {"×{0} daño": "×{0} hasar", "×{0} recibido": "×{0} alınan",
   "Ranking de {0}: tu mejor marca está en el puesto {1}": "{0} sıralaması: en iyi rekorun {1}. sırada",
   "Ya jugaron en este navegador:": "Bu tarayıcıda daha önce oynayanlar:",
   "No hay espacio para guardar aparte tu progreso. Si cierras sesión, se perderá el progreso de este navegador. ¿Cerrar sesión igualmente?": "İlerlemeni ayrı kaydetmek için yer yok. Çıkış yaparsan bu tarayıcıdaki ilerleme kaybolur. Yine de çıkış yapılsın mı?",
-  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "Çıkış yapmak ilerlemeni bu tarayıcıda saklar: geri almak için aynı adla tekrar gir. Hesabı silmek tüm ilerlemeni siler."
+  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "Çıkış yapmak ilerlemeni bu tarayıcıda saklar: geri almak için aynı adla tekrar gir. Hesabı silmek tüm ilerlemeni siler.",
+  "Tú": "Sen",
+  "Cofre": "Sandık",
+  "Santuario": "Tapınak",
+  "Élite": "Elit",
+  "Jefe": "Patron",
+  "Portal": "Portal"
 });

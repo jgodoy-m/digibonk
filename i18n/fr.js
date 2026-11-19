@@ -1503,5 +1503,10 @@ I18N.add('fr', {"×{0} daño": "×{0} dégâts", "×{0} recibido": "×{0} reçus
   "Ranking de {0}: tu mejor marca está en el puesto {1}": "Classement {0} : ton meilleur record est à la place {1}",
   "Ya jugaron en este navegador:": "Ont déjà joué sur ce navigateur :",
   "No hay espacio para guardar aparte tu progreso. Si cierras sesión, se perderá el progreso de este navegador. ¿Cerrar sesión igualmente?": "Pas assez de place pour mettre ta progression de côté. Si tu te déconnectes, la progression de ce navigateur sera perdue. Se déconnecter quand même ?",
-  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "Se déconnecter garde ta progression dans ce navigateur : reconnecte-toi avec le même nom pour la récupérer. Supprimer le compte efface toute ta progression."
+  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "Se déconnecter garde ta progression dans ce navigateur : reconnecte-toi avec le même nom pour la récupérer. Supprimer le compte efface toute ta progression.",
+  "Tú": "Toi",
+  "Cofre": "Coffre",
+  "Santuario": "Sanctuaire",
+  "Élite": "Élite",
+  "Jefe": "Boss"
 });

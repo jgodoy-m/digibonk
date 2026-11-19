@@ -1502,5 +1502,11 @@ I18N.add('pt', {"×{0} daño": "×{0} dano", "×{0} recibido": "×{0} recebido",
   "Ranking de {0}: tu mejor marca está en el puesto {1}": "Ranking de {0}: o teu melhor recorde está na posição {1}",
   "Ya jugaron en este navegador:": "Já jogaram neste navegador:",
   "No hay espacio para guardar aparte tu progreso. Si cierras sesión, se perderá el progreso de este navegador. ¿Cerrar sesión igualmente?": "Não há espaço para guardar o teu progresso à parte. Se terminares a sessão, perde-se o progresso deste navegador. Terminar sessão mesmo assim?",
-  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "Terminar sessão guarda o teu progresso neste navegador: volta a entrar com o mesmo nome para o recuperar. Eliminar a conta apaga todo o teu progresso."
+  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "Terminar sessão guarda o teu progresso neste navegador: volta a entrar com o mesmo nome para o recuperar. Eliminar a conta apaga todo o teu progresso.",
+  "Tú": "Você",
+  "Cofre": "Baú",
+  "Santuario": "Santuário",
+  "Élite": "Elite",
+  "Jefe": "Chefe",
+  "Portal": "Portal"
 });

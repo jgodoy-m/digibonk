@@ -1647,5 +1647,11 @@ I18N.add('en', {
   "¡Nuevo! {0}": "New! {0}",
   "¡Nuevo! Reliquia del jefe": "New! Boss relic",
   "¡Nuevo! Elige tu ruta": "New! Choose your route",
-  "Nuevo en tus partidas: {0} · {1}": "New in your runs: {0} · {1}"
+  "Nuevo en tus partidas: {0} · {1}": "New in your runs: {0} · {1}",
+  "Tú": "You",
+  "Cofre": "Chest",
+  "Santuario": "Shrine",
+  "Élite": "Elite",
+  "Jefe": "Boss",
+  "Portal": "Portal"
 });
