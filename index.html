@@ -4585,11 +4585,101 @@ function twinMat(m){
 }
 // Orienta un sprite: fr = true mira a la derecha
 function faceSprite(mesh, fr){
-  const m = mesh && mesh.material, t = m && m.map;
+  let m = mesh && mesh.material, t = m && m.map;
   if (!t) return;
+  // Una pose de ataque (poseMat/poseTex) se deshace primero: el gemelo se busca siempre desde el material normal
+  if (m.root){ mesh.material = m = m.root; t = m.map; }
+  if (t.root){ m.map = t = t.root; }
   if (t.own){ if (t.isAnim) setTexFlip(t, fr); }        // textura propia (jugador, apoyos, salvajes): se invierte en el sitio
   else if (sharedMats.has(m)){ if (!!m.fr !== fr) mesh.material = twinMat(m); }   // material compartido: se cambia por su gemelo
   else if (!!t.fr !== fr) m.map = twinTex(t);            // material propio con textura compartida (élites, cargadores)
+}
+// ---------- Andar y atacar ----------
+// Las hojas solo tienen 5 poses (reposo 1 y 2, ataque 1 y 2, daño), así que el paso se hace con el cuerpo:
+// al andar, saltito con aplastado al pisar, un leve balanceo y los dos fotogramas de reposo más deprisa;
+// al atacar, se encoge hacia atrás (ataque 1) y se estira hacia el objetivo (ataque 2).
+// Vale para todas las etapas de evolución porque solo usa la hoja que tenga el Digimon en ese momento.
+// Pose fija de un material compartido (enemigos del mismo tipo): copia con su textura parada en el fotograma f
+function poseMat(m, f){
+  m.pose = m.pose || {};
+  if (m.pose[f]) return m.pose[f];
+  const w = m.clone();
+  w.map = poseTex(m.map, f);   // textura parada (comparte la imagen)
+  w.fr = m.fr; w.root = m;
+  return (m.pose[f] = w);
+}
+function poseTex(t, f){
+  t.pose = t.pose || {};
+  if (t.pose[f]) return t.pose[f];
+  const w = t.clone();
+  w.isAnim = true; w.fr = !!t.fr; w.root = t;
+  w.repeat.x = t.repeat.x; w.offset.x = (f + (w.fr ? 1 : 0))/ANIM_N;
+  return (t.pose[f] = w);
+}
+// Pone el fotograma f (null = el normal) a un sprite, sea cual sea su tipo de material
+function setPose(mesh, f){
+  const m = mesh.material, t = m && m.map;
+  if (!t) return;
+  if (t.own){ if (t.isAnim && f !== null) t.offset.x = (f + (t.fr ? 1 : 0))/ANIM_N; return; }
+  const rm = m.root || m, rt = t.root || t;
+  if (!rt.isAnim) return;
+  if (sharedMats.has(rm)) mesh.material = f === null ? rm : poseMat(rm, f);
+  else m.map = f === null ? rt : poseTex(rt, f);
+}
+// Golpe de un enemigo: dur segundos; rel = empieza ya en el fotograma de soltar (el tirador dispara al momento)
+function foeAtk(e, dur, rel = false){ e.atkDur = dur; e.atkT = rel ? dur*0.6 : dur; }
+// Aplica el paso y el ataque a un cuerpo. o: {mesh, x, z, own, atk (0..1, 0 = nada), feet, tx, tz, face}
+// feet: la posición vertical va por los pies (enemigos y apoyos); si no, por el centro (jugador)
+function animBody(mesh, x, z, dt, atk, pose, tx, tz, feet, sway){
+  const u = mesh.userData;
+  // Base: si otra parte del juego cambió la escala (digievolución, apoyo que evoluciona), se toma la nueva
+  if (u.lx !== mesh.scale.x || u.ly !== mesh.scale.y){ u.bx = mesh.scale.x; u.by = mesh.scale.y; }
+  const v = u.px === undefined ? 0 : Math.hypot(x - u.px, z - u.pz)/Math.max(dt, 1e-3);
+  u.px = x; u.pz = z;
+  const walking = v > 0.6;
+  u.w = (u.w || 0) + ((walking ? 1 : 0) - (u.w || 0))*Math.min(1, dt*10);   // entra y sale del paso con suavidad
+  u.ph = (u.ph || Math.random()*6) + dt*Math.min(15, 7 + v*0.9);           // cadencia según la velocidad
+  const st = Math.abs(Math.sin(u.ph)), w = u.w*(atk ? 0.3 : 1);
+  let kx = 1 + 0.06*w*(1 - st), ky = 1 - 0.08*w*(1 - st), hop = 0.09*Math.min(u.by, 3)*w*st, lx = 0, lz = 0;
+  if (atk){
+    // atk de 1 a 0: primer 40 % se encoge (prepara), luego se estira hacia el objetivo y vuelve
+    if (atk > 0.6){ const k = (atk - 0.6)/0.4; kx *= 1 + 0.07*Math.sin(k*Math.PI); ky *= 1 - 0.06*Math.sin(k*Math.PI); }
+    else { const k = Math.sin((atk/0.6)*Math.PI); kx *= 1 + 0.13*k; ky *= 1 - 0.05*k; const d = Math.hypot(tx, tz) || 1, r = 0.22*Math.min(u.bx, 3)*k; lx = tx/d*r; lz = tz/d*r; }
+  } else if (pose === 2){ kx *= 1.06; ky *= 0.94; }          // preparando una embestida: agazapado
+  else if (pose === 3){ kx *= 1.1; ky *= 0.95; }
+  const sy = u.by*ky, ref = feet ? mesh.scale.y : u.by;
+  mesh.scale.set(u.bx*kx, sy, 1);
+  u.lx = mesh.scale.x; u.ly = mesh.scale.y;
+  mesh.position.x += lx; mesh.position.z += lz;
+  mesh.position.y += (sy - ref)/2 + hop;
+  if (sway) mesh.material.rotation = Math.sin(u.ph)*0.07*w;    // balanceo: solo con material propio
+  return walking;
+}
+// Recorre jugador, apoyos y enemigos tras colocarlos (syncMeshes / updateSupport)
+function animBodies(dt){
+  const p = g.p;
+  // Jugador: el fotograma lo elige frame() (ataque, daño, reposo); aquí va el cuerpo
+  const rx = Math.cos(camYaw), rz = -Math.sin(camYaw);   // derecha de la pantalla en el mundo
+  const pa = g.atkT > 0 ? g.atkT/0.26 : 0, pf = g.faceR ? 1 : -1;
+  animBody(g.playerMesh, p.x, p.z, dt, pa, 0, rx*pf, rz*pf, false, true);
+  for (const s of g.sups){
+    s.atkT = Math.max(0, (s.atkT || 0) - dt);
+    const f = s.faceR ? 1 : -1, a = s.atkT/0.26;
+    const walking = animBody(s.mesh, s.x, s.z, dt, a, 0, rx*f, rz*f, true, true);
+    const t = s.mesh.material.map;
+    if (t && t.isAnim) setPose(s.mesh, a > 0.5 ? 2 : a > 0 ? 3 : Math.floor(animMs/(walking ? 150 : 380)) % 2);
+  }
+  for (const e of g.enemies){
+    if (e.atkT !== undefined) e.atkT = Math.max(-1, e.atkT - dt);
+    const dur = e.atkDur || 0.36, a = e.atkT > 0 ? e.atkT/dur : 0;
+    const c = e.ch || e.charge, pose = c ? ((c.w !== undefined ? c.w : c.wait) > 0 ? 2 : 3) : 0;   // embestidas: agazapado y luego lanzado
+    const own = e.mesh.material.map && e.mesh.material.map.own;
+    const walking = animBody(e.mesh, e.x, e.z, dt, a, pose, p.x - e.x, p.z - e.z, true, !sharedMats.has(e.mesh.material.root || e.mesh.material));
+    if (e.frozenT > 0) continue;
+    const f = a > 0.6 ? 2 : a > 0 ? 3 : pose || null;
+    if (own) setPose(e.mesh, f !== null ? f : Math.floor(animMs/(walking ? 150 : 380)) % 2);   // salvaje: textura propia
+    else setPose(e.mesh, f);
+  }
 }
 // Componente horizontal en pantalla de un desplazamiento del mundo (positivo = hacia la derecha)
 function screenDx(dx, dz){ return dx*Math.cos(camYaw) - dz*Math.sin(camYaw); }
@@ -8515,9 +8605,9 @@ function update(dt){
       e.x += dx/d*spd*want*dt; e.z += dz/d*spd*want*dt;
       e.st = (e.st === undefined ? 1 + Math.random()*2 : e.st) - dt;
       dangerLane(e, dx/d, dz/d, e.st < 0.5 && d < 16 ? Math.min(d, 7) : 0, 0.5, true);   // aviso: línea de tiro medio segundo antes
-      if (e.st <= 0 && d < 16){ e.st = 3.5; dangerLane(e); enemyShot(e.x, e.z, Math.atan2(dz, dx), 8, e.dmg*1.3*foeMul(e)*idleMul(), 0xff6e40); }
+      if (e.st <= 0 && d < 16){ e.st = 3.5; foeAtk(e, 0.32, true); dangerLane(e); enemyShot(e.x, e.z, Math.atan2(dz, dx), 8, e.dmg*1.3*foeMul(e)*idleMul(), 0xff6e40); }
       [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5); resolveSolids(e, e.r*0.8);
-      if (d < e.r + 0.8 && g.dash <= 0) p.hp -= e.dmg * foeMul(e) * (p.armor || 1) * idleMul() * dt;
+      if (d < e.r + 0.8 && g.dash <= 0){ p.hp -= e.dmg * foeMul(e) * (p.armor || 1) * idleMul() * dt; if (!(e.atkT > -0.5)) foeAtk(e, 0.36); }
       continue;
     }
     if (e.mech) eliteMech(e, d, dt);
@@ -8543,7 +8633,7 @@ function update(dt){
     [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5);   // los enemigos también quedan dentro
     resolveSolids(e, e.r*0.8);                          // y no atraviesan casas ni vallas
     e.cd -= dt;
-    if (d < e.r + 0.8 && g.dash <= 0){ p.hp -= e.dmg * foeMul(e) * (p.armor || 1) * idleMul() * (g.inferno && !e.boss ? Math.sqrt(infMul()) : 1) * dt; shake = Math.max(shake, 0.12); }
+    if (d < e.r + 0.8 && g.dash <= 0){ p.hp -= e.dmg * foeMul(e) * (p.armor || 1) * idleMul() * (g.inferno && !e.boss ? Math.sqrt(infMul()) : 1) * dt; shake = Math.max(shake, 0.12); if (!(e.atkT > -0.5)) foeAtk(e, 0.36); }   // golpe visible cada ~0,9 s mientras toca
   }
 
   // Armas (tras digievolucionar, 4 s de ataque acelerado)
@@ -10082,6 +10172,7 @@ function bossPhases(dt){
   b.slamT -= dt;
   if (b.slamT > 0) return;
   b.slamT = b.phase === 3 ? 4 : 6;
+  foeAtk(b, 0.5);
   const n = b.phase === 3 ? 5 : 3, dmg = 14 * bossDmgMul() * (b.phase === 3 ? 1.25 : 1), warn = lvlDiff().slamWarn || 1;
   b.slamN = (b.slamN || 0) + 1;
   if (b.slamN % 2 === 0){
@@ -10801,7 +10892,7 @@ function updateBossMechanics(dt){
     if (!m) continue;
     if (e.frozenT > 0) continue;
     e.mt = (e.mt === undefined ? 3 : e.mt) - dt;
-    if (e.mt <= 0){ e.mt = m.cd; m.f(e); }
+    if (e.mt <= 0){ e.mt = m.cd; m.f(e); foeAtk(e, 0.45); }
     if (e.charge){
       const c = e.charge;
       if (c.wait > 0) c.wait -= dt;
@@ -11171,7 +11262,7 @@ function updateSupport(dt){
     let best = null, bd = 14;
     for (const e of g.enemies){ const d = dist2(e.x, e.z, s.x, s.z); if (e.hp > 0 && !e.wild && d < bd){ bd = d; best = e; } }
     if (!best) return;
-    s.cd = 1.1 * p.cdMul;
+    s.cd = 1.1 * p.cdMul; s.atkT = 0.26;
     const d = bd || 1, c = CHARS[s.key];
     fireProjectile(s.x, s.z, (best.x - s.x)/d*16, (best.z - s.z)/d*16, (c.dmg || 10) * Math.min(0.5, 0.25 + 0.005*p.lvl) * p.dmg * (1 + 0.35*s.st), 1.2 + 0.2*s.st, s.st ? 0xffd54f : 0x80deea, {fx: c.fx === 'claw' || c.fx === 'leaf' || c.fx === 'snow' ? 'star' : c.fx, big: 0.8 + 0.15*s.st});
   });
@@ -12872,7 +12963,7 @@ function frame(now){
     if (g.perfectCd > 0) g.perfectCd -= dt;
     if (!g.evoAnim) update(sdt);   // durante la digievolución el mundo se detiene y solo corre la animación
     if (g){
-      syncMeshes(); updateCamera(dt); updateHUD();
+      syncMeshes(); if (!g.evoAnim) animBodies(dt); updateCamera(dt); updateHUD();
     }
   }
   drawEdgeMarkers();
@@ -12927,7 +13018,7 @@ if (LOCAL_DEV && new URLSearchParams(location.search).has('demo')){
     rollTier,
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
-    spawnMini, MINIS, PORTAL, PONDS, PLAZA_SPOTS, get layout(){ return layout; }, openMap, closeMap, topView(h = 230){ camera.position.set(0, h, 40); camera.lookAt(0, 0, 0); const f = camera.far; camera.far = 600; camera.updateProjectionMatrix(); renderer.render(scene, camera); camera.far = f; camera.updateProjectionMatrix(); }, startMapEvent, SHRINE_TYPES, initShrines, summonBoss, openPortal, enterScreen: n => enterScreen(n, true), openRelics, useCons, openRoutes, showMapSelect, showReto, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
+    digivolve, addSupport, spawnMini, MINIS, PORTAL, PONDS, PLAZA_SPOTS, get layout(){ return layout; }, openMap, closeMap, topView(h = 230){ camera.position.set(0, h, 40); camera.lookAt(0, 0, 0); const f = camera.far; camera.far = 600; camera.updateProjectionMatrix(); renderer.render(scene, camera); camera.far = f; camera.updateProjectionMatrix(); }, startMapEvent, SHRINE_TYPES, initShrines, summonBoss, openPortal, enterScreen: n => enterScreen(n, true), openRelics, useCons, openRoutes, showMapSelect, showReto, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
     stepUpdate: dt => update(dt), animateEvo, updateFx, syncMeshes, tryDash, openChest,
     resume(){ if (state === 'paused'){ state = 'play'; hideOverlay(); hidePause(); } },
     // Simulación rápida sin dibujar (para medir el equilibrio): avanza sec segundos y elige la carta pick en cada subida
