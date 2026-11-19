@@ -7270,11 +7270,12 @@ function spawnMini(m){
   // una élite normal (Devimon 995 PS frente a 1.156 en el minuto 3). m.hp solo ordena a unos frente a otros
   const hp = ENEMY.elite.hp*MINI_HP_K*(m.hp/340)*eliteHpK(diffT(t))*evoHp()*diffMul('hp');
   g.enemies.push({kind: 'mini', name: m.name, sprite: m.sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 2.5, r: 1.9, xp: 60, dmg: 16*(1 + diffT(t)/300)*diffMul('dmg'), cd: 0});
+  markDanger(g.enemies[g.enemies.length - 1], 0xd500f9);
   sfx('boss');
   bossIntro(g.enemies[g.enemies.length - 1], m.name, 'Jefe menor', '#ce93d8', true);
 }
-function burst(x, z, color){
-  for (let i = 0; i < 7; i++){
+function burst(x, z, color, n = 7){
+  for (let i = 0; i < n; i++){
     const m = new THREE.Mesh(fxGeo, new THREE.MeshBasicMaterial({color, transparent: true}));
     m.position.set(x, 0.8, z);
     world.add(m);
@@ -7636,8 +7637,11 @@ function hurt(e, dmg){
   if (e.shield) dmg *= 0.2;   // élite con el escudo activo
   e.hp -= dmg;
   g.dmgBy[dmgSrc] = (g.dmgBy[dmgSrc] || 0) + dmg;
-  popText(e.x, e.z, Math.round(dmg), crit ? '#ffb300' : '#ffffff', crit ? 0.8 : 0.55);
-  burst(e.x, e.z, hitColors[e.kind] || '#ffe082');
+  // Con mucha horda (sobre todo en móvil) solo salen números de críticos y de enemigos grandes, y menos chispas:
+  // así se ven las balas rojas y los avisos de ataque
+  const big = e.boss || e.kind === 'elite' || e.kind === 'mini', busy = !big && g.enemies.length > (isTouchUI() ? 45 : 80);
+  if (!busy || crit) popText(e.x, e.z, Math.round(dmg), crit ? '#ffb300' : '#ffffff', crit ? 0.8 : 0.55);
+  burst(e.x, e.z, hitColors[e.kind] || '#ffe082', busy ? 2 : 7);
   sfx('hit');
 }
 
@@ -7731,7 +7735,7 @@ function spawnEnemy(forced){
     kind, sprite, mesh, shadow, x: sp[0], z: sp[1],
     hp: d.hp*k*evoHp()*diffMul('hp')*(g.foeHp || 1), max: d.hp*k*evoHp()*diffMul('hp')*(g.foeHp || 1), spd: d.spd*(g.foeSpd || 1), r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300 + (tt/600)*(tt/600))*evoDmg()*diffMul('dmg'), cd: 0
   };
-  if (kind === 'elite'){ foe.mech = ELITE_MECHS[Math.floor(Math.random()*ELITE_MECHS.length)]; foe.st = 2 + Math.random()*2; }
+  if (kind === 'elite'){ foe.mech = ELITE_MECHS[Math.floor(Math.random()*ELITE_MECHS.length)]; foe.st = 2 + Math.random()*2; markDanger(foe, 0xff5722); }
   g.enemies.push(foe);
   return foe;
 }
@@ -8396,7 +8400,8 @@ function update(dt){
       const want = d > 11 ? 1 : d < 8 ? -0.8 : 0, spd = e.slowT > 0 ? (e.slowT -= dt, e.spd*0.5) : e.spd;
       e.x += dx/d*spd*want*dt; e.z += dz/d*spd*want*dt;
       e.st = (e.st === undefined ? 1 + Math.random()*2 : e.st) - dt;
-      if (e.st <= 0 && d < 16){ e.st = 3.5; enemyShot(e.x, e.z, Math.atan2(dz, dx), 8, e.dmg*1.3*foeMul(e)*idleMul(), 0xff6e40); }
+      dangerLane(e, dx/d, dz/d, e.st < 0.5 && d < 16 ? Math.min(d, 7) : 0, 0.5, true);   // aviso: línea de tiro medio segundo antes
+      if (e.st <= 0 && d < 16){ e.st = 3.5; dangerLane(e); enemyShot(e.x, e.z, Math.atan2(dz, dx), 8, e.dmg*1.3*foeMul(e)*idleMul(), 0xff6e40); }
       [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5); resolveSolids(e, e.r*0.8);
       if (d < e.r + 0.8 && g.dash <= 0) p.hp -= e.dmg * foeMul(e) * (p.armor || 1) * idleMul() * dt;
       continue;
@@ -8408,7 +8413,7 @@ function update(dt){
       if (!e.ch && e.st <= 0 && d < 10){ e.ch = {w: 0.7, t: 0.6, dx: dx/d, dz: dz/d}; e.mesh.material.color.set(0xff5252); }
       if (e.ch){
         const c = e.ch;
-        if (c.w > 0){ c.w -= dt; if (c.w > 0.25){ c.dx = dx/d; c.dz = dz/d; } }   // apunta y fija la dirección en el último cuarto de segundo
+        if (c.w > 0){ c.w -= dt; if (c.w > 0.25){ c.dx = dx/d; c.dz = dz/d; } dangerLane(e, c.dx, c.dz, (e.mech ? 19 : 15)*0.6 + e.r, e.r*(e.mech ? 1.6 : 1.1), !e.mech); if (c.w <= 0) dangerLane(e); }   // apunta y fija la dirección en el último cuarto de segundo; el carril rojo muestra por dónde pasará
         else { const v = e.mech ? 19 : 15; c.t -= dt; e.x += c.dx*v*dt; e.z += c.dz*v*dt; if (c.t <= 0){ e.ch = null; e.st = e.mech ? 4.5 : 3.5; e.mesh.material.color.set(0xffffff); } }
         [e.x, e.z] = clampArena(e.x, e.z, ARENA_R - 0.5); resolveSolids(e, e.r*0.8);
         if (d < e.r + 0.8 && g.dash <= 0) p.hp -= e.dmg * (c.w > 0 ? 1 : 1.8) * foeMul(e) * (p.armor || 1) * idleMul() * dt;
@@ -8652,7 +8657,7 @@ function update(dt){
       const ns = Math.round((bd.shots || 10) * (dr.n || 1) * [1, 1, 1.4, 1.7][ph]), spd = (6 + (ph - 1) * 1.2) * (dr.spd || 1);
       for (let i = 0; i < ns; i++){
         const an = i/ns*Math.PI*2 + g.t;
-        const shot = projMesh(0xff1744, 'dark'); shot.scale.multiplyScalar(1.3);
+        const shot = enemyShotMesh(1.3);
         // Salen desde el borde del jefe, no desde su centro: estar encima ya no recibe el anillo entero a la vez
         const sx = b.x + Math.cos(an)*b.r, sz = b.z + Math.sin(an)*b.r;
         shot.position.set(sx, 1 + terrainH(sx, sz), sz);
@@ -9086,6 +9091,23 @@ function fxTex(kind){
       const gr = x.createLinearGradient(0, 0, 0, S);
       gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(0.35, 'rgba(255,255,255,.7)'); gr.addColorStop(0.5, '#fff'); gr.addColorStop(0.65, 'rgba(255,255,255,.7)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
       x.fillStyle = gr; x.fillRect(0, 0, S, S); break; }
+    // Lenguaje del peligro (legible sobre nieve, arena o hierba): siempre rojo con borde negro, sin mezcla aditiva
+    case 'ebullet':   // bala enemiga: borde negro, cuerpo rojo y núcleo amarillo
+      x.fillStyle = '#000'; x.beginPath(); x.arc(m, m, 46, 0, Math.PI*2); x.fill();
+      x.fillStyle = '#ff1744'; x.beginPath(); x.arc(m, m, 36, 0, Math.PI*2); x.fill();
+      x.fillStyle = '#ffeb3b'; x.beginPath(); x.arc(m, m, 15, 0, Math.PI*2); x.fill(); break;
+    case 'dmark':     // anillo bajo élites y jefes menores (blanco: se tiñe), con borde oscuro por fuera y por dentro
+      x.strokeStyle = 'rgba(0,0,0,.7)'; x.lineWidth = 16; x.beginPath(); x.arc(m, m, 52, 0, Math.PI*2); x.stroke();
+      x.strokeStyle = '#fff'; x.lineWidth = 9; x.beginPath(); x.arc(m, m, 52, 0, Math.PI*2); x.stroke();
+      x.fillStyle = 'rgba(255,255,255,.18)'; x.beginPath(); x.arc(m, m, 46, 0, Math.PI*2); x.fill(); break;
+    case 'lane': {    // carril de embestida o línea de tiro: franja roja con flechas hacia +x
+      const gr = x.createLinearGradient(0, 0, S, 0);
+      gr.addColorStop(0, 'rgba(255,23,68,.15)'); gr.addColorStop(1, 'rgba(255,23,68,.55)');
+      x.fillStyle = gr; x.fillRect(0, 18, S, S - 36);
+      x.fillStyle = '#ff1744'; x.fillRect(0, 14, S, 6); x.fillRect(0, S - 20, S, 6);
+      x.strokeStyle = 'rgba(255,255,255,.9)'; x.lineWidth = 7;
+      for (const ax of [34, 74, 114]){ x.beginPath(); x.moveTo(ax - 18, m - 20); x.lineTo(ax, m); x.lineTo(ax - 18, m + 20); x.stroke(); }
+      break; }
     default: glow(50, '#ffffff', 'rgba(255,255,255,0)');
   }
   const t = new THREE.CanvasTexture(c);
@@ -9096,7 +9118,7 @@ const FX_PLANE = new THREE.PlaneGeometry(1, 1);
 FX_PLANE.rotateX(-Math.PI/2);   // plano horizontal: se ve bien con la cámara desde arriba
 const FX_MATS = {};
 // Marcas en el suelo: se dibujan sin prueba de profundidad para que las laderas no las corten
-const FX_GROUND = new Set(['rune', 'target', 'mine', 'wave']);
+const FX_GROUND = new Set(['rune', 'target', 'mine', 'wave', 'dmark', 'lane']);
 // Material compartido por forma y color (para proyectiles: muchos a la vez)
 function fxMat(kind, color = 0xffffff, add = true){
   const k = kind + ':' + color + ':' + add;
@@ -9122,6 +9144,30 @@ function projMesh(color, kind){
 }
 // Gira el plano del proyectil hacia donde avanza (las formas apuntan a +x)
 function aimMesh(m, vx, vz){ m.rotation.y = -Math.atan2(vz, vx); }
+// Bala enemiga (tiradores, jefes menores y jefes): siempre la misma forma roja con borde negro
+function enemyShotMesh(big = 1){ return fxMesh('ebullet', 1.0*big, 0xffffff, false); }
+// Anillo de peligro bajo élites y jefes menores. Va colgado de su sombra: se quita solo cuando se quita la sombra
+function markDanger(e, color){
+  const m = fxMesh('dmark', 1, color, false), k = e.shadow.scale.x || 1;
+  m.userData.base = e.r*2.6/k; m.scale.set(m.userData.base, 1, m.userData.base);
+  m.renderOrder = 1; m.position.y = 0.02;
+  e.shadow.add(m); e.mark = m;
+}
+// Aviso de ataque: carril rojo en el suelo desde el enemigo hacia (dx, dz), de largo len y ancho w. null lo quita
+// soft: enemigos normales (más tenue, para que con muchos a la vez no tape la horda); las élites lo llevan fuerte
+let laneSoftMat = null;
+function dangerLane(e, dx, dz, len, w, soft){
+  if (!len){ if (e.lane){ e.shadow.remove(e.lane); e.lane = null; } return; }
+  if (!e.lane){
+    e.lane = fxMesh('lane', 1, 0xffffff, false); e.lane.renderOrder = 1; e.shadow.add(e.lane);
+    if (soft){ if (!laneSoftMat){ laneSoftMat = e.lane.material.clone(); laneSoftMat.opacity = 0.45; } e.lane.material = laneSoftMat; }
+  }
+  const sx = e.shadow.scale.x || 1, sz = e.shadow.scale.z || 1, l = e.lane;
+  l.position.set(dx*len/2/sx, 0.03, dz*len/2/sz);
+  l.rotation.y = -Math.atan2(dz, dx);
+  // el plano gira dentro de un padre escalado en x/z: con escala uniforme (círculo) no se deforma
+  l.scale.set(len/sx, 1, w/sz);
+}
 function matFor(color){ return matCache[color] || (matCache[color] = new THREE.MeshBasicMaterial({color})); }
 const RING_GEO = new THREE.RingGeometry(0.96, 1, 48);
 const GEM_CAP = 150, GEM_DRIFT_AFTER = 20;
@@ -9630,6 +9676,7 @@ function syncMeshes(){
     const ge = terrainH(e.x, e.z);
     e.mesh.position.set(e.x, ge + e.mesh.scale.y/2, e.z);
     e.shadow.position.set(e.x, ge + 0.02, e.z);
+    if (e.mark){ const k = e.mark.userData.base*(1 + 0.08*Math.sin(g.t*6)); e.mark.scale.set(k, 1, k); }
     // Los enemigos miran hacia el jugador (margen para que no tiemblen cuando está justo encima o debajo)
     const sx = screenDx(p.x - e.x, p.z - e.z);
     if (Math.abs(sx) > 0.6) faceSprite(e.mesh, sx > 0);
@@ -10584,7 +10631,7 @@ function hitPlayer(dmg){
   return true;
 }
 function enemyShot(x, z, an, spd, dmg, color){
-  const shot = projMesh(color, 'dark');
+  const shot = enemyShotMesh();
   shot.position.set(x, 1 + terrainH(x, z), z);
   world.add(shot);
   g.eshots.push({x, z, vx: Math.cos(an)*spd, vz: Math.sin(an)*spd, life: 4, mesh: shot, dmg});
