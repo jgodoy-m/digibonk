@@ -94,6 +94,7 @@ canvas{display:block}
 #banner b{display:block;font-size:46px;letter-spacing:3px;color:inherit;text-shadow:0 4px 0 #000,0 0 24px currentColor}
 #banner small{display:block;margin-top:4px;font-size:15px;letter-spacing:1px;color:#e6f4ff;text-shadow:0 2px 4px #000}
 #banner.show{animation:bannerIn 2.4s ease both}
+#banner.mid{top:50%}
 /* Tutorial de la primera partida: consejo corto abajo en el centro, sin tapar al Digimon ni los controles */
 #tutoTip{position:fixed;left:50%;bottom:24%;transform:translate(-50%,8px);max-width:min(560px,86vw);padding:10px 18px;border-radius:16px;background:rgba(8,18,44,.86);border:1px solid rgba(154,239,255,.55);box-shadow:0 6px 20px rgba(0,0,0,.35);color:#fff;font:800 15px/1.35 'Nunito',system-ui,sans-serif;text-align:center;pointer-events:none;opacity:0;transition:opacity .35s,transform .35s;z-index:30}
 #tutoTip.show{opacity:1;transform:translate(-50%,0)}
@@ -4583,8 +4584,12 @@ function tex(url){
 }
 // Hojas de animación (sprites/anim/<id>.webp, WebP sin pérdida): 5 fotogramas en fila -> reposo 1, reposo 2, ataque 1, ataque 2, daño
 const ANIM_N = 5;
-const ANIM_IDS = new Set(["agumon", "gatomon_0_lcd", "gatomon_0_variocolor", "gatomon_0_galactico", "gatomon_0_festival", "gatomon_0_reno", "gatomon_1_lcd", "gatomon_1_variocolor", "gatomon_1_galactico", "gatomon_1_festival", "gatomon_1_reno", "wizardmon_0_galactico", "hagurumon_0_lcd", "hagurumon_0_variocolor", "hagurumon_0_galactico", "hagurumon_0_festival", "hagurumon_0_reno", "wizardmon_0_lcd", "wizardmon_0_variocolor", "wizardmon_0_festival", "wizardmon_0_reno", "frigimon_0_lcd", "frigimon_0_variocolor", "frigimon_0_galactico", "frigimon_0_festival", "frigimon_0_reno", "gabumon_0_lcd", "gabumon_1_lcd", "gabumon_0_festival", "gabumon_0_galactico", "gabumon_0_reno", "gabumon_0_variocolor", "gabumon_1_festival", "gabumon_1_galactico", "gabumon_1_reno", "gabumon_1_variocolor", "gabumon_2_festival", "gabumon_2_galactico", "gabumon_2_lcd", "gabumon_2_reno", "gabumon_2_variocolor", "gabumon_3_festival", "gabumon_3_galactico", "gabumon_3_lcd", "gabumon_3_reno", "gabumon_3_variocolor", "leomon_1_reno", "leomon_0_festival", "leomon_0_reno", "leomon_1_lcd", "leomon_1_variocolor", "leomon_1_galactico", "leomon_1_festival", "leomon_0_galactico", "leomon_0_lcd", "leomon_0_variocolor", "patamon_0_reno", "patamon_1_reno", "patamon_2_reno", "patamon_0_variocolor", "patamon_1_variocolor", "patamon_2_variocolor", "patamon_0_lcd", "patamon_1_lcd", "patamon_2_lcd", "patamon_0_festival", "patamon_1_festival", "patamon_2_festival", "patamon_0_galactico", "patamon_1_galactico", "patamon_2_galactico", "patamon_0_holografica", "patamon_1_holografica", "patamon_2_holografica", "agumon_0_variocolor", "agumon_1_variocolor", "agumon_2_variocolor", "agumon_3_variocolor", "agumon_0_festival", "agumon_1_festival", "agumon_2_festival", "agumon_3_festival", "agumon_0_lcd", "agumon_1_lcd", "agumon_2_lcd", "agumon_3_lcd", "agumon_0_reno", "agumon_1_reno", "agumon_2_reno", "agumon_3_reno", "agumon_0_galactico", "agumon_1_galactico", "agumon_2_galactico", "agumon_3_galactico", "agumon_0_holografica", "agumon_1_holografica", "agumon_2_holografica", "agumon_3_holografica", "leomon", "saberleomon", "hagurumon", "frigimon", "wizardmon", "andromon", "angemon", "angewomon", "bakemon", "birdramon", "biyomon", "darktyrannomon", "devimon", "etemon", "gabumon", "garudamon", "garurumon", "gatomon", "gazimon", "gigadramon", "gizamon", "gomamon", "greymon", "ikkakumon", "kabuterimon", "kuwagamon", "lillymon", "machinedramon", "magnaangemon", "mammothmon", "megadramon", "megakabuterimon", "meramon", "metalgarurumon", "metalgreymon", "metalseadramon", "monochromon", "myotismon", "numemon", "palmon", "patamon", "phantomon", "piedmon", "puppetmon", "raremon", "skullgreymon", "snimon", "tank", "tentomon", "togemon", "tyrannomon", "vegiemon", "wargreymon", "weregarurumon", "zudomon"]);
+const ANIM_IDS = new Set(["agumon", "tyrannomon_elite", "darktyrannomon_elite", "gigadramon_elite", "megadramon_elite", "skullgreymon_elite", "andromon_elite", "mammothmon_elite", "devimon_jefe", "etemon_jefe", "myotismon_jefe", "metalseadramon_jefe", "puppetmon_jefe", "machinedramon_jefe", "gatomon_0_lcd", "gatomon_0_variocolor", "gatomon_0_galactico", "gatomon_0_festival", "gatomon_0_reno", "gatomon_1_lcd", "gatomon_1_variocolor", "gatomon_1_galactico", "gatomon_1_festival", "gatomon_1_reno", "wizardmon_0_galactico", "hagurumon_0_lcd", "hagurumon_0_variocolor", "hagurumon_0_galactico", "hagurumon_0_festival", "hagurumon_0_reno", "wizardmon_0_lcd", "wizardmon_0_variocolor", "wizardmon_0_festival", "wizardmon_0_reno", "frigimon_0_lcd", "frigimon_0_variocolor", "frigimon_0_galactico", "frigimon_0_festival", "frigimon_0_reno", "gabumon_0_lcd", "gabumon_1_lcd", "gabumon_0_festival", "gabumon_0_galactico", "gabumon_0_reno", "gabumon_0_variocolor", "gabumon_1_festival", "gabumon_1_galactico", "gabumon_1_reno", "gabumon_1_variocolor", "gabumon_2_festival", "gabumon_2_galactico", "gabumon_2_lcd", "gabumon_2_reno", "gabumon_2_variocolor", "gabumon_3_festival", "gabumon_3_galactico", "gabumon_3_lcd", "gabumon_3_reno", "gabumon_3_variocolor", "leomon_1_reno", "leomon_0_festival", "leomon_0_reno", "leomon_1_lcd", "leomon_1_variocolor", "leomon_1_galactico", "leomon_1_festival", "leomon_0_galactico", "leomon_0_lcd", "leomon_0_variocolor", "patamon_0_reno", "patamon_1_reno", "patamon_2_reno", "patamon_0_variocolor", "patamon_1_variocolor", "patamon_2_variocolor", "patamon_0_lcd", "patamon_1_lcd", "patamon_2_lcd", "patamon_0_festival", "patamon_1_festival", "patamon_2_festival", "patamon_0_galactico", "patamon_1_galactico", "patamon_2_galactico", "patamon_0_holografica", "patamon_1_holografica", "patamon_2_holografica", "agumon_0_variocolor", "agumon_1_variocolor", "agumon_2_variocolor", "agumon_3_variocolor", "agumon_0_festival", "agumon_1_festival", "agumon_2_festival", "agumon_3_festival", "agumon_0_lcd", "agumon_1_lcd", "agumon_2_lcd", "agumon_3_lcd", "agumon_0_reno", "agumon_1_reno", "agumon_2_reno", "agumon_3_reno", "agumon_0_galactico", "agumon_1_galactico", "agumon_2_galactico", "agumon_3_galactico", "agumon_0_holografica", "agumon_1_holografica", "agumon_2_holografica", "agumon_3_holografica", "leomon", "saberleomon", "hagurumon", "frigimon", "wizardmon", "andromon", "angemon", "angewomon", "bakemon", "birdramon", "biyomon", "darktyrannomon", "devimon", "etemon", "gabumon", "garudamon", "garurumon", "gatomon", "gazimon", "gigadramon", "gizamon", "gomamon", "greymon", "ikkakumon", "kabuterimon", "kuwagamon", "lillymon", "machinedramon", "magnaangemon", "mammothmon", "megadramon", "megakabuterimon", "meramon", "metalgarurumon", "metalgreymon", "metalseadramon", "monochromon", "myotismon", "numemon", "palmon", "patamon", "phantomon", "piedmon", "puppetmon", "raremon", "skullgreymon", "snimon", "tank", "tentomon", "togemon", "tyrannomon", "vegiemon", "wargreymon", "weregarurumon", "zudomon"]);
 function sheetOf(url){ const m = /([^\/]+)\.(?:png|webp)$/.exec(url || ''); return m && ANIM_IDS.has(m[1]) ? `sprites/anim/${m[1]}.webp` : null; }
+// Hoja de rango (sprites/anim/rango.py): las élites llevan contorno de brasas; los jefes menores,
+// contorno dorado con halo morado. Si el Digimon no tiene hoja de rango, se usa la normal
+const RANK_K = 1.1;   // las hojas de rango tienen el fotograma un 10 % mayor (margen para el contorno): el sprite crece igual
+function rankSprite(url, rank){ const m = /([^\/]+)\.(?:png|webp)$/.exec(url || ''), id = m && m[1] + '_' + rank; return id && ANIM_IDS.has(id) ? `sprites/anim/${id}.webp` : url; }
 const animTexs = [];   // texturas compartidas (enemigos del mismo tipo marcan el paso a la vez)
 function animTex(url, own = false){
   const sh = sheetOf(url);
@@ -7459,7 +7464,7 @@ function spawnSpecial(){
 }
 function spawnMini(m){
   const t = g.t, a = Math.random()*Math.PI*2;
-  const mesh = billboard(m.sprite, 4.6);
+  const rs = rankSprite(m.sprite, 'jefe'), mesh = billboard(rs, 4.6*(rs !== m.sprite ? RANK_K : 1));
   world.add(mesh);
   const shadow = makeShadow(4.4);
   world.add(shadow);
@@ -7468,7 +7473,6 @@ function spawnMini(m){
   // una élite normal (Devimon 995 PS frente a 1.156 en el minuto 3). m.hp solo ordena a unos frente a otros
   const hp = ENEMY.elite.hp*MINI_HP_K*(m.hp/340)*eliteHpK(diffT(t))*evoHp()*diffMul('hp');
   g.enemies.push({kind: 'mini', name: m.name, sprite: m.sprite, mesh, shadow, x: sp[0], z: sp[1], hp, max: hp, spd: 2.5, r: 1.9, xp: 60, dmg: 16*(1 + diffT(t)/300)*diffMul('dmg'), cd: 0});
-  markDanger(g.enemies[g.enemies.length - 1], 0xd500f9);
   sfx('boss');
   bossIntro(g.enemies[g.enemies.length - 1], m.name, 'Jefe menor', '#ce93d8', true);
 }
@@ -7931,7 +7935,7 @@ function spawnEnemy(forced){
   // vida: crece más deprisa a partir del minuto 5 (antes /170: a nivel 20 nada aguantaba). Las élites siguen una curva más suave
   const d = ENEMY[kind], k = kind === 'elite' ? eliteHpK(tt) : foeHpK(tt);
   const pool = (zoneDef().foes || ZONE_FOES[g.zone - 1])[kind] || (pc.foes && pc.foes[kind]) || EXTRA_FOES[kind], sprite = pool ? pool[Math.floor(Math.random()*pool.length)] : d.sprite;
-  const mesh = billboard(sprite, d.scale);
+  const rs = kind === 'elite' ? rankSprite(sprite, 'elite') : sprite, mesh = billboard(rs, d.scale*(rs !== sprite ? RANK_K : 1));
   if (kind === 'charger' || forced === 'elite') mesh.material = mesh.material.clone();   // material propio: se tiñe al cargar o al ser el Digimon buscado
   mesh.position.y = d.scale/2;
   world.add(mesh);
@@ -7942,7 +7946,7 @@ function spawnEnemy(forced){
     kind, sprite, mesh, shadow, x: sp[0], z: sp[1],
     hp: d.hp*k*evoHp()*diffMul('hp')*(g.foeHp || 1)*(kind === 'elite' ? 1 : pc.hp), max: d.hp*k*evoHp()*diffMul('hp')*(g.foeHp || 1)*(kind === 'elite' ? 1 : pc.hp), spd: d.spd*(g.foeSpd || 1)*pc.spd, r: d.r, xp: d.xp, dmg: d.dmg*(1 + tt/300 + (tt/600)*(tt/600))*evoDmg()*diffMul('dmg'), cd: 0
   };
-  if (kind === 'elite'){ foe.mech = ELITE_MECHS[Math.floor(Math.random()*ELITE_MECHS.length)]; foe.st = 2 + Math.random()*2; markDanger(foe, 0xff5722); }
+  if (kind === 'elite'){ foe.mech = ELITE_MECHS[Math.floor(Math.random()*ELITE_MECHS.length)]; foe.st = 2 + Math.random()*2; }
   g.enemies.push(foe);
   return foe;
 }
@@ -8627,7 +8631,7 @@ function update(dt){
     g.eliteT = eliteGap();
     // Una sola élite cada vez (antes dos a partir del minuto 5) y cada una con su mecánica: se distingue el peligro
     const el = spawnEnemy('elite');
-    if (el) announce('¡Élite!', ELITE_MECH[el.mech].sub, '#ff7043');
+    if (el) announce('¡Élite!', ELITE_MECH[el.mech].sub, '#ff7043', true);   // en medio de la pantalla
   }
 
   // Enemigos: persiguen y dañan por contacto
@@ -9338,10 +9342,6 @@ function fxTex(kind){
       x.fillStyle = '#000'; x.beginPath(); x.arc(m, m, 46, 0, Math.PI*2); x.fill();
       x.fillStyle = '#ff1744'; x.beginPath(); x.arc(m, m, 36, 0, Math.PI*2); x.fill();
       x.fillStyle = '#ffeb3b'; x.beginPath(); x.arc(m, m, 15, 0, Math.PI*2); x.fill(); break;
-    case 'dmark':     // anillo bajo élites y jefes menores (blanco: se tiñe), con borde oscuro por fuera y por dentro
-      x.strokeStyle = 'rgba(0,0,0,.7)'; x.lineWidth = 16; x.beginPath(); x.arc(m, m, 52, 0, Math.PI*2); x.stroke();
-      x.strokeStyle = '#fff'; x.lineWidth = 9; x.beginPath(); x.arc(m, m, 52, 0, Math.PI*2); x.stroke();
-      x.fillStyle = 'rgba(255,255,255,.18)'; x.beginPath(); x.arc(m, m, 46, 0, Math.PI*2); x.fill(); break;
     case 'lane': {    // carril de embestida o línea de tiro: franja roja con flechas hacia +x
       const gr = x.createLinearGradient(0, 0, S, 0);
       gr.addColorStop(0, 'rgba(255,23,68,.15)'); gr.addColorStop(1, 'rgba(255,23,68,.55)');
@@ -9360,7 +9360,7 @@ const FX_PLANE = new THREE.PlaneGeometry(1, 1);
 FX_PLANE.rotateX(-Math.PI/2);   // plano horizontal: se ve bien con la cámara desde arriba
 const FX_MATS = {};
 // Marcas en el suelo: se dibujan sin prueba de profundidad para que las laderas no las corten
-const FX_GROUND = new Set(['rune', 'target', 'mine', 'wave', 'dmark', 'lane']);
+const FX_GROUND = new Set(['rune', 'target', 'mine', 'wave', 'lane']);
 // Material compartido por forma y color (para proyectiles: muchos a la vez)
 function fxMat(kind, color = 0xffffff, add = true){
   const k = kind + ':' + color + ':' + add;
@@ -9389,12 +9389,6 @@ function aimMesh(m, vx, vz){ m.rotation.y = -Math.atan2(vz, vx); }
 // Bala enemiga (tiradores, jefes menores y jefes): siempre la misma forma roja con borde negro
 function enemyShotMesh(big = 1){ return fxMesh('ebullet', 1.0*big, 0xffffff, false); }
 // Anillo de peligro bajo élites y jefes menores. Va colgado de su sombra: se quita solo cuando se quita la sombra
-function markDanger(e, color){
-  const m = fxMesh('dmark', 1, color, false), k = e.shadow.scale.x || 1;
-  m.userData.base = e.r*2.6/k; m.scale.set(m.userData.base, 1, m.userData.base);
-  m.renderOrder = 1; m.position.y = 0.02;
-  e.shadow.add(m); e.mark = m;
-}
 // Aviso de ataque: carril rojo en el suelo desde el enemigo hacia (dx, dz), de largo len y ancho w. null lo quita
 // soft: enemigos normales (más tenue, para que con muchos a la vez no tape la horda); las élites lo llevan fuerte
 let laneSoftMat = null;
@@ -9921,7 +9915,6 @@ function syncMeshes(){
     const ge = terrainH(e.x, e.z);
     e.mesh.position.set(e.x, ge + e.mesh.scale.y/2, e.z);
     e.shadow.position.set(e.x, ge + 0.02, e.z);
-    if (e.mark){ const k = e.mark.userData.base*(1 + 0.08*Math.sin(g.t*6)); e.mark.scale.set(k, 1, k); }
     // Los enemigos miran hacia el jugador (margen para que no tiemblen cuando está justo encima o debajo)
     const sx = screenDx(p.x - e.x, p.z - e.z);
     if (Math.abs(sx) > 0.6) faceSprite(e.mesh, sx > 0);
@@ -10026,8 +10019,9 @@ function evoBlast(st){
   g.evoRushT = 4;
   shake = Math.max(shake, 0.8);
 }
-function announce(title, sub, color = '#ffd54f'){
+function announce(title, sub, color = '#ffd54f', mid){
   const el = document.getElementById('banner');
+  el.classList.toggle('mid', !!mid);   // mid: centrado en la pantalla (aviso de élite)
   el.classList.toggle('over-menu', !g || state === 'end');   // en los menús la capa del menú lo tapaba
   el.style.color = color;
   el.innerHTML = `<b>${title}</b><small>${sub || ''}</small>`;
