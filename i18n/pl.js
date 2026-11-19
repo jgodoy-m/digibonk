@@ -1522,5 +1522,9 @@ I18N.add('pl', {"×{0} daño": "×{0} obrażeń", "×{0} recibido": "×{0} otrzy
   "Elige mapa": "Wybierz mapę",
   "Sin cambios: el juego base": "Bez zmian: gra podstawowa",
   "dificultad": "trudność",
-  "empezar": "start"
+  "empezar": "start",
+  "Santuarios": "Kapliczki",
+  "Emblemas": "Emblematy",
+  "Santuarios usados": "Użyte kapliczki",
+  "Emblemas conseguidos": "Zdobyte emblematy"
 });

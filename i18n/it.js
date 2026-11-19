@@ -1519,5 +1519,9 @@ I18N.add('it', {"×{0} daño": "×{0} danni", "×{0} recibido": "×{0} subiti",
   "Elige mapa": "Scegli la mappa",
   "Sin cambios: el juego base": "Nessuna modifica: il gioco base",
   "dificultad": "difficoltà",
-  "empezar": "inizia"
+  "empezar": "inizia",
+  "Santuarios": "Santuari",
+  "Emblemas": "Emblemi",
+  "Santuarios usados": "Santuari usati",
+  "Emblemas conseguidos": "Emblemi ottenuti"
 });

@@ -1662,5 +1662,9 @@ I18N.add('en', {
   "Elige mapa": "Choose map",
   "Sin cambios: el juego base": "No changes: the base game",
   "dificultad": "difficulty",
-  "empezar": "start"
+  "empezar": "start",
+  "Santuarios": "Shrines",
+  "Emblemas": "Emblems",
+  "Santuarios usados": "Shrines used",
+  "Emblemas conseguidos": "Emblems earned"
 });

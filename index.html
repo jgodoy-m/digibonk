@@ -2195,6 +2195,16 @@ body:has(.ga) #topbar{display:none!important}
 /* Objetivo de la pantalla y botón para invocar al jefe de zona */
 #hudObj{margin-top:6px;font:700 12px var(--h-font);color:#bfe9ff;letter-spacing:.3px;text-align:center;white-space:nowrap}
 #hudObj:empty{display:none}
+#hudObj.off{display:none!important}   /* el objetivo aparece unos segundos al cambiar */
+#hudChips small{font:800 9px var(--h-font);letter-spacing:.8px;text-transform:uppercase;color:var(--h-mut);margin-left:2px}
+@media (max-width:900px),(max-height:500px){#hudChips small{display:none}}
+/* EXP: anillo alrededor del retrato en lugar de la pastilla «Nivel · EXP» */
+#xpTxt{display:none!important}
+.hud-portrait:not([class*="fr-"]){box-shadow:0 0 0 6px rgba(106,168,255,.12)!important}
+.hud-portrait:not([class*="fr-"])::after{content:'';position:absolute;inset:-4px;border-radius:50%;pointer-events:none;z-index:1;
+  background:conic-gradient(var(--h-xp,#6aa8ff) var(--xpd,0deg),rgba(255,255,255,.16) 0);transition:--xpd .25s;
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3.5px));mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3.5px))}
+.hud-lvl{z-index:2}
 #hudObj.hot{color:#7ff3ff;animation:objPulse 1.1s ease-in-out infinite}#hudObj.inf{color:#ff8a80}
 @keyframes objPulse{50%{opacity:.55}}
 #timer.inferno{color:#ff5252!important;text-shadow:0 0 12px #ff1744!important;animation:objPulse .6s infinite}
@@ -9148,52 +9158,75 @@ function drawEdgeMarkers(){
   if (cv.width !== innerWidth || cv.height !== innerHeight){ cv.width = innerWidth; cv.height = innerHeight; }
   const c = cv.getContext('2d');
   c.clearRect(0, 0, cv.width, cv.height);
-  const targets = g.chests.filter(ch => !ch.open && !ch.gone).map(ch => ({x: ch.x, z: ch.z, col: '#ffd54f'}));
-  if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ce93d8'});
-  if (g.portal) targets.push({x: PORTAL.x, z: PORTAL.z, col: g.portalOpen ? '#3de0ff' : '#8fe9ff', label: I18N.tr('Portal'), big: true});
-  for (const n of eventTargets()) targets.push({x: n.x, z: n.z, col: EVENT_COL[g.ev.kind] || '#7cf29c'});
-  for (const sh of g.shrines || []) if (!sh.used) targets.push({x: sh.x, z: sh.z, col: shrineHex(sh.type), far: 40});
-  for (const e of g.eggs || []) targets.push({x: e.x, z: e.z, col: '#ffd54f'});
-  for (const n of g.npcs || []) targets.push({x: n.x, z: n.z, col: '#' + n.col.toString(16).padStart(6, '0'), far: 45});
-  for (const e of g.enemies) if (e.kind === 'elite' || e.kind === 'mini') targets.push({x: e.x, z: e.z, col: e.kind === 'mini' ? '#ce93d8' : '#ff7043'});
+  // Cada flecha lleva un icono de lo que señala; pr = prioridad (si dos flechas caen juntas, se queda la más importante)
+  const targets = g.chests.filter(ch => !ch.open && !ch.gone).map(ch => ({x: ch.x, z: ch.z, col: '#ffd54f', ic: '🎁', pr: 4}));
+  if (g.boss && g.enemies.includes(g.boss)) targets.push({x: g.boss.x, z: g.boss.z, col: '#ff1744', img: g.boss.sprite, pr: 9, big: true});
+  if (g.portal) targets.push({x: PORTAL.x, z: PORTAL.z, col: g.portalOpen ? '#3de0ff' : '#8fe9ff', label: I18N.tr('Portal'), big: true, pr: 8, img: (PORTAL_ART[g.map] || PORTAL_ART.desierto).file});
+  for (const n of eventTargets()) targets.push({x: n.x, z: n.z, col: EVENT_COL[g.ev.kind] || '#7cf29c', ic: '!', pr: 7});
+  for (const sh of g.shrines || []) if (!sh.used) targets.push({x: sh.x, z: sh.z, col: shrineHex(sh.type), far: 40, img: 'ui/hud/ic_santuario.webp', pr: 2});
+  for (const e of g.eggs || []) targets.push({x: e.x, z: e.z, col: '#ffd54f', ic: '🥚', pr: 3});
+  for (const n of g.npcs || []) targets.push({x: n.x, z: n.z, col: '#' + n.col.toString(16).padStart(6, '0'), far: 45, ic: n.icon, pr: 1});
+  for (const e of g.enemies) if (e.kind === 'elite' || e.kind === 'mini') targets.push({x: e.x, z: e.z, col: e.kind === 'mini' ? '#c77dff' : '#ff7043', dia: true, pr: e.kind === 'mini' ? 6 : 5});
+  targets.sort((a, b) => b.pr - a.pr);
   const W = cv.width, H = cv.height, cx = W/2, cy = H/2;
   // Las flechas de arriba van por debajo del panel central del HUD (si no, el portal del norte queda tapado)
   const ht = document.getElementById('hudTop'), hr = ht && ht.getClientRects().length ? ht.getBoundingClientRect() : null;
   const top = hr && hr.bottom < H/2 ? Math.max(40, hr.bottom + 28) : 40;
-  // Botones táctiles, minimapa y barra de Bonk: las flechas (y sus metros) no pueden quedar encima (en móvil tapaban SALTO)
+  // Botones táctiles, minimapa, Bonk y avisos en pantalla: las flechas (y sus metros) no pueden quedar encima
   const avoid = [];
-  for (const el of document.querySelectorAll('#touchCtl .t-btn, #minimap, #bonkBar')){
+  for (const el of document.querySelectorAll('#touchCtl .t-btn, #minimap, #bonkBar, #ann-mid.show:not(.held), #banner.show, #combo:not(:empty), #skillBar, #consBar, #hudSummon')){
     if (!el.getClientRects().length) continue;
     const r = el.getBoundingClientRect();
-    if (r.width && r.height) avoid.push({l: r.left - 16, r: r.right + 16, t: r.top - 18, b: r.bottom + 30});   // margen para la flecha y el texto
+    // margen para la flecha, su icono y los metros (los avisos, más ancho: el icono queda hacia dentro de la pantalla)
+    const m = el.matches('#ann-mid, #banner') ? 56 : 18;
+    if (r.width && r.height) avoid.push({l: r.left - m, r: r.right + m, t: r.top - 20, b: r.bottom + 34});
   }
+  const placed = [], touch = isTouchUI(), sc = touch ? 0.9 : 1;
   for (const t of targets){
-    if (t.far && Math.hypot(t.x - g.p.x, t.z - g.p.z) > t.far) continue;   // santuarios: solo los cercanos
+    const dist = Math.hypot(t.x - g.p.x, t.z - g.p.z);
+    if (t.far && dist > t.far) continue;   // santuarios: solo los cercanos
     const v = new THREE.Vector3(t.x, terrainH(t.x, t.z) + 1.5, t.z).project(camera);
     const sx = (v.x + 1)/2*W, sy = (1 - v.y)/2*H;
     const inside = v.z < 1 && sx > 40 && sx < W - 40 && sy > top && sy < H - 40;
-    if (inside && !(t.big && Math.hypot(t.x - g.p.x, t.z - g.p.z) > 30)) continue;   // el portal lejano cae en el horizonte: flecha igual
+    if (inside && !(t.big && dist > 30)) continue;   // el portal lejano cae en el horizonte: flecha igual
     let dx = sx - cx, dy = sy - cy;
     if (v.z > 1){ dx = -dx; dy = -dy; }          // detrás de la cámara: la flecha apunta al lado correcto
     const k = Math.min((cx - 40)/Math.abs(dx || 1e-6), (dy < 0 ? cy - top : cy - 40)/Math.abs(dy || 1e-6));
     let px = cx + dx*k, py = cy + dy*k;
-    // Si cae sobre un botón, se desliza por el mismo borde hasta salir de él (por los lados, hacia arriba; abajo, hacia el centro)
-    for (let it = 0; it < 4; it++){
+    // Si cae sobre un botón o un aviso, se desliza por el mismo borde hasta salir de él
+    for (let it = 0; it < 5; it++){
       const a = avoid.find(r => px > r.l && px < r.r && py > r.t && py < r.b);
       if (!a) break;
       if (px <= 41 || px >= W - 41) py = a.t - 1;
       else if (py >= H - 41) px = px > cx ? a.l - 1 : a.r + 1;
+      else if (py <= top + 2) px = px > cx ? a.r + 1 : a.l - 1;
       else py = a.b + 1;
     }
-    c.save(); c.translate(px, py); c.rotate(Math.atan2(dy, dx));
-    c.fillStyle = t.col; c.strokeStyle = '#000'; c.lineWidth = 2;
-    if (t.big) c.scale(1.4, 1.4);
-    c.beginPath(); c.moveTo(16, 0); c.lineTo(-9, -11); c.lineTo(-9, 11); c.closePath(); c.fill(); c.stroke();
+    // Dos flechas en el mismo sitio: solo la más importante (la lista va por prioridad)
+    if (placed.some(q => Math.hypot(q[0] - px, q[1] - py) < 46*sc)) continue;
+    placed.push([px, py]);
+    const ang = Math.atan2(dy, dx), ux = Math.cos(ang), uy = Math.sin(ang);
+    // Flecha en el borde
+    c.save(); c.translate(px, py); c.rotate(ang);
+    c.fillStyle = t.col; c.strokeStyle = 'rgba(0,0,0,.85)'; c.lineWidth = 2;
+    const fs = (t.big ? 1.15 : 0.9) * sc; c.scale(fs, fs);
+    c.beginPath(); c.moveTo(14, 0); c.lineTo(-6, -10); c.lineTo(-6, 10); c.closePath(); c.fill(); c.stroke();
     c.restore();
-    c.fillStyle = '#fff'; c.strokeStyle = '#000'; c.lineWidth = 3; c.font = 'bold 13px system-ui'; c.textAlign = 'center';
-    const d = Math.round(Math.hypot(t.x - g.p.x, t.z - g.p.z)), txt = (t.label ? t.label + ' · ' : '') + d + ' m';
-    const ty = py < top + 10 ? py + 30 : py - 20;   // arriba del todo: el texto va debajo de la flecha
-    c.strokeText(txt, px, ty); c.fillText(txt, px, ty);
+    // Icono en una placa redonda, hacia dentro de la pantalla
+    const R = (t.big ? 15 : 12) * sc, bx = px - ux*(R + 14*sc), by = py - uy*(R + 14*sc);
+    c.fillStyle = 'rgba(14,18,30,.88)'; c.strokeStyle = t.col; c.lineWidth = 2.5;
+    c.beginPath(); c.arc(bx, by, R, 0, Math.PI*2); c.fill(); c.stroke();
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    if (t.img) drawIcon(c, t.img, bx, by, R*1.55);
+    else if (t.dia){ const r = R*0.5; c.fillStyle = t.col; c.beginPath(); c.moveTo(bx, by - r); c.lineTo(bx + r, by); c.lineTo(bx, by + r); c.lineTo(bx - r, by); c.closePath(); c.fill(); }
+    else if (t.ic === '!'){ c.fillStyle = t.col; c.font = `900 ${Math.round(R*1.3)}px system-ui`; c.fillText('!', bx, by + 1); }
+    else if (t.ic){ c.font = `${Math.round(R*1.15)}px system-ui`; c.fillText(t.ic, bx, by + 1); }
+    // Metros en una pastilla pequeña debajo de la placa (encima si la flecha apunta hacia abajo)
+    const txt = (t.label && !touch ? t.label + ' · ' : '') + Math.round(dist) + ' m';
+    c.font = `800 ${Math.round(11*sc)}px Roboto, Inter, system-ui, sans-serif`;
+    const tw = c.measureText(txt).width + 10*sc, th = 16*sc, ty = by + (uy > 0.5 ? -(R + th/2 + 3) : R + th/2 + 3);   // del lado contrario a la flecha
+    c.fillStyle = 'rgba(14,18,30,.82)'; c.beginPath(); c.roundRect(bx - tw/2, ty - th/2, tw, th, th/2); c.fill();
+    c.fillStyle = '#fff'; c.fillText(txt, bx, ty + 0.5);
   }
 }
 // ---------- Habilidades de ataque: se eligen al subir de nivel (hasta nivel SKILL_MAX) ----------
@@ -10592,12 +10625,17 @@ function updateHUD(){
   timerEl.classList.toggle('inferno', !!g.inferno);
   const obj = document.getElementById('hudObj'), objTxt = hudObjective();
   if (obj.textContent !== objTxt) obj.textContent = objTxt;
-  obj.className = g.inferno ? 'inf' : g.portalOpen ? 'hot' : '';
+  // El objetivo solo se ve unos segundos cuando cambia (la caja del reloj queda pequeña); el Infierno y el portal abierto se quedan
+  const objKey = objTxt.replace(/\d+/g, '#');
+  if (obj.dataset.k !== objKey || updateHUD.objG !== g){ obj.dataset.k = objKey; updateHUD.objT = g.t; updateHUD.objG = g; }
+  const objOn = g.inferno || g.portalOpen || g.t - (updateHUD.objT ?? -99) < 8 || g.t < 10;
+  obj.className = (g.inferno ? 'inf' : g.portalOpen ? 'hot' : '') + (objOn ? '' : ' off');
   const canSummon = portalMap && canSummonBoss() && nearPortal();
   const sumEl = document.getElementById('hudSummon');
   sumEl.style.display = canSummon ? 'flex' : 'none';
   if (canSummon) document.getElementById('hudSummonName').textContent = zoneDef().boss.name + (zoneDef().boss.resume && leftFrac() ? ' · ' + Math.round(leftFrac() * 100) + '%' : '');
   document.getElementById('xpTxt').textContent = `Nivel ${p.lvl} · EXP ${Math.floor(p.xp)} / ${p.nextXp}`;
+  { const pe = document.getElementById('hudPortrait'), xd = Math.round(360 * Math.min(1, p.xp / p.nextXp)) + 'deg'; if (pe.style.getPropertyValue('--xpd') !== xd){ pe.style.setProperty('--xpd', xd); pe.title = `Nivel ${p.lvl} · EXP ${Math.floor(p.xp)} / ${p.nextXp}`; } }   // anillo de EXP alrededor del retrato
   { const t = `${shortNum(p.hp)} / ${shortNum(p.maxHp)}`, el = document.getElementById('hpTxt'); if (el.textContent !== t) el.textContent = t; }
   document.getElementById('hudName').textContent = stageName(g.ch.id, g.ch.evolved);
   // Zona actual, progreso de zonas y récord de tiempo (como en la barra superior de la referencia)
@@ -10608,7 +10646,7 @@ function updateHUD(){
   const chipKey = [g.kills, g.coins || 0, g.tix, shrinesDone, (g.shrines || []).length, (g.emblems || []).length].join('|'), chipsEl = document.getElementById('hudChips');
   if (chipsEl.dataset.k !== chipKey){
     chipsEl.dataset.k = chipKey;
-    chipsEl.innerHTML = `<span>${HUD_IC.kills}<b>${g.kills}</b></span><span class="c-coin" title="Monedas de la partida (tienda y ruleta)">${hudArt('ic_bits')}<b>${g.coins || 0}</b></span>${GACHA_SOON ? '' : `<span class="c-tix">${HUD_IC.tix}<b>${g.tix}</b></span>`}<span class="c-shr">${HUD_IC.shr}<b>${shrinesDone}/${(g.shrines || []).length}</b></span><span class="c-emb">${HUD_IC.emb}<b>${(g.emblems || []).length}/${EMBLEMS.length}</b></span>`;
+    chipsEl.innerHTML = `<span title="Bajas">${HUD_IC.kills}<b>${g.kills.toLocaleString('es-ES')}</b></span><span class="c-coin" title="Monedas de la partida (tienda y ruleta)">${hudArt('ic_bits')}<b>${g.coins || 0}</b></span>${GACHA_SOON ? '' : `<span class="c-tix">${HUD_IC.tix}<b>${g.tix}</b></span>`}<span class="c-shr" title="Santuarios usados">${HUD_IC.shr}<b>${shrinesDone}/${(g.shrines || []).length}</b><small>Santuarios</small></span><span class="c-emb" title="Emblemas conseguidos">${HUD_IC.emb}<b>${(g.emblems || []).length}/${EMBLEMS.length}</b><small>Emblemas</small></span>`;
   }
   hudEmblems();
   document.querySelector('.hud-hp').classList.toggle('low', p.hp < p.maxHp*0.3);

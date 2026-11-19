@@ -1530,5 +1530,9 @@ I18N.add('zh', {"×{0} daño": "伤害 ×{0}", "×{0} recibido": "受到伤害 �
   "Elige mapa": "选择地图",
   "Sin cambios: el juego base": "无变化：基础游戏",
   "dificultad": "难度",
-  "empezar": "开始"
+  "empezar": "开始",
+  "Santuarios": "神殿",
+  "Emblemas": "徽章",
+  "Santuarios usados": "已用神殿",
+  "Emblemas conseguidos": "已获徽章"
 });

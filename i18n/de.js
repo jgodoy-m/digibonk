@@ -1517,5 +1517,9 @@ I18N.add('de', {"×{0} daño": "×{0} Schaden", "×{0} recibido": "×{0} erhalte
   "Elige mapa": "Karte wählen",
   "Sin cambios: el juego base": "Keine Änderungen: das Grundspiel",
   "dificultad": "Schwierigkeit",
-  "empezar": "starten"
+  "empezar": "starten",
+  "Santuarios": "Schreine",
+  "Emblemas": "Embleme",
+  "Santuarios usados": "Benutzte Schreine",
+  "Emblemas conseguidos": "Erhaltene Embleme"
 });

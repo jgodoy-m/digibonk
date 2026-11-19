@@ -1523,5 +1523,9 @@ I18N.add('tr', {"×{0} daño": "×{0} hasar", "×{0} recibido": "×{0} alınan",
   "Elige mapa": "Harita seç",
   "Sin cambios: el juego base": "Değişiklik yok: temel oyun",
   "dificultad": "zorluk",
-  "empezar": "başla"
+  "empezar": "başla",
+  "Santuarios": "Tapınaklar",
+  "Emblemas": "Amblemler",
+  "Santuarios usados": "Kullanılan tapınaklar",
+  "Emblemas conseguidos": "Kazanılan amblemler"
 });

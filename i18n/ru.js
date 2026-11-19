@@ -1528,5 +1528,9 @@ I18N.add('ru', {"×{0} daño": "×{0} урона", "×{0} recibido": "×{0} по
   "Elige mapa": "Выбери карту",
   "Sin cambios: el juego base": "Без изменений: базовая игра",
   "dificultad": "сложность",
-  "empezar": "начать"
+  "empezar": "начать",
+  "Santuarios": "Святилища",
+  "Emblemas": "Эмблемы",
+  "Santuarios usados": "Использованные святилища",
+  "Emblemas conseguidos": "Полученные эмблемы"
 });

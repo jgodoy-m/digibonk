@@ -1517,5 +1517,9 @@ I18N.add('fr', {"×{0} daño": "×{0} dégâts", "×{0} recibido": "×{0} reçus
   "Elige mapa": "Choisis la carte",
   "Sin cambios: el juego base": "Aucun changement : le jeu de base",
   "dificultad": "difficulté",
-  "empezar": "commencer"
+  "empezar": "commencer",
+  "Santuarios": "Sanctuaires",
+  "Emblemas": "Emblèmes",
+  "Santuarios usados": "Sanctuaires utilisés",
+  "Emblemas conseguidos": "Emblèmes obtenus"
 });
