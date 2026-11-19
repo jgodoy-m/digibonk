@@ -1658,5 +1658,10 @@ I18N.add('en', {
   "Superado {0}/4": "Cleared {0}/4",
   "Mejor oleada": "Best wave",
   "Jefes menores cada 5 oleadas": "Mini-bosses every 5 waves",
-  "Jefes menores": "Mini-bosses"
+  "Jefes menores": "Mini-bosses",
+  "Récord": "Record",
+  "Elige mapa": "Choose map",
+  "Sin cambios: el juego base": "No changes: the base game",
+  "dificultad": "difficulty",
+  "empezar": "start"
 });

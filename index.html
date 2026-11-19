@@ -3917,7 +3917,33 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 #overlay:not(.menu-mode) .picker-screen.ms .ms-diff.on{background:var(--dc)!important;border-color:var(--dc)!important;box-shadow:0 6px 16px color-mix(in srgb,var(--dc) 35%,transparent)!important}
 #overlay:not(.menu-mode) .picker-screen.ms .ms-diff.on :is(b,small){color:#10141f!important;filter:none!important}
 .ms-diff.on .ms2-lv i{background:#10141f}
-#overlay .picker-screen.ms .ms-table em.eq{opacity:.45}
+/* Cabecera limpia (sin la cinta morada): etiqueta pequeña + título, tu Digimon y las teclas */
+#overlay .picker-screen.ms .ms2-top{flex-wrap:nowrap!important;gap:14px!important;align-items:center!important}
+#overlay:not(.menu-mode) .picker-screen.ms .ms2-top h2.ms2-title{display:flex;align-items:baseline;gap:10px;margin:0;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;
+  clip-path:none!important;transform:none!important;font:900 24px/1.1 var(--h-font,system-ui)!important;font-style:normal!important;letter-spacing:.2px;color:var(--m-text)!important;text-shadow:none!important}
+#overlay .picker-screen.ms .ms2-title small{font:900 10px var(--h-font,system-ui)!important;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:99px;background:var(--m-banner,#5b4bff)!important;color:#fff!important;align-self:center}
+.ms2-who{display:inline-flex;align-items:center;gap:8px;margin-left:auto;padding:3px 12px 3px 3px;border-radius:99px;background:var(--m-sunk,rgba(255,255,255,.06));border:1px solid var(--m-line,rgba(255,255,255,.1))}
+.ms2-who img{width:28px;height:28px;border-radius:50%;object-fit:cover}
+#overlay .picker-screen.ms .ms2-who b{font:800 13px var(--h-font,system-ui)!important}
+.ms2-keys{font:700 11px var(--h-font,system-ui);color:var(--m-mute,#9aa6bf);white-space:nowrap}
+.ms2-keys kbd{display:inline-block;padding:1px 6px;margin:0 2px 0 6px;border-radius:6px;background:var(--m-sunk,rgba(255,255,255,.08));border:1px solid var(--m-line,rgba(255,255,255,.12));font:800 10px var(--h-font,system-ui);color:var(--m-text,#fff)}
+body.is-touch .ms2-keys{display:none}
+/* Récord de tiempo en el mapa, arriba a la derecha de la ilustración */
+.ms2-best{position:absolute;right:10px;top:10px;z-index:3;display:flex;flex-direction:column;align-items:flex-end;padding:4px 10px;border-radius:12px;background:rgba(10,14,24,.72);border:1px solid rgba(255,255,255,.18);line-height:1.1}
+.ms2-best small{font:800 9px var(--h-font,system-ui)!important;letter-spacing:1.4px;text-transform:uppercase;color:#c9d3e8!important}
+#overlay .picker-screen.ms .ms2-best b{font:900 16px var(--h-font,system-ui)!important;color:#fff!important;font-variant-numeric:tabular-nums}
+.ms2-best[data-none] b{opacity:.6}
+.ms2-boss{height:70%!important;right:2px!important}
+/* La tarjeta elegida mantiene su fondo; solo cambia el borde (en oscuro se veía marrón) */
+#overlay:not(.menu-mode) .picker-screen.ms .ms-card.ms2c.on{background:var(--m-sunk)!important}
+/* Dificultad: una línea con el nombre, la frase y solo lo que cambia */
+#overlay .picker-screen.ms .ms2-dline{grid-area:table;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:10px 14px;border-radius:14px;background:var(--m-panel,rgba(255,255,255,.04));
+  border:1px solid var(--m-line,rgba(255,255,255,.1));border-left:4px solid var(--dc);font:700 12px var(--h-font,system-ui);align-self:center}
+#overlay .picker-screen.ms .ms2-dline>b{font:900 15px var(--h-font,system-ui)!important;color:var(--dc)!important;filter:brightness(.9)}
+#overlay .picker-screen.ms .ms2-dd{color:var(--m-soft,#cfd8ea);margin-right:4px}
+.ms2-dline i{font-style:normal;padding:3px 9px;border-radius:99px;background:var(--m-sunk,rgba(255,255,255,.06));color:var(--m-text,#fff);white-space:nowrap}
+.ms2-dline i em{font-style:normal;font-weight:900;color:var(--dc);filter:brightness(.9)}
+.ms2-dline i.eq{color:var(--m-mute,#9aa6bf)}
 @media (max-height:500px){
   .ms2-art{height:clamp(84px,30vh,130px)}
   #overlay .picker-screen.ms .ms2-body{padding:6px 10px 8px;gap:4px}
@@ -3928,6 +3954,11 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
   #overlay .picker-screen.ms .ms2-name small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #overlay .picker-screen.ms .ms-diff small{display:none}
   .ms2-lv i{width:5px;height:10px}
+  .ms2-keys,#overlay .picker-screen.ms .ms2-dd{display:none}
+  #overlay:not(.menu-mode) .picker-screen.ms .ms2-top h2.ms2-title{font-size:18px!important}
+  .ms2-best{top:6px;right:6px;padding:2px 7px;flex-direction:row;align-items:baseline;gap:5px}#overlay .picker-screen.ms .ms2-best b{font-size:12px!important}
+  .ms2-boss{height:56%!important}
+  #overlay .picker-screen.ms .ms2-dline{padding:6px 10px;font-size:11px}
   #overlay .picker-screen.ms .ms2-name b{font-size:15px!important}
   #overlay .picker-screen.ms .ms2-name small{font-size:10px!important}
 }
@@ -6040,7 +6071,7 @@ function showHelp(){
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const SAVE_KEYS = ['digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
-  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
+  'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-maptime', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
   'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales', 'digibonk3d-objetos', 'digibonk3d-obj-ini', 'digibonk3d-reto', 'digibonk3d-sist'];
 // También cuentan los contadores por banner (pity) y la mejor oleada de cada mapa
 const isSaveKey = k => SAVE_KEYS.includes(k) || /^digibonk3d-(pity|surv-wave)-[A-Za-z0-9_]{1,32}$/.test(k);
@@ -6930,8 +6961,7 @@ function showMapSelect(){
   preloadLoadArt(runMap);   // destino conocido: el fondo de su pantalla de carga se pide ya
   setHud(false);
   try { localStorage.setItem('digibonk3d-map', runMap); localStorage.setItem('digibonk3d-diff', runDiff); } catch(e){}
-  const surv = runMode === 'surv', wins = mapWins();
-  const pe = v => `<em${pct(v) === '=' ? ' class="eq"' : ''}>${pct(v)}</em>`;
+  const surv = runMode === 'surv', wins = mapWins(), mapTimes = loadJSON('digibonk3d-maptime', {});
   const pct = v => Math.abs(v - 1) < 0.005 ? '=' : (v >= 1 ? '+' : '−') + Math.round(Math.abs(v - 1) * 100) + '%';
   // Tarjetas con la ilustración de la pantalla de carga de cada mapa, su jefe final, los jefes y qué dificultades has superado
   const cards = MAP_ORDER.map(id => {
@@ -6939,22 +6969,27 @@ function showMapSelect(){
     const bosses = m.zones.map(z => z.boss && z.boss.name).filter((v, i, l) => v && l.indexOf(v) === i);
     const wave = +(localStorage.getItem('digibonk3d-surv-wave-' + id) || 0);
     const pips = DIFF_ORDER.map(dd => `<i class="${won.includes(dd) ? 'ok' : ''}" style="--dc:${DIFFS[dd].col}" title="${DIFFS[dd].name}"></i>`).join('');
+    const bestT = mapTimes[id] || 0;
     const rec = surv ? `<span class="ms2-rec"><span>Mejor oleada</span> <b>${wave || '—'}</b></span>`
       : `<span class="ms2-rec"><span class="ms2-pips">${pips}</span><span>${won.length ? `Superado ${won.length}/4` : 'Sin superar'}</span></span>`;
+    const best = surv ? '' : `<span class="ms2-best"${bestT ? '' : ' data-none="1"'}><small>Récord</small><b>${bestT ? fmtTime(bestT) : '—'}</b></span>`;
     return `<button type="button" class="ms-card ms2c${id === runMap ? ' on' : ''}" data-map="${id}" aria-pressed="${id === runMap}" style="--art:url(${art.src});--pos:${art.pos}">
-      <span class="ms2-art"><em>Mapa ${m.n}</em><img class="ms2-boss" src="${bossPng}" alt="" loading="lazy"><span class="ms2-name"><b>${m.name}</b><small>${m.zones.map(z => z.name).join(' → ')}</small></span></span>
+      <span class="ms2-art"><em>Mapa ${m.n}</em>${best}<img class="ms2-boss" src="${bossPng}" alt="" loading="lazy"><span class="ms2-name"><b>${m.name}</b><small>${m.zones.map(z => z.name).join(' → ')}</small></span></span>
       <span class="ms2-body"><p>${surv ? 'Supervivencia: sin jefe final, una oleada por minuto y un jefe menor cada 5 oleadas.' : m.desc}</p>
       <span class="ms2-meta"><span class="ms2-bosses">${surv ? 'Jefes menores cada 5 oleadas' : (m.minis ? '<span>Jefes menores</span> · ' : '') + `<span>${bosses.join(' → ')}</span>`}</span>${rec}</span></span></button>`;
   }).join('');
   const d = DIFFS[runDiff];
+  // Solo lo que cambia respecto a Normal (en Normal no cambia nada)
+  const dchg = [['Vida enemigos', d.hp], ['Daño enemigos', d.dmg], ['Enemigos', 1 / d.spawn], ['Élites', 1 / d.elite], ['Jefes de zona', d.boss]]
+    .filter(([, v]) => Math.abs(v - 1) >= 0.005).map(([t, v]) => [t, pct(v)]);
+  if (d.reward !== 1) dchg.push(['Bits y tickets', '×' + String(d.reward).replace('.', ',')]);
   const diffs = DIFF_ORDER.map(id => `<button type="button" class="ms-diff${id === runDiff ? ' on' : ''}" data-diff="${id}" style="--dc:${DIFFS[id].col}" aria-pressed="${id === runDiff}"><span class="ms2-lv">${'<i></i>'.repeat(DIFF_ORDER.indexOf(id) + 1)}</span><b>${DIFFS[id].name}</b><small>Premios ×${String(DIFFS[id].reward).replace('.', ',')}</small></button>`).join('');
   showOverlay(`
     <div class="picker-screen ms ms2">
-      <header class="pk2-top"><button class="g-back" id="msBack">← Digimon</button><h2>${surv ? 'Supervivencia · elige mapa' : 'Elige mapa y dificultad'}</h2><span class="pk2-sub">${CHARS[selectedKey].name} · ←→ mapa · ↑↓ dificultad · Enter empezar</span></header>
+      <header class="pk2-top ms2-top"><button class="g-back" id="msBack">← Digimon</button><h2 class="ms2-title"><small>${surv ? 'Supervivencia' : 'Partida'}</small>Elige mapa</h2><span class="ms2-who"><img src="${charIcon(selectedKey)}" alt=""><b>${CHARS[selectedKey].name}</b></span><span class="ms2-keys"><kbd>←→</kbd> mapa <kbd>↑↓</kbd> dificultad <kbd>Enter</kbd> empezar</span></header>
       <div class="ms-maps">${cards}</div>
       <section class="ms-dsec"><div class="ms-diffs">${diffs}</div>
-        <div class="ms-table" style="--dc:${d.col}" title="En todos los niveles la presión sube con el tiempo: más vida, daño y hordas hasta el minuto 10. En todos los mapas, a los 20 minutos en una pantalla empieza el Infierno."><b>${d.name}</b><span>${d.d}</span>
-          <ul><li>Vida enemigos ${pe(d.hp)}</li><li>Daño enemigos ${pe(d.dmg)}</li><li>Enemigos ${pe(1 / d.spawn)}</li><li>Élites ${pe(1 / d.elite)}</li><li>Jefes de zona ${pe(d.boss)}</li><li>Bits y tickets <em>×${String(d.reward).replace('.', ',')}</em></li></ul></div>
+        <div class="ms2-dline" style="--dc:${d.col}" title="En todos los niveles la presión sube con el tiempo: más vida, daño y hordas hasta el minuto 10. En todos los mapas, a los 20 minutos en una pantalla empieza el Infierno."><b>${d.name}</b><span class="ms2-dd">${d.d}</span>${dchg.length ? dchg.map(([t, v]) => `<i>${t} <em>${v}</em></i>`).join('') : '<i class="eq">Sin cambios: el juego base</i>'}</div>
         <footer class="pk2-foot ms-foot"><span class="pk-hint">${surv ? 'Supervivencia' : 'Partida'} en ${MAPS[runMap].name} · ${d.name}</span><button class="btn btn-primary pk-start" id="msStart">¡Empezar!</button></footer>
       </section>
     </div>`);
@@ -9972,6 +10007,7 @@ function endGame(win){
   g.reto = g.weekly ? retoRecord(win) : null;   // el reto lleva su propia marca semanal
   if (!g.weekly) saveRecord(win);   // los récords normales no mezclan partidas del reto
   recordCharRun(g.ch.id, win && g.mode !== 'surv', g.diff, g.kills, g.p.lvl);
+  if (g.mode !== 'surv' && !g.weekly){ const mt = loadJSON('digibonk3d-maptime', {}), t = Math.floor(g.t); if (t > (mt[g.map] || 0)){ mt[g.map] = t; try { localStorage.setItem('digibonk3d-maptime', JSON.stringify(mt)); } catch(e){} } }   // récord de tiempo en cada mapa (Elige mapa)
   if (win && g.mode !== 'surv' && !g.weekly){ const mw = mapWins(), l = mw[g.map] || (mw[g.map] = []); if (!l.includes(g.diff)) l.push(g.diff); localStorage.setItem('digibonk3d-mapwins', JSON.stringify(mw)); }
   // Con todo guardado: logros (marcos y títulos), Digimon nuevos y premios de maestría
   g.newTitles = checkAchievements(win);

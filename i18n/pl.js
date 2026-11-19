@@ -1518,5 +1518,10 @@ I18N.add('pl', {"×{0} daño": "×{0} obrażeń", "×{0} recibido": "×{0} otrzy
   "Superado {0}/4": "Ukończone {0}/4",
   "Mejor oleada": "Najlepsza fala",
   "Jefes menores cada 5 oleadas": "Mini-bossowie co 5 fal",
-  "Jefes menores": "Mini-bossowie"
+  "Jefes menores": "Mini-bossowie",
+  "Récord": "Rekord",
+  "Elige mapa": "Wybierz mapę",
+  "Sin cambios: el juego base": "Bez zmian: gra podstawowa",
+  "dificultad": "trudność",
+  "empezar": "start"
 });

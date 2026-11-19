@@ -1526,5 +1526,10 @@ I18N.add('ja', {"×{0} daño": "ダメージ ×{0}", "×{0} recibido": "被ダ�
   "Superado {0}/4": "クリア {0}/4",
   "Mejor oleada": "最高ウェーブ",
   "Jefes menores cada 5 oleadas": "5ウェーブごとに中ボス",
-  "Jefes menores": "中ボス"
+  "Jefes menores": "中ボス",
+  "Récord": "記録",
+  "Elige mapa": "マップを選ぶ",
+  "Sin cambios: el juego base": "変更なし：基本のゲーム",
+  "dificultad": "難易度",
+  "empezar": "開始"
 });

@@ -1513,5 +1513,10 @@ I18N.add('de', {"×{0} daño": "×{0} Schaden", "×{0} recibido": "×{0} erhalte
   "Superado {0}/4": "Geschafft {0}/4",
   "Mejor oleada": "Beste Welle",
   "Jefes menores cada 5 oleadas": "Mini-Bosse alle 5 Wellen",
-  "Jefes menores": "Mini-Bosse"
+  "Jefes menores": "Mini-Bosse",
+  "Récord": "Rekord",
+  "Elige mapa": "Karte wählen",
+  "Sin cambios: el juego base": "Keine Änderungen: das Grundspiel",
+  "dificultad": "Schwierigkeit",
+  "empezar": "starten"
 });

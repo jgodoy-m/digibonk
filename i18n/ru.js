@@ -1524,5 +1524,10 @@ I18N.add('ru', {"×{0} daño": "×{0} урона", "×{0} recibido": "×{0} по
   "Superado {0}/4": "Пройдено {0}/4",
   "Mejor oleada": "Лучшая волна",
   "Jefes menores cada 5 oleadas": "Мини-боссы каждые 5 волн",
-  "Jefes menores": "Мини-боссы"
+  "Jefes menores": "Мини-боссы",
+  "Récord": "Рекорд",
+  "Elige mapa": "Выбери карту",
+  "Sin cambios: el juego base": "Без изменений: базовая игра",
+  "dificultad": "сложность",
+  "empezar": "начать"
 });

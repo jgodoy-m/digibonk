@@ -1513,5 +1513,10 @@ I18N.add('pt', {"×{0} daño": "×{0} dano", "×{0} recibido": "×{0} recebido",
   "Superado {0}/4": "Superado {0}/4",
   "Mejor oleada": "Melhor onda",
   "Jefes menores cada 5 oleadas": "Minichefes a cada 5 ondas",
-  "Jefes menores": "Minichefes"
+  "Jefes menores": "Minichefes",
+  "Récord": "Recorde",
+  "Elige mapa": "Escolha o mapa",
+  "Sin cambios: el juego base": "Sem mudanças: o jogo base",
+  "dificultad": "dificuldade",
+  "empezar": "começar"
 });

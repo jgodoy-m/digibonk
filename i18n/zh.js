@@ -1526,5 +1526,10 @@ I18N.add('zh', {"×{0} daño": "伤害 ×{0}", "×{0} recibido": "受到伤害 �
   "Superado {0}/4": "已通关 {0}/4",
   "Mejor oleada": "最佳波次",
   "Jefes menores cada 5 oleadas": "每5波出现小首领",
-  "Jefes menores": "小首领"
+  "Jefes menores": "小首领",
+  "Récord": "纪录",
+  "Elige mapa": "选择地图",
+  "Sin cambios: el juego base": "无变化：基础游戏",
+  "dificultad": "难度",
+  "empezar": "开始"
 });

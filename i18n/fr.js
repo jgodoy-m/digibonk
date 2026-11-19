@@ -1513,5 +1513,10 @@ I18N.add('fr', {"×{0} daño": "×{0} dégâts", "×{0} recibido": "×{0} reçus
   "Superado {0}/4": "Terminé {0}/4",
   "Mejor oleada": "Meilleure vague",
   "Jefes menores cada 5 oleadas": "Mini-boss toutes les 5 vagues",
-  "Jefes menores": "Mini-boss"
+  "Jefes menores": "Mini-boss",
+  "Récord": "Record",
+  "Elige mapa": "Choisis la carte",
+  "Sin cambios: el juego base": "Aucun changement : le jeu de base",
+  "dificultad": "difficulté",
+  "empezar": "commencer"
 });

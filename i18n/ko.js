@@ -1525,5 +1525,10 @@ I18N.add('ko', {"×{0} daño": "피해 ×{0}", "×{0} recibido": "받는 피해 
   "Superado {0}/4": "클리어 {0}/4",
   "Mejor oleada": "최고 웨이브",
   "Jefes menores cada 5 oleadas": "5웨이브마다 중간 보스",
-  "Jefes menores": "중간 보스"
+  "Jefes menores": "중간 보스",
+  "Récord": "기록",
+  "Elige mapa": "맵 선택",
+  "Sin cambios: el juego base": "변경 없음: 기본 게임",
+  "dificultad": "난이도",
+  "empezar": "시작"
 });
