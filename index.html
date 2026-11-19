@@ -6986,7 +6986,7 @@ function showMapSelect(){
   const diffs = DIFF_ORDER.map(id => `<button type="button" class="ms-diff${id === runDiff ? ' on' : ''}" data-diff="${id}" style="--dc:${DIFFS[id].col}" aria-pressed="${id === runDiff}"><span class="ms2-lv">${'<i></i>'.repeat(DIFF_ORDER.indexOf(id) + 1)}</span><b>${DIFFS[id].name}</b><small>Premios ×${String(DIFFS[id].reward).replace('.', ',')}</small></button>`).join('');
   showOverlay(`
     <div class="picker-screen ms ms2">
-      <header class="pk2-top ms2-top"><button class="g-back" id="msBack">← Digimon</button><h2 class="ms2-title"><small>${surv ? 'Supervivencia' : 'Partida'}</small>Elige mapa</h2><span class="ms2-who"><img src="${charIcon(selectedKey)}" alt=""><b>${CHARS[selectedKey].name}</b></span><span class="ms2-keys"><kbd>←→</kbd> mapa <kbd>↑↓</kbd> dificultad <kbd>Enter</kbd> empezar</span></header>
+      <header class="pk2-top ms2-top"><button class="g-back" id="msBack">← Digimon</button><h2 class="ms2-title">${surv ? '<small>Supervivencia</small>' : ''}Elige mapa</h2><span class="ms2-who"><img src="${charIcon(selectedKey)}" alt=""><b>${CHARS[selectedKey].name}</b></span><span class="ms2-keys"><kbd>←→</kbd> mapa <kbd>↑↓</kbd> dificultad <kbd>Enter</kbd> empezar</span></header>
       <div class="ms-maps">${cards}</div>
       <section class="ms-dsec"><div class="ms-diffs">${diffs}</div>
         <div class="ms2-dline" style="--dc:${d.col}" title="En todos los niveles la presión sube con el tiempo: más vida, daño y hordas hasta el minuto 10. En todos los mapas, a los 20 minutos en una pantalla empieza el Infierno."><b>${d.name}</b><span class="ms2-dd">${d.d}</span>${dchg.length ? dchg.map(([t, v]) => `<i>${t} <em>${v}</em></i>`).join('') : '<i class="eq">Sin cambios: el juego base</i>'}</div>

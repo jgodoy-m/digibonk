@@ -361,7 +361,6 @@ I18N.add('fr', {
   "Premios ×{0}": "Récompenses ×{0}",
   "Supervivencia · elige mapa": "Survie · choisis la carte",
   "Elige mapa y dificultad": "Choisis la carte et la difficulté",
-  "Partida": "Partie",
   "{0} · ←→ mapa · ↑↓ dificultad · Enter empezar": "{0} · ←→ carte · ↑↓ difficulté · Entrée pour commencer",
   "Vida enemigos": "Vie des ennemis",
   "Daño enemigos": "Dégâts des ennemis",

@@ -367,7 +367,6 @@ I18N.add('ko', {
   "Premios ×{0}": "보상 ×{0}",
   "Supervivencia · elige mapa": "서바이벌 · 맵 선택",
   "Elige mapa y dificultad": "맵과 난이도 선택",
-  "Partida": "게임",
   "{0} · ←→ mapa · ↑↓ dificultad · Enter empezar": "{0} · ←→ 맵 · ↑↓ 난이도 · Enter 시작",
   "Vida enemigos": "적 체력",
   "Daño enemigos": "적 피해",

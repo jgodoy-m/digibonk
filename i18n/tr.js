@@ -363,7 +363,6 @@ I18N.add('tr', {
   "Premios ×{0}": "Ödüller ×{0}",
   "Supervivencia · elige mapa": "Hayatta Kalma · harita seç",
   "Elige mapa y dificultad": "Harita ve zorluk seç",
-  "Partida": "Oyun",
   "{0} · ←→ mapa · ↑↓ dificultad · Enter empezar": "{0} · ←→ harita · ↑↓ zorluk · başlamak için Enter",
   "Vida enemigos": "Düşman canı",
   "Daño enemigos": "Düşman hasarı",

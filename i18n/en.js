@@ -360,7 +360,6 @@ I18N.add('en', {
   "Premios ×{0}": "Rewards ×{0}",
   "Supervivencia · elige mapa": "Survival · choose map",
   "Elige mapa y dificultad": "Choose map and difficulty",
-  "Partida": "Run",
   "{0} · ←→ mapa · ↑↓ dificultad · Enter empezar": "{0} · ←→ map · ↑↓ difficulty · Enter to start",
   "Vida enemigos": "Enemy health",
   "Daño enemigos": "Enemy damage",

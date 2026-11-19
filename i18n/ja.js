@@ -368,7 +368,6 @@ I18N.add('ja', {
   "Premios ×{0}": "報酬×{0}",
   "Supervivencia · elige mapa": "サバイバル · マップを選ぶ",
   "Elige mapa y dificultad": "マップと難易度を選ぶ",
-  "Partida": "プレイ",
   "{0} · ←→ mapa · ↑↓ dificultad · Enter empezar": "{0} · ←→ マップ · ↑↓ 難易度 · Enterで開始",
   "Vida enemigos": "敵のHP",
   "Daño enemigos": "敵のダメージ",

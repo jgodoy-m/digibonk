@@ -366,7 +366,6 @@ I18N.add('ru', {
   "Premios ×{0}": "Награды ×{0}",
   "Supervivencia · elige mapa": "Выживание · выбери карту",
   "Elige mapa y dificultad": "Выбери карту и сложность",
-  "Partida": "Забег",
   "{0} · ←→ mapa · ↑↓ dificultad · Enter empezar": "{0} · ←→ карта · ↑↓ сложность · Enter — старт",
   "Vida enemigos": "Здоровье врагов",
   "Daño enemigos": "Урон врагов",

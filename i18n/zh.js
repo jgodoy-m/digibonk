@@ -367,7 +367,6 @@ I18N.add('zh', {
   "Premios ×{0}": "奖励 ×{0}",
   "Supervivencia · elige mapa": "生存 · 选择地图",
   "Elige mapa y dificultad": "选择地图和难度",
-  "Partida": "对局",
   "{0} · ←→ mapa · ↑↓ dificultad · Enter empezar": "{0} · ←→ 地图 · ↑↓ 难度 · Enter 开始",
   "Vida enemigos": "敌人生命",
   "Daño enemigos": "敌人伤害",
