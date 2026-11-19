@@ -4264,9 +4264,9 @@ Object.assign(CHARS, {
   patamon: {name:'Patamon', desc:'Ráfagas rápidas que atraviesan a un enemigo', sprite:'sprites/adventure/patamon.png', kind:'shot', cd:0.5, dmg:10, pierce:1, fx:'air'},
   biyomon: {name:'Biyomon', desc:'Remolino de viento que atraviesa la fila', sprite:'sprites/adventure/biyomon.png', kind:'shot', cd:1.0, dmg:14, pierce:6, fx:'greenfire'},
   // Compañeros que no son de los niños elegidos: cada uno estrena un tipo de ataque propio
-  leomon:    {name:'Leomon',    desc:'Puño de la Bestia: golpe en abanico hacia donde miras', sprite:'sprites/adventure/leomon.png',    kind:'melee',  cd:0.6, dmg:26, fx:'fire'},
+  leomon:    {name:'Leomon',    desc:'Puño de la Bestia: golpe en abanico y puño de energía a distancia', sprite:'sprites/adventure/leomon.png',    kind:'melee',  cd:0.6, dmg:26, fx:'fire', armor:0.85},   // pelea de cerca: recibe un 15% menos de daño
   hagurumon: {name:'Hagurumon', desc:'Deja torretas de engranaje que disparan solas',         sprite:'sprites/adventure/hagurumon.png', kind:'turret', cd:2.2, dmg:11, fx:'gear'},
-  frigimon:  {name:'Frigimon',  desc:'Ventisca alrededor: daña y frena a los enemigos',        sprite:'sprites/adventure/frigimon.png',  kind:'frost',  cd:1.6, dmg:11, fx:'snow'},
+  frigimon:  {name:'Frigimon',  desc:'Ventisca alrededor: daña y frena a los enemigos',        sprite:'sprites/adventure/frigimon.png',  kind:'frost',  cd:1.6, dmg:13, fx:'snow', armor:0.9},   // pelea de cerca: −10% de daño recibido
   wizardmon: {name:'Wizardmon', desc:'Círculos mágicos que estallan bajo los enemigos',        sprite:'sprites/adventure/wizardmon.png', kind:'zone',   cd:1.5, dmg:11, fx:'star'}
 });
 // Compañeros iniciales: solo los de los niños elegidos (el resto se desbloquea jugando)
@@ -6471,9 +6471,9 @@ function baseFacts(c){
   if (c.kind === 'ring') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Proyectiles', 6], ['Alcance', '8 m']];
   if (c.kind === 'orbit') return [['Daño', dmg], ['Golpe cada', '0,25 s'], ['Cuchillas', 2], ['Radio', '3,2 m']];
   if (c.kind === 'chain') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Saltos', 3], ['Alcance', '6 m']];
-  if (c.kind === 'melee') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Abanico', '140°'], ['Alcance', '4,5 m']];
+  if (c.kind === 'melee') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Abanico', '140°'], ['Alcance', '4,5 m · puño 14 m']];
   if (c.kind === 'turret') return [['Daño', dmg], ['Torreta cada', fmtN(c.cd, 2) + ' s'], ['Torretas', 3], ['Dura', '10 s']];
-  if (c.kind === 'frost') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Frena', '−50% 2 s'], ['Radio', '6 m']];
+  if (c.kind === 'frost') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Frena', '−50% 2 s'], ['Radio', '7,5 m']];
   if (c.kind === 'zone') return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], ['Círculos', 1], ['Radio', '3 m']];
   return [['Daño', dmg], ['Recarga', fmtN(c.cd, 2) + ' s'], c.splash ? ['Estalla', fmtN(c.splash) + ' m'] : c.pierce ? ['Atraviesa', c.pierce] : ['Proyectiles', 1], ['Alcance', '22 m']];
 }
@@ -6598,7 +6598,7 @@ function renderPickPreview(){
   const wins = st.wins || {};
   const hp = Math.round(b.hp * labMul('hp')), dmg = c.dmg * b.dmgMul * labMul('dmg'), spd = b.speed * labMul('speed');
   const rate = c.kind === 'orbit' ? 1 / 0.25 : c.kind === 'chain' ? 3 / c.cd : c.kind === 'ring' ? 6 / c.cd : c.kind === 'melee' ? 3 / c.cd : c.kind === 'turret' ? 1 / 0.5 * 3 : c.kind === 'frost' ? 4 / c.cd : 1.5 / c.cd;
-  const reach = c.kind === 'ring' ? 8 : c.kind === 'orbit' ? 3.2 : c.kind === 'chain' ? 6 : c.kind === 'melee' ? 4.5 : c.kind === 'turret' ? 12 : c.kind === 'frost' ? 6 : c.kind === 'zone' ? 16 : 22;
+  const reach = c.kind === 'ring' ? 8 : c.kind === 'orbit' ? 3.2 : c.kind === 'chain' ? 6 : c.kind === 'melee' ? 4.5 : c.kind === 'turret' ? 12 : c.kind === 'frost' ? 7.5 : c.kind === 'zone' ? 16 : 22;
   const bar = (label, val, max, shown) => `<div class="ps-bar"><span>${label}</span><div class="ps-meter"><i style="width:${Math.max(6, Math.min(100, Math.round(val / max * 100)))}%"></i></div><b>${shown}</b></div>`;
   const row = (label, val) => `<div class="ps-row"><span>${label}</span><b>${val}</b></div>`;
   el.innerHTML = `
@@ -7153,7 +7153,7 @@ function buildRun(key, resume){
     seed: (resume && resume.g && resume.g.seed) || (runWeekly && runMode !== 'surv' ? 7919*(weekNum() + 1000) : 1 + Math.floor(Math.random()*2e9)),
     star: runWeekly && runMode !== 'surv' ? retoStar() : null,
     ch: {...c, id:key},
-    p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:3.5, critChance:0.12, critMul:2},
+    p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:3.5, critChance:0.12, critMul:2, armor: c.armor || 1},
     t: 0, kills: 0, enemies: [], shots: [], gems: [], blades: [], turrets: [], zones: [],
     wCd: 0, spawnT: 0, orbitA: 0, choices: [],
     dash: 0, dashCd: 0, dir: {x:0, z:-1}, chests: [], chestT: 20, flash: '', flashT: 0,
@@ -7636,7 +7636,15 @@ function updateKindAttacks(dt){
         if (!e.boss) [e.x, e.z] = clampArena(e.x + rx/d*0.3, e.z + rz/d*0.3, ARENA_R - 0.5);   // pequeño empujón
       }
     }
-    if (hit || near.e){ g.wCd = ch.cd * p.cdMul; g.atkT = 0.26; spawnRing(p.x + dx*R*0.55, p.z + dz*R*0.55, 0xffb74d, R*0.6, 0.25); }
+    // Juken: con cada golpe sale un puño de energía hacia el enemigo más cercano (hasta 14 m), así Leomon no se queda sin dar
+    // cuando huye de la horda y los enemigos le siguen fuera del abanico
+    const far = nearestIn(p.x, p.z, 14*p.area);
+    if (far){
+      const fd = dist2(far.x, far.z, p.x, p.z) || 1;
+      fireProjectile(p.x, p.z, (far.x - p.x)/fd*22, (far.z - p.z)/fd*22, ch.dmg*p.dmg*0.6, 0.7*p.area, 0xffb74d, {pierce: 1 + p.count, fx: 'fire', big: 1.6});
+    }
+    if (hit || far){ g.wCd = ch.cd * p.cdMul; g.atkT = 0.26; if (hit) spawnRing(p.x + dx*R*0.55, p.z + dz*R*0.55, 0xffb74d, R*0.6, 0.25); }
+    else g.wCd = 0.1;
   }
   if (ch.kind === 'chain' && g.wCd <= 0 && g.enemies.length){
     // Puño de Gato: golpea al más cercano (6 m) y salta a otros cercanos (4 m); un salto más por proyectil extra
@@ -7662,7 +7670,7 @@ function updateKindAttacks(dt){
   }
   if (ch.kind === 'frost' && g.wCd <= 0){
     g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
-    const R = 6*p.area;
+    const R = 7.5*p.area;   // 7,5 m (antes 6): con 6 m casi no tocaba a la horda al huir
     for (const e of g.enemies){
       if (e.hp > 0 && dist2(e.x, e.z, p.x, p.z) < R + e.r){ hurt(e, ch.dmg*p.dmg); e.slowT = 2 + 0.3*(p.count - 1); }
     }
