@@ -3714,6 +3714,190 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
   #overlay .realhub.hb .hb-bar .nm-lbl{display:none!important}
   #overlay .realhub.hb .hb-bar .hb-btn{padding:0!important;justify-content:center}
 }
+/* ---------- Elige mapa compacto (2026-11-17) ----------
+   Una sola pantalla sin desplazarse: tres mapas en fila (también en móvil horizontal), las cuatro dificultades en
+   una fila y «¡Empezar!» a la derecha de la dificultad, siempre a la vista. Las tarjetas se encogen con la altura. */
+#overlay:not(.menu-mode)>.picker-screen.ms{height:auto!important;max-height:calc(100dvh - 16px)!important;display:flex!important;flex-direction:column;gap:10px;padding:14px 18px!important;overflow:auto!important}
+#overlay .picker-screen.ms .pk2-top{flex-wrap:nowrap!important;padding:0!important;min-width:0}
+#overlay .picker-screen.ms .pk2-top h2{white-space:nowrap;font-size:18px!important;padding:6px 18px 6px 14px!important}
+#overlay .picker-screen.ms .pk2-sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:12px}
+#overlay .picker-screen.ms .ms-maps{margin:0!important;gap:10px!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+#overlay .picker-screen.ms .ms-art{height:96px}
+#overlay .picker-screen.ms .ms-boss{height:92px}
+#overlay .picker-screen.ms .ms-deco{width:48px;height:48px}#overlay .picker-screen.ms .ms-deco.d2{left:56px;width:38px;height:38px}
+#overlay .picker-screen.ms .ms-txt{padding:7px 12px 9px;gap:3px}
+#overlay .picker-screen.ms .ms-txt b{font-size:18px}
+#overlay .picker-screen.ms .ms-txt p{min-height:0;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12px}
+#overlay .picker-screen.ms .ms-tags i{font-size:10px;padding:1px 7px}
+#overlay .picker-screen.ms .ms-rec{margin-top:1px;font-size:11px}
+#overlay .picker-screen.ms .ms-dsec{margin:0!important;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"diffs diffs" "table foot";gap:8px 12px;align-items:stretch}
+#overlay .picker-screen.ms .ms-diffs{grid-area:diffs;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px}
+#overlay .picker-screen.ms .ms-diff{padding:6px 10px!important;flex-direction:row;align-items:baseline;justify-content:space-between;gap:6px}
+#overlay .picker-screen.ms .ms-diff b{font-size:15px}
+#overlay .picker-screen.ms .ms-diff small{white-space:nowrap}
+#overlay .picker-screen.ms .ms-table{grid-area:table;padding:8px 12px!important}
+#overlay .picker-screen.ms .ms-table>b{font-size:15px}#overlay .picker-screen.ms .ms-table>span{font-size:12px}
+#overlay .picker-screen.ms .ms-table ul{margin:6px 0 0;gap:4px 6px}
+#overlay .picker-screen.ms .ms-table li{padding:3px 8px;font-size:11.5px}
+#overlay .picker-screen.ms .ms-foot{grid-area:foot;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;gap:6px;padding:0!important;margin:0!important;position:static!important;background:none!important;width:230px}
+#overlay .picker-screen.ms .ms-foot .pk-hint{font-size:12px;text-align:center;line-height:1.3}
+#overlay .picker-screen.ms .ms-foot .pk-start{min-width:0!important;width:100%;padding:14px 10px!important;font-size:20px!important}
+/* Móvil en horizontal y pantallas bajas: sin descripciones ni etiquetas, tarjetas de mapa bajas */
+@media (orientation:landscape) and (max-height:500px){
+  #overlay:not(.menu-mode)>.picker-screen.ms{width:calc(100vw - 16px)!important;max-height:calc(100dvh - 10px)!important;padding:8px 12px!important;gap:6px;border-radius:12px!important;margin:0!important}
+  #overlay:has(>.picker-screen.ms){padding-top:0!important;justify-content:center}
+  #overlay .picker-screen.ms .pk2-top{gap:8px!important}
+  #overlay .picker-screen.ms .pk2-top h2{font-size:14px!important;padding:4px 12px 4px 10px!important}
+  #overlay .picker-screen.ms .g-back{padding:4px 10px!important;font-size:12px!important}
+  #overlay .picker-screen.ms .pk2-sub{display:none}
+  #overlay .picker-screen.ms .ms-maps{gap:6px!important}
+  #overlay .picker-screen.ms .ms-card{border-width:2px!important;border-radius:10px!important}
+  #overlay .picker-screen.ms .ms-card:hover{transform:none}
+  #overlay .picker-screen.ms .ms-art{height:46px}
+  #overlay .picker-screen.ms .ms-art em{font-size:9px;padding:1px 6px;top:4px;left:6px;letter-spacing:1px}
+  #overlay .picker-screen.ms .ms-boss{height:44px}
+  #overlay .picker-screen.ms .ms-deco{width:28px;height:28px;bottom:4px}#overlay .picker-screen.ms .ms-deco.d1{left:6px}#overlay .picker-screen.ms .ms-deco.d2{left:30px;width:22px;height:22px;bottom:12px}
+  #overlay .picker-screen.ms .ms-txt{padding:3px 8px 5px;gap:1px}
+  #overlay .picker-screen.ms .ms-txt b{font-size:13px}
+  #overlay .picker-screen.ms .ms-txt small{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #overlay .picker-screen.ms :is(.ms-txt p,.ms-tags){display:none!important}
+  #overlay .picker-screen.ms .ms-rec{font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #overlay .picker-screen.ms .ms-dsec{gap:5px 8px}
+  #overlay .picker-screen.ms .ms-diffs{gap:5px}
+  #overlay .picker-screen.ms .ms-diff{padding:3px 7px!important;border-radius:9px!important}
+  #overlay .picker-screen.ms .ms-diff b{font-size:12px}#overlay .picker-screen.ms .ms-diff small{font-size:9px}
+  #overlay .picker-screen.ms .ms-table{padding:4px 8px!important;border-radius:10px!important}
+  #overlay .picker-screen.ms .ms-table>b{font-size:12px;margin-right:4px}#overlay .picker-screen.ms .ms-table>span{font-size:10.5px}
+  #overlay .picker-screen.ms .ms-table ul{margin:3px 0 0;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:2px 4px}
+  #overlay .picker-screen.ms .ms-table li{padding:1px 6px;font-size:9.5px}
+  #overlay .picker-screen.ms .ms-foot{width:150px;gap:3px}
+  #overlay .picker-screen.ms .ms-foot .pk-hint{font-size:9.5px}
+  #overlay .picker-screen.ms .ms-foot .pk-start{padding:9px 6px!important;font-size:15px!important}
+  #overlay .picker-screen.ms .ms-foot .pk-start small{display:none}
+}
+/* Móvil en vertical: un mapa debajo de otro, pero «¡Empezar!» queda fijo abajo */
+@media (orientation:portrait) and (max-width:760px){
+  #overlay .picker-screen.ms .ms-maps{grid-template-columns:1fr!important}
+  #overlay .picker-screen.ms .ms-dsec{grid-template-columns:1fr;grid-template-areas:"diffs" "table" "foot"}
+  #overlay .picker-screen.ms .ms-diffs{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #overlay .picker-screen.ms .ms-foot{width:auto;position:sticky!important;bottom:0}
+  #overlay .picker-screen.ms .pk2-top{flex-wrap:wrap!important}
+}
+/* ---------- Reto semanal: pantalla y señas propias (verde), distinta de Jugar ---------- */
+.rt{--rt:#13a06b;--rt2:#2bd18a;--rt-dark:#0a6a46;--rt-bg:color-mix(in srgb,#2bb673 10%,var(--m-card))}
+#overlay:not(.menu-mode)>.rt-screen.rt{width:min(1080px,96vw);max-height:calc(100dvh - 16px);box-sizing:border-box;overflow:auto;display:flex;flex-direction:column;gap:12px;padding:14px 18px;
+  background:var(--m-card);border:1px solid var(--m-cardline);border-top:6px solid var(--rt);border-radius:16px;box-shadow:var(--m-shadow);color:var(--m-text);font-family:'Nunito',system-ui,sans-serif;text-align:left}
+#overlay:not(.menu-mode):has(>.rt){filter:none}
+.rt kbd{display:inline-grid;place-items:center;padding:1px 6px;border-radius:5px;background:rgba(0,0,0,.25);color:#fff;font:800 10px 'Nunito',system-ui,sans-serif;border:0}
+.rt-top{display:flex;align-items:center;gap:14px;min-width:0}
+html[lang] #overlay .rt .g-back{background:var(--m-btn)!important;color:var(--m-text)!important;border:1px solid var(--m-line2)!important;border-radius:99px!important;clip-path:none!important;font:800 13px 'Nunito',system-ui,sans-serif!important;box-shadow:var(--m-pillsh)!important;padding:8px 16px;letter-spacing:0!important}
+html[lang] #overlay .rt .g-back kbd{background:var(--m-tabon);color:var(--m-tabon-txt)}
+#overlay .rt .rt-title{margin:0;display:flex;align-items:baseline;gap:10px;padding:7px 22px 7px 16px;border-radius:10px;background:linear-gradient(180deg,var(--rt2),var(--rt) 55%,var(--rt-dark));color:#fff;
+  font:900 22px 'Orbitron',system-ui,sans-serif;letter-spacing:1px;box-shadow:0 4px 0 #075236;transform:skewX(-8deg);white-space:nowrap;text-shadow:0 2px 0 rgba(0,0,0,.2)}
+#overlay .rt .rt-title small{font:900 10px 'Nunito',system-ui,sans-serif;letter-spacing:2px;text-transform:uppercase;padding:2px 7px;border-radius:99px;background:rgba(0,0,0,.25)}
+.rt-week{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;line-height:1.2;white-space:nowrap}
+.rt-week b{font:900 15px 'Nunito',system-ui,sans-serif;color:var(--rt)}.rt-week small{font:700 12px 'Nunito',system-ui,sans-serif;color:var(--m-soft)}
+.rt-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr) minmax(0,.9fr);gap:12px;flex:none}
+.rt :is(span,p,li,small,b){text-shadow:none}
+.rt-card{background:var(--m-sunk);border:1px solid var(--m-line);border-radius:14px;padding:12px 14px;min-width:0;display:flex;flex-direction:column;gap:8px}
+.rt-card h4{margin:0;color:var(--m-mute);font:800 11px 'Nunito',system-ui,sans-serif;letter-spacing:1.4px;text-transform:uppercase}
+.rt-rule{padding:0;overflow:hidden;border:2px solid var(--rt)}
+.rt-art{position:relative;display:block;height:110px;flex:none;background:var(--floor) 0 0/48px 48px repeat;image-rendering:pixelated;overflow:hidden}
+.rt-art::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(6,60,40,.85))}
+.rt-art em{position:absolute;left:10px;bottom:8px;z-index:2;font:900 11px 'Nunito',system-ui,sans-serif;letter-spacing:1.5px;text-transform:uppercase;font-style:normal;color:#fff;padding:2px 9px;border-radius:99px;background:var(--rt)}
+.rt-deco{position:absolute;left:12px;top:10px;width:56px;height:56px;image-rendering:pixelated;z-index:1}
+.rt-boss{position:absolute;right:10px;bottom:0;height:104px;max-width:55%;object-fit:contain;image-rendering:pixelated;z-index:1;filter:drop-shadow(0 4px 6px #000a)}
+.rt-rule-in{padding:10px 14px 12px;display:flex;flex-direction:column;gap:6px}
+#overlay .rt .rt-rule-in>b{font:900 22px 'Nunito',system-ui,sans-serif;color:var(--rt)}
+.rt-rule-in>p{margin:0;font:700 13.5px/1.35 'Nunito',system-ui,sans-serif;color:var(--m-text)}
+.rt-cond{list-style:none;margin:2px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.rt-cond li{background:var(--m-panel);border:1px solid var(--m-line);border-radius:10px;padding:5px 8px;display:flex;flex-direction:column;min-width:0}
+.rt-cond small{font:800 9.5px 'Nunito',system-ui,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--m-mute)}
+.rt-cond b{font:900 13px/1.2 'Nunito',system-ui,sans-serif;color:var(--dc,var(--m-text))}
+.rt-note{margin:0;font:700 11.5px/1.35 'Nunito',system-ui,sans-serif;color:var(--m-soft)}
+.rt-pick{display:flex;align-items:center;gap:10px}
+.rt-pick img{width:58px;height:58px;border-radius:50%;background:var(--m-panel);border:3px solid var(--rt);object-fit:cover;flex:none}
+.rt-pick b{display:block;font:900 19px 'Nunito',system-ui,sans-serif}.rt-pick small{font:700 12px 'Nunito',system-ui,sans-serif;color:var(--m-soft)}
+.rt-btns{display:flex;gap:6px;flex-wrap:wrap}
+.rt-btn{appearance:none;cursor:pointer;border-radius:99px;border:1px solid var(--m-line2);background:var(--m-btn);color:var(--m-text);box-shadow:var(--m-pillsh);font:800 12.5px 'Nunito',system-ui,sans-serif;padding:6px 12px}
+.rt-btn kbd{background:var(--m-tabon);color:var(--m-tabon-txt)}
+.rt-btn.star{border-color:#ffb300;color:#a86f00}html[data-theme=oscuro] .rt-btn.star{color:#ffc24f}
+.rt-hitos{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+.rt-hitos li{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:10px;background:var(--m-panel);font:700 12px/1.25 'Nunito',system-ui,sans-serif}
+.rt-hitos i{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:900;background:var(--m-mute);color:#fff;font-size:11px}
+.rt-hitos li.ok i{background:var(--rt)}.rt-hitos li.ok{outline:2px solid var(--rt)}
+.rt-hitos span{flex:1;min-width:0}.rt-hitos em{flex:none;font-style:normal;font-weight:900;color:var(--rt)}
+.rt-best{display:flex;align-items:baseline;gap:8px}
+.rt-best b{font:900 38px/1 'Orbitron',system-ui,sans-serif;color:var(--rt)}.rt-best small{font:800 13px 'Nunito',system-ui,sans-serif;color:var(--m-soft)}
+.rt-bestinfo{margin:0;display:flex;align-items:center;gap:6px;font:700 12px 'Nunito',system-ui,sans-serif;color:var(--m-soft)}
+.rt-bestinfo img{width:24px;height:24px;border-radius:50%;background:var(--m-panel)}
+.rt-tries{margin:0;font:700 12px 'Nunito',system-ui,sans-serif;color:var(--m-soft)}
+.rt-how{display:flex;flex-direction:column;background:var(--m-panel);border-radius:10px;padding:5px 9px}
+.rt-how small{font:800 9.5px 'Nunito',system-ui,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--m-mute)}
+.rt-how span{font:700 12px/1.3 'Nunito',system-ui,sans-serif}
+.rt-foot{display:flex;align-items:center;gap:14px;justify-content:flex-end}
+.rt-sum{font:700 12.5px 'Nunito',system-ui,sans-serif;color:var(--m-soft);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#overlay .rt .rt-go{appearance:none;cursor:pointer;min-width:280px;padding:13px 20px;border:0;border-radius:14px;background:linear-gradient(180deg,#45e09b,#17a96d 55%,#0d8a57);box-shadow:0 5px 0 #075236;color:#fff;
+  font:900 22px 'Nunito',system-ui,sans-serif;text-shadow:0 2px 0 #075236;clip-path:none}
+@media (orientation:landscape) and (max-height:500px){
+  #overlay:not(.menu-mode)>.rt-screen.rt{width:calc(100vw - 16px);max-height:calc(100dvh - 10px);padding:8px 12px;gap:6px;border-top-width:4px}
+  #overlay:has(>.rt-screen.rt){padding-top:0!important}
+  #overlay .rt .rt-title{font-size:15px;padding:4px 14px 4px 10px}
+  html[lang] #overlay .rt .g-back{padding:4px 10px;font-size:12px!important}
+  .rt-week b{font-size:12px}.rt-week small{font-size:10.5px}
+  .rt-body{gap:6px}
+  .rt-card{padding:7px 9px;gap:5px;border-radius:10px}
+  .rt-rule{padding:0}
+  .rt-art{height:44px}.rt-deco{width:30px;height:30px;top:4px;left:6px}.rt-boss{height:42px}.rt-art em{font-size:9px;bottom:4px;left:6px}
+  .rt-rule-in{padding:5px 9px 7px;gap:3px}
+  #overlay .rt .rt-rule-in>b{font-size:15px}
+  .rt-rule-in>p{font-size:11px}
+  .rt-cond{gap:4px}.rt-cond li{padding:2px 6px}.rt-cond small{font-size:8.5px}.rt-cond b{font-size:11px}
+  .rt-note{display:none}
+  .rt-card h4{font-size:9.5px}
+  .rt-pick img{width:36px;height:36px;border-width:2px}.rt-pick b{font-size:14px}.rt-pick small{font-size:10.5px}
+  .rt-btn{padding:3px 9px;font-size:11px}
+  .rt-hitos{gap:3px}.rt-hitos li{padding:2px 6px;font-size:10.5px}.rt-hitos i{width:16px;height:16px;font-size:9px}
+  .rt-best b{font-size:24px}
+  .rt-bestinfo,.rt-tries{font-size:10.5px}
+  .rt-how{padding:2px 7px}.rt-how small{font-size:8.5px}.rt-how span{font-size:10.5px}
+  .rt-sum{font-size:10.5px}
+  #overlay .rt .rt-go{min-width:200px;padding:8px 14px;font-size:16px}
+  .rt-how,.rt-tries,.rt-hitos em{display:none}
+  .rt-hitos span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rt-btn{white-space:nowrap}
+  .rt-cond{grid-template-columns:repeat(2,minmax(0,1fr))}.rt-cond li:nth-child(3){display:none}
+  .rt-pick>span{min-width:0}
+  .rt-cond b{font-size:10.5px}
+}
+@media (orientation:portrait) and (max-width:760px){
+  .rt-body{grid-template-columns:1fr}
+  .rt-foot{position:sticky;bottom:0;background:var(--m-card);padding-top:6px}
+  #overlay .rt .rt-go{min-width:0;flex:1}
+  .rt-sum{display:none}
+  .rt-top{flex-wrap:wrap}
+}
+/* Selección de Digimon dentro del reto: cartel verde para no confundirlo con Jugar */
+#overlay .ps.ps-reto .ps-banner{background:linear-gradient(180deg,#45e09b,#17a96d 55%,#0d8a57)!important;box-shadow:0 4px 0 #075236!important}
+#overlay .ps.ps-reto .ps-banner h2{background:none!important;box-shadow:none!important}
+#overlay .ps.ps-reto .ps-go{background:linear-gradient(180deg,#45e09b,#17a96d 55%,#0d8a57)!important;box-shadow:0 5px 0 #075236!important;text-shadow:0 2px 0 #075236!important}
+/* Fin del reto: marco verde, puntos y marca semanal */
+#overlay .end3.reto{border-top:6px solid #13a06b!important}
+#overlay .end3 .end3-mode{font:900 11px 'Nunito',system-ui,sans-serif;letter-spacing:2px;text-transform:uppercase;color:#fff;background:#13a06b;padding:3px 12px;border-radius:99px;margin-bottom:4px}
+#overlay .end3.reto h1{background:linear-gradient(180deg,#45e09b,#17a96d 55%,#0d8a57)!important;box-shadow:0 5px 0 #075236!important;color:#fff!important}
+#overlay .end3.reto .end3-go{background:linear-gradient(180deg,#45e09b,#17a96d 55%,#0d8a57)!important;box-shadow:0 5px 0 #075236!important;text-shadow:0 2px 0 #075236!important}
+#overlay .end3.reto .end3-go kbd{color:#0a6a46}
+#overlay .end3 .end3-reto{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:12px;align-items:center;margin:8px 0;padding:8px 14px;border-radius:12px;background:color-mix(in srgb,#2bb673 12%,transparent);border:1px solid color-mix(in srgb,#2bb673 45%,transparent)}
+#overlay .end3 .end3-reto>span{display:flex;flex-direction:column;line-height:1.1}
+#overlay .end3 .end3-reto small{font:800 10px 'Nunito',system-ui,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--m-mute)!important}
+#overlay .end3 .end3-reto b{font:900 26px 'Orbitron',system-ui,sans-serif;color:#13a06b!important}
+#overlay .end3 .end3-reto .er-best b{font-size:18px;color:var(--m-text)!important}
+#overlay .end3 .end3-reto em{font:900 11px 'Nunito',system-ui,sans-serif;font-style:normal;color:#fff;background:#ff8a1e;border-radius:99px;padding:1px 8px;margin-top:3px;align-self:flex-start}
+#overlay .end3 .er-hitos{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;font:700 11.5px 'Nunito',system-ui,sans-serif;color:var(--m-soft)}
+#overlay .end3 .er-hitos i{font-style:normal;font-weight:900;margin-right:5px}#overlay .end3 .er-hitos li.ok{color:#13a06b}
+/* HUD de una partida del reto: marco verde y la regla delante del mapa */
+body.reto-run #hudTop{border-color:#2bb673!important;box-shadow:0 0 0 2px #2bb673,0 0 18px rgba(43,182,115,.45)!important}
+body.reto-run #hudZone{color:#7cf2b4!important}
 /* Avisos (announce) en los menús: por encima de la capa del menú para que se vean */
 #banner.over-menu{z-index:60}
 /* Registro: aviso de nombre vacío junto al campo (antes salía en un cartel tapado por el menú) */
@@ -4716,7 +4900,12 @@ addEventListener('keydown', e => {
     if (k.length === 1 && '123456789'.includes(k) && +k <= list.length && isUnlocked(list[+k-1])){ selectedKey = list[+k-1]; showPicker(); }
     else if (k === 'arrowleft') pickMove(-1);
     else if (k === 'arrowright') pickMove(1);
-    else if (k === 'enter') showMapSelect();
+    else if (k === 'enter') isRetoRun() ? showReto() : showMapSelect();
+    else if (k === 'escape') isRetoRun() ? showReto() : showSelect();
+  }
+  else if (state === 'reto'){
+    if (k === 'enter') startGame(selectedKey);
+    else if (k === 'c') showPicker('personaje');
     else if (k === 'escape') showSelect();
   }
   else if (state === 'mapsel'){
@@ -4732,7 +4921,7 @@ addEventListener('keydown', e => {
   else if (state === 'levelup' && k === 'z') toggleBanish();
   else if (state === 'end' && (k === 'enter' || k === 'r')) startGame(g ? g.ch.id : selectedKey);
   else if (state === 'end' && k === 'm') showSelect();
-  else if (state === 'end' && k === 'c') showPicker();
+  else if (state === 'end' && k === 'c') (g && g.weekly) ? showReto() : showPicker();
 });
 addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
 
@@ -4984,6 +5173,7 @@ function setHud(v){
   const sb0 = document.getElementById('skillBar'); if (sb0){ sb0.style.display = v ? 'flex' : 'none'; if (!v) sb0.innerHTML = ''; }
   const bb0 = document.getElementById('bonkBar'); if (bb0) bb0.style.display = v ? 'block' : 'none';
   const d = v ? '' : 'none';
+  document.body.classList.toggle('reto-run', !!(v && g && g.weekly));   // el HUD del reto va en verde
   document.getElementById('menubg').style.display = 'none';
   document.getElementById('menuart').style.display = v ? 'none' : 'block';
   for (const id of ['hud', 'hudTop', 'timer', 'xp', 'xpTrack', 'xpTxt', 'combo', 'bossbar', 'prompt', 'minimap', 'hudSummon', 'hudEmb']) document.getElementById(id).style.display = d;
@@ -5373,16 +5563,16 @@ function showSelect(){
   // The equipped skin may have a unique appearance; if so, use that sprite's first frame.
   // El botón Jugar siempre muestra el icono del compañero (no la skin equipada)
   if(!avatarIcon() && !PLAYER_ICONS.some(x => x.id === avatarKey())) headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
-  document.getElementById('playBtn').onclick=()=>{ runMode='normal'; runWeekly=false; showPicker('personaje'); };
-  // Reto semanal: botón aparte, partida clásica con la regla de la semana
-  document.getElementById('mWeekly').onclick=()=>{ runMode='normal'; runWeekly=true; showPicker('personaje'); };
+  document.getElementById('playBtn').onclick=()=>{ runMode='normal'; runWeekly=false; restoreRunPrefs(); showPicker('personaje'); };
+  // Reto semanal: modo aparte con su propia pantalla (mapa, dificultad y regla fijos de la semana)
+  document.getElementById('mWeekly').onclick=()=>{ runMode='normal'; runWeekly=true; showReto(); };
   { const el = document.getElementById('hbContinue'); if (el) el.onclick = runContinue; }
   const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { if (GACHA_SOON) return showEncargos(); gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR'; showGacha(); };
   { const el = document.getElementById('hbShop'); if (el) el.onclick = () => showShop(); }
   document.getElementById('btnColl').onclick=showCollection;
   document.getElementById('btnPlayer').onclick=showPlayer;
   document.getElementById('btnGacha').onclick=showLab;
-  document.getElementById('mMaps').onclick=()=>{ runMode='normal'; runWeekly=false; showMapSelect(); };
+  document.getElementById('mMaps').onclick=()=>{ runMode='normal'; runWeekly=false; restoreRunPrefs(); showMapSelect(); };
   ['hbGacha2','hbGacha3'].forEach(id => { const el = document.getElementById(id); if (el) el.onclick = () => { if (GACHA_SOON) { hmSoon('Incubadora: Próximamente'); return; } gxBanner = 'std'; showGacha(); }; });
   { const el = document.getElementById('hbLab2'); if (el) el.onclick = showLab; }
   document.getElementById('btnHelp').onclick=showHelp;
@@ -5390,7 +5580,7 @@ function showSelect(){
   // Botones del menú principal aún sin contenido: muestran un aviso breve en lugar de abrir nada
   const hmSoon=(msg)=>{const m=document.getElementById('hmMsg'); if(!m) return; m.textContent=msg||'Próximamente'; clearTimeout(m._t); m._t=setTimeout(()=>{m.textContent='';},1800);};
   ['mEvent','mRank','mBuild'].forEach(id=>{const el=document.getElementById(id); if(el) el.onclick=()=>hmSoon('Próximamente');});
-  document.getElementById('mSurv').onclick=()=>{ runMode='surv'; runWeekly=false; showPicker('personaje'); };
+  document.getElementById('mSurv').onclick=()=>{ runMode='surv'; runWeekly=false; restoreRunPrefs(); showPicker('personaje'); };
   document.getElementById('mEnc').onclick=showEncargos;
   document.getElementById('mLog').onclick=showLogros;
   document.getElementById('mBug').onclick=()=>{
@@ -5609,7 +5799,7 @@ function showSaveCode(){
 // La URL del proyecto y la clave "anon public" (Supabase → Project Settings → API) se ponen en sitio.json y las copia aquí tools/configurar.py.
 // La clave anon es pública por diseño: la seguridad está en las reglas de supabase/schema.sql.
 // Vacío = nube apagada: el juego guarda solo en este navegador, como antes, y el código DBK1- sigue sirviendo.
-const CLOUD_CFG = {url: '', key: ''};   // SITIO:nube (lo rellena tools/configurar.py desde sitio.json)
+const CLOUD_CFG = {url: 'https://lsmakqxoculfqfgygdgh.supabase.co', key: 'sb_publishable_CawVIBrwhedIxGlH6DevBg_xvgNj5UZ'};   // SITIO:nube (lo rellena tools/configurar.py desde sitio.json)
 const CLOUD_ON = !!(CLOUD_CFG.url && CLOUD_CFG.key);
 const REGIONS = {EU: 'Europa', NA: 'Norteamérica', LATAM: 'Latinoamérica', ASIA: 'Asia y Oriente Medio', OCE: 'Oceanía', AFR: 'África'};
 // La región se deduce de la zona horaria del navegador (sin pedir ubicación ni mirar la IP); el jugador puede cambiarla
@@ -5719,7 +5909,7 @@ async function cloudSync({pull = false, force = false} = {}){
 }
 // Partidas pendientes de enviar al ranking (se guardan si no hay conexión y se envían luego)
 function cloudQueueScore(g){
-  if (!cloudEnabled() || Cloud.st.noRank || g.t < 30 || !g.ranked || g.resumed) return;   // una partida continuada nunca entra en el ranking
+  if (!cloudEnabled() || Cloud.st.noRank || g.t < 30 || !g.ranked || g.resumed || g.weekly) return;   // el reto no entra en el ranking de partidas normales   // una partida continuada nunca entra en el ranking
   const q = Cloud.st.scores || [];
   q.push({p_mode: g.mode === 'surv' ? 'surv' : 'normal', p_map: g.map, p_diff: g.diff, p_digimon: g.ch.id, p_t: Math.floor(g.t), p_kills: g.kills | 0, p_lvl: g.p.lvl | 0, p_wave: g.mode === 'surv' ? (g.wave || 1) : 0, p_win: !!g.win});
   Cloud.st.scores = q.slice(-5); Cloud.save();
@@ -5909,7 +6099,7 @@ async function showRanking(from){
 }
 // Créditos y licencias: lo que consta en sprites/CREDITS.txt, textures/CREDITOS.txt y fonts/LICENCIAS.txt.
 // Los recuadros naranjas marcan lo que falta verificar antes de publicar (permisos de sprites y autoría)
-const CREDIT_AUTHOR = '';   // SITIO:autor (campo "autor" de sitio.json; vacío: hueco visible por rellenar)
+const CREDIT_AUTHOR = "";   // SITIO:autor (campo "autor" de sitio.json; vacío: hueco visible por rellenar)
 let creditsFrom = 'settings';
 async function showCredits(from){
   if (from) creditsFrom = from;
@@ -6244,7 +6434,7 @@ function showPicker(tab){
   const wins = Object.values(st.wins || {}).reduce((a, n) => a + n, 0);
   const pill = (n, label) => `<span class="ps-pill"><b>${n}</b> ${label}</span>`;
   showOverlay(`
-    <div class="picker-screen pk2 ps">
+    <div class="picker-screen pk2 ps${isRetoRun() ? ' ps-reto' : ''}">
       <header class="ps-top">
         <button class="g-back" id="pkBack"><kbd>Esc</kbd> Volver</button>
         <div class="ps-banner"><h2>${runMode === 'surv' ? 'Supervivencia' : runWeekly ? 'Reto semanal' : 'Elige tu Digimon'}</h2><small>${runWeekly && runMode !== 'surv' ? `Digimon de la semana: ${CHARS[retoStar()].name} · +25% Bits` : `${pr.done}/${pr.total} Digimon`}</small></div>
@@ -6259,7 +6449,7 @@ function showPicker(tab){
           </div>
           <footer class="ps-foot">
             <div class="ps-mine"><span class="ps-lbl">Tus partidas</span>${pill(st.plays, 'Partidas')}${pill(wins, 'Victorias')}${pill(st.best || 0, 'Récord de bajas')}${pill(st.maxLvl || 0, 'Nivel máx.')}</div>
-            <button class="pk-start ps-go" id="pkStart">¡Elegir mapa! <kbd>Enter</kbd></button>
+            <button class="pk-start ps-go" id="pkStart">${isRetoRun() ? 'Volver al reto' : '¡Elegir mapa!'} <kbd>Enter</kbd></button>
           </footer>
         </main>
         <aside class="ps-card ps-roster">
@@ -6270,8 +6460,8 @@ function showPicker(tab){
       </div>
     </div>`);
   overlay.querySelectorAll('.ps-seg button').forEach(b => b.onclick = () => { rosterTab = b.dataset.rt; showPicker(); });
-  document.getElementById('pkBack').onclick = () => showSelect();
-  document.getElementById('pkStart').onclick = () => showMapSelect();
+  document.getElementById('pkBack').onclick = () => isRetoRun() ? showReto() : showSelect();
+  document.getElementById('pkStart').onclick = () => isRetoRun() ? showReto() : showMapSelect();
   renderPickPreview();
   renderPickPanels();
   renderRoster();
@@ -6322,7 +6512,7 @@ function renderRoster(){
   sortSel.onchange = () => { try { localStorage.setItem('digibonk3d-picksort', sortSel.value); } catch(e){} renderRoster(); };
   el.querySelectorAll('.ps-tile[data-pick]').forEach(b => {
     b.onclick = () => { selectedKey = b.dataset.pick; showPicker(); popPick(); };
-    b.ondblclick = () => { selectedKey = b.dataset.pick; showMapSelect(); };
+    b.ondblclick = () => { selectedKey = b.dataset.pick; isRetoRun() ? showReto() : showMapSelect(); };
   });
   // La búsqueda filtra en el DOM sin redibujar; sus teclas no llegan al manejador global
   const search = document.getElementById('pkSearch');
@@ -6424,11 +6614,12 @@ function pickMove(delta){
 /* ---------- Elección de mapa y dificultad (después de elegir Digimon) ---------- */
 const mapWins = () => loadJSON('digibonk3d-mapwins', {});
 function showMapSelect(){
+  if (isRetoRun()) return showReto();   // el reto semanal no elige mapa ni dificultad
   state = 'mapsel';
   preloadLoadArt(runMap);   // destino conocido: el fondo de su pantalla de carga se pide ya
   setHud(false);
   try { localStorage.setItem('digibonk3d-map', runMap); localStorage.setItem('digibonk3d-diff', runDiff); } catch(e){}
-  const surv = runMode === 'surv', weekly = runWeekly && !surv, wins = mapWins();
+  const surv = runMode === 'surv', wins = mapWins();
   const pct = v => (v >= 1 ? '+' : '−') + Math.round(Math.abs(v - 1) * 100) + '%';
   const cards = MAP_ORDER.map(id => {
     const m = MAPS[id], [floorTx, decoPng, bossPng] = m.preview, won = (wins[id] || []);
@@ -6445,21 +6636,68 @@ function showMapSelect(){
   const diffs = DIFF_ORDER.map(id => `<button type="button" class="ms-diff${id === runDiff ? ' on' : ''}" data-diff="${id}" style="--dc:${DIFFS[id].col}" aria-pressed="${id === runDiff}"><b>${DIFFS[id].name}</b><small>Premios ×${String(DIFFS[id].reward).replace('.', ',')}</small></button>`).join('');
   showOverlay(`
     <div class="picker-screen ms">
-      <header class="pk2-top"><button class="g-back" id="msBack">← Digimon</button><h2>${surv ? 'Supervivencia · elige mapa' : weekly ? 'Reto semanal · elige mapa' : 'Elige mapa y dificultad'}</h2><span class="pk2-sub">${CHARS[selectedKey].name} · ←→ mapa · ↑↓ dificultad · Enter empezar</span></header>
+      <header class="pk2-top"><button class="g-back" id="msBack">← Digimon</button><h2>${surv ? 'Supervivencia · elige mapa' : 'Elige mapa y dificultad'}</h2><span class="pk2-sub">${CHARS[selectedKey].name} · ←→ mapa · ↑↓ dificultad · Enter empezar</span></header>
       <div class="ms-maps">${cards}</div>
-      ${weekly ? `<p class="ms-weekly"><b>${weeklyMod().name}</b><span>${weeklyMod().d}</span><em>+25% Bits</em></p>
-      <ul class="ms-hitos"><li class="star${selectedKey === retoStar() ? ' ok' : ''}"><i>★</i><span>Digimon de la semana: ${CHARS[retoStar()].name}</span><em>+25% Bits</em></li>${RETO_HITOS.map(h => { const ok = retoState().done.includes(h.id); return `<li class="${ok ? 'ok' : ''}"><i>${ok ? '✓' : '○'}</i><span>${h.t}</span><em>+${h.bits} Bits</em></li>`; }).join('')}</ul>` : ''}
       <section class="ms-dsec"><div class="ms-diffs">${diffs}</div>
-        <div class="ms-table" style="--dc:${d.col}"><b>${d.name}</b><span>${d.d}</span>
-          <ul><li>Vida enemigos <em>${pct(d.hp)}</em></li><li>Daño enemigos <em>${pct(d.dmg)}</em></li><li>Enemigos <em>${pct(1 / d.spawn)}</em></li><li>Élites <em>${pct(1 / d.elite)}</em></li><li>Jefes de zona <em>${pct(d.boss)}</em></li><li>Bits y tickets <em>×${String(d.reward).replace('.', ',')}</em></li></ul>
-          <small>En todos los niveles la presión sube con el tiempo: más vida, daño y hordas hasta el minuto 10. En todos los mapas, a los 20 minutos en una pantalla empieza el Infierno.</small></div>
+        <div class="ms-table" style="--dc:${d.col}" title="En todos los niveles la presión sube con el tiempo: más vida, daño y hordas hasta el minuto 10. En todos los mapas, a los 20 minutos en una pantalla empieza el Infierno."><b>${d.name}</b><span>${d.d}</span>
+          <ul><li>Vida enemigos <em>${pct(d.hp)}</em></li><li>Daño enemigos <em>${pct(d.dmg)}</em></li><li>Enemigos <em>${pct(1 / d.spawn)}</em></li><li>Élites <em>${pct(1 / d.elite)}</em></li><li>Jefes de zona <em>${pct(d.boss)}</em></li><li>Bits y tickets <em>×${String(d.reward).replace('.', ',')}</em></li></ul></div>
+        <footer class="pk2-foot ms-foot"><span class="pk-hint">${surv ? 'Supervivencia' : 'Partida'} en ${MAPS[runMap].name} · ${d.name}</span><button class="btn btn-primary pk-start" id="msStart">¡Empezar!</button></footer>
       </section>
-      <footer class="pk2-foot"><button class="btn btn-primary pk-start" id="msStart">¡Empezar! <small>(Enter)</small></button><span class="pk-hint">${surv ? 'Supervivencia' : weekly ? 'Reto semanal' : 'Partida'} en ${MAPS[runMap].name} · ${d.name}</span></footer>
     </div>`);
   overlay.querySelectorAll('.ms-card').forEach(b => b.onclick = () => { runMap = b.dataset.map; showMapSelect(); });
   overlay.querySelectorAll('.ms-diff').forEach(b => b.onclick = () => { runDiff = b.dataset.diff; showMapSelect(); });
   document.getElementById('msBack').onclick = () => showPicker();
   document.getElementById('msStart').onclick = () => startGame(selectedKey);
+}
+/* ---------- Reto semanal: pantalla propia del modo ----------
+   Sustituye a «Elige mapa»: el mapa, la dificultad, la regla y la semilla son los de la semana y no se cambian.
+   Solo se elige el Digimon. Tiene su propia marca semanal (puntos) y sus hitos. */
+function showReto(){
+  runMode = 'normal'; runWeekly = true;
+  state = 'reto';
+  setHud(false);
+  if (!isUnlocked(selectedKey)) selectedKey = SEASONS.adventure.chars.find(k => isUnlocked(k)) || 'agumon';
+  const rs = retoSetup(), m = MAPS[rs.map], d = DIFFS[rs.diff], mod = weeklyMod(), st = retoState(), star = retoStar(), k = selectedKey;
+  const [floorTx, decoPng, bossPng] = m.preview, isStar = k === star;
+  const best = st.best;
+  const hitos = RETO_HITOS.map(h => { const ok = st.done.includes(h.id); return `<li class="${ok ? 'ok' : ''}"><i>${ok ? '✓' : '○'}</i><span>${h.t}</span><em>+${h.bits} Bits</em></li>`; }).join('');
+  preloadLoadArt(rs.map);
+  showOverlay(`
+    <div class="rt-screen rt">
+      <header class="rt-top">
+        <button class="g-back" id="rtBack"><kbd>Esc</kbd> Menú</button>
+        <h2 class="rt-title"><small>Modo</small>Reto semanal</h2>
+        <span class="rt-week"><b>Semana ${weekNum() % 1000}</b><small>Termina en ${retoLeft()}</small></span>
+      </header>
+      <div class="rt-body">
+        <section class="rt-card rt-rule">
+          <span class="rt-art" style="--floor:url(${floorTx})"><img class="rt-deco" src="${decoPng}" alt=""><img class="rt-boss" src="${bossPng}" alt=""><em>Regla de la semana</em></span>
+          <div class="rt-rule-in"><b>${mod.name}</b><p>${mod.d}</p>
+            <ul class="rt-cond"><li><small>Mapa</small><b>${m.name}</b></li><li style="--dc:${d.col}"><small>Dificultad</small><b>${d.name}</b></li><li><small>Mapa generado</small><b>Igual para todos</b></li></ul>
+            <p class="rt-note">Mapa, dificultad y regla son fijos toda la semana. Las partidas del reto no cuentan en tus récords normales.</p></div>
+        </section>
+        <section class="rt-card rt-digi">
+          <h4>Tu Digimon</h4>
+          <div class="rt-pick"><img src="${charIcon(k)}" alt=""><span><b>${CHARS[k].name}</b><small>${isStar ? '★ Digimon de la semana · +25% Bits' : `Digimon de la semana: ${CHARS[star].name}`}</small></span></div>
+          <div class="rt-btns"><button type="button" class="rt-btn" id="rtPick">Cambiar Digimon <kbd>C</kbd></button>${!isStar && isUnlocked(star) ? `<button type="button" class="rt-btn star" id="rtStar">★ Usar a ${CHARS[star].name}</button>` : ''}</div>
+          <h4>Hitos de la semana</h4>
+          <ul class="rt-hitos">${hitos}</ul>
+        </section>
+        <section class="rt-card rt-score">
+          <h4>Tu marca de la semana</h4>
+          <div class="rt-best"><b>${best ? best.pts.toLocaleString('es-ES') : '—'}</b><small>puntos</small></div>
+          ${best ? `<p class="rt-bestinfo"><img src="${charIcon(best.key)}" alt=""><span>${CHARS[best.key] ? CHARS[best.key].name : ''} · ${fmtTime(best.t)} · ${best.kills.toLocaleString('es-ES')} bajas${best.win ? ' · Superado' : ''}</span></p>` : '<p class="rt-bestinfo"><span>Aún no lo has jugado esta semana</span></p>'}
+          <p class="rt-tries">Intentos: <b>${st.tries | 0}</b></p>
+          <div class="rt-how"><small>Puntos</small><span>1 por baja · 2 por segundo · +${RETO_WIN_PTS.toLocaleString('es-ES')} si ganas</span></div>
+          <div class="rt-how"><small>Premios</small><span>Bits +25% · con el Digimon de la semana, otro +25%</span></div>
+        </section>
+      </div>
+      <footer class="rt-foot"><span class="rt-sum">${CHARS[k].name} · ${m.name} · ${d.name} · ${mod.name}</span><button type="button" class="rt-go" id="rtStart">¡Empezar reto! <kbd>Enter</kbd></button></footer>
+    </div>`);
+  document.getElementById('rtBack').onclick = () => showSelect();
+  document.getElementById('rtPick').onclick = () => showPicker('personaje');
+  { const el = document.getElementById('rtStar'); if (el) el.onclick = () => { selectedKey = star; showReto(); }; }
+  document.getElementById('rtStart').onclick = () => startGame(selectedKey);
 }
 // Móvil: se juega siempre en horizontal. Al empezar la partida y en cada toque de los menús (si se salió de la
 // pantalla completa), intenta pantalla completa y bloquear la orientación (Android). Instalado como app no hace
@@ -6814,6 +7052,7 @@ function startGame(key, resume){
     runDrop();
   }
   lockLandscape();   // necesita el gesto del jugador: antes de esperar a la pantalla de carga
+  if (!resume && isRetoRun()){ const rs = retoSetup(); runMap = rs.map; runDiff = rs.diff; }   // el reto no se elige: es el de la semana
   const tok = mapLoadBegin(runMap);
   // Dos vueltas: el navegador pinta la pantalla de carga antes de que la construcción del mapa ocupe el hilo
   requestAnimationFrame(() => setTimeout(() => {
@@ -6888,6 +7127,10 @@ function buildRun(key, resume){
     announce('Partida continuada', 'El mapa se ha reconstruido con oleadas nuevas', '#7cf29c');
     if (g.reopenUp){ g.reopenUp = false; openUpgrades(); }
     else if (!g.pendingUp) pauseGame();   // empieza en pausa para que dé tiempo a situarse
+  }
+  else if (g.weekly){   // al quitarse la pantalla de carga, recuerda la regla de la semana
+    const gg = g, show = () => { if (g !== gg) return; if (mapLoad.on || state !== 'play') return setTimeout(show, 300); announce('Reto semanal', weeklyMod().name, '#2bb673'); };
+    setTimeout(show, 600);
   }
 }
 
@@ -9316,9 +9559,10 @@ function endGame(win){
   g.encDone = checkEncargos();
   g.questDone = checkLongQuests(win);
   unlockMouse();
-  saveRecord(win);
+  g.reto = g.weekly ? retoRecord(win) : null;   // el reto lleva su propia marca semanal
+  if (!g.weekly) saveRecord(win);   // los récords normales no mezclan partidas del reto
   recordCharRun(g.ch.id, win && g.mode !== 'surv', g.diff, g.kills, g.p.lvl);
-  if (win && g.mode !== 'surv'){ const mw = mapWins(), l = mw[g.map] || (mw[g.map] = []); if (!l.includes(g.diff)) l.push(g.diff); localStorage.setItem('digibonk3d-mapwins', JSON.stringify(mw)); }
+  if (win && g.mode !== 'surv' && !g.weekly){ const mw = mapWins(), l = mw[g.map] || (mw[g.map] = []); if (!l.includes(g.diff)) l.push(g.diff); localStorage.setItem('digibonk3d-mapwins', JSON.stringify(mw)); }
   // Con todo guardado: logros (marcos y títulos), Digimon nuevos y premios de maestría
   g.newTitles = checkAchievements(win);
   g.newDigis = checkUnlocks();
@@ -9350,9 +9594,10 @@ function endGame(win){
   if (lvlDiff().reward !== 1) rewards.push(`<li>Dificultad ${lvlDiff().name}: premios ×${String(lvlDiff().reward).replace('.', ',')}</li>`);
   const endKey = g.ch.id;
   showOverlay(`
-    <div class="end3 ${win ? 'win' : 'lose'}">
-      <div class="end3-top"><img class="end3-ic" src="${charIcon(g.ch.id)}" alt=""><h1>${g.mode === 'surv' ? 'FIN DE LA SUPERVIVENCIA' : win ? '¡VICTORIA!' : 'HAS CAÍDO'}</h1></div>
-      <p class="end3-sub">${g.mode === 'surv' ? `Has aguantado ${fmtTime(Math.floor(g.t))} · récord con ${g.ch.name}: ${fmtTime(Math.floor(survBest(g.ch.id)))}` : win ? (g.bossName || 'Piedmon') + ' ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Laboratorio`} · ${mapDef().name} · ${zoneDef().name} · ${lvlDiff().name}${g.mode === 'surv' ? ' · Oleada ' + (g.wave || 1) : ''}${g.weekly ? ' · Reto semanal' : ''}</p>
+    <div class="end3 ${win ? 'win' : 'lose'}${g.weekly ? ' reto' : ''}">
+      <div class="end3-top">${g.weekly ? '<span class="end3-mode">Reto semanal</span>' : ''}<img class="end3-ic" src="${charIcon(g.ch.id)}" alt=""><h1>${g.mode === 'surv' ? 'FIN DE LA SUPERVIVENCIA' : g.weekly ? (win ? '¡RETO SUPERADO!' : 'FIN DEL RETO') : win ? '¡VICTORIA!' : 'HAS CAÍDO'}</h1></div>
+      <p class="end3-sub">${g.mode === 'surv' ? `Has aguantado ${fmtTime(Math.floor(g.t))} · récord con ${g.ch.name}: ${fmtTime(Math.floor(survBest(g.ch.id)))}` : win ? (g.bossName || 'Piedmon') + ' ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Laboratorio`} · ${mapDef().name} · ${zoneDef().name} · ${lvlDiff().name}${g.mode === 'surv' ? ' · Oleada ' + (g.wave || 1) : ''}${g.weekly ? ' · ' + weeklyMod().name : ''}</p>
+      ${g.reto ? `<div class="end3-reto"><span class="er-pts"><small>Puntos del reto</small><b>${g.reto.pts.toLocaleString('es-ES')}</b></span><span class="er-best"><small>Tu marca de la semana</small><b>${g.reto.best.toLocaleString('es-ES')}</b>${g.reto.isBest ? '<em>¡Nueva marca!</em>' : ''}</span><ul class="er-hitos">${RETO_HITOS.map(h => { const ok = retoState().done.includes(h.id); return `<li class="${ok ? 'ok' : ''}"><i>${ok ? '✓' : '○'}</i>${h.t}</li>`; }).join('')}</ul></div>` : ''}
       <p class="end3-sub end3-rank" id="end3Rank" aria-live="polite"></p>
       <div class="end3-cells${GACHA_SOON ? ' no-tix' : ''}">
         <span><i>⏱</i><b>${fmtTime(Math.floor(g.t))}</b>Tiempo</span><span><i>⭐</i><b>${g.p.lvl}</b>Nivel</span><span><i>⚔</i><b>${g.kills}</b>Bajas</span><span><i>✦</i><b>${Object.keys(g.skills).length}</b>Habilidades</span>
@@ -9364,12 +9609,12 @@ function endGame(win){
         </section>
         <section><h3>Recompensas</h3><ul class="end3-rw">${rewards.join('')}</ul></section>
       </div>
-      <div class="end3-act2"><button class="end3-go" id="endAgain">↻ Otra vez <kbd>Enter</kbd></button><button class="end3-pill" id="endPick">Cambiar Digimon <kbd>C</kbd></button><button class="end3-pill" id="endMenu">Menú <kbd>M</kbd></button></div>
+      <div class="end3-act2"><button class="end3-go" id="endAgain">${g.weekly ? '↻ Reintentar reto' : '↻ Otra vez'} <kbd>Enter</kbd></button><button class="end3-pill" id="endPick">${g.weekly ? 'Pantalla del reto' : 'Cambiar Digimon'} <kbd>C</kbd></button><button class="end3-pill" id="endMenu">Menú <kbd>M</kbd></button></div>
     </div>`);
   overlay.onclick = null;
   document.getElementById('endAgain').onclick = () => startGame(endKey);
   document.getElementById('endMenu').onclick = () => showSelect();
-  document.getElementById('endPick').onclick = () => showPicker();
+  document.getElementById('endPick').onclick = () => g.weekly ? showReto() : showPicker();
   cloudAfterRun(win);   // guarda en la nube y envía la marca al ranking (si la nube está activada)
 
 }
@@ -9832,7 +10077,7 @@ function updateHUD(){
   document.getElementById('hudName').textContent = stageName(g.ch.id, g.ch.evolved);
   // Zona actual, progreso de zonas y récord de tiempo (como en la barra superior de la referencia)
   const recMax = getRecords().reduce((a, r) => Math.max(a, r.t), 0);
-  document.getElementById('hudZone').textContent = `${mapDef().name} · ${zoneDef().name} · ${g.mode === 'surv' ? 'Oleada ' + (g.wave || 1) : 'Pantalla ' + g.zone + '/' + zonesOf().length}`;
+  document.getElementById('hudZone').textContent = `${g.weekly ? 'Reto · ' + weeklyMod().name + ' · ' : ''}${mapDef().name} · ${zoneDef().name} · ${g.mode === 'surv' ? 'Oleada ' + (g.wave || 1) : 'Pantalla ' + g.zone + '/' + zonesOf().length}`;
   // Contadores de la partida: bajas, tickets ganados y santuarios cargados (como la fila de la referencia)
   const shrinesDone = (g.shrines || []).filter(s => s.used).length;
   const chipKey = [g.kills, g.coins || 0, g.tix, shrinesDone, (g.shrines || []).length, (g.emblems || []).length].join('|'), chipsEl = document.getElementById('hudChips');
@@ -11054,7 +11299,36 @@ const RETO_HITOS = [
   {id:'gana',     t:'Gana el reto', bits: 300, tix: 2, ok: win => !!win},
   {id:'estrella', t:'Gana el reto con el Digimon de la semana', bits: 400, tix: 3, ok: win => !!win && g.ch.id === g.star}
 ];
-function retoState(){ const w = weekNum(), st = loadJSON('digibonk3d-reto', null); return st && st.w === w && Array.isArray(st.done) ? st : {w, done: []}; }
+function retoState(){ const w = weekNum(), st = loadJSON('digibonk3d-reto', null); return st && st.w === w && Array.isArray(st.done) ? st : {w, done: [], tries: 0, best: null}; }
+// El reto semanal es un modo aparte: cada semana fija para todos el mapa, la dificultad, la regla y la semilla del mapa.
+// No se elige mapa ni dificultad, tiene su propia puntuación y su propia marca semanal, y no cuenta en los récords,
+// en los mapas superados ni en el ranking de las partidas normales.
+const RETO_DIFFS = ['normal', 'dificil'];
+function retoSetup(){
+  const w = weekNum(), m = MAP_ORDER.length, d = RETO_DIFFS.length;
+  return {map: MAP_ORDER[((w % m) + m) % m], diff: RETO_DIFFS[((Math.floor(w / m) % d) + d) % d]};
+}
+function retoLeft(){
+  const ms = WEEK_MS - ((Date.now() - 4 * 86400000) % WEEK_MS), h = Math.floor(ms / 3600000);
+  return h >= 24 ? `${Math.floor(h / 24)} d ${h % 24} h` : `${h} h ${Math.floor(ms / 60000) % 60} min`;
+}
+// Puntos del reto: bajas + 2 por segundo aguantado + 5.000 si se gana
+const RETO_WIN_PTS = 5000;
+const retoPoints = win => (g.kills | 0) + Math.floor(g.t) * 2 + (win ? RETO_WIN_PTS : 0);
+function retoRecord(win){
+  const st = retoState(), pts = retoPoints(win), isBest = !st.best || pts > st.best.pts;
+  st.tries = (st.tries | 0) + 1;
+  if (isBest) st.best = {pts, key: g.ch.id, t: Math.floor(g.t), kills: g.kills | 0, win: !!win};
+  try { localStorage.setItem('digibonk3d-reto', JSON.stringify(st)); } catch(e){}
+  return {pts, isBest, best: st.best.pts};
+}
+// Al salir del reto, Jugar y Mapas recuperan el mapa y la dificultad que eligió el jugador
+function restoreRunPrefs(){
+  const m = localStorage.getItem('digibonk3d-map'), d = localStorage.getItem('digibonk3d-diff');
+  runMap = MAPS[m] ? m : 'bosque';
+  runDiff = DIFFS[d] ? d : 'normal';
+}
+const isRetoRun = () => runWeekly && runMode !== 'surv';
 function checkReto(win){
   if (!g.weekly) return [];
   const st = retoState(), out = [];
@@ -12402,7 +12676,7 @@ if (LOCAL_DEV && new URLSearchParams(location.search).has('demo')){
     rollTier,
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
-    spawnMini, MINIS, PORTAL, PONDS, PLAZA_SPOTS, get layout(){ return layout; }, openMap, closeMap, topView(h = 230){ camera.position.set(0, h, 40); camera.lookAt(0, 0, 0); const f = camera.far; camera.far = 600; camera.updateProjectionMatrix(); renderer.render(scene, camera); camera.far = f; camera.updateProjectionMatrix(); }, startMapEvent, SHRINE_TYPES, initShrines, summonBoss, openPortal, enterScreen: n => enterScreen(n, true), openRelics, useCons, openRoutes, showMapSelect, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
+    spawnMini, MINIS, PORTAL, PONDS, PLAZA_SPOTS, get layout(){ return layout; }, openMap, closeMap, topView(h = 230){ camera.position.set(0, h, 40); camera.lookAt(0, 0, 0); const f = camera.far; camera.far = 600; camera.updateProjectionMatrix(); renderer.render(scene, camera); camera.far = f; camera.updateProjectionMatrix(); }, startMapEvent, SHRINE_TYPES, initShrines, summonBoss, openPortal, enterScreen: n => enterScreen(n, true), openRelics, useCons, openRoutes, showMapSelect, showReto, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
     stepUpdate: dt => update(dt), animateEvo, updateFx, syncMeshes, tryDash, openChest,
     resume(){ if (state === 'paused'){ state = 'play'; hideOverlay(); hidePause(); } },
     // Simulación rápida sin dibujar (para medir el equilibrio): avanza sec segundos y elige la carta pick en cada subida
