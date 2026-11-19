@@ -1519,5 +1519,10 @@ I18N.add('ru', {"×{0} daño": "×{0} урона", "×{0} recibido": "×{0} по
   "Cofre": "Сундук",
   "Santuario": "Святилище",
   "Élite": "Элита",
-  "Jefe": "Босс"
+  "Jefe": "Босс",
+  "Sin superar": "Не пройдено",
+  "Superado {0}/4": "Пройдено {0}/4",
+  "Mejor oleada": "Лучшая волна",
+  "Jefes menores cada 5 oleadas": "Мини-боссы каждые 5 волн",
+  "Jefes menores": "Мини-боссы"
 });

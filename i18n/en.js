@@ -1653,5 +1653,10 @@ I18N.add('en', {
   "Santuario": "Shrine",
   "Élite": "Elite",
   "Jefe": "Boss",
-  "Portal": "Portal"
+  "Portal": "Portal",
+  "Sin superar": "Not cleared",
+  "Superado {0}/4": "Cleared {0}/4",
+  "Mejor oleada": "Best wave",
+  "Jefes menores cada 5 oleadas": "Mini-bosses every 5 waves",
+  "Jefes menores": "Mini-bosses"
 });

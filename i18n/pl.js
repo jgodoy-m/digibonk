@@ -1513,5 +1513,10 @@ I18N.add('pl', {"×{0} daño": "×{0} obrażeń", "×{0} recibido": "×{0} otrzy
   "Santuario": "Kapliczka",
   "Élite": "Elita",
   "Jefe": "Boss",
-  "Portal": "Portal"
+  "Portal": "Portal",
+  "Sin superar": "Nieukończone",
+  "Superado {0}/4": "Ukończone {0}/4",
+  "Mejor oleada": "Najlepsza fala",
+  "Jefes menores cada 5 oleadas": "Mini-bossowie co 5 fal",
+  "Jefes menores": "Mini-bossowie"
 });

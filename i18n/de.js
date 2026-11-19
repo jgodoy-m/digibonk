@@ -1508,5 +1508,10 @@ I18N.add('de', {"×{0} daño": "×{0} Schaden", "×{0} recibido": "×{0} erhalte
   "Santuario": "Schrein",
   "Élite": "Elite",
   "Jefe": "Boss",
-  "Portal": "Portal"
+  "Portal": "Portal",
+  "Sin superar": "Nicht geschafft",
+  "Superado {0}/4": "Geschafft {0}/4",
+  "Mejor oleada": "Beste Welle",
+  "Jefes menores cada 5 oleadas": "Mini-Bosse alle 5 Wellen",
+  "Jefes menores": "Mini-Bosse"
 });

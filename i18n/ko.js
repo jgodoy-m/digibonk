@@ -1520,5 +1520,10 @@ I18N.add('ko', {"×{0} daño": "피해 ×{0}", "×{0} recibido": "받는 피해 
   "Cofre": "상자",
   "Santuario": "성소",
   "Élite": "엘리트",
-  "Jefe": "보스"
+  "Jefe": "보스",
+  "Sin superar": "미클리어",
+  "Superado {0}/4": "클리어 {0}/4",
+  "Mejor oleada": "최고 웨이브",
+  "Jefes menores cada 5 oleadas": "5웨이브마다 중간 보스",
+  "Jefes menores": "중간 보스"
 });

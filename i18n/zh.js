@@ -1521,5 +1521,10 @@ I18N.add('zh', {"×{0} daño": "伤害 ×{0}", "×{0} recibido": "受到伤害 �
   "Cofre": "宝箱",
   "Santuario": "神殿",
   "Élite": "精英",
-  "Jefe": "首领"
+  "Jefe": "首领",
+  "Sin superar": "未通关",
+  "Superado {0}/4": "已通关 {0}/4",
+  "Mejor oleada": "最佳波次",
+  "Jefes menores cada 5 oleadas": "每5波出现小首领",
+  "Jefes menores": "小首领"
 });

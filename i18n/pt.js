@@ -1508,5 +1508,10 @@ I18N.add('pt', {"×{0} daño": "×{0} dano", "×{0} recibido": "×{0} recebido",
   "Santuario": "Santuário",
   "Élite": "Elite",
   "Jefe": "Chefe",
-  "Portal": "Portal"
+  "Portal": "Portal",
+  "Sin superar": "Não superado",
+  "Superado {0}/4": "Superado {0}/4",
+  "Mejor oleada": "Melhor onda",
+  "Jefes menores cada 5 oleadas": "Minichefes a cada 5 ondas",
+  "Jefes menores": "Minichefes"
 });

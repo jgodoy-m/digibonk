@@ -1514,5 +1514,10 @@ I18N.add('tr', {"×{0} daño": "×{0} hasar", "×{0} recibido": "×{0} alınan",
   "Santuario": "Tapınak",
   "Élite": "Elit",
   "Jefe": "Patron",
-  "Portal": "Portal"
+  "Portal": "Portal",
+  "Sin superar": "Geçilmedi",
+  "Superado {0}/4": "Geçildi {0}/4",
+  "Mejor oleada": "En iyi dalga",
+  "Jefes menores cada 5 oleadas": "Her 5 dalgada mini patron",
+  "Jefes menores": "Mini patronlar"
 });

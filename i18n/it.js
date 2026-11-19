@@ -1510,5 +1510,10 @@ I18N.add('it', {"×{0} daño": "×{0} danni", "×{0} recibido": "×{0} subiti",
   "Cofre": "Forziere",
   "Santuario": "Santuario",
   "Élite": "Élite",
-  "Jefe": "Boss"
+  "Jefe": "Boss",
+  "Sin superar": "Non superato",
+  "Superado {0}/4": "Superato {0}/4",
+  "Mejor oleada": "Ondata migliore",
+  "Jefes menores cada 5 oleadas": "Mini-boss ogni 5 ondate",
+  "Jefes menores": "Mini-boss"
 });

@@ -1508,5 +1508,10 @@ I18N.add('fr', {"×{0} daño": "×{0} dégâts", "×{0} recibido": "×{0} reçus
   "Cofre": "Coffre",
   "Santuario": "Sanctuaire",
   "Élite": "Élite",
-  "Jefe": "Boss"
+  "Jefe": "Boss",
+  "Sin superar": "Pas terminé",
+  "Superado {0}/4": "Terminé {0}/4",
+  "Mejor oleada": "Meilleure vague",
+  "Jefes menores cada 5 oleadas": "Mini-boss toutes les 5 vagues",
+  "Jefes menores": "Mini-boss"
 });

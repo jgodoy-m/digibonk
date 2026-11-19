@@ -1521,5 +1521,10 @@ I18N.add('ja', {"×{0} daño": "ダメージ ×{0}", "×{0} recibido": "被ダ�
   "Cofre": "宝箱",
   "Santuario": "祠",
   "Élite": "エリート",
-  "Jefe": "ボス"
+  "Jefe": "ボス",
+  "Sin superar": "未クリア",
+  "Superado {0}/4": "クリア {0}/4",
+  "Mejor oleada": "最高ウェーブ",
+  "Jefes menores cada 5 oleadas": "5ウェーブごとに中ボス",
+  "Jefes menores": "中ボス"
 });
