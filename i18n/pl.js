@@ -947,6 +947,8 @@ I18N.add('pl', {
   "junto al portal del norte": "przy portalu na północy",
   "Ve al portal del norte para invocar a {0}": "Idź do portalu na północy, by przywołać {0}",
   "Gira el móvil": "Obróć telefon",
+  "¿No gira? Quita el bloqueo de rotación del móvil": "Nie obraca się? Wyłącz blokadę obrotu",
+  "En iPhone, para jugar a pantalla completa: Compartir y «Añadir a pantalla de inicio»": "Na iPhonie, aby grać na pełnym ekranie: Udostępnij i „Do ekranu początkowego”",
   "DigiBonk se juega en horizontal": "W DigiBonk gra się poziomo"
 });
 

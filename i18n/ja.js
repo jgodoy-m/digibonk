@@ -956,6 +956,8 @@ I18N.add('ja', {
   "junto al portal del norte": "北のポータルのそばで",
   "Ve al portal del norte para invocar a {0}": "北のポータルへ行って{0}を呼ぼう",
   "Gira el móvil": "スマホを横にしてね",
+  "¿No gira? Quita el bloqueo de rotación del móvil": "回転しない? 画面の向きのロックをオフにしてね",
+  "En iPhone, para jugar a pantalla completa: Compartir y «Añadir a pantalla de inicio»": "iPhoneで全画面にするには: 共有 →「ホーム画面に追加」",
   "DigiBonk se juega en horizontal": "DigiBonkは横画面で遊びます"
 });
 

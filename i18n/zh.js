@@ -956,6 +956,8 @@ I18N.add('zh', {
   "junto al portal del norte": "在北边传送门旁",
   "Ve al portal del norte para invocar a {0}": "前往北边传送门召唤 {0}",
   "Gira el móvil": "请横屏",
+  "¿No gira? Quita el bloqueo de rotación del móvil": "无法旋转?请关闭屏幕方向锁定",
+  "En iPhone, para jugar a pantalla completa: Compartir y «Añadir a pantalla de inicio»": "在 iPhone 上全屏游玩:分享 →「添加到主屏幕」",
   "DigiBonk se juega en horizontal": "DigiBonk 需横屏游玩"
 });
 

@@ -954,6 +954,8 @@ I18N.add('ru', {
   "junto al portal del norte": "у северного портала",
   "Ve al portal del norte para invocar a {0}": "Иди к северному порталу, чтобы призвать {0}",
   "Gira el móvil": "Поверни телефон",
+  "¿No gira? Quita el bloqueo de rotación del móvil": "Не поворачивается? Отключи блокировку поворота",
+  "En iPhone, para jugar a pantalla completa: Compartir y «Añadir a pantalla de inicio»": "На iPhone для полного экрана: «Поделиться» → «На экран „Домой“»",
   "DigiBonk se juega en horizontal": "В DigiBonk играют в горизонтальном режиме"
 });
 
