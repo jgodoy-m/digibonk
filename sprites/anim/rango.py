@@ -10,6 +10,7 @@ from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 N = 5
+PAD = 0.05   # margen añadido a cada lado, en fracción del fotograma (el fotograma crece 2·PAD)
 ELITES = ['tyrannomon', 'darktyrannomon', 'gigadramon', 'megadramon', 'skullgreymon', 'andromon', 'mammothmon']
 JEFES = ['devimon', 'etemon', 'myotismon', 'metalseadramon', 'puppetmon', 'machinedramon']
 
@@ -17,8 +18,8 @@ def rgb(h): return np.array([int(h[i:i + 2], 16) for i in (1, 3, 5)], np.float32
 
 ESTILO = {
     # anillos del contorno de dentro afuera; tinte = mezcla del cuerpo hacia un color en las zonas oscuras
-    'elite': {'anillos': ['#2a0600', '#ff4d12', '#ffa040'], 'tinte': '#b3261e', 'fuerza': 0.16},
-    'jefe':  {'anillos': ['#1e0630', '#ffc107', '#d500f9'], 'tinte': '#7b1fa2', 'fuerza': 0.16},
+    'elite': {'anillos': ['#1a0300', '#ff3d00', '#ff3d00', '#ff8a1a', '#ffd27a'], 'tinte': '#b3261e', 'fuerza': 0.16},
+    'jefe':  {'anillos': ['#14031f', '#ffc400', '#ffc400', '#fff176', '#d500f9', '#d500f9'], 'tinte': '#7b1fa2', 'fuerza': 0.16},
 }
 
 def exterior(al):
@@ -63,9 +64,15 @@ def hacer(nombre, tipo):
     src = os.path.join(HERE, nombre + '.webp')
     a = np.array(Image.open(src).convert('RGBA'))
     H, W = a.shape[:2]; fw = W // N
-    out = np.zeros_like(a)
+    # El contorno grueso no cabe en el margen de la hoja: cada fotograma crece un 10 % (P a los lados y 2P arriba,
+    # nada abajo para que los pies sigan en el suelo) y el juego agranda el sprite lo mismo (RANK_K en index.html)
+    P = round(fw * PAD)
+    nf = fw + 2 * P
+    out = np.zeros((nf, nf * N, 4), np.uint8)
     for f in range(N):
-        out[:, f * fw:(f + 1) * fw] = frame(a[:, f * fw:(f + 1) * fw], tipo)
+        src_f = np.zeros((nf, nf, 4), np.uint8)
+        src_f[nf - H:, P:P + fw] = a[:, f * fw:(f + 1) * fw]
+        out[:, f * nf:(f + 1) * nf] = frame(src_f, tipo)
     dst = os.path.join(HERE, f'{nombre}_{tipo}.webp')
     Image.fromarray(out).save(dst, lossless=True, quality=100, method=6)
     return dst
