@@ -1507,5 +1507,11 @@ I18N.add('pl', {"×{0} daño": "×{0} obrażeń", "×{0} recibido": "×{0} otrzy
   "Ranking de {0}: tu mejor marca está en el puesto {1}": "Ranking {0}: twój najlepszy wynik jest na miejscu {1}",
   "Ya jugaron en este navegador:": "Grali już w tej przeglądarce:",
   "No hay espacio para guardar aparte tu progreso. Si cierras sesión, se perderá el progreso de este navegador. ¿Cerrar sesión igualmente?": "Brak miejsca, aby osobno zapisać twój postęp. Jeśli się wylogujesz, postęp w tej przeglądarce przepadnie. Wylogować mimo to?",
-  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "Wylogowanie zachowuje twój postęp w tej przeglądarce: zaloguj się ponownie tą samą nazwą, aby go odzyskać. Usunięcie konta kasuje cały twój postęp."
+  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "Wylogowanie zachowuje twój postęp w tej przeglądarce: zaloguj się ponownie tą samą nazwą, aby go odzyskać. Usunięcie konta kasuje cały twój postęp.",
+  "Tú": "Ty",
+  "Cofre": "Skrzynia",
+  "Santuario": "Kapliczka",
+  "Élite": "Elita",
+  "Jefe": "Boss",
+  "Portal": "Portal"
 });

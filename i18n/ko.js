@@ -1515,5 +1515,10 @@ I18N.add('ko', {"×{0} daño": "피해 ×{0}", "×{0} recibido": "받는 피해 
   "Ranking de {0}: tu mejor marca está en el puesto {1}": "{0} 랭킹: 내 최고 기록은 {1}위입니다",
   "Ya jugaron en este navegador:": "이 브라우저에서 플레이한 사람:",
   "No hay espacio para guardar aparte tu progreso. Si cierras sesión, se perderá el progreso de este navegador. ¿Cerrar sesión igualmente?": "진행 상황을 따로 저장할 공간이 없습니다. 로그아웃하면 이 브라우저의 진행 상황이 사라집니다. 그래도 로그아웃할까요?",
-  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "로그아웃해도 진행 상황은 이 브라우저에 남습니다. 같은 이름으로 다시 들어오면 돌아옵니다. 계정을 삭제하면 모든 진행 상황이 지워집니다."
+  "Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.": "로그아웃해도 진행 상황은 이 브라우저에 남습니다. 같은 이름으로 다시 들어오면 돌아옵니다. 계정을 삭제하면 모든 진행 상황이 지워집니다.",
+  "Tú": "나",
+  "Cofre": "상자",
+  "Santuario": "성소",
+  "Élite": "엘리트",
+  "Jefe": "보스"
 });

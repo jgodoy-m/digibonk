@@ -90,10 +90,48 @@ canvas{display:block}
 #bossCard.small img{width:56px;height:56px}
 #bossCard.small .bc-t{font-size:clamp(15px,2vw,22px)}
 .reduce-motion #bossCard,.reduce-motion #bossCard.show{transform:none}
-#banner{position:fixed;left:50%;top:26%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;opacity:0;white-space:nowrap}
-#banner b{display:block;font-size:46px;letter-spacing:3px;color:inherit;text-shadow:0 4px 0 #000,0 0 24px currentColor}
-#banner small{display:block;margin-top:4px;font-size:15px;letter-spacing:1px;color:#e6f4ff;text-shadow:0 2px 4px #000}
-#banner.show{animation:bannerIn 2.4s ease both}
+/* Avisos: placas grafito con el color del aviso en el borde (se leen sobre hierba, nieve y arena) */
+#banner,.ann{position:fixed;left:50%;pointer-events:none;opacity:0;text-align:center;box-sizing:border-box;max-width:min(680px,92vw);
+  background:rgba(20,22,28,.9);border:1px solid rgba(255,255,255,.08);border-top:3px solid var(--ac,#ffd54f);
+  box-shadow:0 10px 28px rgba(0,0,0,.42),0 0 26px color-mix(in srgb,var(--ac,#ffd54f) 28%,transparent);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-family:var(--h-font,system-ui,sans-serif)}
+#banner b,.ann b{display:block;color:var(--ac,#ffd54f);letter-spacing:.5px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#banner small,.ann small{display:block;color:#dde4f2;letter-spacing:.2px;line-height:1.3;font-weight:600}
+/* Importantes: en el centro */
+#banner{top:36%;transform:translate(-50%,-50%);padding:10px 28px 11px;border-radius:18px;z-index:9}
+#banner b{font:900 34px/1.1 var(--h-font,system-ui,sans-serif);text-transform:uppercase;letter-spacing:1.5px}
+#banner small{margin-top:4px;font-size:15px}
+#banner.show{animation:annTopIn .3s cubic-bezier(.2,1.3,.4,1) both}
+#banner.out{animation:annTopOut .25s ease-in both}
+@keyframes annTopIn{from{opacity:0;transform:translate(-50%,-50%) scale(1.25)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes annTopOut{from{opacity:1;transform:translate(-50%,-50%)}to{opacity:0;transform:translate(-50%,-70%) scale(.97)}}
+/* Normales: franja bajo el reloj */
+#ann-mid{top:var(--ann-mid-top,150px);transform:translate(-50%,0);padding:6px 18px 7px;border-radius:14px;z-index:8}
+#ann-mid b{font:800 17px/1.15 var(--h-font,system-ui,sans-serif)}
+#ann-mid small{margin-top:1px;font-size:12.5px}
+#ann-mid.show{animation:annMidIn .25s ease-out both}
+#ann-mid.out{animation:annMidOut .22s ease-in both}
+@keyframes annMidIn{from{opacity:0;transform:translate(-50%,-10px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes annMidOut{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,-8px)}}
+/* Menores: aviso discreto abajo (también en los menús, por encima de todo) */
+#ann-low{top:auto;bottom:22px;transform:translate(-50%,0);padding:6px 16px 7px;border-radius:12px;border-top:0;border-left:3px solid var(--ac,#ffd54f);z-index:60;text-align:left;max-width:min(420px,90vw)}
+#ann-low b{font:800 14px/1.2 var(--h-font,system-ui,sans-serif)}
+#ann-low small{font-size:12px}
+#ann-low.show{animation:annLowIn .22s ease-out both}
+#ann-low.out{animation:annLowOut .2s ease-in both}
+@keyframes annLowIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes annLowOut{from{opacity:1}to{opacity:0;transform:translate(-50%,6px)}}
+/* Con las cartas de nivel, la pausa o la tienda abiertas, los avisos de partida esperan */
+body.dbk-noplay :is(#banner,#ann-mid),#ann-mid.held{visibility:hidden}
+.reduce-motion :is(#banner,.ann).show{animation-duration:.01s}
+@media (max-height:500px),(max-width:760px){
+  #banner{top:36%;padding:7px 18px 8px;border-radius:14px;max-width:min(520px,70vw)}
+  #banner b{font-size:22px;letter-spacing:1px}
+  #banner small{font-size:12px;margin-top:2px}
+  #ann-mid{padding:4px 12px 5px;border-radius:11px;max-width:min(420px,52vw)}
+  #ann-mid b{font-size:13.5px}#ann-mid small{font-size:11px}
+  #ann-low{bottom:12px;padding:4px 12px 5px}#ann-low b{font-size:12.5px}#ann-low small{font-size:11px}
+}
 /* Tutorial de la primera partida: consejo corto abajo en el centro, sin tapar al Digimon ni los controles */
 #tutoTip{position:fixed;left:50%;bottom:24%;transform:translate(-50%,8px);max-width:min(560px,86vw);padding:10px 18px;border-radius:16px;background:rgba(8,18,44,.86);border:1px solid rgba(154,239,255,.55);box-shadow:0 6px 20px rgba(0,0,0,.35);color:#fff;font:800 15px/1.35 'Nunito',system-ui,sans-serif;text-align:center;pointer-events:none;opacity:0;transition:opacity .35s,transform .35s;z-index:30}
 #tutoTip.show{opacity:1;transform:translate(-50%,0)}
@@ -107,7 +145,7 @@ body.dbk-noplay #tutoTip{opacity:0!important}   /* el consejo no tapa las cartas
 #glLost p{margin:0 0 14px;color:#cfe3ff;font-weight:700}
 #glLost button{height:44px;padding:0 22px;border:0;border-radius:999px;background:#f08a24;color:#fff;font:900 16px 'Nunito',sans-serif;cursor:pointer}
 #glLost button[hidden]{display:none}
-@keyframes bannerIn{0%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}12%{opacity:1;transform:translate(-50%,-50%) scale(1)}78%{opacity:1}100%{opacity:0;transform:translate(-50%,-62%) scale(.98)}}
+
 #hurt{position:fixed;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(198,40,40,.9) 100%)}
 #prompt{position:fixed;left:0;top:0;transform:translate(-50%,-100%);display:none;padding:5px 12px;border-radius:10px;
   background:rgba(8,14,30,.92);border:2px solid #ffd54f;color:#ffd54f;font-weight:bold;font-size:14px;letter-spacing:.5px;
@@ -195,11 +233,33 @@ body.dbk-noplay #tutoTip{opacity:0!important}   /* el consejo no tapa las cartas
 #vignette{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at center,transparent 58%,rgba(10,20,40,.45) 100%)}
 #minimap{position:fixed;right:16px;top:16px;width:170px;height:170px;border-radius:14px;border:3px solid #4fc3f7;
   box-shadow:0 0 14px rgba(79,195,247,.4);pointer-events:none;background:#16321f}
-#mapview{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;
-  background:rgba(4,8,18,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:15;cursor:pointer}
+#mapview{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(4,8,18,.62);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);z-index:15;cursor:pointer}
 #mapview.open{display:flex}
-#bigmap{width:min(72vh,600px);height:min(72vh,600px);border-radius:18px;border:3px solid #4fc3f7;box-shadow:0 0 30px rgba(79,195,247,.4)}
-.mapleg{font-size:13px;color:#cfe8ff;text-align:center;background:rgba(6,14,26,.85);padding:6px 14px;border-radius:10px;border:1px solid #2d5f78}
+/* Mapa grande: tarjeta grafito como el HUD, con cabecera, rosa N y leyenda con los mismos iconos que el mapa */
+.mv-card{display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 16px 12px;border-radius:24px;background:rgba(18,21,30,.92);
+  border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 50px rgba(0,0,0,.5);font-family:var(--h-font,system-ui,sans-serif);max-width:96vw;box-sizing:border-box}
+.mv-head{display:flex;align-items:baseline;gap:10px;width:100%;padding:0 4px}
+.mv-head b{font:900 18px var(--h-font,system-ui);color:#eef3ff;letter-spacing:.3px}
+.mv-head span{font:700 11px var(--h-font,system-ui);color:#a9b6d3;letter-spacing:1.4px;text-transform:uppercase;margin-left:auto}
+.mv-map{position:relative;line-height:0}
+#bigmap{width:min(66vh,600px);height:min(66vh,600px);border-radius:16px;box-shadow:0 0 0 1px rgba(255,255,255,.12),inset 0 0 0 1px #000}
+.mv-n{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:22px;height:22px;display:grid;place-items:center;border-radius:50%;
+  background:rgba(14,18,30,.8);color:#fff;font:900 11px/1 var(--h-font,system-ui);box-shadow:0 0 0 1px rgba(255,255,255,.25)}
+.mapleg{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 12px;max-width:min(66vh,600px);font:700 12px var(--h-font,system-ui);color:#dde4f2}
+.mapleg span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.mapleg i{display:inline-grid;place-items:center;width:14px;height:14px;font-style:normal;font-size:12px;line-height:1;flex:none}
+.mapleg .lg-you{border-radius:50%;border:2px solid #fff;background:rgba(14,18,30,.6);box-sizing:border-box}
+.mapleg .lg-shr{border-radius:50%;background:#c8a6ff;box-shadow:0 0 0 2px #0b1020}
+.mapleg .lg-ev{border-radius:50%;background:#7cf29c;color:#0b1020;font-weight:900;font-size:10px;box-shadow:0 0 0 2px #0b1020}
+.mapleg .lg-el,.mapleg .lg-mini{width:10px;height:10px;transform:rotate(45deg);background:#ff7043;box-shadow:0 0 0 1.5px #0b1020;margin:0 2px}
+.mapleg .lg-mini{background:#c77dff}
+.mapleg .lg-boss{border-radius:50%;background:rgba(255,23,68,.6);box-shadow:0 0 0 2px #ff1744}
+.mapleg .lg-por{border-radius:50%;background:rgba(61,224,255,.85);box-shadow:0 0 0 2px #fff}
+.mv-foot{font:600 11px var(--h-font,system-ui);color:#8d99b5}
+@media (max-height:500px){.mv-card{flex-direction:row;flex-wrap:wrap;justify-content:center;padding:8px 10px;gap:6px 12px;border-radius:18px}
+  #bigmap{width:min(78vh,420px);height:min(78vh,420px)}.mv-head{flex-direction:column;align-items:flex-start;width:auto;order:-1}
+  .mv-head span{margin-left:0}.mapleg{flex-direction:column;align-items:flex-start;max-width:none;gap:5px;font-size:11px}.mv-foot{display:none}}
 .mini-btn{padding:9px 16px;font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #050b18}
 .mini-btn:hover{filter:brightness(1.15)}
 .gacha{width:min(880px,96vw);max-height:92vh;overflow:auto;padding:18px 22px;color:#e6f4ff;text-align:left}
@@ -3936,8 +3996,6 @@ html[lang] #overlay .rt .g-back kbd{background:var(--m-tabon);color:var(--m-tabo
 /* HUD de una partida del reto: marco verde y la regla delante del mapa */
 body.reto-run #hudTop{border-color:#2bb673!important;box-shadow:0 0 0 2px #2bb673,0 0 18px rgba(43,182,115,.45)!important}
 body.reto-run #hudZone{color:#7cf2b4!important}
-/* Avisos (announce) en los menús: por encima de la capa del menú para que se vean */
-#banner.over-menu{z-index:60}
 /* Registro: aviso de nombre vacío junto al campo (antes salía en un cartel tapado por el menú) */
 .rg-err{margin:6px 0 0;min-height:1.2em;font:800 13px 'Nunito',system-ui,sans-serif;color:#e53935;text-align:center}
 .rg-err:empty{display:none}
@@ -4046,8 +4104,12 @@ body.is-touch #overlay :is(button,.g-back) kbd{display:none!important}
 <div id="prompt"></div>
 <canvas id="minimap" width="170" height="170"></canvas>
 <div id="mapview">
-  <canvas id="bigmap" width="600" height="600"></canvas>
-  <div class="mapleg">Tú (tu Digimon) · 🎁 cofres · santuarios · ❗ eventos · portal (círculo cian) · jefe<br>M o Esc para cerrar</div>
+  <div class="mv-card">
+    <div class="mv-head"><b id="mvTitle"></b><span id="mvSub"></span></div>
+    <div class="mv-map"><canvas id="bigmap" width="600" height="600"></canvas><span class="mv-n">N</span></div>
+    <div class="mapleg"><span><i class="lg-you"></i>Tú</span><span><i class="lg-ico">🎁</i>Cofre</span><span><i class="lg-shr"></i>Santuario</span><span><i class="lg-ev">!</i>Evento</span><span><i class="lg-el"></i>Élite</span><span><i class="lg-mini"></i>Jefe menor</span><span><i class="lg-boss"></i>Jefe</span><span><i class="lg-por"></i>Portal</span></div>
+    <div class="mv-foot">M o Esc para cerrar</div>
+  </div>
 </div>
 <div id="pause" class="hidden"></div>
 
@@ -4950,11 +5012,13 @@ function propSprite(set, name, x, z, scale = 1, shadow = 0){
 const biomeTexCache = {};
 function biomeTex(path, rx, ry){ return biomeTexCache[path + rx + ':' + ry] || (biomeTexCache[path + rx + ':' + ry] = loadTex(path, rx, ry, true)); }
 let curBiome = null;
+const mapTrees = [];   // árboles grandes del escenario actual (x, z, alto) para el mapa
 function buildEnvironment(name = 'bosque', seed = 0){
   const B = BIOMES[name] || BIOMES.bosque;
   curBiome = name;
   // Vacía la decoración anterior (los materiales de cada sprite son propios; las texturas se reutilizan)
   for (const o of [...decoGroup.children]){ decoGroup.remove(o); if (o.material && o.material !== shadowMat) o.material.dispose(); }
+  mapTrees.length = 0; mapArt.key = null;
   const T = B.deco.map(d => decoTex(d[0]));
   const total = B.deco.reduce((a, d) => a + d[3], 0);
   // Suelo por capas y disposición del mapa
@@ -5010,6 +5074,7 @@ function buildEnvironment(name = 'bosque', seed = 0){
     placed++;
     const h = size*(0.85 + Math.random()*0.35);
     decoSprite(T[j], h*kw, h*kh, x0, gy, z0);
+    if (size >= 3) mapTrees.push([x0, z0, h]);   // para pintar las arboledas en el mapa
     if (shad){ const sh = makeShadow(h*shad); sh.position.set(x0, gy + 0.02, z0); decoGroup.add(sh); }
   }
 }
@@ -5233,7 +5298,7 @@ function resumeGame(){
   hidePause();
   state = 'play';
   // Si el navegador rechaza el bloqueo (p. ej. tras pulsar Esc), se avisa para hacer un clic
-  lockMouse(() => announce('Haz clic para capturar el ratón', 'El navegador pide un clic tras pulsar Esc', '#7fd0ff'));
+  lockMouse(() => announce('Haz clic para capturar el ratón', 'El navegador pide un clic tras pulsar Esc', '#7fd0ff', 'low'));
 }
 function hidePause(){ pauseConfirm = false; pauseEl.classList.add('hidden'); }
 // Frase de cada compañero al pausar: le da carácter a la pantalla
@@ -5972,7 +6037,7 @@ function showSaveCode(){
   document.getElementById('scCopy').onclick = () => {
     const ta = document.getElementById('scOut');
     ta.select();
-    const done = () => announce('Código copiado', 'Pégalo en el otro navegador', '#7cf29c');
+    const done = () => announce('Código copiado', 'Pégalo en el otro navegador', '#7cf29c', 'low');
     if (navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(ta.value).then(done, () => { document.execCommand('copy'); done(); });
     } else { document.execCommand('copy'); done(); }
@@ -5981,7 +6046,7 @@ function showSaveCode(){
     const btn = document.getElementById('scLoad');
     let data;
     try { data = readSaveCode(document.getElementById('scIn').value); }
-    catch(e){ announce('Código no válido', e.message, '#ef5350'); return; }
+    catch(e){ announce('Código no válido', e.message, '#ef5350', 'low'); return; }
     if (!scArmed){
       scArmed = true;
       btn.textContent = '¿Sustituir el progreso? Pulsa otra vez';
@@ -7261,6 +7326,7 @@ function startGame(key, resume){
   }, 0));
 }
 function buildRun(key, resume){
+  annClear();
   // El botón Jugar muestra el último Digimon con el que se jugó
   if (CHARS[key]) { selectedKey = key; try { localStorage.setItem('digibonk3d-last-choice', key); } catch(e){} }
   // El botón de volver del navegador no saca de la partida: queda una entrada de historial que lo absorbe
@@ -7455,7 +7521,7 @@ function spawnSpecial(){
   const name = CHARS[pick.key].name;
   g.enemies.push({kind: 'mini', special: true, attr: ATTR_OF[pick.key], name, sprite, mesh, shadow, x: sp[0], z: sp[1], hp: hp*diffMul('hp'), max: hp*diffMul('hp'), spd: 3.0, r: 1.9, xp: 120, dmg: 18*(1 + diffT(t)/300)*diffMul('dmg'), cd: 0});
   sfx('boss');
-  announce('¡' + name.toUpperCase() + '!', 'Jefe especial', '#ffd54f');
+  announce('¡' + name.toUpperCase() + '!', 'Jefe especial', '#ffd54f', 'top');
 }
 function spawnMini(m){
   const t = g.t, a = Math.random()*Math.PI*2;
@@ -7530,11 +7596,11 @@ function digivolve(){
   g.p.area *= Math.pow(EVO_TOTAL.area, 1/n);
   g.p.maxHp += inc; g.p.hp += inc;
   if (st === 1) g.p.count += 1;
-  if (itemLv('digivice')){ g.p.count += 1; setTimeout(() => { if (g) announce('Digivice', '+1 proyectil', '#80d8ff'); }, 2800); }
+  if (itemLv('digivice')){ g.p.count += 1; setTimeout(() => { if (g) announce('Digivice', '+1 proyectil', '#80d8ff', 'low'); }, 2800); }
   g.evoAnim = {t: 0, dur: 2.6, swapped: false, sprite: spriteOf(g.ch.id, st), name: evo.name};
   shake = Math.max(shake, 0.5);
   sfx('evolution');
-  announce('¡' + evo.name + '!', `Digievolución · +${Math.round((Math.pow(EVO_TOTAL.dmg, 1/n) - 1)*100)}% daño, +${inc} vida`, '#ffd54f');
+  announce('¡' + evo.name + '!', `Digievolución · +${Math.round((Math.pow(EVO_TOTAL.dmg, 1/n) - 1)*100)}% daño, +${inc} vida`, '#ffd54f', 'top');
 }
 
 // Animación de digievolución: 0-0.6 s brillo y temblor, cambio de sprite con destello y anillo, 0.6-1.6 s asentamiento
@@ -7691,8 +7757,8 @@ function bonkRelease(){
   sfx('evolve');
   g.bonks = (g.bonks || 0) + 1;
   const fx = BONK_FX[g.ch.id];
-  if (fx){ fx.f(p); announce('¡BONK!', fx.name, '#ffd54f'); }
-  else announce('¡BONK!', 'Onda de choque', '#ffd54f');
+  if (fx){ fx.f(p); announce('¡BONK!', fx.name, '#ffd54f', 'top'); }
+  else announce('¡BONK!', 'Onda de choque', '#ffd54f', 'top');
 }
 // Efecto extra del Bonk según el compañero (además de la onda base)
 const BONK_FX = {
@@ -8199,7 +8265,7 @@ function updateShrines(dt){
       burst(sh.x, sh.z, shrineHex(sh.type));
       spawnRing(sh.x, sh.z, sh.type.col, 6, 0.5);
       if (sh.type.id !== 'desafio') announce(sh.type.name, sh.type.text, shrineHex(sh.type));
-      else announce('¡Desafío!', 'Derrota a las 3 élites en 45 s', '#ff5252');
+      else announce('¡Desafío!', 'Derrota a las 3 élites en 45 s', '#ff5252', 'top');
       sfx('ready');
       hud = null;
     }
@@ -8358,7 +8424,7 @@ const CONS = {
 function addCons(id){ const c = g.cons || (g.cons = {}); c[id] = Math.min(CONS_MAX, (c[id] || 0) + 1); }
 function useCons(id){
   if (!g || state !== 'play' || !g.cons || !(g.cons[id] > 0)) return;
-  g.cons[id]--; CONS[id].use(); announce(CONS[id].name, '', CONS[id].col);
+  g.cons[id]--; CONS[id].use(); announce(CONS[id].name, '', CONS[id].col, 'low');
 }
 function consCard(id, n){
   const c = CONS[id];
@@ -8581,8 +8647,8 @@ function update(dt){
 
   // Avisos de fase: hordas a los 45 s y aviso del jefe 15 s antes
   if (g.zone < 2 && g.t >= ZONE2_AT){ if (isPortalMap()){ if (g.mode === 'surv') enterScreen(2); } else setZone(2); }
-  if (!g.hordeWarned && g.t >= 45){ g.hordeWarned = true; announce('¡HORDAS!', 'Más enemigos aparecen', '#ef5350'); }
-  if (g.mode !== 'surv' && !isPortalMap() && !g.bossWarned && g.t >= BOSS_AT - 15){ g.bossWarned = true; announce('Algo se acerca…', 'Piedmon llega en 15 s', '#ce93d8'); }
+  if (!g.hordeWarned && g.t >= 45){ g.hordeWarned = true; announce('¡HORDAS!', 'Más enemigos aparecen', '#ef5350', 'top'); }
+  if (g.mode !== 'surv' && !isPortalMap() && !g.bossWarned && g.t >= BOSS_AT - 15){ g.bossWarned = true; announce('Algo se acerca…', 'Piedmon llega en 15 s', '#ce93d8', 'top'); }
   updateScreenClock(dt);
   updatePortal(dt);
   if (g.mode === 'surv') updateWaves();
@@ -8592,7 +8658,7 @@ function update(dt){
   // Los primeros 8 s no cuentan: al empezar se lee el consejo de la primera partida y antes salía «¡Muévete!» encima
   g.idleT = (mvd > 0.02 || mx || mz || g.t < 8) ? 0 : (g.idleT || 0) + dt;   // empujar contra una pared también cuenta como moverse
   g.lastPx = g.p.x; g.lastPz = g.p.z;
-  if (g.idleT > 2.5 && !g.idleWarned){ g.idleWarned = true; announce('¡Muévete!', 'Quieto recibes cada vez más daño y te rodean', '#ef5350'); }
+  if (g.idleT > 2.5 && !g.idleWarned){ g.idleWarned = true; announce('¡Muévete!', 'Quieto recibes cada vez más daño y te rodean', '#ef5350', 'top'); }
   if (g.idleT <= 2.5) g.idleWarned = false;
   // Corrupción de datos: tras 5 s quieto pierdes vida aunque nadie te toque (un ataque de área no te salva):
   // 3% de la vida máxima por segundo, +3% cada 2 s, hasta el 15%. Sin armadura. Quedarse quieto mata en unos 15 s
@@ -8601,7 +8667,7 @@ function update(dt){
     p.hp -= p.maxHp*rate*dt;
     g.corrT = (g.corrT || 0) - dt;
     if (g.corrT <= 0){ g.corrT = 1; popText(p.x, p.z, 'Corrupción', '#e040fb', 0.8); shake = Math.max(shake, 0.15); }
-    if (!g.corrWarned){ g.corrWarned = true; announce('¡Corrupción de datos!', 'Si sigues quieto pierdes vida cada segundo', '#e040fb'); }
+    if (!g.corrWarned){ g.corrWarned = true; announce('¡Corrupción de datos!', 'Si sigues quieto pierdes vida cada segundo', '#e040fb', 'top'); }
   } else if (g.idleT <= 5) g.corrWarned = false;
 
   // Aparición
@@ -8923,7 +8989,7 @@ function update(dt){
     // Jefe especial: 10% de que aparezca uno más, de entre tus Digimon desbloqueados
     if (specialPool().length && Math.random() < SPECIAL_CHANCE){
       g.extraOn = true; g.extraNext = g.t + 4; g.extraSpawned = false;
-      announce('¡Algo se mueve!', 'Un jefe especial aparece', '#ffd54f');
+      announce('¡Algo se mueve!', 'Un jefe especial aparece', '#ffd54f', 'top');
     }
   }
   for (const s of g.eshots){
@@ -8963,7 +9029,7 @@ function update(dt){
     g.revives--; p.hp = Math.round(p.maxHp * 0.5);
     for (const e of g.enemies){ if (e.boss || e.kind === 'mini') continue; const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz) || 1; if (d < 10) [e.x, e.z] = clampArena(e.x + dx/d*8, e.z + dz/d*8, ARENA_R - 0.5); }
     spawnRing(p.x, p.z, 0x7cf29c, 10, 0.6); screenFlash = 0.5;
-    announce('¡Segunda oportunidad!', 'Laboratorio · 50% de vida', '#7cf29c');
+    announce('¡Segunda oportunidad!', 'Laboratorio · 50% de vida', '#7cf29c', 'top');
   }
   if (g.shieldT > 0){ g.shieldT -= dt; if (p.hp < hp0) p.hp = hp0; }
   if (g.routeT > 0 && !g.evoAnim){ g.routeT -= dt; if (g.routeT <= 0 && !g.pendingUp && state === 'play'){ openRoutes(); return; } else if (g.routeT <= 0) g.routeT = 0.5; }
@@ -8973,7 +9039,7 @@ function update(dt){
     g.discoUsed = true; p.hp = Math.round(p.maxHp * (0.2 + 0.1*itemLv('disco')));
     for (const e of g.enemies){ if (e.boss || e.kind === 'mini') continue; const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz) || 1; if (d < 10) [e.x, e.z] = clampArena(e.x + dx/d*8, e.z + dz/d*8, ARENA_R - 0.5); }
     spawnRing(p.x, p.z, 0x80d8ff, 10, 0.6); screenFlash = 0.5;
-    announce('¡Disco de memoria!', 'Vuelves con ' + Math.round((0.2 + 0.1*itemLv('disco'))*100) + '% de vida', '#80d8ff');
+    announce('¡Disco de memoria!', 'Vuelves con ' + Math.round((0.2 + 0.1*itemLv('disco'))*100) + '% de vida', '#80d8ff', 'top');
   }
   if (p.hp <= 0){ p.hp = 0; endGame(false); }
   else if (g.bossDown && (!g.extraOn || (g.extraSpawned && !g.enemies.some(e => e.special && e.hp > 0)))) endGame(true);
@@ -9232,7 +9298,7 @@ function rerollUp(){
 function skipUp(){
   const r = upRes(); if (r.skip <= 0 || state !== 'levelup' || g.npcPick || !g.choices.length) return;
   r.skip--; SAVE.bits = SAVE.bits + 15; g.chestPick = null; runDrop();
-  announce('+15 Bits', 'Carta saltada', '#ffd54f');
+  announce('+15 Bits', 'Carta saltada', '#ffd54f', 'low');
   hideOverlay(); lockMouse(); state = 'play';
 }
 function toggleBanish(){
@@ -9821,6 +9887,7 @@ function endGame(win){
   if (g.runId && !runIsLive()){ runTakenOver(); return; }   // la partida siguió en otra pestaña: aquí no da premios
   runEnd();   // fin de la partida: se libera el hueco de guardado
   state = 'end';
+  annClear();
   setHud(false); evHud(null); shrineHud(null);
   sfx(win ? 'victory' : 'defeat');
   const daily = loadDaily();
@@ -10026,12 +10093,88 @@ function evoBlast(st){
   g.evoRushT = 4;
   shake = Math.max(shake, 0.8);
 }
-function announce(title, sub, color = '#ffd54f'){
-  const el = document.getElementById('banner');
-  el.classList.toggle('over-menu', !g || state === 'end');   // en los menús la capa del menú lo tapaba
-  el.style.color = color;
-  el.innerHTML = `<b>${title}</b><small>${sub || ''}</small>`;
-  el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+// Avisos en tres carriles con cola, para que uno no pise al otro:
+//  'top' (centro, grande): élites, jefes, fases, Infierno, Bonk, evolución, cambio de pantalla y peligros
+//  'mid' (franja bajo el reloj, por defecto): eventos, santuarios, recompensas
+//  'low' (esquina, discreto): ajustes, menús y detalles. Fuera de la partida todo va a 'low'.
+// El cuarto parámetro acepta también true (= 'top') para los avisos que se centran.
+const ANN_RUN = new Set(['play', 'levelup', 'paused', 'map']);
+const ANN = {top: {q: [], t: 0, cur: null, dur: 2.6}, mid: {q: [], t: 0, cur: null, dur: 2.8}, low: {q: [], t: 0, cur: null, dur: 2.4}};
+function announce(title, sub, color = '#ffd54f', lvl = 'mid'){
+  if (lvl === true) lvl = 'top'; else if (!ANN[lvl]) lvl = 'mid';
+  const inPlay = g && ANN_RUN.has(state);
+  if (!inPlay) lvl = 'low';
+  const L = ANN[lvl], item = {title, sub: sub || '', color};
+  // El mismo aviso otra vez: se renueva en lugar de repetirse
+  if (L.cur && L.cur.title === title){ L.cur.sub = item.sub; L.t = 0; annShow(lvl, L.cur, false); return; }
+  if (L.q.some(x => x.title === title)) return;
+  L.q.push(item);
+  if (L.q.length > 3) L.q.splice(0, L.q.length - 3);   // con mucha prisa se pierden los más viejos, no se acumula retraso
+  if (!L.cur) annNext(lvl);
+  annLoop();
+}
+function annEl(lvl){
+  let el = document.getElementById(lvl === 'top' ? 'banner' : 'ann-' + lvl);
+  if (!el){ el = document.createElement('div'); el.id = 'ann-' + lvl; el.className = 'ann'; el.setAttribute('aria-live', 'polite'); document.body.appendChild(el); }
+  return el;
+}
+function annShow(lvl, it, anim = true){
+  const el = annEl(lvl);
+  if (lvl === 'mid'){   // justo debajo de la caja del reloj, esté arriba o abajo en móvil
+    const r = document.getElementById('hudTop').getBoundingClientRect();
+    el.style.setProperty('--ann-mid-top', (r.height && r.top < innerHeight / 2 ? Math.round(r.bottom + 8) : 12) + 'px');
+  }
+  if (lvl === 'mid') el.classList.toggle('held', !!ANN.top.cur);
+  el.style.setProperty('--ac', it.color);
+  el.innerHTML = `<b>${it.title}</b>${it.sub ? `<small>${it.sub}</small>` : ''}`;
+  if (anim){ el.classList.remove('show', 'out'); void el.offsetWidth; }
+  el.classList.remove('out'); el.classList.add('show');
+}
+function annNext(lvl){
+  const L = ANN[lvl];
+  L.cur = L.q.shift() || null; L.t = 0;
+  if (L.cur) annShow(lvl, L.cur);
+}
+// Reloj propio: el tiempo de los avisos de partida solo corre mientras se juega (no con las cartas, la pausa o la tienda)
+let annLast = 0, annRaf = 0;
+function annLoop(){
+  if (annRaf) return;
+  annLast = performance.now();
+  const tick = now => {
+    const dt = Math.min(0.1, (now - annLast) / 1000); annLast = now;
+    const playing = g && state === 'play';
+    let busy = false;
+    for (const lvl in ANN){
+      const L = ANN[lvl];
+      if (!L.cur) continue;
+      busy = true;
+      if (lvl !== 'low' && !playing && g && ANN_RUN.has(state)) continue;
+      // Mientras hay un aviso importante en el centro, el normal espera oculto (en móvil se pisaban)
+      if (lvl === 'mid'){ const held = !!ANN.top.cur; annEl('mid').classList.toggle('held', held); if (held) continue; }
+      // Con avisos en cola, el actual dura menos (mínimo 1,4 s)
+      L.t += dt;
+      const dur = L.q.length ? Math.max(1.4, L.dur - 0.6 * L.q.length) : L.dur;
+      if (L.t >= dur){
+        const el = annEl(lvl); el.classList.add('out'); el.classList.remove('show');
+        L.cur = null;
+        if (L.q.length) setTimeout(() => { if (!L.cur) annNext(lvl); }, 220);
+      }
+    }
+    annRaf = busy || Object.values(ANN).some(L => L.q.length) ? requestAnimationFrame(tick) : 0;
+  };
+  annRaf = requestAnimationFrame(tick);
+}
+// Al empezar o acabar una partida se vacían las colas de la anterior
+function annClear(){
+  for (const lvl in ANN){ ANN[lvl].q.length = 0; ANN[lvl].cur = null; const el = document.getElementById(lvl === 'top' ? 'banner' : 'ann-' + lvl); if (el) el.classList.remove('show', 'out'); }
+}
+// Números cortos para la vida: 980, 12,4 k, 3,1 M
+function shortNum(n){
+  n = Math.max(0, Math.ceil(n));
+  if (n < 10000) return String(n);
+  const [d, u] = n < 1e6 ? [1e3, ' k'] : n < 1e9 ? [1e6, ' M'] : [1e9, ' mil M'];
+  const v = n / d;
+  return (v < 100 ? (Math.floor(v * 10) / 10).toLocaleString('es-ES') : Math.floor(v).toLocaleString('es-ES')) + u;
 }
 // Colores de cada zona: niebla, cielo y tinte del suelo (sin reconstruir el mapa)
 function applyZoneVisuals(n){
@@ -10054,7 +10197,7 @@ function setZone(n){
   shake = Math.max(shake, 0.4);
   sfx('evolve');
   const z = zoneDef(n);
-  announce('Zona ' + n + ': ' + z.name, g.mode === 'surv' ? 'Supervivencia: aguanta todo lo que puedas' : n === 2 ? 'Derrota al jefe final para ganar' : '', z.color);
+  announce('Zona ' + n + ': ' + z.name, g.mode === 'surv' ? 'Supervivencia: aguanta todo lo que puedas' : n === 2 ? 'Derrota al jefe final para ganar' : '', z.color, 'top');
 }
 /* ---------- Portal, jefes de zona, Infierno y oleadas ---------- */
 const portalTwirl = decoTex('ui/gacha/twirl_02.png');
@@ -10194,7 +10337,7 @@ function screenBanner(n){
   shake = Math.max(shake, 0.5);
   sfx('evolve');
   const z = zoneDef(n);
-  announce('Pantalla ' + n + ': ' + z.name, g.mode === 'surv' ? 'Supervivencia: el escenario cambia, la horda no' : z.boss ? 'Ve al portal del norte para invocar a ' + z.boss.name : '', z.color);
+  announce('Pantalla ' + n + ': ' + z.name, g.mode === 'surv' ? 'Supervivencia: el escenario cambia, la horda no' : z.boss ? 'Ve al portal del norte para invocar a ' + z.boss.name : '', z.color, 'top');
 }
 // Fases de los jefes: al 50% y al 25% de vida cambian de ritmo y añaden golpes en el suelo avisados con círculos
 function bossPhases(dt){
@@ -10204,7 +10347,7 @@ function bossPhases(dt){
   if ((b.phase || 1) < ph){
     b.phase = ph; b.spd *= 1.15; b.slamT = 1.2;
     spawnRing(b.x, b.z, 0xff1744, 10, 0.9); shake = Math.max(shake, 0.6); sfx('boss');
-    announce('¡Fase ' + ph + '!', ph === 2 ? 'Golpes en el suelo: sal de los círculos rojos' : 'Más disparos y más golpes', '#ff5a6e');
+    announce('¡Fase ' + ph + '!', ph === 2 ? 'Golpes en el suelo: sal de los círculos rojos' : 'Más disparos y más golpes', '#ff5a6e', 'top');
   }
   if ((b.phase || 1) < 2) return;
   b.slamT -= dt;
@@ -10300,7 +10443,7 @@ function updateScreenClock(dt){
       g.inferno = true; g.revives = 0;
       infernoFx();
       shake = Math.max(shake, 1); sfx('boss');
-      announce('¡INFIERNO!', '20 minutos en esta pantalla: la dificultad no deja de subir', '#ff1744');
+      announce('¡INFIERNO!', '20 minutos en esta pantalla: la dificultad no deja de subir', '#ff1744', 'top');
     }
     // Corrupción: daño directo que crece cada segundo (no lo reduce la armadura)
     g.p.hp -= (4 + (g.screenT - SCREEN_LIMIT) * 0.8) * dt;
@@ -10366,7 +10509,7 @@ function updateHUD(){
   sumEl.style.display = canSummon ? 'flex' : 'none';
   if (canSummon) document.getElementById('hudSummonName').textContent = zoneDef().boss.name + (zoneDef().boss.resume && leftFrac() ? ' · ' + Math.round(leftFrac() * 100) + '%' : '');
   document.getElementById('xpTxt').textContent = `Nivel ${p.lvl} · EXP ${Math.floor(p.xp)} / ${p.nextXp}`;
-  document.getElementById('hpTxt').textContent = `${Math.ceil(Math.max(0, p.hp))} / ${p.maxHp}`;
+  { const t = `${shortNum(p.hp)} / ${shortNum(p.maxHp)}`, el = document.getElementById('hpTxt'); if (el.textContent !== t) el.textContent = t; }
   document.getElementById('hudName').textContent = stageName(g.ch.id, g.ch.evolved);
   // Zona actual, progreso de zonas y récord de tiempo (como en la barra superior de la referencia)
   const recMax = getRecords().reduce((a, r) => Math.max(a, r.t), 0);
@@ -10625,7 +10768,7 @@ function toggleMute(silent){
   localStorage.setItem('digibonk3d-sfx', Sfx.muted ? '0' : '1');
   if (Sfx.master) Sfx.master.gain.value = Sfx.muted ? 0 : 0.5 * Sfx.vol;
   if (Music.file) Music.file.muted = Sfx.muted;
-  if (!silent) announce(Sfx.muted ? 'Sonido desactivado' : 'Sonido activado', 'N para cambiarlo', '#7fd0ff');
+  if (!silent) announce(Sfx.muted ? 'Sonido desactivado' : 'Sonido activado', 'N para cambiarlo', '#7fd0ff', 'low');
 }
 addEventListener('pointerdown', audioInit);
 // Sonidos de interfaz en cualquier botón de los menús
@@ -10644,21 +10787,109 @@ function drawIcon(c, src, cx, cy, size){
   if (im.complete && im.naturalWidth) c.drawImage(im, cx - size/2, cy - size/2, size, size);
   else { c.fillStyle = '#ffffff'; c.beginPath(); c.arc(cx, cy, size/4, 0, Math.PI*2); c.fill(); }
 }
+/* Mapa pintado: relieve con luz del noroeste, cuestas de roca, caminos con borde, lagos con orilla y arboledas.
+   Se pinta una vez por escenario (se guarda en mapArt.cv) y encima van la niebla y los puntos de interés. */
+const MAP_PAL = {
+  bosque:    {floor: '#6cae44', hi: '#9ad35e', rock: '#6b4c34', mount: '#3f4f3c', water: '#3aa0e0', shore: '#d8f0b8', tree: '#2c6a30', treeHi: '#58a24a'},
+  dunas:     {floor: '#d9b46a', hi: '#efd08a', rock: '#a77a4e', mount: '#6e5038', water: '#2fb0a0', shore: '#f4e2b0', tree: '#6f8f3a', treeHi: '#93b34e'},
+  ruinas:    {floor: '#c79d62', hi: '#e2be7f', rock: '#8e6c4e', mount: '#5e4a3a', water: '#3a9a7a', shore: '#e8d6a8', tree: '#5f7f3a', treeHi: '#83a34e'},
+  nieve:     {floor: '#dfe8f2', hi: '#ffffff', rock: '#8a9ab0', mount: '#56637a', water: '#6fb8e8', shore: '#ffffff', tree: '#3b6a62', treeHi: '#5f8f86'},
+  fortaleza: {floor: '#545a78', hi: '#6f7598', rock: '#3a3550', mount: '#25222f', water: '#e0561a', shore: '#ffb36b', tree: '#3d4a5a', treeHi: '#566578'}
+};
+function mapArt(){
+  const key = curWorld + ':' + mapTrees.length + ':' + (layoutMini ? 1 : 0);
+  if (mapArt.key === key && mapArt.cv) return mapArt.cv;
+  const N = 240, W = ARENA_R + 8, cv = mapArt.cv || (mapArt.cv = document.createElement('canvas'));
+  cv.width = cv.height = N;
+  const c = cv.getContext('2d'), P = MAP_PAL[curBiome] || MAP_PAL.bosque;
+  const hex = h => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+  const fl = hex(P.floor), hi = hex(P.hi), rk = hex(P.rock), mt = hex(P.mount);
+  const id = c.createImageData(N, N), step = 2*W/N;
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++){
+    const wx = -W + (x + 0.5)*step, wz = -W + (y + 0.5)*step;
+    const out = Math.max(Math.abs(wx), Math.abs(wz)) > ARENA_R;
+    const h = terrainH(wx, wz), hx = terrainH(wx + step, wz) - h, hz = terrainH(wx, wz + step) - h;
+    const slope = Math.hypot(hx, hz) / step;
+    const light = Math.max(-1, Math.min(1, (-hx - hz) / step * 1.6));   // luz desde arriba a la izquierda
+    const dither = ((x * 7 + y * 13) % 5) / 5 * 0.04;   // grano suave para que no se vea plano
+    let col;
+    if (out) col = mt;
+    else {
+      const t = 0.55 * Math.min(1, Math.max(0, (slope - 0.55) / 0.5));   // cuestas: un toque de roca, sin rayar todo el mapa
+      const hh = Math.min(1, Math.max(0, h / 8));
+      col = [0, 1, 2].map(i => (fl[i] + (hi[i] - fl[i]) * hh * 0.55) * (1 - t) + rk[i] * t);
+    }
+    const f = 1 + light * (out ? 0.35 : 0.22) + dither - (out ? 0.08 : 0);
+    const q = (y*N + x)*4;
+    id.data[q] = Math.min(255, col[0]*f); id.data[q + 1] = Math.min(255, col[1]*f); id.data[q + 2] = Math.min(255, col[2]*f); id.data[q + 3] = 255;
+  }
+  c.putImageData(id, 0, 0);
+  const k = N / (2*W), X = v => (v + W)*k;
+  // Caminos y losas: primero una sombra oscura y luego el color, así tienen borde
+  if (layoutMini){
+    const sz = TERRAIN_SIZE*k, o = X(-TERRAIN_SIZE/2);
+    c.save(); c.beginPath(); c.rect(X(-ARENA_R), X(-ARENA_R), 2*ARENA_R*k, 2*ARENA_R*k); c.clip();
+    c.globalAlpha = 0.45; c.filter = 'brightness(0.35)'; c.drawImage(layoutMini, o + 1, o + 1, sz, sz);
+    c.globalAlpha = 1; c.filter = 'none'; c.drawImage(layoutMini, o, o, sz, sz);
+    c.restore();
+  }
+  // Lagos: orilla clara, agua con degradado y un brillo
+  for (const p of PONDS){
+    const cx = X(p.x), cy = X(p.z), rx = p.rx*1.05*k, rz = p.rz*1.05*k;
+    c.fillStyle = P.shore; c.beginPath(); c.ellipse(cx, cy, rx + 2, rz + 2, 0, 0, Math.PI*2); c.fill();
+    const gr = c.createRadialGradient(cx - rx*0.3, cy - rz*0.3, 1, cx, cy, Math.max(rx, rz));
+    gr.addColorStop(0, P.water); gr.addColorStop(1, 'rgba(10,30,60,.9)');
+    c.fillStyle = P.water; c.beginPath(); c.ellipse(cx, cy, rx, rz, 0, 0, Math.PI*2); c.fill();
+    c.globalAlpha = 0.45; c.fillStyle = gr; c.fill(); c.globalAlpha = 1;
+    c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 1; c.beginPath(); c.ellipse(cx - rx*0.2, cy - rz*0.25, rx*0.45, rz*0.25, -0.3, Math.PI*1.1, Math.PI*1.7); c.stroke();
+  }
+  // Arboledas: copas con sombra y brillo
+  for (const [tx, tz, th] of mapTrees){
+    const r = Math.max(2, th*0.6*k), cx = X(tx), cy = X(tz);
+    c.fillStyle = 'rgba(0,0,0,.28)'; c.beginPath(); c.arc(cx + 1, cy + 1.2, r, 0, Math.PI*2); c.fill();
+    c.fillStyle = P.tree; c.beginPath(); c.arc(cx, cy, r, 0, Math.PI*2); c.fill();
+    c.fillStyle = P.treeHi; c.beginPath(); c.arc(cx - r*0.3, cy - r*0.3, r*0.5, 0, Math.PI*2); c.fill();
+  }
+  // Borde del escenario: una línea fina donde empiezan las montañas
+  c.strokeStyle = 'rgba(0,0,0,.35)'; c.lineWidth = 2; c.strokeRect(X(-ARENA_R), X(-ARENA_R), 2*ARENA_R*k, 2*ARENA_R*k);
+  mapArt.key = key; mapArt.W = W;
+  return cv;
+}
+mapArt.key = null;
+// Niebla: casillas de 8 m que se descubren al pasar cerca (cada partida y cada pantalla empieza tapada)
+const FOG_N = 32;
+function mapFog(){
+  const key = curWorld;
+  if (!mapFog.cv){ mapFog.cv = document.createElement('canvas'); mapFog.cv.width = mapFog.cv.height = FOG_N; mapFog.seen = new Uint8Array(FOG_N*FOG_N); }
+  if (mapFog.key !== key || mapFog.g !== g){ mapFog.key = key; mapFog.g = g; mapFog.seen.fill(0); mapFog.dirty = true; }
+  if (g){
+    const W = mapArt.W || ARENA_R + 8, cs = 2*W/FOG_N, R2 = 26*26;
+    const cx = Math.floor((g.p.x + W)/cs), cz = Math.floor((g.p.z + W)/cs), rr = Math.ceil(26/cs);
+    for (let j = cz - rr; j <= cz + rr; j++) for (let i = cx - rr; i <= cx + rr; i++){
+      if (i < 0 || j < 0 || i >= FOG_N || j >= FOG_N) continue;
+      const q = j*FOG_N + i; if (mapFog.seen[q]) continue;
+      const dx = -W + (i + 0.5)*cs - g.p.x, dz = -W + (j + 0.5)*cs - g.p.z;
+      if (dx*dx + dz*dz < R2){ mapFog.seen[q] = 1; mapFog.dirty = true; }
+    }
+  }
+  if (mapFog.dirty){
+    const c = mapFog.cv.getContext('2d'), id = c.createImageData(FOG_N, FOG_N);
+    for (let q = 0; q < FOG_N*FOG_N; q++){ id.data[q*4] = 14; id.data[q*4 + 1] = 18; id.data[q*4 + 2] = 30; id.data[q*4 + 3] = mapFog.seen[q] ? 0 : 105; }
+    c.putImageData(id, 0, 0); mapFog.dirty = false;
+  }
+  return mapFog.cv;
+}
 function drawWorldMap(cv, size){
   if (!cv) return;
   const c = cv.getContext('2d');
-  const R = size / 2, k = (R - 6) / ARENA_R;
+  const art = mapArt(), W = mapArt.W, R = size / 2, k = R / W;
   const X = x => R + x*k, Y = z => R + z*k;
   const u = size / 170;   // escala de los iconos según el tamaño del mapa
   c.clearRect(0, 0, size, size);
-  c.fillStyle = '#4b5d72'; c.fillRect(0, 0, size, size);      // montañas
-  const MC = {bosque: ['#3f7d3f', '#2a7fb8'], dunas: ['#c9a25a', '#3aa88a'], ruinas: ['#9a7a5a', '#3a8a5a'], nieve: ['#c8d8ea', '#8ac6ea'], fortaleza: ['#4a3a56', '#e0561a']}[curBiome] || ['#3f7d3f', '#2a7fb8'];
-  c.fillStyle = MC[0]; c.fillRect(X(-ARENA_R), Y(-ARENA_R), 2*ARENA_R*k, 2*ARENA_R*k);  // suelo del bioma (cuadrado)
-  if (layoutMini){ c.save(); c.beginPath(); c.rect(X(-ARENA_R), Y(-ARENA_R), 2*ARENA_R*k, 2*ARENA_R*k); c.clip(); c.drawImage(layoutMini, X(-TERRAIN_SIZE/2), Y(-TERRAIN_SIZE/2), TERRAIN_SIZE*k, TERRAIN_SIZE*k); c.restore(); }
-  c.fillStyle = MC[1];
-  for (const P of PONDS){ c.beginPath(); c.ellipse(X(P.x), Y(P.z), P.rx*1.05*k, P.rz*1.05*k, 0, 0, Math.PI*2); c.fill(); }
+  c.imageSmoothingEnabled = true; c.drawImage(art, 0, 0, size, size);
   if (!g) return;
-  // Solo puntos de interés: cofres, huevos, santuarios, eventos, jefe y portal (sin enemigos normales)
+  c.drawImage(mapFog(), 0, 0, size, size);
+  // Solo puntos de interés: cofres, huevos, santuarios, eventos, élites, jefes y portal (sin enemigos normales)
   const badge = (x, y, r, fill, stroke) => { c.fillStyle = fill; c.strokeStyle = stroke; c.lineWidth = 2*u; c.beginPath(); c.arc(x, y, r, 0, Math.PI*2); c.fill(); c.stroke(); };
   c.font = `${Math.max(12, 14*u)}px system-ui`; c.textAlign = 'center'; c.textBaseline = 'middle';
   for (const ch of g.chests){
@@ -10675,6 +10906,13 @@ function drawWorldMap(cv, size){
     badge(sx, sy, 7*u, shrineHex(sh.type), '#0b1020');
     drawIcon(c, 'ui/hud/ic_santuario.webp', sx, sy, 12*u);
   }
+  // Élites (naranja) y jefes menores (morado): un rombo pequeño para saber dónde está el peligro
+  for (const e of g.enemies){
+    if (e.boss || (e.kind !== 'elite' && e.kind !== 'mini') || e.hp <= 0) continue;
+    const ex = X(e.x), ey = Y(e.z), r = (e.kind === 'mini' ? 5 : 3.8)*u;
+    c.fillStyle = e.kind === 'mini' ? '#c77dff' : '#ff7043'; c.strokeStyle = '#0b1020'; c.lineWidth = 1.5*u;
+    c.beginPath(); c.moveTo(ex, ey - r); c.lineTo(ex + r, ey); c.lineTo(ex, ey + r); c.lineTo(ex - r, ey); c.closePath(); c.fill(); c.stroke();
+  }
   // Eventos: círculo que late con una exclamación
   if (g.ev){
     const col = EVENT_COL[g.ev.kind] || '#7cf29c';
@@ -10684,9 +10922,11 @@ function drawWorldMap(cv, size){
       c.fillStyle = '#0b1020'; c.font = `bold ${Math.max(9, 10*u)}px system-ui`; c.fillText('!', ex, ey + 0.5*u);
     }
   }
-  // Jefe
+  // Jefe: su sprite sobre un círculo rojo que late
   if (g.boss && g.enemies.includes(g.boss)){
-    drawIcon(c, g.boss.sprite || 'sprites/adventure/piedmon.png', X(g.boss.x), Y(g.boss.z), 26 * u);
+    const bx = X(g.boss.x), by = Y(g.boss.z);
+    badge(bx, by, (13 + 1.5*Math.sin(g.t*5))*u, 'rgba(255,23,68,.55)', '#ff1744');
+    drawIcon(c, g.boss.sprite || 'sprites/adventure/piedmon.png', bx, by, 24 * u);
   }
   // Portal: la puerta del mapa dentro de un círculo grande que late; gris azulado cerrado, cian abierto
   if (g.portal){
@@ -10696,14 +10936,19 @@ function drawWorldMap(cv, size){
     const art = PORTAL_ART[g.map] || PORTAL_ART.desierto, im = iconImg(art.file), ih = 15*u, iw = ih*art.aspect;
     if (im.complete && im.naturalWidth) c.drawImage(im, qx - iw/2, qy - ih/2 - 0.5*u, iw, ih);
   }
-  // Jugador: el Digimon que estás usando
-  const pc = X(g.p.x), py = Y(g.p.z);
-  c.fillStyle = 'rgba(255,255,255,.25)'; c.beginPath(); c.arc(pc, py, 12*u, 0, Math.PI*2); c.fill();
+  // Jugador: el Digimon que estás usando, con un cono hacia donde mira
+  const pc = X(g.p.x), py = Y(g.p.z), d = g.p.dir || {x: 0, z: -1}, a = Math.atan2(d.z, d.x);
+  const cone = c.createRadialGradient(pc, py, 4*u, pc, py, 34*u);
+  cone.addColorStop(0, 'rgba(255,255,255,.55)'); cone.addColorStop(1, 'rgba(255,255,255,0)');
+  c.fillStyle = cone; c.beginPath(); c.moveTo(pc, py); c.arc(pc, py, 34*u, a - 0.5, a + 0.5); c.closePath(); c.fill();
+  c.fillStyle = 'rgba(14,18,30,.55)'; c.strokeStyle = '#fff'; c.lineWidth = 2*u; c.beginPath(); c.arc(pc, py, 12*u, 0, Math.PI*2); c.fill(); c.stroke();
   drawIcon(c, spriteOf(g.ch.id, g.ch.evolved), pc, py, 24 * u);
 }
 function openMap(){
   if (state !== 'play' || !g) return;
   state = 'map';
+  document.getElementById('mvTitle').textContent = mapDef().name;
+  document.getElementById('mvSub').textContent = zoneDef().name;
   for (const k in keys) keys[k] = false;
   unlockMouse();
   document.getElementById('mapview').classList.add('open');
@@ -11104,7 +11349,7 @@ function endMapEvent(ok){
     else { if (ev.foe.hp > 0) dropFoe(ev.foe); announce('La presa ha escapado', 'Se acabó el tiempo', '#9e9e9e'); }
     return;
   }
-  if (ev.kind === 'double'){ announce('Fin de los datos dobles', '', '#6aa8ff'); return; }
+  if (ev.kind === 'double'){ announce('Fin de los datos dobles', '', '#6aa8ff', 'low'); return; }
   if (ev.kind === 'meteor'){
     if (!ok) return;
     if (ev.hits <= 2){ spawnChestAt(g.p.x + 3, g.p.z + 3, true); announce('¡Lluvia esquivada!', 'Un cofre dorado cae a tu lado', '#ff7043'); }
@@ -11311,7 +11556,7 @@ function updateEmergency(dt){
   const p = g.p, line = EVO_LINE[g.ch.id] || [];
   if (!g.emergUsed && p.hp > 0 && p.hp < p.maxHp*0.2 && (g.ch.evolved | 0) < line.length && !g.evoAnim){
     g.emergUsed = true; g.emergOffer = 6;
-    announce('¡Evolución de emergencia!', 'Pulsa R en los próximos 6 s', '#ff7043');
+    announce('¡Evolución de emergencia!', 'Pulsa R en los próximos 6 s', '#ff7043', 'top');
   }
   if (g.emergOffer > 0){ g.emergOffer -= dt; evHud(g.ev ? null : `Evolución de emergencia: ${isTouchUI() ? 'toca EVO' : 'pulsa R'} (${Math.ceil(g.emergOffer)} s)`); if (g.emergOffer <= 0 && !g.ev) evHud(null); }
   if (g.emergT > 0){
@@ -11583,7 +11828,7 @@ function labBuy(id){
   const u = LAB_BY_ID[id], lv = labLv(id);
   if (lv >= labMax(u)) return false;
   const cost = labCosts(u)[lv];
-  if (SAVE.bits < cost){ announce('Bits insuficientes', `Necesitas ${cost} Bits`, '#ef5350'); return false; }
+  if (SAVE.bits < cost){ announce('Bits insuficientes', `Necesitas ${cost} Bits`, '#ef5350', 'low'); return false; }
   SAVE.bits = SAVE.bits - cost;
   const L = labLevels(); L[id] = lv + 1;
   localStorage.setItem('digibonk3d-lab', JSON.stringify(L));
@@ -11725,7 +11970,7 @@ function showLab(){
     </div>`);
   document.getElementById('labBack').onclick = () => showSelect();
   document.getElementById('labGacha').onclick = () => { if (!GACHA_SOON) return showGacha(); showSelect(); showShop(); };
-  document.getElementById('labRefund').onclick = () => { const b = labRefund(); announce('Reembolso', `+${b} Bits`, '#ffd54f'); showLab(); };
+  document.getElementById('labRefund').onclick = () => { const b = labRefund(); announce('Reembolso', `+${b} Bits`, '#ffd54f', 'low'); showLab(); };
   overlay.querySelectorAll('.lab-buy').forEach(b => b.onclick = () => { if (labBuy(b.dataset.lab)) showLab(); });
 }
 const SAVE = {
@@ -12183,7 +12428,7 @@ function showPlayer(){
   });
   // Nombre editable en la tarjeta
   const nameIn = document.getElementById('tcName');
-  const saveName = () => { const v = nameIn.value.trim(); if (v && v !== trainerName){ setTrainerName(v); announce('Nombre guardado', v, '#3de0ff'); } else if (!v) nameIn.value = trainerName || ''; };
+  const saveName = () => { const v = nameIn.value.trim(); if (v && v !== trainerName){ setTrainerName(v); announce('Nombre guardado', v, '#3de0ff', 'low'); } else if (!v) nameIn.value = trainerName || ''; };
   nameIn.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') nameIn.blur(); });
   nameIn.onblur = saveName;
 }
@@ -12593,7 +12838,7 @@ function grantReward(r){
 }
 // Tirada: 1 o 10. Con 10 se garantiza al menos una recompensa rara o épica
 function doPulls(n){
-  if (usableTickets(gxBanner) < n){ announce('Tickets insuficientes', `Necesitas ${n} ${n === 1 ? 'ticket' : 'tickets'}. Se consiguen jugando`, '#ef5350'); return; }
+  if (usableTickets(gxBanner) < n){ announce('Tickets insuficientes', `Necesitas ${n} ${n === 1 ? 'ticket' : 'tickets'}. Se consiguen jugando`, '#ef5350', 'low'); return; }
   spendUsable(gxBanner, n);
   const tiers = Array.from({length: n}, () => rollTier());
   if (n === 10 && !tiers.some(t => t !== 'c')) tiers[9] = 'r';
@@ -12605,8 +12850,8 @@ function doPulls(n){
     if (tiers[i] === 'l') pity = 0;
   }
   localStorage.setItem(pityKey(gxBanner), String(pity));
-  if (gxBanner === 'std' && n === 10){ addTickets('std', 1); announce('+1 ticket', '10 tiradas en el banner permanente', '#3de0ff'); }
-  if (addWeekPulls(n)) announce('Misión semanal completada', '+1 ticket por 5 tiradas esta semana', '#ffd54f');
+  if (gxBanner === 'std' && n === 10){ addTickets('std', 1); announce('+1 ticket', '10 tiradas en el banner permanente', '#3de0ff', 'low'); }
+  if (addWeekPulls(n)) announce('Misión semanal completada', '+1 ticket por 5 tiradas esta semana', '#ffd54f', 'low');
   const results = [];
   for (const t of tiers){
     let r = rollReward(t);
@@ -13056,7 +13301,7 @@ if (LOCAL_DEV && new URLSearchParams(location.search).has('demo')){
     rollTier,
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
-    digivolve, addSupport, spawnMini, MINIS, PORTAL, PONDS, PLAZA_SPOTS, get layout(){ return layout; }, openMap, closeMap, topView(h = 230){ camera.position.set(0, h, 40); camera.lookAt(0, 0, 0); const f = camera.far; camera.far = 600; camera.updateProjectionMatrix(); renderer.render(scene, camera); camera.far = f; camera.updateProjectionMatrix(); }, startMapEvent, SHRINE_TYPES, initShrines, summonBoss, openPortal, enterScreen: n => enterScreen(n, true), openRelics, useCons, openRoutes, showMapSelect, showReto, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
+    announce, digivolve, addSupport, spawnMini, MINIS, PORTAL, PONDS, PLAZA_SPOTS, get layout(){ return layout; }, openMap, closeMap, topView(h = 230){ camera.position.set(0, h, 40); camera.lookAt(0, 0, 0); const f = camera.far; camera.far = 600; camera.updateProjectionMatrix(); renderer.render(scene, camera); camera.far = f; camera.updateProjectionMatrix(); }, startMapEvent, SHRINE_TYPES, initShrines, summonBoss, openPortal, enterScreen: n => enterScreen(n, true), openRelics, useCons, openRoutes, showMapSelect, showReto, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
     stepUpdate: dt => update(dt), animateEvo, updateFx, syncMeshes, tryDash, openChest,
     resume(){ if (state === 'paused'){ state = 'play'; hideOverlay(); hidePause(); } },
     // Simulación rápida sin dibujar (para medir el equilibrio): avanza sec segundos y elige la carta pick en cada subida
