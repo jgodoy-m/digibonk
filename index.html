@@ -3957,6 +3957,48 @@ body.is-touch #overlay :is(button,.g-back) kbd{display:none!important}
   .rg .rg-guest{padding-top:6px!important;padding-bottom:6px!important}
 }
 </style>
+<style id="hub-icons">
+/* Iconos del inicio unificados: todos van sobre la misma placa redondeada.
+   Claro: placa blanca azulada. Oscuro: placa grafito. Sobre botones de color: placa de cristal blanco (igual en los dos temas). */
+html{--ic-plate:linear-gradient(180deg,#fbfcff,#e7eefb);--ic-line:#d3ddef;--ic-sh:inset 0 1px 0 #fff,0 2px 5px rgba(20,40,90,.14);--ic-drop:drop-shadow(0 1px 1px rgba(10,26,70,.28));--ic-ink:#25324a}
+html[data-theme=oscuro]{--ic-plate:linear-gradient(180deg,#3a3e46,#282b30);--ic-line:#4a4f58;--ic-sh:inset 0 1px 0 rgba(255,255,255,.07),0 2px 5px rgba(0,0,0,.4);--ic-drop:drop-shadow(0 1px 1px rgba(0,0,0,.55)) drop-shadow(0 0 2px rgba(154,239,255,.18));--ic-ink:#e9edf4}
+#overlay .realhub.hb{--ic-glass:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,.14));--ic-glass-line:rgba(255,255,255,.45)}
+/* Placa común */
+html #overlay .realhub.hb :is(.nm-tiles .hb-tile>i,.nm-encard>i,.nm-stack .hb-mode>i,.nm-event>i,.hb-side-h>i){display:grid!important;place-items:center!important;flex:none;box-sizing:border-box;border-radius:30%!important;transform:none!important;overflow:visible!important;font-size:0!important}
+html #overlay .realhub.hb :is(.nm-tiles .hb-tile>i,.nm-encard>i){background:radial-gradient(circle at 50% 72%,color-mix(in srgb,var(--tc,#4e63e8) 26%,transparent),transparent 68%),var(--ic-plate)!important;border:1px solid var(--ic-line)!important;box-shadow:var(--ic-sh)!important}
+html #overlay .realhub.hb .nm-encard{--tc:#12b4c8}
+html #overlay .realhub.hb :is(.nm-stack .hb-mode>i,.nm-event>i,.hb-side-h>i){background:var(--ic-glass)!important;border:1px solid var(--ic-glass-line)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 2px 6px rgba(0,0,0,.16)!important}
+html #overlay .realhub.hb :is(.nm-tiles .hb-tile>i,.nm-encard>i,.nm-stack .hb-mode>i,.nm-event>i,.hb-side-h>i) .nm-ic{width:88%!important;height:88%!important;object-fit:contain!important;filter:var(--ic-drop)!important;transform:none!important}
+html #overlay .realhub.hb .nm-tiles .hb-tile>i{width:54px!important;height:54px!important;margin:0 0 3px!important}
+html #overlay .realhub.hb .nm-encard>i{width:50px!important;height:50px!important}
+html #overlay .realhub.hb .nm-stack .hb-mode>i{width:46px!important;height:46px!important}
+html #overlay .realhub.hb .nm-event>i{width:32px!important;height:32px!important;border-radius:10px!important}
+html #overlay .realhub.hb .hb-side-h>i{width:40px!important;height:40px!important}
+html #overlay .realhub.hb .nm-event.hm-soon>i .nm-ic{filter:grayscale(1) opacity(.7)!important}
+/* Pastillas (idioma, ajustes, guía, bugs): icono en una placa redonda pequeña */
+html #overlay .realhub.hb :is(.hb-pill,.hb-btn)>.nm-ic{box-sizing:border-box;width:30px!important;height:30px!important;padding:3px;margin-left:-8px!important;border-radius:50%;background:var(--ic-plate);border:1px solid var(--ic-line);box-shadow:var(--ic-sh);object-fit:contain;filter:none!important}
+html #overlay .realhub.hb .hb-pill>.nm-ic{width:28px!important;height:28px!important;margin-left:-9px!important}
+/* Pantalla completa: trazo del mismo color que el texto */
+html #overlay .realhub.hb .nm-svg{width:20px;height:20px;fill:none;stroke:var(--ic-ink);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+/* Pestañas de récords: icono pequeño sin placa */
+html #overlay .realhub.hb .hb-tabs button{display:inline-flex;align-items:center;justify-content:center;gap:5px}
+html #overlay .realhub.hb .hb-tabs button .nm-ic{width:18px!important;height:18px!important;object-fit:contain;filter:var(--ic-drop)}
+html #overlay .realhub.hb .hb-tabs button:not(.on) .nm-ic{opacity:.75}
+@media(max-width:760px){
+  html #overlay .realhub.hb .nm-stack .hb-mode>i{width:38px!important;height:38px!important}
+  html #overlay .realhub.hb .nm-encard>i{width:40px!important;height:40px!important}
+  html #overlay .realhub.hb :is(.hb-pill,.hb-btn)>.nm-ic{width:26px!important;height:26px!important}
+}
+@media (orientation:landscape) and (max-height:500px){
+  html #overlay .realhub.hb .nm-tiles .hb-tile>i{width:34px!important;height:34px!important;margin:0!important;border-radius:11px!important}
+  html #overlay .realhub.hb .nm-stack .hb-mode>i{width:36px!important;height:36px!important}
+  html #overlay .realhub.hb .nm-encard>i{width:38px!important;height:38px!important}
+  html #overlay .realhub.hb .nm-event>i{width:26px!important;height:26px!important;border-radius:8px!important}
+  html #overlay .realhub.hb .hb-side-h>i{width:32px!important;height:32px!important}
+  html #overlay .realhub.hb :is(.hb-pill,.hb-btn)>.nm-ic{width:26px!important;height:26px!important;margin-left:-6px!important}
+  html #overlay .realhub.hb .hb-btn.hb-sq>.nm-ic,html #overlay .realhub.hb .hb-bar .hb-btn>.nm-ic{margin:0!important}
+}
+</style>
 </head>
 <body>
 <div id="vignette"></div>
@@ -5562,7 +5604,7 @@ function showSelect(){
         <div class="hb-utils">
           <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma"><img class="nm-ic" src="ui/hub/ic_idioma.webp" alt="">${LANG.toUpperCase()}</button>
           <button class="hb-pill hb-app" type="button" id="rhApp" aria-label="Instalar la app" title="Instalar la app"${appCanInstall() ? '' : ' hidden'}><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m-5-5 5 5 5-5M5 20h14"/></svg><span>App</span></button>
-          <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>
+          <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa"><svg class="nm-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/></svg></button>
         </div>
         <div class="hb-user" role="toolbar" aria-label="Jugador">
           <button type="button" class="hb-me" id="rhProfile"><span class="hud-portrait mini hm-pl-frame${extra.frame ? ' fr-' + extra.frame : ''}"><img id="rhProfileImg" src="${avatarSrc()}" alt=""></span><span><strong>${safeText(trainerName || 'Invitado')}</strong><small>${isGuest() ? t('guestTag') : (extra.title ? (TITLES.find(x => x.id === extra.title) || {}).name || '' : t('noTitle'))}</small></span></button>
@@ -5589,7 +5631,7 @@ function showSelect(){
           </div>
           <button type="button" class="hb-event nm-event nm-weekly" id="mWeekly" aria-label="Reto semanal: ${safeText(weeklyMod().name)}" title="${safeText(weeklyMod().d)}"><i><img class="nm-ic" src="ui/hub/ic_mision.webp" alt=""></i><span><small>Reto semanal</small><b>${weeklyMod().name}</b></span><em><span class="nm-wk-lbl">Hitos</span> ${retoState().done.length}/${RETO_HITOS.length}</em></button>
           <button type="button" class="nm-quests nm-encard" id="mEnc" aria-label="Encargos: hoy ${qs.day.done} de ${qs.day.all}, semana ${qs.week.done} de ${qs.week.all}${qs.ev ? ', evento ' + qs.ev.done + ' de ' + qs.ev.all : ''}"><i><img class="nm-ic" src="ui/hub/ic_encargos.webp" alt=""></i><span class="nm-eh"><b>Encargos</b><small>${qs.ev ? 'Diarios, semanales y de evento' : 'Diarios y semanales'}</small></span><span class="nm-eqs">${[['Hoy', qs.day, 'q-d'], ['Semana', qs.week, 'q-w'], ...(qs.ev ? [['Evento', qs.ev, 'q-e']] : [])].map(([n, q, c]) => `<span class="nm-eq ${c}"><small>${n}</small><b>${q.done}/${q.all}</b><span class="hb-meter"><i style="width:${Math.round(q.done / q.all * 100)}%"></i></span></span>`).join('')}</span></button>
-          ${(!GACHA_SOON ? (bannerOpen("navidadP") || bannerOpen("navidadR")) : eventActive()) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span class="lv-sheen"></span><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
+          ${(!GACHA_SOON ? (bannerOpen("navidadP") || bannerOpen("navidadR")) : eventActive()) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span class="lv-sheen"></span><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span><small>Evento</small><b>Próximamente</b></span></button>`}
           <div class="hb-tiles nm-tiles">
             <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex: ${pickProgress().done} de ${pickProgress().total} Digimon"><i><img class="nm-ic" src="ui/hub/ic_digidex.webp" alt=""></i><b>Digidex</b><small>${pickProgress().done}/${pickProgress().total} Digimon</small></button>
             <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio${labReady ? ': ' + labReady + ' mejoras disponibles' : ''}"><i><img class="nm-ic" src="ui/hub/ic_laboratorio.webp" alt=""></i><b>Laboratorio</b><small>${labReady ? labReady + (labReady === 1 ? ' mejora' : ' mejoras') : 'Mejoras'}</small>${labReady ? '<em class="nm-dot" aria-hidden="true"></em>' : ''}</button>
@@ -5613,8 +5655,8 @@ function showSelect(){
           <img class="rw-character rw-gabumon" src="ui/personaje_aprobado_gabumon.png" alt="">
         </div>
         <aside class="hb-side hb-lb" aria-label="Tus récords">
-          <div class="hb-side-h"><i>🏆</i><span><b>Tus récords</b><small>${recs.length ? recs.length + ' partidas guardadas' : 'Juega para entrar en la tabla'}</small></span></div>
-          <div class="hb-tabs" role="tablist"><button type="button" role="tab" class="on" data-k="t">⏱ Tiempo</button><button type="button" role="tab" data-k="lvl">⭐ Nivel</button><button type="button" role="tab" data-k="kills">💥 Bajas</button></div>
+          <div class="hb-side-h"><i><img class="nm-ic" src="ui/hub/ic_ranking.webp" alt=""></i><span><b>Tus récords</b><small>${recs.length ? recs.length + ' partidas guardadas' : 'Juega para entrar en la tabla'}</small></span></div>
+          <div class="hb-tabs" role="tablist"><button type="button" role="tab" class="on" data-k="t"><img class="nm-ic" src="ui/hub/ic_supervivencia.webp" alt=""><span>Tiempo</span></button><button type="button" role="tab" data-k="lvl"><img class="nm-ic" src="ui/hud/ic_emblema.webp" alt=""><span>Nivel</span></button><button type="button" role="tab" data-k="kills"><img class="nm-ic" src="ui/hud/ic_bajas.webp" alt=""><span>Bajas</span></button></div>
           <div class="hb-lbrow"><span><b>${fmtTime(bestT)}</b><small>Mejor tiempo</small></span><span><b>${bestL}</b><small>Mejor nivel</small></span><span><b>${kills.toLocaleString('es-ES')}</b><small>Bajas totales</small></span></div>
           <ol class="hb-rank" id="hbRank"></ol>
           <button type="button" class="hb-all" id="rhRecords">Ver todos los récords</button>
