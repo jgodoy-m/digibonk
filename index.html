@@ -3031,6 +3031,44 @@ html.reduce-motion .anim{animation:animIdle .8s steps(1) infinite!important}
 html.reduce-motion .logo-fx,html.reduce-motion .logo-fx>img{animation:none!important}
 html.reduce-motion .logo-fx::after{display:none}
 @media (prefers-reduced-motion:reduce){.logo-fx,.logo-fx>img{animation:none!important}.logo-fx::after{display:none}}
+/* Fondo animado detrás del logo del inicio: halo que respira, dos anillos de datos en órbita y chispas que suben.
+   Solo anima transform y opacity (van por la GPU, sin repintar). En móvil o pantallas táctiles queda en versión ligera:
+   halo y un anillo, sin chispas ni el brillo pulsante del logo. Con «menos movimiento» se queda quieto. */
+#overlay .realhub.hb .hb-brand>.logo-fx{z-index:1}
+#overlay .realhub.hb .hb-brand>.hb-ver{z-index:2}
+.hb-logo-bg{position:absolute;left:50%;top:50%;width:132%;height:230%;transform:translate(-50%,-50%);pointer-events:none;z-index:0;contain:layout paint style}
+.hb-logo-bg i{position:absolute;display:block}
+.hb-logo-bg .lb-glow{inset:12% 6%;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(110,236,255,.42),rgba(60,150,255,.22) 45%,rgba(150,90,255,.10) 70%,transparent);
+  animation:lb-breathe 4.8s ease-in-out infinite alternate;will-change:transform,opacity}
+.hb-logo-bg .lb-orbit{left:50%;top:50%;width:84%;aspect-ratio:1;margin-left:-42%;transform:translateY(-50%) scaleY(.3) rotate(-4deg)}
+.hb-logo-bg .lb-orbit2{width:66%;margin-left:-33%;transform:translateY(-50%) scaleY(.38) rotate(8deg)}
+.hb-logo-bg .lb-ring{inset:0;border-radius:50%;
+  background:repeating-conic-gradient(rgba(154,239,255,.85) 0 5deg,transparent 5deg 11deg,rgba(154,239,255,.35) 11deg 13deg,transparent 13deg 22deg);
+  -webkit-mask:radial-gradient(closest-side,transparent calc(100% - 3px),#000 calc(100% - 2.5px),#000 99%,transparent);
+          mask:radial-gradient(closest-side,transparent calc(100% - 3px),#000 calc(100% - 2.5px),#000 99%,transparent);
+  opacity:.55;animation:lb-spin 26s linear infinite;will-change:transform}
+.hb-logo-bg .lb-orbit2 .lb-ring{opacity:.38;animation-duration:38s;animation-direction:reverse}
+.hb-logo-bg .lb-sparks{inset:0}
+.hb-logo-bg .lb-sparks i{bottom:30%;width:4px;height:4px;background:#9aefff;box-shadow:0 0 6px #6ff3ff;opacity:0;
+  animation:lb-rise 5.4s linear infinite;will-change:transform,opacity}
+.hb-logo-bg .lb-sparks i:nth-child(1){left:14%;animation-delay:0s}
+.hb-logo-bg .lb-sparks i:nth-child(2){left:31%;animation-delay:-3.1s;width:3px;height:3px}
+.hb-logo-bg .lb-sparks i:nth-child(3){left:47%;animation-delay:-1.4s;background:#c9a4ff;box-shadow:0 0 6px #b57bff}
+.hb-logo-bg .lb-sparks i:nth-child(4){left:62%;animation-delay:-4.2s;width:3px;height:3px}
+.hb-logo-bg .lb-sparks i:nth-child(5){left:77%;animation-delay:-2.3s}
+.hb-logo-bg .lb-sparks i:nth-child(6){left:88%;animation-delay:-0.7s;background:#ffe28a;box-shadow:0 0 6px #ffc94d;width:3px;height:3px}
+@keyframes lb-breathe{from{opacity:.6;transform:scale(.94)}to{opacity:1;transform:scale(1.05)}}
+@keyframes lb-spin{to{transform:rotate(360deg)}}
+@keyframes lb-rise{0%{opacity:0;transform:translateY(0)}15%{opacity:.9}70%{opacity:.6}100%{opacity:0;transform:translateY(-120px)}}
+/* Versión ligera (móvil, tablet o pantallas táctiles) */
+@media (pointer:coarse),(max-width:760px){
+  .hb-logo-bg .lb-orbit2,.hb-logo-bg .lb-sparks{display:none}
+  .hb-logo-bg .lb-ring{animation-duration:40s}
+  #overlay .realhub.hb .hb-brand .logo-fx>img{animation:none}
+}
+html.reduce-motion .hb-logo-bg *{animation:none!important}
+@media (prefers-reduced-motion:reduce){.hb-logo-bg *{animation:none!important}}
 .set-vol{display:flex;align-items:center;gap:10px}
 .set-range{-webkit-appearance:none;appearance:none;width:150px;height:8px;border-radius:5px;background:var(--m-line);outline:none;cursor:pointer}
 .set-range::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--m-cta);box-shadow:0 2px 0 var(--m-cta-sh);border:2px solid #fff}
@@ -5573,7 +5611,7 @@ function showSelect(){
       </header>
       <section class="hb-main">
         <div class="hb-left">
-          <h1 class="hb-brand"><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span><span class="hb-ver">BETA</span></h1>
+          <h1 class="hb-brand"><span class="hb-logo-bg" aria-hidden="true"><i class="lb-glow"></i><i class="lb-orbit"><i class="lb-ring"></i></i><i class="lb-orbit lb-orbit2"><i class="lb-ring"></i></i><i class="lb-sparks"><i></i><i></i><i></i><i></i><i></i><i></i></i></span><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span><span class="hb-ver">BETA</span></h1>
           ${life.parade}
           ${saved ? `<button type="button" class="hb-continue" id="hbContinue" aria-label="Continuar partida guardada"><i><img src="${charIcon(saved.key)}" alt=""></i><span class="hbc-txt"><small>Partida guardada</small><b>Continuar partida</b></span><span class="hbc-info"><em>${savedTxt}</em><small><span>${safeText(MAPS[saved.map].name)}</span> · <span>${safeText(DIFFS[saved.diff].name)}</span>${saved.mode === 'surv' ? ' · <span>Supervivencia</span>' : saved.weekly ? ' · <span>Reto semanal</span>' : ''}</small></span><span class="hbc-go" aria-hidden="true">▶</span></button>` : ''}
           <div class="hb-modes nm-modes">
