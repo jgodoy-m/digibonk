@@ -3,27 +3,46 @@
 El juego funciona sin esto: con `supabase_url` vacío en `sitio.json` todo se guarda en el navegador, como antes.
 Para activar el guardado en la nube y el ranking por regiones:
 
-1. Crea un proyecto gratis en https://supabase.com (región: Europa, p. ej. Frankfurt).
-2. **SQL Editor** → pega y ejecuta `supabase/schema.sql`.
-3. **Authentication → Sign In / Providers**:
-   - activa **Allow anonymous sign-ins** (cada jugador tiene cuenta sin registrarse);
-   - deja activado **Email**.
-   - Recomendado: **Attack Protection → CAPTCHA** más adelante, si aparecen cuentas basura.
-4. **Authentication → Emails → Templates**: en **Magic Link** y en **Change Email Address**, añade el código al texto, por ejemplo
-   `Tu código de DigiBonk: {{ .Token }}`. El juego pide ese código de 6 cifras (no usa enlaces, así funciona también dentro de itch.io).
-5. **Project Settings → API**: copia la *Project URL* y la clave *anon public* (o *publishable*) en `sitio.json`
-   y ejecuta `python3 tools/configurar.py`:
+Antes: ten creado el correo de DigiBonk y, si puede ser, el dominio comprado (orden completo en [`LANZAMIENTO.md`](../LANZAMIENTO.md)).
+Lo marcado con 🔒 es secreto: va a un gestor de contraseñas, nunca a un chat ni al repositorio.
+
+1. **Crear el proyecto.** https://supabase.com/dashboard → regístrate con el correo de DigiBonk → **New project**.
+   - Organization: la que te crea por defecto (plan **Free**).
+   - Project name: `digibonk`.
+   - Database password: pulsa **Generate a password** y guárdala 🔒. El juego no la usa; solo sirve para entrar a la base de datos desde fuera.
+   - Region: **Central EU (Frankfurt)** (o la más cercana a la mayoría de jugadores).
+   - Espera un par de minutos a que diga que el proyecto está listo.
+2. **Crear las tablas.** Menú izquierdo → **SQL Editor** → **New query** → pega todo `supabase/schema.sql` → **Run**.
+   Tiene que acabar en «Success. No rows returned». Se puede volver a ejecutar sin perder datos: hazlo cada vez que un cambio del juego toque `schema.sql`.
+3. **Cuentas.** **Authentication → Sign In / Providers**:
+   - activa **Allow anonymous sign-ins** (cada jugador tiene cuenta sin registrarse) y guarda;
+   - en **Email**, deja activado el proveedor y **Confirm email** (el juego confirma con un código).
+   - Más adelante, si aparecen cuentas basura: **Attack Protection → CAPTCHA**.
+4. **Correo con código.** **Authentication → Emails → Templates**: en **Magic Link** y en **Change Email Address**, cambia el texto para que lleve el código, por ejemplo:
+   ```
+   Asunto: Tu código de DigiBonk
+   Tu código de DigiBonk es {{ .Token }}. Caduca en una hora. Si no lo has pedido, ignora este correo.
+   ```
+   El juego pide ese código de 6 cifras (no usa enlaces, así funciona también dentro de itch.io).
+5. **Dominio.** **Authentication → URL Configuration → Site URL**: `https://tu-dominio` (sin barra final). Si aún no lo tienes, déjalo para luego.
+6. **Claves para el juego.** **Project Settings → API Keys** (o el botón **Connect** de arriba):
+   - *Project URL*: `https://xxxx.supabase.co`
+   - *Publishable key* (`sb_publishable_...`) o, en la pestaña *Legacy*, la *anon public* (`eyJ...`). Cualquiera de las dos vale.
+
+   Estas dos son públicas por diseño (van dentro del juego); la seguridad la ponen las reglas de `schema.sql`.
+   Ponlas en `sitio.json` y ejecuta `python3 tools/configurar.py`, o pásalas por el chat para que lo haga un hilo:
    ```json
    "supabase_url": "https://xxxx.supabase.co",
-   "supabase_anon_key": "eyJ..."
+   "supabase_anon_key": "sb_publishable_..."
    ```
-   La clave anon es pública por diseño; la seguridad la ponen las reglas de `schema.sql`.
-   **Nunca** pongas la clave *service_role* / *secret*: el script la rechaza.
-   Cuando tengas dominio, ponlo también en **Authentication → URL Configuration → Site URL**.
-6. El correo de Supabase por defecto solo envía unos pocos emails por hora. Para el lanzamiento conviene
-   configurar un SMTP propio (Authentication → Emails → SMTP), por ejemplo Resend o Brevo, que tienen plan gratis.
-   Con dominio propio, el remitente puede ser `noreply@tu-dominio` (Resend y Brevo explican qué registros DNS añadir).
-7. En el plan gratis, Supabase pausa el proyecto tras 7 días sin ninguna visita. Con jugadores no pasa;
+   **Nunca** uses la *Secret key* (`sb_secret_...`) ni la *service_role* 🔒: el script las rechaza.
+7. **Correo propio (antes de abrir al público).** El correo de Supabase por defecto solo manda unos pocos emails por hora, y los códigos dejarían de llegar.
+   - Crea una cuenta gratis en https://resend.com con el correo de DigiBonk → **Domains → Add domain** → tu dominio. Si el dominio está en Cloudflare, Resend ofrece añadir los registros DNS solo; si no, cópialos a mano en Cloudflare → DNS.
+   - Cuando Resend marque el dominio como *Verified*: **API Keys → Create API key** (permiso *Sending access*) 🔒.
+   - En Supabase, **Authentication → Emails → SMTP Settings** → **Enable Custom SMTP**:
+     host `smtp.resend.com`, puerto `465`, usuario `resend`, contraseña = esa API key 🔒, remitente `noreply@tu-dominio`, nombre `DigiBonk`.
+   - Prueba: vincula tu correo desde el juego y comprueba que llega el código.
+8. En el plan gratis, Supabase pausa el proyecto tras 7 días sin ninguna visita. Con jugadores no pasa;
    si se pausa, se reactiva desde el panel con un clic.
 
 ## Cómo funciona
