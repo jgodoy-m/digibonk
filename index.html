@@ -6119,7 +6119,7 @@ async function showCredits(from){
         ${sec('Digimon jugables y skins', '<p>Hojas de animación de las líneas jugables, Leomon, Hagurumon, Frigimon y Wizardmon, retratos e iconos de skin: aportados por el autor del juego (generados con IA).</p>')}
         ${sec('Enemigos y jefes', `<p>Sprites de la base «Digimon / Pendulum Color Mod Sprite Database», recortados y ampliados.</p><p>${link('https://dmc-sprite-database.vercel.app')}</p><p id="crSprites">Cargando autores…</p>`)}
         ${sec('Pendiente de verificar', '<p>La base de sprites no publica licencia. Falta el permiso de sus autores (tero0x, tortoisehel, Ray y phrogmentado) para usar sus sprites; los sprites «Dot» originales son de Bandai.</p>', true)}
-        ${sec('Música', `<p>«Together we are strong» de ThisIsBeatKitchen, en Pixabay.</p><p>${link('https://pixabay.com/service/license-summary/', 'Pixabay Content License')}</p><p>Los efectos de sonido se generan en el propio juego.</p>`)}
+        ${sec('Música', `<p>«Together we are strong» de ThisIsBeatKitchen, en Pixabay.</p><p>${link('https://pixabay.com/service/license-summary/', 'Pixabay Content License')}</p><p>Pistas de los mapas (Bosque File, Desierto de Datos y Montaña Helada): compuestas para DigiBonk dentro del proyecto · CC0.</p><p>Efectos de golpe: «Impact Sounds» de Kenney · subida de nivel: «Digital Audio» de Kenney · evolución y aparición de jefe: fanfarrias de Beatscribe (homebrew_vgm). Todo ${link('https://creativecommons.org/publicdomain/zero/1.0/', 'CC0 1.0')}.</p><p>El resto de efectos se generan en el propio juego.</p>`)}
         ${sec('Mapas, decoración y modelos 3D', '<p>Suelos, decoración, portales, santuario y cofre: aportados por el autor del juego (generados con IA). Agua y piedra en pixel art: generadas dentro del proyecto.</p>')}
         ${sec('Kenney (CC0)', `<p>Texturas «Retro Textures Fantasy», iconos de «Tiny Dungeon» y «Tiny Battle» y partículas de «Particle Pack».</p><p>${link('https://kenney.nl', 'kenney.nl')} · ${link('https://creativecommons.org/publicdomain/zero/1.0/', 'CC0 1.0')}</p>`)}
         ${sec('Tipografías', `<p>Orbitron (Matt McInerney) y Nunito (Vernon Adams, Cyreal, Jacques Le Bailly).</p><p>${link('https://openfontlicense.org', 'SIL Open Font License 1.1')}</p>`)}
@@ -7336,7 +7336,7 @@ function digivolve(){
   if (itemLv('digivice')){ g.p.count += 1; setTimeout(() => { if (g) announce('Digivice', '+1 proyectil', '#80d8ff'); }, 2800); }
   g.evoAnim = {t: 0, dur: 2.6, swapped: false, sprite: spriteOf(g.ch.id, st), name: evo.name};
   shake = Math.max(shake, 0.5);
-  sfx('evolve');
+  sfx('evolution');
   announce('¡' + evo.name + '!', `Digievolución · +${Math.round((Math.pow(EVO_TOTAL.dmg, 1/n) - 1)*100)}% daño, +${inc} vida`, '#ffd54f');
 }
 
@@ -8635,7 +8635,7 @@ function update(dt){
     if (g.bossResume){ g.boss.hp = Math.max(1, g.boss.max * g.bossResume); g.bossResume = 0; }   // partida continuada: la vida que le quedaba
     g.enemies.push(g.boss);
     g.bossShotT = 2;
-    sfx('boss');
+    sfx('bossIntro');
     bossIntro(g.boss, 'Piedmon', 'Jefe final · líder de los Dark Masters', '#ce93d8');
   }
   if (g.boss && g.enemies.includes(g.boss)){
@@ -10023,7 +10023,7 @@ function summonBoss(){
   g.boss = {kind: 'boss', boss: true, def, name: def.name, sprite: def.sprite, mesh, shadow, x, z, hp, max, spd: 2.3, r: 2.4, xp: 60, dmg: def.dmg * bossDmgMul(), cd: 0};
   g.enemies.push(g.boss);
   g.bossSpawned = true; g.bossName = def.name; g.bossShotT = 2.2;
-  sfx('boss');
+  sfx('bossIntro');
   if (left){ const b = g.boss; b.phase = b.hp <= b.max*0.25 ? 3 : b.hp <= b.max*0.5 ? 2 : 1; b.slamT = 3; }   // sin cartel de fase al aparecer
   bossIntro(g.boss, def.name, left ? 'Vuelve con ' + Math.round(hp / max * 100) + '% de vida' : def.sub, def.col);
 }
@@ -10200,11 +10200,13 @@ const TUNE_LEAD = [
 // Raíz del acorde de cada compás (Am F C G Am F G C) y el bajo sube raíz, quinta, octava, quinta
 const TUNE_ROOT = [45, 41, 48, 43, 45, 41, 43, 48];
 function midiHz(m){ return 440 * Math.pow(2, (m - 69) / 12); }
-// Música de fondo: pista MP3 en bucle (audio/). Si el archivo no carga, se usa el bucle sintetizado
-const MUSIC_FILE = 'audio/together-we-are-strong.mp3';
+// Música de fondo: pista MP3 en bucle (audio/). Menús con su tema y una pista original por mapa
+// (audio/musica/, compuestas para el juego con tools/musica/). Si el archivo no carga, se usa el bucle sintetizado
+const MUSIC_FILES = {menu: 'audio/together-we-are-strong.mp3', bosque: 'audio/musica/bosque.mp3', desierto: 'audio/musica/desierto.mp3', nevado: 'audio/musica/nevado.mp3'};
+Music.track = 'menu';
 function musicStart(){
   if (!Music.file){
-    Music.file = new Audio(MUSIC_FILE);
+    Music.file = new Audio(MUSIC_FILES[Music.track] || MUSIC_FILES.menu);
     Music.file.loop = true;
     Music.file.volume = 0.5 * Music.vol;
     Music.file.onerror = () => { Music.file = null; if (Music.on && !Music.nodes) musicSynth(); };
@@ -10216,6 +10218,14 @@ function musicStart(){
 function musicStop(){
   if (Music.file) Music.file.pause();
   musicSynth(true);
+}
+// Cambia de pista según dónde está el jugador: la del mapa durante la partida, la de los menús fuera
+function musicSync(){
+  const want = g && state !== 'end' && MUSIC_FILES[g.map] ? g.map : 'menu';
+  if (want === Music.track) return;
+  Music.track = want;
+  if (Music.file){ Music.file.pause(); Music.file.onerror = null; Music.file = null; }
+  if (Music.on && Sfx.ctx) musicStart();
 }
 function musicSynth(stopOnly){
   if (stopOnly) return musicSynthStop();
@@ -10293,6 +10303,26 @@ function audioInit(){
   Sfx.noiseBuf = Sfx.ctx.createBuffer(1, len, Sfx.ctx.sampleRate);
   const d = Sfx.noiseBuf.getChannelData(0);
   for (let i = 0; i < len; i++) d[i] = Math.random()*2 - 1;
+  sfxLoadSamples();
+}
+// Efectos grabados (CC0, ver audio/LICENCIAS.txt). Mientras cargan, o si fallan, suena la versión sintetizada
+const SFX_FILES = {hit: ['golpe_1', 'golpe_2', 'golpe_3', 'golpe_4'], hurt: ['herido'], levelup: ['nivel'], evolution: ['evolucion'], bossIntro: ['jefe']};
+const SFX_VOL = {hit: .35, hurt: .7, levelup: .55, evolution: .6, bossIntro: .65};
+Sfx.buf = {};
+function sfxLoadSamples(){
+  for (const [k, list] of Object.entries(SFX_FILES)) list.forEach((f, i) =>
+    fetch('audio/sfx/' + f + '.mp3').then(r => r.ok ? r.arrayBuffer() : Promise.reject()).then(a => new Promise((ok, ko) => Sfx.ctx.decodeAudioData(a, ok, ko)))
+      .then(b => { (Sfx.buf[k] = Sfx.buf[k] || [])[i] = b; }).catch(() => {}));
+}
+function sfxSample(name){
+  const list = (Sfx.buf[name] || []).filter(Boolean);
+  if (!list.length) return false;
+  const c = Sfx.ctx, s = c.createBufferSource(), gn = c.createGain();
+  s.buffer = list[Math.floor(Math.random() * list.length)];
+  if (name === 'hit') s.playbackRate.value = 0.9 + Math.random() * 0.25;   // que los golpes seguidos no suenen idénticos
+  gn.gain.value = SFX_VOL[name] || .5;
+  s.connect(gn); gn.connect(Sfx.master); s.start();
+  return true;
 }
 function tone(freq, dur, type, vol, slideTo, delay){
   const c = Sfx.ctx, t0 = c.currentTime + (delay || 0);
@@ -10325,6 +10355,7 @@ function sfx(name){
     if (now - (Sfx.last[name] || 0) < SFX_GAP[name]) return;
     Sfx.last[name] = now;
   }
+  if (sfxSample(name)) return;
   switch (name){
     case 'shoot':   tone(880, .08, 'triangle', .07, 440); break;
     case 'hit':     noise(.05, .10, 0, 1500); break;
@@ -10338,6 +10369,8 @@ function sfx(name){
     case 'levelup': [440,554,660,880].forEach((f,i) => tone(f, .18, 'square', .07, null, i*.08)); break;
     case 'evolve':  tone(220, 1.0, 'sawtooth', .10, 880); [523,659,784].forEach((f,i) => tone(f, .5, 'triangle', .14, null, .6 + i*.1)); break;
     case 'boss':    tone(65, 1.6, 'sawtooth', .16, 40); noise(1.2, .07, 0, 200); break;
+    case 'bossIntro': tone(65, 1.6, 'sawtooth', .16, 40); noise(1.2, .07, 0, 200); break;
+    case 'evolution': tone(220, 1.0, 'sawtooth', .10, 880); [523,659,784].forEach((f,i) => tone(f, .5, 'triangle', .14, null, .6 + i*.1)); break;
     case 'victory': [523,659,784,1046,784,1046].forEach((f,i) => tone(f, .22, 'triangle', .18, null, i*.12)); break;
     case 'defeat':  tone(330, .6, 'triangle', .18, 110); tone(220, .9, 'triangle', .16, 55, .3); break;
   }
@@ -12712,6 +12745,7 @@ function frame(now){
   }
   const dt = Math.min(0.05, (now-last)/1000);
   last = now;
+  musicSync();
   if (modelMixers.size) tickModels(dt);
   if (state === 'play' && g && !mapLoad.on){   // con la pantalla de carga encima, el mundo espera
     if (g.slotSaved) runDrop();   // se vuelve a jugar: el guardado ya no es el estado actual

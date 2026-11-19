@@ -1,0 +1,30 @@
+Licencias del audio de DigiBonk
+================================
+
+audio/together-we-are-strong.mp3  (música de los menús)
+  «Together we are strong», de ThisIsBeatKitchen, en Pixabay.
+  Pixabay Content License: https://pixabay.com/service/license-summary/
+
+audio/musica/bosque.mp3, desierto.mp3, nevado.mp3  (una pista por mapa)
+  Composiciones originales hechas para DigiBonk dentro del proyecto: melodías, acordes
+  e instrumentos están escritos nota a nota en tools/musica/componer.js y se sintetizan
+  con Web Audio (tools/musica/render.js). No usan muestras ni melodías de terceros.
+  Licencia: CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/).
+
+audio/sfx/golpe_1..4.mp3  ← impact_punch_medium_000..003.ogg
+audio/sfx/herido.mp3      ← impact_punch_heavy_000.ogg
+  Kenney, «Impact Sounds» (https://kenney.nl/assets/impact-sounds). CC0 1.0.
+  Copia usada: github.com/Boyquotes/kenney-impact-sounds-for-godot (LICENSE: CC0 1.0 Universal).
+
+audio/sfx/nivel.mp3       ← power_up_1.ogg
+  Kenney, «Digital Audio» (https://kenney.nl/assets/digital-audio). CC0 1.0.
+  Copia usada: github.com/Boyquotes/kenney-digital-audio-for-godot (LICENSE: CC0 1.0 Universal).
+
+audio/sfx/evolucion.mp3   ← SNES/mp3/reveal.mp3
+audio/sfx/jefe.mp3        ← SNES/mp3/boss_appears.mp3
+  Beatscribe, «Homebrew Free Jingle and Fanfare Music Assets»
+  (https://github.com/Beatscribe/homebrew_vgm). El README dice: «All this is available
+  under the CC0 license». Crédito opcional: «Beatscribe».
+
+Los efectos se han convertido a MP3 y recortado el silencio del principio y del final.
+El resto de efectos (disparo, cofre, interfaz, victoria…) se sintetizan en el propio juego.
