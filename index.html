@@ -3903,6 +3903,9 @@ body.reto-run #hudZone{color:#7cf2b4!important}
 /* Registro: aviso de nombre vacío junto al campo (antes salía en un cartel tapado por el menú) */
 .rg-err{margin:6px 0 0;min-height:1.2em;font:800 13px 'Nunito',system-ui,sans-serif;color:#e53935;text-align:center}
 .rg-err:empty{display:none}
+.rg-profiles{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;margin:8px 0 0}
+.rg-profiles>span{width:100%;text-align:center;font:700 12px 'Nunito',system-ui,sans-serif;opacity:.75}
+.rg-profiles .rg-prof{height:32px;padding:0 12px;font-size:13px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rg-err.show{animation:rgShake .35s ease}
 @keyframes rgShake{25%{transform:translateX(-6px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
 </style>
@@ -5599,7 +5602,7 @@ function showSelect(){
   // Sin enlace, el botón no lleva a ningún sitio: se oculta y vuelve solo al rellenar su URL en sitio.json
   [['mBug', HM_DISCORD_BUGS_URL || HM_DISCORD_URL], ['mKofi', HM_KOFI_URL], ['mDiscord', HM_DISCORD_URL], ['mX', HM_X_URL]].forEach(([id, url]) => { if (!url) document.getElementById(id).hidden = true; });
   document.getElementById('hmCredits').onclick=()=>showCredits('hub');
-  document.getElementById('hmLogout').onclick=()=>{if(isGuest()){try{runEnd();}catch(e){}Object.keys(localStorage).filter(isSaveKey).forEach(k=>localStorage.removeItem(k));}localStorage.removeItem('digibonk3d-name');localStorage.removeItem('digibonk3d-guest');location.reload();};   // el invitado de pruebas lo tiene todo desbloqueado: al salir se borra para que no pase a una cuenta normal
+  document.getElementById('hmLogout').onclick=()=>logoutProfile();
   document.getElementById('rhProfile').onclick=showPlayer;
   document.getElementById('rhLang').onclick=toggleLang;
   document.getElementById('rhApp').onclick=()=>installEvt?installApp():openInfo('app');
@@ -5903,7 +5906,7 @@ async function cloudSync({pull = false, force = false} = {}){
     await cloudDevGrant();
     await cloudPush(force);
     await cloudFlushScores();
-    cloudSetMsg('Guardado en la nube ' + new Date(Cloud.st.syncedAt || Date.now()).toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'}));
+    cloudSetMsg('Guardado en la nube ' + new Date(Cloud.st.syncedAt || Date.now()).toLocaleTimeString(I18N.lang, {hour: '2-digit', minute: '2-digit'}));
   } catch(e){ cloudSetMsg('Sin conexión con la nube: ' + e.message); }
   finally { Cloud.busy = false; }
 }
@@ -5964,7 +5967,7 @@ function cloudShowConflict(){
   const row = Cloud.pending; if (!row) return;
   state = 'cloud';
   setHud(false);
-  const when = new Date(row.updated_at).toLocaleString('es-ES', {dateStyle: 'medium', timeStyle: 'short'});
+  const when = new Date(row.updated_at).toLocaleString(I18N.lang, {dateStyle: 'medium', timeStyle: 'short'});
   showOverlay(`
     <div class="settings sc-box cd-box">
       <header class="set-head"><h2>¿Qué progreso conservas?</h2></header>
@@ -5995,7 +5998,7 @@ function showCloud(){
   }
   const guest = isGuest(), email = Cloud.st.email;
   const acct = guest ? 'El modo invitado es de pruebas: no se guarda en la nube ni entra en el ranking.'
-    : email ? `Vinculada a <b>${safe(email)}</b>. Entra con ese email en otro dispositivo para seguir tu partida.`
+    : email ? `Vinculada a <b>${safe(email)}</b>.</span> <span>Entra con ese email en otro dispositivo para seguir tu partida.`
     : 'Cuenta anónima de este dispositivo. Vincula un email para no perderla y para jugar en otro dispositivo.';
   const step = cdStep;
   const emailForm = step ? `
@@ -6007,7 +6010,7 @@ function showCloud(){
   showOverlay(`
     <div class="settings sc-box cd-box">
       <header class="set-head"><button class="g-back" id="cdBack">← Volver</button><h2>Nube y ranking</h2></header>
-      <p class="sc-p">Tu progreso se guarda solo en la nube al acabar cada partida y cada minuto en los menús. ${acct}</p>
+      <p class="sc-p"><span>Tu progreso se guarda solo en la nube al acabar cada partida y cada minuto en los menús.</span> <span>${acct}</span></p>
       <p class="sc-p cd-status" id="cdStatus" aria-live="polite">${safe(Cloud.msg || '')}</p>
       ${guest ? '' : `
       <div class="set-row"><div><b>Guardar ahora</b><small>Sube el progreso de este dispositivo y comprueba si hay uno más nuevo.</small></div><button class="mini-btn" id="cdSync">Sincronizar</button></div>
@@ -6185,7 +6188,7 @@ function showSettings(){
         <button class="mini-btn" id="btnCredits">Créditos</button>
       </div>
       <div class="set-row">
-        <div><b>Cuenta</b><small>Cerrar sesión deja tu progreso guardado en este navegador. Eliminar la cuenta borra todo el progreso de este navegador.</small></div>
+        <div><b>Cuenta</b><small>Cerrar sesión guarda tu progreso en este navegador: vuelve a entrar con el mismo nombre para recuperarlo. Eliminar la cuenta borra todo tu progreso.</small></div>
         <div class="set-seg-wrap"><button class="mini-btn" id="btnLogout">Cerrar sesión</button><button class="mini-btn danger" id="btnDelete">Eliminar cuenta</button></div>
       </div>
     </div>`);
@@ -6206,17 +6209,15 @@ function showSettings(){
   const ba = document.getElementById('btnApp'); if (ba) ba.onclick = () => installApp();
   document.getElementById('btnCloud').onclick = () => showCloud();
   document.getElementById('btnCredits').onclick = () => showCredits('settings');
-  // Cerrar sesión: vuelve a la pantalla de registro; el progreso sigue en este navegador
-  document.getElementById('btnLogout').onclick = () => {
-    localStorage.removeItem('digibonk3d-name');
-    localStorage.removeItem('digibonk3d-guest');
-    location.reload();
-  };
+  // Cerrar sesión: vuelve a la pantalla de registro; el progreso se guarda aparte con el nombre (ver logoutProfile)
+  document.getElementById('btnLogout').onclick = () => logoutProfile();
   // Eliminar cuenta: borra todo lo guardado por el juego en este navegador
   document.getElementById('btnDelete').onclick = async () => {
     if (!confirm(Cloud.st.uid ? I18N.tr('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Bits, skins, colección, récords) y tu cuenta en la nube con tus puestos del ranking. No se puede deshacer.') : I18N.tr('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Bits, skins, colección, récords). No se puede deshacer.'))) return;
     if (Cloud.st.uid && CLOUD_ON){ try { await cloudRpc('delete_my_data', {}); } catch(e){ if (!confirm(I18N.tr('No se pudo borrar la cuenta de la nube ({0}). ¿Borrar solo este navegador?'.replace('{0}', e.message)))) return; } }
-    Object.keys(localStorage).filter(k => k.startsWith('digibonk3d-')).forEach(k => localStorage.removeItem(k));
+    // Solo esta cuenta: los perfiles de otros nombres guardados en este navegador y las preferencias se quedan
+    profileKeys().forEach(k => localStorage.removeItem(k));
+    ['digibonk3d-name', 'digibonk3d-guest'].forEach(k => localStorage.removeItem(k));
     location.reload();
   };
   document.getElementById('tMusic').onclick = () => {
@@ -11679,6 +11680,54 @@ function setTrainerName(v){
   trainerName = v.trim().slice(0, 16);
   localStorage.setItem('digibonk3d-name', trainerName);
 }
+/* ---------- Perfiles de este navegador ----------
+   Al cerrar sesión, el progreso se guarda aparte con el nombre y se vacía, para que el siguiente nombre
+   empiece de cero. Al volver a entrar con el mismo nombre se recupera (también su sesión de la nube).
+   Las preferencias del dispositivo (volumen, tamaño, tema) se quedan. */
+const PROFILE_PREFIX = 'digibonk3d-perfil:';
+const DEVICE_PREFS = ['digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-theme'];
+const PROFILE_EXTRA = ['digibonk3d-cloud', 'digibonk3d-run-slot', 'digibonk3d-run-live', 'digibonk3d-last-choice', 'digibonk3d-starter-pending'];
+const profileKey = n => PROFILE_PREFIX + String(n).trim().slice(0, 16).toLowerCase();
+const profileKeys = () => Object.keys(localStorage).filter(k => (isSaveKey(k) && !DEVICE_PREFS.includes(k)) || PROFILE_EXTRA.includes(k));
+// Nombres guardados en este navegador (los más recientes primero)
+function savedProfiles(){
+  return Object.keys(localStorage).filter(k => k.startsWith(PROFILE_PREFIX)).map(k => {
+    try { const p = JSON.parse(localStorage.getItem(k)); return p && typeof p.name === 'string' ? {name: p.name, at: +p.at || 0} : null; } catch(e){ return null; }
+  }).filter(Boolean).sort((a, b) => b.at - a.at).slice(0, 6);
+}
+async function logoutProfile(){
+  // El invitado de pruebas lo tiene todo desbloqueado: al salir se borra para que no pase a una cuenta normal
+  if (isGuest()){
+    try { runEnd(); } catch(e){}
+    Object.keys(localStorage).filter(isSaveKey).forEach(k => localStorage.removeItem(k));
+  } else {
+    // Último guardado en la nube antes de salir (sin esperar más de 4 s)
+    try { if (cloudEnabled()) await Promise.race([cloudSync(), new Promise(r => setTimeout(r, 4000))]); } catch(e){}
+    const name = trainerName || localStorage.getItem('digibonk3d-name') || '';
+    const keys = profileKeys();
+    if (name){
+      const data = {}; keys.forEach(k => { data[k] = localStorage.getItem(k); });
+      try { localStorage.setItem(profileKey(name), JSON.stringify({v: 1, name, at: Date.now(), data})); }
+      catch(e){ if (!confirm(I18N.tr('No hay espacio para guardar aparte tu progreso. Si cierras sesión, se perderá el progreso de este navegador. ¿Cerrar sesión igualmente?'))) return; }
+    }
+    keys.forEach(k => localStorage.removeItem(k));
+  }
+  localStorage.removeItem('digibonk3d-name');
+  localStorage.removeItem('digibonk3d-guest');
+  location.reload();
+}
+// Recupera el progreso guardado con ese nombre (mayúsculas aparte). Devuelve false si no hay
+function restoreProfile(name){
+  const raw = localStorage.getItem(profileKey(name)); if (!raw) return false;
+  let p; try { p = JSON.parse(raw); } catch(e){ return false; }
+  if (!p || !p.data || typeof p.data !== 'object') return false;
+  profileKeys().forEach(k => localStorage.removeItem(k));
+  for (const [k, v] of Object.entries(p.data)) if (typeof v === 'string' && (isSaveKey(k) || PROFILE_EXTRA.includes(k))) localStorage.setItem(k, v);
+  localStorage.setItem('digibonk3d-name', p.name || String(name).trim().slice(0, 16));
+  localStorage.removeItem('digibonk3d-guest');
+  localStorage.removeItem(profileKey(name));
+  return true;
+}
 function showRegister(){
   state = 'register';
   setHud(false);
@@ -11700,6 +11749,7 @@ function showRegister(){
           <input id="regName" class="rg-input" maxlength="16" placeholder="${t('ph')}" autocomplete="off">
           <button class="rg-go" id="regGo">${t('enter')}<kbd>Enter</kbd></button>
           <p class="rg-err" id="regErr" role="alert"></p>
+          ${savedProfiles().length ? `<div class="rg-profiles"><span>${I18N.tr('Ya jugaron en este navegador:')}</span>${savedProfiles().map(p => `<button type="button" class="rg-pill rg-prof" data-prof="${escHtml(p.name)}">${escHtml(p.name)}</button>`).join('')}</div>` : ''}
           ${TEST_MODE ? `<div class="rg-or"><span>o</span></div>
           <button class="rg-pill rg-guest" id="regGuest">${t('guest')}</button>
           <button class="rg-pill rg-guest" id="regDev">Entrar con mi nombre y todo desbloqueado</button>` : ''}
@@ -11710,10 +11760,13 @@ function showRegister(){
   const go = () => {
     const v = document.getElementById('regName').value.trim();
     if (!v){ const er = document.getElementById('regErr'); er.textContent = t('needName'); er.classList.remove('show'); void er.offsetWidth; er.classList.add('show'); document.getElementById('regName').focus(); return; }
+    // Ese nombre ya jugó aquí y cerró sesión: recupera su progreso
+    if (restoreProfile(v)){ location.reload(); return; }
     setTrainerName(v);
     if (localStorage.getItem('digibonk3d-unlocked')) showSelect(); else showStarter();
   };
   document.getElementById('regGo').onclick = go;
+  overlay.querySelectorAll('.rg-prof').forEach(b => b.onclick = () => { document.getElementById('regName').value = b.dataset.prof; go(); });
   if (TEST_MODE) document.getElementById('regGuest').onclick = () => {
     unlockAllForTesting();
     location.reload();

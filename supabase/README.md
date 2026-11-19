@@ -75,6 +75,10 @@ Las partidas de una cuenta de desarrollador no entran en el ranking. Para quitar
 ## Límites conocidos
 
 - Las partidas se calculan en el navegador, así que alguien con conocimientos puede enviar marcas falsas.
-  `submit_score` rechaza cifras imposibles y partidas más largas que el tiempo pasado desde la anterior,
-  pero no es a prueba de trampas. Para borrar una marca: Table Editor → `scores`.
+  `submit_score` rechaza mapas, dificultades o Digimon que no existen, cifras imposibles, victorias en menos de
+  minuto y medio, más de 12 partidas por hora o 120 por día, y partidas más largas que el tiempo pasado desde la
+  anterior, pero no es a prueba de trampas. Si se añade un mapa o una dificultad, hay que añadirlos también en
+  `submit_score` y volver a ejecutar `schema.sql`. Para borrar una marca: Table Editor → `scores`.
 - Los nombres de entrenador no se moderan (máx. 16 caracteres).
+- Cerrar sesión en el juego guarda el progreso (y la sesión de la nube) aparte con el nombre, y el siguiente
+  nombre empieza con una cuenta anónima nueva. Al volver a entrar con el mismo nombre se recupera todo.
