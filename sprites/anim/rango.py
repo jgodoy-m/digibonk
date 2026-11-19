@@ -1,6 +1,6 @@
 # Genera las hojas de rango de los enemigos fuertes a partir de su hoja normal (mismas 5 poses y tamaño):
-#   <id>_elite.webp  élites: contorno de brasas (rojo anaranjado), cuerpo con un tinte rojizo y una gema roja sobre la cabeza
-#   <id>_jefe.webp   jefes menores: contorno dorado con halo morado, sombras moradas y una corona dorada sobre la cabeza
+#   <id>_elite.webp  élites: contorno de brasas (rojo anaranjado), cuerpo con un tinte rojizo
+#   <id>_jefe.webp   jefes menores: contorno dorado con halo morado y sombras moradas
 # Así se distinguen a simple vista de los enemigos normales del mismo Digimon (Tyrannomon es tanque y élite, por ejemplo).
 # Uso: python3 sprites/anim/rango.py            (regenera todas las de ELITES y JEFES)
 #      python3 sprites/anim/rango.py tyrannomon elite
@@ -42,38 +42,6 @@ def dilate(m, r=1):
             s[ys, xs] = m[yd, xd]; o |= s
     return o
 
-# Emblemas en pixel art (1 = contorno oscuro, 2 = color, 3 = luz, 4 = gema)
-GEMA = ["...1...",
-        "..121..",
-        ".12321.",
-        "1223221",
-        ".12221.",
-        "..121..",
-        "...1..."]
-CORONA = ["1....1....1",
-          "21..141..12",
-          "231.121.132",
-          "22312221322",
-          "22222222222",
-          "24242424242",
-          "11111111111"]
-def emblema(tipo):
-    pat = GEMA if tipo == 'elite' else CORONA
-    pal = {'elite': {'1': '#2a0600', '2': '#e53917', '3': '#ffd0a0', '4': '#ff6a1a'},
-           'jefe':  {'1': '#2a0a3a', '2': '#ffc107', '3': '#fff3b0', '4': '#d500f9'}}[tipo]
-    return pat, pal
-
-def stamp(out, pat, pal, cx, top, k):
-    """Dibuja el patrón con píxeles de k×k, centrado en cx, empezando en y=top."""
-    h = len(pat); w = len(pat[0])
-    x0 = int(round(cx - w * k / 2))
-    for j, row in enumerate(pat):
-        for i, ch in enumerate(row):
-            if ch == '.': continue
-            y = top + j * k; x = x0 + i * k
-            if y < 0 or x < 0 or y + k > out.shape[0] or x + k > out.shape[1]: continue
-            out[y:y + k, x:x + k, :3] = rgb(pal[ch]); out[y:y + k, x:x + k, 3] = 255
-
 def frame(a, tipo):
     st = ESTILO[tipo]
     al = a[..., 3] > 0
@@ -89,16 +57,6 @@ def frame(a, tipo):
         out[ring, :3] = rgb(col); out[ring, 3] = 255
         prev = prev | ring
     out = out.clip(0, 255)
-    # emblema sobre la cabeza: centrado en lo más alto de la silueta
-    ys, xs = np.nonzero(al)
-    top = ys.min()
-    head = xs[ys <= top + 6]
-    cx = (head.min() + head.max()) / 2
-    pat, pal = emblema(tipo)
-    k = 3 if tipo == 'elite' else 2
-    hgt = len(pat) * k
-    y = max(1, top - 6 - hgt)
-    stamp(out, pat, pal, cx, y, k)
     return out.astype(np.uint8)
 
 def hacer(nombre, tipo):
