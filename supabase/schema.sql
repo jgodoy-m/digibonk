@@ -37,18 +37,26 @@ create table if not exists public.scores (
   win        boolean not null default false,
   created_at timestamptz not null default now()
 );
+-- Cuentas de desarrollador: el juego les da todo desbloqueado y sus partidas no entran en el ranking.
+-- Solo se añaden a mano desde el panel de Supabase (ver supabase/README.md); el juego no puede escribir aquí.
+create table if not exists public.devs (
+  user_id    uuid primary key references auth.users(id) on delete cascade,
+  note       text,
+  created_at timestamptz not null default now()
+);
 create index if not exists scores_board_idx on public.scores (mode, map, diff, user_id);
 create index if not exists scores_user_idx  on public.scores (user_id, created_at desc);
 
 alter table public.profiles enable row level security;
 alter table public.saves    enable row level security;
 alter table public.scores   enable row level security;
+alter table public.devs     enable row level security;
 
 -- El jugador solo puede leer su propio guardado; escribir, solo mediante put_save.
 drop policy if exists saves_read_own on public.saves;
 create policy saves_read_own on public.saves for select to authenticated using (user_id = auth.uid());
 -- Perfiles y partidas no se leen directamente: el ranking sale de get_leaderboard.
-revoke all on public.profiles, public.saves, public.scores from anon, authenticated;
+revoke all on public.profiles, public.saves, public.scores, public.devs from anon, authenticated;
 grant select on public.saves to authenticated;
 
 -- Nombre y región del jugador (se llama al entrar y al cambiarlos)
@@ -92,6 +100,7 @@ begin
   if auth.uid() is null then raise exception 'not_signed_in'; end if;
   if not exists (select 1 from profiles where user_id = auth.uid()) then raise exception 'no_profile'; end if;
   if p_t < 30 then return; end if;   -- partidas de menos de 30 s no cuentan
+  if exists (select 1 from devs where user_id = auth.uid()) then return; end if;   -- las cuentas de desarrollador no puntúan
   if p_kills > p_t * 40 + 300 or p_lvl > p_t / 4 + 10 or p_wave > p_t / 60 + 2 then raise exception 'implausible'; end if;
   if p_mode = 'normal' and p_t > 3600 then raise exception 'implausible'; end if;
   -- desde la partida anterior o, si es la primera, desde que se creó la cuenta
@@ -130,6 +139,12 @@ language sql stable security definer set search_path = public as $$
   select * from ranked where pos <= least(greatest(p_limit, 1), 100) or me order by pos;
 $$;
 
+-- ¿Es la cuenta actual de desarrollador? Solo responde por la propia cuenta
+create or replace function public.am_i_dev()
+returns boolean language sql stable security definer set search_path = public as $$
+  select auth.uid() is not null and exists (select 1 from devs where user_id = auth.uid());
+$$;
+
 -- Borra todos los datos del jugador en la nube (botón "Eliminar cuenta" del juego)
 create or replace function public.delete_my_data()
 returns void language plpgsql security definer set search_path = public as $$
@@ -143,8 +158,8 @@ end $$;
 
 revoke all on function public.set_profile(text, text), public.put_save(jsonb, integer, boolean),
   public.submit_score(text, text, text, text, integer, integer, integer, integer, boolean),
-  public.get_leaderboard(text, text, text, text, integer), public.delete_my_data() from public, anon;
+  public.get_leaderboard(text, text, text, text, integer), public.delete_my_data(), public.am_i_dev() from public, anon;
 grant execute on function public.set_profile(text, text), public.put_save(jsonb, integer, boolean),
   public.submit_score(text, text, text, text, integer, integer, integer, integer, boolean),
-  public.delete_my_data() to authenticated;
+  public.delete_my_data(), public.am_i_dev() to authenticated;
 grant execute on function public.get_leaderboard(text, text, text, text, integer) to anon, authenticated;
