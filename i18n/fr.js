@@ -361,7 +361,6 @@ I18N.add('fr', {
   "Premios ×{0}": "Récompenses ×{0}",
   "Supervivencia · elige mapa": "Survie · choisis la carte",
   "Elige mapa y dificultad": "Choisis la carte et la difficulté",
-  "Partida": "Partie",
   "{0} · ←→ mapa · ↑↓ dificultad · Enter empezar": "{0} · ←→ carte · ↑↓ difficulté · Entrée pour commencer",
   "Vida enemigos": "Vie des ennemis",
   "Daño enemigos": "Dégâts des ennemis",
@@ -1508,5 +1507,15 @@ I18N.add('fr', {"×{0} daño": "×{0} dégâts", "×{0} recibido": "×{0} reçus
   "Cofre": "Coffre",
   "Santuario": "Sanctuaire",
   "Élite": "Élite",
-  "Jefe": "Boss"
+  "Jefe": "Boss",
+  "Sin superar": "Pas terminé",
+  "Superado {0}/4": "Terminé {0}/4",
+  "Mejor oleada": "Meilleure vague",
+  "Jefes menores cada 5 oleadas": "Mini-boss toutes les 5 vagues",
+  "Jefes menores": "Mini-boss",
+  "Récord": "Record",
+  "Elige mapa": "Choisis la carte",
+  "Sin cambios: el juego base": "Aucun changement : le jeu de base",
+  "dificultad": "difficulté",
+  "empezar": "commencer"
 });

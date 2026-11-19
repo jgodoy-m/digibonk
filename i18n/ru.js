@@ -366,7 +366,6 @@ I18N.add('ru', {
   "Premios ×{0}": "Награды ×{0}",
   "Supervivencia · elige mapa": "Выживание · выбери карту",
   "Elige mapa y dificultad": "Выбери карту и сложность",
-  "Partida": "Забег",
   "{0} · ←→ mapa · ↑↓ dificultad · Enter empezar": "{0} · ←→ карта · ↑↓ сложность · Enter — старт",
   "Vida enemigos": "Здоровье врагов",
   "Daño enemigos": "Урон врагов",
@@ -1519,5 +1518,15 @@ I18N.add('ru', {"×{0} daño": "×{0} урона", "×{0} recibido": "×{0} по
   "Cofre": "Сундук",
   "Santuario": "Святилище",
   "Élite": "Элита",
-  "Jefe": "Босс"
+  "Jefe": "Босс",
+  "Sin superar": "Не пройдено",
+  "Superado {0}/4": "Пройдено {0}/4",
+  "Mejor oleada": "Лучшая волна",
+  "Jefes menores cada 5 oleadas": "Мини-боссы каждые 5 волн",
+  "Jefes menores": "Мини-боссы",
+  "Récord": "Рекорд",
+  "Elige mapa": "Выбери карту",
+  "Sin cambios: el juego base": "Без изменений: базовая игра",
+  "dificultad": "сложность",
+  "empezar": "начать"
 });

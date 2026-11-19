@@ -360,7 +360,6 @@ I18N.add('en', {
   "Premios ×{0}": "Rewards ×{0}",
   "Supervivencia · elige mapa": "Survival · choose map",
   "Elige mapa y dificultad": "Choose map and difficulty",
-  "Partida": "Run",
   "{0} · ←→ mapa · ↑↓ dificultad · Enter empezar": "{0} · ←→ map · ↑↓ difficulty · Enter to start",
   "Vida enemigos": "Enemy health",
   "Daño enemigos": "Enemy damage",
@@ -1653,5 +1652,15 @@ I18N.add('en', {
   "Santuario": "Shrine",
   "Élite": "Elite",
   "Jefe": "Boss",
-  "Portal": "Portal"
+  "Portal": "Portal",
+  "Sin superar": "Not cleared",
+  "Superado {0}/4": "Cleared {0}/4",
+  "Mejor oleada": "Best wave",
+  "Jefes menores cada 5 oleadas": "Mini-bosses every 5 waves",
+  "Jefes menores": "Mini-bosses",
+  "Récord": "Record",
+  "Elige mapa": "Choose map",
+  "Sin cambios: el juego base": "No changes: the base game",
+  "dificultad": "difficulty",
+  "empezar": "start"
 });

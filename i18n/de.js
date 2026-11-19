@@ -360,7 +360,6 @@ I18N.add('de', {
   "Premios ×{0}": "Belohnungen ×{0}",
   "Supervivencia · elige mapa": "Überleben · Karte wählen",
   "Elige mapa y dificultad": "Karte und Schwierigkeit wählen",
-  "Partida": "Lauf",
   "{0} · ←→ mapa · ↑↓ dificultad · Enter empezar": "{0} · ←→ Karte · ↑↓ Schwierigkeit · Enter starten",
   "Vida enemigos": "Gegnerleben",
   "Daño enemigos": "Gegnerschaden",
@@ -1508,5 +1507,15 @@ I18N.add('de', {"×{0} daño": "×{0} Schaden", "×{0} recibido": "×{0} erhalte
   "Santuario": "Schrein",
   "Élite": "Elite",
   "Jefe": "Boss",
-  "Portal": "Portal"
+  "Portal": "Portal",
+  "Sin superar": "Nicht geschafft",
+  "Superado {0}/4": "Geschafft {0}/4",
+  "Mejor oleada": "Beste Welle",
+  "Jefes menores cada 5 oleadas": "Mini-Bosse alle 5 Wellen",
+  "Jefes menores": "Mini-Bosse",
+  "Récord": "Rekord",
+  "Elige mapa": "Karte wählen",
+  "Sin cambios: el juego base": "Keine Änderungen: das Grundspiel",
+  "dificultad": "Schwierigkeit",
+  "empezar": "starten"
 });

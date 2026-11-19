@@ -368,7 +368,6 @@ I18N.add('ja', {
   "Premios ×{0}": "報酬×{0}",
   "Supervivencia · elige mapa": "サバイバル · マップを選ぶ",
   "Elige mapa y dificultad": "マップと難易度を選ぶ",
-  "Partida": "プレイ",
   "{0} · ←→ mapa · ↑↓ dificultad · Enter empezar": "{0} · ←→ マップ · ↑↓ 難易度 · Enterで開始",
   "Vida enemigos": "敵のHP",
   "Daño enemigos": "敵のダメージ",
@@ -1521,5 +1520,15 @@ I18N.add('ja', {"×{0} daño": "ダメージ ×{0}", "×{0} recibido": "被ダ�
   "Cofre": "宝箱",
   "Santuario": "祠",
   "Élite": "エリート",
-  "Jefe": "ボス"
+  "Jefe": "ボス",
+  "Sin superar": "未クリア",
+  "Superado {0}/4": "クリア {0}/4",
+  "Mejor oleada": "最高ウェーブ",
+  "Jefes menores cada 5 oleadas": "5ウェーブごとに中ボス",
+  "Jefes menores": "中ボス",
+  "Récord": "記録",
+  "Elige mapa": "マップを選ぶ",
+  "Sin cambios: el juego base": "変更なし：基本のゲーム",
+  "dificultad": "難易度",
+  "empezar": "開始"
 });

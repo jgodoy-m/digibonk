@@ -367,7 +367,6 @@ I18N.add('ko', {
   "Premios ×{0}": "보상 ×{0}",
   "Supervivencia · elige mapa": "서바이벌 · 맵 선택",
   "Elige mapa y dificultad": "맵과 난이도 선택",
-  "Partida": "게임",
   "{0} · ←→ mapa · ↑↓ dificultad · Enter empezar": "{0} · ←→ 맵 · ↑↓ 난이도 · Enter 시작",
   "Vida enemigos": "적 체력",
   "Daño enemigos": "적 피해",
@@ -1520,5 +1519,15 @@ I18N.add('ko', {"×{0} daño": "피해 ×{0}", "×{0} recibido": "받는 피해 
   "Cofre": "상자",
   "Santuario": "성소",
   "Élite": "엘리트",
-  "Jefe": "보스"
+  "Jefe": "보스",
+  "Sin superar": "미클리어",
+  "Superado {0}/4": "클리어 {0}/4",
+  "Mejor oleada": "최고 웨이브",
+  "Jefes menores cada 5 oleadas": "5웨이브마다 중간 보스",
+  "Jefes menores": "중간 보스",
+  "Récord": "기록",
+  "Elige mapa": "맵 선택",
+  "Sin cambios: el juego base": "변경 없음: 기본 게임",
+  "dificultad": "난이도",
+  "empezar": "시작"
 });
