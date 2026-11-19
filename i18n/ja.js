@@ -1530,5 +1530,9 @@ I18N.add('ja', {"×{0} daño": "ダメージ ×{0}", "×{0} recibido": "被ダ�
   "Elige mapa": "マップを選ぶ",
   "Sin cambios: el juego base": "変更なし：基本のゲーム",
   "dificultad": "難易度",
-  "empezar": "開始"
+  "empezar": "開始",
+  "Santuarios": "祠",
+  "Emblemas": "エンブレム",
+  "Santuarios usados": "使った祠",
+  "Emblemas conseguidos": "獲得したエンブレム"
 });

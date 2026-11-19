@@ -1529,5 +1529,9 @@ I18N.add('ko', {"×{0} daño": "피해 ×{0}", "×{0} recibido": "받는 피해 
   "Elige mapa": "맵 선택",
   "Sin cambios: el juego base": "변경 없음: 기본 게임",
   "dificultad": "난이도",
-  "empezar": "시작"
+  "empezar": "시작",
+  "Santuarios": "성소",
+  "Emblemas": "엠블럼",
+  "Santuarios usados": "사용한 성소",
+  "Emblemas conseguidos": "획득한 엠블럼"
 });
