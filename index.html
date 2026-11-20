@@ -145,6 +145,11 @@ body.dbk-noplay #tutoTip{opacity:0!important}   /* el consejo no tapa las cartas
 #glLost p{margin:0 0 14px;color:#cfe3ff;font-weight:700}
 #glLost button{height:44px;padding:0 22px;border:0;border-radius:999px;background:#f08a24;color:#fff;font:900 16px 'Nunito',sans-serif;cursor:pointer}
 #glLost button[hidden]{display:none}
+#glUnavailable{width:min(430px,calc(100% - 32px));padding:24px;border:1px solid #6296bd;border-radius:20px;background:#101e38;color:#fff;font-family:'Nunito',system-ui,sans-serif}
+#glUnavailable::backdrop{background:#040a1ccc}
+#glUnavailable h2{font-size:20px;margin:0 0 8px}
+#glUnavailable p{margin:0 0 16px;color:#d5e7ff}
+#glUnavailable button{min-height:44px;padding:0 18px;border:0;border-radius:999px;background:#ffd369;color:#151e31;font:900 15px 'Nunito',sans-serif}
 
 #hurt{position:fixed;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(198,40,40,.9) 100%)}
 #prompt{position:fixed;left:0;top:0;transform:translate(-50%,-100%);display:none;padding:5px 12px;border-radius:10px;
@@ -3985,6 +3990,11 @@ body.is-touch #overlay :is(button,.g-back) kbd{display:none!important}
 <div id="bossCard"><div class="bc-band"></div><div class="bc-in"><img alt=""><div><div class="bc-t"></div><div class="bc-s"></div></div></div></div>
 <div id="tutoTip" aria-live="polite"></div>
 <div id="glLost" role="alertdialog" aria-live="assertive"><div><b>Recuperando los gráficos…</b><p id="glLostP">El navegador ha liberado la memoria gráfica. La partida está en pausa.</p><button type="button" id="glReload" hidden>Recargar el juego</button></div></div>
+<dialog id="glUnavailable" aria-labelledby="glUnavailableTitle" aria-describedby="glUnavailableText">
+  <h2 id="glUnavailableTitle">WebGL no disponible</h2>
+  <p id="glUnavailableText">El navegador no pudo iniciar los gráficos 3D. Puedes seguir usando el menú e intentar jugar de nuevo cuando WebGL esté disponible.</p>
+  <form method="dialog"><button type="submit">Volver</button></form>
+</dialog>
 <div id="prompt"></div>
 <canvas id="minimap" width="170" height="170"></canvas>
 <div id="mapview">
@@ -4296,11 +4306,31 @@ const QUALITY = {
   baja: {dpr: 1, aa: false, shadows: false, decor: 175, minimapEvery: 4}
 };
 const Q = QUALITY[qualityChoice() === 'alta' || (qualityChoice() === 'auto' && !autoIsLow()) ? 'alta' : 'baja'];
-const renderer = new THREE.WebGLRenderer({antialias: Q.aa});
+let renderer = null;
 // Estilo de época (PlayStation): se renderiza a baja resolución y se amplía sin suavizar
 const RETRO_SCALE = Q === QUALITY.alta ? 1 : 2;   // alta: resolución completa y nítida; baja: la mitad
-renderer.setPixelRatio(RETRO_SCALE === 1 ? Math.min(devicePixelRatio, Q.dpr) : 1);
+const glUnavailable = document.getElementById('glUnavailable');
+glUnavailable.addEventListener('keydown', e => e.stopPropagation());
+// El menú usa HTML y sprites 2D. El contexto 3D se pide al iniciar o continuar una partida.
+function ensureRenderer(){
+  if (renderer) return true;
+  try {
+    renderer = new THREE.WebGLRenderer({antialias: Q.aa});
+  } catch (error) {
+    console.warn('Digibonk: WebGL no disponible', error);
+    if (!glUnavailable.open) glUnavailable.showModal();
+    return false;
+  }
+  renderer.setPixelRatio(RETRO_SCALE === 1 ? Math.min(devicePixelRatio, Q.dpr) : 1);
+  applyRetroSize();
+  const canvas = renderer.domElement;
+  bindGraphicsEvents(canvas);
+  bindCameraControls(canvas);
+  document.body.prepend(canvas);
+  return true;
+}
 function applyRetroSize(){
+  if (!renderer) return;
   const w = Math.max(160, Math.floor(innerWidth / RETRO_SCALE));
   const h = Math.max(120, Math.floor(innerHeight / RETRO_SCALE));
   renderer.setSize(w, h, false);
@@ -4310,26 +4340,27 @@ function applyRetroSize(){
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
 }
-document.body.prepend(renderer.domElement);
 // Si el navegador pierde el contexto WebGL (móvil al cambiar de app, poca memoria), se pausa y se avisa en vez de quedarse en negro.
 // preventDefault() permite que el navegador lo devuelva; Three.js vuelve a subir texturas y geometrías al recuperarlo.
 let glLostTimer = null;
-renderer.domElement.addEventListener('webglcontextlost', e => {
-  e.preventDefault();
-  if (state === 'play') pauseGame();
-  document.getElementById('glReload').hidden = true;
-  document.getElementById('glLostP').textContent = 'El navegador ha liberado la memoria gráfica. La partida está en pausa.';
-  document.getElementById('glLost').classList.add('show');
-  clearTimeout(glLostTimer);
-  glLostTimer = setTimeout(() => {   // si no vuelve en 6 s, se ofrece recargar (el progreso guardado no se pierde; la partida en curso sí)
-    document.getElementById('glLostP').textContent = 'No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.';
-    document.getElementById('glReload').hidden = false;
-  }, 6000);
-});
-renderer.domElement.addEventListener('webglcontextrestored', () => {
-  clearTimeout(glLostTimer);
-  document.getElementById('glLost').classList.remove('show');
-});
+function bindGraphicsEvents(canvas){
+  canvas.addEventListener('webglcontextlost', e => {
+    e.preventDefault();
+    if (state === 'play') pauseGame();
+    document.getElementById('glReload').hidden = true;
+    document.getElementById('glLostP').textContent = 'El navegador ha liberado la memoria gráfica. La partida está en pausa.';
+    document.getElementById('glLost').classList.add('show');
+    clearTimeout(glLostTimer);
+    glLostTimer = setTimeout(() => {   // si no vuelve en 6 s, se ofrece recargar (el progreso guardado no se pierde; la partida en curso sí)
+      document.getElementById('glLostP').textContent = 'No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.';
+      document.getElementById('glReload').hidden = false;
+    }, 6000);
+  });
+  canvas.addEventListener('webglcontextrestored', () => {
+    clearTimeout(glLostTimer);
+    document.getElementById('glLost').classList.remove('show');
+  });
+}
 document.getElementById('glReload').onclick = () => location.reload();
 
 const scene = new THREE.Scene();
@@ -4349,7 +4380,6 @@ sun.position.set(12, 25, 8);
 scene.add(sun);
 
 const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 280);
-applyRetroSize();
 camera.position.set(0, 16, 11);
 
 const TERRAIN_SIZE = ARENA_R*2 + 20, TERRAIN_SEG = 320;
@@ -7130,6 +7160,7 @@ function runSlot(){
 function runContinue(){
   const s = runSlot();
   if (!s){ showSelect(); return; }
+  if (!ensureRenderer()) return;
   try { localStorage.removeItem(RUN_SLOT); } catch(e){}
   runMode = s.mode === 'surv' ? 'surv' : 'normal'; runWeekly = !!s.weekly; runMap = s.map; runDiff = s.diff;
   startGame(s.key, s);
@@ -7317,6 +7348,7 @@ function mapLoadCancel(){
   el.classList.remove('on', 'ml-out'); el.setAttribute('aria-hidden', 'true');
 }
 function startGame(key, resume){
+  if (!ensureRenderer()) return;
   // Hay una partida guardada: empezar otra la descarta (solo hay un hueco)
   if (!resume && runSlot()){
     if (!confirm(I18N.tr('Tienes una partida guardada. Si empiezas otra, se perderá. ¿Empezar una partida nueva?'))) return;
@@ -10244,28 +10276,30 @@ function syncMeshes(){
 // Esc libera el ratón; al hacer clic de nuevo en la pantalla se vuelve a bloquear.
 const camBase = new THREE.Vector3(0, 16, 11);
 let camYaw = 0, camPitch = 0.9, camDist = 19.4;
-const canvasEl = renderer.domElement;
 // Algunos entornos (p. ej. paneles embebidos) rechazan el bloqueo: se ignora el error y el juego sigue
 function lockMouse(onFail){
-  if (isTouchUI() || !canvasEl.requestPointerLock) return;   // en móvil no hay ratón que capturar
+  const canvasEl = renderer?.domElement;
+  if (isTouchUI() || !canvasEl?.requestPointerLock) return;   // en móvil no hay ratón que capturar
   const r = canvasEl.requestPointerLock();
   if (r && r.catch) r.catch(() => { if (onFail) onFail(); });
 }
 function unlockMouse(){
-  const r = document.exitPointerLock();
+  const r = document.exitPointerLock?.();
   if (r && r.catch) r.catch(() => {});
 }
-canvasEl.addEventListener('mousedown', () => {
-  if (state === 'play' && !document.pointerLockElement) lockMouse();
-});
-document.addEventListener('mousemove', e => {
-  if (document.pointerLockElement !== canvasEl) return;
-  camYaw -= e.movementX*0.0025;
-  camPitch = Math.max(0.2, Math.min(1.4, camPitch + e.movementY*0.0018));
-});
-renderer.domElement.addEventListener('wheel', e => {
-  camDist = Math.max(10, Math.min(36, camDist + e.deltaY*0.02));
-}, {passive: true});
+function bindCameraControls(canvas){
+  canvas.addEventListener('mousedown', () => {
+    if (state === 'play' && !document.pointerLockElement) lockMouse();
+  });
+  document.addEventListener('mousemove', e => {
+    if (document.pointerLockElement !== canvas) return;
+    camYaw -= e.movementX*0.0025;
+    camPitch = Math.max(0.2, Math.min(1.4, camPitch + e.movementY*0.0018));
+  });
+  canvas.addEventListener('wheel', e => {
+    camDist = Math.max(10, Math.min(36, camDist + e.deltaY*0.02));
+  }, {passive: true});
+}
 
 function updateCamera(dt){
   const p = g.p;
@@ -13937,7 +13971,7 @@ function frame(now){
   frameNo++;
   if (state === 'play' && g && frameNo % Q.minimapEvery === 0) drawWorldMap(document.getElementById('minimap'), 170);
   if (state === 'map' && g) drawWorldMap(document.getElementById('bigmap'), 600);
-  renderer.render(scene, camera);
+  renderer?.render(scene, camera);
   requestAnimationFrame(frame);
 }
 buildSkins();
@@ -13949,7 +13983,7 @@ if (LOCAL_DEV && new URLSearchParams(location.search).has('demo')){
     get g(){ return g; }, get state(){ return state; }, get scene(){ return scene; },
     rollReward, grantReward, setBanner: b => { gxBanner = b; }, playPullAnimation, endGame, retoState, retoStar, WEEKLY_MODS,
     hold(on){ demoSteps = on ? 0 : null; }, step(n = 1){ demoSteps = n; }, get pending(){ return demoSteps; },
-    startGame: (k, r) => { mapLoadCancel(); buildRun(k, r); }, spawnEnemy, spawnMagnetDrop, runSave, runSlot, runContinue, setZone, showGacha, addSkill, upgradeChoices,
+    startGame: (k, r) => { if (!ensureRenderer()) return; mapLoadCancel(); buildRun(k, r); }, spawnEnemy, spawnMagnetDrop, runSave, runSlot, runContinue, setZone, showGacha, addSkill, upgradeChoices,
     // Datos de skins y personajes
     SKINS, EVO_LINE, CHARS, SEASONS,
     headUrl, spriteWith,
@@ -13959,7 +13993,7 @@ if (LOCAL_DEV && new URLSearchParams(location.search).has('demo')){
     rollTier,
     get music(){ return Music.file; },
     specialPool, spawnSpecial,
-    announce, digivolve, addSupport, spawnMini, MINIS, PORTAL, PONDS, PLAZA_SPOTS, get layout(){ return layout; }, openMap, closeMap, topView(h = 230){ camera.position.set(0, h, 40); camera.lookAt(0, 0, 0); const f = camera.far; camera.far = 600; camera.updateProjectionMatrix(); renderer.render(scene, camera); camera.far = f; camera.updateProjectionMatrix(); }, startMapEvent, SHRINE_TYPES, initShrines, summonBoss, openPortal, enterScreen: n => enterScreen(n, true), openRelics, useCons, openRoutes, showMapSelect, showReto, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
+    announce, digivolve, addSupport, spawnMini, MINIS, PORTAL, PONDS, PLAZA_SPOTS, get layout(){ return layout; }, openMap, closeMap, topView(h = 230){ if (!renderer) return; camera.position.set(0, h, 40); camera.lookAt(0, 0, 0); const f = camera.far; camera.far = 600; camera.updateProjectionMatrix(); renderer.render(scene, camera); camera.far = f; camera.updateProjectionMatrix(); }, startMapEvent, SHRINE_TYPES, initShrines, summonBoss, openPortal, enterScreen: n => enterScreen(n, true), openRelics, useCons, openRoutes, showMapSelect, showReto, MAPS, setRun: (m, d, mode) => { runMap = m; if (d) runDiff = d; if (mode) runMode = mode; }, triggerEmergency, grantEmblem, evoSkillCards, EVO_SKILLS, fusionCards, openUpgrades, pickUpgrade, bossPhases,
     stepUpdate: dt => update(dt), animateEvo, updateFx, syncMeshes, tryDash, openChest,
     resume(){ if (state === 'paused'){ state = 'play'; hideOverlay(); hidePause(); } },
     // Simulación rápida sin dibujar (para medir el equilibrio): avanza sec segundos y elige la carta pick en cada subida

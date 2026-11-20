@@ -1097,6 +1097,8 @@ I18N.add('en', {
   "Pulsa Shift para hacer un dash y esquivar": "Press Shift to dash and dodge",
   "Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»": "Whenever you like, go to the north portal (on the minimap) and tap “Summon boss”",
   "Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe": "Whenever you like, go to the north portal (on the minimap) and press B to summon the boss",
+  "WebGL no disponible": "WebGL unavailable",
+  "El navegador no pudo iniciar los gráficos 3D. Puedes seguir usando el menú e intentar jugar de nuevo cuando WebGL esté disponible.": "The browser could not start 3D graphics. You can still use the menu and try playing again when WebGL is available.",
   "Recuperando los gráficos…": "Recovering graphics…",
   "El navegador ha liberado la memoria gráfica. La partida está en pausa.": "The browser freed the graphics memory. The run is paused.",
   "No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.": "The graphics could not be recovered. Reload the game: your saved progress is kept.",

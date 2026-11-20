@@ -1034,6 +1034,8 @@ I18N.add('ru', {
   "Pulsa Shift para hacer un dash y esquivar": "Нажмите Shift, чтобы сделать рывок и увернуться",
   "Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»": "Когда будете готовы, идите к северному порталу (на мини-карте) и нажмите «Призвать босса»",
   "Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe": "Когда будете готовы, идите к северному порталу (на мини-карте) и нажмите B, чтобы призвать босса",
+  "WebGL no disponible": "WebGL недоступен",
+  "El navegador no pudo iniciar los gráficos 3D. Puedes seguir usando el menú e intentar jugar de nuevo cuando WebGL esté disponible.": "Браузер не смог запустить 3D-графику. Меню по-прежнему доступно. Попробуйте начать игру снова, когда WebGL станет доступен.",
   "Recuperando los gráficos…": "Восстанавливаем графику…",
   "El navegador ha liberado la memoria gráfica. La partida está en pausa.": "Браузер освободил графическую память. Забег на паузе.",
   "No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.": "Не удалось восстановить графику. Перезагрузите игру: сохранённый прогресс останется.",

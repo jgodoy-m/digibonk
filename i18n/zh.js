@@ -1036,6 +1036,8 @@ I18N.add('zh', {
   "Pulsa Shift para hacer un dash y esquivar": "按 Shift 冲刺闪避",
   "Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»": "准备好后，前往北方传送门（小地图上有标记），点击“召唤头目”",
   "Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe": "准备好后，前往北方传送门（小地图上有标记），按 B 召唤头目",
+  "WebGL no disponible": "WebGL 不可用",
+  "El navegador no pudo iniciar los gráficos 3D. Puedes seguir usando el menú e intentar jugar de nuevo cuando WebGL esté disponible.": "浏览器无法启动 3D 图形。你可以继续使用菜单，等 WebGL 可用后再尝试开始游戏。",
   "Recuperando los gráficos…": "正在恢复画面…",
   "El navegador ha liberado la memoria gráfica. La partida está en pausa.": "浏览器释放了图形内存。游戏已暂停。",
   "No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.": "无法恢复画面。请重新加载游戏：已保存的进度不会丢失。",
