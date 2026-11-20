@@ -7439,7 +7439,7 @@ function showReto(){
   if (!isUnlocked(selectedKey)) selectedKey = SEASONS.adventure.chars.find(k => isUnlocked(k)) || 'agumon';
   const week = weekNum(), rs = retoSetup(week), m = MAPS[rs.map], d = DIFFS[rs.diff], mod = weeklyMod(week);
   const st = retoState(week), star = retoStar(week), k = selectedKey;
-  const stageLabel = mod === BOSS_CIRCUIT ? 'Circuito de 3 zonas' : m.name;
+  const stageLabel = mod === BOSS_CIRCUIT ? `${BOSS_CIRCUIT_ZONES.length} jefes` : m.name;
   const [floorTx, decoPng, bossPng] = m.preview, isStar = k === star;
   const best = st.best;
   const hitos = RETO_HITOS.map(h => { const ok = st.done.includes(h.id); return `<li class="${ok ? 'ok' : ''}"><i>${ok ? '✓' : '○'}</i><span>${h.t}</span><em>+${h.bits} Bits</em></li>`; }).join('');
@@ -10984,7 +10984,7 @@ function buildPortal(){
   const y0 = terrainH(PORTAL.x, PORTAL.z);
   grp.position.set(PORTAL.x, y0, PORTAL.z);
   // Puerta dibujada del bioma (hojas de mapas de Jaime): apagada y gris hasta que se abre
-  const map = g.weeklyRule === BOSS_CIRCUIT.id ? BOSS_CIRCUIT_MAPS[g.zone - 1] : g.map;
+  const map = g.weeklyRule === BOSS_CIRCUIT.id ? BOSS_CIRCUIT_STAGES[g.zone - 1].map : g.map;
   const art = PORTAL_ART[map] || PORTAL_ART.desierto;
   const stone = new THREE.Sprite(new THREE.SpriteMaterial({map: decoTex(art.file), transparent: true, alphaTest: 0.5, color: 0x737886}));
   stone.scale.set(art.h*art.aspect, art.h, 1); stone.position.y = art.h/2;
@@ -11071,7 +11071,7 @@ function enterScreen(n, instant){
   if (instant) return swapScreen(n);
   const z = zoneDef(n), gg = g;
   g.screenLoad = true;
-  const map = g.weeklyRule === BOSS_CIRCUIT.id ? BOSS_CIRCUIT_MAPS[n - 1] : g.map || runMap;
+  const map = g.weeklyRule === BOSS_CIRCUIT.id ? BOSS_CIRCUIT_STAGES[n - 1].map : g.map || runMap;
   const tok = mapLoadBegin(map, {status: I18N.tr('Pantalla') + ' ' + n + ': ' + I18N.tr(z.name), minMs: 1300, after: () => { if (g === gg) screenBanner(n); }});
   requestAnimationFrame(() => setTimeout(() => {
     if (g !== gg){ return; }   // se salió de la partida mientras tanto
@@ -12594,7 +12594,7 @@ function showEncargos(){
 }
 function showModes(trigger){
   const week = weekNum(), {map, diff} = retoSetup(week), mod = weeklyMod(week);
-  const stage = mod === BOSS_CIRCUIT ? 'Circuito de 3 zonas' : MAPS[map].name;
+  const stage = mod === BOSS_CIRCUIT ? `${BOSS_CIRCUIT_ZONES.length} jefes` : MAPS[map].name;
   menuModal('Modos', `<div class="mode-options"><button type="button" id="modeWeekly">
     <img src="ui/hub/digivice/reto.png" alt=""><span><b>${mod.name}</b><small>${stage} · ${DIFFS[diff].name} · Cambia el lunes</small></span>
     <span aria-hidden="true">›</span></button></div>`, () => trigger?.focus({preventScroll:true}));
@@ -13088,15 +13088,22 @@ function checkReto(win){
   if (out.length){ try { localStorage.setItem('digibonk3d-reto', JSON.stringify(st)); } catch(e){} }
   return out;
 }
+const BOSS_CIRCUIT_STAGES = [
+  {map:'bosque', zone:0},    // Andromon
+  {map:'desierto', zone:0},  // Scorpiomon
+  {map:'bosque', zone:1},    // Piedmon
+  {map:'desierto', zone:1},  // MetalEtemon
+  {map:'nevado', zone:0}     // Machinedramon
+];
+const BOSS_CIRCUIT_ZONES = BOSS_CIRCUIT_STAGES.map(({map, zone}, i, stages) => {
+  const stage = MAPS[map].zones[zone];
+  return {...stage, boss:{...stage.boss, final:i === stages.length - 1, retreatAt:0, resume:false}};
+});
 const BOSS_CIRCUIT = {
   id:'circuito-jefes', name:'Circuito de jefes',
-  d:'Derrota a Andromon, Scorpiomon y Machinedramon. Entre combates, cruza el portal para recuperar un 25% de vida y elegir una mejora.',
+  d:`${BOSS_CIRCUIT_ZONES.map(zone => zone.boss.name).join(' → ')}. Entre combates, cruza el portal para recuperar un 25% de vida y elegir una mejora.`,
   apply(){}
 };
-const BOSS_CIRCUIT_MAPS = ['bosque', 'desierto', 'nevado'];
-const BOSS_CIRCUIT_ZONES = BOSS_CIRCUIT_MAPS.map(map => MAPS[map].zones[0]).map((zone, i, zones) => ({
-  ...zone, boss:{...zone.boss, final:i === zones.length - 1, retreatAt:0, resume:false}
-}));
 const MODE_ROTATION_START = Date.UTC(2026, 10, 23);
 const MODE_ROTATION = [BOSS_CIRCUIT, ...WEEKLY_MODS];
 function weeklyMod(week = weekNum()){
