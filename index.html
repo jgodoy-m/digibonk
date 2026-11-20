@@ -2391,11 +2391,6 @@ html[lang] #overlay .end3 .mini-btn{background:var(--m-btn)!important;color:var(
 #overlay .realhub.hb .hm-msg{margin:0;align-self:flex-start;font-weight:800;font-size:13px;color:var(--m-text);text-shadow:none;background:var(--m-btn);border-radius:999px;padding:6px 14px;box-shadow:var(--m-btnsh)}
 #overlay .realhub.hb .hm-msg:empty{display:none}
 /* lateral */
-#overlay .realhub.hb .hb-side{display:flex;flex-direction:column;gap:10px;padding:0 0 14px;border:1px solid var(--m-cardline);border-radius:22px;background:var(--m-card);color:var(--m-text);overflow:hidden;box-shadow:var(--m-shadow);min-width:0}
-#overlay .realhub.hb .hb-side-h{text-align:left;display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--m-head);color:#fff}
-#overlay .realhub.hb .hb-side-h i{font-style:normal;width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.22)}
-#overlay .realhub.hb .hb-side-h b{display:block;font-size:17px;font-weight:900}
-#overlay .realhub.hb .hb-side-h small{display:block;font-size:12px;font-weight:700;opacity:.9}
 #overlay .realhub.hb .hb-meter{display:block;height:8px;border-radius:4px;background:var(--m-line);overflow:hidden}
 #overlay .realhub.hb .hb-meter i{display:block;height:100%;background:var(--m-meter);border-radius:4px}
 #overlay .realhub.hb .hb-all{margin:2px 14px 0;height:42px;border:0;border-radius:999px;background:var(--m-tabon);color:var(--m-tabon-txt);font:900 14px/1 'Nunito',sans-serif}
@@ -2432,7 +2427,6 @@ html[lang] #overlay .end3 .mini-btn{background:var(--m-btn)!important;color:var(
   #overlay .realhub.hb .hb-bar{justify-content:center}
   #overlay .realhub.hb .hb-btn{padding:0 14px;height:40px;font-size:14px}
   #overlay .realhub.hb .hb-btn.hb-sq{width:40px;padding:0}
-  #overlay .realhub.hb .hb-side{width:100%}
   #overlay .realhub.hb .hb-legal{position:static;padding:0 0 10px}
 }
 /* Barra superior de los menús: mismas píldoras redondeadas que el menú principal */
@@ -2710,13 +2704,11 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
 .ps-card,.rg-card,.pz2,#overlay .end3,
 #overlay:not(.menu-mode)>:is(.picker-screen.cl4,.picker-screen.ms,.pk2-starter,.settings,.help-box,.lab-screen),
 .approved-info-scrim .approved-info-dialog,
-#overlay .realhub.hb .hb-side,.pl4 :is(.pl5-hero,.pl5-panel),.tr11 :is(.tr11-loot-board,.tr11-side){border-radius:var(--sh-big)!important}
 /* Tarjetas medianas y paneles internos */
 .ps-panel,.ps-hero,#overlay .realhub.hb :is(.hb-enc,.hb-tile),.pz2-profile,#overlay .end3 .end3-cells span,.cl4-skin,.cl4-item,.ms-card,.lab-card,.pl4 .pl4-stat,.pz2-stats div{border-radius:var(--sh-mid)!important}
 .ps-atk,.ps-pill,.ps-row,.pz2-confirm{border-radius:var(--sh-sm)!important}
 /* Cabeceras de panel con el final cortado en ángulo */
-.ps-ph,.pl4 .pl5-panel>h3,#overlay .realhub.hb .hb-side-h{clip-path:polygon(0 0,100% 0,100% 40%,calc(100% - 26px) 100%,0 100%)}
-#overlay .realhub.hb .hb-side-h{padding-right:34px}
+.ps-ph,.pl4 .pl5-panel>h3{clip-path:polygon(0 0,100% 0,100% 40%,calc(100% - 26px) 100%,0 100%)}
 /* Botones de color en diagonal (el texto se endereza) */
 #overlay .realhub.hb :is(.hb-play,.hb-mode,.hb-event),.rg-go,.pz2-go,#overlay .end3 .end3-go,#overlay:not(.menu-mode) .ps-go{transform:skewX(var(--sh-skew))!important;border-radius:var(--sh-mid)!important}
 #overlay .realhub.hb :is(.hb-play,.hb-mode,.hb-event)>*,.rg-go>*,.pz2-go>*,#overlay .end3 .end3-go>*,#overlay:not(.menu-mode) .ps-go>*{transform:skewX(calc(-1 * var(--sh-skew)))}
@@ -2781,7 +2773,6 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
 #overlay .realhub.hb .hb-btn.hm-soon i{filter:grayscale(1);opacity:.6}
 #overlay .realhub.hb .hb-tile{min-width:0!important;overflow:hidden}
 #overlay .realhub.hb .hb-tile :is(b,small){max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#overlay .realhub.hb .hb-side{gap:12px!important}
 @media(max-width:1100px){#overlay .realhub.hb .hb-main{grid-template-columns:minmax(0,1.3fr) minmax(250px,1fr)!important}}
 @media(max-width:760px){
   #overlay .realhub.hb .hb-main{padding:12px 14px 40px!important;gap:18px!important}
@@ -2804,7 +2795,6 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
 #overlay .realhub.hb .hb-play .hb-dev{position:relative!important;left:auto!important;top:auto!important;width:66px!important;height:66px!important;flex:none;box-shadow:0 4px 0 rgba(0,0,0,.2),inset 0 -4px 0 rgba(0,0,0,.08)}
 #overlay .realhub.hb .hb-play-txt{max-width:calc(76% - 80px)}
 #overlay .realhub.hb .hb-play-txt small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#overlay .realhub.hb .hb-rank span{text-align:left}
 #overlay .realhub.hb .hb-play-txt b{font-size:clamp(32px,2.6vw,42px)!important}
 #overlay .realhub.hb .hb-play-txt small{font-size:12.5px!important;line-height:1.25}
 #overlay .realhub.hb .hb-play-face{right:2px!important;bottom:4px!important;width:28%!important;height:92%!important;place-items:center!important}
@@ -2819,37 +2809,105 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
 #overlay .realhub.hb .hb-tiles .t5{--tc:#f0a020}
 #overlay .realhub.hb .hb-bar{flex-wrap:nowrap!important}
 #overlay .realhub.hb .hb-bar .hb-btn{flex:none}
-/* Tabla de récords */
-#overlay .realhub.hb .hb-lb{gap:10px!important;padding-bottom:14px!important}
-#overlay .realhub.hb .hb-lb .hb-side-h{background:var(--m-cta)!important;padding:14px 34px 14px 16px!important}
-#overlay .realhub.hb .hb-lb .hb-side-h b{font-size:19px!important;text-shadow:0 2px 0 var(--m-cta-sh)}
-#overlay .realhub.hb .hb-tabs{display:flex;gap:4px;margin:0 12px;padding:4px;border-radius:999px;background:var(--m-sunk)}
-#overlay .realhub.hb .hb-tabs button{flex:1;height:32px;border:0;border-radius:999px;background:transparent;color:var(--m-mute);font:900 12.5px/1 'Nunito',sans-serif;cursor:pointer}
-#overlay .realhub.hb .hb-tabs button.on{background:var(--m-card);color:var(--m-text);box-shadow:0 2px 6px rgba(0,0,0,.15)}
-#overlay .realhub.hb .hb-lbrow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 12px}
-#overlay .realhub.hb .hb-lbrow span{padding:7px 4px;border-radius:12px;background:var(--m-sunk);text-align:center}
-#overlay .realhub.hb .hb-lbrow b{display:block;font-size:16px;font-weight:900;font-variant-numeric:tabular-nums}
-#overlay .realhub.hb .hb-lbrow small{display:block;font-size:10px;font-weight:800;color:var(--m-mute)}
-#overlay .realhub.hb .hb-rank{list-style:none;margin:0 12px;padding:0;display:flex;flex-direction:column;gap:5px}
-#overlay .realhub.hb .hb-rank li{display:flex;align-items:center;gap:9px;padding:5px 9px;border-radius:12px;background:var(--m-rowbg)}
-#overlay .realhub.hb .hb-rank em{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:900 11px/1 'Nunito',sans-serif;font-style:normal;background:var(--m-tabon);color:var(--m-tabon-txt)}
-#overlay .realhub.hb .hb-rank img{flex:none;width:28px;height:28px;border-radius:50%;object-fit:cover;background:var(--m-sunk)}
-#overlay .realhub.hb .hb-rank span{flex:1;min-width:0}
-#overlay .realhub.hb .hb-rank b{display:block;font-size:13px;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#overlay .realhub.hb .hb-rank span small{display:block;font-size:10.5px;font-weight:700;color:var(--m-mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#overlay .realhub.hb .hb-rank strong{text-align:right;font:900 14px/1 'Nunito',sans-serif;font-variant-numeric:tabular-nums}
-#overlay .realhub.hb .hb-rank strong small{display:block;font-size:9.5px;font-weight:800;color:var(--m-mute);margin-top:2px}
-#overlay .realhub.hb .hb-rank li.top{padding:9px 10px;border:2px solid #ffd37a;background:linear-gradient(90deg,rgba(255,194,79,.22),rgba(255,194,79,.06))}
-#overlay .realhub.hb .hb-rank li.p2{border-color:#cfd8e6;background:linear-gradient(90deg,rgba(180,195,220,.25),rgba(180,195,220,.06))}
-#overlay .realhub.hb .hb-rank li.p3{border-color:#f0b08a;background:linear-gradient(90deg,rgba(240,165,107,.22),rgba(240,165,107,.06))}
-#overlay .realhub.hb .hb-rank li.top img{width:44px;height:44px;box-shadow:0 0 0 3px #fff}
-#overlay .realhub.hb .hb-rank li.top b{font-size:15px}
-#overlay .realhub.hb .hb-rank li.top strong{font-size:19px}
-#overlay .realhub.hb .hb-rank li.p1 em{background:#ffc24f;color:#5a3500}
-#overlay .realhub.hb .hb-rank li.p2 em{background:#cfd8e6;color:#2a3550}
-#overlay .realhub.hb .hb-rank li.p3 em{background:#f0a56b;color:#5a2600}
-#overlay .realhub.hb .hb-rank .hb-empty{justify-content:center;font-size:13px;font-weight:700;color:var(--m-mute);padding:16px 10px}
-#overlay .realhub.hb .hb-lb .hb-all{margin:2px 12px 0!important;background:linear-gradient(180deg,#5b8cff,#3a5fe0)!important;color:#fff!important;box-shadow:0 4px 0 #23409e}
+/* Digivice de récords: la carcasa PNG rodea la pantalla y sus controles reales. */
+#overlay .realhub.hb .hb-record-device{
+  position:relative; width:min(100%,380px); min-height:400px; aspect-ratio:0.85;
+  justify-self:center; align-self:center; margin-inline:auto;
+  background:url('ui/hub/records-digivice.png') center/100% 100% no-repeat;
+}
+#overlay .realhub.hb .hb-record-screen{
+  --records-surface:#0d1c30; --records-ink:#e9f9ff; --records-muted:#abc8db;
+  --records-well:#162e46; --records-line:#36566f; --records-active:#9de8fa;
+  position:absolute; inset:14.8% 7.8% 17%; display:flex; flex-direction:column; gap:5px;
+  padding:8px; border:1px solid var(--records-line); border-radius:8px; min-width:0;
+  background:var(--records-surface); color:var(--records-ink); text-align:left;
+  box-shadow:inset 0 0 16px #1e58752f; color-scheme:dark;
+}
+html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
+  --records-surface:#e8f9fc; --records-ink:#132d43; --records-muted:#395b72;
+  --records-well:#d5edf4; --records-line:#99bacb; --records-active:#173f64;
+  color-scheme:light;
+}
+#overlay .realhub.hb .hb-record-head{
+  display:flex; align-items:center; gap:7px; min-width:0;
+  padding:0 0 5px; border-bottom:1px solid var(--records-line);
+}
+#overlay .realhub.hb .hb-record-head img{width:31px;height:31px;flex:none;object-fit:contain}
+#overlay .realhub.hb .hb-record-head h2{
+  margin:0; color:var(--records-ink); font:900 17px/1.05 'Nunito',sans-serif;
+}
+#overlay .realhub.hb .hb-record-head small{
+  display:block; margin-top:2px; color:var(--records-muted); font-size:11px;
+}
+#overlay .realhub.hb .hb-record-screen .hb-tabs{
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:3px;
+  padding:2px; border:1px solid var(--records-line); border-radius:6px; background:var(--records-well);
+}
+#overlay .realhub.hb .hb-record-screen .hb-tabs button{
+  min-height:32px; min-width:0; border:1px solid transparent; border-radius:4px;
+  padding:3px 1px; background:none; color:var(--records-muted);
+  font:900 11px/1.1 'Nunito',sans-serif; overflow-wrap:anywhere; cursor:pointer;
+}
+#overlay .realhub.hb .hb-record-screen .hb-tabs button[aria-selected=true]{
+  background:var(--records-active); color:var(--records-surface);
+}
+#overlay .realhub.hb .hb-record-screen .hb-lbrow{
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:3px;
+}
+#overlay .realhub.hb .hb-record-screen .hb-lbrow span{
+  min-width:0; padding:4px 2px; border-radius:4px; background:var(--records-well); text-align:center;
+}
+#overlay .realhub.hb .hb-record-screen .hb-lbrow b{
+  display:block; font-size:clamp(12px,1.12vw,16px); font-weight:900; line-height:1.05;
+  font-variant-numeric:tabular-nums; overflow-wrap:anywhere;
+}
+#overlay .realhub.hb .hb-record-screen .hb-lbrow small{
+  display:block; margin-top:3px; color:var(--records-muted); font-size:10px; line-height:1.15; overflow-wrap:anywhere;
+}
+#overlay .realhub.hb .hb-record-list{
+  flex:1; min-height:32px; overflow:auto; overscroll-behavior:contain;
+}
+#overlay .realhub.hb .hb-record-screen .hb-rank{
+  list-style:none; margin:0; padding:0; display:grid; gap:3px;
+}
+#overlay .realhub.hb .hb-record-screen .hb-rank li{
+  display:flex; align-items:center; gap:5px; min-width:0; padding:4px;
+  border-radius:4px; background:var(--records-well);
+}
+#overlay .realhub.hb .hb-record-screen .hb-rank em{
+  flex:none; width:19px; height:19px; border-radius:50%; display:grid; place-items:center;
+  color:var(--records-surface); background:var(--records-active); font:900 10px/1 'Nunito',sans-serif;
+}
+#overlay .realhub.hb .hb-record-screen .hb-rank li.p1 em{background:#ffd37a;color:#513300}
+#overlay .realhub.hb .hb-record-screen .hb-rank li.p2 em{background:#d8e4ec;color:#1d3549}
+#overlay .realhub.hb .hb-record-screen .hb-rank li.p3 em{background:#ffc39a;color:#582800}
+#overlay .realhub.hb .hb-record-screen .hb-rank img{flex:none;width:24px;height:24px;object-fit:contain}
+#overlay .realhub.hb .hb-record-screen .hb-rank span{flex:1;min-width:0}
+#overlay .realhub.hb .hb-record-screen .hb-rank b{display:block;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#overlay .realhub.hb .hb-record-screen .hb-rank span small{
+  display:block; color:var(--records-muted); font-size:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+#overlay .realhub.hb .hb-record-screen .hb-rank strong{
+  text-align:right; font:900 12px/1.1 'Nunito',sans-serif; font-variant-numeric:tabular-nums;
+}
+#overlay .realhub.hb .hb-record-screen .hb-rank strong small{display:block;color:var(--records-muted);font-size:10px}
+#overlay .realhub.hb .hb-record-screen .hb-rank .hb-empty{
+  justify-content:center; text-align:center; color:var(--records-muted); padding:7px; font-size:11px;
+}
+#overlay .realhub.hb .hb-record-screen .hb-all{
+  flex:none; min-height:32px; margin:0; padding:4px 6px; border:1px solid var(--records-line);
+  border-radius:5px; background:var(--records-active); color:var(--records-surface);
+  font:900 11.5px/1.2 'Nunito',sans-serif; cursor:pointer;
+}
+#overlay .realhub.hb .hb-record-screen :is(button,.hb-record-list):focus-visible{
+  outline:2px solid var(--records-ink); outline-offset:-2px;
+}
+@media (pointer:coarse){
+  #overlay .realhub.hb .hb-record-screen :is(.hb-tabs button,.hb-all){min-height:44px}
+}
+@media (orientation:landscape) and (max-height:500px){
+  #overlay .realhub.hb .hb-record-device{margin-block:12px}
+}
 @media(max-width:1100px){#overlay .realhub.hb .hb-main{grid-template-columns:minmax(0,1.3fr) minmax(260px,1fr)!important}}
 @media(max-width:760px){
   #overlay .realhub.hb .hb-modes{grid-template-columns:1fr .62fr!important;row-gap:10px!important}
@@ -3395,17 +3453,19 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{
 .trainer-device h3{margin:0 0 5px;font-size:18px;line-height:1.2;text-align:center}
 .trainer-device-shell{position:relative;aspect-ratio:1752 / 897;min-height:154px;isolation:isolate}
 .trainer-device-shell>img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;filter:drop-shadow(0 6px 7px #18353640)}
-.trainer-device-screen{position:absolute;inset:19.7% 14.3% 28.8%;display:grid;grid-template-columns:auto minmax(0,1fr) auto;
-  align-items:center;gap:4px;box-sizing:border-box;padding:5px clamp(4px,1vw,12px);border-radius:clamp(6px,1.4vw,17px);
-  background:linear-gradient(152deg,#dbf7e7,#b5e1d6);color:#113f38;text-align:center}
-.trainer-device-screen button{width:36px;height:44px;padding:0;border:1px solid #4a887a;border-radius:10px;background:#e9fff1;
-  color:#164a3e;font:900 22px/1 system-ui;cursor:pointer}
-.trainer-device-screen button:hover{background:#fff}
-.trainer-device-screen button:focus-visible{outline:3px solid #1b4d4b;outline-offset:2px}
-.trainer-device-view{min-width:0;line-height:1.1;overflow-wrap:anywhere}
-.trainer-device-view>strong{display:block;font-size:clamp(13px,2vw,21px)}
-.trainer-device-values{display:flex;justify-content:center;gap:4px 10px;flex-wrap:wrap;margin-top:4px;font-size:clamp(12px,1.6vw,17px);font-weight:850;font-variant-numeric:tabular-nums}
-.trainer-device-view>small{display:block;margin-top:3px;font-size:clamp(11px,1.3vw,13px);color:#25564c}
+.trainer-device-screen{position:absolute;inset:19.7% 14.3% 28.8%;display:grid;align-items:center;box-sizing:border-box;
+  padding:4px 7px;border-radius:clamp(6px,1.4vw,17px);background:linear-gradient(152deg,#dbf7e7,#b5e1d6);color:#113f38}
+.trainer-device-view{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;gap:6px;
+  text-align:center;min-width:0;margin:0}
+.trainer-device-view[hidden]{display:none}
+.trainer-device-view dt{font-size:clamp(11px,1.25vw,15px);font-weight:800;line-height:1.15;overflow-wrap:anywhere}
+.trainer-device-view dd{margin:3px 0 0;font-size:clamp(18px,3vw,36px);font-weight:900;line-height:1.05;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.trainer-device-controls{position:absolute;inset:76% 10% 8%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;gap:5px}
+.trainer-device-controls button{min-height:36px;padding:4px 2px;border:1px solid #a69d8c;border-radius:9px;background:#fff7e9;
+  color:#294741;box-shadow:0 2px 0 #a69d8c;font:850 clamp(10px,1.2vw,14px)/1.1 'Nunito',system-ui;cursor:pointer;overflow-wrap:anywhere}
+.trainer-device-controls button[aria-pressed="true"]{border-color:#155e52;background:#155e52;color:#fff;box-shadow:0 2px 0 #0a473e}
+.trainer-device-controls button[aria-pressed="false"]:hover{background:#fff}
+.trainer-device-controls button:focus-visible{outline:3px solid #155e52;outline-offset:2px}
 .trainer-record{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;font-size:12px;padding:8px 0}
 .trainer-record + .trainer-record,.trainer-goal + .trainer-goal{border-top:1px solid var(--m-line)}
 .trainer-record span:first-child{min-width:0;overflow-wrap:anywhere}
@@ -3528,8 +3588,7 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{
   .trainer-hero{gap:12px;padding:14px}
   .trainer-screen .trainer-hero #plChange{line-height:1.2;font-size:13px!important}
   .trainer-stat{gap:6px}
-  .trainer-device-screen button{width:29px;height:44px}
-  .trainer-device-values{gap:3px 5px}
+  .trainer-device-shell{min-height:182px}
   .trainer-run{grid-template-columns:minmax(0,1fr) auto;gap:4px 7px}
   .trainer-run span:nth-child(2){grid-row:2}
   .trainer-run strong{grid-column:2;grid-row:1/3}
@@ -5358,10 +5417,32 @@ function hideOverlay(){ overlay.classList.add('hidden'); refreshTopbar(); }
 
 // Récords locales (las 10 mejores partidas, guardadas en este navegador)
 function getRecords(){
-  try { return JSON.parse(localStorage.getItem('digibonk3d-records') || '[]'); } catch(e){ return []; }
+  const records = loadJSON('digibonk3d-records', []);
+  return Array.isArray(records) ? records.filter(Boolean) : [];
+}
+// Conserva las victorias más rápidas aunque salgan del historial de las diez partidas.
+function timeTrialMarks(saved, runs){
+  return Object.fromEntries(MAP_ORDER.map(map => {
+    const previous = Number(saved?.[map]);
+    let fastest = Number.isFinite(previous) && previous > 0 ? previous : Infinity;
+    for (const run of runs){
+      if (!run?.win || run.map !== map || run.weekly || run.wave) continue;
+      const time = Number(run.t);
+      if (Number.isFinite(time) && time > 0) fastest = Math.min(fastest, time);
+    }
+    return [map, Number.isFinite(fastest) ? fastest : 0];
+  }));
+}
+function timeTrialSummary(times){
+  const maps = MAP_ORDER.map(map => [map, times[map]]);
+  return {
+    maps,
+    completed: maps.filter(([, seconds]) => seconds > 0).length,
+    total: maps.reduce((sum, [, seconds]) => sum + seconds, 0)
+  };
 }
 function saveRecord(win){
-  const stored = getRecords(), list = Array.isArray(stored) ? stored.filter(Boolean) : [];
+  const list = getRecords();
   const run = {name: stageName(g.ch.id, g.ch.evolved), key: g.ch.id, t: Math.floor(g.t), kills: g.kills, lvl: g.p.lvl, win, map: g.map};
   if (g.mode === 'surv') run.wave = g.wave || 1;
   const best = {...loadJSON(TRAINER_RECORDS_KEY, {})};
@@ -5372,7 +5453,9 @@ function saveRecord(win){
     list.push(run);
     list.sort((a, b) => b.t - a.t || b.kills - a.kills);
   }
-  best.recent = [run, ...(Array.isArray(best.recent) ? best.recent : [])].slice(0, 6);
+  const recent = Array.isArray(best.recent) ? best.recent : [];
+  best.timeTrial = timeTrialMarks(best.timeTrial, [...list, ...recent]);
+  best.recent = [run, ...recent].slice(0, 6);
   try {
     if (!g.weekly) localStorage.setItem('digibonk3d-records', JSON.stringify(list.slice(0, 10)));
     localStorage.setItem(TRAINER_RECORDS_KEY, JSON.stringify(best));
@@ -5776,8 +5859,9 @@ function showSelect(){
   const recs = getRecords();
   const st = loadJSON('digibonk3d-stats', {});
   const kills = Object.values(st).reduce((a, x) => a + (x.kills || 0), 0);
-  const bestT = recs.reduce((a, r) => Math.max(a, r.t), 0);
-  const bestL = recs.reduce((a, r) => Math.max(a, r.lvl || 0), 0);
+  const savedRecords = loadJSON(TRAINER_RECORDS_KEY, {});
+  const recentRecords = Array.isArray(savedRecords.recent) ? savedRecords.recent : [];
+  const trialTimes = timeTrialMarks(savedRecords.timeTrial, [...recs, ...recentRecords]);
   const d = loadDaily();
   const currentRuns = Math.min(DAILY.runsGoal, d.runs || 0);
   const safeText = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -5854,12 +5938,23 @@ function showSelect(){
           <img class="rw-character rw-agumon" src="ui/personaje_aprobado_agumon.png" alt="">
           <img class="rw-character rw-gabumon" src="ui/personaje_aprobado_gabumon.png" alt="">
         </div>
-        <aside class="hb-side hb-lb" aria-label="Tus récords">
-          <div class="hb-side-h"><i>🏆</i><span><b>Tus récords</b><small>${recs.length ? recs.length + ' partidas guardadas' : 'Juega para entrar en la tabla'}</small></span></div>
-          <div class="hb-tabs" role="tablist"><button type="button" role="tab" class="on" data-k="t">⏱ Tiempo</button><button type="button" role="tab" data-k="lvl">⭐ Nivel</button><button type="button" role="tab" data-k="kills">💥 Bajas</button></div>
-          <div class="hb-lbrow"><span><b>${fmtTime(bestT)}</b><small>Mejor tiempo</small></span><span><b>${bestL}</b><small>Mejor nivel</small></span><span><b>${kills.toLocaleString('es-ES')}</b><small>Bajas totales</small></span></div>
-          <ol class="hb-rank" id="hbRank"></ol>
-          <button type="button" class="hb-all" id="rhRecords">Ver todos los récords</button>
+        <aside class="hb-record-device" aria-labelledby="hbRecordsTitle">
+          <div class="hb-record-screen">
+            <header class="hb-record-head">
+              <img src="ui/hub/digivice/ranking.png" alt="">
+              <div><h2 id="hbRecordsTitle">Tus récords</h2><small>${recs.length ? recs.length + ' partidas guardadas' : 'Juega para entrar en la tabla'}</small></div>
+            </header>
+            <div class="hb-tabs" role="tablist" aria-label="Ordenar récords">
+              <button type="button" role="tab" id="hbRecordsKills" aria-selected="true" aria-controls="hbRecordsPanel" data-k="kills">Bajas</button>
+              <button type="button" role="tab" id="hbRecordsTrial" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="trial">Contrarreloj</button>
+              <button type="button" role="tab" id="hbRecordsSurvival" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="survival">Supervivencia</button>
+            </div>
+            <div class="hb-lbrow" id="hbRecordsSummary" aria-live="polite"></div>
+            <div class="hb-record-list" id="hbRecordsPanel" role="tabpanel" aria-labelledby="hbRecordsKills" tabindex="0">
+              <ol class="hb-rank" id="hbRank"></ol>
+            </div>
+            <button type="button" class="hb-all" id="rhRecords">Ver todos los récords</button>
+          </div>
         </aside>
         <footer class="hb-legal">${t('legal')} <button type="button" class="hb-credits" id="hmCredits">Créditos</button></footer>
       </section>
@@ -5919,7 +6014,7 @@ function showSelect(){
   document.getElementById('rhApp').onclick=()=>installEvt?installApp():openInfo('app');
   document.getElementById('rhFullscreen').onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{})};
   bindMenuFX();
-  const openInfo=type=>{
+  const openInfo=(type,trigger)=>{
     const host=document.getElementById('realModalHost');if(!host)return;
     let title,content;
     if(type==='app'){
@@ -5935,20 +6030,75 @@ function showSelect(){
     }
     host.innerHTML=`<div class="approved-info-scrim"><section class="approved-info-dialog" role="dialog" aria-modal="true" aria-label="${safeText(title)}"><header><h2>${safeText(title)}</h2><button type="button" id="realClose">✕</button></header>${content}${type==='records'&&CLOUD_ON?'<button type="button" id="realRank">Ranking por regiones</button>':''}<button type="button" id="realDone">Volver al menú</button></section></div>`;
     { const rk=host.querySelector('#realRank'); if(rk) rk.onclick=()=>{host.innerHTML='';showRanking('select');}; }
-    const close=()=>{host.innerHTML=''};
+    const close=()=>{host.innerHTML='';trigger?.focus()};
     host.querySelector('#realClose').onclick=close;host.querySelector('#realDone').onclick=close;
     host.querySelector('.approved-info-scrim').onclick=e=>{if(e.target===e.currentTarget)close()};
     host.querySelector('#realClose').focus();
   };
-  document.getElementById('rhRecords').onclick=()=>openInfo('records');
-  { const ol = document.getElementById('hbRank'), tabs = document.querySelectorAll('.hb-tabs button');
+  document.getElementById('rhRecords').onclick=event=>openInfo('records',event.currentTarget);
+  { const ol = document.getElementById('hbRank'), panel = document.getElementById('hbRecordsPanel');
+    const tabs = [...document.querySelectorAll('.hb-record-screen .hb-tabs button')];
+    const summary = document.getElementById('hbRecordsSummary');
     const recKey = r => r.key || Object.keys(CHARS).find(k => CHARS[k].name === r.name || (EVO_LINE[k] || []).some(e => e.name === r.name)) || 'agumon';
-    const val = (r, k) => k === 't' ? fmtTime(r.t) : k === 'lvl' ? 'Nv ' + (r.lvl || 1) : (r.kills || 0).toLocaleString('es-ES');
-    const unit = k => k === 't' ? 'tiempo' : k === 'lvl' ? 'nivel' : 'bajas';
-    const draw = k => { const list = recs.slice().sort((a, b) => (b[k] || 0) - (a[k] || 0) || b.t - a.t).slice(0, 7);
-      ol.innerHTML = list.map((r, i) => `<li class="${i < 3 ? 'top p' + (i + 1) : ''}"><em>${i + 1}</em><img src="${charIcon(recKey(r))}" alt="" onerror="this.style.visibility='hidden'"><span><b>${safeText(r.name)}</b><small>${r.win ? 'Victoria' : 'Nivel ' + (r.lvl || 1)} · ${r.kills} bajas</small></span><strong>${val(r, k)}<small>${unit(k)}</small></strong></li>`).join('') || '<li class="hb-empty">Todavía no hay partidas. ¡Empieza una!</li>'; };
-    tabs.forEach(b => b.onclick = () => { tabs.forEach(x => x.classList.toggle('on', x === b)); draw(b.dataset.k); });
-    draw('t'); }
+    const stat = (label, value) => `<span><b>${safeText(value)}</b><small>${safeText(label)}</small></span>`;
+    const empty = '<li class="hb-empty">Todavía no hay partidas. ¡Empieza una!</li>';
+    const number = value => Number(value || 0).toLocaleString(LANG);
+    const time = seconds => seconds > 0 ? fmtTime(seconds) : '—';
+    const row = (rank, name, value, key, note) => `<li class="p${rank}">
+      <em>${rank}</em>${key ? `<img src="${charIcon(key)}" alt="" onerror="this.style.visibility='hidden'">` : ''}
+      <span><b>${safeText(name)}</b>${note ? `<small>${safeText(note)}</small>` : ''}</span>
+      <strong>${safeText(value)}</strong>
+    </li>`;
+    const draw = mode => {
+      if (mode === 'trial'){
+        const {maps, completed, total} = timeTrialSummary(trialTimes);
+        summary.innerHTML = stat(completed === maps.length ? 'Tiempo total' : 'Tiempo parcial', time(total))
+          + stat('Mapas completados', `${completed}/${maps.length}`);
+        ol.innerHTML = maps.map(([map, seconds], i) => row(i + 1, MAPS[map].name, time(seconds), '', seconds ? 'Completado' : 'Pendiente')).join('');
+        return;
+      }
+      if (mode === 'survival'){
+        const list = Object.keys(CHARS).map(key => [key, Number(survBest(key))])
+          .filter(([, seconds]) => Number.isFinite(seconds) && seconds > 0)
+          .sort((a, b) => b[1] - a[1]);
+        const bestWave = trainerBestWave(savedRecords.wave);
+        summary.innerHTML = stat('Mejor tiempo', time(list[0]?.[1])) + stat('Mejor oleada', bestWave || '—');
+        ol.innerHTML = list.slice(0, 7).map(([key, seconds], i) => row(i + 1, CHARS[key].name, time(seconds), key)).join('') || empty;
+        return;
+      }
+      const best = savedRecords.kills;
+      const list = best && !recs.some(run => run.key === best.key && run.map === best.map && run.t === best.t && run.kills === best.kills)
+        ? [...recs, best] : recs.slice();
+      list.sort((a, b) => b.kills - a.kills || b.t - a.t);
+      summary.innerHTML = stat('Bajas totales', number(kills)) + stat('Más bajas en una partida', list.length ? number(list[0].kills) : '—');
+      ol.innerHTML = list.slice(0, 7).map((run, i) => row(i + 1, run.name, number(run.kills), recKey(run), MAPS[run.map]?.name)).join('') || empty;
+    };
+    const selectTab = tab => {
+      tabs.forEach(button => {
+        const active = button === tab;
+        button.setAttribute('aria-selected', String(active));
+        button.tabIndex = active ? 0 : -1;
+      });
+      panel.setAttribute('aria-labelledby', tab.id);
+      draw(tab.dataset.k);
+      panel.scrollTop = 0;
+    };
+    tabs.forEach((tab, index) => {
+      tab.onclick = () => selectTab(tab);
+      tab.onkeydown = event => {
+        const target = {
+          ArrowLeft: (index + tabs.length - 1) % tabs.length,
+          ArrowRight: (index + 1) % tabs.length,
+          Home: 0,
+          End: tabs.length - 1
+        }[event.key];
+        if (typeof target !== 'number') return;
+        event.preventDefault();
+        selectTab(tabs[target]);
+        tabs[target].focus();
+      };
+    });
+    draw('kills'); }
   clearInterval(newsTimer);
 }
 // Guía «Cómo jugar»: diez pantallas en cuatro capítulos. Cada una tiene un vídeo grabado del propio juego
@@ -12874,21 +13024,13 @@ function trainerGoalPlan(id){
   if (id === 't_surv') return {key, mode:'surv'};
   return null;
 }
-function trainerRecordSummary(recs, roster){
-  const saved = loadJSON(TRAINER_RECORDS_KEY, {});
-  const time = recs.reduce((best, r) => r.t > (best?.t || 0) ? r : best, null);
-  const compare = (first, second, field) => +(second?.[field] || 0) > +(first?.[field] || 0) ? second : first;
-  let kills = recs.reduce((best, r) => compare(best, r, 'kills'), saved.kills);
-  let wave = recs.reduce((best, r) => compare(best, r, 'wave'), saved.wave);
-  for (const key of roster) kills = compare(kills, {kills:+statsOf(key).best || 0, name:CHARS[key].name}, 'kills');
-  for (const map of MAP_ORDER){
-    wave = compare(wave, {wave:+localStorage.getItem('digibonk3d-surv-wave-' + map) || 0, map}, 'wave');
-  }
-  return [
-    {label:'Mejor tiempo', mark:time, value:time ? fmtTime(time.t) : '—'},
-    {label:'Más bajas', mark:kills, value:kills?.kills || '—'},
-    {label:'Mejor oleada', mark:wave, value:wave?.wave || '—'}
-  ];
+function trainerBestKills(recs, roster, saved){
+  return Math.max(0, Number(saved?.kills) || 0,
+    ...recs.map(run => Number(run.kills) || 0), ...roster.map(key => Number(statsOf(key).best) || 0));
+}
+function trainerBestWave(saved){
+  return Math.max(0, Number(saved?.wave) || 0,
+    ...MAP_ORDER.map(map => Number(localStorage.getItem('digibonk3d-surv-wave-' + map)) || 0));
 }
 const TRAINER_RENAME_INTERVAL = 30 * 24 * 60 * 60 * 1000;
 function trainerRenameAvailableAt(){
@@ -12959,24 +13101,23 @@ function showPlayer(){
   const pins = pinned.map(id => unlocked.find(item => item.id === id)).map(item => `<details class="trainer-pin">
     <summary><span class="trainer-pin-art">${trainerAchievementArt(item, avatarSrc())}</span><b>${escHtml(item.name)}</b></summary>
     <p>${escHtml(item.how)}</p></details>`).join('');
-  const mapTimes = loadJSON('digibonk3d-maptime', {});
-  const recordViews = MAP_ORDER.map(map => {
-    const time = +mapTimes[map] || 0;
-    const wave = +localStorage.getItem('digibonk3d-surv-wave-' + map) || 0;
-    return {label:MAPS[map].name, values:[time ? fmtTime(time) : '', wave ? `Oleada ${number(wave)}` : ''].filter(Boolean)};
-  });
-  for (const {label, mark, value} of trainerRecordSummary(recs, chars)){
-    if (!mark) continue;
-    const detail = [mark.name, MAPS[mark.map]?.name].filter(Boolean).join(' · ');
-    recordViews.push({label, values:[typeof value === 'number' ? number(value) : value], detail});
-  }
-  const recordsScreen = recordViews.map(({label,values,detail}, index) => `<div class="trainer-device-view"${index ? ' hidden' : ''}>
-    <strong>${escHtml(label)}</strong>
-    ${values.length ? `<div class="trainer-device-values">${values.map(value => `<span>${escHtml(value)}</span>`).join('')}</div>` : '<small>Sin récord</small>'}
-    ${detail ? `<small>${escHtml(detail)}</small>` : ''}
-  </div>`).join('');
-  const recentRaw = loadJSON(TRAINER_RECORDS_KEY, {}).recent;
-  const recent = Array.isArray(recentRaw) ? recentRaw.filter(r => r && Number.isFinite(r.t)).slice(0, 5) : [];
+  const savedRecords = loadJSON(TRAINER_RECORDS_KEY, {});
+  const recentRuns = Array.isArray(savedRecords.recent) ? savedRecords.recent.filter(r => r && Number.isFinite(r.t)) : [];
+  const trial = timeTrialSummary(timeTrialMarks(savedRecords.timeTrial, [...recs, ...recentRuns]));
+  const bestKills = trainerBestKills(recs, chars, savedRecords.kills);
+  const bestWave = trainerBestWave(savedRecords.wave);
+  const survival = loadJSON('digibonk3d-surv', {});
+  const bestSurvival = Math.max(0, ...chars.map(key => Number(survival[key]) || 0));
+  const time = seconds => seconds > 0 ? fmtTime(Math.floor(seconds)) : '—';
+  const recordModes = [
+    {id:'kills', name:'Bajas', values:[['Bajas totales', number(sum('kills'))], ['Más bajas en una partida', bestKills ? number(bestKills) : '—']]},
+    {id:'trial', name:'Contrarreloj', values:[[trial.completed === trial.maps.length ? 'Tiempo total' : 'Tiempo parcial', time(trial.total)], ['Mapas completados', `${trial.completed}/${trial.maps.length}`]]},
+    {id:'survival', name:'Supervivencia', values:[['Mejor tiempo', time(bestSurvival)], ['Mejor oleada', bestWave ? number(bestWave) : '—']]}
+  ];
+  const recordsScreen = recordModes.map(({id,values}, index) => `<dl class="trainer-device-view" data-record-view="${id}"${index ? ' hidden' : ''}>
+    ${values.map(([label,value]) => `<div><dt>${label}</dt><dd>${escHtml(value)}</dd></div>`).join('')}
+  </dl>`).join('');
+  const recent = recentRuns.slice(0, 5);
   const lastRuns = recent.map(r => `<div class="trainer-record trainer-run">
     <span><b data-no-i18n>${escHtml(r.name || '—')}</b><small>${escHtml(MAPS[r.map]?.name || '')}</small></span>
     <span>${r.weekly ? 'Reto semanal · ' : ''}${r.wave ? `Oleada ${number(r.wave)}` : r.win ? 'Victoria' : 'Derrota'} · ${number(+r.kills || 0)} bajas</span>
@@ -13017,10 +13158,9 @@ function showPlayer(){
             <h3 id="trainerDeviceHeading">Récords</h3>
             <div class="trainer-device-shell">
               <img src="ui/trainer-digivice.png" alt="" width="898" height="460">
-              <div class="trainer-device-screen" id="trainerDeviceScreen">
-                <button type="button" id="trainerRecordPrev" aria-label="Récord anterior">‹</button>
-                <div aria-live="polite" aria-atomic="true">${recordsScreen}</div>
-                <button type="button" id="trainerRecordNext" aria-label="Récord siguiente">›</button>
+              <div class="trainer-device-screen" id="trainerDeviceScreen" aria-live="polite" aria-atomic="true">${recordsScreen}</div>
+              <div class="trainer-device-controls" id="trainerDeviceControls" role="group" aria-label="Categorías de récords">
+                ${recordModes.map(({id,name}, index) => `<button type="button" data-record-mode="${id}" aria-pressed="${index === 0}" aria-controls="trainerDeviceScreen">${name}</button>`).join('')}
               </div>
             </div>
           </section>
@@ -13047,15 +13187,12 @@ function showPlayer(){
     </main>`);
   document.getElementById('plBack').onclick = showSelect;
   document.getElementById('plChange').onclick = () => openCustomizer();
-  const recordsDisplay = [...document.getElementById('trainerDeviceScreen').querySelectorAll('.trainer-device-view')];
-  let recordPage = 0;
-  const browseRecords = step => {
-    recordsDisplay[recordPage].hidden = true;
-    recordPage = (recordPage + step + recordsDisplay.length) % recordsDisplay.length;
-    recordsDisplay[recordPage].hidden = false;
-  };
-  document.getElementById('trainerRecordPrev').onclick = () => browseRecords(-1);
-  document.getElementById('trainerRecordNext').onclick = () => browseRecords(1);
+  const recordsDisplay = [...document.getElementById('trainerDeviceScreen').querySelectorAll('[data-record-view]')];
+  const recordButtons = [...document.getElementById('trainerDeviceControls').querySelectorAll('button')];
+  recordButtons.forEach(button => button.onclick = () => {
+    for (const view of recordsDisplay) view.hidden = view.dataset.recordView !== button.dataset.recordMode;
+    for (const control of recordButtons) control.setAttribute('aria-pressed', String(control === button));
+  });
   const pinsButton = document.getElementById('trainerPins');
   pinsButton.onclick = () => openCustomizer('pins', pinsButton);
   const playGoal = document.getElementById('trainerGoalPlay');
