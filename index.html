@@ -1566,16 +1566,11 @@ body:has(.tr11) #hudTop{display:none!important}
 .enc-row{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(19,41,77,.65);border:1px solid #2c4a78;font-size:14px;line-height:1.35}
 .enc-row b{font-size:18px;text-align:center}
 .enc-row span{text-align:left}
-.ach-prog{display:flex;flex-direction:column;align-items:flex-end;gap:3px;font-style:normal}
 .enc-row small{color:#b9f6ca;font-weight:700;white-space:nowrap}
 .enc-row.done{border-color:#7cf29c;opacity:.85}
 .enc-row.done span{text-decoration:line-through}
 .enc-row.done span strong{text-decoration:none}
 .enc-note{font-size:12px;color:#9fb3d1;margin:6px 0 0}
-.ach-bar{display:inline-block;width:70px;height:6px;border-radius:3px;background:#22385e;overflow:hidden;vertical-align:middle}
-.ach-bar u{display:block;height:100%;background:#ffd54f}
-.ach-stats{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:#cdd5e6;margin-bottom:6px}
-.ach-stats b{color:#ffd54f;margin-left:4px}
 /* Digimon de apoyo (selector) */
 /* ===================== HUD en partida · estilo Material (superficies, elevación, color por función) ===================== */
 :root{--h-surf:rgba(14,18,30,.74);--h-surf2:rgba(255,255,255,.07);--h-line:rgba(255,255,255,.10);--h-txt:#eef3ff;--h-mut:#a9b6d3;
@@ -2205,8 +2200,76 @@ html[lang] #overlay:not(.menu-mode) .mini-btn.danger{border-radius:99px!importan
 .approved-info-dialog .enc-row{background:var(--m-sunk)!important;border:1px solid var(--m-line)!important;border-radius:12px!important;color:var(--m-text)!important}
 .approved-info-dialog :is(b,strong,span,p){color:var(--m-text)!important}
 .approved-info-dialog small{color:var(--m-good)!important}
-.approved-info-dialog :is(.approved-info-meter,.ach-bar){background:var(--m-line2)!important;border:0!important}
-.approved-info-dialog .ach-bar u,.approved-info-dialog .approved-info-meter i{background:var(--m-meter)!important}
+.approved-info-dialog .approved-info-meter{background:var(--m-line2)!important;border:0!important}
+.approved-info-dialog .approved-info-meter i{background:var(--m-meter)!important}
+#overlay:not(.hidden):has(>.achievement-page){display:block;padding:0;align-items:initial;overflow:auto}
+.achievement-page{
+  --ach-accent:#007980;--ach-epic:#7546ab;--ach-screen:#eaf4f6;--ach-glow:#cceae9;
+  min-height:100%;color:var(--m-text);font-family:'Nunito',system-ui,sans-serif;text-align:left;
+  background:radial-gradient(ellipse at 100% 0%,var(--ach-glow),transparent 65%),var(--ach-screen);
+}
+html[data-theme=oscuro] .achievement-page{
+  --ach-accent:#5ce0d6;--ach-epic:#d2a9ff;--ach-screen:#101925;--ach-glow:#173343;
+}
+.achievement-wrap{box-sizing:border-box;width:min(1180px,100%);margin:auto;padding:clamp(16px,3vw,38px)}
+.achievement-back,.achievement-filters button{
+  min-height:44px;border-radius:10px;padding:8px 15px;border:1px solid var(--m-line2);
+  background:var(--m-card);color:var(--m-text);font:850 14px 'Nunito',system-ui,sans-serif;cursor:pointer;
+}
+.achievement-back:hover,.achievement-filters button:hover{border-color:var(--ach-accent)}
+.achievement-hero{
+  box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) minmax(96px,28%);align-items:center;
+  gap:16px;margin-top:14px;padding:clamp(20px,4.4vw,56px);overflow:hidden;
+  min-height:220px;border:1px solid #498e9e;border-radius:22px;color:#fff;
+  background:linear-gradient(95deg,#081e35 4%,#0b2945ed 43%,#08244254 100%),url(ui/pantallas-carga/carga_bosque.webp) 60% 53%/cover;
+  box-shadow:0 8px 18px #06182f36;
+}
+#overlay .achievement-hero h1{margin:0 0 16px;color:inherit;text-shadow:none;letter-spacing:0;font:900 clamp(24px,4.8vw,54px)/1.1 'Orbitron','Nunito',system-ui,sans-serif;overflow-wrap:anywhere}
+.achievement-hero>img{width:min(100%,158px);height:auto;justify-self:center;filter:drop-shadow(0 12px 14px #041b34cc)}
+.achievement-total{display:flex;flex-wrap:wrap;align-items:baseline;gap:5px 10px;color:#deeffa}
+.achievement-total b{font-size:clamp(18px,2.5vw,30px);color:#fff;font-variant-numeric:tabular-nums}
+.achievement-page progress{
+  display:block;width:100%;height:7px;appearance:none;overflow:hidden;border:0;border-radius:99px;
+  background:var(--m-line2);accent-color:var(--ach-accent);
+}
+.achievement-page progress::-webkit-progress-bar{background:transparent}
+.achievement-page progress::-webkit-progress-value{background:var(--ach-accent);border-radius:99px}
+.achievement-page progress::-moz-progress-bar{background:var(--ach-accent);border-radius:99px}
+.achievement-hero progress{max-width:340px;height:9px;margin-top:10px;background:#193e53;--ach-accent:#71e5cd}
+.achievement-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--m-cardline);border:1px solid var(--m-cardline);border-radius:14px;overflow:hidden;margin:14px 0 24px}
+.achievement-stats>div{display:grid;gap:3px;background:var(--m-card);padding:10px clamp(8px,2vw,20px);overflow-wrap:anywhere}
+.achievement-stats span,.achievement-card p,.achievement-progress span{color:var(--m-soft);font-size:14px}
+.achievement-stats b{font-size:clamp(14px,2vw,20px);font-variant-numeric:tabular-nums}
+.achievement-filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
+.achievement-filters button span{margin-inline-start:6px;font-variant-numeric:tabular-nums}
+.achievement-filters button[aria-pressed=true]{background:var(--m-tabon);color:var(--m-tabon-txt);border-color:var(--m-tabon)}
+.achievement-group+.achievement-group{margin-top:24px}
+#overlay .achievement-group h2{display:flex;align-items:center;gap:10px;font-size:21px;margin:0 0 10px;color:inherit;text-shadow:none;letter-spacing:0}
+.achievement-group h2::after{content:'';flex:1;border-top:1px solid var(--m-line2)}
+.achievement-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:10px}
+.achievement-card{
+  --ach-card-accent:var(--ach-accent);display:grid;grid-template-columns:58px minmax(0,1fr);align-items:start;gap:11px;
+  min-width:0;padding:14px;background:var(--m-card);border:1px solid var(--m-cardline);
+  border-inline-start:3px solid var(--m-line2);border-radius:12px;
+}
+.achievement-card[data-tier=e]{--ach-card-accent:var(--ach-epic)}
+.achievement-card[data-state=earned]{border-inline-start-color:var(--ach-card-accent)}
+.achievement-art{width:58px;height:58px;display:grid;place-items:center;border-radius:10px;background:var(--m-rowbg)}
+.achievement-art>.title-badge-art{width:44px;height:44px;object-fit:contain}
+.achievement-art>.trainer-portrait{width:54px;height:54px;margin:0}
+.achievement-card h3{margin:0;font-size:17px;line-height:1.2;overflow-wrap:anywhere}
+.achievement-card p{margin:4px 0 10px;line-height:1.3}
+.achievement-progress{display:flex;align-items:center;gap:8px}
+.achievement-progress progress{min-width:24px;--ach-accent:var(--ach-card-accent)}
+.achievement-progress span{flex:none;font-variant-numeric:tabular-nums;font-size:12px}
+.achievement-earned{color:var(--ach-card-accent);font-size:13px;font-weight:900}
+.achievement-empty{border:1px dashed var(--m-line2);padding:20px;border-radius:12px;color:var(--m-soft)}
+.achievement-page [hidden]{display:none!important}
+@media(max-width:540px){
+  .achievement-hero{grid-template-columns:minmax(0,1fr) 72px;min-height:156px;border-radius:16px}
+  .achievement-stats{margin-bottom:16px}
+  .achievement-stats span{font-size:12px}
+}
 #overlay:not(.menu-mode) :is(.cl4,.settings,.help-box,.lab-screen,.ms,.pk2-starter) :is(.pk-head,.set-head,.lab-top,.pk2-top) h2{flex:none!important;width:auto!important}
 #overlay:not(.menu-mode) .ms-diff{border-color:color-mix(in srgb,var(--dc) 45%,var(--m-line))!important}
 #overlay:not(.menu-mode) .ms-diff b{color:var(--dc)!important;filter:brightness(.85)}
@@ -2471,7 +2534,6 @@ html[lang] body #topbar .tb-id .hud-portrait{width:26px;height:26px}}
 .approved-info-dialog .enc-row.ach-row.got>b{background:color-mix(in srgb,var(--m-gold) 22%,transparent)}
 .approved-info-dialog .enc-row.ach-row:not(.got){opacity:.8}
 .approved-info-dialog .enc-row.ach-row{grid-template-columns:34px 1fr auto!important}
-.ach-got{font:900 12px 'Nunito',system-ui,sans-serif;font-style:normal;color:var(--m-good);white-space:nowrap}
 @media (max-width:700px){
   .tr11 .treasure-card .tc-art{transform:none!important;margin:0!important;height:52px!important;font-size:34px!important}
   .tr11 .treasure-card .tc-art svg{width:40px!important;height:40px!important}
@@ -2813,7 +2875,7 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
 #overlay .realhub.hb .hb-bar .hb-btn{flex:none}
 /* Digivice de récords: la carcasa PNG rodea la pantalla y sus controles reales. */
 #overlay .realhub.hb .hb-record-device{
-  position:relative; width:min(100%,380px); min-height:400px; aspect-ratio:0.85;
+  position:relative; width:min(100%,400px); min-height:550px; aspect-ratio:0.72;
   justify-self:center; align-self:center; margin-inline:auto;
   background:url('ui/hub/records-digivice.png') center/100% 100% no-repeat;
 }
@@ -2821,7 +2883,7 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
   --records-surface:#0d1c30; --records-ink:#e9f9ff; --records-muted:#abc8db;
   --records-well:#162e46; --records-line:#36566f; --records-active:#9de8fa;
   position:absolute; inset:14.8% 7.8% 17%; display:flex; flex-direction:column; gap:5px;
-  padding:8px; border:1px solid var(--records-line); border-radius:8px; min-width:0;
+  padding:7px; border:1px solid var(--records-line); border-radius:8px; min-width:0;
   background:var(--records-surface); color:var(--records-ink); text-align:left;
   box-shadow:inset 0 0 16px #1e58752f; color-scheme:dark;
 }
@@ -2831,15 +2893,26 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
   color-scheme:light;
 }
 #overlay .realhub.hb .hb-record-head{
-  display:flex; align-items:center; gap:7px; min-width:0;
-  padding:0 0 5px; border-bottom:1px solid var(--records-line);
+  display:flex; align-items:center; gap:7px; flex:none; width:100%; min-width:0;
+  padding:6px; border:1px solid #e2a447; border-radius:6px; text-align:left;
+  background:repeating-linear-gradient(135deg,#fff3be28 0 8px,transparent 8px 16px),linear-gradient(110deg,#ffd574,#ed9e36);
+  color:#36230e;
 }
-#overlay .realhub.hb .hb-record-head img{width:31px;height:31px;flex:none;object-fit:contain}
-#overlay .realhub.hb .hb-record-head h2{
-  margin:0; color:var(--records-ink); font:900 17px/1.05 'Nunito',sans-serif;
+#overlay .realhub.hb .hb-record-head img{width:33px;height:33px;flex:none;object-fit:contain}
+#overlay .realhub.hb .hb-record-head span{min-width:0}
+#overlay .realhub.hb .hb-record-head b{
+  display:block; font:900 clamp(12px,1.1vw,16px)/1.08 'Nunito',sans-serif;
 }
-#overlay .realhub.hb .hb-record-head small{
-  display:block; margin-top:2px; color:var(--records-muted); font-size:11px;
+#overlay .realhub.hb .hb-record-head small{display:block;margin-top:2px;font-size:10px;font-weight:800;line-height:1.15}
+#overlay .realhub.hb .hb-record-map{
+  display:flex; align-items:center; flex:none; gap:6px; min-width:0; min-height:34px; padding:2px 6px;
+  border:1px solid var(--records-line); border-radius:6px; background:var(--records-well); color:var(--records-ink);
+}
+#overlay .realhub.hb .hb-record-map img{width:23px;height:23px;flex:none;object-fit:contain}
+#overlay .realhub.hb .hb-record-map span{font:850 10px/1 'Nunito',sans-serif;color:var(--records-muted)}
+#overlay .realhub.hb .hb-record-map select{
+  flex:1; min-width:0; width:100%; min-height:29px; margin:0; padding:3px; border:0;
+  background:var(--records-well); color:var(--records-ink); font:900 12px/1.2 'Nunito',sans-serif; cursor:pointer;
 }
 #overlay .realhub.hb .hb-record-screen .hb-tabs{
   display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:3px;
@@ -2874,12 +2947,21 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 }
 #overlay .realhub.hb .hb-record-screen .hb-rank li{
   display:flex; align-items:center; gap:5px; min-width:0; padding:4px;
-  border-radius:4px; background:var(--records-well);
+  border:1px solid transparent; border-radius:7px; background:var(--records-well);
 }
 #overlay .realhub.hb .hb-record-screen .hb-rank em{
   flex:none; width:19px; height:19px; border-radius:50%; display:grid; place-items:center;
   color:var(--records-surface); background:var(--records-active); font:900 10px/1 'Nunito',sans-serif;
 }
+#overlay .realhub.hb .hb-record-screen .hb-rank li.podium{
+  min-height:43px; border-color:var(--podium-line);
+  background:linear-gradient(90deg,color-mix(in srgb,var(--podium-line) 22%,var(--records-well)),var(--records-well));
+}
+#overlay .realhub.hb .hb-record-screen .hb-rank li.p1{--podium-line:#d5a542}
+#overlay .realhub.hb .hb-record-screen .hb-rank li.p2{--podium-line:#a5b4cf}
+#overlay .realhub.hb .hb-record-screen .hb-rank li.p3{--podium-line:#bc8158}
+#overlay .realhub.hb .hb-record-screen .hb-rank li.podium img{width:31px;height:31px}
+#overlay .realhub.hb .hb-record-screen .hb-rank li.podium strong{font-size:14px}
 #overlay .realhub.hb .hb-record-screen .hb-rank li.p1 em{background:#ffd37a;color:#513300}
 #overlay .realhub.hb .hb-record-screen .hb-rank li.p2 em{background:#d8e4ec;color:#1d3549}
 #overlay .realhub.hb .hb-record-screen .hb-rank li.p3 em{background:#ffc39a;color:#582800}
@@ -2896,16 +2978,21 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 #overlay .realhub.hb .hb-record-screen .hb-rank .hb-empty{
   justify-content:center; text-align:center; color:var(--records-muted); padding:7px; font-size:11px;
 }
+#overlay .realhub.hb .hb-record-actions{display:grid;grid-template-columns:2fr 1fr;gap:4px;flex:none}
 #overlay .realhub.hb .hb-record-screen .hb-all{
-  flex:none; min-height:32px; margin:0; padding:4px 6px; border:1px solid var(--records-line);
-  border-radius:5px; background:var(--records-active); color:var(--records-surface);
-  font:900 11.5px/1.2 'Nunito',sans-serif; cursor:pointer;
+  min-width:0; min-height:33px; margin:0; padding:4px 5px; border:1px solid var(--records-line);
+  border-radius:6px; background:var(--records-well); color:var(--records-ink);
+  font:900 10.5px/1.15 'Nunito',sans-serif; cursor:pointer;
 }
-#overlay .realhub.hb .hb-record-screen :is(button,.hb-record-list):focus-visible{
+#overlay .realhub.hb .hb-record-screen .hb-record-online{
+  background:repeating-linear-gradient(135deg,#c1e5ff20 0 8px,transparent 8px 16px),linear-gradient(#427cce,#2354a0);
+  color:#fff; border-color:#659ce0;
+}
+#overlay .realhub.hb .hb-record-screen :is(button,select,.hb-record-list):focus-visible{
   outline:2px solid var(--records-ink); outline-offset:-2px;
 }
 @media (pointer:coarse){
-  #overlay .realhub.hb .hb-record-screen :is(.hb-tabs button,.hb-all){min-height:44px}
+  #overlay .realhub.hb .hb-record-screen :is(.hb-tabs button,.hb-all,select){min-height:44px}
 }
 @media (orientation:landscape) and (max-height:500px){
   #overlay .realhub.hb .hb-record-device{margin-block:12px}
@@ -2948,11 +3035,6 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 #overlay .realhub.hb .nm-event b{font-size:14px!important;overflow:hidden;text-overflow:ellipsis}
 #overlay .realhub.hb .nm-event>em{flex:none;font:900 12px/1 'Nunito',sans-serif;font-style:normal;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.25)}
 /* Reto semanal: botón propio, aparte de Jugar (verde para no confundirlo con el evento ni con Jugar) */
-#overlay .realhub.hb .nm-weekly{background:linear-gradient(90deg,#0f8a5f,#2bb673)!important;box-shadow:0 3px 0 #0a5c3f,0 6px 16px rgba(0,0,0,.18)!important}
-#overlay .realhub.hb .nm-weekly>em{background:rgba(0,0,0,.22)}
-#overlay .realhub.hb .nm-weekly>span>small{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
-#overlay .realhub.hb .nm-weekly>span>b{flex:0 0 auto;max-width:70%}
-@media (orientation:landscape) and (max-height:500px){#overlay .realhub.hb .nm-weekly .nm-wk-lbl{display:none}}
 #overlay .realhub.hb .nm-event.hm-soon{background:var(--m-sunk)!important;color:var(--m-mute)!important;box-shadow:none!important}
 #overlay .realhub.hb .nm-tiles{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important}
 #overlay .realhub.hb .nm-tiles .hb-tile{padding:8px 4px 7px!important;gap:1px!important;border:1px solid var(--m-cardline)!important;border-bottom:3px solid var(--tc)!important;transition:transform .14s,box-shadow .14s!important}
@@ -3036,15 +3118,6 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 #overlay .realhub.hb .nm-eh{flex:none;min-width:0}
 #overlay .realhub.hb .nm-eh b{display:block;font-size:16px;font-weight:900;line-height:1.1}
 #overlay .realhub.hb .nm-eh small{display:block;font-size:11px;font-weight:700;color:var(--m-mute)}
-#overlay .realhub.hb .nm-eqs{flex:1;display:flex;gap:8px;min-width:0;justify-content:flex-end}
-#overlay .realhub.hb .nm-eq{flex:1;max-width:96px;min-width:0;padding:6px 8px;border-radius:10px;background:var(--m-sunk)}
-#overlay .realhub.hb .nm-eq small{display:block;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--m-mute)}
-#overlay .realhub.hb .nm-eq b{display:block;font-size:14px;font-weight:900;font-variant-numeric:tabular-nums}
-#overlay .realhub.hb .nm-eq .hb-meter{display:block;height:5px;margin-top:3px;border-radius:3px;background:var(--m-line);overflow:hidden}
-#overlay .realhub.hb .nm-eq .hb-meter i{display:block;height:100%;border-radius:3px}
-#overlay .realhub.hb .nm-eq.q-d .hb-meter i{background:#e2476b}
-#overlay .realhub.hb .nm-eq.q-w .hb-meter i{background:#12b4c8}
-#overlay .realhub.hb .nm-eq.q-e .hb-meter i{background:#8b4fe6}
 #overlay .approved-info-dialog.eq-dialog,.approved-info-dialog.eq-dialog{width:min(1040px,94vw)!important;max-width:none!important;max-height:calc(100vh - 40px);overflow-y:auto}
 .eq-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:6px 0 4px}
 .eq-grid.eq-two{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -3072,8 +3145,6 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 @media(max-width:760px){
   #overlay .realhub.hb .nm-encard{flex-wrap:wrap;gap:8px 10px;padding:10px 12px}
   #overlay .realhub.hb .nm-encard>i,#overlay .realhub.hb .nm-encard>i .nm-ic{width:34px;height:34px}
-  #overlay .realhub.hb .nm-eqs{flex-basis:100%;justify-content:stretch}
-  #overlay .realhub.hb .nm-eq{max-width:none}
 }
 /* Mismo tamaño para todos los paneles: grandes (Colección, Laboratorio, Mapa) y medianos (Ajustes, Guía, Código) */
 #overlay .picker-screen.cl4,#overlay:not(.menu-mode)>.picker-screen.ms,#overlay .picker-screen.ms,#overlay .lab-screen{width:min(1080px,94vw)!important;max-width:none!important;height:min(780px,calc(100vh - 60px))!important;max-height:none!important;box-sizing:border-box!important;overflow-y:auto}
@@ -3713,30 +3784,61 @@ html[lang] .trainer-screen .trainer-header .g-back,
 #overlay .realhub.hb .hb-user-card .hb-wallet .hb-chip img{width:17px;height:17px}
 #overlay .realhub.hb .hb-user-card .hb-out{width:36px;height:40px}
 
-/* Logo y temporada comparten el espacio sobre los modos en escritorio. */
-#overlay .realhub.hb .hb-intro{
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;column-gap:12px;row-gap:8px
+/* Inicio: modos jugables arriba y actividades en la fila inferior. */
+#overlay .realhub.hb .nm-modes{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) minmax(0,.8fr)!important}
+#overlay .realhub.hb .nm-modes>.hb-mode{
+  min-width:0;flex-direction:column;justify-content:center;gap:8px;text-align:center;padding:10px 4px!important
 }
-#overlay .realhub.hb .hb-intro .hb-brand{align-self:auto}
-#overlay .realhub.hb .hb-intro .hb-brand img{height:clamp(65px,8vw,105px)!important}
-#overlay .realhub.hb .hb-season{
-  display:flex;align-items:center;gap:9px;flex:1 1 170px;min-width:0;max-width:245px;
-  padding:8px 10px;box-sizing:border-box;text-align:left;border:1px solid var(--m-cardline);border-radius:13px;
-  color:var(--m-text);background:linear-gradient(115deg,color-mix(in srgb,var(--m-card) 88%,#e6a43d),var(--m-card) 75%);
-  box-shadow:0 4px 10px #0002
+#overlay .realhub.hb .nm-modes>.hb-mode i{margin:0}
+#overlay .realhub.hb .nm-modes>.hb-mode b{font-size:clamp(12px,1.25vw,17px)!important;overflow-wrap:anywhere}
+#overlay .realhub.hb .nm-modes>.hb-mode small{display:block;line-height:1.1}
+#overlay .realhub.hb .nm-modes .m-modes{background:linear-gradient(140deg,#4468b5,#2e4278);box-shadow:0 3px 0 #1b2b57}
+#overlay .realhub.hb .hb-activities{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:10px}
+#overlay .realhub.hb .hb-activities button{min-width:0;height:100%;box-sizing:border-box;padding:8px 10px;flex-wrap:nowrap}
+#overlay .realhub.hb .hb-activities #hubEvents{
+  background:linear-gradient(112deg,color-mix(in srgb,var(--m-card) 76%,#9070d0),var(--m-card) 82%);
+  border-inline-start:3px solid #9d79e1
 }
-#overlay .realhub.hb .hb-season:hover{border-color:#db9236}
-#overlay .realhub.hb .hb-season:focus-visible{outline:2px solid var(--m-acc);outline-offset:2px}
-.hb-season img,.season-summary img{
-  width:38px;height:38px;object-fit:contain;flex:none;
-  filter:drop-shadow(0 1px 1px #529db53b)
+#overlay .realhub.hb .hb-activities .nm-eh b,#overlay .realhub.hb .hb-activities .nm-eh small{overflow-wrap:anywhere}
+#overlay .realhub.hb .hb-activities .nm-eh b{font-size:clamp(13px,1.3vw,16px)}
+#overlay .realhub.hb .hb-activities .nm-eh small{margin-top:3px;line-height:1.2}
+.mode-options{display:grid;gap:8px}
+.mode-options button{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px;width:100%;text-align:left;border:1px solid var(--m-cardline);border-radius:11px;background:var(--m-sunk);color:var(--m-text);font:inherit;cursor:pointer}
+.mode-options button:hover,.mode-options button:focus-visible{border-color:var(--m-acc)}
+.mode-options button img{width:36px;height:36px;object-fit:contain}
+.mode-options button b,.mode-options button small{display:block}
+.mode-options button small{color:var(--m-soft)}
+@media(max-width:760px) and (orientation:portrait){
+  #overlay .realhub.hb .nm-modes{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #overlay .realhub.hb .nm-modes>.hb-play{grid-column:1/-1}
+  #overlay .realhub.hb .nm-modes>.hb-mode{flex-direction:row;text-align:left}
+  #overlay .realhub.hb .hb-activities{gap:6px}
+  #overlay .realhub.hb .hb-activities button{gap:5px;padding:6px}
+  #overlay .realhub.hb .hb-activities button>i,#overlay .realhub.hb .hb-activities button>i .nm-ic{width:29px;height:29px}
 }
-.hb-season-copy{flex:1;min-width:0}
-.hb-season-copy b,.hb-season-copy small{display:block}
-.hb-season-copy b{font-size:14px;line-height:1.15}
-.hb-season-copy small{color:var(--m-soft);margin-top:3px;font-size:11px;line-height:1.2}
-.hb-season-copy progress,.season-dialog progress{width:100%;height:5px;accent-color:#db9236;display:block;margin-top:5px}
-.hb-season-next{color:var(--m-soft);font-size:18px;flex:none}
+@media(orientation:landscape) and (max-height:500px){
+  #overlay .realhub.hb .hb-activities{grid-column:2;grid-row:1}
+  #overlay .realhub.hb .hb-activities button{gap:6px;padding:5px}
+  #overlay .realhub.hb .hb-activities button>i,#overlay .realhub.hb .hb-activities button>i .nm-ic{width:27px;height:27px}
+}
+
+#overlay .realhub.hb .nm-encard .nm-eh{flex:1;min-width:0}
+#overlay .realhub.hb .nm-encard .nm-eh small{overflow-wrap:anywhere}
+#overlay .realhub.hb .nm-encard:focus-visible{outline:2px solid var(--m-acc);outline-offset:2px}
+.activity-tabs{display:flex;flex-wrap:wrap;gap:5px;padding:5px;margin:4px 0 12px;border-radius:12px;background:var(--m-sunk)}
+.activity-tabs button{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:1 1 110px;padding:7px;min-height:40px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--m-soft);font:800 13px/1.15 Nunito,system-ui,sans-serif;cursor:pointer}
+.activity-tabs button[aria-selected=true]{background:var(--m-card);border-color:var(--m-cardline);color:var(--m-text);box-shadow:0 2px 4px #0001}
+.activity-tabs button:focus-visible{outline:2px solid var(--m-acc);outline-offset:-2px}
+.activity-tabs img{width:22px;height:22px;object-fit:contain}
+.activity-panel:focus-visible{outline:2px solid var(--m-acc);outline-offset:3px;border-radius:8px}
+.activity-detail{padding:12px;border:1px solid var(--m-cardline);border-radius:12px;background:var(--m-sunk)}
+.activity-detail h3{margin:0 0 2px}
+.activity-detail p{margin:6px 0 0}
+.activity-detail small{color:var(--m-soft)}
+.activity-panel .eq-grid.eq-single{grid-template-columns:1fr}
+.activity-panel .activity-action{margin-top:10px}
+.season-dialog progress{width:100%;height:5px;accent-color:#db9236;display:block;margin-top:5px}
+.season-summary img{flex:none;object-fit:contain}
 .season-dialog article{border:1px solid var(--m-cardline);border-radius:12px;padding:10px 12px;background:var(--m-sunk)}
 .season-dialog .season-summary{display:flex;align-items:center;gap:12px}
 .season-summary img{width:44px;height:44px}
@@ -3752,34 +3854,23 @@ html[lang] .trainer-screen .trainer-header .g-back,
   #overlay .realhub.hb .hb-user-card .hb-me{height:43px}
   #overlay .realhub.hb .hb-user-card .hb-wallet{padding-inline:5px;font-size:12px}
   #overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{width:40px!important;height:40px!important}
-  #overlay .realhub.hb .hb-intro{flex-direction:column;align-items:center}
-  #overlay .realhub.hb .hb-season{flex:auto;width:100%;max-width:none}
 }
 @media(orientation:landscape) and (max-height:500px){
   #overlay .realhub.hb .hb-user-card .hb-me{height:34px}
   #overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{width:32px!important;height:32px!important}
   #overlay .realhub.hb .hb-user-card{flex:0 1 auto;min-width:0;padding:2px 5px}
-  #overlay .realhub.hb .hb-intro{grid-column:2;grid-row:4}
-  #overlay .realhub.hb .hb-season{max-width:none;padding:4px 8px}
-  #overlay .realhub.hb .hb-season img{width:25px;height:25px}
 }
 
 /* Móvil en horizontal (poca altura): el inicio cabe sin desplazarse. Sin logo; a la izquierda Jugar y los modos,
-   a la derecha encargos, evento y accesos en una cuadrícula de 3×2 */
+   a la derecha encargos y accesos en una cuadrícula de 3×2 */
 @media (orientation:landscape) and (max-height:500px){
   #overlay .realhub.hb .hb-brand{display:none!important}
   #overlay .realhub.hb .hb-main{display:block!important;padding:6px 12px 6px!important}
   #overlay .realhub.hb .hb-left{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;grid-auto-rows:auto;align-content:start;gap:7px 12px!important;width:100%!important;max-width:none!important;margin:0!important}
   #overlay .realhub.hb .hb-left>*{margin:0!important;min-width:0}
   #overlay .realhub.hb .hb-modes{grid-column:1;grid-row:1 / span 2;align-self:start}
-  #overlay .realhub.hb #mWeekly{grid-column:1;grid-row:3;align-self:start;min-height:0!important;height:34px!important}
-  #overlay .realhub.hb .hb-left:has(#mWeekly) .hb-play{height:clamp(96px,29vh,132px)!important}
-  #overlay .realhub.hb .hb-left:has(#mWeekly) .nm-play .hb-play-face>*{width:min(116px,calc(29vh - 22px))!important;height:min(116px,calc(29vh - 22px))!important}
   #overlay .realhub.hb .hb-play{min-height:0!important;height:clamp(120px,40vh,170px)!important}
-  #overlay .realhub.hb #mEnc{grid-column:2;grid-row:1;padding:6px 10px!important;min-height:0!important}
-  #overlay .realhub.hb #mEnc .nm-eqs{font-size:11px!important;gap:2px!important}
-  #overlay .realhub.hb #rhEvent{grid-column:2;grid-row:2;min-height:0!important;height:34px!important}
-  #overlay .realhub.hb .hb-tiles{grid-column:2;grid-row:3;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
+  #overlay .realhub.hb .hb-tiles{grid-column:2;grid-row:2 / span 2;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
   #overlay .realhub.hb .nm-tiles .hb-tile{min-height:0!important;height:50px!important;padding:3px 4px!important;flex-direction:row!important;gap:6px!important;justify-content:flex-start!important}
   #overlay .realhub.hb .nm-tiles .hb-tile i{margin:0!important;flex:none}
   #overlay .realhub.hb .nm-tiles .hb-tile i img{width:24px!important;height:24px!important}
@@ -4103,8 +4194,6 @@ body.is-touch #overlay :is(button,.g-back) kbd{display:none!important}
   #overlay .realhub.hb .nm-tiles .hb-tile i{width:34px!important;height:34px!important;margin:0!important}
   #overlay .realhub.hb .nm-tiles .hb-tile i .nm-ic{width:34px!important;height:34px!important}
   #overlay .realhub.hb .nm-tiles .hb-tile b{font-size:11px!important;letter-spacing:-.1px}
-  #overlay .realhub.hb .nm-weekly>span>small{flex:none!important;overflow:visible!important}
-  #overlay .realhub.hb .nm-weekly>span>b{flex:0 1 auto!important;min-width:0;max-width:none!important}
   /* Reto semanal: los hitos se leen enteros (dos líneas si hace falta) */
   .rt-hitos span{white-space:normal!important;overflow:visible!important;line-height:1.15}
   /* Laboratorio y Ficha: cabeceras más bajas */
@@ -5230,6 +5319,7 @@ addEventListener('keydown', e => {
   // Esc cierra las ventanas del menú (Logros, Encargos, Récords…) antes que nada
   if (k === 'escape'){ const x = overlay.querySelector('.approved-info-scrim #realClose'); if (x){ x.click(); return; } }
   if (state === 'savecode'){ if (k === 'escape') showSettings(); return; }
+  if (state === 'logros'){ if (k === 'escape') document.getElementById('achBack').click(); return; }
   if (state === 'cloud' || state === 'ranking'){ if (k === 'escape'){ const b = document.getElementById(state === 'cloud' ? 'cdBack' : 'rkBack'); if (b) b.click(); } return; }
   if (state === 'register') return;
   if (k === 'n'){ toggleMute(); return; }
@@ -5273,7 +5363,7 @@ addEventListener('keydown', e => {
   else if (state === 'reto'){
     if (k === 'enter') startGame(selectedKey);
     else if (k === 'c') showPicker('personaje');
-    else if (k === 'escape') showSelect();
+    else if (k === 'escape') returnToModes();
   }
   else if (state === 'mapsel'){
     const i = MAP_ORDER.indexOf(runMap);
@@ -5976,8 +6066,7 @@ function showSelect(){
   const currentRuns = Math.min(DAILY.runsGoal, d.runs || 0);
   const safeText = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const choice = CHARS[selectedKey] || CHARS.agumon;
-  const dbEvDays = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
-  const qs = questSummary();
+  const daily = dailyQuestSummary(), featured = featuredActivity();
   const labReady = LAB.filter(u => labLv(u.id) < labMax(u) && labCosts(u)[labLv(u.id)] <= SAVE.bits).length;
   syncRewards();   // lo ya conseguido antes de existir estos premios se da al volver al menú
   const achAll = achItems().length, achOwned = achDoneCount();
@@ -6011,10 +6100,7 @@ function showSelect(){
       </header>
       <section class="hb-main">
         <div class="hb-left">
-          <div class="hb-intro">
-            <h1 class="hb-brand"><span class="hb-logo-bg" aria-hidden="true"><i class="lb-glow"></i><i class="lb-orbit"><i class="lb-ring"></i></i><i class="lb-orbit lb-orbit2"><i class="lb-ring"></i></i><i class="lb-sparks"><i></i><i></i><i></i><i></i><i></i><i></i></i></span><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span></h1>
-            ${seasonBanner()}
-          </div>
+          <h1 class="hb-brand"><span class="hb-logo-bg" aria-hidden="true"><i class="lb-glow"></i><i class="lb-orbit"><i class="lb-ring"></i></i><i class="lb-orbit lb-orbit2"><i class="lb-ring"></i></i><i class="lb-sparks"><i></i><i></i><i></i><i></i><i></i><i></i></i></span><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span></h1>
           ${life.parade}
           ${saved ? `<button type="button" class="hb-continue" id="hbContinue" aria-label="Continuar partida guardada"><i><img src="${charIcon(saved.key)}" alt=""></i><span class="hbc-txt"><small>Partida guardada</small><b>Continuar partida</b></span><span class="hbc-info"><em>${savedTxt}</em><small><span>${safeText(MAPS[saved.map].name)}</span> · <span>${safeText(DIFFS[saved.diff].name)}</span>${saved.mode === 'surv' ? ' · <span>Supervivencia</span>' : saved.weekly ? ' · <span>Reto semanal</span>' : ''}</small></span><span class="hbc-go" aria-hidden="true">▶</span></button>` : ''}
           <div class="hb-modes nm-modes">
@@ -6023,14 +6109,21 @@ function showSelect(){
               <span class="hb-play-face">${animEl(spriteOf(selectedKey, false), 'hb-face')}</span>
               <span class="lv-sheen"></span><span class="nm-band"><span class="hb-dev"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span>Modo clásico · <b>${safeText(choice.name)}</b></span></span>
             </button>
-            <div class="hb-stack nm-stack">
-              <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i><img class="nm-ic" src="ui/hub/digivice/supervivencia.png" alt=""></i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
-              ${!GACHA_SOON ? `<button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Incubadora: ${usableTickets('std')} tickets disponibles"><i><img class="nm-ic" src="ui/hub/digivice/incubadora.png" alt=""></i><span><b>Incubadora</b><small><em class="nm-tix">${usableTickets('std')}</em> tickets<span class="nm-long"> disponibles</span></small></span></button>` : `<button type="button" class="hb-mode m-gacha" id="hbShop" aria-label="Tienda: rotación semanal"><i><img class="nm-ic" src="ui/hub/digivice/tienda.png" alt=""></i><span><b>Tienda</b><small>Rotación semanal</small></span></button>`}
-            </div>
+            <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i><img class="nm-ic" src="ui/hub/digivice/supervivencia.png" alt=""></i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
+            <button type="button" class="hb-mode m-modes" id="mModes" aria-haspopup="dialog">
+              <i><img class="nm-ic" src="ui/hub/digivice/reto.png" alt=""></i><span><b>Modos</b><small>3 modos de juego</small></span>
+            </button>
           </div>
-          <button type="button" class="hb-event nm-event nm-weekly" id="mWeekly" aria-label="Reto semanal: ${safeText(weeklyMod().name)}" title="${safeText(weeklyMod().d)}"><i><img class="nm-ic" src="ui/hub/digivice/reto.png" alt=""></i><span><small>Reto semanal</small><b>${weeklyMod().name}</b></span><em><span class="nm-wk-lbl">Hitos</span> ${retoState().done.length}/${RETO_HITOS.length}</em></button>
-          <button type="button" class="nm-quests nm-encard" id="mEnc" aria-label="Encargos: hoy ${qs.day.done} de ${qs.day.all}, semana ${qs.week.done} de ${qs.week.all}${qs.ev ? ', evento ' + qs.ev.done + ' de ' + qs.ev.all : ''}"><i><img class="nm-ic" src="ui/hub/digivice/encargos.png" alt=""></i><span class="nm-eh"><b>Encargos</b><small>${qs.ev ? 'Diarios, semanales y de evento' : 'Diarios y semanales'}</small></span><span class="nm-eqs">${[['Hoy', qs.day, 'q-d'], ['Semana', qs.week, 'q-w'], ...(qs.ev ? [['Evento', qs.ev, 'q-e']] : [])].map(([n, q, c]) => `<span class="nm-eq ${c}"><small>${n}</small><b>${q.done}/${q.all}</b><span class="hb-meter"><i style="width:${Math.round(q.done / q.all * 100)}%"></i></span></span>`).join('')}</span></button>
-          ${(!GACHA_SOON ? (bannerOpen("navidadP") || bannerOpen("navidadR")) : eventActive()) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/digivice/evento.png" alt=""></i><span class="lv-sheen"></span><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
+          <div class="hb-activities">
+            <button type="button" class="nm-quests nm-encard" id="hubEvents" aria-haspopup="dialog">
+              <i><img class="nm-ic" src="ui/hub/digivice/${featured.icon}.png" alt=""></i>
+              <span class="nm-eh"><b>${featured.title}</b><small>${featured.status}</small></span>
+            </button>
+            <button type="button" class="nm-quests nm-encard" id="mEnc" aria-haspopup="dialog">
+              <i><img class="nm-ic" src="ui/hub/digivice/encargos.png" alt=""></i>
+              <span class="nm-eh"><b>Encargos</b><small>Hoy · ${daily.done}/${daily.all}</small></span>
+            </button>
+          </div>
           <div class="hb-tiles nm-tiles">
             <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex: ${pickProgress().done} de ${pickProgress().total} Digimon"><i><img class="nm-ic" src="ui/hub/digivice/digidex.png" alt=""></i><b>Digidex</b><small>${pickProgress().done}/${pickProgress().total} Digimon</small></button>
             <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio${labReady ? ': ' + labReady + ' mejoras disponibles' : ''}"><i><img class="nm-ic" src="ui/hub/digivice/laboratorio.png" alt=""></i><b>Laboratorio</b><small>${labReady ? labReady + (labReady === 1 ? ' mejora' : ' mejoras') : 'Mejoras'}</small>${labReady ? '<em class="nm-dot" aria-hidden="true"></em>' : ''}</button>
@@ -6040,6 +6133,7 @@ function showSelect(){
             <button type="button" class="hb-tile t7" id="btnPlayer" aria-label="Jugador"><i><img class="nm-ic" src="ui/hub/digivice/jugador.png" alt=""></i><b>Jugador</b><small>Perfil y marcos</small></button>
           </div>
           <nav class="hb-bar" aria-label="Enlaces y ajustes">
+            ${GACHA_SOON ? '<button type="button" class="hb-btn" id="hbShop" aria-label="Tienda semanal" title="Tienda semanal"><img class="nm-ic" src="ui/hub/digivice/tienda.png" alt=""><span class="nm-lbl">Tienda</span></button>' : '<button type="button" class="hb-btn" id="hbGacha3" aria-label="Incubadora" title="Incubadora"><img class="nm-ic" src="ui/hub/digivice/incubadora.png" alt=""><span class="nm-lbl">Incubadora</span></button>'}
             <button type="button" class="hb-btn" id="btnAjustes" aria-label="Ajustes"><img class="nm-ic" src="ui/hub/digivice/ajustes.png" alt=""><span class="nm-lbl">Ajustes</span></button>
             <button type="button" class="hb-btn" id="btnHelp" aria-label="Guía"><img class="nm-ic" src="ui/hub/digivice/guia.png" alt=""><span class="nm-lbl">Guía</span></button>
             <button type="button" class="hb-btn" id="mBug" aria-label="Reportar bugs en Discord" title="Reportar bugs en Discord"><img class="nm-ic" src="ui/hub/digivice/bugs.png" alt=""><span class="nm-lbl">Bugs</span></button>
@@ -6055,20 +6149,30 @@ function showSelect(){
         </div>
         <aside class="hb-record-device" aria-labelledby="hbRecordsTitle">
           <div class="hb-record-screen">
-            <header class="hb-record-head">
+            <div class="hb-record-head">
               <img src="ui/hub/digivice/ranking.png" alt="">
-              <div><h2 id="hbRecordsTitle">Tus récords</h2><small>${recs.length ? recs.length + ' partidas guardadas' : 'Juega para entrar en la tabla'}</small></div>
-            </header>
+              <span><b id="hbRecordsTitle">Tus récords</b><small>Récords personales</small></span>
+            </div>
             <div class="hb-tabs" role="tablist" aria-label="Ordenar récords">
               <button type="button" role="tab" id="hbRecordsKills" aria-selected="true" aria-controls="hbRecordsPanel" data-k="kills">Bajas</button>
               <button type="button" role="tab" id="hbRecordsTrial" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="trial">Contrarreloj</button>
               <button type="button" role="tab" id="hbRecordsSurvival" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="survival">Supervivencia</button>
             </div>
+            <label class="hb-record-map">
+              <img src="ui/hub/digivice/mapas.png" alt=""><span>Mapa</span>
+              <select id="hbRecordsMap">
+                <option value="">Global · Mis marcas</option>
+                ${MAP_ORDER.map(map => `<option value="${map}">${safeText(MAPS[map].name)}</option>`).join('')}
+              </select>
+            </label>
             <div class="hb-lbrow" id="hbRecordsSummary" aria-live="polite"></div>
             <div class="hb-record-list" id="hbRecordsPanel" role="tabpanel" aria-labelledby="hbRecordsKills" tabindex="0">
               <ol class="hb-rank" id="hbRank"></ol>
             </div>
-            <button type="button" class="hb-all" id="rhRecords">Ver todos los récords</button>
+            <div class="hb-record-actions">
+              <button type="button" class="hb-all hb-record-online" id="hbRecordsOnline">Clasificación online</button>
+              <button type="button" class="hb-all" id="rhRecords">Mi historial</button>
+            </div>
           </div>
         </aside>
         <footer class="hb-legal">${t('legal')} <button type="button" class="hb-credits" id="hmCredits">Créditos</button></footer>
@@ -6087,9 +6191,7 @@ function showSelect(){
   if(!avatarIcon() && !PLAYER_ICONS.some(x => x.id === avatarKey())) headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
   document.getElementById('playBtn').onclick=()=>{ runMode='normal'; runWeekly=false; restoreRunPrefs(); showPicker('personaje'); };
   // Reto semanal: modo aparte con su propia pantalla (mapa, dificultad y regla fijos de la semana)
-  document.getElementById('mWeekly').onclick=()=>{ runMode='normal'; runWeekly=true; showReto(); };
   { const el = document.getElementById('hbContinue'); if (el) el.onclick = runContinue; }
-  const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { if (GACHA_SOON) return showEncargos(); gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR'; showGacha(); };
   { const el = document.getElementById('hbShop'); if (el) el.onclick = () => showShop(); }
   document.getElementById('btnColl').onclick=showCollection;
   document.getElementById('btnPlayer').onclick=showPlayer;
@@ -6103,7 +6205,9 @@ function showSelect(){
   const hmSoon=(msg)=>{const m=document.getElementById('hmMsg'); if(!m) return; m.textContent=msg||'Próximamente'; clearTimeout(m._t); m._t=setTimeout(()=>{m.textContent='';},1800);};
   ['mEvent','mRank','mBuild'].forEach(id=>{const el=document.getElementById(id); if(el) el.onclick=()=>hmSoon('Próximamente');});
   document.getElementById('mSurv').onclick=()=>{ runMode='surv'; runWeekly=false; restoreRunPrefs(); showPicker('personaje'); };
-  document.getElementById('mEnc').onclick=showEncargos;
+  document.getElementById('mEnc').onclick = event => showEncargos(event.currentTarget);
+  document.getElementById('hubEvents').onclick = event => showEvents(event.currentTarget, featured.tab);
+  document.getElementById('mModes').onclick = event => showModes(event.currentTarget);
   document.getElementById('mLog').onclick=showLogros;
   document.getElementById('hbRankOnline').onclick = () => showRanking('select');
   document.getElementById('mBug').onclick=()=>{
@@ -6126,7 +6230,6 @@ function showSelect(){
   document.getElementById('rhProfile').onclick=showPlayer;
   bindHubLanguages();
   document.getElementById('hubRelease').onclick = e => showMenuRelease(e.currentTarget);
-  document.getElementById('hubSeason').onclick = e => showSeason(e.currentTarget);
   document.getElementById('rhApp').onclick=()=>installEvt?installApp():openInfo('app');
   document.getElementById('rhFullscreen').onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{})};
   bindMenuFX();
@@ -6155,25 +6258,48 @@ function showSelect(){
   { const ol = document.getElementById('hbRank'), panel = document.getElementById('hbRecordsPanel');
     const tabs = [...document.querySelectorAll('.hb-record-screen .hb-tabs button')];
     const summary = document.getElementById('hbRecordsSummary');
+    const mapFilter = document.getElementById('hbRecordsMap');
+    let mode = 'kills';
     const recKey = r => r.key || Object.keys(CHARS).find(k => CHARS[k].name === r.name || (EVO_LINE[k] || []).some(e => e.name === r.name)) || 'agumon';
     const stat = (label, value) => `<span><b>${safeText(value)}</b><small>${safeText(label)}</small></span>`;
     const empty = '<li class="hb-empty">Todavía no hay partidas. ¡Empieza una!</li>';
     const number = value => Number(value || 0).toLocaleString(LANG);
     const time = seconds => seconds > 0 ? fmtTime(seconds) : '—';
-    const row = (rank, name, value, key, note) => `<li class="p${rank}">
+    const row = (rank, name, value, key, note, podium = true) => `<li class="${podium && rank <= 3 ? 'podium p' + rank : ''}">
       <em>${rank}</em>${key ? `<img src="${charIcon(key)}" alt="" onerror="this.style.visibility='hidden'">` : ''}
       <span><b>${safeText(name)}</b>${note ? `<small>${safeText(note)}</small>` : ''}</span>
       <strong>${safeText(value)}</strong>
     </li>`;
-    const draw = mode => {
+    const draw = () => {
+      const map = mapFilter.value;
       if (mode === 'trial'){
+        if (map){
+          const seconds = trialTimes[map];
+          summary.innerHTML = stat('Mejor victoria', time(seconds)) + stat('Estado', seconds ? 'Completado' : 'Pendiente');
+          ol.innerHTML = row(MAP_ORDER.indexOf(map) + 1, MAPS[map].name, time(seconds), '', '', false);
+          return;
+        }
         const {maps, completed, total} = timeTrialSummary(trialTimes);
         summary.innerHTML = stat(completed === maps.length ? 'Tiempo total' : 'Tiempo parcial', time(total))
           + stat('Mapas completados', `${completed}/${maps.length}`);
-        ol.innerHTML = maps.map(([map, seconds], i) => row(i + 1, MAPS[map].name, time(seconds), '', seconds ? 'Completado' : 'Pendiente')).join('');
+        ol.innerHTML = maps.map(([map, seconds], i) => row(i + 1, MAPS[map].name, time(seconds), '', seconds ? 'Completado' : 'Pendiente', false)).join('');
         return;
       }
       if (mode === 'survival'){
+        if (map){
+          const wave = Number(localStorage.getItem('digibonk3d-surv-wave-' + map)) || 0;
+          const runs = [...recs, ...recentRecords].filter(r => r?.map === map && r.wave && !r.weekly);
+          const marks = new Map();
+          for (const run of runs){
+            const key = recKey(run);
+            const old = marks.get(key);
+            if (!old || run.t > old.t) marks.set(key, run);
+          }
+          const list = [...marks.values()].sort((a, b) => b.t - a.t);
+          summary.innerHTML = stat('Mejor tiempo registrado', time(list[0]?.t)) + stat('Mejor oleada', wave || '—');
+          ol.innerHTML = list.slice(0, 7).map((run, i) => row(i + 1, run.name, time(run.t), recKey(run), `Oleada ${run.wave}`)).join('') || empty;
+          return;
+        }
         const list = Object.keys(CHARS).map(key => [key, Number(survBest(key))])
           .filter(([, seconds]) => Number.isFinite(seconds) && seconds > 0)
           .sort((a, b) => b[1] - a[1]);
@@ -6183,10 +6309,11 @@ function showSelect(){
         return;
       }
       const best = savedRecords.kills;
-      const list = best && !recs.some(run => run.key === best.key && run.map === best.map && run.t === best.t && run.kills === best.kills)
-        ? [...recs, best] : recs.slice();
-      list.sort((a, b) => b.kills - a.kills || b.t - a.t);
-      summary.innerHTML = stat('Bajas totales', number(kills)) + stat('Más bajas en una partida', list.length ? number(list[0].kills) : '—');
+      const runs = best && !recs.some(run => run.key === best.key && run.map === best.map && run.t === best.t && run.kills === best.kills)
+        ? [...recs, best] : recs;
+      const list = runs.filter(run => !map || run.map === map).sort((a, b) => b.kills - a.kills || b.t - a.t);
+      summary.innerHTML = (map ? stat('Partidas registradas', list.length) : stat('Bajas totales', number(kills)))
+        + stat('Más bajas en una partida', list.length ? number(list[0].kills) : '—');
       ol.innerHTML = list.slice(0, 7).map((run, i) => row(i + 1, run.name, number(run.kills), recKey(run), MAPS[run.map]?.name)).join('') || empty;
     };
     const selectTab = tab => {
@@ -6196,7 +6323,8 @@ function showSelect(){
         button.tabIndex = active ? 0 : -1;
       });
       panel.setAttribute('aria-labelledby', tab.id);
-      draw(tab.dataset.k);
+      mode = tab.dataset.k;
+      draw();
       panel.scrollTop = 0;
     };
     tabs.forEach((tab, index) => {
@@ -6214,7 +6342,13 @@ function showSelect(){
         tabs[target].focus();
       };
     });
-    draw('kills'); }
+    mapFilter.onchange = () => { draw(); panel.scrollTop = 0; };
+    document.getElementById('hbRecordsOnline').onclick = () => {
+      Rk.mode = mode === 'survival' ? 'surv' : 'normal';
+      Rk.map = mapFilter.value || runMap;
+      showRanking('select');
+    };
+    draw(); }
   clearInterval(newsTimer);
 }
 // Guía «Cómo jugar»: diez pantallas en cuatro capítulos. Cada una tiene un vídeo grabado del propio juego
@@ -7243,6 +7377,10 @@ function showMapSelect(){
 /* ---------- Reto semanal: pantalla propia del modo ----------
    Sustituye a «Elige mapa»: el mapa, la dificultad, la regla y la semilla son los de la semana y no se cambian.
    Solo se elige el Digimon. Tiene su propia marca semanal (puntos) y sus hitos. */
+function returnToModes(){
+  showSelect();
+  showModes(document.getElementById('mModes'));
+}
 function showReto(){
   runMode = 'normal'; runWeekly = true;
   state = 'reto';
@@ -7256,7 +7394,7 @@ function showReto(){
   showOverlay(`
     <div class="rt-screen rt">
       <header class="rt-top">
-        <button class="g-back" id="rtBack"><kbd>Esc</kbd> Menú</button>
+        <button class="g-back" id="rtBack"><kbd>Esc</kbd> Modos</button>
         <h2 class="rt-title"><small>Modo</small>Reto semanal</h2>
         <span class="rt-week"><b>Semana ${weekNum() % 1000}</b><small>Termina en ${retoLeft()}</small></span>
       </header>
@@ -7285,7 +7423,7 @@ function showReto(){
       </div>
       <footer class="rt-foot"><span class="rt-sum">${CHARS[k].name} · ${m.name} · ${d.name} · ${mod.name}</span><button type="button" class="rt-go" id="rtStart">¡Empezar reto! <kbd>Enter</kbd></button></footer>
     </div>`);
-  document.getElementById('rtBack').onclick = () => showSelect();
+  document.getElementById('rtBack').onclick = returnToModes;
   document.getElementById('rtPick').onclick = () => showPicker('personaje');
   { const el = document.getElementById('rtStar'); if (el) el.onclick = () => { selectedKey = star; showReto(); }; }
   document.getElementById('rtStart').onclick = () => startGame(selectedKey);
@@ -10451,6 +10589,7 @@ function pickUpgrade(i){
 }
 
 function endGame(win){
+  if (state !== 'play' || !g) return;   // cada partida solo puede conceder sus premios una vez
   if (g.runId && !runIsLive()){ runTakenOver(); return; }   // la partida siguió en otra pestaña: aquí no da premios
   runEnd();   // fin de la partida: se libera el hueco de guardado
   state = 'end';
@@ -12181,6 +12320,14 @@ function endEmergency(){
 }
 /* ---------- Supervivencia: récord por Digimon ---------- */
 function survBest(k){ return loadJSON('digibonk3d-surv', {})[k] || 0; }
+function bestSurvivalRecord(){
+  let best = null;
+  for (const [key, value] of Object.entries(loadJSON('digibonk3d-surv', {}))){
+    const seconds = Math.floor(Number(value));
+    if (Object.hasOwn(CHARS, key) && Number.isFinite(seconds) && seconds > (best?.seconds || 0)) best = {key, seconds};
+  }
+  return best;
+}
 function recordSurv(k, t){
   const all = loadJSON('digibonk3d-surv', {});
   if (t <= (all[k] || 0)) return false;
@@ -12296,15 +12443,20 @@ function checkLongQuests(win){
   return won;
 }
 // Resumen para la tarjeta del menú: hechos/total de hoy, de la semana y del evento
-function questSummary(){
-  const d = loadDaily(), enc = loadEncargos().list, wk = weekState(), wq = weekQuestState();
-  const day = {done: (d.claimed || d.runs >= DAILY.runsGoal ? 1 : 0) + enc.filter(e => e.done).length, all: 1 + enc.length};
-  const week = {done: (!GACHA_SOON && wk.claimed ? 1 : 0) + wq.done.length, all: (!GACHA_SOON ? 1 : 0) + WEEK_QUESTS.length};
-  const ev = eventActive() ? {done: eventQuestState().done.length, all: EVENT_QUESTS.length} : null;
-  return {day, week, ev};
+function dailyQuestSummary(){
+  const day = loadDaily(), enc = loadEncargos().list;
+  return {done: Number(day.claimed || day.runs >= DAILY.runsGoal) + enc.filter(task => task.done).length, all:1 + enc.length};
 }
-// Ventana de encargos: tres paneles grandes (diarios, semanales y de evento si hay uno activo)
-function showEncargos(){
+function featuredActivity(){
+  const season = seasonData();
+  if (season.phase !== 'active' && eventActive()){
+    const days = Math.ceil((EVENT.end - Date.now()) / 86400000);
+    return {tab:'christmas',icon:'evento',title:EVENT.name,status:days === 1 ? 'Queda 1 día' : `Quedan ${days} días`};
+  }
+  return {tab:'season',icon:'file-island',title:'Señal de File Island',status:seasonStatus(season)};
+}
+// Los encargos del evento y los habituales usan las mismas filas y recompensas.
+function questPanels(eventOnly = false){
   const d = loadDaily(), enc = loadEncargos(), wk = weekState(), wq = weekQuestState(), ev = eventActive() ? eventQuestState() : null;
   const fmt = n => Number(n).toLocaleString('es-ES');
   const rw = (b, t) => GACHA_SOON ? (b ? '+' + fmt(b) + ' Bits' : '') : `${b ? '+' + fmt(b) + ' Bits · ' : ''}+${t} ${t === 1 ? 'ticket' : 'tickets'}`;
@@ -12318,12 +12470,86 @@ function showEncargos(){
     panel('eq-day', 'ic_mision', 'Diarios', 'Se renuevan cada día', dayRows, dayRows.filter(r => r.includes(' done"')).length, dayRows.length),
     panel('eq-week', 'ic_encargos', 'Semanales', `Se renuevan cada lunes · ${weeklyMod().name}`, weekRows, weekRows.filter(r => r.includes(' done"')).length, weekRows.length)
   ];
-  if (ev){
+  if (eventOnly && ev){
     const evRows = EVENT_QUESTS.map(q => row(ev.done.includes(q.id), q.t, questProg(ev, q), q.goal, rw(q.bits, q.tix) + (q.vale || q.extra ? '<br><span class="eq-prize">+ ' + eventPrizeText(q) + '</span>' : '')));
-    parts.push(panel('eq-ev', 'ic_evento', 'Evento', `${EVENT.name} · quedan ${days} ${days === 1 ? 'día' : 'días'}`, evRows, ev.done.length, evRows.length));
+    return `<div class="eq-grid eq-single">${panel('eq-ev', 'ic_evento', EVENT.name,
+      `Quedan ${days} ${days === 1 ? 'día' : 'días'}`, evRows, ev.done.length, evRows.length)}</div>`;
   }
-  menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios se renuevan cada día. Los semanales y los de evento suman lo que haces en todas tus partidas. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d} <span>Solo se aplica en el Reto semanal, que tiene su propio botón en el menú.</span></p>`);
-  const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('eq-dialog');
+  return `<div class="eq-grid eq-two">${parts.join('')}</div>`;
+}
+function showEncargos(trigger = document.getElementById('mEnc')){
+  menuModal('Encargos', questPanels(), () => trigger?.focus({preventScroll:true}));
+  document.querySelector('#realModalHost .approved-info-dialog')?.classList.add('eq-dialog');
+}
+function showModes(trigger){
+  const {map, diff} = retoSetup(), mod = weeklyMod();
+  const modes = [
+    {id:'modeClassic', icon:'mapas', name:'Clásico', description:'Elige mapa y dificultad.'},
+    {id:'modeSurvival', icon:'supervivencia', name:'Supervivencia', description:'Modo infinito'},
+    {id:'modeWeekly', icon:'reto', name:'Reto semanal', description:`${MAPS[map].name} · ${DIFFS[diff].name} · ${mod.name}`}
+  ];
+  const options = modes.map(({id,icon,name,description}) => `<button type="button" id="${id}">
+    <img src="ui/hub/digivice/${icon}.png" alt=""><span><b>${name}</b><small>${description}</small></span>
+    <span aria-hidden="true">›</span></button>`).join('');
+  menuModal('Modos', `<div class="mode-options">${options}</div>`, () => trigger?.focus({preventScroll:true}));
+  document.getElementById('modeClassic').onclick = () => document.getElementById('playBtn').click();
+  document.getElementById('modeSurvival').onclick = () => document.getElementById('mSurv').click();
+  document.getElementById('modeWeekly').onclick = showReto;
+}
+function christmasPanel(){
+  const banner = !GACHA_SOON && (bannerOpen('navidadP') ? 'navidadP' : bannerOpen('navidadR') ? 'navidadR' : '');
+  const quests = eventActive() ? questPanels(true) : '';
+  return `${quests}${banner ? '<button class="mini-btn activity-action" type="button" id="activityChristmasBanner">Abrir Incubadora</button>' : ''}`;
+}
+function showEvents(trigger, selected = 'season'){
+  const tabs = [{id:'season', label:'Temporada', icon:'file-island', content:seasonPanel}];
+  if (eventActive() || (!GACHA_SOON && (bannerOpen('navidadP') || bannerOpen('navidadR')))){
+    tabs.push({id:'christmas', label:'Navidad', icon:'evento', content:christmasPanel});
+  }
+  const initial = Math.max(0, tabs.findIndex(tab => tab.id === selected));
+  const markup = tabs.map(({id,label,icon}, i) => `<button type="button" id="activity-tab-${id}" role="tab"
+    aria-selected="${i === initial}" tabindex="${i === initial ? 0 : -1}" aria-controls="activity-panel-${id}">
+    <img src="ui/hub/digivice/${icon}.png" alt="">${label}</button>`).join('');
+  const panels = tabs.map(({id,content}, i) => `<div class="activity-panel" id="activity-panel-${id}" role="tabpanel"
+    aria-labelledby="activity-tab-${id}" tabindex="0"${i === initial ? '' : ' hidden'}>${content()}</div>`).join('');
+  menuModal('Eventos', `<div class="activity-tabs" role="tablist" aria-label="Eventos">${markup}</div>${panels}`,
+    () => trigger?.focus({preventScroll:true}));
+  const dialog = document.querySelector('#realModalHost .approved-info-dialog');
+  if (!dialog) return;
+  dialog.classList.add('eq-dialog');
+  const buttons = [...dialog.querySelectorAll('[role="tab"]')];
+  const views = [...dialog.querySelectorAll('[role="tabpanel"]')];
+  const select = index => {
+    buttons.forEach((button,i) => {
+      button.setAttribute('aria-selected', String(i === index));
+      button.tabIndex = i === index ? 0 : -1;
+      views[i].hidden = i !== index;
+    });
+    buttons[index].focus({preventScroll:true});
+  };
+  buttons.forEach((button, i) => {
+    button.onclick = () => select(i);
+    button.onkeydown = event => {
+      const key = event.key;
+      if (!['ArrowLeft','ArrowRight','Home','End'].includes(key)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const index = key === 'Home' ? 0 : key === 'End' ? buttons.length - 1 :
+        (i + (key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length;
+      select(index);
+    };
+  });
+  const bind = (id, action) => {
+    const button = dialog.querySelector('#' + id);
+    if (button) button.onclick = action;
+  };
+  bind('seasonReto', showReto);
+  bind('seasonSurv', () => document.getElementById('mSurv').click());
+  bind('activityChristmasBanner', () => {
+    gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR';
+    showGacha();
+  });
+  buttons[initial].focus({preventScroll:true});
 }
 /* ---------- Escaparate semanal de cosméticos ---------- */
 const SHOP_PRICE = {title:600, frame:1200, galactico:2500, holografica:5000, festival:4000, reno:4000};
@@ -12494,17 +12720,76 @@ function showShop(msg = ''){
   };
 }
 function showLogros(){
-  const ach = loadAch();
-  const kills = sumStats('kills'), plays = sumStats('plays');
-  const best = Object.entries(loadJSON('digibonk3d-surv', {})).sort((a, b) => b[1] - a[1])[0];
-  const fmt = n => Number(n).toLocaleString('es-ES');
-  const rows = achItems().map(tl => {
-    const isT = TITLES.includes(tl), own = (isT ? inv.titles : inv.frames).includes(tl.id), pr = tl.prog();
-    const bar = `<em class="ach-prog"><i class="ach-bar"><u style="width:${Math.round(Math.min(1, pr[0]/pr[1])*100)}%"></u></i><small>${fmt(Math.min(pr[0], pr[1]))}/${fmt(pr[1])}</small></em>`;
-    return `<div class="enc-row ach-row${own ? ' got' : ''}"><b>${own ? (isT ? '🏅' : '🖼') : '🔒'}</b><span><strong>${tl.name}</strong> <small>${isT ? 'Título' : 'Marco'}</small><br>${tl.how}</span>${own ? '<em class="ach-got">✓ Conseguido</em>' : bar}</div>`;
-  }).join('');
-  const stats = `<div class="ach-stats"><span>Partidas <b>${plays}</b></span><span>Bajas <b>${kills}</b></span><span>Supervivencia <b>${best ? fmtTime(best[1]) + ' · ' + CHARS[best[0]].name : '—'}</b></span></div>`;
-  menuModal('Logros', stats + `<div class="enc-list">${rows}</div>`);
+  state = 'logros';
+  setHud(false);
+  const fmt = n => Number(n).toLocaleString(LANG);
+  const entries = achItems().map(item => {
+    const title = TITLES.includes(item);
+    const earned = (title ? inv.titles : inv.frames).includes(item.id);
+    const [current, goal] = item.prog();
+    const value = Math.max(0, Math.min(Number(current) || 0, goal));
+    return {item, title, earned, value, goal};
+  }).sort((a, b) => Number(a.earned) - Number(b.earned) || b.value / b.goal - a.value / a.goal);
+  const earned = entries.filter(entry => entry.earned).length;
+  const best = bestSurvivalRecord();
+  const avatar = avatarSrc();
+  const card = ({item, earned, value, goal}) => `<article class="achievement-card" data-state="${earned ? 'earned' : 'pending'}" data-tier="${item.tier}">
+    <span class="achievement-art" aria-hidden="true">${trainerAchievementArt(item, avatar)}</span>
+    <div>
+      <h3 id="achievement-${item.id}">${escHtml(item.name)}</h3>
+      <p>${escHtml(item.how)}</p>
+      ${earned ? '<span class="achievement-earned">✓ Conseguido</span>' : `<div class="achievement-progress">
+        <progress aria-labelledby="achievement-${item.id}" value="${value}" max="${goal}"></progress>
+        <span aria-hidden="true">${fmt(value)} / ${fmt(goal)}</span>
+      </div>`}
+    </div>
+  </article>`;
+  const group = (name, title) => `<section class="achievement-group"><h2>${name}</h2>
+    <div class="achievement-grid">${entries.filter(entry => entry.title === title).map(card).join('')}</div>
+  </section>`;
+  showOverlay(`<main class="achievement-page" aria-labelledby="achHeading">
+    <div class="achievement-wrap">
+      <button class="achievement-back" type="button" id="achBack"><span aria-hidden="true">‹</span> <span>Volver al menú</span></button>
+      <header class="achievement-hero">
+        <div>
+          <h1 id="achHeading">Logros</h1>
+          <div class="achievement-total"><b>${fmt(earned)} / ${fmt(entries.length)}</b><span id="achTotalLabel">Conseguidos</span></div>
+          <progress aria-labelledby="achTotalLabel" value="${earned}" max="${entries.length}"></progress>
+        </div>
+        <img src="ui/hub/digivice/logros.png" alt="" width="158" height="158">
+      </header>
+      <div class="achievement-stats">
+        <div><span>Partidas</span><b>${fmt(sumStats('plays'))}</b></div>
+        <div><span>Bajas</span><b>${fmt(sumStats('kills'))}</b></div>
+        <div><span>Supervivencia</span><b>${best ? `${fmtTime(best.seconds)} · ${escHtml(CHARS[best.key].name)}` : '—'}</b></div>
+      </div>
+      <div class="achievement-filters" role="group" aria-label="Filtrar logros">
+        <button type="button" data-ach-filter="all" aria-pressed="true" aria-controls="achResults">Todos<span>${fmt(entries.length)}</span></button>
+        <button type="button" data-ach-filter="pending" aria-pressed="false" aria-controls="achResults">Pendientes<span>${fmt(entries.length - earned)}</span></button>
+        <button type="button" data-ach-filter="earned" aria-pressed="false" aria-controls="achResults">Conseguidos<span>${fmt(earned)}</span></button>
+      </div>
+      <div id="achResults">
+        ${group('Títulos', true)}
+        ${group('Marcos', false)}
+        <p class="achievement-empty" role="status" hidden>No hay logros para este filtro.</p>
+      </div>
+    </div>
+  </main>`);
+  const back = document.getElementById('achBack');
+  back.onclick = () => { showSelect(); document.getElementById('mLog')?.focus(); };
+  back.focus();
+  const filters = [...overlay.querySelectorAll('[data-ach-filter]')];
+  const groups = [...overlay.querySelectorAll('.achievement-group')];
+  const empty = overlay.querySelector('.achievement-empty');
+  for (const filter of filters) filter.onclick = () => {
+    for (const button of filters) button.setAttribute('aria-pressed', String(button === filter));
+    for (const section of groups){
+      const cards = [...section.querySelectorAll('.achievement-card')];
+      for (const entry of cards) entry.hidden = filter.dataset.achFilter !== 'all' && entry.dataset.state !== filter.dataset.achFilter;
+      section.hidden = cards.every(entry => entry.hidden);
+    }
+    empty.hidden = groups.some(section => !section.hidden);
+  };
 }
 /* ---------- Laboratorio: mejoras permanentes que se compran con Bits ---------- */
 // per = bonus por nivel (multiplicador sumado) · flat = bonus entero · costs = precio de cada nivel
@@ -13496,7 +13781,7 @@ const wonMap = m => (mapWins()[m] || []).length ? 1 : 0;
 const wonDiff = ds => Object.values(mapWins()).some(l => l.some(d => ds.includes(d))) ? 1 : 0;
 const HARD_DIFFS = ['dificil', 'pesadilla'];
 const wonMapDiff = (m, ds) => (mapWins()[m] || []).some(d => ds.includes(d)) ? 1 : 0;
-const bestSurvMin = () => Math.floor(Math.max(0, ...Object.values(loadJSON('digibonk3d-surv', {}))) / 60);
+const bestSurvMin = () => Math.floor((bestSurvivalRecord()?.seconds || 0) / 60);
 // Contadores de toda la vida del jugador (cofres, apoyos, fusiones, jefes menores, días seguidos)
 const LIFE_DEF = {chests: 0, sups: 0, fusions: 0, minis: [], streak: 0, best: 0, last: ''};
 function loadLife(){ return {...LIFE_DEF, ...loadJSON('digibonk3d-life', {})}; }
@@ -13568,6 +13853,20 @@ const TITLES = [
 ];
 // Progreso de logros guardado en 'digibonk3d-ach'
 function loadAch(){ return loadJSON('digibonk3d-ach', {runs: 0, zone2: false, boss: false}); }
+function achievementDay(day){
+  const parts = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(day);
+  if (!parts) return NaN;
+  const [, year, month, date] = parts.map(Number);
+  return Date.UTC(year, month - 1, date) / 86400000;
+}
+function recordDailyStreak(life, today){
+  const lastDay = achievementDay(life.last);
+  const elapsed = achievementDay(today) - lastDay;
+  if (elapsed <= 0) return;   // repetir el día o atrasar el reloj no suma ni borra la racha
+  life.streak = elapsed === 1 ? (Number(life.streak) || 0) + 1 : 1;
+  life.last = today;
+  life.best = Math.max(life.best, life.streak);
+}
 // Tras cada partida: guarda lo que ha pasado en ella (logros, contadores y días seguidos)
 function recordRunProgress(win){
   const ach = loadAch();
@@ -13580,11 +13879,7 @@ function recordRunProgress(win){
   life.sups += (g.supsJoined || 0);
   life.fusions += (g.fus || []).length;
   life.minis = [...new Set([...life.minis, ...(g.minisKilled || [])])];
-  if (g.t >= 5){
-    const today = dayKey(), y = new Date(Date.now() - 86400000), yKey = `${y.getFullYear()}-${y.getMonth()+1}-${y.getDate()}`;
-    if (life.last !== today){ life.streak = life.last === yKey ? life.streak + 1 : 1; life.last = today; }
-    life.best = Math.max(life.best, life.streak);
-  }
+  if (g.t >= 5) recordDailyStreak(life, dayKey());
   saveLife(life);
 }
 // Concede los marcos y títulos cuya meta ya se cumple. Devuelve los nuevos ({name, kind})
@@ -13737,20 +14032,7 @@ function seasonStatus(data){
   if (data.phase === 'closed') return 'Temporada finalizada';
   return `Semana ${data.week} de ${FILE_SEASON.weeks.length} · ${data.days === 1 ? 'Queda 1 día' : `Quedan ${data.days} días`}`;
 }
-function seasonBanner(){
-  const data = seasonData(), total = FILE_SEASON.weeks.length;
-  const next = FILE_SEASON.prizes.find(prize => prize.at > data.done);
-  const target = next?.at || total;
-  return `<button type="button" class="hb-season" id="hubSeason" aria-haspopup="dialog">
-    <img src="ui/hub/digivice/file-island.png" alt="">
-    <span class="hb-season-copy">
-      <b>Señal de File Island</b><small>${seasonStatus(data)}</small>
-      ${data.phase === 'active' ? `<progress max="${target}" value="${data.done}" aria-label="Progreso de temporada" title="${data.done}/${target}"></progress>` : ''}
-    </span>
-    <span class="hb-season-next" aria-hidden="true">›</span>
-  </button>`;
-}
-function showSeason(trigger){
+function seasonPanel(){
   const data = seasonData(), {start, weeks, prizes} = FILE_SEASON;
   const tasks = weeks.map((task, i) => {
     const count = Math.min(task.goal, data.progress[task.id] || 0);
@@ -13759,10 +14041,10 @@ function showSeason(trigger){
     return `<li><span><small>Semana ${i + 1}</small>${task.label}</span><strong>${status}</strong></li>`;
   }).join('');
   const rewards = prizes.map(({at, label, owns}) => `<li><span>${label}</span><strong>${owns() ? 'En tu colección' : `${at}/${weeks.length}`}</strong></li>`).join('');
-  menuModal('Señal de File Island', `<div class="season-dialog">
+  return `<div class="season-dialog">
     <article class="season-summary">
       <img src="ui/hub/digivice/file-island.png" alt="">
-      <div><b>${seasonStatus(data)}</b><small>${data.done}/${weeks.length} encargos</small><progress max="${weeks.length}" value="${data.done}" aria-label="Progreso de temporada"></progress></div>
+      <div><b>Señal de File Island</b><small>${seasonStatus(data)}</small><small>${data.done}/${weeks.length} encargos</small><progress max="${weeks.length}" value="${data.done}" aria-label="Progreso de temporada"></progress></div>
     </article>
     <p>Cierre: ${seasonDate(data.end)} · 00:00 UTC</p>
     <p>Se abre un encargo cada lunes. Puedes completar los anteriores hasta el cierre.</p>
@@ -13770,11 +14052,7 @@ function showSeason(trigger){
     ${data.phase === 'active' && data.week >= 2 ? '<button class="season-mode mini-btn" type="button" id="seasonReto">Abrir Reto semanal</button>' : ''}
     ${data.phase === 'active' && data.week >= 4 ? '<button class="season-mode mini-btn" type="button" id="seasonSurv">Ir a Supervivencia</button>' : ''}
     <h3>Recompensas</h3><ul class="season-prizes">${rewards}</ul>
-  </div>`, () => trigger.focus({preventScroll:true}));
-  const btnReto = document.getElementById('seasonReto');
-  if (btnReto) btnReto.onclick = showReto;
-  const btnSurv = document.getElementById('seasonSurv');
-  if (btnSurv) btnSurv.onclick = () => document.getElementById('mSurv').click();
+  </div>`;
 }
 
 function weeklyIndex(){ const n = SEASONS.adventure.chars.length; return ((weekNum() % n) + n) % n; }

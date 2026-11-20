@@ -236,6 +236,10 @@ I18N.add('en', {
   "{0}/{1} Digimon": "{0}/{1} Digimon",
   "Laboratorio": "Laboratory",
   "Mapas": "Maps",
+  "Conseguidos": "Unlocked",
+  "Pendientes": "Pending",
+  "Filtrar logros": "Filter achievements",
+  "No hay logros para este filtro.": "No achievements match this filter.",
   "Logros": "Achievements",
   "Perfil y marcos": "Profile and frames",
   "Apoyar": "Support",
@@ -1817,5 +1821,11 @@ I18N.add('en', {
   "Se abre un encargo cada lunes. Puedes completar los anteriores hasta el cierre.": "A mission opens each Monday. Earlier missions remain available until the season ends.",
   "Abrir Reto semanal": "Open Weekly Challenge",
   "Ir a Supervivencia": "Go to Survival",
-  "En tu colección": "In your collection"
+  "En tu colección": "In your collection",
+  "Hoy · {0}/{1}": "Today \u00b7 {0}/{1}",
+  "Temporada": "Season",
+  "Abrir Incubadora": "Open Incubator",
+  "3 modos de juego": "3 game modes",
+  "Modos": "Modes",
+  "Elige mapa y dificultad.": "Choose a map and difficulty."
 });
