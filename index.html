@@ -5544,8 +5544,9 @@ document.addEventListener('pointerlockchange', () => {
 // la animación de entrada y se conserva el scroll de las listas, para que no parezca una recarga
 let overlayShownState = null;
 function showOverlay(html){
-  if (overlayShownState === 'player' && state !== 'player') stopSoundEffects();
-  const same = overlayShownState === state && !overlay.classList.contains('hidden') && overlay.firstElementChild;
+  const wasVisible = !overlay.classList.contains('hidden') && overlay.firstElementChild;
+  if (wasVisible && overlayShownState !== state) stopSoundEffects();
+  const same = wasVisible && overlayShownState === state;
   const scrolls = [];
   if (same) overlay.querySelectorAll('*').forEach((el, i) => {
     if (el.scrollTop || el.scrollLeft) scrolls.push([el.id ? '#' + el.id : null, el.className, i, el.scrollTop, el.scrollLeft]);
@@ -5570,7 +5571,7 @@ function showOverlay(html){
   refreshTopbar();
 }
 function hideOverlay(){
-  if (overlayShownState === 'player') stopSoundEffects();
+  if (!overlay.classList.contains('hidden')) stopSoundEffects();
   overlay.classList.add('hidden'); refreshTopbar();
 }
 
@@ -11302,7 +11303,8 @@ function musicSync(){
   const want = g && state !== 'end' && MUSIC_FILES[g.map] ? g.map : 'menu';
   if (want === Music.track) return;
   Music.track = want;
-  if (Music.file){ Music.file.pause(); Music.file.onerror = null; Music.file = null; }
+  musicStop(true);
+  if (Music.file){ Music.file.onerror = null; Music.file = null; }
   if (Music.on && Sfx.ctx) musicStart();
 }
 function musicSynth(){
