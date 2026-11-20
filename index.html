@@ -4446,7 +4446,7 @@ const DIFF_ORDER = ['facil', 'normal', 'dificil', 'pesadilla'];
 let runMap = MAPS[localStorage.getItem('digibonk3d-map')] ? localStorage.getItem('digibonk3d-map') : 'bosque';
 let runDiff = DIFFS[localStorage.getItem('digibonk3d-diff')] ? localStorage.getItem('digibonk3d-diff') : 'normal';
 const mapDef = () => MAPS[(g && g.map) || 'bosque'];
-const zonesOf = () => mapDef().zones;
+const zonesOf = () => g?.weeklyRule && g.weeklyRule === BOSS_CIRCUIT.id ? BOSS_CIRCUIT_ZONES : mapDef().zones;
 const zoneDef = (n = g ? g.zone : 1) => zonesOf()[n - 1];
 const isPortalMap = () => !!g && mapDef().kind === 'portal';
 const lvlDiff = () => DIFFS[(g && g.diff) || 'normal'];
@@ -5446,7 +5446,7 @@ addEventListener('keydown', e => {
     else if (k === 'escape') isRetoRun() ? showReto() : showSelect();
   }
   else if (state === 'reto'){
-    if (k === 'enter') startGame(selectedKey);
+    if (k === 'enter') document.getElementById('rtStart')?.click();
     else if (k === 'c') showPicker('personaje');
     else if (k === 'escape') returnFromWeekly();
   }
@@ -6208,7 +6208,7 @@ function showSelect(){
             </button>
             <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i><img class="nm-ic" src="ui/hub/digivice/supervivencia.png" alt=""></i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
             <button type="button" class="hb-mode m-modes" id="mModes" aria-haspopup="dialog">
-              <i><img class="nm-ic" src="ui/hub/digivice/reto.png" alt=""></i><span><b>Modos</b><small>3 modos de juego</small></span>
+              <i><img class="nm-ic" src="ui/hub/digivice/reto.png" alt=""></i><span><b>Modos</b><small>Reto semanal</small></span>
             </button>
           </div>
           <div class="hb-activities">
@@ -7473,7 +7473,9 @@ function showReto(){
   state = 'reto';
   setHud(false);
   if (!isUnlocked(selectedKey)) selectedKey = SEASONS.adventure.chars.find(k => isUnlocked(k)) || 'agumon';
-  const rs = retoSetup(), m = MAPS[rs.map], d = DIFFS[rs.diff], mod = weeklyMod(), st = retoState(), star = retoStar(), k = selectedKey;
+  const week = weekNum(), rs = retoSetup(week), m = MAPS[rs.map], d = DIFFS[rs.diff], mod = weeklyMod(week);
+  const st = retoState(week), star = retoStar(week), k = selectedKey;
+  const stageLabel = mod === BOSS_CIRCUIT ? `${BOSS_CIRCUIT_ZONES.length} jefes` : m.name;
   const [floorTx, decoPng, bossPng] = m.preview, isStar = k === star;
   const best = st.best;
   const hitos = RETO_HITOS.map(h => { const ok = st.done.includes(h.id); return `<li class="${ok ? 'ok' : ''}"><i>${ok ? '✓' : '○'}</i><span>${h.t}</span><em>+${h.bits} Bits</em></li>`; }).join('');
@@ -7483,13 +7485,13 @@ function showReto(){
       <header class="rt-top">
         <button class="g-back" id="rtBack"><kbd>Esc</kbd> Volver</button>
         <h2 class="rt-title"><small>Modo</small>Reto semanal</h2>
-        <span class="rt-week"><b>Semana ${weekNum() % 1000}</b><small>Termina en ${retoLeft()}</small></span>
+        <span class="rt-week"><b>Semana ${week % 1000}</b><small>Termina en ${retoLeft()}</small></span>
       </header>
       <div class="rt-body">
         <section class="rt-card rt-rule">
           <span class="rt-art" style="--floor:url(${floorTx})"><img class="rt-deco" src="${decoPng}" alt=""><img class="rt-boss" src="${bossPng}" alt=""><em>Regla de la semana</em></span>
           <div class="rt-rule-in"><b>${mod.name}</b><p>${mod.d}</p>
-            <ul class="rt-cond"><li><small>Mapa</small><b>${m.name}</b></li><li style="--dc:${d.col}"><small>Dificultad</small><b>${d.name}</b></li><li><small>Mapa generado</small><b>Igual para todos</b></li></ul>
+            <ul class="rt-cond"><li><small>Mapa</small><b>${stageLabel}</b></li><li style="--dc:${d.col}"><small>Dificultad</small><b>${d.name}</b></li><li><small>Mapa generado</small><b>Igual para todos</b></li></ul>
             <p class="rt-note">Mapa, dificultad y regla son fijos toda la semana. Las partidas del reto no cuentan en tus récords normales.</p></div>
         </section>
         <section class="rt-card rt-digi">
@@ -7513,7 +7515,9 @@ function showReto(){
   document.getElementById('rtBack').onclick = returnFromWeekly;
   document.getElementById('rtPick').onclick = () => showPicker('personaje');
   { const el = document.getElementById('rtStar'); if (el) el.onclick = () => { selectedKey = star; showReto(); }; }
-  document.getElementById('rtStart').onclick = () => startGame(selectedKey);
+  const start = document.getElementById('rtStart');
+  start.onclick = () => weekNum() === week ? startGame(selectedKey) : showReto();
+  scheduleWeeklyView(start, week, showReto);
 }
 // Móvil: se juega siempre en horizontal. Al empezar la partida y en cada toque de los menús (si se salió de la
 // pantalla completa), intenta pantalla completa y bloquear la orientación (Android). Instalado como app no hace
@@ -7872,17 +7876,18 @@ function startGame(key, resume){
     runDrop();
   }
   lockLandscape();   // necesita el gesto del jugador: antes de esperar a la pantalla de carga
-  if (!resume && isRetoRun()){ const rs = retoSetup(); runMap = rs.map; runDiff = rs.diff; }   // el reto no se elige: es el de la semana
+  const week = isRetoRun() ? (resume?.g.weeklyWeek ?? weekNum(resume?.at)) : null;
+  if (!resume && week !== null){ const rs = retoSetup(week); runMap = rs.map; runDiff = rs.diff; }
   const tok = mapLoadBegin(runMap);
   // Dos vueltas: el navegador pinta la pantalla de carga antes de que la construcción del mapa ocupe el hilo
   requestAnimationFrame(() => setTimeout(() => {
     if (tok !== mapLoad.tok) return;   // otro destino o cancelada mientras tanto
-    try { buildRun(key, resume); }
+    try { buildRun(key, resume, week); }
     catch(e){ mapLoadCancel(); throw e; }
     mapLoadArm(tok);
   }, 0));
 }
-function buildRun(key, resume){
+function buildRun(key, resume, week = isRetoRun() ? (resume?.g.weeklyWeek ?? weekNum(resume?.at)) : null){
   annClear();
   // El botón Jugar muestra el último Digimon con el que se jugó
   if (CHARS[key]) { selectedKey = key; try { localStorage.setItem('digibonk3d-last-choice', key); } catch(e){} }
@@ -7899,10 +7904,12 @@ function buildRun(key, resume){
   if (!resume && skinHasArt(key, 0, 'variocolor') && Math.random() < 1 / 8192){ grantSkinAt(key, 0, 'variocolor'); equipSkinAt(key, 0, 'variocolor'); }
   g = {
     mode: runMode,
-    weekly: runWeekly && runMode !== 'surv',
-    // Semilla del mapa: una nueva en cada partida; el reto semanal usa la de la semana (mismo mapa para todos)
-    seed: (resume && resume.g && resume.g.seed) || (runWeekly && runMode !== 'surv' ? 7919*(weekNum() + 1000) : 1 + Math.floor(Math.random()*2e9)),
-    star: runWeekly && runMode !== 'surv' ? retoStar() : null,
+    weekly: week !== null,
+    weeklyWeek: week,
+    weeklyRule: week !== null ? (resume?.g.weeklyRule || resume?.g.mod?.id || weeklyMod(week).id) : null,
+    // La semana se fija al empezar y se conserva en el punto de guardado.
+    seed: resume?.g.seed || (week !== null ? 7919*(week + 1000) : 1 + Math.floor(Math.random()*2e9)),
+    star: week !== null ? (resume?.g.star || retoStar(week)) : null,
     ch: {...c, id:key},
     p: {x:sp.x, y:0, vy:0, z:sp.z, hp:100, maxHp:100, speed:6, xp:0, lvl:1, nextXp:10, dmg:1, cdMul:1, area:1, count:1, pickup:3.5, critChance:0.12, critMul:2, armor: c.armor || 1},
     t: 0, kills: 0, enemies: [], shots: [], gems: [], blades: [], turrets: [], zones: [],
@@ -7935,7 +7942,7 @@ function buildRun(key, resume){
   // Identificador de la partida viva (punto de guardado) y si cuenta para el ranking global
   g.runId = runNewId(); runSetLive(g.runId);
   if (runLiveId() !== g.runId) g.runId = null;   // sin almacenamiento local: no se guarda ni se comprueba
-  g.ranked = !resume && runRanked();
+  g.ranked = !resume && !g.weekly && runRanked();
   if (resume) runApply(resume);
   else { const si = startItem(); if (si) addItem(si); }   // objeto inicial elegido en la vitrina del Digidex
   hideOverlay();
@@ -7950,7 +7957,7 @@ function buildRun(key, resume){
     else if (!g.pendingUp) pauseGame();   // empieza en pausa para que dé tiempo a situarse
   }
   else if (g.weekly){   // al quitarse la pantalla de carga, recuerda la regla de la semana
-    const gg = g, show = () => { if (g !== gg) return; if (mapLoad.on || state !== 'play') return setTimeout(show, 300); announce('Reto semanal', weeklyMod().name, '#2bb673'); };
+    const gg = g, show = () => { if (g !== gg) return; if (mapLoad.on || state !== 'play') return setTimeout(show, 300); announce('Reto semanal', weeklyRunMod().name, '#2bb673'); };
     setTimeout(show, 600);
   }
 }
@@ -10756,7 +10763,7 @@ function endGame(win){
   showOverlay(`
     <div class="end3 ${win ? 'win' : 'lose'}${g.weekly ? ' reto' : ''}">
       <div class="end3-top">${g.weekly ? '<span class="end3-mode">Reto semanal</span>' : ''}<img class="end3-ic" src="${charIcon(g.ch.id)}" alt=""><h1>${g.mode === 'surv' ? 'FIN DE LA SUPERVIVENCIA' : g.weekly ? (win ? '¡RETO SUPERADO!' : 'FIN DEL RETO') : win ? '¡VICTORIA!' : 'HAS CAÍDO'}</h1></div>
-      <p class="end3-sub">${g.mode === 'surv' ? `Has aguantado ${fmtTime(Math.floor(g.t))} · récord con ${g.ch.name}: ${fmtTime(Math.floor(survBest(g.ch.id)))}` : win ? (g.bossName || 'Piedmon') + ' ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Laboratorio`} · ${mapDef().name} · ${zoneDef().name} · ${lvlDiff().name}${g.mode === 'surv' ? ' · Oleada ' + (g.wave || 1) : ''}${g.weekly ? ' · ' + weeklyMod().name : ''}</p>
+      <p class="end3-sub">${g.mode === 'surv' ? `Has aguantado ${fmtTime(Math.floor(g.t))} · récord con ${g.ch.name}: ${fmtTime(Math.floor(survBest(g.ch.id)))}` : win ? (g.bossName || 'Piedmon') + ' ha sido derrotado' : `${stageName(g.ch.id, g.ch.evolved)} vuelve al Laboratorio`} · ${mapDef().name} · ${zoneDef().name} · ${lvlDiff().name}${g.mode === 'surv' ? ' · Oleada ' + (g.wave || 1) : ''}${g.weekly ? ' · ' + weeklyRunMod().name : ''}</p>
       ${g.reto ? `<div class="end3-reto"><span class="er-pts"><small>Puntos del reto</small><b>${g.reto.pts.toLocaleString('es-ES')}</b></span><span class="er-best"><small>Tu marca de la semana</small><b>${g.reto.best.toLocaleString('es-ES')}</b>${g.reto.isBest ? '<em>¡Nueva marca!</em>' : ''}</span><ul class="er-hitos">${RETO_HITOS.map(h => { const ok = retoState().done.includes(h.id); return `<li class="${ok ? 'ok' : ''}"><i>${ok ? '✓' : '○'}</i>${h.t}</li>`; }).join('')}</ul></div>` : ''}
       <p class="end3-sub end3-rank" id="end3Rank" aria-live="polite"></p>
       <div class="end3-cells${GACHA_SOON ? ' no-tix' : ''}">
@@ -11016,7 +11023,8 @@ function buildPortal(){
   const y0 = terrainH(PORTAL.x, PORTAL.z);
   grp.position.set(PORTAL.x, y0, PORTAL.z);
   // Puerta dibujada del bioma (hojas de mapas de Jaime): apagada y gris hasta que se abre
-  const art = PORTAL_ART[g.map] || PORTAL_ART.desierto;
+  const map = g.weeklyRule === BOSS_CIRCUIT.id ? BOSS_CIRCUIT_STAGES[g.zone - 1].map : g.map;
+  const art = PORTAL_ART[map] || PORTAL_ART.desierto;
   const stone = new THREE.Sprite(new THREE.SpriteMaterial({map: decoTex(art.file), transparent: true, alphaTest: 0.5, color: 0x737886}));
   stone.scale.set(art.h*art.aspect, art.h, 1); stone.position.y = art.h/2;
   grp.add(stone);
@@ -11091,7 +11099,7 @@ function updatePortal(dt){
     const k = 1 + 0.06*Math.sin(g.t*5);
     P.swirl.scale.set(3.6*k, 3.6*k, 1);
     if (P.glow) P.glow.material.opacity = 0.55 + 0.3*Math.sin(g.t*3);
-    if (Math.hypot(g.p.x - PORTAL.x, g.p.z - PORTAL.z) < PORTAL.r) enterScreen(2);
+    if (g.zone < zonesOf().length && Math.hypot(g.p.x - PORTAL.x, g.p.z - PORTAL.z) < PORTAL.r) enterScreen(g.zone + 1);
   }
 }
 // Cambio de pantalla (portal, o por tiempo en Supervivencia): sale la pantalla de carga del mapa con el nombre de la
@@ -11102,7 +11110,8 @@ function enterScreen(n, instant){
   if (instant) return swapScreen(n);
   const z = zoneDef(n), gg = g;
   g.screenLoad = true;
-  const tok = mapLoadBegin(g.map || runMap, {status: I18N.tr('Pantalla') + ' ' + n + ': ' + I18N.tr(z.name), minMs: 1300, after: () => { if (g === gg) screenBanner(n); }});
+  const map = g.weeklyRule === BOSS_CIRCUIT.id ? BOSS_CIRCUIT_STAGES[n - 1].map : g.map || runMap;
+  const tok = mapLoadBegin(map, {status: I18N.tr('Pantalla') + ' ' + n + ': ' + I18N.tr(z.name), minMs: 1300, after: () => { if (g === gg) screenBanner(n); }});
   requestAnimationFrame(() => setTimeout(() => {
     if (g !== gg){ return; }   // se salió de la partida mientras tanto
     gg.screenLoad = false;
@@ -11121,6 +11130,10 @@ function swapScreen(n, quiet){
   // La experiencia que quedaba en el suelo se absorbe al cruzar
   for (const gm of g.gems){ if (gm.mesh) world.remove(gm.mesh); if (!gm.heal) g.p.xp += gm.v * (g.labXp || 1); }
   g.gems = [];
+  if (g.weeklyRule === BOSS_CIRCUIT.id){
+    g.p.hp = Math.min(g.p.maxHp, g.p.hp + Math.ceil(g.p.maxHp * 0.25));
+    g.p.xp = Math.max(g.p.xp, g.p.nextXp);
+  }
   for (const c of g.chests) if (c.group) world.remove(c.group);
   g.chests = [];
   for (const sh of g.shrines || []) removeShrine(sh);
@@ -11321,7 +11334,7 @@ function updateHUD(){
   document.getElementById('hudName').textContent = stageName(g.ch.id, g.ch.evolved);
   // Zona actual, progreso de zonas y récord de tiempo (como en la barra superior de la referencia)
   const recMax = getRecords().reduce((a, r) => Math.max(a, r.t), 0);
-  document.getElementById('hudZone').textContent = `${g.weekly ? 'Reto · ' + weeklyMod().name + ' · ' : ''}${mapDef().name} · ${zoneDef().name} · ${g.mode === 'surv' ? 'Oleada ' + (g.wave || 1) : 'Pantalla ' + g.zone + '/' + zonesOf().length}`;
+  document.getElementById('hudZone').textContent = `${g.weekly ? 'Reto · ' + weeklyRunMod().name + ' · ' : ''}${mapDef().name} · ${zoneDef().name} · ${g.mode === 'surv' ? 'Oleada ' + (g.wave || 1) : 'Pantalla ' + g.zone + '/' + zonesOf().length}`;
   // Contadores de la partida: bajas, tickets ganados y santuarios cargados (como la fila de la referencia)
   const shrinesDone = (g.shrines || []).filter(s => s.used).length;
   const chipKey = [g.kills, g.coins || 0, g.tix, shrinesDone, (g.shrines || []).length, (g.emblems || []).length].join('|'), chipsEl = document.getElementById('hudChips');
@@ -12647,19 +12660,14 @@ function showEncargos(){
     `<span class="activity-balance"><img src="ui/hud/ic_bits.webp" alt="Bits">${SAVE.bits.toLocaleString(LANG)}</span>`);
 }
 function showModes(trigger){
-  const {map, diff} = retoSetup(), mod = weeklyMod();
-  const modes = [
-    {id:'modeClassic', icon:'mapas', name:'Clásico', description:'Elige mapa y dificultad.'},
-    {id:'modeSurvival', icon:'supervivencia', name:'Supervivencia', description:'Modo infinito'},
-    {id:'modeWeekly', icon:'reto', name:'Reto semanal', description:`${MAPS[map].name} · ${DIFFS[diff].name} · ${mod.name}`}
-  ];
-  const options = modes.map(({id,icon,name,description}) => `<button type="button" id="${id}">
-    <img src="ui/hub/digivice/${icon}.png" alt=""><span><b>${name}</b><small>${description}</small></span>
-    <span aria-hidden="true">›</span></button>`).join('');
-  menuModal('Modos', `<div class="mode-options">${options}</div>`, () => trigger?.focus({preventScroll:true}));
-  document.getElementById('modeClassic').onclick = () => document.getElementById('playBtn').click();
-  document.getElementById('modeSurvival').onclick = () => document.getElementById('mSurv').click();
-  document.getElementById('modeWeekly').onclick = showReto;
+  const week = weekNum(), {map, diff} = retoSetup(week), mod = weeklyMod(week);
+  const stage = mod === BOSS_CIRCUIT ? `${BOSS_CIRCUIT_ZONES.length} jefes` : MAPS[map].name;
+  menuModal('Modos', `<div class="mode-options"><button type="button" id="modeWeekly">
+    <img src="ui/hub/digivice/reto.png" alt=""><span><b>${mod.name}</b><small>${stage} · ${DIFFS[diff].name} · Cambia el lunes</small></span>
+    <span aria-hidden="true">›</span></button></div>`, () => trigger?.focus({preventScroll:true}));
+  const entry = document.getElementById('modeWeekly');
+  entry.onclick = showReto;
+  scheduleWeeklyView(entry, week, () => showModes(trigger));
 }
 function christmasPanel(){
   const banner = !GACHA_SOON && (bannerOpen('navidadP') ? 'navidadP' : bannerOpen('navidadR') ? 'navidadR' : '');
@@ -13098,8 +13106,8 @@ const WEEKLY_MODS = [
 ];
 // Digimon de la semana: el de la rotación de la tienda o, si no lo tienes, el siguiente que sí tengas.
 // Jugar el reto con él da +25% de Bits y cuenta para el tercer hito
-function retoStar(){
-  const ch = SEASONS.adventure.chars, n = ch.length, i = weeklyIndex();
+function retoStar(week = weekNum()){
+  const ch = SEASONS.adventure.chars, n = ch.length, i = weeklyIndex(week);
   for (let j = 0; j < n; j++){ const k = ch[(i + j) % n]; if (isUnlocked(k)) return k; }
   return ch[i];
 }
@@ -13109,13 +13117,14 @@ const RETO_HITOS = [
   {id:'gana',     t:'Gana el reto', bits: 300, tix: 2, ok: win => !!win},
   {id:'estrella', t:'Gana el reto con el Digimon de la semana', bits: 400, tix: 3, ok: win => !!win && g.ch.id === g.star}
 ];
-function retoState(){ const w = weekNum(), st = loadJSON('digibonk3d-reto', null); return st && st.w === w && Array.isArray(st.done) ? st : {w, done: [], tries: 0, best: null}; }
+function retoState(w = weekNum()){ const st = loadJSON('digibonk3d-reto', null); return st && st.w === w && Array.isArray(st.done) ? st : {w, done: [], tries: 0, best: null}; }
 // El reto semanal es un modo aparte: cada semana fija para todos el mapa, la dificultad, la regla y la semilla del mapa.
 // No se elige mapa ni dificultad, tiene su propia puntuación y su propia marca semanal, y no cuenta en los récords,
 // en los mapas superados ni en el ranking de las partidas normales.
 const RETO_DIFFS = ['normal', 'dificil'];
-function retoSetup(){
-  const w = weekNum(), m = MAP_ORDER.length, d = RETO_DIFFS.length;
+function retoSetup(w = weekNum()){
+  if (weeklyMod(w) === BOSS_CIRCUIT) return {map:'bosque', diff:'normal'};
+  const m = MAP_ORDER.length, d = RETO_DIFFS.length;
   return {map: MAP_ORDER[((w % m) + m) % m], diff: RETO_DIFFS[((Math.floor(w / m) % d) + d) % d]};
 }
 function retoLeft(){
@@ -13126,7 +13135,9 @@ function retoLeft(){
 const RETO_WIN_PTS = 5000;
 const retoPoints = win => (g.kills | 0) + Math.floor(g.t) * 2 + (win ? RETO_WIN_PTS : 0);
 function retoRecord(win){
-  const st = retoState(), pts = retoPoints(win), isBest = !st.best || pts > st.best.pts;
+  const pts = retoPoints(win);
+  if (g.weeklyWeek !== weekNum()) return {pts, isBest:false, best:pts};
+  const st = retoState(g.weeklyWeek), isBest = !st.best || pts > st.best.pts;
   st.tries = (st.tries | 0) + 1;
   if (isBest) st.best = {pts, key: g.ch.id, t: Math.floor(g.t), kills: g.kills | 0, win: !!win};
   try { localStorage.setItem('digibonk3d-reto', JSON.stringify(st)); } catch(e){}
@@ -13140,19 +13151,55 @@ function restoreRunPrefs(){
 }
 const isRetoRun = () => runWeekly && runMode !== 'surv';
 function checkReto(win){
-  if (!g.weekly) return [];
-  const st = retoState(), out = [];
+  if (!g.weekly || g.weeklyWeek !== weekNum()) return [];
+  const st = retoState(g.weeklyWeek), out = [];
   for (const h of RETO_HITOS) if (!st.done.includes(h.id) && h.ok(win)){ st.done.push(h.id); out.push(h); }
   if (out.length){ try { localStorage.setItem('digibonk3d-reto', JSON.stringify(st)); } catch(e){} }
   return out;
 }
-function weeklyMod(){ const n = WEEKLY_MODS.length; return WEEKLY_MODS[((weekNum() % n) + n) % n]; }
+const BOSS_CIRCUIT_STAGES = [
+  {map:'bosque', zone:0},    // Andromon
+  {map:'desierto', zone:0},  // Scorpiomon
+  {map:'bosque', zone:1},    // Piedmon
+  {map:'desierto', zone:1},  // MetalEtemon
+  {map:'nevado', zone:0}     // Machinedramon
+];
+const BOSS_CIRCUIT_ZONES = BOSS_CIRCUIT_STAGES.map(({map, zone}, i, stages) => {
+  const stage = MAPS[map].zones[zone];
+  return {...stage, boss:{...stage.boss, final:i === stages.length - 1, retreatAt:0, resume:false}};
+});
+const BOSS_CIRCUIT = {
+  id:'circuito-jefes', name:'Circuito de jefes',
+  d:`${BOSS_CIRCUIT_ZONES.map(zone => zone.boss.name).join(' → ')}. Entre combates, cruza el portal para recuperar un 25% de vida y elegir una mejora.`,
+  apply(){}
+};
+const MODE_ROTATION_START = Date.UTC(2026, 10, 23);
+const MODE_ROTATION = [BOSS_CIRCUIT, ...WEEKLY_MODS];
+function weeklyMod(week = weekNum()){
+  const offset = week - weekNum(MODE_ROTATION_START);
+  if (offset >= 0) return MODE_ROTATION[offset % MODE_ROTATION.length];
+  const n = WEEKLY_MODS.length;
+  return WEEKLY_MODS[((week % n) + n) % n];
+}
+function weeklyRunMod(){
+  return MODE_ROTATION.find(mode => mode.id === g.weeklyRule) || weeklyMod(g.weeklyWeek);
+}
+let weeklyViewTimer;
+function scheduleWeeklyView(element, week, redraw){
+  clearTimeout(weeklyViewTimer);
+  const next = (week + 1) * WEEK_MS + 4 * 86400000;
+  weeklyViewTimer = setTimeout(() => {
+    if (!element.isConnected) return;
+    if (weekNum() !== week) redraw();
+    else scheduleWeeklyView(element, week, redraw);
+  }, Math.max(1, next - Date.now()));
+}
 // El modificador solo se aplica en el Reto semanal, que se elige con su propio botón del menú:
 // Jugar, Mapas y Supervivencia nunca lo activan, así nadie empieza sin curación o con menos vida sin saberlo
 function applyWeekly(){
   g.mod = {spawnMul: 1};
   if (!g.weekly) return;
-  const m = weeklyMod();
+  const m = weeklyRunMod();
   m.apply();
   g.mod.id = m.id;
 }
@@ -14252,7 +14299,7 @@ function frameClass(){ return extra.frame ? ' fr-' + extra.frame : ''; }
 // Banner permanente: cada semana destaca una línea evolutiva distinta (sus skins galácticas)
 const WEEK_MS = 7 * 86400000;
 // Número de semana con cambio los lunes (el 1970-01-05 fue lunes; 4 días después del 1 de enero de 1970)
-const weekNum = () => Math.floor((Date.now() - 4 * 86400000) / WEEK_MS);
+const weekNum = (now = Date.now()) => Math.floor((now - 4 * 86400000) / WEEK_MS);
 // Ambos pases empiezan el lunes del lanzamiento, en el límite UTC del reto semanal.
 const PASS_LEVELS = 50;
 const PASS_START = Date.UTC(2026, 10, 23);
@@ -14428,7 +14475,7 @@ function seasonPanel(){
     <button class="mini-btn" type="button" id="filePassQuests">Abrir Encargos</button>`;
 }
 
-function weeklyIndex(){ const n = SEASONS.adventure.chars.length; return ((weekNum() % n) + n) % n; }
+function weeklyIndex(week = weekNum()){ const n = SEASONS.adventure.chars.length; return ((week % n) + n) % n; }
 function weeklyDigimon(){ return SEASONS.adventure.chars[weeklyIndex()]; }
 // Marco y título exclusivos del banner activo (null si el banner no tiene)
 function bannerFrame(){
