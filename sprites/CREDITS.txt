@@ -9,6 +9,6 @@ sprites/anim/: hojas de animación (reposo, ataque y daño) montadas con los fot
 
 Hojas redibujadas con IA para Digibonk: Puppetmon (referencia del sprite de Bandai), Scorpiomon y MetalEtemon (referencias de tero0x), y la forma cuadrúpeda de SaberLeomon en Clásico y Papá Noel. Las variantes Galáctico, Digivice LCD y Variocolor de SaberLeomon usan la paleta de cada skin sobre la hoja cuadrúpeda. En las hojas DMC con una pose de daño repetida se añadió un retroceso a partir de la pose de reposo.
 
-Frigimon clásico retocado con manos blancas de nieve, siguiendo la ilustración oficial de Bandai. Retoque de los guantes de Frigimon en Galáctico, Papá Noel, Reno y Variocolor, e iconos nuevos de Agumon y Patamon para Digivice LCD y Holográfica, generados con IA a partir del arte del juego.
+Frigimon clásico retocado con manos blancas de nieve, siguiendo la ilustración oficial de Bandai. Las cinco skins reutilizan sus poses y añaden paletas o accesorios del arte existente. Iconos de Digivice LCD y Holográfica de Agumon y Patamon generados con IA a partir del arte del juego.
 
 Música: "Together we are strong (178 BPM)" de ThisIsBeatKitchen (BeatKitchen), en Pixabay, bajo la Pixabay Content License. Archivo: audio/together-we-are-strong.mp3
