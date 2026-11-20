@@ -3510,9 +3510,15 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
 #overlay .realhub.hb button.hb-version:hover{background:#ffe190}
 #overlay .realhub.hb button.hb-version:focus-visible{outline:2px solid #d6f4ff;outline-offset:3px}
 #overlay .approved-info-dialog.menu-release-dialog{text-align:left}
-.menu-release-meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;font-size:.84em}
-.menu-release-meta b{border:1px solid var(--m-line2);border-radius:999px;background:var(--m-sunk);padding:4px 10px}
-.menu-release-meta time{color:var(--m-mute)}
+.menu-release-history{display:grid;gap:8px;margin:0 0 12px}
+.menu-release-entry{min-width:0;border:1px solid var(--m-cardline);border-radius:11px;background:var(--m-sunk)}
+.menu-release-entry summary{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;padding:0 12px;list-style:none;font-size:.93em;font-weight:900;cursor:pointer}
+.menu-release-entry summary::-webkit-details-marker{display:none}
+.menu-release-entry summary::after{content:"";flex:none;width:8px;height:8px;margin:0 4px 4px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg)}
+.menu-release-entry[open] summary::after{margin-block:4px 0;transform:rotate(225deg)}
+.menu-release-entry summary:focus-visible{outline:2px solid var(--m-acc);outline-offset:2px;border-radius:10px}
+.menu-release-body{padding:0 10px 2px}
+.menu-release-body time{display:block;margin:0 2px 8px;color:var(--m-mute);font-size:.76em}
 .menu-release-list{display:grid;gap:7px;padding:0;margin:0 0 12px;list-style:none}
 .menu-release-list li{border:1px solid var(--m-line);border-radius:10px;background:var(--m-sunk);padding:8px 10px;font-size:.88em}
 .menu-release-list li p{margin:2px 0 0;font-size:.9em;line-height:1.4}
@@ -5594,22 +5600,38 @@ function hubLife(){
     parade: `<div class="living-strip" aria-hidden="true">${strip.map(data => actor('living-strip-actor',data)).join('')}</div>`
   };
 }
-const MENU_RELEASE = {
-  version: '0.1.1',
-  date: '2026-11-20',
-  changes: [
-    ['Inicio animado', 'Recorre el Mundo Digital desde el inicio. Los Digimon caminan, vuelan y nadan en el paisaje animado.'],
-    ['Ranking online', 'Abre la clasificación desde el inicio y filtra por mapa, modo, dificultad y región.'],
-    ['Tienda semanal', 'Prueba el marco y el título de la semana en tu propia ficha antes de comprarlos.'],
-    ['Ficha de entrenador', 'Personaliza tu fondo, consulta las marcas por mapa y destaca hasta tres logros.'],
-    ['Iconos Digivice', 'El menú principal tiene 16 iconos ilustrados.']
-  ]
-};
+const MENU_RELEASES = [
+  {
+    version: '0.1.1',
+    date: '2026-11-20',
+    changes: [
+      ['Inicio animado', 'Recorre el Mundo Digital desde el inicio. Los Digimon caminan, vuelan y nadan en el paisaje animado.'],
+      ['Ficha de entrenador', 'Busca y filtra los iconos, los marcos y los títulos. Puedes dejar tu tarjeta sin fondo.']
+    ]
+  },
+  {
+    version: '0.1.0',
+    date: '2026-11-20',
+    changes: [
+      ['Inicio animado', 'El portal, la aurora y los reflejos se mueven en el menú. Puedes reducir el movimiento desde Ajustes.'],
+      ['Ranking online', 'Abre la clasificación desde el inicio y filtra por mapa, modo, dificultad y región.'],
+      ['Tienda semanal', 'Prueba el marco y el título de la semana en tu propia ficha antes de comprarlos.'],
+      ['Ficha de entrenador', 'Personaliza tu fondo, consulta las marcas por mapa y destaca hasta tres logros.'],
+      ['Iconos Digivice', 'El menú principal tiene 16 iconos ilustrados.']
+    ]
+  }
+];
 function showMenuRelease(trigger){
-  const date = new Intl.DateTimeFormat(I18N.lang, {dateStyle:'long', timeZone:'UTC'}).format(new Date(MENU_RELEASE.date));
-  const entries = MENU_RELEASE.changes.map(([name, detail]) => `<li><strong>${name}</strong><p>${detail}</p></li>`).join('');
-  menuModal('Novedades', `<div class="menu-release-meta"><b>Beta ${MENU_RELEASE.version}</b><time datetime="${MENU_RELEASE.date}" data-no-i18n>${date}</time></div>
-    <ul class="menu-release-list">${entries}</ul>`, () => trigger.focus());
+  const formatDate = new Intl.DateTimeFormat(I18N.lang, {dateStyle:'long', timeZone:'UTC'});
+  const releases = MENU_RELEASES.map(({version, date, changes}, index) => {
+    const entries = changes.map(([name, detail]) => `<li><strong>${name}</strong><p>${detail}</p></li>`).join('');
+    return `<details class="menu-release-entry"${index === 0 ? ' open' : ''}>
+      <summary data-no-i18n>v${version}</summary>
+      <div class="menu-release-body"><time datetime="${date}" data-no-i18n>${formatDate.format(new Date(date))}</time>
+      <ul class="menu-release-list">${entries}</ul></div>
+    </details>`;
+  }).join('');
+  menuModal('Novedades', `<div class="menu-release-history">${releases}</div>`, () => trigger.focus());
   document.querySelector('#realModalHost .approved-info-dialog')?.classList.add('menu-release-dialog');
 }
 function showSelect(){
@@ -5642,7 +5664,7 @@ function showSelect(){
       <div class="real-world" aria-hidden="true">${life.stage}</div>
       <header class="hb-top">
         <div class="hb-utils">
-          <button class="hb-pill hb-version" id="hubRelease" type="button" aria-haspopup="dialog" title="Ver novedades">Beta ${MENU_RELEASE.version}</button>
+          <button class="hb-pill hb-version" id="hubRelease" type="button" aria-haspopup="dialog" title="Ver novedades">Beta ${MENU_RELEASES[0].version}</button>
           <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma"><img class="nm-ic" src="ui/hub/digivice/idioma.png" alt="">${LANG.toUpperCase()}</button>
           <button class="hb-pill hb-app" type="button" id="rhApp" aria-label="Instalar la app" title="Instalar la app"${appCanInstall() ? '' : ' hidden'}><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m-5-5 5 5 5-5M5 20h14"/></svg><span>App</span></button>
           <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>

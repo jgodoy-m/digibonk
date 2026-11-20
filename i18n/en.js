@@ -1769,6 +1769,8 @@ I18N.add('en', {
   "Novedades": "What’s new",
   "Ver novedades": "See what’s new",
   "Inicio animado": "Animated home screen",
+  "El portal, la aurora y los reflejos se mueven en el menú. Puedes reducir el movimiento desde Ajustes.": "The portal, aurora and reflections move in the main menu. You can reduce motion in Settings.",
+  "Busca y filtra los iconos, los marcos y los títulos. Puedes dejar tu tarjeta sin fondo.": "Search and filter icons, frames and titles. Your card can also use no background.",
   "Recorre el Mundo Digital desde el inicio. Los Digimon caminan, vuelan y nadan en el paisaje animado.": "Explore the Digital World from the main menu. Digimon walk, fly and swim across the animated scenery.",
   "Abre la clasificación desde el inicio y filtra por mapa, modo, dificultad y región.": "Open the leaderboard from the main menu and filter by map, mode, difficulty and region.",
   "Prueba el marco y el título de la semana en tu propia ficha antes de comprarlos.": "Preview the weekly frame and title on your own trainer card before buying them.",
