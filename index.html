@@ -3684,20 +3684,33 @@ html[lang] .trainer-screen .trainer-header .g-back,
 /* La cabecera mantiene visibles las utilidades, el entrenador y su saldo. */
 #overlay .realhub.hb .hb-user-card{
   --trainer-ring:color-mix(in srgb,var(--m-cardline) 72%,#549ccc);
-  min-width:min(100%,300px);gap:10px;padding:6px 7px 6px 9px;border:1px solid var(--trainer-ring);border-radius:18px;
+  min-width:min(100%,312px);gap:6px;padding:5px 6px;border:1px solid var(--trainer-ring);border-radius:18px;
   background:linear-gradient(140deg,color-mix(in srgb,var(--m-card) 87%,#579ed0),var(--m-card) 65%);
   box-shadow:inset 0 1px #ffffff24,0 5px 16px #071b291f
 }
-#overlay .realhub.hb .hb-user-card .hb-me{flex:1;height:52px;gap:11px;padding:0 4px}
+#overlay .realhub.hb .hb-trainer-face{
+  display:flex;align-items:center;gap:7px;flex:1;min-width:0;padding:3px 4px;
+  border:1px solid var(--trainer-ring);border-radius:13px;
+  background:color-mix(in srgb,var(--m-sunk) 94%,#378dc2);
+  box-shadow:inset 0 1px 3px #08162220
+}
+#overlay .realhub.hb .hb-user-card .hb-me{flex:1;height:46px;gap:8px;padding:0 3px}
+#overlay .realhub.hb .hb-user-card .hb-me:focus-visible{outline-offset:-1px}
 #overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{
-  width:46px!important;height:46px!important;border:1px solid var(--trainer-ring);box-sizing:border-box
+  width:42px!important;height:42px!important;border:1px solid var(--trainer-ring);box-sizing:border-box
 }
 #overlay .realhub.hb .hb-user-card .hb-me strong{font-size:16px!important;max-width:19ch}
 #overlay .realhub.hb .hb-user-card .hb-me small{font-size:11px!important;margin-top:3px}
 #overlay .realhub.hb .hb-user-card .hb-wallet{
-  align-self:stretch;padding:0 4px 0 12px;border:0;border-inline-start:1px solid var(--trainer-ring);border-radius:0;
-  background:transparent;font-size:15px
+  --lcd-tint:#58a882;
+  flex:0 1 auto;align-self:stretch;justify-content:center;min-width:0;gap:5px;
+  padding:3px 7px;border:1px solid color-mix(in srgb,var(--m-line2) 55%,var(--lcd-tint));border-radius:8px;
+  color:var(--m-text);font:800 14px/1 'IBM Plex Mono',ui-monospace,monospace;
+  background:repeating-linear-gradient(180deg,transparent 0 3px,#385d4b10 3px 4px),
+    color-mix(in srgb,var(--m-sunk) 80%,var(--lcd-tint));
+  box-shadow:inset 0 2px 4px #061b1924
 }
+#overlay .realhub.hb .hb-user-card .hb-wallet .hb-chip img{width:17px;height:17px}
 #overlay .realhub.hb .hb-user-card .hb-out{width:36px;height:40px}
 
 /* Logo y temporada comparten el espacio sobre los modos en escritorio. */
@@ -3714,7 +3727,10 @@ html[lang] .trainer-screen .trainer-header .g-back,
 }
 #overlay .realhub.hb .hb-season:hover{border-color:#db9236}
 #overlay .realhub.hb .hb-season:focus-visible{outline:2px solid var(--m-acc);outline-offset:2px}
-.hb-season img{width:32px;height:32px;object-fit:contain;flex:none}
+.hb-season img,.season-summary img{
+  width:38px;height:38px;object-fit:contain;flex:none;
+  filter:drop-shadow(0 1px 1px #529db53b)
+}
 .hb-season-copy{flex:1;min-width:0}
 .hb-season-copy b,.hb-season-copy small{display:block}
 .hb-season-copy b{font-size:14px;line-height:1.15}
@@ -3723,7 +3739,7 @@ html[lang] .trainer-screen .trainer-header .g-back,
 .hb-season-next{color:var(--m-soft);font-size:18px;flex:none}
 .season-dialog article{border:1px solid var(--m-cardline);border-radius:12px;padding:10px 12px;background:var(--m-sunk)}
 .season-dialog .season-summary{display:flex;align-items:center;gap:12px}
-.season-summary img{width:42px;height:42px;object-fit:contain}
+.season-summary img{width:44px;height:44px}
 .season-summary div{flex:1}
 .season-dialog small{display:block;color:var(--m-mute)}
 .season-weeks,.season-prizes{display:grid;gap:6px;margin:10px 0;padding:0;list-style:none}
@@ -3733,7 +3749,8 @@ html[lang] .trainer-screen .trainer-header .g-back,
 .season-dialog button.season-mode{display:inline-flex;margin:4px 0 10px}
 @media(max-width:760px){
   #overlay .realhub.hb .hb-user-card{padding:4px 6px}
-  #overlay .realhub.hb .hb-user-card .hb-me{height:47px}
+  #overlay .realhub.hb .hb-user-card .hb-me{height:43px}
+  #overlay .realhub.hb .hb-user-card .hb-wallet{padding-inline:5px;font-size:12px}
   #overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{width:40px!important;height:40px!important}
   #overlay .realhub.hb .hb-intro{flex-direction:column;align-items:center}
   #overlay .realhub.hb .hb-season{flex:auto;width:100%;max-width:none}
@@ -5982,10 +5999,12 @@ function showSelect(){
           <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>
         </div>
         <div class="hb-user-card" role="group" aria-label="Jugador">
-          <button type="button" class="hb-me" id="rhProfile"><span class="hud-portrait mini hm-pl-frame${extra.frame ? ' fr-' + extra.frame : ''}"><img id="rhProfileImg" src="${avatarSrc()}" alt=""></span><span class="hb-id"><strong>${safeText(trainerName || 'Invitado')}</strong><small>${TITLES.find(x => x.id === extra.title)?.name || (isGuest() ? t('guestTag') : t('noTitle'))}</small></span></button>
-          <div class="hb-wallet">
-            <span class="hb-chip" title="${SAVE.bits.toLocaleString('es-ES')} Bits"><img src="ui/hud/ic_bits.webp" alt="Bits"><span>${SAVE.bits.toLocaleString('es-ES')}</span></span>
-            ${GACHA_SOON ? '' : `<span class="hb-chip" title="${usableTickets('std')} Tickets"><img src="ui/hud/ic_ticket.webp" alt="Tickets"><span>${usableTickets('std')}</span></span>`}
+          <div class="hb-trainer-face">
+            <button type="button" class="hb-me" id="rhProfile"><span class="hud-portrait mini hm-pl-frame${extra.frame ? ' fr-' + extra.frame : ''}"><img id="rhProfileImg" src="${avatarSrc()}" alt=""></span><span class="hb-id"><strong>${safeText(trainerName || 'Invitado')}</strong><small>${TITLES.find(x => x.id === extra.title)?.name || (isGuest() ? t('guestTag') : t('noTitle'))}</small></span></button>
+            <div class="hb-wallet">
+              <span class="hb-chip" title="${SAVE.bits.toLocaleString('es-ES')} Bits"><img src="ui/hud/ic_bits.webp" alt="Bits"><span>${SAVE.bits.toLocaleString('es-ES')}</span></span>
+              ${GACHA_SOON ? '' : `<span class="hb-chip" title="${usableTickets('std')} Tickets"><img src="ui/hud/ic_ticket.webp" alt="Tickets"><span>${usableTickets('std')}</span></span>`}
+            </div>
           </div>
           <button type="button" class="hb-out" id="hmLogout" aria-label="Cerrar sesión" title="Cerrar sesión"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h5m-1-8h11m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
@@ -13723,7 +13742,7 @@ function seasonBanner(){
   const next = FILE_SEASON.prizes.find(prize => prize.at > data.done);
   const target = next?.at || total;
   return `<button type="button" class="hb-season" id="hubSeason" aria-haspopup="dialog">
-    <img src="ui/hub/digivice/evento.png" alt="">
+    <img src="ui/hub/digivice/file-island.png" alt="">
     <span class="hb-season-copy">
       <b>Señal de File Island</b><small>${seasonStatus(data)}</small>
       ${data.phase === 'active' ? `<progress max="${target}" value="${data.done}" aria-label="Progreso de temporada" title="${data.done}/${target}"></progress>` : ''}
@@ -13742,7 +13761,7 @@ function showSeason(trigger){
   const rewards = prizes.map(({at, label, owns}) => `<li><span>${label}</span><strong>${owns() ? 'En tu colección' : `${at}/${weeks.length}`}</strong></li>`).join('');
   menuModal('Señal de File Island', `<div class="season-dialog">
     <article class="season-summary">
-      <img src="ui/hub/digivice/evento.png" alt="">
+      <img src="ui/hub/digivice/file-island.png" alt="">
       <div><b>${seasonStatus(data)}</b><small>${data.done}/${weeks.length} encargos</small><progress max="${weeks.length}" value="${data.done}" aria-label="Progreso de temporada"></progress></div>
     </article>
     <p>Cierre: ${seasonDate(data.end)} · 00:00 UTC</p>
