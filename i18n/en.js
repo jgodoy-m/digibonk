@@ -1756,3 +1756,5 @@ I18N.add('en', {
   "Título · {0}": "Title · {0}",
   "Prueba las piezas con tu avatar actual.": "Try the items with your current avatar."
 });
+
+I18N.add('en', { "Clasificación online": "Online leaderboard", "Ranking online": "Online ranking" });
