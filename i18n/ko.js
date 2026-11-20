@@ -1035,6 +1035,8 @@ I18N.add('ko', {
   "Pulsa Shift para hacer un dash y esquivar": "Shift를 눌러 대시로 피하세요",
   "Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»": "준비되면 북쪽 포털(미니맵에 표시)로 가서 「보스 소환」을 누르세요",
   "Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe": "준비되면 북쪽 포털(미니맵에 표시)로 가서 B를 눌러 보스를 소환하세요",
+  "WebGL no disponible": "WebGL을 사용할 수 없습니다",
+  "El navegador no pudo iniciar los gráficos 3D. Puedes seguir usando el menú e intentar jugar de nuevo cuando WebGL esté disponible.": "브라우저에서 3D 그래픽을 시작할 수 없습니다. 메뉴는 계속 이용할 수 있으며, WebGL을 사용할 수 있게 되면 다시 플레이할 수 있습니다.",
   "Recuperando los gráficos…": "그래픽 복구 중…",
   "El navegador ha liberado la memoria gráfica. La partida está en pausa.": "브라우저가 그래픽 메모리를 해제했어요. 게임이 일시 정지되었습니다.",
   "No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.": "그래픽을 복구하지 못했어요. 게임을 새로고침하세요. 저장된 진행 상황은 유지됩니다.",

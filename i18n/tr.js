@@ -1028,6 +1028,8 @@ I18N.add('tr', {
   "Pulsa Shift para hacer un dash y esquivar": "Atılıp kaçmak için Shift’e bas",
   "Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»": "Hazır olduğunda kuzeydeki portala git (mini haritada) ve «Boss çağır»a dokun",
   "Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe": "Hazır olduğunda kuzeydeki portala git (mini haritada) ve boss’u çağırmak için B’ye bas",
+  "WebGL no disponible": "WebGL kullanılamıyor",
+  "El navegador no pudo iniciar los gráficos 3D. Puedes seguir usando el menú e intentar jugar de nuevo cuando WebGL esté disponible.": "Tarayıcı 3B grafikleri başlatamadı. Menüyü kullanmaya devam edebilir ve WebGL kullanılabilir olduğunda tekrar oynamayı deneyebilirsin.",
   "Recuperando los gráficos…": "Grafikler geri yükleniyor…",
   "El navegador ha liberado la memoria gráfica. La partida está en pausa.": "Tarayıcı grafik belleğini boşalttı. Oyun duraklatıldı.",
   "No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.": "Grafikler geri yüklenemedi. Oyunu yeniden yükle: kayıtlı ilerlemen korunur.",

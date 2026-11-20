@@ -1036,6 +1036,8 @@ I18N.add('ja', {
   "Pulsa Shift para hacer un dash y esquivar": "Shiftでダッシュしてよける",
   "Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»": "準備ができたら北のポータル（ミニマップに表示）へ行き「ボスを呼ぶ」をタップ",
   "Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe": "準備ができたら北のポータル（ミニマップに表示）へ行きBでボスを呼ぶ",
+  "WebGL no disponible": "WebGL を利用できません",
+  "El navegador no pudo iniciar los gráficos 3D. Puedes seguir usando el menú e intentar jugar de nuevo cuando WebGL esté disponible.": "ブラウザーで 3D グラフィックスを起動できませんでした。メニューは引き続き使えます。WebGL が利用可能になってから、もう一度プレイしてください。",
   "Recuperando los gráficos…": "グラフィックを復旧中…",
   "El navegador ha liberado la memoria gráfica. La partida está en pausa.": "ブラウザがグラフィックメモリを解放しました。プレイは一時停止中です。",
   "No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.": "グラフィックを復旧できませんでした。ゲームを再読み込みしてください。保存した進行状況は残ります。",

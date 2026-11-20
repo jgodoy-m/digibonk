@@ -1021,6 +1021,8 @@ I18N.add('de', {
   "Pulsa Shift para hacer un dash y esquivar": "Drücke Umschalt für einen Dash zum Ausweichen",
   "Cuando quieras, ve al portal del norte (en el minimapa) y toca «Invocar jefe»": "Wenn du bereit bist, geh zum Nordportal (auf der Minikarte) und tippe auf „Boss rufen“",
   "Cuando quieras, ve al portal del norte (en el minimapa) y pulsa B para invocar al jefe": "Wenn du bereit bist, geh zum Nordportal (auf der Minikarte) und drücke B, um den Boss zu rufen",
+  "WebGL no disponible": "WebGL nicht verfügbar",
+  "El navegador no pudo iniciar los gráficos 3D. Puedes seguir usando el menú e intentar jugar de nuevo cuando WebGL esté disponible.": "Der Browser konnte die 3D-Grafik nicht starten. Du kannst das Menü weiterhin nutzen und erneut spielen, sobald WebGL verfügbar ist.",
   "Recuperando los gráficos…": "Grafik wird wiederhergestellt…",
   "El navegador ha liberado la memoria gráfica. La partida está en pausa.": "Der Browser hat den Grafikspeicher freigegeben. Der Lauf ist pausiert.",
   "No se han podido recuperar los gráficos. Recarga el juego: tu progreso guardado se mantiene.": "Die Grafik konnte nicht wiederhergestellt werden. Lade das Spiel neu: Dein gespeicherter Fortschritt bleibt erhalten.",
