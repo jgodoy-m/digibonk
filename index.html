@@ -3207,6 +3207,42 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 #overlay .realhub.hb .nm-dot{animation:lv-dot 1.8s ease-in-out infinite}
 @keyframes lv-dot{0%,100%{scale:1}50%{scale:1.25}}
 @media(prefers-reduced-motion:reduce){#overlay .realhub.hb :is(.lv-stage,.lv-parade,.nm-play,.nm-event,.nm-stack,.nm-tiles) *,#overlay .realhub.hb :is(.nm-play,.lv-sheen)::before,#overlay .realhub.hb .lv-sheen::after{animation:none!important}#overlay .realhub.hb .lv-fx{display:none}}
+/* Jerarquía y estados de los menús. */
+#overlay .realhub.hb .hb-resume-main{margin:0;min-height:112px;box-shadow:0 5px 0 #157443;animation:none}
+#overlay .realhub.hb .hub-play-options{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)!important}
+#overlay .realhub.hb .hub-play-options .hb-stack{display:grid;grid-auto-rows:1fr}
+#overlay .realhub.hb .hub-play-options #mWeekly{grid-row:auto;height:auto!important}
+#overlay .realhub.hb .hub-play-options:has(.hb-resume-main) .hb-resume-main{display:grid;grid-template-columns:auto minmax(0,1fr);align-content:center;text-align:left}
+#overlay .realhub.hb .hb-resume-main .hbc-info{grid-column:1/-1;align-items:flex-start;text-align:left}
+#overlay .realhub.hb .hb-resume-main .hbc-go{display:none}
+.settings-type-preview{display:grid;gap:4px;padding:8px 12px;border:1px solid var(--m-line,#6b98cc);border-radius:10px}
+.guide-quick{margin:0 0 8px;text-align:center;font-size:.85em}
+#overlay .realhub.hb .hub-play-options .hb-mode{min-height:44px}
+#overlay .realhub.hb .hub-new-game{background:#315983;color:#fff}
+#overlay .realhub.hb .hub-weekly{background:#224670;color:#fff}
+#overlay .realhub.hb .hub-weekly em{margin-left:auto;font-size:.75em}
+#overlay .realhub.hb .hub-next .hb-side-h img{width:34px;height:34px;object-fit:contain}
+#overlay .realhub.hb .hub-next-action{position:relative;display:grid;gap:4px;width:100%;padding:12px 30px 12px 12px;border:1px solid var(--m-line,#6b98cc);border-radius:12px;background:var(--m-panel,#173256);color:inherit;text-align:left;font:inherit;cursor:pointer}
+.hub-next-action small{line-height:1.3}
+.hub-next-action span{position:absolute;right:12px;top:12px}
+#overlay .realhub.hb .hub-shop span{display:grid;gap:2px}
+.menu-details summary{cursor:pointer;font-weight:800}
+.record-tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.record-tools label{display:grid;gap:4px;flex:1;min-width:110px;font-size:.85em}
+.record-tools select{font:inherit;padding:6px}
+.approved-info-records .record-row{display:flex;flex-wrap:wrap;gap:5px 10px;align-items:center}
+.record-row small{flex-basis:100%}
+.skin-preview{display:grid;justify-items:center;gap:8px;padding:8px;text-align:center}
+.skin-preview-art,.skin-preview-art img,.skin-pose{width:85px;height:85px;object-fit:contain;image-rendering:pixelated}
+.skin-pose{display:block;background:var(--sheet) var(--pose) 0 / 500% 100% no-repeat}
+.skin-preview-actions{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.skin-preview-actions [aria-pressed=true]{outline:2px solid #61caff}
+.menu-section-title{margin:14px 0 4px;font-size:1em}
+.lab-card .lab-balance{grid-column:1/-1;text-align:right}
+@media (max-width:760px){
+  #overlay .realhub.hb .hub-play-options{position:sticky;top:0;z-index:5}
+  #overlay .realhub.hb .hb-resume-main{min-height:80px}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.min.js" } }
@@ -4680,7 +4716,7 @@ addEventListener('keydown', e => {
   if (k === 'b' && state === 'play'){ summonBoss(); return; }
   if (state === 'play' && (k === '4' || k === '5' || k === '6')){ useCons(Object.keys(CONS).find(id => CONS[id].key === k)); return; }
   if (MENU_NAV.includes(state) && menuNav(k, e)) return;
-  if (state === 'help'){ if (k === 'escape') showSelect(); if (k === 'arrowright') tutoStep(1); if (k === 'arrowleft') tutoStep(-1); return; }
+  if (state === 'help'){ if (k === 'escape') document.getElementById('helpBack').click(); if (k === 'arrowright') tutoStep(1); if (k === 'arrowleft') tutoStep(-1); return; }
   if (state === 'credits'){ if (k === 'escape') creditsFrom === 'hub' ? showSelect() : showSettings(); return; }
   if (state === 'gacha' || state === 'lab' || state === 'settings' || state === 'player' || state === 'collection'){ if (k === 'escape') showSelect(); return; }
   // Esc o P pausan y reanudan. Con el ratón bloqueado el navegador puede no entregar Esc:
@@ -4700,7 +4736,7 @@ addEventListener('keydown', e => {
   if (state === 'play' && k === 'e' && g && g.nearChest) openChest(g.nearChest);
   const list = state === 'pick' ? pickOrder() : SEASONS.adventure.chars;
   if (state === 'select'){
-    if (k === 'enter') showPicker('personaje');
+    if (k === 'enter') (document.getElementById('hbContinue') || document.getElementById('playBtn')).click();
   }
   else if (state === 'pick'){
     if (k.length === 1 && '123456789'.includes(k) && +k <= list.length && isUnlocked(list[+k-1])){ selectedKey = list[+k-1]; showPicker(); }
@@ -4868,8 +4904,10 @@ function showPause(askQuit = false){
   const evoNext = runEvoLevel(c.id, evolved | 0), evoMax = (evolved | 0) >= EVO_LINE[c.id].length;
   const evoPct = evoMax ? 100 : Math.min(100, g.p.lvl / evoNext * 100);
   const evoTxt = evoMax ? 'Forma final alcanzada' : `Siguiente digievolución · Nv ${g.p.lvl}/${evoNext}`;
+  const savedRun = g.slotSaved ? runSlot() : null;
   const saveNote = g.ranked ? '<p class="pz2-save">Las partidas del ranking global no se guardan.</p>'
-    : g.slotSaved ? '<p class="pz2-save ok">Partida guardada: puedes cerrar el juego y continuarla desde el menú.</p>' : '';
+    : g.slotSaved ? `<p class="pz2-save ok">Punto de guardado · ${fmtTime(Math.floor(savedRun?.g.t ?? g.t))}</p>`
+      : '<p class="pz2-save">Todavía no hay un punto de guardado para esta partida.</p>';
   const actions = askQuit ? `
     <div class="pz2-confirm">
       <b>¿Abandonar la partida?</b>
@@ -4906,6 +4944,7 @@ function showPause(askQuit = false){
         <div><b>x${g.p.dmg.toFixed(2)}</b><small>Ataque</small></div>
       </div>
       ${actions}
+      <button type="button" class="pz2-pill" id="pGuide">Guía de jefes y portal</button>
       <div class="pz2-keys">
         <span><kbd>Esc</kbd> pausa</span><span><kbd>WASD</kbd> mover</span><span><kbd>Espacio</kbd> saltar</span><span><kbd>Shift</kbd> dash</span>
         <span><kbd>E</kbd> cofres</span><span><kbd>Tab</kbd> mapa</span><span><kbd>N</kbd> sonido</span><span><kbd>R</kbd> evolucionar</span><span><kbd>Q</kbd> Bonk</span><span><kbd>B</kbd> invocar jefe</span>
@@ -4915,6 +4954,12 @@ function showPause(askQuit = false){
   const on = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = fn; };
   on('pClose', resumeGame);
   on('pResume', resumeGame);
+  on('pGuide', () => {
+    hidePause();
+    showHelp(GUIDE.findIndex(s => s.clip === 'jefe'), () => {
+      hideOverlay(); state = 'paused'; showPause();
+    });
+  });
   on('pRestart', () => { runEnd(); startGame(c.id); });   // reinicia con el mismo Digimon; no guarda récord
   on('pSaveQuit', () => { if (runSave()) showSelect(); });   // la partida queda en el hueco: «Continuar partida» en el menú
   on('pQuitAsk', () => showPause(true));
@@ -4962,7 +5007,7 @@ function getRecords(){
 }
 function saveRecord(win){
   const list = getRecords();
-  list.push({name: stageName(g.ch.id, g.ch.evolved), key: g.ch.id, t: Math.floor(g.t), kills: g.kills, lvl: g.p.lvl, win});
+  list.push({name: stageName(g.ch.id, g.ch.evolved), key: g.ch.id, t: Math.floor(g.t), kills: g.kills, lvl: g.p.lvl, win, map: g.map, diff: g.diff, mode: g.mode, weekly: !!g.weekly});
   list.sort((a, b) => b.t - a.t || b.kills - a.kills);
   try { localStorage.setItem('digibonk3d-records', JSON.stringify(list.slice(0, 10))); } catch(e){}
 }
@@ -5005,7 +5050,7 @@ function toggleLang(){
   if (!window.I18N) return;
   I18N.openPicker(code => {
     LANG = code;
-    if (state === 'register') showRegister(); else if (state === 'select') showSelect(); else refreshTopbar();
+    if (state === 'register') showRegister(); else if (state === 'select') showSelect(); else if (state === 'settings') showSettings(); else refreshTopbar();
   });
 }
 // Colección: todo lo que se puede conseguir, con porcentaje de completado (solo consulta)
@@ -5050,15 +5095,15 @@ function showCollection(){
       const open = isUnlocked(k);
       let own = 0, all = 0;
       for (const sk of lineSkins(k)){ all++; if (ownsAt(k, 0, sk.id)) own++; }
-      return `<button class="cl4-item${k === colKey ? ' sel' : ''}${open ? '' : ' lock'}" data-k="${k}" ${open ? '' : 'disabled'}>
+      return `<button class="cl4-item${k === colKey ? ' sel' : ''}${open ? '' : ' lock'}" data-k="${k}">
         <span class="ps-ic cl4-ic"><img src="${open ? charIcon(k) : 'ui/jugador/' + k + '.webp'}" alt=""></span>
-        <span><b>${open ? CHARS[k].name : '???'}</b><small>${open ? own + ' skins · Maestría ' + masteryLv(k) : unlockHowProg(k)}</small></span></button>`;
+        <span><b>${CHARS[k].name}</b><small>${open ? own + ' skins · Maestría ' + masteryLv(k) : unlockHowProg(k)}</small></span></button>`;
     }).join('');
     const k = colKey, open = isUnlocked(k);
     let detail;
     if (!open){
       const up = unlockProg(k);
-      detail = `<div class="cl4-empty"><b>???</b><p>${unlockHow(k)}</p>${up ? `<div class="ms-bar"><i style="width:${Math.round(Math.min(1, up[0] / up[1]) * 100)}%"></i></div><small>${up[0].toLocaleString('es-ES')}/${up[1].toLocaleString('es-ES')}</small>` : ''}</div>`;
+      detail = `<div class="cl4-empty"><b>${CHARS[k].name} · Desbloqueable</b><p>${unlockHow(k)}</p>${up ? `<div class="ms-bar"><i style="width:${Math.round(Math.min(1, up[0] / up[1]) * 100)}%"></i></div><small>${up[0].toLocaleString('es-ES')}/${up[1].toLocaleString('es-ES')}</small>` : ''}</div>`;
     } else {
       const n = stageCount(k);
       const stages = Array.from({length: n}, (_, i) => ({name: stageName(k, i), on: i === 0 || evolvedUnlocked(k)}));
@@ -5081,6 +5126,7 @@ function showCollection(){
             <div class="cl4-evo">${evoRow}</div>
           </div>
         </div>
+        <button type="button" class="g-btn" id="clPlay">Jugar con ${CHARS[k].name}</button>
         ${masteryHtml(k)}
         <h4>Skins · toda la línea de ${CHARS[k].name}</h4>
         <div class="cl4-skins">${cards}</div>`;
@@ -5096,7 +5142,12 @@ function showCollection(){
   document.getElementById('clBack').onclick = () => showSelect();
   overlay.querySelectorAll('.cl4-tab').forEach(b => b.onclick = () => { colTab = b.dataset.t; showCollection(); });
   overlay.querySelectorAll('[data-obj]').forEach(b => b.onclick = () => { try { if (startItem() === b.dataset.obj) localStorage.removeItem(START_ITEM_KEY); else localStorage.setItem(START_ITEM_KEY, b.dataset.obj); } catch(e){} showCollection(); });
-  overlay.querySelectorAll('.cl4-item:not(.lock)').forEach(b => b.onclick = () => { colKey = b.dataset.k; showCollection(); });
+  overlay.querySelectorAll('.cl4-item').forEach(b => b.onclick = () => { colKey = b.dataset.k; showCollection(); });
+  const play = document.getElementById('clPlay');
+  if (play) play.onclick = () => {
+    selectedKey = colKey; runMode = 'normal'; runWeekly = false;
+    restoreRunPrefs(); showPicker('personaje');
+  };
   overlay.querySelectorAll('.cl4-st:not(.off)').forEach(b => b.onclick = () => { colStage = +b.dataset.st; showCollection(); });
   overlay.querySelectorAll('.cl4-skin.owned').forEach(b => b.onclick = () => { equipSkinAt(colKey, 0, b.dataset.skin); showCollection(); });
   // Vale de evento: da la skin a este Digimon (toda la línea) y la equipa
@@ -5136,12 +5187,12 @@ function menuNav(k, e){
   }
   const d = dirs[k];
   if (!d) return false;
-  if (act && act.matches && act.matches('input[type=range]')) return false;
+  if (act && act.matches && act.matches('input[type=range],select')) return false;
   const list = [...root.querySelectorAll('button:not([disabled]),[role=button],a[href]')].filter(b => { const r = b.getBoundingClientRect(); return r.width > 4 && r.height > 4 && r.bottom > 0 && r.top < innerHeight && getComputedStyle(b).visibility !== 'hidden'; });
   if (!list.length) return false;
   e.preventDefault();
   if (!act || !list.includes(act)){
-    const first = root.querySelector('#playBtn,#pResume,#endAgain,.pz2-go') || list[0];
+    const first = root.querySelector('#hbContinue') || root.querySelector('#playBtn,#pResume,#endAgain,.pz2-go') || list[0];
     first.focus({preventScroll: false});
     return true;
   }
@@ -5275,14 +5326,12 @@ function showSelect(){
   if (g){ scene.remove(world); world = new THREE.Group(); scene.add(world); g = null; }
   hidePause();
   const recs = getRecords();
-  const st = loadJSON('digibonk3d-stats', {});
-  const kills = Object.values(st).reduce((a, x) => a + (x.kills || 0), 0);
   const bestT = recs.reduce((a, r) => Math.max(a, r.t), 0);
-  const bestL = recs.reduce((a, r) => Math.max(a, r.lvl || 0), 0);
   const d = loadDaily();
   const currentRuns = Math.min(DAILY.runsGoal, d.runs || 0);
   const safeText = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const choice = CHARS[selectedKey] || CHARS.agumon;
+  if (!isUnlocked(selectedKey)) selectedKey = SEASONS.adventure.chars.find(isUnlocked) || 'agumon';
+  const choice = CHARS[selectedKey];
   const dbEvDays = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
   const qs = questSummary();
   const labReady = LAB.filter(u => labLv(u.id) < labMax(u) && labCosts(u)[labLv(u.id)] <= SAVE.bits).length;
@@ -5290,7 +5339,17 @@ function showSelect(){
   const achAll = achItems().length, achOwned = achDoneCount();
   const life = hubLife();
   const saved = runSlot();   // partida guardada con el punto de guardado
-  const savedTxt = saved ? `${safeText(stageName(saved.key, saved.evolved))} · Nv ${saved.g.p.lvl | 0} · ${fmtTime(Math.floor(+saved.g.t || 0))}` : '';
+  const savedTxt = saved ? `${safeText(stageName(saved.key, saved.evolved))} · ${fmtTime(Math.floor(+saved.g.t || 0))}` : '';
+  const nextUnlock = SEASONS.adventure.chars.filter(k => !isUnlocked(k))
+    .map(k => ({k, progress: unlockProg(k)})).filter(x => x.progress && x.progress[0] > 0)
+    .sort((a, b) => (b.progress[0] / b.progress[1]) - (a.progress[0] / a.progress[1]))[0];
+  const nextAction = nextUnlock
+    ? {title: `Desbloquear a ${CHARS[nextUnlock.k].name}`, text: unlockHowProg(nextUnlock.k), go: () => { colTab = 'digimon'; colKey = nextUnlock.k; showCollection(); }}
+    : labReady
+      ? {title: 'Mejoras disponibles', text: `${labReady} en el Laboratorio`, go: showLab}
+      : recs.length
+        ? {title: 'Encargos', text: `Hoy · ${qs.day.done}/${qs.day.all}`, go: showEncargos}
+        : {title: 'Tu primera partida', text: 'Elige un Digimon y explora el Bosque File', go: () => document.getElementById('playBtn').click()};
   showOverlay(`
     <main class="realhub hb" aria-label="Menú principal Digibonk">
       <div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><div class="rw-scenery-core"></div><div class="rw-aurora"></div><div class="rw-light"></div><div class="rw-water"></div><div class="rw-stars"></div>${life.stage}</div>
@@ -5311,28 +5370,26 @@ function showSelect(){
         <div class="hb-left">
           <h1 class="hb-brand"><span class="hb-logo-bg" aria-hidden="true"><i class="lb-glow"></i><i class="lb-orbit"><i class="lb-ring"></i></i><i class="lb-orbit lb-orbit2"><i class="lb-ring"></i></i><i class="lb-sparks"><i></i><i></i><i></i><i></i><i></i><i></i></i></span><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span><span class="hb-ver">BETA</span></h1>
           ${life.parade}
-          ${saved ? `<button type="button" class="hb-continue" id="hbContinue" aria-label="Continuar partida guardada"><i><img src="${charIcon(saved.key)}" alt=""></i><span class="hbc-txt"><small>Partida guardada</small><b>Continuar partida</b></span><span class="hbc-info"><em>${savedTxt}</em><small><span>${safeText(MAPS[saved.map].name)}</span> · <span>${safeText(DIFFS[saved.diff].name)}</span>${saved.mode === 'surv' ? ' · <span>Supervivencia</span>' : saved.weekly ? ' · <span>Reto semanal</span>' : ''}</small></span><span class="hbc-go" aria-hidden="true">▶</span></button>` : ''}
-          <div class="hb-modes nm-modes">
-            <button type="button" id="playBtn" class="hb-play nm-play" aria-label="Jugar con ${safeText(choice.name)}">
+          <div class="hb-modes nm-modes hub-play-options">
+            ${saved ? `<button type="button" class="hb-continue hb-resume-main" id="hbContinue" aria-label="Continuar partida guardada"><i><img src="${charIcon(saved.key)}" alt=""></i><span class="hbc-txt"><b>Continuar</b></span><span class="hbc-info"><em>${savedTxt}</em><small><span>${safeText(MAPS[saved.map].name)}</span> · <span>${safeText(DIFFS[saved.diff].name)}</span>${saved.mode === 'surv' ? ' · <span>Supervivencia</span>' : saved.weekly ? ' · <span>Reto semanal</span>' : ''}</small></span><span class="hbc-go" aria-hidden="true">▶</span></button>` : `<button type="button" id="playBtn" class="hb-play nm-play" aria-label="Jugar con ${safeText(choice.name)}">
               <span class="hb-play-txt"><b>Jugar</b></span>
               <span class="hb-play-face">${animEl(spriteOf(selectedKey, false), 'hb-face')}</span>
               <span class="lv-sheen"></span><span class="nm-band"><span class="hb-dev"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span>Modo clásico · <b>${safeText(choice.name)}</b></span></span>
-            </button>
+            </button>`}
             <div class="hb-stack nm-stack">
+              ${saved ? '<button type="button" id="playBtn" class="hb-mode hub-new-game"><span><b>Nueva partida</b><small>Modo clásico</small></span></button>' : ''}
               <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i><img class="nm-ic" src="ui/hub/ic_supervivencia.webp" alt=""></i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
-              ${!GACHA_SOON ? `<button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Incubadora: ${usableTickets('std')} tickets disponibles"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Incubadora</b><small><em class="nm-tix">${usableTickets('std')}</em> tickets<span class="nm-long"> disponibles</span></small></span></button>` : `<button type="button" class="hb-mode m-gacha" id="hbShop" aria-label="Tienda: rotación semanal"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Tienda</b><small>Rotación semanal</small></span></button>`}
+              <button type="button" class="hb-mode hub-weekly" id="mWeekly" aria-label="Reto semanal: ${safeText(weeklyMod().name)}" title="${safeText(weeklyMod().d)}"><i><img class="nm-ic" src="ui/hub/ic_mision.webp" alt=""></i><span><small>Reto semanal</small><b>${weeklyMod().name}</b></span><em><span class="nm-wk-lbl">Hitos</span> ${retoState().done.length}/${RETO_HITOS.length}</em></button>
             </div>
-          </div>
-          <button type="button" class="hb-event nm-event nm-weekly" id="mWeekly" aria-label="Reto semanal: ${safeText(weeklyMod().name)}" title="${safeText(weeklyMod().d)}"><i><img class="nm-ic" src="ui/hub/ic_mision.webp" alt=""></i><span><small>Reto semanal</small><b>${weeklyMod().name}</b></span><em><span class="nm-wk-lbl">Hitos</span> ${retoState().done.length}/${RETO_HITOS.length}</em></button>
-          <button type="button" class="nm-quests nm-encard" id="mEnc" aria-label="Encargos: hoy ${qs.day.done} de ${qs.day.all}, semana ${qs.week.done} de ${qs.week.all}${qs.ev ? ', evento ' + qs.ev.done + ' de ' + qs.ev.all : ''}"><i><img class="nm-ic" src="ui/hub/ic_encargos.webp" alt=""></i><span class="nm-eh"><b>Encargos</b><small>${qs.ev ? 'Diarios, semanales y de evento' : 'Diarios y semanales'}</small></span><span class="nm-eqs">${[['Hoy', qs.day, 'q-d'], ['Semana', qs.week, 'q-w'], ...(qs.ev ? [['Evento', qs.ev, 'q-e']] : [])].map(([n, q, c]) => `<span class="nm-eq ${c}"><small>${n}</small><b>${q.done}/${q.all}</b><span class="hb-meter"><i style="width:${Math.round(q.done / q.all * 100)}%"></i></span></span>`).join('')}</span></button>
+          </div>on type="button" class="nm-quests nm-encard" id="mEnc" aria-label="Encargos: hoy ${qs.day.done} de ${qs.day.all}, semana ${qs.week.done} de ${qs.week.all}${qs.ev ? ', evento ' + qs.ev.done + ' de ' + qs.ev.all : ''}"><i><img class="nm-ic" src="ui/hub/ic_encargos.webp" alt=""></i><span class="nm-eh"><b>Encargos</b><small>${qs.ev ? 'Diarios, semanales y de evento' : 'Diarios y semanales'}</small></span><span class="nm-eqs">${[['Hoy', qs.day, 'q-d'], ['Semana', qs.week, 'q-w'], ...(qs.ev ? [['Evento', qs.ev, 'q-e']] : [])].map(([n, q, c]) => `<span class="nm-eq ${c}"><small>${n}</small><b>${q.done}/${q.all}</b><span class="hb-meter"><i style="width:${Math.round(q.done / q.all * 100)}%"></i></span></span>`).join('')}</span></button>
           ${(!GACHA_SOON ? (bannerOpen("navidadP") || bannerOpen("navidadR")) : eventActive()) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/ic_evento.webp" alt=""></i><span class="lv-sheen"></span><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
           <div class="hb-tiles nm-tiles">
             <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex: ${pickProgress().done} de ${pickProgress().total} Digimon"><i><img class="nm-ic" src="ui/hub/ic_digidex.webp" alt=""></i><b>Digidex</b><small>${pickProgress().done}/${pickProgress().total} Digimon</small></button>
             <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio${labReady ? ': ' + labReady + ' mejoras disponibles' : ''}"><i><img class="nm-ic" src="ui/hub/ic_laboratorio.webp" alt=""></i><b>Laboratorio</b><small>${labReady ? labReady + (labReady === 1 ? ' mejora' : ' mejoras') : 'Mejoras'}</small>${labReady ? '<em class="nm-dot" aria-hidden="true"></em>' : ''}</button>
             <button type="button" class="hb-tile t3" id="mMaps" aria-label="Mapas: ${safeText(MAPS[runMap].name)}"><i><img class="nm-ic" src="ui/hub/ic_mapas.webp" alt=""></i><b>Mapas</b><small>${safeText(MAPS[runMap].name)}</small></button>
             <button type="button" class="hb-tile t4" id="mLog" aria-label="Logros: ${achOwned} de ${achAll}"><i><img class="nm-ic" src="ui/hub/ic_logros.webp" alt=""></i><b>Logros</b><small>${achOwned}/${achAll}</small></button>
+            ${!GACHA_SOON ? `<button type="button" class="hb-tile hub-shop" id="hbGacha3" aria-label="Incubadora: ${usableTickets('std')} tickets disponibles"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Incubadora</b><small><em class="nm-tix">${usableTickets('std')}</em> tickets<span class="nm-long"> disponibles</span></small></span></button>` : `<button type="button" class="hb-tile hub-shop" id="hbShop" aria-label="Tienda: rotación semanal"><i><img class="nm-ic" src="ui/hub/ic_tesoros.webp" alt=""></i><span><b>Tienda</b><small>Rotación semanal</small></span></button>`}
             <button type="button" class="hb-tile t5" id="mRecs" aria-label="Récords"><i><img class="nm-ic" src="ui/hub/ic_ranking.webp" alt=""></i><b>Récords</b><small>${recs.length ? 'Mejor ' + fmtTime(bestT) : 'Sin partidas'}</small></button>
-            <button type="button" class="hb-tile t7" id="btnPlayer" aria-label="Jugador"><i><img class="nm-ic" src="ui/hub/ic_jugador.webp" alt=""></i><b>Jugador</b><small>Perfil y marcos</small></button>
           </div>
           <nav class="hb-bar" aria-label="Enlaces y ajustes">
             <button type="button" class="hb-btn" id="btnAjustes" aria-label="Ajustes"><img class="nm-ic" src="ui/hub/ic_ajustes.webp" alt=""><span class="nm-lbl">Ajustes</span></button>
@@ -5348,12 +5405,10 @@ function showSelect(){
           <img class="rw-character rw-agumon" src="ui/personaje_aprobado_agumon.png" alt="">
           <img class="rw-character rw-gabumon" src="ui/personaje_aprobado_gabumon.png" alt="">
         </div>
-        <aside class="hb-side hb-lb" aria-label="Tus récords">
-          <div class="hb-side-h"><i>🏆</i><span><b>Tus récords</b><small>${recs.length ? recs.length + ' partidas guardadas' : 'Juega para entrar en la tabla'}</small></span></div>
-          <div class="hb-tabs" role="tablist"><button type="button" role="tab" class="on" data-k="t">⏱ Tiempo</button><button type="button" role="tab" data-k="lvl">⭐ Nivel</button><button type="button" role="tab" data-k="kills">💥 Bajas</button></div>
-          <div class="hb-lbrow"><span><b>${fmtTime(bestT)}</b><small>Mejor tiempo</small></span><span><b>${bestL}</b><small>Mejor nivel</small></span><span><b>${kills.toLocaleString('es-ES')}</b><small>Bajas totales</small></span></div>
-          <ol class="hb-rank" id="hbRank"></ol>
-          <button type="button" class="hb-all" id="rhRecords">Ver todos los récords</button>
+        <aside class="hb-side hb-lb hub-next" aria-label="Tu progreso">
+          <div class="hb-side-h"><img src="ui/hub/ic_mision.webp" alt=""><span><b>Siguiente objetivo</b><small>Tu progreso</small></span></div>
+          <button type="button" class="hub-next-action" id="hubNext"><b>${safeText(nextAction.title)}</b><small>${safeText(nextAction.text)}</small><span aria-hidden="true">→</span></button>
+          <button type="button" class="hb-all" id="rhRecords">${recs.length ? `Tus récords · ${fmtTime(bestT)}` : 'Tus récords'}</button>
         </aside>
         <footer class="hb-legal">${t('legal')} <button type="button" class="hb-credits" id="hmCredits">Créditos</button></footer>
       </section>
@@ -5376,7 +5431,6 @@ function showSelect(){
   const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { if (GACHA_SOON) return showEncargos(); gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR'; showGacha(); };
   { const el = document.getElementById('hbShop'); if (el) el.onclick = () => showShop(); }
   document.getElementById('btnColl').onclick=showCollection;
-  document.getElementById('btnPlayer').onclick=showPlayer;
   document.getElementById('btnGacha').onclick=showLab;
   document.getElementById('mMaps').onclick=()=>{ runMode='normal'; runWeekly=false; restoreRunPrefs(); showMapSelect(); };
   ['hbGacha2','hbGacha3'].forEach(id => { const el = document.getElementById(id); if (el) el.onclick = () => { if (GACHA_SOON) { hmSoon('Incubadora: Próximamente'); return; } gxBanner = 'std'; showGacha(); }; });
@@ -5411,6 +5465,7 @@ function showSelect(){
   document.getElementById('rhApp').onclick=()=>installEvt?installApp():openInfo('app');
   document.getElementById('rhFullscreen').onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{})};
   bindMenuFX();
+  const recordFilters = {map: '', mode: '', diff: ''};
   const openInfo=type=>{
     const host=document.getElementById('realModalHost');if(!host)return;
     let title,content;
@@ -5422,26 +5477,46 @@ function showSelect(){
       title=t('daily');
       content=`<p>${safeText(dailyText())}</p><div class="approved-info-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></div><p>${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits${GACHA_SOON ? '' : ' · +' + DAILY.rewardTix + ' 🎟'}</p>`;
     }else{
-      title=t('recs');
-      content=recs.length?`<div class="approved-info-records">${recs.slice(0,10).map((r,i)=>`<div><b>${i+1}. ${safeText(r.name)}</b><span>${fmtTime(r.t)} · Nv. ${Number(r.lvl)||0} · ${Number(r.kills)||0} bajas</span></div>`).join('')}</div>`:`<p>${safeText(t('none'))}</p>`;
+      title='Mis partidas';
+      const filter = (key, label, options) => `<label>${label}<select data-record-filter="${key}"><option value="">Todos</option>${options.map(([id, name]) => `<option value="${id}"${recordFilters[key] === id ? ' selected' : ''}>${name}</option>`).join('')}</select></label>`;
+      content = `<div class="record-tools">
+        ${filter('map', 'Mapa', Object.entries(MAPS).map(([id, m]) => [id, m.name]))}
+        ${filter('mode', 'Modo', [['normal', 'Clásico'], ['surv', 'Supervivencia'], ['weekly', 'Reto semanal']])}
+        ${filter('diff', 'Dificultad', DIFF_ORDER.map(id => [id, DIFFS[id].name]))}
+        </div><div class="approved-info-records" id="recordRows"></div>`;
     }
     host.innerHTML=`<div class="approved-info-scrim"><section class="approved-info-dialog" role="dialog" aria-modal="true" aria-label="${safeText(title)}"><header><h2>${safeText(title)}</h2><button type="button" id="realClose">✕</button></header>${content}${type==='records'&&CLOUD_ON?'<button type="button" id="realRank">Ranking por regiones</button>':''}<button type="button" id="realDone">Volver al menú</button></section></div>`;
-    { const rk=host.querySelector('#realRank'); if(rk) rk.onclick=()=>{host.innerHTML='';showRanking('select');}; }
+    { const rk=host.querySelector('#realRank'); if(rk) rk.onclick=()=>{host.innerHTML='';showRanking('records');}; }
+    if (type === 'records'){
+      const rows = host.querySelector('#recordRows');
+      const draw = () => {
+        rows.innerHTML = recs.map((r, index) => ({r, index})).filter(({r}) =>
+          (!recordFilters.map || r.map === recordFilters.map) &&
+          (!recordFilters.mode || (r.weekly ? 'weekly' : r.mode) === recordFilters.mode) &&
+          (!recordFilters.diff || r.diff === recordFilters.diff)
+        ).map(({r, index}) => `<div class="record-row"><b>${safeText(r.name)}</b><span>${fmtTime(r.t)} · Nv. ${Number(r.lvl) || 0} · ${Number(r.kills) || 0} bajas</span>
+          <small>${MAPS[r.map]?.name || 'Partida anterior'}${DIFFS[r.diff] ? ' · ' + DIFFS[r.diff].name : ''}</small>
+          ${!r.weekly && MAPS[r.map] && DIFFS[r.diff] && isUnlocked(r.key) ? `<button type="button" class="mini-btn" data-repeat-record="${index}">Repetir configuración</button>` : ''}</div>`).join('') || '<p>No hay partidas para estos filtros.</p>';
+        rows.querySelectorAll('[data-repeat-record]').forEach(b => b.onclick = () => {
+          const r = recs[+b.dataset.repeatRecord];
+          selectedKey = r.key; runMap = r.map; runDiff = r.diff;
+          runMode = r.mode === 'surv' ? 'surv' : 'normal'; runWeekly = false;
+          showMapSelect();
+        });
+      };
+      host.querySelectorAll('[data-record-filter]').forEach(el => el.onchange = () => {
+        recordFilters[el.dataset.recordFilter] = el.value; draw();
+      });
+      draw();
+    }
     const close=()=>{host.innerHTML=''};
     host.querySelector('#realClose').onclick=close;host.querySelector('#realDone').onclick=close;
     host.querySelector('.approved-info-scrim').onclick=e=>{if(e.target===e.currentTarget)close()};
     host.querySelector('#realClose').focus();
   };
+  document.getElementById('hubNext').onclick = nextAction.go;
   document.getElementById('rhRecords').onclick=()=>openInfo('records');
   document.getElementById('mRecs').onclick=()=>openInfo('records');
-  { const ol = document.getElementById('hbRank'), tabs = document.querySelectorAll('.hb-tabs button');
-    const recKey = r => r.key || Object.keys(CHARS).find(k => CHARS[k].name === r.name || (EVO_LINE[k] || []).some(e => e.name === r.name)) || 'agumon';
-    const val = (r, k) => k === 't' ? fmtTime(r.t) : k === 'lvl' ? 'Nv ' + (r.lvl || 1) : (r.kills || 0).toLocaleString('es-ES');
-    const unit = k => k === 't' ? 'tiempo' : k === 'lvl' ? 'nivel' : 'bajas';
-    const draw = k => { const list = recs.slice().sort((a, b) => (b[k] || 0) - (a[k] || 0) || b.t - a.t).slice(0, 7);
-      ol.innerHTML = list.map((r, i) => `<li class="${i < 3 ? 'top p' + (i + 1) : ''}"><em>${i + 1}</em><img src="${charIcon(recKey(r))}" alt="" onerror="this.style.visibility='hidden'"><span><b>${safeText(r.name)}</b><small>${r.win ? 'Victoria' : 'Nivel ' + (r.lvl || 1)} · ${r.kills} bajas</small></span><strong>${val(r, k)}<small>${unit(k)}</small></strong></li>`).join('') || '<li class="hb-empty">Todavía no hay partidas. ¡Empieza una!</li>'; };
-    tabs.forEach(b => b.onclick = () => { tabs.forEach(x => x.classList.toggle('on', x === b)); draw(b.dataset.k); });
-    draw('t'); }
   clearInterval(newsTimer);
 }
 // Guía «Cómo jugar»: diez pantallas en cuatro capítulos. Cada una tiene un vídeo grabado del propio juego
@@ -5506,12 +5581,14 @@ function tutoShow(i){
   document.getElementById('tutoNext').innerHTML = last ? '¡A jugar!' : 'Siguiente ▶';
 }
 function tutoStep(dir){ if (state === 'help') tutoShow(tutoIdx + dir); }
-function showHelp(){
+function showHelp(start = 0, back = showSelect){
+  if (typeof start !== 'number') start = 0;
   state = 'help';
   const touch = guideTouch();
   showOverlay(`
     <div class="help-box tuto gd">
       <header class="set-head"><button class="g-back" id="helpBack">← Volver</button><h2>Cómo jugar</h2><span class="gd-count" id="gdCount"></span></header>
+      <p class="guide-quick">${touch ? 'Joystick: moverte · DASH: esquivar · BONK: soltar la carga' : 'WASD: moverte · Shift: dash · Q: BONK · Tab: mapa'}</p>
       <nav class="gd-tabs" id="gdTabs" role="tablist" aria-label="Capítulos">${GUIDE_CH.map((c, i) => `<button type="button" role="tab" data-ch="${i}">${c}</button>`).join('')}</nav>
       <div class="gd-stage">
         <figure class="gd-media" id="gdMedia"></figure>
@@ -5524,11 +5601,11 @@ function showHelp(){
       </div>
       ${touch ? '' : '<div class="muted gd-hint">← → cambian de pantalla · Esc vuelve</div>'}
     </div>`);
-  document.getElementById('helpBack').onclick = () => showSelect();
+  document.getElementById('helpBack').onclick = back;
   document.getElementById('tutoPrev').onclick = () => tutoStep(-1);
-  document.getElementById('tutoNext').onclick = () => tutoIdx === GUIDE.length - 1 ? showSelect() : tutoStep(1);
+  document.getElementById('tutoNext').onclick = () => tutoIdx === GUIDE.length - 1 ? back() : tutoStep(1);
   document.querySelectorAll('#gdTabs button').forEach(b => b.onclick = () => tutoShow(GUIDE.findIndex(x => x.ch === +b.dataset.ch)));
-  tutoShow(0);
+  tutoShow(start);
 }
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
@@ -5886,7 +5963,12 @@ async function showRanking(from){
       <p class="sc-p">${Rk.mode === 'normal' ? 'Primero las victorias, de la más rápida a la más lenta; después, quien más aguantó.' : 'Más oleadas primero; a igualdad, más tiempo.'}</p>
       <ol class="rk-list" id="rkList"><li class="rk-empty">${CLOUD_ON ? 'Cargando…' : 'El ranking online aún no está activado en esta versión.'}</li></ol>
     </div>`);
-  document.getElementById('rkBack').onclick = () => Rk.from === 'cloud' ? showCloud() : showSelect();
+  document.getElementById('rkBack').onclick = () => {
+    if (Rk.from === 'cloud') return showCloud();
+    const fromRecords = Rk.from === 'records';
+    showSelect();
+    if (fromRecords) document.getElementById('rhRecords')?.click();
+  };
   overlay.querySelectorAll('[data-rk]').forEach(b => b.onclick = () => { Rk[b.dataset.rk] = b.dataset.v; showRanking(); });
   if (!CLOUD_ON) return;
   const want = JSON.stringify(Rk);
@@ -5953,6 +6035,7 @@ function showSettings(){
         <button class="g-back" id="setBack">← Volver</button>
         <h2>Ajustes</h2>
       </header>
+      <h3 class="menu-section-title">Juego y rendimiento</h3>
       <div class="set-row">
         <div><b>Calidad gráfica</b><small>Alta: resolución completa. Baja: para equipos antiguos. Se aplica al recargar.</small></div>
         <div class="set-seg-wrap">${seg('auto', 'Auto')}${seg('alta', 'Alta')}${seg('baja', 'Baja')}</div>
@@ -5961,6 +6044,7 @@ function showSettings(){
         <div><b>Tema de los menús</b><small>Claro u oscuro para todos los menús.</small></div>
         <div class="set-seg-wrap">${['claro', 'oscuro'].map(t => `<button class="set-seg${uiTheme() === t ? ' on' : ''}" data-theme="${t}">${t === 'claro' ? 'Claro' : 'Oscuro'}</button>`).join('')}</div>
       </div>
+      <h3 class="menu-section-title">Sonido</h3>
       <div class="set-row">
         <div><b>Efectos de sonido</b><small>Golpes, cofres, subidas de nivel. También con la tecla N.</small></div>
         <div class="set-vol"><input type="range" class="set-range" id="vSfx" min="0" max="100" step="5" value="${Math.round(Sfx.vol * 100)}" aria-label="Volumen de efectos"><button class="set-toggle${Sfx.muted ? '' : ' on'}" id="tSfx">${Sfx.muted ? 'Silenciado' : 'Activado'}</button></div>
@@ -5968,6 +6052,11 @@ function showSettings(){
       <div class="set-row">
         <div><b>Música</b><small>Ambiente suave en los menús y en la partida.</small></div>
         <div class="set-vol"><input type="range" class="set-range" id="vMusic" min="0" max="100" step="5" value="${Math.round(Music.vol * 100)}" aria-label="Volumen de la música"><button class="set-toggle${Music.on ? ' on' : ''}" id="tMusic">${Music.on ? 'Activada' : 'Silenciada'}</button></div>
+      </div>
+      <h3 class="menu-section-title">Accesibilidad</h3>
+      <div class="set-row">
+        <div><b>Idioma</b><small>${I18N.langs.find(l => l.code === I18N.lang)?.name || LANG}</small></div>
+        <button type="button" class="mini-btn" id="setLang">Cambiar idioma</button>
       </div>
       <div class="set-row">
         <div><b>Tamaño del texto</b><small>Agranda los paneles y ventanas de los menús.</small></div>
@@ -5977,7 +6066,9 @@ function showSettings(){
         <div><b>Reducir animaciones</b><small>Quita transiciones y movimientos de los menús.</small></div>
         <button class="set-toggle${reduceMotion() ? ' on' : ''}" id="tMotion">${reduceMotion() ? 'Activado' : 'Desactivado'}</button>
       </div>
+      <div class="settings-type-preview"><b>Vista previa del texto</b><span>Gabumon · Bosque File · Normal</span></div>
       ${appRow()}
+      <h3 class="menu-section-title">Cuenta y guardado</h3>
       <div class="set-row">
         <div><b>Progreso</b><small>Exporta tu progreso a un código para usarlo en otro navegador.</small></div>
         <button class="mini-btn" id="btnSaveCode">Código de guardado</button>
@@ -5995,6 +6086,7 @@ function showSettings(){
         <div class="set-seg-wrap"><button class="mini-btn" id="btnLogout">Cerrar sesión</button><button class="mini-btn danger" id="btnDelete">Eliminar cuenta</button></div>
       </div>
     </div>`);
+  document.getElementById('setLang').onclick = toggleLang;
   document.getElementById('setBack').onclick = () => showSelect();
   overlay.querySelectorAll('.set-seg[data-theme]').forEach(b => b.onclick = () => { setUiTheme(b.dataset.theme); showSettings(); });
   overlay.querySelectorAll('.set-seg[data-q]').forEach(b => b.onclick = () => {
@@ -6101,7 +6193,7 @@ function showStarter(){
           <section class="pk2-left">
             <div class="pk2-hero">
               <div class="pk2-stage">${animEl(spriteOf(pick, false), 'pk2-hero-img')}</div>
-              <div class="pk2-id"><small>Inicial</small><h2>${CHARS[pick].name}</h2><p>${BALANCE[pick].why}</p></div>
+              <div class="pk2-id"><small>Inicial</small><h2>${CHARS[pick].name}</h2><p>${CHARS[pick].desc}</p><p>${BALANCE[pick].why}</p></div>
             </div>
           </section>
           <aside class="pk2-right"><div class="pk2-grid">${grid}</div></aside>
@@ -6252,7 +6344,7 @@ function showPicker(tab){
             <section class="ps-panel"><h4 class="ps-ph"><i>R</i>Evolución (tecla R) y tipos</h4><div class="ps-pb" id="pkEvo"></div></section>
           </div>
           <footer class="ps-foot">
-            <div class="ps-mine"><span class="ps-lbl">Tus partidas</span>${pill(st.plays, 'Partidas')}${pill(wins, 'Victorias')}${pill(st.best || 0, 'Récord de bajas')}${pill(st.maxLvl || 0, 'Nivel máx.')}</div>
+            <details class="ps-mine menu-details"><summary>Tus partidas</summary>${pill(st.plays, 'Partidas')}${pill(wins, 'Victorias')}${pill(st.best || 0, 'Récord de bajas')}${pill(st.maxLvl || 0, 'Nivel máx.')}</details>
             <button class="pk-start ps-go" id="pkStart">${isRetoRun() ? 'Volver al reto' : '¡Elegir mapa!'} <kbd>Enter</kbd></button>
           </footer>
         </main>
@@ -6287,9 +6379,26 @@ function renderRoster(){
     const owned = ownedSkinsAt(k, 0), eq = equippedAt(k, 0);
     const list = lineSkins(k).filter(sk => owned.includes(sk.id));
     el.innerHTML = `<div class="ps-lbl">La skin se aplica a toda la línea de ${CHARS[k].name}</div>
+      <div id="skinPreview" class="skin-preview"></div>
       <div class="ps-grid">${list.map(sk => `<button type="button" class="ps-tile${eq === sk.id ? ' sel' : ''}" data-skin="${sk.id}" title="${sk.name}">${skinThumb(k, sk)}<b>${sk.name}</b></button>`).join('')}</div>
       ${list.length <= 1 ? '<p class="ps-note">Consigue skins con la maestría, el evento y la tienda.</p>' : ''}`;
-    el.querySelectorAll('[data-skin]').forEach(b => b.onclick = () => { equipSkinAt(k, 0, b.dataset.skin); showPicker(); });
+    let previewSkin = eq, pose = 0;
+    const preview = document.getElementById('skinPreview');
+    const draw = () => {
+      const stage = pickStage || 0, src = spriteWith(k, stage, previewSkin), sheet = sheetOf(src);
+      preview.innerHTML = `<div class="skin-preview-art">${sheet
+        ? `<span class="skin-pose" style="--sheet:url('${sheet}');--pose:${pose * 25}%"></span>`
+        : `<img src="${src}" alt="">`}</div>
+        <b>${SKIN_BY_ID[previewSkin].name} · ${stageName(k, stage)}</b>
+        ${sheet ? `<div class="skin-preview-actions">${[[0,'Reposo'], [3,'Ataque'], [4,'Daño']].map(([i, label]) => `<button type="button" class="mini-btn" data-pose="${i}" aria-pressed="${pose === i}">${label}</button>`).join('')}</div>` : ''}
+        <button type="button" class="mini-btn" id="equipPreview" ${previewSkin === eq ? 'disabled' : ''}>${previewSkin === eq ? 'Equipada' : 'Equipar'}</button>`;
+      preview.querySelectorAll('[data-pose]').forEach(b => b.onclick = () => {
+        pose = +b.dataset.pose; draw(); preview.querySelector(`[data-pose="${pose}"]`)?.focus();
+      });
+      document.getElementById('equipPreview').onclick = () => { equipSkinAt(k, 0, previewSkin); showPicker(); };
+    };
+    el.querySelectorAll('[data-skin]').forEach(b => b.onclick = () => { previewSkin = b.dataset.skin; draw(); });
+    draw();
     return;
   }
   if (rosterTab === 'apoyo') rosterTab = 'todos';
@@ -6386,15 +6495,15 @@ function renderPickPanels(){
     <h5 class="ps-big">${ATTACK_NAME[c.kind] || 'Ataque'} de ${c.name}</h5>
     <p class="ps-txt">${BALANCE[k].why}.</p>
     ${chipsHtml(baseFacts(c))}
-    <hr class="ps-hr">
+    <details class="menu-details"><summary>Kit de ataques</summary>
     <div class="ps-lbl">Kit de ataques <small>· cifras a nivel 1, sube hasta nivel ${SKILL_MAX}</small></div>
-    <div class="ps-kit">${[...learnable(k).mine, ...learnable(k).type.slice(0, 1)].map(id => { const sk = SKILLS[id], ty = !(CHAR_SKILLS[k] || []).includes(id); return `<div class="ps-atk k-${sk.k}"><i class="ps-ico">${SKILL_ICON[id] || '✦'}</i><div><div class="ps-atk-h"><b>${skillName(id, k)}</b>${ty ? ` <small>· de tipo ${ATTR_NAME[ATTR_OF[k]]}</small>` : ''}</div><small class="ps-kind">${sk.k[0].toUpperCase() + sk.k.slice(1)}</small><p>${sk.d}</p>${chipsHtml(skillFacts(id))}</div></div>`; }).join('')}</div>`;
+    <div class="ps-kit">${[...learnable(k).mine, ...learnable(k).type.slice(0, 1)].map(id => { const sk = SKILLS[id], ty = !(CHAR_SKILLS[k] || []).includes(id); return `<div class="ps-atk k-${sk.k}"><i class="ps-ico">${SKILL_ICON[id] || '✦'}</i><div><div class="ps-atk-h"><b>${skillName(id, k)}</b>${ty ? ` <small>· de tipo ${ATTR_NAME[ATTR_OF[k]]}</small>` : ''}</div><small class="ps-kind">${sk.k[0].toUpperCase() + sk.k.slice(1)}</small><p>${sk.d}</p>${chipsHtml(skillFacts(id))}</div></div>`; }).join('')}</div></details>`;
   const at = ATTR_OF[k], beats = BEATS[at], loses = Object.keys(BEATS).find(a => BEATS[a] === at);
   const foes = a => Object.keys(FOE_ATTR).filter(n => FOE_ATTR[n] === a && n !== 'tank');
   const icons = a => { const l = foes(a); return `${l.slice(0, 7).map(n => `<img src="sprites/adventure/${n}.png" alt="" title="${(COMING_SOON.find(c => c.id === n) || {name: n[0].toUpperCase() + n.slice(1)}).name}" onerror="this.remove()">`).join('')}${l.length > 7 ? `<small>+${l.length - 7}</small>` : ''}`; };
   const trow = (lbl, cls, a, mul) => `<div class="ps-trow ${cls}"><span class="ps-tl">${lbl}</span><span class="ps-attr a-${a}">${ATTR_ICON[a]} ${ATTR_NAME[a]}</span><b>${mul}</b><span class="ps-foes">${icons(a)}</span></div>`;
   evo.innerHTML = `
-    <div class="ps-ult"><i class="ps-ico r">R</i><div><b>Evolución de emergencia</b><p>Por debajo del 20% de PS tienes 6 s para pulsar R y evolucionar al instante durante 15 s. Una vez por partida.</p></div></div>
+    <div class="ps-ult"><i class="ps-ico r">${line.length ? 'R' : 'Q'}</i><div><b>${line.length ? 'Evolución de emergencia' : 'BONK'}</b><p>${line.length ? 'Por debajo del 20% de PS tienes 6 s para pulsar R y evolucionar al instante durante 15 s. Una vez por partida.' : BONK_FX[k]?.name || 'Libera el BONK cuando se llene.'}</p></div></div>
     ${line.map((e, i) => `<div class="ps-ult"><span class="ps-node${pickStage === i + 1 ? ' on' : ''}">${sprEl(spriteOf(k, i + 1), 46)}</span><div><b>${e.name}</b><p>Nivel ${evoLevelFor(k, i)} · +${Math.round((Math.pow(EVO_TOTAL.dmg, 1/line.length) - 1)*100)}% daño y +${Math.round(60/line.length)} PS durante el resto de la partida. Al evolucionar, una onda arrasa a la horda cercana.</p></div></div>`).join('')}
     <hr class="ps-hr">
     <div class="ps-lbl">Tipos</div>
@@ -6452,7 +6561,7 @@ function showMapSelect(){
       <div class="ms-maps">${cards}</div>
       <section class="ms-dsec"><div class="ms-diffs">${diffs}</div>
         <div class="ms2-dline" style="--dc:${d.col}" title="En todos los niveles la presión sube con el tiempo: más vida, daño y hordas hasta el minuto 10. En todos los mapas, a los 20 minutos en una pantalla empieza el Infierno."><b>${d.name}</b><span class="ms2-dd">${d.d}</span>${dchg.length ? dchg.map(([t, v]) => `<i>${t} <em>${v}</em></i>`).join('') : '<i class="eq">Sin cambios: el juego base</i>'}</div>
-        <footer class="pk2-foot ms-foot"><span class="pk-hint">${surv ? 'Supervivencia' : 'Partida'} en ${MAPS[runMap].name} · ${d.name}</span><button class="btn btn-primary pk-start" id="msStart">¡Empezar!</button></footer>
+        <footer class="pk2-foot ms-foot"><span class="pk-hint">${CHARS[selectedKey].name} · ${MAPS[runMap].name} · ${d.name}${surv ? ' · Supervivencia' : ''}</span><button class="btn btn-primary pk-start" id="msStart">¡Empezar!</button></footer>
       </section>
     </div>`);
   overlay.querySelectorAll('.ms-card').forEach(b => b.onclick = () => { runMap = b.dataset.map; showMapSelect(); });
@@ -6471,6 +6580,7 @@ function showReto(){
   const rs = retoSetup(), m = MAPS[rs.map], d = DIFFS[rs.diff], mod = weeklyMod(), st = retoState(), star = retoStar(), k = selectedKey;
   const [floorTx, decoPng, bossPng] = m.preview, isStar = k === star;
   const best = st.best;
+  const nextHito = RETO_HITOS.find(h => !st.done.includes(h.id));
   const hitos = RETO_HITOS.map(h => { const ok = st.done.includes(h.id); return `<li class="${ok ? 'ok' : ''}"><i>${ok ? '✓' : '○'}</i><span>${h.t}</span><em>+${h.bits} Bits</em></li>`; }).join('');
   preloadLoadArt(rs.map);
   showOverlay(`
@@ -6503,7 +6613,7 @@ function showReto(){
           <div class="rt-how"><small>Premios</small><span>Bits +25% · con el Digimon de la semana, otro +25%</span></div>
         </section>
       </div>
-      <footer class="rt-foot"><span class="rt-sum">${CHARS[k].name} · ${m.name} · ${d.name} · ${mod.name}</span><button type="button" class="rt-go" id="rtStart">¡Empezar reto! <kbd>Enter</kbd></button></footer>
+      <footer class="rt-foot"><span class="rt-sum">${nextHito ? `Siguiente hito: ${nextHito.t} · +${nextHito.bits} Bits` : 'Hitos completados'}</span><button type="button" class="rt-go" id="rtStart">¡Empezar reto! <kbd>Enter</kbd></button></footer>
     </div>`);
   document.getElementById('rtBack').onclick = () => showSelect();
   document.getElementById('rtPick').onclick = () => showPicker('personaje');
@@ -9513,12 +9623,12 @@ function endGame(win){
         <span class="end3-gain"><i><img src="ui/hud/ic_bits.webp" alt=""></i><b>+${g.earned}</b>Bits ganados</span>${GACHA_SOON ? '' : `<span class="end3-gain"><i><img src="ui/hud/ic_ticket.webp" alt=""></i><b>+${(g.tix || 0) + (g.retoTix || 0) + g.encDone.length * ENC_REWARD.tix}</b>Tickets</span>`}
       </div>
       <div class="end3-cols">
-        <section><h3>Daño por ataque</h3>
-          ${dmgRows.map(([k, v], i) => `<div class="end3-bar" style="animation-delay:${.15 + i*.08}s"><span>${svgIcon(k)}${dmgName(k)}</span><i><u style="width:${Math.round(v/dmgMax*100)}%"></u></i><em>${Math.round(v)}</em></div>`).join('') || '<p class="muted">Sin daño registrado</p>'}
-        </section>
         <section><h3>Recompensas</h3><ul class="end3-rw">${rewards.join('')}</ul></section>
+        <details class="menu-details"><summary>Daño por ataque</summary>
+          ${dmgRows.map(([k, v], i) => `<div class="end3-bar" style="animation-delay:${.15 + i*.08}s"><span>${svgIcon(k)}${dmgName(k)}</span><i><u style="width:${Math.round(v/dmgMax*100)}%"></u></i><em>${Math.round(v)}</em></div>`).join('') || '<p class="muted">Sin daño registrado</p>'}
+        </details>
       </div>
-      <div class="end3-act2"><button class="end3-go" id="endAgain">${g.weekly ? '↻ Reintentar reto' : '↻ Otra vez'} <kbd>Enter</kbd></button><button class="end3-pill" id="endPick">${g.weekly ? 'Pantalla del reto' : 'Cambiar Digimon'} <kbd>C</kbd></button><button class="end3-pill" id="endMenu">Menú <kbd>M</kbd></button></div>
+      <div class="end3-act2"><button class="end3-go" id="endAgain">${g.weekly ? '↻ Reintentar reto' : '↻ Reintentar'} <kbd>Enter</kbd></button><button class="end3-pill" id="endPick">${g.weekly ? 'Pantalla del reto' : 'Cambiar Digimon'} <kbd>C</kbd></button><button class="end3-pill" id="endMenu">Menú <kbd>M</kbd></button></div>
     </div>`);
   overlay.onclick = null;
   document.getElementById('endAgain').onclick = () => startGame(endKey);
@@ -11267,7 +11377,8 @@ function showEncargos(){
   const row = (done, txt, prog, goal, reward) => `<div class="eq-row${done ? ' done' : ''}"><b aria-hidden="true">${done ? '✓' : ''}</b><span><span class="eq-t">${txt}</span>${goal > 1 ? `<span class="eq-bar"><i style="width:${Math.round(Math.min(prog, goal) / goal * 100)}%"></i></span><small>${fmt(Math.min(prog, goal))}/${fmt(goal)}</small>` : ''}</span><em>${reward}</em></div>`;
   const panel = (cls, icon, title, sub, rows, done, all) => `<section class="eq-panel ${cls}"><header><img src="ui/hub/${icon}.webp" alt=""><span><b>${title}</b><small>${sub}</small></span><em>${done}/${all}</em></header><div class="eq-rows">${rows.join('')}</div></section>`;
   const dayDone = d.claimed || d.runs >= DAILY.runsGoal;
-  const dayRows = [row(dayDone, `Juega ${DAILY.runsGoal} partidas`, d.runs, DAILY.runsGoal, rw(DAILY.reward, DAILY.rewardTix)), ...enc.list.map(e => row(e.done, encText(e), e.done ? 1 : 0, 1, rw(ENC_REWARD.bits, ENC_REWARD.tix)))];
+  const dayRows = [row(dayDone, `Juega ${DAILY.runsGoal} partidas`, d.runs, DAILY.runsGoal, rw(DAILY.reward, DAILY.rewardTix)), ...[...enc.list].sort((a, b) => Number(a.done) - Number(b.done)).map(e => row(e.done, encText(e), e.done ? 1 : 0, 1,
+    rw(ENC_REWARD.bits, ENC_REWARD.tix) + (!e.done && e.id === 'mini' ? '<br><button type="button" class="mini-btn" data-quest-map="bosque">Elegir mapa</button>' : '')))];
   const weekRows = [...(!GACHA_SOON ? [row(wk.claimed, `Haz ${WEEK_PULLS} tiradas en la Incubadora`, wk.pulls, WEEK_PULLS, rw(0, 1))] : []), ...WEEK_QUESTS.map(q => row(wq.done.includes(q.id), q.t, questProg(wq, q), q.goal, rw(q.bits, q.tix) + (q.obj && !wq.done.includes(q.id) && weekItem() ? '<br><span class="eq-prize">+ Objeto: ' + ITEMS[weekItem()].name + '</span>' : '')))];
   const days = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
   const parts = [
@@ -11279,7 +11390,13 @@ function showEncargos(){
     parts.push(panel('eq-ev', 'ic_evento', 'Evento', `${EVENT.name} · quedan ${days} ${days === 1 ? 'día' : 'días'}`, evRows, ev.done.length, evRows.length));
   }
   menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios se renuevan cada día. Los semanales y los de evento suman lo que haces en todas tus partidas. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d} <span>Solo se aplica en el Reto semanal, que tiene su propio botón en el menú.</span></p>`);
-  const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('eq-dialog');
+  const dlg = document.querySelector('#realModalHost .approved-info-dialog');
+  if (dlg){
+    dlg.classList.add('eq-dialog');
+    dlg.querySelectorAll('[data-quest-map]').forEach(b => b.onclick = () => {
+      runMode = 'normal'; runWeekly = false; restoreRunPrefs(); runMap = b.dataset.questMap; showMapSelect();
+    });
+  }
 }
 /* ---------- Tienda: gasta Bits en lo de la línea de la semana (cambia cada lunes) ---------- */
 // Mientras la Incubadora está en «Próximamente», la tienda es la otra forma de conseguir skins, marcos y títulos
@@ -11326,7 +11443,7 @@ function showShop(msg){
   const fmt = n => Number(n).toLocaleString('es-ES');
   const next = (weekNum() + 1) * WEEK_MS + 4 * 86400000, days = Math.max(1, Math.ceil((next - Date.now()) / 86400000));
   const bits = SAVE.bits, items = shopItems();
-  const rows = items.map((it, n) => `<div class="eq-row shop-row${it.owned ? ' done' : ''}"><img class="shop-ic" src="${charIcon(it.k, it.type === 'skin' ? it.id : 'clasico')}" alt=""><span><span class="eq-t">${it.name}</span><small>${CHARS[it.k].name}</small></span>${it.owned ? '<em>✓ Ya lo tienes</em>' : `<button type="button" class="shop-buy" data-n="${n}" ${bits < it.price ? 'disabled' : ''}>Ⓑ ${fmt(it.price)}</button>`}</div>`).join('');
+  const rows = items.map((it, n) => `<div class="eq-row shop-row${it.owned ? ' done' : ''}">${it.type === 'skin' ? sprEl(spriteWith(it.k, Math.max(0, skinLineArt(it.k, it.id)), it.id), 72) : `<img class="shop-ic" src="${charIcon(it.k, 'clasico')}" alt="">`}<span><span class="eq-t">${it.name}</span><small>${CHARS[it.k].name}${it.type === 'skin' ? ' · ' + stageName(it.k, Math.max(0, skinLineArt(it.k, it.id))) : ''}</small></span>${it.owned ? '<em>✓ Ya lo tienes</em>' : `<button type="button" class="shop-buy" data-n="${n}" ${bits < it.price ? 'disabled' : ''}>Ⓑ ${fmt(it.price)}</button>`}</div>`).join('');
   menuModal('Tienda', `<p class="shop-top"><span>Tus Bits: <b>Ⓑ ${fmt(bits)}</b></span><span>Se renueva el lunes · ${days === 1 ? 'queda 1 día' : `quedan ${days} días`}</span></p>
     <div class="eq-rows shop-rows">${rows}</div>
     <div class="shop-code"><input id="shopCode" maxlength="24" placeholder="Código de recompensa" autocomplete="off"><button type="button" id="shopRedeem">Canjear</button></div>
@@ -11344,12 +11461,19 @@ function showLogros(){
   const best = Object.entries(loadJSON('digibonk3d-surv', {})).sort((a, b) => b[1] - a[1])[0];
   const fmt = n => Number(n).toLocaleString('es-ES');
   const rows = achItems().map(tl => {
+    const [value, goal] = tl.prog(), owned = (TITLES.includes(tl) ? inv.titles : inv.frames).includes(tl.id);
+    return {tl, owned, ratio: goal ? value / goal : 0};
+  }).sort((a, b) => Number(a.owned) - Number(b.owned) || b.ratio - a.ratio).map(({tl}) => {
     const isT = TITLES.includes(tl), own = (isT ? inv.titles : inv.frames).includes(tl.id), pr = tl.prog();
     const bar = `<em class="ach-prog"><i class="ach-bar"><u style="width:${Math.round(Math.min(1, pr[0]/pr[1])*100)}%"></u></i><small>${fmt(Math.min(pr[0], pr[1]))}/${fmt(pr[1])}</small></em>`;
-    return `<div class="enc-row ach-row${own ? ' got' : ''}"><b>${own ? (isT ? '🏅' : '🖼') : '🔒'}</b><span><strong>${tl.name}</strong> <small>${isT ? 'Título' : 'Marco'}</small><br>${tl.how}</span>${own ? '<em class="ach-got">✓ Conseguido</em>' : bar}</div>`;
+    return `<div class="enc-row ach-row${own ? ' got' : ''}"><b>${own ? (isT ? '🏅' : '🖼') : '🔒'}</b><span><strong>${tl.name}</strong> <small>${isT ? 'Título' : 'Marco'}</small><br>${tl.how}</span>${own ? (extra[isT ? 'title' : 'frame'] === tl.id ? '<em class="ach-got">Equipado</em>' : `<button type="button" class="mini-btn" data-equip-ach="${tl.id}" data-ach-type="${isT ? 'title' : 'frame'}">Equipar</button>`) : bar}</div>`;
   }).join('');
   const stats = `<div class="ach-stats"><span>Partidas <b>${plays}</b></span><span>Bajas <b>${kills}</b></span><span>Supervivencia <b>${best ? fmtTime(best[1]) + ' · ' + CHARS[best[0]].name : '—'}</b></span></div>`;
   menuModal('Logros', stats + `<div class="enc-list">${rows}</div>`);
+  document.querySelectorAll('#realModalHost [data-equip-ach]').forEach(b => b.onclick = () => {
+    extra[b.dataset.achType] = b.dataset.equipAch;
+    saveExtra(); grantProgress(); showSelect(); showLogros();
+  });
 }
 /* ---------- Laboratorio: mejoras permanentes que se compran con Bits ---------- */
 // per = bonus por nivel (multiplicador sumado) · flat = bonus entero · costs = precio de cada nivel
@@ -11494,7 +11618,8 @@ function showLab(){
   setHud(false);
   const esc = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const bits = SAVE.bits;
-  const cards = LAB.map(u => {
+  const affordable = u => labLv(u.id) < labMax(u) && bits >= labCosts(u)[labLv(u.id)];
+  const card = u => {
     const lv = labLv(u.id), max = labMax(u), full = lv >= max, cost = full ? 0 : labCosts(u)[lv];
     const pips = Array.from({length: max}, (_, i) => `<i class="${i < lv ? 'on' : ''}"></i>`).join('');
     return `<article class="lab-card${full ? ' full' : ''}">
@@ -11503,8 +11628,17 @@ function showLab(){
         <div class="lab-pips" aria-label="Nivel ${lv} de ${max}">${pips}</div>
         <small>${esc(labBonusText(u, lv))}${!full && u.per ? ` → +${Math.round(u.per*(lv + 1)*100)}%` : ''}</small></div>
       <button type="button" class="lab-buy" data-lab="${u.id}" ${full || bits < cost ? 'disabled' : ''}>${full ? 'Máximo' : `Ⓑ ${cost}`}</button>
+      ${affordable(u) ? `<small class="lab-balance">Saldo después: Ⓑ ${(bits - cost).toLocaleString('es-ES')}</small>` : ''}
     </article>`;
-  }).join('');
+  };
+  const categories = [
+    ['Ataque', ['dmg', 'bonk', 'skill']],
+    ['Supervivencia', ['hp', 'speed', 'revive']],
+    ['Utilidad', ['pickup', 'xp', 'rer', 'bits']]
+  ];
+  const groups = categories.map(([label, ids]) => ({
+    label, upgrades: ids.map(id => LAB_BY_ID[id]).sort((a, b) => Number(affordable(b)) - Number(affordable(a)))
+  })).sort((a, b) => Number(b.upgrades.some(affordable)) - Number(a.upgrades.some(affordable)));
   showOverlay(`
     <div class="lab-screen">
       <header class="lab-top">
@@ -11513,7 +11647,7 @@ function showLab(){
         <span class="lab-bits">Ⓑ ${bits.toLocaleString('es-ES')}</span>
       </header>
       <p class="lab-say">Elecmon: «Con los Bits que traes de tus partidas puedo mejorar a tu compañero. Las mejoras valen para todos los Digimon.»</p>
-      <div class="lab-grid">${cards}</div>
+      ${groups.map(({label, upgrades}) => `<h3 class="menu-section-title">${label}</h3><div class="lab-grid">${upgrades.map(card).join('')}</div>`).join('')}
       <footer class="lab-foot">
         <button type="button" class="mini-btn" id="labRefund" ${labSpent() ? '' : 'disabled'}>Reembolsar todo (Ⓑ ${labSpent()})</button>
         <button type="button" class="g-btn" id="labGacha">${!GACHA_SOON ? '🎟 Ir a la Incubadora' : '🛒 Ir a la tienda'}</button>
