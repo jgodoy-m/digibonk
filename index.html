@@ -4019,14 +4019,23 @@ html[data-theme=oscuro] .activity-page .eq-panel>header progress{accent-color:#d
 .pass-panel header strong{color:var(--m-acc)}
 .pass-panel progress,.pass-missions progress{width:100%;height:7px;accent-color:var(--m-acc)}
 .pass-panel small{color:var(--m-soft)}
-.pass-levels{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px;padding:0;margin:12px 0;list-style:none}
-.pass-levels li{text-align:center;min-width:0;padding:4px 2px;border:1px solid var(--m-line2);border-radius:7px;font-variant-numeric:tabular-nums}
-.pass-levels .reached{background:var(--m-acc);color:var(--m-card);border-color:var(--m-acc)}
-.pass-levels .milestone{font-weight:900;border-color:var(--m-gold)}
-.pass-rewards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:12px 0 0;padding:0;list-style:none}
-.pass-rewards li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px 8px;align-items:center;padding:8px;border:1px solid var(--m-line2);border-radius:9px;background:var(--m-card);font-size:13px}
-.pass-rewards img{width:28px;height:28px;object-fit:contain;grid-row:1 / span 2}
-.pass-rewards .pass-unlocked{color:var(--m-good)}
+.pass-payout{margin-inline-start:auto}
+.pass-rails{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center;margin-top:12px}
+.pass-navigation{min-width:29px;min-height:44px;border:1px solid var(--m-line2);background:var(--m-card);color:var(--m-text);border-radius:9px;font-size:23px;cursor:pointer}
+.pass-levels{display:flex;gap:7px;overflow-x:auto;padding:4px 3px 10px;margin:0;list-style:none;scroll-snap-type:x proximity;overscroll-behavior-x:contain}
+.pass-levels li{
+  display:grid;grid-template-rows:auto 48px minmax(38px,auto) auto;gap:5px;justify-items:center;align-items:center;
+  flex:0 0 clamp(104px,12vw,143px);box-sizing:border-box;min-height:148px;padding:7px 5px;text-align:center;
+  border:1px solid var(--m-line2);border-radius:10px;background:var(--m-card);scroll-snap-align:start;
+  font-size:12px;line-height:1.2
+}
+.pass-levels img{width:44px;height:44px;object-fit:contain}
+.pass-levels .pass-number{color:var(--m-soft);font-size:11px;font-variant-numeric:tabular-nums}
+.pass-levels .reached{border-color:var(--m-acc)}
+.pass-levels .milestone{border-color:var(--m-gold);background:color-mix(in srgb,var(--m-card) 88%,var(--m-gold))}
+.pass-levels [aria-current=step]{outline:2px solid var(--m-acc);outline-offset:1px}
+.pass-levels .pass-coin-claim{font-size:11px;min-height:28px;padding:3px 5px;margin:0}
+.pass-status{min-height:1.3em;margin:5px 0 0}
 .pass-missions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
 .pass-missions article{min-width:0;padding:12px;border:1px solid var(--m-line2);border-radius:12px;background:var(--m-sunk)}
 .pass-missions article h3{margin:0}
@@ -4035,7 +4044,7 @@ html[data-theme=oscuro] .activity-page .eq-panel>header progress{accent-color:#d
 .pass-missions li b{color:var(--m-acc)}
 .pass-legacy{margin-top:10px}
 .pass-legacy summary{cursor:pointer;font-weight:900}
-@media(max-width:640px){.pass-missions{grid-template-columns:1fr}.pass-levels{grid-template-columns:repeat(10,minmax(0,1fr));gap:3px;font-size:11px}}
+@media(max-width:640px){.pass-missions{grid-template-columns:1fr}.pass-rails{gap:4px}.pass-panel{padding:10px}}
 
 .activity-panel:focus-visible{outline:2px solid var(--m-acc);outline-offset:3px;border-radius:8px}
 .activity-panel .eq-grid.eq-single{grid-template-columns:1fr}
@@ -4527,7 +4536,7 @@ const mapPace = () => MAP_PACE[(g && g.map) || 'bosque'] || MAP_PACE.bosque;
 const SCREEN_LIMIT = 1200;   // 20 minutos en una misma pantalla: empieza el Infierno
 /* ---------- Dificultad ----------
    Multiplicadores fijos de cada nivel sobre la base (vida y daño de enemigos y jefes menores, intervalo entre
-   apariciones y entre élites; menor = más enemigos), vida de los jefes de zona y premio de Bits y tickets.
+   apariciones y entre élites; menor = más enemigos), vida de los jefes de zona y premio de Digicoins y tickets.
    Además, en todos los niveles la presión sube con el tiempo de partida (ver diffMul y spawnEnemy). */
 const DIFFS = {
   // ring: anillo de disparos de los jefes (n = número de balas, spd = velocidad, gap = tiempo entre anillos, wait = segundos que las
@@ -5873,7 +5882,7 @@ let LANG = window.I18N ? I18N.lang : 'es';
 const TXT = {
   es: {tag:'FAN GAME · DIGIMON ADVENTURE', pitch:'Survivor 3D de Digimon, gratis en el navegador', boot:'DIGIVICE · ACCESO AL DIGIMUNDO', who:'Niño elegido, identifícate',
        saved:'Tu nombre se guarda en este navegador.', ph:'TU NOMBRE', enter:'ENTRAR AL DIGIMUNDO', guest:'Entrar como invitado (pruebas)', needName:'Escribe un nombre',
-       play:'JUGAR', playS:'Elige tu Digimon, mapa y dificultad', gacha:'GACHA', gachaS:'Tiradas con Bits o tickets', player:'JUGADOR', playerS:'Tu tarjeta, marcos y títulos',
+       play:'JUGAR', playS:'Elige tu Digimon, mapa y dificultad', gacha:'GACHA', gachaS:'Tiradas con Digicoins o tickets', player:'JUGADOR', playerS:'Tu tarjeta, marcos y títulos',
        coll:'COLECCIÓN', collS:'Skins, marcos, títulos y evoluciones', help:'CÓMO JUGAR', helpS:'Tutorial con vídeos', set:'AJUSTES', setS:'Calidad, sonido y guardado', recs:'Tus récords', runs:'Partidas', best:'Mejor tiempo', lvl:'Mejor nivel',
        kills:'Bajas', none:'Todavía no hay partidas. ¡Empieza una!', partner:'Tu compañero', noTitle:'Sin título', guestTag:'invitado · pruebas',
        evEnds:'Termina en', evSkin:'Skins de Navidad como legendarias en la Incubadora', tipT:'Consejo', tip:'Los élites y el jefe sueltan tickets de tirada.', daily:'Misión diaria',
@@ -6091,8 +6100,8 @@ function menuNav(k, e){
   if (best){ best.focus(); best.scrollIntoView({block: 'nearest', inline: 'nearest'}); }
   return true;
 }
-// ---------- Barra superior fija en los menús: tarjeta, Bits, tickets, idioma, sonido, pantalla completa y ajustes ----------
-// Bits, tickets y perfil solo se ven en el menú de inicio (que lleva su propia barra); el resto de pantallas no la muestran
+// ---------- Barra superior fija en los menús: tarjeta, Digicoins, tickets, idioma, sonido, pantalla completa y ajustes ----------
+// Digicoins, tickets y perfil solo se ven en el menú de inicio (que lleva su propia barra); el resto de pantallas no la muestran
 const TOP_STATES = [];
 function refreshTopbar(){
   const el = document.getElementById('topbar');
@@ -6105,7 +6114,7 @@ function refreshTopbar(){
     <button class="tb-id" id="tbId"><span class="hud-portrait mini${extra.frame ? ' fr-' + extra.frame : ''}"><img src="${avatarSrc()}" alt=""></span>
       <span><b>${escHtml(trainerName || 'Entrenador')}</b><small>${isGuest() ? t('guestTag') : (tt ? tt.name : t('noTitle'))}</small></span></button>
     <span class="tb-sp"></span>
-    <span class="tb-chip" title="Bits">Ⓑ ${SAVE.bits}</span>
+    <span class="tb-chip" title="Digicoins">Ⓑ ${SAVE.bits}</span>
     ${GACHA_SOON ? '' : `<span class="tb-chip tix" title="Tickets">🎟 ${SAVE.tickets}</span>`}
     <button class="tb-btn" id="tbLang" title="Idioma / Language">${LANG.toUpperCase()}</button>
     <button class="tb-btn" id="tbSnd" title="Sonido">${Sfx.muted ? '🔇' : '🔊'}</button>
@@ -6211,7 +6220,7 @@ const MENU_RELEASES = [
     version: '0.1.2',
     date: '2026-11-20',
     changes: [
-      ['Nueva cabecera Digivice', 'La ficha de entrenador tiene un retrato más grande y un visor para los Bits.'],
+      ['Nueva cabecera Digivice', 'La ficha de entrenador tiene un retrato más grande y un visor para los Digicoins.'],
       ['Señal de File Island', 'Cuatro semanas de encargos con un título, un marco y la skin Agumon Digivice LCD.']
     ]
   },
@@ -6297,7 +6306,7 @@ function showSelect(){
             <span class="hb-id"><strong${trainerName ? ' data-no-i18n' : ''}>${safeText(trainerName || 'Invitado')}</strong>${title ? `<small>${safeText(title.name)}</small>` : ''}</span>
           </button>
           <div class="hb-wallet">
-            <span class="hb-chip hb-bits" title="Bits"><img src="ui/hud/ic_bits.webp" alt="Bits"><span>${bits}</span></span>
+            <span class="hb-chip hb-bits" title="Digicoins"><img src="ui/hud/ic_bits.webp" alt="Digicoins"><span>${bits}</span></span>
             ${GACHA_SOON ? '' : `<span class="hb-chip" title="Tickets"><img src="ui/hud/ic_ticket.webp" alt="Tickets"><span>${usableTickets('std')}</span></span>`}
             <button type="button" class="hb-chip" id="rhDex" aria-label="Digidex: ${dex.done} de ${dex.total} Digimon" title="Digidex"><img src="ui/hub/digivice/digidex.png" alt=""><span>${dex.done}/${dex.total}</span></button>
           </div>
@@ -6453,7 +6462,7 @@ function showSelect(){
       content=`<p>Juega a pantalla completa y en horizontal desde un icono, también sin conexión.</p><ol class="hb-app-steps"><li>Abre Digibonk en Safari.</li><li>Toca el botón Compartir (el cuadrado con la flecha hacia arriba).</li><li>Elige «Añadir a pantalla de inicio» y confirma con «Añadir».</li></ol>`;
     }else if(type==='mission'){
       title=t('daily');
-      content=`<p>${safeText(dailyText())}</p><div class="approved-info-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></div><p>${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits${GACHA_SOON ? '' : ' · +' + DAILY.rewardTix + ' 🎟'}</p>`;
+      content=`<p>${safeText(dailyText())}</p><div class="approved-info-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></div><p>${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Digicoins${GACHA_SOON ? '' : ' · +' + DAILY.rewardTix + ' 🎟'}</p>`;
     }else{
       title=t('recs');
       content=recs.length?`<div class="approved-info-records">${recs.slice(0,10).map((r,i)=>`<div><b>${i+1}. ${safeText(r.name)}</b><span>${fmtTime(r.t)} · Nv. ${Number(r.lvl)||0} · ${Number(r.kills)||0} bajas</span></div>`).join('')}</div>`:`<p>${safeText(t('none'))}</p>`;
@@ -6582,7 +6591,7 @@ const GUIDE = [
       ['B', 'Invocar jefe', 'Llamar al jefe junto al portal']
     ]},
   {tab: 'Progreso', title: 'Recompensas', img: 'lab',
-    intro: 'Ganas Bits al jugar. Úsalos en el Laboratorio para mejorar a todos tus Digimon.',
+    intro: 'Ganas Digicoins al jugar. Úsalos en el Laboratorio para mejorar a todos tus Digimon.',
     tips: [
       'Juega con un Digimon para subir su maestría y desbloquear recompensas.',
       'Completa encargos para conseguir premios adicionales.'
@@ -6643,9 +6652,10 @@ const TRAINER_IDENTITY_KEY = 'digibonk3d-trainer-identity';
 const TRAINER_RENAMED_KEY = 'digibonk3d-trainer-renamed-at';
 const TRAINER_RECORDS_KEY = 'digibonk3d-trainer-records';
 const SEASON_KEY = 'digibonk3d-season-file-island';
+const DIGICOIN_WALLET_KEY = 'digibonk3d-digicoins';
 const FILE_PASS_KEY = 'digibonk3d-file-pass-2026';
 const CHRISTMAS_PASS_KEY = 'digibonk3d-christmas-pass-2026';
-const SAVE_KEYS = [FILE_PASS_KEY, CHRISTMAS_PASS_KEY, SEASON_KEY, TRAINER_BG_KEY, TRAINER_IDENTITY_KEY, TRAINER_RENAMED_KEY, TRAINER_RECORDS_KEY, 'digibonk3d-shop-favorites', 'digibonk3d-shop-discount', 'digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
+const SAVE_KEYS = [DIGICOIN_WALLET_KEY, FILE_PASS_KEY, CHRISTMAS_PASS_KEY, SEASON_KEY, TRAINER_BG_KEY, TRAINER_IDENTITY_KEY, TRAINER_RENAMED_KEY, TRAINER_RECORDS_KEY, 'digibonk3d-shop-favorites', 'digibonk3d-shop-discount', 'digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
   'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-maptime', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
   'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales', 'digibonk3d-objetos', 'digibonk3d-obj-ini', 'digibonk3d-reto', 'digibonk3d-sist'];
 // También cuentan los contadores por banner (pity) y la mejor oleada de cada mapa
@@ -6875,9 +6885,9 @@ function cloudBoot(){
 // Resumen corto de un progreso para poder comparar
 function saveSummary(d){
   const j = (k, def) => { try { return JSON.parse(d[k]) || def; } catch(e){ return def; } };
-  const bits = +(d['digibonk3d-bits'] || 0), digis = (j('digibonk3d-unlocked', [])).length, recs = j('digibonk3d-records', []);
+  const bits = digicoinAmount(j(DIGICOIN_WALLET_KEY, null)?.balance ?? d['digibonk3d-bits']), digis = (j('digibonk3d-unlocked', [])).length, recs = j('digibonk3d-records', []);
   const best = recs.reduce((a, r) => Math.max(a, r.t || 0), 0);
-  return `${bits.toLocaleString('es-ES')} Bits · ${digis || '—'} Digimon · mejor partida ${best ? fmtTime(best) : '—'}`;
+  return `${bits.toLocaleString('es-ES')} Digicoins · ${digis || '—'} Digimon · mejor partida ${best ? fmtTime(best) : '—'}`;
 }
 function cloudShowConflict(){
   const row = Cloud.pending; if (!row) return;
@@ -7137,7 +7147,7 @@ function showSettings(){
   document.getElementById('btnLogout').onclick = () => logoutProfile();
   // Eliminar cuenta: borra todo lo guardado por el juego en este navegador
   document.getElementById('btnDelete').onclick = async () => {
-    if (!confirm(Cloud.st.uid ? I18N.tr('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Bits, skins, colección, récords) y tu cuenta en la nube con tus puestos del ranking. No se puede deshacer.') : I18N.tr('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Bits, skins, colección, récords). No se puede deshacer.'))) return;
+    if (!confirm(Cloud.st.uid ? I18N.tr('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Digicoins, skins, colección, récords) y tu cuenta en la nube con tus puestos del ranking. No se puede deshacer.') : I18N.tr('¿Eliminar la cuenta? Se borrará todo el progreso de este navegador (Digicoins, skins, colección, récords). No se puede deshacer.'))) return;
     if (Cloud.st.uid && CLOUD_ON){ try { await cloudRpc('delete_my_data', {}); } catch(e){ if (!confirm(I18N.tr('No se pudo borrar la cuenta de la nube ({0}). ¿Borrar solo este navegador?'.replace('{0}', e.message)))) return; } }
     // Solo esta cuenta: los perfiles de otros nombres guardados en este navegador y las preferencias se quedan
     profileKeys().forEach(k => localStorage.removeItem(k));
@@ -7309,7 +7319,7 @@ function skillFacts(id){
   const K = SKILL_K, L = 1;
   const f = {
     aura:     [['Daño', (2.5 + 1.2*L)*K], ['Cada', '0,3 s'], ['Radio', fmtN(3.2 + 1.0*L) + ' m']],
-    tornado:  [['Daño', (6 + 3*L)*K], ['Bits', L + 1], ['Radio', '3,4 m']],
+    tornado:  [['Daño', (6 + 3*L)*K], ['Digicoins', L + 1], ['Radio', '3,4 m']],
     pulso:    [['Daño', (6 + 2*L)*K], ['Recarga', fmtN(4.2 - 0.4*L) + ' s'], ['Radio', (6.5 + 1.5*L) + ' m']],
     espiral:  [['Daño', (14 + 6*L)*K], ['Recarga', '0,6 s'], ['Atraviesa', 2 + L]],
     cuchilla: [['Daño', (11 + 4*L)*K], ['Recarga', '1,3 s'], ['Cuchillas', 2*L]],
@@ -7362,7 +7372,7 @@ function showPicker(tab){
     <div class="picker-screen pk2 ps${isRetoRun() ? ' ps-reto' : ''}">
       <header class="ps-top">
         <button class="g-back" id="pkBack"><kbd>Esc</kbd> Volver</button>
-        <div class="ps-banner"><h2>${runMode === 'surv' ? 'Supervivencia' : runWeekly ? 'Reto semanal' : 'Elige tu Digimon'}</h2><small>${runWeekly && runMode !== 'surv' ? `Digimon de la semana: ${CHARS[retoStar()].name} · +25% Bits` : `${pr.done}/${pr.total} Digimon`}</small></div>
+        <div class="ps-banner"><h2>${runMode === 'surv' ? 'Supervivencia' : runWeekly ? 'Reto semanal' : 'Elige tu Digimon'}</h2><small>${runWeekly && runMode !== 'surv' ? `Digimon de la semana: ${CHARS[retoStar()].name} · +25% Digicoins` : `${pr.done}/${pr.total} Digimon`}</small></div>
         
       </header>
       <div class="ps-body">
@@ -7567,7 +7577,7 @@ function showMapSelect(){
   // Solo lo que cambia respecto a Normal (en Normal no cambia nada)
   const dchg = [['Vida enemigos', d.hp], ['Daño enemigos', d.dmg], ['Enemigos', 1 / d.spawn], ['Élites', 1 / d.elite], ['Jefes de zona', d.boss]]
     .filter(([, v]) => Math.abs(v - 1) >= 0.005).map(([t, v]) => [t, pct(v)]);
-  if (d.reward !== 1) dchg.push(['Bits y tickets', '×' + String(d.reward).replace('.', ',')]);
+  if (d.reward !== 1) dchg.push(['Digicoins y tickets', '×' + String(d.reward).replace('.', ',')]);
   const diffs = DIFF_ORDER.map(id => `<button type="button" class="ms-diff${id === runDiff ? ' on' : ''}" data-diff="${id}" style="--dc:${DIFFS[id].col}" aria-pressed="${id === runDiff}"><span class="ms2-lv">${'<i></i>'.repeat(DIFF_ORDER.indexOf(id) + 1)}</span><b>${DIFFS[id].name}</b><small>Premios ×${String(DIFFS[id].reward).replace('.', ',')}</small></button>`).join('');
   showOverlay(`
     <div class="picker-screen ms ms2">
@@ -7600,7 +7610,7 @@ function showReto(){
   const stageLabel = mod === BOSS_CIRCUIT ? `${BOSS_CIRCUIT_ZONES.length} jefes` : m.name;
   const [floorTx, decoPng, bossPng] = m.preview, isStar = k === star;
   const best = st.best;
-  const hitos = RETO_HITOS.map(h => { const ok = st.done.includes(h.id); return `<li class="${ok ? 'ok' : ''}"><i>${ok ? '✓' : '○'}</i><span>${h.t}</span><em>+${h.bits} Bits</em></li>`; }).join('');
+  const hitos = RETO_HITOS.map(h => { const ok = st.done.includes(h.id); return `<li class="${ok ? 'ok' : ''}"><i>${ok ? '✓' : '○'}</i><span>${h.t}</span><em>+${h.bits} Digicoins</em></li>`; }).join('');
   preloadLoadArt(rs.map);
   showOverlay(`
     <div class="rt-screen rt">
@@ -7618,7 +7628,7 @@ function showReto(){
         </section>
         <section class="rt-card rt-digi">
           <h4>Tu Digimon</h4>
-          <div class="rt-pick"><img src="${charIcon(k)}" alt=""><span><b>${CHARS[k].name}</b><small>${isStar ? '★ Digimon de la semana · +25% Bits' : `Digimon de la semana: ${CHARS[star].name}`}</small></span></div>
+          <div class="rt-pick"><img src="${charIcon(k)}" alt=""><span><b>${CHARS[k].name}</b><small>${isStar ? '★ Digimon de la semana · +25% Digicoins' : `Digimon de la semana: ${CHARS[star].name}`}</small></span></div>
           <div class="rt-btns"><button type="button" class="rt-btn" id="rtPick">Cambiar Digimon <kbd>C</kbd></button>${!isStar && isUnlocked(star) ? `<button type="button" class="rt-btn star" id="rtStar">★ Usar a ${CHARS[star].name}</button>` : ''}</div>
           <h4>Hitos de la semana</h4>
           <ul class="rt-hitos">${hitos}</ul>
@@ -7629,7 +7639,7 @@ function showReto(){
           ${best ? `<p class="rt-bestinfo"><img src="${charIcon(best.key)}" alt=""><span>${CHARS[best.key] ? CHARS[best.key].name : ''} · ${fmtTime(best.t)} · ${best.kills.toLocaleString('es-ES')} bajas${best.win ? ' · Superado' : ''}</span></p>` : '<p class="rt-bestinfo"><span>Aún no lo has jugado esta semana</span></p>'}
           <p class="rt-tries">Intentos: <b>${st.tries | 0}</b></p>
           <div class="rt-how"><small>Puntos</small><span>1 por baja · 2 por segundo · +${RETO_WIN_PTS.toLocaleString('es-ES')} si ganas</span></div>
-          <div class="rt-how"><small>Premios</small><span>Bits +25% · con el Digimon de la semana, otro +25%</span></div>
+          <div class="rt-how"><small>Premios</small><span>Digicoins +25% · con el Digimon de la semana, otro +25%</span></div>
         </section>
       </div>
       <footer class="rt-foot"><span class="rt-sum">${CHARS[k].name} · ${m.name} · ${d.name} · ${mod.name}</span><button type="button" class="rt-go" id="rtStart">¡Empezar reto! <kbd>Enter</kbd></button></footer>
@@ -8919,10 +8929,10 @@ const SHRINE_TYPES = [
   {id: 'iman',     name: 'Santuario imán',        col: 0x80deea, art: 'ui/hud/carta_iman.webp',      text: '+40% de imán',              w: 0.8, apply: g => { g.p.pickup *= 1.4; }},
   {id: 'saber',    name: 'Santuario del saber',   col: 0x6aa8ff, glyph: 'EXP',                       text: 'Subes un nivel',            w: 0.9, apply: g => { g.p.xp = Math.max(g.p.xp, g.p.nextXp); }},
   {id: 'bonk',     name: 'Santuario del Bonk',    col: 0xffb547, art: 'ui/hud/bonk_listo.webp',      text: 'Bonk cargado al 100%',      w: 0.7, apply: g => { addBonk(100); }},
-  {id: 'fortuna',  name: 'Santuario de fortuna',  col: 0xffe082, art: 'ui/hud/ic_bits.webp',         text: '+60 Bits',                  w: 0.7, apply: g => { g.extraBits = (g.extraBits || 0) + 60; }},
+  {id: 'fortuna',  name: 'Santuario de fortuna',  col: 0xffe082, art: 'ui/hud/ic_bits.webp',         text: '+60 Digicoins',                  w: 0.7, apply: g => { g.extraBits = (g.extraBits || 0) + 60; }},
   {id: 'tickets',  name: 'Santuario de tickets',  col: 0xffd54f, art: 'ui/hud/ic_ticket.webp',       text: '+1 ticket del permanente',  w: 0.5, ok: () => !GACHA_SOON, apply: () => addTickets('std', 1)},
   {id: 'maldito',  name: 'Santuario maldito',     col: 0xb04ce0, art: 'ui/hud/carta_dano.webp',      text: '+25% daño · −20 vida máx.', w: 0.5, apply: g => { g.p.dmg *= 1.25; g.p.maxHp = Math.max(30, g.p.maxHp - 20); g.p.hp = Math.min(g.p.hp, g.p.maxHp); }},
-  {id: 'desafio',  name: 'Santuario del desafío', col: 0xff5252, art: 'ui/hud/jefe.png',             text: 'Llegan 3 élites: vence en 45 s y gana un cofre dorado y 80 Bits', w: 0.8, apply: (g, sh) => startShrineTrial(sh)}
+  {id: 'desafio',  name: 'Santuario del desafío', col: 0xff5252, art: 'ui/hud/jefe.png',             text: 'Llegan 3 élites: vence en 45 s y gana un cofre dorado y 80 Digicoins', w: 0.8, apply: (g, sh) => startShrineTrial(sh)}
 ];
 const SHRINE_CHARGE = 3, SHRINE_RANGE = 2.2, SHRINES_PER_SCREEN = 3;
 const SHRINE_STONE = {bosque: 0x9aa7b8, dunas: 0xd9bc8c, ruinas: 0xbfa27f, nieve: 0xc3d1e2, fortaleza: 0x6f6280};
@@ -9042,7 +9052,7 @@ function initShrines(saved){
     }
   }
 }
-// Santuario del desafío: 3 élites rodean el santuario; si caen en 45 s, cofre dorado y Bits
+// Santuario del desafío: 3 élites rodean el santuario; si caen en 45 s, cofre dorado y Digicoins
 function startShrineTrial(sh){
   const foes = [];
   for (let i = 0; i < 3; i++){
@@ -9063,7 +9073,7 @@ function updateTrial(dt){
   if (left === 0){
     g.trial = null;
     spawnChestAt(tr.x, tr.z + 2.5, true); g.extraBits = (g.extraBits || 0) + 80;
-    announce('¡Desafío superado!', '+80 Bits y un cofre dorado en el santuario', '#ff5252'); sfx('chest');
+    announce('¡Desafío superado!', '+80 Digicoins y un cofre dorado en el santuario', '#ff5252'); sfx('chest');
     return null;
   }
   if (tr.t <= 0){ g.trial = null; announce('Desafío fallido', 'Se acabó el tiempo', '#9e9e9e'); return null; }
@@ -10168,7 +10178,7 @@ function rerollUp(){
 function skipUp(){
   const r = upRes(); if (r.skip <= 0 || state !== 'levelup' || g.npcPick || !g.choices.length) return;
   r.skip--; SAVE.bits = SAVE.bits + 15; g.chestPick = null; runDrop();
-  announce('+15 Bits', 'Carta saltada', '#ffd54f', 'low');
+  announce('+15 Digicoins', 'Carta saltada', '#ffd54f', 'low');
   hideOverlay(); lockMouse(); state = 'play';
 }
 function toggleBanish(){
@@ -10858,13 +10868,13 @@ function endGame(win){
   const dmgRows = Object.entries(g.dmgBy).sort((a, b) => b[1] - a[1]).slice(0, 6);
   const dmgMax = dmgRows.length ? dmgRows[0][1] : 1;
   const dmgName = k => k === 'base' ? `Ataque de ${g.ch.name}` : k.startsWith('fus:') ? 'Fusión: ' + (FUSION_NAMES[k.slice(4)] || k.slice(4)) : (SKILLS[k] ? skillName(k) : k);
-  const rewards = [`<li><b>+${g.earned - g.bonus - (g.extraBits || 0) - (g.retoBits || 0)}</b> Bits</li>`];
-  if (g.weekly && g.ch.id === g.star) rewards.push(`<li>Digimon de la semana: <b>+25%</b> Bits</li>`);
-  for (const h of g.retoDone || []) rewards.push(`<li>Hito del reto: <b>${h.t}</b> · +${h.bits} Bits${GACHA_SOON ? '' : ` y +${h.tix} tickets`}</li>`);
-  if (g.extraBits) rewards.push(`<li><b>+${g.extraBits}</b> Bits de eventos del mapa</li>`);
+  const rewards = [`<li><b>+${g.earned - g.bonus - (g.extraBits || 0) - (g.retoBits || 0)}</b> Digicoins</li>`];
+  if (g.weekly && g.ch.id === g.star) rewards.push(`<li>Digimon de la semana: <b>+25%</b> Digicoins</li>`);
+  for (const h of g.retoDone || []) rewards.push(`<li>Hito del reto: <b>${h.t}</b> · +${h.bits} Digicoins${GACHA_SOON ? '' : ` y +${h.tix} tickets`}</li>`);
+  if (g.extraBits) rewards.push(`<li><b>+${g.extraBits}</b> Digicoins de eventos del mapa</li>`);
   if (g.shopDiscount === weekNum()) rewards.push(`<li>Encargo de la tienda: <b>−${SHOP_DISCOUNT_PCT}% en tu skin destacada</b></li>`);
   if (g.emblems && g.emblems.length) rewards.push(`<li>Emblemas: <b>${g.emblems.length}/8</b></li>`);
-  if (g.bonus) rewards.push(GACHA_SOON ? `<li><b>+${g.bonus}</b> Bits · misión diaria completada</li>` : `<li><b>+${g.bonus}</b> Bits y <b>+${g.dailyTix}</b> tickets · misión diaria completada</li>`);
+  if (g.bonus) rewards.push(GACHA_SOON ? `<li><b>+${g.bonus}</b> Digicoins · misión diaria completada</li>` : `<li><b>+${g.bonus}</b> Digicoins y <b>+${g.dailyTix}</b> tickets · misión diaria completada</li>`);
   if (g.tix && !GACHA_SOON) rewards.push(`<li><b>+${g.tix}</b> tickets de tirada</li>`);
   for (const u of g.unlocked) rewards.push(`<li>Skin nueva: <b>${u}</b></li>`);
   for (const tl of g.newTitles) rewards.push(tl.kind === 'Marco' ? `<li>Marco desbloqueado: <b>${tl.name}</b></li>` : `<li>Título desbloqueado: <b>${tl.name}</b></li>`);
@@ -10874,10 +10884,10 @@ function endGame(win){
   for (const d of g.newDigis) rewards.push(`<li>Digimon desbloqueado: <b>${d}</b></li>`);
   for (const sy of g.newSys || []) rewards.push(`<li>Nuevo en tus partidas: <b>${sy.name}</b> · ${sy.d}</li>`);
   for (const it of g.newItems || []) rewards.push(`<li>Objeto desbloqueado: <b>${it}</b> · míralo en la vitrina del Digidex</li>`);
-  for (const q of (g.questDone || [])) rewards.push(`<li>Encargo cumplido: <b>${q.t}</b> · +${q.bits} Bits${GACHA_SOON ? '' : ` y +${q.tix} tickets`}</li>`);
+  for (const q of (g.questDone || [])) rewards.push(`<li>Encargo cumplido: <b>${q.t}</b> · +${q.bits} Digicoins${GACHA_SOON ? '' : ` y +${q.tix} tickets`}</li>`);
   if (g.filePassXP) rewards.push(`<li>Señal de File Island · <b>+${g.filePassXP} XP</b></li>`);
   if (g.christmasPassXP) rewards.push(`<li>Navidad Digital · <b>+${g.christmasPassXP} XP</b></li>`);
-  for (const e of g.encDone) rewards.push(`<li>Encargo cumplido: <b>${e}</b> · +${ENC_REWARD.bits} Bits${GACHA_SOON ? '' : ` y +${ENC_REWARD.tix} ticket`}</li>`);
+  for (const e of g.encDone) rewards.push(`<li>Encargo cumplido: <b>${e}</b> · +${ENC_REWARD.bits} Digicoins${GACHA_SOON ? '' : ` y +${ENC_REWARD.tix} ticket`}</li>`);
   if (g.survBest) rewards.push(`<li>¡Nuevo récord de Supervivencia con ${g.ch.name}!</li>`);
   if (g.waveBest) rewards.push(`<li>¡Nueva mejor oleada en ${mapDef().name}: <b>${g.wave}</b>!</li>`);
   if (lvlDiff().reward !== 1) rewards.push(`<li>Dificultad ${lvlDiff().name}: premios ×${String(lvlDiff().reward).replace('.', ',')}</li>`);
@@ -10890,7 +10900,7 @@ function endGame(win){
       <p class="end3-sub end3-rank" id="end3Rank" aria-live="polite"></p>
       <div class="end3-cells${GACHA_SOON ? ' no-tix' : ''}">
         <span><i>⏱</i><b>${fmtTime(Math.floor(g.t))}</b>Tiempo</span><span><i>⭐</i><b>${g.p.lvl}</b>Nivel</span><span><i>⚔</i><b>${g.kills}</b>Bajas</span><span><i>✦</i><b>${Object.keys(g.skills).length}</b>Habilidades</span>
-        <span class="end3-gain"><i><img src="ui/hud/ic_bits.webp" alt=""></i><b>+${g.earned}</b>Bits ganados</span>${GACHA_SOON ? '' : `<span class="end3-gain"><i><img src="ui/hud/ic_ticket.webp" alt=""></i><b>+${(g.tix || 0) + (g.retoTix || 0) + g.encDone.length * ENC_REWARD.tix}</b>Tickets</span>`}
+        <span class="end3-gain"><i><img src="ui/hud/ic_bits.webp" alt=""></i><b>+${g.earned}</b>Digicoins ganados</span>${GACHA_SOON ? '' : `<span class="end3-gain"><i><img src="ui/hud/ic_ticket.webp" alt=""></i><b>+${(g.tix || 0) + (g.retoTix || 0) + g.encDone.length * ENC_REWARD.tix}</b>Tickets</span>`}
       </div>
       <div class="end3-cols">
         <section><h3>Daño por ataque</h3>
@@ -11958,8 +11968,8 @@ function clearBossRing(){
   if (g && g.bossRing){ world.remove(g.bossRing); g.bossRing = null; }
 }
 
-/* ---------- Monedas (Bits), skins y gacha ---------- */
-// Misión diaria: jugar 3 partidas (de al menos 5 s) da un bonus; las Bits por partida tienen tope diario
+/* ---------- Monedas (Digicoins), skins y gacha ---------- */
+// Misión diaria: jugar 3 partidas (de al menos 5 s) da un bonus; las Digicoins por partida tienen tope diario
 const DAILY = {runsGoal: 3, reward: 150, rewardTix: 3, runCap: 600, runTix: 1, runTixAt: 300};
 function dayKey(){ const d = new Date(); return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; }
 function loadDaily(){
@@ -11970,7 +11980,7 @@ function loadDaily(){
 function saveDaily(d){ localStorage.setItem('digibonk3d-daily', JSON.stringify(d)); }
 function dailyText(){
   const d = loadDaily();
-  return d.claimed ? 'Misión diaria completada' : `Misión diaria: ${Math.min(d.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits${GACHA_SOON ? '' : ` y ${DAILY.rewardTix} tickets`}`;
+  return d.claimed ? 'Misión diaria completada' : `Misión diaria: ${Math.min(d.runs, DAILY.runsGoal)}/${DAILY.runsGoal} partidas · +${DAILY.reward} Digicoins${GACHA_SOON ? '' : ` y ${DAILY.rewardTix} tickets`}`;
 }
 
 
@@ -12309,7 +12319,7 @@ function startMapEvent(force){
     const e = {kind: 'basic', golden: true, sprite: 'sprites/numemon.png', mesh, shadow, x, z, hp, max: hp, spd: 6.2, r: 0.9, xp: 30, dmg: 0, cd: 0, attr: 'vir'};
     g.enemies.push(e);
     g.ev = {kind, t: 30, foe: e};
-    announce('Evento: ¡Numemon dorado!', GACHA_SOON ? 'Atrápalo antes de 30 s: Bits' : 'Atrápalo antes de 30 s: Bits y un ticket', '#ffd54f');
+    announce('Evento: ¡Numemon dorado!', GACHA_SOON ? 'Atrápalo antes de 30 s: Digicoins' : 'Atrápalo antes de 30 s: Digicoins y un ticket', '#ffd54f');
   }
   sfx('boss');
 }
@@ -12325,7 +12335,7 @@ function endMapEvent(ok){
     return;
   }
   if (ev.kind === 'golden'){
-    if (ok){ g.extraBits = (g.extraBits || 0) + 80; g.tix++; announce('¡Numemon dorado atrapado!', GACHA_SOON ? '+80 Bits' : '+80 Bits y +1 ticket', '#ffd54f'); }
+    if (ok){ g.extraBits = (g.extraBits || 0) + 80; g.tix++; announce('¡Numemon dorado atrapado!', GACHA_SOON ? '+80 Digicoins' : '+80 Digicoins y +1 ticket', '#ffd54f'); }
     else { dropFoe(ev.foe); announce('El Numemon dorado ha huido', '', '#9e9e9e'); }
     return;
   }
@@ -12338,18 +12348,18 @@ function endMapEvent(ok){
   if (ev.kind === 'meteor'){
     if (!ok) return;
     if (ev.hits <= 2){ spawnChestAt(g.p.x + 3, g.p.z + 3, true); announce('¡Lluvia esquivada!', 'Un cofre dorado cae a tu lado', '#ff7043'); }
-    else { g.extraBits = (g.extraBits || 0) + 30; announce('Fin de la lluvia de meteoros', `${ev.hits} golpes: solo +30 Bits`, '#ff7043'); }
+    else { g.extraBits = (g.extraBits || 0) + 30; announce('Fin de la lluvia de meteoros', `${ev.hits} golpes: solo +30 Digicoins`, '#ff7043'); }
     return;
   }
   if (ev.kind === 'stampede'){
-    if (ok){ spawnChestAt(g.p.x + 3, g.p.z + 3, true); g.extraBits = (g.extraBits || 0) + 40; announce('¡Estampida superada!', '+40 Bits y un cofre dorado', '#ffb74d'); }
+    if (ok){ spawnChestAt(g.p.x + 3, g.p.z + 3, true); g.extraBits = (g.extraBits || 0) + 40; announce('¡Estampida superada!', '+40 Digicoins y un cofre dorado', '#ffb74d'); }
     return;
   }
   if (!ok){ announce('Evento fallido', 'Se acabó el tiempo', '#ef5350'); return; }
   const last = ev.nodes[ev.nodes.length - 1];
   spawnChestAt(last.x, last.z, true);
-  if (ev.kind === 'corrupt'){ g.extraBits = (g.extraBits || 0) + 60; announce('¡Datos limpios!', '+60 Bits y un cofre dorado', '#e040fb'); }
-  else if (ev.kind === 'fragments'){ g.extraBits = (g.extraBits || 0) + 50; announce('¡Fragmentos recuperados!', '+50 Bits y un cofre dorado', '#3de0ff'); }
+  if (ev.kind === 'corrupt'){ g.extraBits = (g.extraBits || 0) + 60; announce('¡Datos limpios!', '+60 Digicoins y un cofre dorado', '#e040fb'); }
+  else if (ev.kind === 'fragments'){ g.extraBits = (g.extraBits || 0) + 50; announce('¡Fragmentos recuperados!', '+50 Digicoins y un cofre dorado', '#3de0ff'); }
   else announce('¡Nodo defendido!', 'Un cofre dorado aparece en el nodo', '#7cf29c');
 }
 // Dónde marcar el evento (flechas del borde y minimapa)
@@ -12714,7 +12724,7 @@ function questPanels(eventOnly = false){
     return `<div class="eq-row${done ? ' done' : ''}">
       <b aria-hidden="true">${done ? '✓' : ''}</b><span class="eq-t">${escHtml(title)}</span>
       ${bits || xp ? `<span class="eq-prize-value">
-        ${bits ? `<img src="ui/hud/ic_bits.webp" alt="Bits">+${fmt(bits)}` : ''}
+        ${bits ? `<img src="ui/hud/ic_bits.webp" alt="Digicoins">+${fmt(bits)}` : ''}
         ${xp ? `<strong>+${xp} XP</strong>` : ''}
       </span>` : ''}
       <span class="eq-track">
@@ -12779,7 +12789,7 @@ function showActivityPage(page, title, content, balance = ''){
 }
 function showEncargos(){
   showActivityPage('quests','Encargos',questPanels(),
-    `<span class="activity-balance"><img src="ui/hud/ic_bits.webp" alt="Bits">${SAVE.bits.toLocaleString(LANG)}</span>`);
+    `<span class="activity-balance"><img src="ui/hud/ic_bits.webp" alt="Digicoins">${SAVE.bits.toLocaleString(LANG)}</span>`);
 }
 function showModes(trigger){
   const week = weekNum(), {map, diff} = retoSetup(week), mod = weeklyMod(week);
@@ -12841,6 +12851,7 @@ function showEvents(selected = 'season'){
     const button = dialog.querySelector('#' + id);
     if (button) button.onclick = action;
   };
+  bindPassControls(dialog);
   bind('filePassQuests', showEncargos);
   bind('activityChristmasBanner', () => {
     gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR';
@@ -12849,7 +12860,7 @@ function showEvents(selected = 'season'){
   buttons[initial].focus({preventScroll:true});
 }
 /* ---------- Escaparate semanal de cosméticos ---------- */
-const SHOP_PRICE = {title:600, frame:1200, galactico:2500, holografica:5000, festival:4000, reno:4000};
+const SHOP_PRICE = {title:2700, frame:4800, galactico:7200, holografica:10000, festival:14000, reno:14000};
 const SHOP_FAVORITES = 'digibonk3d-shop-favorites', SHOP_DISCOUNT = 'digibonk3d-shop-discount';
 const SHOP_DISCOUNT_PCT = 20;
 
@@ -12924,15 +12935,15 @@ function showShop(msg = ''){
         : `<span class="shop-title-art">${titleBadge(it)}</span>`;
     const action = it.owned ? '<span class="shop-owned">✓ En tu colección</span>'
       : it.locked ? `<button type="button" class="shop-unlock" data-shop-dex="${it.k}">Cómo desbloquear</button>`
-        : `<button type="button" class="shop-buy" data-shop-buy="${it.key}" ${bits < it.price ? 'disabled' : ''}>${bits < it.price ? `Faltan ${fmt(it.price - bits)} Bits` : `Comprar · ${fmt(it.price)} Bits`}</button>`;
+        : `<button type="button" class="shop-buy" data-shop-buy="${it.key}" ${bits < it.price ? 'disabled' : ''}>${bits < it.price ? `Faltan ${fmt(it.price - bits)} Digicoins` : `Comprar · ${fmt(it.price)} Digicoins`}</button>`;
     return `<article class="shop-card ${it.slot || it.type}">
       <div class="shop-art"><small class="shop-tag" ${it.slot === 'returning' ? 'data-shop-return' : ''}>${it.slot === 'returning' && wish && !it.owned ? 'Vuelve tu favorita' : tag[it.slot || it.type]}</small>
         ${art}
         ${isSkin && !it.owned ? `<button type="button" class="shop-fav" data-shop-fav="${it.key}" aria-pressed="${wish}" aria-label="Favorita: ${digi} ${it.name}">${wish ? '★' : '☆'}</button>` : ''}
       </div>
       <div class="shop-card-copy"><h3>${it.name}</h3><small>${digi}${it.locked ? ' · Bloqueado' : ''}</small>
-        <div class="shop-card-price">${!it.owned && it.price < it.basePrice ? `<del>${fmt(it.basePrice)} Bits</del>` : ''}
-          ${!it.owned && (it.locked || bits < it.price) ? `<small>${fmt(it.price)} Bits</small>` : ''}${action}</div>
+        <div class="shop-card-price">${!it.owned && it.price < it.basePrice ? `<del>${fmt(it.basePrice)} Digicoins</del>` : ''}
+          ${!it.owned && (it.locked || bits < it.price) ? `<small>${fmt(it.price)} Digicoins</small>` : ''}${action}</div>
         ${isSkin ? `<button type="button" class="attack-preview-open" data-shop-preview="${it.key}">Vista previa de combate</button>` : ''}
       </div>
     </article>`;
@@ -12942,7 +12953,7 @@ function showShop(msg = ''){
     <small>${discounted ? `Tu skin destacada tiene un ${SHOP_DISCOUNT_PCT}% de descuento hasta el lunes.` : `Derrota a un jefe de zona con ${CHARS[featured.k].name} y consigue un ${SHOP_DISCOUNT_PCT}% de descuento en su skin.`}</small></div>
     ${!discounted ? `<button type="button" id="shopQuest">${featured.locked ? 'Ver en Digidex' : 'Elegir mapa'}</button>` : ''}</div>`;
   const frame = items.find(it => it.type === 'frame'), title = items.find(it => it.type === 'title');
-  menuModal('Tienda semanal', `<div class="shop-meta"><span>Rotación del lunes · ${rotation}</span><strong class="shop-wallet"><img src="ui/hud/ic_bits.webp" alt="">${fmt(bits)} Bits</strong></div>
+  menuModal('Tienda semanal', `<div class="shop-meta"><span>Rotación del lunes · ${rotation}</span><strong class="shop-wallet"><img src="ui/hud/ic_bits.webp" alt="">${fmt(bits)} Digicoins</strong></div>
     <div class="shop-preview-actions"><button type="button" class="shop-preview-toggle" id="shopCardToggle" aria-controls="shopCardPreview" aria-expanded="false">Ver en mi ficha</button></div>
     <div class="shop-card-preview" id="shopCardPreview" hidden>
       <div id="shopCardSample"></div>
@@ -13152,9 +13163,11 @@ function showLogros(){
   render();
   back.focus();
 }
-/* ---------- Laboratorio: mejoras permanentes que se compran con Bits ---------- */
+/* ---------- Laboratorio: mejoras permanentes que se compran con Digicoins ---------- */
 // per = bonus por nivel (multiplicador sumado) · flat = bonus entero · costs = precio de cada nivel
-const LAB_COSTS = [150, 300, 500, 800, 1200], LAB_LEVELS_KEY = 'digibonk3d-lab';
+const LAB_COSTS = [450, 950, 1800, 3200, 5000], LAB_LEVELS_KEY = 'digibonk3d-lab';
+const LAB_PREVIOUS_COSTS = [150, 300, 500, 800, 1200];
+const LAB_PREVIOUS_SPECIAL_COSTS = {revive:[2500], skill:[2000]};
 const LAB = [
   {id:'hp',     name:'Vida máxima',       icon:'❤', per:0.04, unit:'%', d:'Más vida máxima al empezar cada partida.'},
   {id:'dmg',    name:'Daño',              icon:'⚔', per:0.03, unit:'%', d:'Todos tus ataques hacen más daño.'},
@@ -13163,9 +13176,9 @@ const LAB = [
   {id:'xp',     name:'Experiencia',       icon:'✦', per:0.04, unit:'%', d:'Cada orbe de experiencia vale más.'},
   {id:'bonk',   name:'Carga del Bonk',    icon:'✸', per:0.06, unit:'%', d:'El medidor Bonk se llena más rápido.'},
   {id:'rer',    name:'Refrescos de cartas', icon:'↻', flat:[0, 1, 1, 2, 2, 2], unit:'', d:'Más refrescos de cartas al subir de nivel (+1 en los niveles 1 y 3).'},
-  {id:'bits',   name:'Bits por partida',  icon:'Ⓑ', per:0.05, unit:'%', d:'Ganas más Bits al terminar cada partida.'},
-  {id:'revive', name:'Segunda oportunidad', icon:'✚', max:1, costs:[2500], d:'Una vez por partida, al caer vuelves con el 50% de la vida.'},
-  {id:'skill',  name:'Habilidad inicial', icon:'★', max:1, costs:[2000], d:'Empiezas cada partida con una habilidad de tu Digimon a nivel 1.'}
+  {id:'bits',   name:'Digicoins por partida',  icon:'Ⓑ', per:0.05, unit:'%', d:'Ganas más Digicoins al terminar cada partida.'},
+  {id:'revive', name:'Segunda oportunidad', icon:'✚', max:1, costs:[7500], d:'Una vez por partida, al caer vuelves con el 50% de la vida.'},
+  {id:'skill',  name:'Habilidad inicial', icon:'★', max:1, costs:[6000], d:'Empiezas cada partida con una habilidad de tu Digimon a nivel 1.'}
 ];
 const LAB_BY_ID = Object.fromEntries(LAB.map(u => [u.id, u]));
 const labMax = u => u.max || LAB_COSTS.length;
@@ -13181,8 +13194,14 @@ function labLv(id, levels = labLevels()){
 // Multiplicador de una mejora con porcentaje: 1 + nivel × bonus
 function labMul(id){ const u = LAB_BY_ID[id]; return 1 + (u.per || 0) * labLv(id); }
 function labFlat(id){ const u = LAB_BY_ID[id], lv = labLv(id); return u.flat ? u.flat[lv] : lv; }
-function labSpent(levels = labLevels()){ return LAB.reduce((a, u) => a + labCosts(u).slice(0, labLv(u.id, levels)).reduce((x, y) => x + y, 0), 0); }
-// Si falla la escritura de los Bits, se restaura el progreso previo antes de volver al menú.
+function labSpent(levels = labLevels()){
+  const totalFor = pricesFor => LAB.reduce((total, upgrade) =>
+    total + pricesFor(upgrade).slice(0, labLv(upgrade.id, levels)).reduce((sum, price) => sum + price, 0), 0);
+  if (Number.isSafeInteger(levels.paid) && levels.paid >= 0 && levels.paid <= totalFor(labCosts)) return levels.paid;
+  // Los guardados anteriores solo tienen niveles. Se reembolsan a su precio original.
+  return totalFor(upgrade => LAB_PREVIOUS_SPECIAL_COSTS[upgrade.id] || LAB_PREVIOUS_COSTS);
+}
+// Si falla la escritura de los Digicoins, se restaura el progreso previo antes de volver al menú.
 function saveLabProgress(levels, bits){
   const previous = localStorage.getItem(LAB_LEVELS_KEY);
   try {
@@ -13202,17 +13221,17 @@ function labBuy(id){
   const u = LAB_BY_ID[id], levels = labLevels(), bits = SAVE.bits;
   const lv = labLv(id, levels), cost = labCosts(u)[lv];
   if (lv >= labMax(u) || !(bits >= cost)) return false;
-  if (!saveLabProgress({...levels, [id]: lv + 1}, bits - cost)) return false;
+  if (!saveLabProgress({...levels, [id]:lv + 1, paid:labSpent(levels) + cost}, bits - cost)) return false;
   sfx('ready');
   return true;
 }
-// Reembolso total: devuelve todos los Bits gastados y deja las mejoras a cero.
+// Reembolso total: devuelve todos los Digicoins gastados y deja las mejoras a cero.
 function labRefund(){
   const back = labSpent();
   return back && saveLabProgress({}, SAVE.bits + back) ? back : 0;
 }
 // Aplica el Laboratorio al empezar la partida (después del equilibrio)
-// Modificador de la semana: una regla distinta cada semana con +25% de Bits
+// Modificador de la semana: una regla distinta cada semana con +25% de Digicoins
 const WEEKLY_MODS = [
   {id:'rapidos', name:'Semana veloz', d:'Solo aparecen enemigos rápidos.', apply: () => { g.mod.fastOnly = true; }},
   {id:'sincura', name:'Sin curación', d:'No hay orbes, cofres ni santuarios que curen.', apply: () => { g.mod.noHeal = true; }},
@@ -13227,7 +13246,7 @@ const WEEKLY_MODS = [
   {id:'sindash', name:'Sin dash', d:'No puedes hacer dash, pero corres un 15% más.', apply: () => { g.mod.noDash = true; g.p.speed *= 1.15; }}
 ];
 // Digimon de la semana: el de la rotación de la tienda o, si no lo tienes, el siguiente que sí tengas.
-// Jugar el reto con él da +25% de Bits y cuenta para el tercer hito
+// Jugar el reto con él da +25% de Digicoins y cuenta para el tercer hito
 function retoStar(week = weekNum()){
   const ch = SEASONS.adventure.chars, n = ch.length, i = weeklyIndex(week);
   for (let j = 0; j < n; j++){ const k = ch[(i + j) % n]; if (isUnlocked(k)) return k; }
@@ -13364,7 +13383,7 @@ function showLab(message = '', focusId = ''){
         <div class="lab-name"><img src="ui/hub/digivice/laboratorio.png" alt="">
           <div><h2 id="labHeading">Laboratorio</h2><p>Mejoras permanentes para todos los Digimon</p></div>
         </div>
-        <div class="lab-wallet"><img src="ui/hud/ic_bits.webp" alt=""><span>${number(bits)} Bits</span></div>
+        <div class="lab-wallet"><img src="ui/hud/ic_bits.webp" alt=""><span>${number(bits)} Digicoins</span></div>
       </header>
       <div class="lab-layout">
         <section class="lab-bench" aria-labelledby="labBenchTitle">
@@ -13373,7 +13392,7 @@ function showLab(message = '', focusId = ''){
             ${LAB_STATIONS.map((station, i) => `<button type="button" class="lab-station" data-station="${i}" aria-pressed="false" aria-controls="labProjects">${station.name}</button>`).join('')}
           </div>
           <div class="lab-projects" id="labProjects" role="group" aria-label="Proyectos"></div>
-          <button type="button" class="lab-reset" id="labRefund" ${spent ? '' : 'disabled'}>Reembolsar todo${spent ? ` · ${number(spent)} Bits` : ''}</button>
+          <button type="button" class="lab-reset" id="labRefund" ${spent ? '' : 'disabled'}>Reembolsar todo${spent ? ` · ${number(spent)} Digicoins` : ''}</button>
         </section>
         <section class="lab-instrument" aria-labelledby="labProjectTitle">
           <div class="lab-chamber" aria-hidden="true">${animEl(spriteOf('hagurumon', false), 'lab-specimen')}</div>
@@ -13410,8 +13429,8 @@ function showLab(message = '', focusId = ''){
         <div><dt>Siguiente nivel</dt><dd>${full ? 'Máximo' : labBonusText(u, lv + 1)}</dd></div>
       </dl>
       ${full ? '' : `<div class="lab-controls">
-        <button type="button" class="lab-apply" id="labApply" ${missing ? 'disabled' : ''}>Aplicar mejora · ${number(cost)} Bits</button>
-        ${missing ? `<small>Faltan ${number(missing)} Bits</small>` : ''}
+        <button type="button" class="lab-apply" id="labApply" ${missing ? 'disabled' : ''}>Aplicar mejora · ${number(cost)} Digicoins</button>
+        ${missing ? `<small>Faltan ${number(missing)} Digicoins</small>` : ''}
       </div>`}`;
     const apply = document.getElementById('labApply');
     if (apply) apply.onclick = () => {
@@ -13429,15 +13448,33 @@ function showLab(message = '', focusId = ''){
   document.getElementById('labBack').onclick = showSelect;
   document.getElementById('labRefund').onclick = () => {
     const returned = labRefund();
-    showLab(returned ? `Bits devueltos: ${number(returned)}` : 'No se pudo guardar el cambio.');
+    showLab(returned ? `Digicoins devueltos: ${number(returned)}` : 'No se pudo guardar el cambio.');
     document.getElementById('labBack').focus({preventScroll:true});
   };
   draw();
   if (focusId) (detail.querySelector('button:not(:disabled)') || document.getElementById('labProjectTitle'))?.focus({preventScroll:true});
 }
+function digicoinAmount(value){
+  const amount = Number(value);
+  return Number.isFinite(amount) ? Math.max(0, Math.floor(amount)) : 0;
+}
+function digicoinWallet(){
+  const wallet = loadJSON(DIGICOIN_WALLET_KEY, null);
+  return {
+    balance:digicoinAmount(wallet?.balance ?? localStorage.getItem('digibonk3d-bits')),
+    claimed:wallet?.claimed && typeof wallet.claimed === 'object' ? wallet.claimed : {}
+  };
+}
+function saveDigicoinWallet(wallet){
+  localStorage.setItem(DIGICOIN_WALLET_KEY, JSON.stringify(wallet));
+}
 const SAVE = {
-  get bits(){ return +(localStorage.getItem('digibonk3d-bits') || 0); },
-  set bits(v){ localStorage.setItem('digibonk3d-bits', String(Math.max(0, Math.floor(v)))); },
+  get bits(){ return digicoinWallet().balance; },
+  set bits(value){
+    const wallet = digicoinWallet();
+    wallet.balance = digicoinAmount(value);
+    saveDigicoinWallet(wallet);
+  },
   // Total de tickets (suma de los monederos de cada banner). Para cambiar tickets usa addTickets / spendTickets
   get tickets(){ return totalTickets(); }
 };
@@ -13461,7 +13498,7 @@ function addTickets(bn, n){
   localStorage.setItem(TIX_KEY, JSON.stringify(w));
 }
 function spendTickets(bn, n){ addTickets(bn, -n); }
-// El gacha se paga solo con tickets (los Bits son para el Laboratorio). Los tickets del permanente
+// El gacha se paga solo con tickets (los Digicoins son para el Laboratorio). Los tickets del permanente
 // valen en cualquier banner: primero se gastan los del banner y luego los del permanente
 function usableTickets(bn){ return ticketsOf(bn) + (bn !== 'std' ? ticketsOf('std') : 0); }
 function spendUsable(bn, n){
@@ -13644,7 +13681,7 @@ function grantAllContent(){
     titles: [...new Set([...(inv.titles || []), ...TITLES.map(t => t.id)])],
     items: inv.items || {}
   }));
-  localStorage.setItem('digibonk3d-bits', String(Math.max(99999, +(localStorage.getItem('digibonk3d-bits') || 0))));
+  SAVE.bits = Math.max(99999, SAVE.bits);
   localStorage.setItem('digibonk3d-unlocked', JSON.stringify(SEASONS.adventure.chars));
   localStorage.setItem('digibonk3d-objetos', JSON.stringify(Object.keys(ITEMS).filter(id => !ITEM_BASE.includes(id))));
   localStorage.setItem('digibonk3d-sist', JSON.stringify({...loadJSON('digibonk3d-sist', {}), all: true}));
@@ -14586,22 +14623,78 @@ function passStatus(pass){
   const days = Math.ceil((pass.end - now)/86400000);
   return days === 1 ? 'Queda 1 día' : `Quedan ${days} días`;
 }
+function passCoinReward(level){
+  return 20 + 5 * Math.floor((level - 1) / 10);
+}
+function pendingPassCoins(pass, wallet, level){
+  const special = new Set(pass.prizes.map(prize => prize.at));
+  const claimed = new Set(Array.isArray(wallet.claimed[pass.key]) ? wallet.claimed[pass.key] : []);
+  return Array.from({length:level}, (_, i) => i + 1).filter(n => !special.has(n) && !claimed.has(n));
+}
+function claimPassCoins(pass, level = null){
+  const wallet = digicoinWallet();
+  const pending = pendingPassCoins(pass, wallet, passProgress(pass).level);
+  const claim = level == null ? pending : pending.filter(n => n === level);
+  if (!claim.length) return 0;
+  const amount = claim.reduce((sum, n) => sum + passCoinReward(n), 0);
+  const previous = wallet.claimed[pass.key];
+  wallet.claimed[pass.key] = [...new Set([...(Array.isArray(previous) ? previous : []), ...claim])];
+  wallet.balance += amount;
+  saveDigicoinWallet(wallet);
+  return amount;
+}
 function passPanel(pass){
   const {xp, level, next} = passProgress(pass);
-  const milestones = new Set(pass.prizes.map(prize => prize.at));
-  const levels = Array.from({length:PASS_LEVELS},(_,i) => {
-    const n = i + 1;
-    return `<li class="${n <= level ? 'reached' : ''}${milestones.has(n) ? ' milestone' : ''}"${n === level ? ' aria-current="step"' : ''}>${n}</li>`;
+  const special = new Map(pass.prizes.map(prize => [prize.at,prize]));
+  const pending = new Set(pendingPassCoins(pass,digicoinWallet(),level));
+  const levels = Array.from({length:PASS_LEVELS}, (_,i) => {
+    const n = i + 1, prize = special.get(n), unlocked = n <= level;
+    const label = prize?.label || `${passCoinReward(n)} Digicoins`;
+    let status = `<small>${n * pass.perLevel} XP</small>`;
+    if (unlocked) status = prize ? '<small>Desbloqueado</small>' : pending.has(n) ?
+      `<button type="button" class="mini-btn pass-coin-claim" data-claim-level="${n}">Cobrar</button>` : '<small>Cobrado</small>';
+    return `<li class="${unlocked ? 'reached' : ''}${prize ? ' milestone' : ''}"${n === level ? ' aria-current="step"' : ''}>
+      <span class="pass-number">Nivel ${n}</span><img src="${prize?.icon || 'ui/hud/ic_bits.webp'}" alt="" loading="lazy">
+      <b>${label}</b>${status}</li>`;
   }).join('');
-  const prizes = pass.prizes.map(({at,label,icon}) => `<li><img src="${icon}" alt=""><b>${label}</b>
-    <small class="${at <= level ? 'pass-unlocked' : ''}">${at <= level ? 'Desbloqueado' : `Nivel ${at}`}</small></li>`).join('');
-  return `<section class="pass-panel" aria-label="Pase de 50 niveles">
-    <header><h3>Pase de 50 niveles</h3><strong>Nivel ${level} de ${PASS_LEVELS}</strong></header>
+  return `<section class="pass-panel" data-pass="${pass.key}" aria-label="Pase de 50 niveles">
+    <header><h3>Pase de 50 niveles</h3><strong>Nivel ${level} de ${PASS_LEVELS}</strong>
+      <button type="button" class="mini-btn pass-payout" data-claim-all ${pending.size ? '' : 'disabled'}>Cobrar todo (${pending.size})</button></header>
     <progress max="${pass.perLevel}" value="${next}" aria-label="XP para el siguiente nivel"></progress>
     <small>${level === PASS_LEVELS ? 'Pase completado' : `${next}/${pass.perLevel} XP para el siguiente nivel · ${xp} XP totales`}</small>
-    <ol class="pass-levels" aria-label="Niveles del pase">${levels}</ol>
-    <h3>Recompensas</h3><ul class="pass-rewards">${prizes}</ul>
+    <div class="pass-rails">
+      <button type="button" class="pass-navigation" data-pass-scroll="-1" aria-label="Niveles anteriores">‹</button>
+      <ol class="pass-levels" aria-label="Niveles del pase" tabindex="0">${levels}</ol>
+      <button type="button" class="pass-navigation" data-pass-scroll="1" aria-label="Niveles siguientes">›</button>
+    </div>
+    <p class="pass-status" role="status"></p>
   </section>`;
+}
+function bindPassControls(screen){
+  screen.addEventListener('click', event => {
+    const button = event.target.closest('[data-pass-scroll],[data-claim-level],[data-claim-all]');
+    if (!button || button.disabled) return;
+    const panel = button.closest('[data-pass]');
+    const rail = panel.querySelector('.pass-levels');
+    if (button.dataset.passScroll){
+      rail.scrollBy({left:Number(button.dataset.passScroll) * rail.clientWidth * .85,
+        behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+      return;
+    }
+    const pass = panel.dataset.pass === FILE_PASS.key ? FILE_PASS : CHRISTMAS_PASS;
+    const status = panel.querySelector('.pass-status');
+    let amount;
+    try { amount = claimPassCoins(pass, button.hasAttribute('data-claim-all') ? null : Number(button.dataset.claimLevel)); }
+    catch { status.textContent = I18N.tr('No se pudo guardar el cambio.'); return; }
+    if (!amount) return;
+    const position = rail.scrollLeft;
+    panel.outerHTML = passPanel(pass);
+    const refreshed = screen.querySelector(`[data-pass="${pass.key}"]`);
+    const list = refreshed.querySelector('.pass-levels');
+    list.scrollLeft = position;
+    list.focus({preventScroll:true});
+    refreshed.querySelector('.pass-status').textContent = I18N.tr(`Has cobrado ${amount.toLocaleString(LANG)} Digicoins`);
+  });
 }
 function christmasMissionsPanel(){
   const phase = passPhase(CHRISTMAS_PASS), now = Date.now();
@@ -14679,7 +14772,7 @@ function bannerPool(bn = gxBanner){
 // Para volver a activarla basta con poner GACHA_SOON a false.
 const GACHA_SOON = true;   // mientras tanto, su hueco del menú es la Tienda y los tickets se guardan para cuando abra
 let gxBanner = 'std';
-// Garantía: si pasan PITY_AT tiradas sin legendaria, la siguiente lo es. Una legendaria repetida devuelve Bits
+// Garantía: si pasan PITY_AT tiradas sin legendaria, la siguiente lo es. Una legendaria repetida devuelve Digicoins
 const PITY_AT = 100, LEG_DUP_REFUND = 200;
 // Garantía por banner: el permanente cada 100 tiradas, cada Navidad cada 50 (contadores separados)
 const PITY_BY_BANNER = {std: 100, navidadP: 50, navidadR: 50};
@@ -14692,9 +14785,9 @@ function bannerSkins(){ if (!bannerOpen(gxBanner)) gxBanner = 'std'; return BANN
 function bannerSkin(){ return bannerSkins()[0]; }
 // La rareza se decide primero. Legendaria = skin; el resto reparte entre marco, título y objeto
 const TIER_ODDS = {c: 60, r: 26, e: 12, l: 2};
-// Reparto de lo que no es legendaria: marcos, títulos, tickets y Bits
+// Reparto de lo que no es legendaria: marcos, títulos, tickets y Digicoins
 const CAT_WEIGHTS = [['frame', 32], ['title', 28], ['ticket', 10], ['bits', 30]];
-// Bits según rareza: común 30, rara 80, épica 160. Tickets: siempre 1 por drop
+// Digicoins según rareza: común 30, rara 80, épica 160. Tickets: siempre 1 por drop
 const BITS_BY_TIER = {c: 30, r: 80, e: 160};
 // Tickets por banner: peso del drop (en el reparto no legendario) y cantidad por drop.
 // El permanente da poco; los promocionales dan más para tirar en su evento.
@@ -14760,10 +14853,10 @@ function rollReward(tier){
     const pool = unownedPool(TITLES.filter(t => !t.weekly && !t.seasonal), tier, t => inv.titles.includes(t.id));
     if (pool.length){ const t = pickOne(pool); return {type:'title', t, tier: t.tier}; }
   }
-  // Sin marcos ni títulos nuevos: Bits
+  // Sin marcos ni títulos nuevos: Digicoins
   return {type:'bits', amount: BITS_BY_TIER[tier] || 30, tier};
 }
-// Aplica la recompensa a la colección; los repetidos se convierten en Bits
+// Aplica la recompensa a la colección; los repetidos se convierten en Digicoins
 function grantReward(r){
   if (r.type === 'skin'){
     if (ownsAt(r.key, r.st, r.sk.id)){
@@ -14879,7 +14972,7 @@ function rewardName(r){
   if (r.type === 'frame') return r.f.name;
   if (r.type === 'title') return `Título: ${r.t.name}`;
   if (r.type === 'ticket') return `${r.amount} ticket${r.amount > 1 ? 's' : ''} de tirada`;
-  return `${r.amount} Bits`;
+  return `${r.amount} Digicoins`;
 }
 // Cartas boca abajo: se giran solas una a una (o al hacer clic); las épicas estallan
 function showPullResults(results){
@@ -14888,7 +14981,7 @@ function showPullResults(results){
     <button class="pc t-${r.tier}" data-i="${i}" style="--pc:${GX_TIER_COL[r.tier]};animation-delay:${i*0.07}s">
       <span class="pc-in">
         <span class="pc-back"><i></i></span>
-        <span class="pc-front"><em>${TIER_NAME[r.tier]}</em>${rewardIcon(r)}<b>${rewardName(r)}</b><small>${r.dup ? `Repetido · +${r.refund} Bits` : '¡Nuevo!'}</small></span>
+        <span class="pc-front"><em>${TIER_NAME[r.tier]}</em>${rewardIcon(r)}<b>${rewardName(r)}</b><small>${r.dup ? `Repetido · +${r.refund} Digicoins` : '¡Nuevo!'}</small></span>
       </span>
     </button>`).join('');
   showOverlay(`
@@ -14929,7 +15022,7 @@ let gxIdx = 0, gxTimer = null;
 // Todo lo que puede salir, en el orden del carrusel
 // Muestra la tarjeta i del carrusel (la animación se repite en cada cambio)
 // Pantalla del gacha "Tesoros": cuadrícula de recompensas, vista previa de Digimon y panel de tiradas.
-// Las tiradas usan la lógica original (doPulls): Bits o tickets. La vista previa no cambia las probabilidades.
+// Las tiradas usan la lógica original (doPulls): Digicoins o tickets. La vista previa no cambia las probabilidades.
 let trPrevIdx = -1;
 function showGacha(){
   if (GACHA_SOON) { showSelect(); return; }
@@ -14952,13 +15045,13 @@ function showGacha(){
   const fr = f => `<span class="rw-frame fr-${f.id}"></span>`;
   const first = frameOpts[0], last = frameOpts[frameOpts.length - 1];
   const pool = [
-    {name:'Bits', tier:'c', icon:'Ⓑ'},
+    {name:'Digicoins', tier:'c', icon:'Ⓑ'},
     {name:first.name, tier:first.tier, icon:fr(first)},
     {name:TITLES[0].name, tier:TITLES[0].tier, icon:'🏅'},
     {name:'Tickets', tier:'r', icon:'🎟'},
     {name:last.name, tier:last.tier, icon:fr(last)},
     {name:TITLES[TITLES.length - 1].name, tier:TITLES[TITLES.length - 1].tier, icon:'🏅'},
-    {name:'Bits', tier:'e', icon:'Ⓑ'}
+    {name:'Digicoins', tier:'e', icon:'Ⓑ'}
   ];
   const tile = r => `<button type="button" class="treasure-card tier-${r.tier}" data-info="${esc(r.name)}" data-tier="${r.tier}"><span class="tc-shine"></span><span class="tc-art">${r.icon}</span><strong>${esc(r.name)}</strong><small>${esc(TIER_NAME[r.tier])}</small></button>`;
   const featName = prevKey === fk ? `${CHARS[fk].name} ${FEATURED_NAME[feat.id]}` : `${CHARS[prevKey].name} · Vista previa`;
@@ -14982,7 +15075,7 @@ function showGacha(){
     <div class="tr11-cost"><span>🎟 TIRADAS CON TICKETS</span><strong>${wallet} disponibles</strong></div>
     <button type="button" class="tr11-pull tr11-pull-primary" id="trPull1" ${wallet < 1 ? 'disabled' : ''}><span>✦ TIRAR ✦</span><small>1 tirada · 🎟 1 ticket</small></button>
     <button type="button" class="tr11-pull tr11-pull-multi" id="trPull10" ${wallet < 10 ? 'disabled' : ''}><span>✦ 10 TIRADAS ✦</span><small>🎟 10 tickets · garantía de al menos una rara</small></button>
-    <p class="tr11-help">Los tickets se consiguen jugando: jefes, élites, santuarios, misión diaria y 1 por cada partida de más de 5 minutos. Los del permanente valen en todos los banners. Los Bits se gastan en el Laboratorio.</p>
+    <p class="tr11-help">Los tickets se consiguen jugando: jefes, élites, santuarios, misión diaria y 1 por cada partida de más de 5 minutos. Los del permanente valen en todos los banners. Los Digicoins se gastan en el Laboratorio.</p>
    </aside>
   </div>
   <footer class="tr11-foot"><span>ⓘ Toca un premio para consultar su nombre y rareza. Las probabilidades no cambian al elegir una vista previa.</span><strong>DIGIBONK</strong></footer>
