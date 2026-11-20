@@ -1166,6 +1166,7 @@ body:has(.tr11) #hudTop{display:none!important}
 .hud-portrait.fr-angelical_dorado::before,.rw-frame.fr-angelical_dorado{background-image:url(ui/marcos/angelical_dorado.webp)}
 .hud-portrait.fr-agua_fiabilidad::before,.rw-frame.fr-agua_fiabilidad{background-image:url(ui/marcos/agua_fiabilidad.webp)}
 .hud-portrait.fr-conocimiento_digital::before,.rw-frame.fr-conocimiento_digital{background-image:url(ui/marcos/conocimiento_digital.webp)}
+.hud-portrait.fr-file_senal::before,.rw-frame.fr-file_senal{background-image:url(ui/marcos/digivice_azul.webp);filter:hue-rotate(290deg) saturate(1.15)}
 .hud-portrait.fr-digivice_azul::before,.rw-frame.fr-digivice_azul{background-image:url(ui/marcos/digivice_azul.webp)}
 .hud-portrait.fr-amistad_gabumon::before,.rw-frame.fr-amistad_gabumon{background-image:url(ui/marcos/amistad_gabumon.webp)}
 .hud-portrait.fr-alas_rosadas::before,.rw-frame.fr-alas_rosadas{background-image:url(ui/marcos/alas_rosadas.webp)}
@@ -1230,6 +1231,7 @@ body:has(.tr11) #hudTop{display:none!important}
 .realhub .hm-pl-frame.fr-angelical_dorado::before{background-image:url(ui/marcos/angelical_dorado.webp)!important}
 .realhub .hm-pl-frame.fr-agua_fiabilidad::before{background-image:url(ui/marcos/agua_fiabilidad.webp)!important}
 .realhub .hm-pl-frame.fr-conocimiento_digital::before{background-image:url(ui/marcos/conocimiento_digital.webp)!important}
+.realhub .hm-pl-frame.fr-file_senal::before{background-image:url(ui/marcos/digivice_azul.webp)!important;filter:hue-rotate(290deg) saturate(1.15)}
 .realhub .hm-pl-frame.fr-digivice_azul::before{background-image:url(ui/marcos/digivice_azul.webp)!important}
 .realhub .hm-pl-frame.fr-amistad_gabumon::before{background-image:url(ui/marcos/amistad_gabumon.webp)!important}
 .realhub .hm-pl-frame.fr-alas_rosadas::before{background-image:url(ui/marcos/alas_rosadas.webp)!important}
@@ -3636,6 +3638,59 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
   #overlay .pk2-starter .pk2-id h2{font-size:20px!important;margin:0!important}
   #overlay .pk2-starter .pk2-id p{font-size:13px!important;margin:2px 0 0!important}
 }
+
+/* Cabecera y señal de temporada del menú principal */
+#overlay .realhub.hb .hb-top{gap:12px 24px;align-items:center}
+#overlay .realhub.hb .hb-brand-block{display:flex;align-items:center;gap:12px 22px;flex-wrap:wrap;min-width:0}
+#overlay .realhub.hb .hb-top .hb-brand{margin:0;align-self:center}
+#overlay .realhub.hb .hb-top .hb-brand img{width:auto!important;height:clamp(70px,8.6vw,112px)!important;max-width:75vw}
+#overlay .realhub.hb .hb-user-card{gap:12px;padding:9px 8px 9px 13px;border-radius:22px;border-inline-start-color:#ffbc57;background:linear-gradient(140deg,#254c78,#162843 55%,#132039);color:#f1f7ff;box-shadow:inset 0 1px #9bd5ff40,0 5px 0 #0b172a,0 12px 25px #0004}
+#overlay .realhub.hb .hb-user-card .hb-me{height:64px;padding:3px 7px}
+#overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{width:54px!important;height:54px!important}
+#overlay .realhub.hb .hb-user-card .hb-me strong{font-size:18px!important;color:#f1f7ff;max-width:16ch}
+#overlay .realhub.hb .hb-user-card .hb-me small{font-size:12px!important;color:#b9cde6}
+#overlay .realhub.hb .hb-user-card .hb-wallet{gap:10px;border-color:#84ac905e;background:#142a32;color:#ccf5ad;padding:6px 10px;font-size:15px;box-shadow:inset 0 2px 5px #07171c}
+#overlay .realhub.hb .hb-user-card .hb-out{color:#c5d9f3}
+#overlay .realhub.hb .hb-user-card button:hover,#overlay .realhub.hb .hb-user-card button:focus-visible{background:#8dc7ff26;outline-color:#a8d8ff}
+#overlay .realhub.hb .hb-season{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(100px,190px) auto;align-items:center;gap:12px;box-sizing:border-box;position:relative;z-index:3;margin:10px clamp(14px,2vw,30px) 0;padding:8px 14px;text-align:left;border:1px solid #508b9b;border-radius:14px;background:linear-gradient(112deg,#17374c,#102334);color:#eefcff;box-shadow:0 4px 12px #0003}
+#overlay .realhub.hb .hb-season:hover{border-color:#f4bc67}
+#overlay .realhub.hb .hb-season:focus-visible{outline:2px solid #ffe0a0;outline-offset:2px}
+.hb-season img{width:34px;height:34px;object-fit:contain}
+.hb-season-copy{min-width:0}
+.hb-season-copy b,.hb-season-copy small,.hb-season-meter small{display:block}
+.hb-season-copy b{font-size:clamp(14px,1.5vw,18px);line-height:1.16}
+.hb-season-copy small,.hb-season-meter small{color:#cce3ef;font-size:12px}
+.hb-season-meter{min-width:0}
+.hb-season-meter progress,.season-dialog progress{width:100%;height:7px;accent-color:#e8a74f;display:block;margin-top:5px}
+.hb-season-next{color:#ffcb81;font-size:18px}
+.season-dialog article{border:1px solid var(--m-cardline);border-radius:12px;padding:10px 12px;background:var(--m-sunk)}
+.season-dialog .season-summary{display:flex;align-items:center;gap:12px}
+.season-summary img{width:42px;height:42px;object-fit:contain}
+.season-summary div{flex:1}
+.season-dialog small{display:block;color:var(--m-mute)}
+.season-weeks,.season-prizes{display:grid;gap:6px;margin:10px 0;padding:0;list-style:none}
+.season-weeks li,.season-prizes li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px;border-radius:8px;background:var(--m-sunk)}
+.season-weeks li>span,.season-prizes li>span{min-width:0}
+.season-weeks li>strong,.season-prizes li>strong{white-space:nowrap;color:var(--m-acc)}
+.season-dialog button.season-mode{display:inline-flex;margin:4px 0 10px}
+@media(max-width:760px){
+  #overlay .realhub.hb .hb-top{gap:8px}
+  #overlay .realhub.hb .hb-brand-block{width:100%;justify-content:space-between;gap:5px 12px}
+  #overlay .realhub.hb .hb-top .hb-brand img{height:clamp(52px,13vw,76px)!important;max-width:100%;object-fit:contain}
+  #overlay .realhub.hb .hb-user-card{padding:5px 7px;gap:6px}
+  #overlay .realhub.hb .hb-user-card .hb-me{height:52px}
+  #overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{width:42px!important;height:42px!important}
+  #overlay .realhub.hb .hb-user-card .hb-me strong{font-size:16px!important}
+  #overlay .realhub.hb .hb-season{margin-inline:12px;gap:8px;grid-template-columns:auto minmax(0,1fr) minmax(48px,32%) auto;padding-inline:8px}
+}
+@media(orientation:landscape) and (max-height:500px){
+  #overlay .realhub.hb .hb-brand-block{width:auto}
+  #overlay .realhub.hb .hb-user-card .hb-me{height:38px}
+  #overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{width:32px!important;height:32px!important}
+  #overlay .realhub.hb .hb-user-card{flex:0 1 auto;padding-block:3px}
+  #overlay .realhub.hb .hb-season{padding-block:4px;margin-top:6px}
+}
+
 /* Móvil en horizontal (poca altura): el inicio cabe sin desplazarse. Sin logo; a la izquierda Jugar y los modos,
    a la derecha encargos, evento y accesos en una cuadrícula de 3×2 */
 @media (orientation:landscape) and (max-height:500px){
@@ -5782,6 +5837,14 @@ function hubLife(){
 }
 const MENU_RELEASES = [
   {
+    version: '0.1.2',
+    date: '2026-11-20',
+    changes: [
+      ['Nueva cabecera Digivice', 'La ficha de entrenador tiene un retrato más grande y un visor para los Bits.'],
+      ['Señal de File Island', 'Cuatro semanas de encargos con un título, un marco y la skin Agumon Digivice LCD.']
+    ]
+  },
+  {
     version: '0.1.1',
     date: '2026-11-20',
     changes: [
@@ -5844,18 +5907,21 @@ function showSelect(){
     <main class="realhub hb" aria-label="Menú principal Digibonk">
       <div class="real-world" aria-hidden="true">${life.stage}</div>
       <header class="hb-top">
-        <div class="hb-utils">
-          <button class="hb-pill hb-version" id="hubRelease" type="button" aria-haspopup="dialog" title="Ver novedades">Beta ${MENU_RELEASES[0].version}</button>
-          <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma" aria-expanded="false" popovertarget="hubLanguages"><img class="nm-ic" src="ui/hub/digivice/idioma.png" alt=""><span data-no-i18n>${LANG.toUpperCase()}</span><span class="hb-lang-arrow" aria-hidden="true"></span></button>
-          <div id="hubLanguages" popover="auto" role="group" aria-labelledby="rhLang" data-no-i18n>
-            ${(window.I18N?.langs || []).map(({code,name}) => `<button type="button" data-code="${code}" lang="${code}"${code === LANG ? ' aria-current="true" autofocus' : ''}><small aria-hidden="true">${code.toUpperCase()}</small>${name}</button>`).join('')}
-            <button class="hb-lang-auto" type="button" data-code="auto"><small aria-hidden="true">🌐</small>Auto · ${safeText((navigator.language || '').toUpperCase())}</button>
+        <div class="hb-brand-block">
+          <h1 class="hb-brand"><span class="hb-logo-bg" aria-hidden="true"><i class="lb-glow"></i><i class="lb-orbit"><i class="lb-ring"></i></i><i class="lb-orbit lb-orbit2"><i class="lb-ring"></i></i><i class="lb-sparks"><i></i><i></i><i></i><i></i><i></i><i></i></i></span><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span></h1>
+          <div class="hb-utils">
+            <button class="hb-pill hb-version" id="hubRelease" type="button" aria-haspopup="dialog" title="Ver novedades">Beta ${MENU_RELEASES[0].version}</button>
+            <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma" aria-expanded="false" popovertarget="hubLanguages"><img class="nm-ic" src="ui/hub/digivice/idioma.png" alt=""><span data-no-i18n>${LANG.toUpperCase()}</span><span class="hb-lang-arrow" aria-hidden="true"></span></button>
+            <div id="hubLanguages" popover="auto" role="group" aria-labelledby="rhLang" data-no-i18n>
+              ${(window.I18N?.langs || []).map(({code,name}) => `<button type="button" data-code="${code}" lang="${code}"${code === LANG ? ' aria-current="true" autofocus' : ''}><small aria-hidden="true">${code.toUpperCase()}</small>${name}</button>`).join('')}
+              <button class="hb-lang-auto" type="button" data-code="auto"><small aria-hidden="true">🌐</small>Auto · ${safeText((navigator.language || '').toUpperCase())}</button>
+            </div>
+            <button class="hb-pill hb-app" type="button" id="rhApp" aria-label="Instalar la app" title="Instalar la app"${appCanInstall() ? '' : ' hidden'}><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m-5-5 5 5 5-5M5 20h14"/></svg><span>App</span></button>
+            <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>
           </div>
-          <button class="hb-pill hb-app" type="button" id="rhApp" aria-label="Instalar la app" title="Instalar la app"${appCanInstall() ? '' : ' hidden'}><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m-5-5 5 5 5-5M5 20h14"/></svg><span>App</span></button>
-          <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>
         </div>
         <div class="hb-user-card" role="group" aria-label="Jugador">
-          <button type="button" class="hb-me" id="rhProfile"><span class="hud-portrait mini hm-pl-frame${extra.frame ? ' fr-' + extra.frame : ''}"><img id="rhProfileImg" src="${avatarSrc()}" alt=""></span><span class="hb-id"><strong>${safeText(trainerName || 'Invitado')}</strong><small>${isGuest() ? t('guestTag') : (extra.title ? (TITLES.find(x => x.id === extra.title) || {}).name || '' : t('noTitle'))}</small></span></button>
+          <button type="button" class="hb-me" id="rhProfile"><span class="hud-portrait mini hm-pl-frame${extra.frame ? ' fr-' + extra.frame : ''}"><img id="rhProfileImg" src="${avatarSrc()}" alt=""></span><span class="hb-id"><strong>${safeText(trainerName || 'Invitado')}</strong><small>${TITLES.find(x => x.id === extra.title)?.name || (isGuest() ? t('guestTag') : t('noTitle'))}</small></span></button>
           <div class="hb-wallet">
             <span class="hb-chip" title="${SAVE.bits.toLocaleString('es-ES')} Bits"><img src="ui/hud/ic_bits.webp" alt="Bits"><span>${SAVE.bits.toLocaleString('es-ES')}</span></span>
             ${GACHA_SOON ? '' : `<span class="hb-chip" title="${usableTickets('std')} Tickets"><img src="ui/hud/ic_ticket.webp" alt="Tickets"><span>${usableTickets('std')}</span></span>`}
@@ -5863,9 +5929,9 @@ function showSelect(){
           <button type="button" class="hb-out" id="hmLogout" aria-label="Cerrar sesión" title="Cerrar sesión"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h5m-1-8h11m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </header>
+      ${seasonBanner()}
       <section class="hb-main">
         <div class="hb-left">
-          <h1 class="hb-brand"><span class="hb-logo-bg" aria-hidden="true"><i class="lb-glow"></i><i class="lb-orbit"><i class="lb-ring"></i></i><i class="lb-orbit lb-orbit2"><i class="lb-ring"></i></i><i class="lb-sparks"><i></i><i></i><i></i><i></i><i></i><i></i></i></span><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span></h1>
           ${life.parade}
           ${saved ? `<button type="button" class="hb-continue" id="hbContinue" aria-label="Continuar partida guardada"><i><img src="${charIcon(saved.key)}" alt=""></i><span class="hbc-txt"><small>Partida guardada</small><b>Continuar partida</b></span><span class="hbc-info"><em>${savedTxt}</em><small><span>${safeText(MAPS[saved.map].name)}</span> · <span>${safeText(DIFFS[saved.diff].name)}</span>${saved.mode === 'surv' ? ' · <span>Supervivencia</span>' : saved.weekly ? ' · <span>Reto semanal</span>' : ''}</small></span><span class="hbc-go" aria-hidden="true">▶</span></button>` : ''}
           <div class="hb-modes nm-modes">
@@ -5977,6 +6043,7 @@ function showSelect(){
   document.getElementById('rhProfile').onclick=showPlayer;
   bindHubLanguages();
   document.getElementById('hubRelease').onclick = e => showMenuRelease(e.currentTarget);
+  document.getElementById('hubSeason').onclick = e => showSeason(e.currentTarget);
   document.getElementById('rhApp').onclick=()=>installEvt?installApp():openInfo('app');
   document.getElementById('rhFullscreen').onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{})};
   bindMenuFX();
@@ -6162,7 +6229,8 @@ const TRAINER_BG_KEY = 'digibonk3d-trainer-bg';
 const TRAINER_IDENTITY_KEY = 'digibonk3d-trainer-identity';
 const TRAINER_RENAMED_KEY = 'digibonk3d-trainer-renamed-at';
 const TRAINER_RECORDS_KEY = 'digibonk3d-trainer-records';
-const SAVE_KEYS = [TRAINER_BG_KEY, TRAINER_IDENTITY_KEY, TRAINER_RENAMED_KEY, TRAINER_RECORDS_KEY, 'digibonk3d-shop-favorites', 'digibonk3d-shop-discount', 'digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
+const SEASON_KEY = 'digibonk3d-season-file-island';
+const SAVE_KEYS = [SEASON_KEY, TRAINER_BG_KEY, TRAINER_IDENTITY_KEY, TRAINER_RENAMED_KEY, TRAINER_RECORDS_KEY, 'digibonk3d-shop-favorites', 'digibonk3d-shop-discount', 'digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
   'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-maptime', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
   'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales', 'digibonk3d-objetos', 'digibonk3d-obj-ini', 'digibonk3d-reto', 'digibonk3d-sist'];
 // También cuentan los contadores por banner (pity) y la mejor oleada de cada mapa
@@ -10334,6 +10402,9 @@ function endGame(win){
   g.survBest = g.mode === 'surv' ? recordSurv(g.ch.id, g.t) : null;
   g.encDone = checkEncargos();
   g.questDone = checkLongQuests(win);
+  g.seasonDone = recordSeasonRun(g);
+  const seasonSkin = grantSeasonSkin();
+  if (seasonSkin) g.unlocked.push(seasonSkin);
   unlockMouse();
   g.reto = g.weekly ? retoRecord(win) : null;   // el reto lleva su propia marca semanal
   saveRecord(win);   // la ficha incluye el reto en el historial, los récords normales lo excluyen
@@ -10367,6 +10438,7 @@ function endGame(win){
   for (const sy of g.newSys || []) rewards.push(`<li>Nuevo en tus partidas: <b>${sy.name}</b> · ${sy.d}</li>`);
   for (const it of g.newItems || []) rewards.push(`<li>Objeto desbloqueado: <b>${it}</b> · míralo en la vitrina del Digidex</li>`);
   for (const q of (g.questDone || [])) rewards.push(`<li>Encargo cumplido: <b>${q.t}</b> · +${q.bits} Bits${GACHA_SOON ? '' : ` y +${q.tix} tickets`}</li>`);
+  for (const task of g.seasonDone) rewards.push(`<li>Encargo de temporada: <b>${task}</b></li>`);
   for (const e of g.encDone) rewards.push(`<li>Encargo cumplido: <b>${e}</b> · +${ENC_REWARD.bits} Bits${GACHA_SOON ? '' : ` y +${ENC_REWARD.tix} ticket`}</li>`);
   if (g.survBest) rewards.push(`<li>¡Nuevo récord de Supervivencia con ${g.ch.name}!</li>`);
   if (g.waveBest) rewards.push(`<li>¡Nueva mejor oleada en ${mapDef().name}: <b>${g.wave}</b>!</li>`);
@@ -13362,6 +13434,7 @@ const shopCosmetics = type => Object.entries(SHOP_COSMETICS).map(([key, set]) =>
 }));
 const FRAMES = [
   ...shopCosmetics('frame'),
+  {id:'file_senal', name:'Señal de File', tier:'r', how:'Completa 3 encargos de Señal de File Island', seasonal:true, prog:() => [seasonData().done, 3]},
   {id:'amistad_gabumon', name:'Amistad de Gabumon', tier:'c', how:'Gana una partida con Gabumon', prog: () => [Math.min(1, winsWith('gabumon')), 1]},
   {id:'sinceridad_palmon', name:'Sinceridad de Palmon', tier:'c', how:'Gana una partida con Palmon', prog: () => [Math.min(1, winsWith('palmon')), 1]},
   {id:'agua_fiabilidad', name:'Agua y fiabilidad', tier:'c', how:'Gana una partida con Gomamon', prog: () => [Math.min(1, winsWith('gomamon')), 1]},
@@ -13377,6 +13450,7 @@ const FRAMES = [
 ];
 const TITLES = [
   ...shopCosmetics('title'),
+  {id:'file_explorador', name:'Explorador de File', tier:'r', how:'Completa 1 encargo de Señal de File Island', seasonal:true, prog:() => [seasonData().done, 1]},
   {id:'novato',     name:'Novato',           tier:'c', how:'Termina tu primera partida', prog: () => [Math.min(1, loadAch().runs), 1]},
   {id:'cazador',    name:'Cazador de bajas', tier:'c', how:'Acumula 300 bajas en total', prog: () => [Math.min(300, sumStats('kills')), 300]},
   {id:'explorador', name:'Explorador',       tier:'r', how:'Llega a la zona 2 (Pantano de Datos)', prog: () => [loadAch().zone2 ? 1 : 0, 1]},
@@ -13441,7 +13515,7 @@ function syncRewards(){
     for (const sk of SKINS) if (sk.src === 'logro' && skinHasArt(k, 0, sk.id) && !ownsAt(k, 0, sk.id) && meetsReq(sk, st)) grantSkinLine(k, sk.id);
   }
   if (eventActive()){ const ev = eventQuestState(); if (payEventPrizes(ev).length) localStorage.setItem('digibonk3d-evq3', JSON.stringify(ev)); }
-  grantMastery(); checkUnlocks(false); grantProgress();
+  grantSeasonSkin(); grantMastery(); checkUnlocks(false); grantProgress();
 }
 // Logros que se ven en la ventana Logros (los que salen jugando, no de la maestría ni del evento)
 const achItems = () => [...TITLES, ...FRAMES].filter(x => x.prog && !x.weekly && !x.seasonal);
@@ -13515,6 +13589,97 @@ function frameClass(){ return extra.frame ? ' fr-' + extra.frame : ''; }
 const WEEK_MS = 7 * 86400000;
 // Número de semana con cambio los lunes (el 1970-01-05 fue lunes; 4 días después del 1 de enero de 1970)
 const weekNum = () => Math.floor((Date.now() - 4 * 86400000) / WEEK_MS);
+// Season 1 uses the same Monday UTC boundary as the weekly challenge.
+const FILE_SEASON = {
+  start: Date.UTC(2026, 10, 23),
+  weeks: [
+    {id:'partida', label:'Aguanta 3 minutos en una partida', goal:1, count:run => Number(run.t >= 180)},
+    {id:'reto', label:'Aguanta 3 minutos en el Reto semanal', goal:1, count:run => Number(run.weekly && run.t >= 180)},
+    {id:'bajas', label:'Suma 5.000 bajas entre partidas', goal:5000, count:run => Math.max(0, run.kills || 0)},
+    {id:'supervivencia', label:'Aguanta 5 minutos en Supervivencia', goal:1, count:run => Number(run.mode === 'surv' && run.t >= 300)}
+  ],
+  prizes: [
+    {at:1, label:'Título · Explorador de File', owns:() => inv.titles.includes('file_explorador')},
+    {at:3, label:'Marco · Señal de File', owns:() => inv.frames.includes('file_senal')},
+    {at:4, label:'Skin · Agumon Digivice LCD', owns:() => ownsAt('agumon', 0, 'lcd')}
+  ]
+};
+function seasonData(now = Date.now()){
+  const {start, weeks} = FILE_SEASON;
+  const end = start + weeks.length * WEEK_MS;
+  const phase = now < start ? 'upcoming' : now >= end ? 'closed' : 'active';
+  const week = Math.min(weeks.length, Math.max(0, Math.floor((now - start) / WEEK_MS) + 1));
+  const progress = loadJSON(SEASON_KEY, {});
+  const done = weeks.filter(task => (progress[task.id] || 0) >= task.goal).length;
+  return {phase, week, progress, done, days:Math.max(0, Math.ceil((end - now) / 86400000)), end};
+}
+function recordSeasonRun(run, now = Date.now()){
+  const {phase, week, progress} = seasonData(now);
+  if (phase !== 'active') return [];
+  const completed = [];
+  let changed = false;
+  for (const task of FILE_SEASON.weeks.slice(0, week)){
+    const previous = progress[task.id] || 0;
+    const next = Math.min(task.goal, previous + task.count(run));
+    if (next <= previous) continue;
+    progress[task.id] = next;
+    changed = true;
+    if (next === task.goal) completed.push(task.label);
+  }
+  if (changed) localStorage.setItem(SEASON_KEY, JSON.stringify(progress));
+  return completed;
+}
+function grantSeasonSkin(){
+  if (seasonData().done < FILE_SEASON.weeks.length || ownsAt('agumon', 0, 'lcd')) return null;
+  grantSkinLine('agumon', 'lcd');
+  return 'Agumon · Digivice LCD';
+}
+function seasonDate(ms){
+  return new Intl.DateTimeFormat(LANG, {day:'numeric', month:'long', timeZone:'UTC'}).format(ms);
+}
+function seasonStatus(data){
+  if (data.phase === 'upcoming') return `Empieza el ${seasonDate(FILE_SEASON.start)}`;
+  if (data.phase === 'closed') return 'Temporada finalizada';
+  return `Semana ${data.week} de ${FILE_SEASON.weeks.length} · ${data.days === 1 ? 'Queda 1 día' : `Quedan ${data.days} días`}`;
+}
+function seasonBanner(){
+  const data = seasonData(), total = FILE_SEASON.weeks.length;
+  const next = FILE_SEASON.prizes.find(prize => prize.at > data.done);
+  const target = data.phase === 'closed' ? total : next?.at || total;
+  return `<button type="button" class="hb-season" id="hubSeason" aria-haspopup="dialog">
+    <img src="ui/hub/digivice/evento.png" alt="">
+    <span class="hb-season-copy"><b>Señal de File Island</b><small>${seasonStatus(data)}</small></span>
+    <span class="hb-season-meter"><small>${data.phase === 'active' && next ? `Próximo premio · ${data.done}/${target}` : `${data.done}/${total} encargos`}</small><progress max="${target}" value="${data.done}" aria-label="Progreso de temporada"></progress></span>
+    <span class="hb-season-next" aria-hidden="true">›</span>
+  </button>`;
+}
+function showSeason(trigger){
+  const data = seasonData(), {start, weeks, prizes} = FILE_SEASON;
+  const tasks = weeks.map((task, i) => {
+    const count = Math.min(task.goal, data.progress[task.id] || 0);
+    const status = count === task.goal ? 'Completado' : data.phase === 'closed' ? 'Cerrado' :
+      i >= data.week ? seasonDate(start + WEEK_MS * i) : `${count.toLocaleString(LANG)}/${task.goal.toLocaleString(LANG)}`;
+    return `<li><span><small>Semana ${i + 1}</small>${task.label}</span><strong>${status}</strong></li>`;
+  }).join('');
+  const rewards = prizes.map(({at, label, owns}) => `<li><span>${label}</span><strong>${owns() ? 'En tu colección' : `${at}/${weeks.length}`}</strong></li>`).join('');
+  menuModal('Señal de File Island', `<div class="season-dialog">
+    <article class="season-summary">
+      <img src="ui/hub/digivice/evento.png" alt="">
+      <div><b>${seasonStatus(data)}</b><small>${data.done}/${weeks.length} encargos</small><progress max="${weeks.length}" value="${data.done}" aria-label="Progreso de temporada"></progress></div>
+    </article>
+    <p>Cierre: ${seasonDate(data.end)} · 00:00 UTC</p>
+    <p>Se abre un encargo cada lunes. Puedes completar los anteriores hasta el cierre.</p>
+    <ol class="season-weeks">${tasks}</ol>
+    ${data.phase === 'active' && data.week >= 2 ? '<button class="season-mode mini-btn" type="button" id="seasonReto">Abrir Reto semanal</button>' : ''}
+    ${data.phase === 'active' && data.week >= 4 ? '<button class="season-mode mini-btn" type="button" id="seasonSurv">Ir a Supervivencia</button>' : ''}
+    <h3>Recompensas</h3><ul class="season-prizes">${rewards}</ul>
+  </div>`, () => trigger.focus({preventScroll:true}));
+  const btnReto = document.getElementById('seasonReto');
+  if (btnReto) btnReto.onclick = showReto;
+  const btnSurv = document.getElementById('seasonSurv');
+  if (btnSurv) btnSurv.onclick = () => document.getElementById('mSurv').click();
+}
+
 function weeklyIndex(){ const n = SEASONS.adventure.chars.length; return ((weekNum() % n) + n) % n; }
 function weeklyDigimon(){ return SEASONS.adventure.chars[weeklyIndex()]; }
 // Marco y título exclusivos del banner activo (null si el banner no tiene)
