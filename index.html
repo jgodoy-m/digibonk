@@ -3485,6 +3485,59 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
   .trainer-picker .cz-tile .cz-art{width:44px;height:44px}
   .trainer-picker .cz-tile .cz-av,.trainer-picker .cz-tile .cz-fr .hud-portrait{width:38px!important;height:38px!important}
 }
+/* Ficha de entrenador: identidad, estadísticas y trayectoria. */
+.realhub.pl4.trainer-screen{
+  --m-card:#16213a;--m-cardline:#425479;--m-sunk:#111a30;--m-text:#f2f6ff;
+  --m-soft:#c0cde6;--m-mute:#a3b3d3;--m-line:#354769;--m-line2:#526889;
+  --m-acc:#92caff;--m-cta:#265ec7;--m-shadow:0 6px 17px #02091580;
+  background:linear-gradient(#0a1531a8,#17152bc0),url(ui/fondo_inicio.webp) center 46%/cover no-repeat!important
+}
+.trainer-screen .trainer-wrap{max-width:1390px;gap:12px;padding-inline:max(16px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-right))}
+.trainer-screen .trainer-header{gap:12px}
+.trainer-screen .trainer-heading-band{border-radius:12px;padding:10px clamp(12px,3vw,30px);
+  background:repeating-linear-gradient(135deg,#fff2 0 10px,transparent 10px 21px),linear-gradient(100deg,#ff866f,#ffc373);
+  box-shadow:0 4px 0 #9b4d58,0 5px 14px #09122875}
+.trainer-screen .trainer-heading-band h2{color:#21192c;text-shadow:none;font-size:clamp(17px,3vw,29px);font-weight:900}
+.trainer-screen .trainer-hero{grid-template-columns:auto minmax(0,1fr) auto;gap:clamp(12px,3vw,28px);min-height:174px;padding:16px clamp(10px,3vw,28px)}
+.trainer-avatar-block{display:grid;justify-items:center;gap:8px;min-width:0}
+.trainer-screen .trainer-hero #tcAv{width:92px;height:92px}
+.trainer-screen .trainer-hero #plChange{margin:0!important;padding:6px 10px;font-size:12px!important;max-width:100%}
+.trainer-hero-pins{display:flex;flex-wrap:wrap;justify-content:end;gap:5px}
+.trainer-hero-pins:empty{display:none}
+.trainer-hero-pins .trainer-pin-art{width:40px;height:40px;margin:0}
+.trainer-hero-pins .title-badge-art{width:29px;height:29px}
+.trainer-screen .trainer-cover .trainer-identity input{font-size:clamp(19px,3.2vw,31px);min-height:41px}
+.trainer-screen .trainer-stat-board{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.trainer-stat-board .trainer-stat{display:flex;align-items:center;gap:8px;min-height:52px;
+  padding:8px 10px;border:1px solid var(--m-cardline);border-radius:13px;background:var(--m-card);box-shadow:var(--m-shadow)}
+.trainer-stat-board .trainer-stat img{width:24px;height:24px;flex:none;object-fit:contain;image-rendering:auto}
+.trainer-stat-board .trainer-stat b{font-size:clamp(15px,2vw,22px)}
+.trainer-stat-board .trainer-stat small{color:var(--m-soft);font-size:11px;line-height:1.15}
+.trainer-screen .trainer-panel{border-radius:16px}
+.trainer-screen .trainer-panel h3{padding-inline-start:9px;border-inline-start:4px solid #ff9879;font-size:16px;line-height:1.25}
+.trainer-screen .trainer-record-heading{color:var(--m-soft);font-size:12px;margin:9px 0 1px}
+.trainer-screen .trainer-run{grid-template-columns:minmax(0,1fr) auto auto}
+.trainer-screen .trainer-run span:nth-child(2){color:var(--m-soft)}
+@media(max-width:960px){.trainer-screen .trainer-stat-board{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:620px){
+  .realhub.pl4.trainer-screen{background-image:linear-gradient(#0a1531b0,#17152bdf),url(ui/fondo_inicio_movil.webp)!important}
+  .trainer-screen .trainer-stat-board{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .trainer-screen .trainer-hero{grid-template-columns:auto minmax(0,1fr);padding:9px;min-height:117px}
+  .trainer-screen .trainer-hero #tcAv{width:61px;height:61px}
+  .trainer-hero-pins{grid-column:1/-1;justify-content:start}
+}
+@media(max-width:430px){
+  .trainer-screen .trainer-stat-board{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .trainer-screen .trainer-heading-band{padding:7px 10px}
+  .trainer-screen .trainer-hero #plChange{max-width:100px;line-height:1.15}
+  .trainer-screen .trainer-run{grid-template-columns:minmax(0,1fr) auto;gap:4px 7px}
+  .trainer-screen .trainer-run span:nth-child(2){grid-row:2}
+  .trainer-screen .trainer-run strong{grid-column:2;grid-row:1/3}
+}
+@media(orientation:landscape) and (max-height:510px){
+  .trainer-screen .trainer-hero{min-height:110px;padding-block:8px}
+  .trainer-screen .trainer-hero #tcAv{width:55px;height:55px}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.min.js" } }
@@ -5247,12 +5300,16 @@ function saveRecord(win){
   const run = {name: stageName(g.ch.id, g.ch.evolved), key: g.ch.id, t: Math.floor(g.t), kills: g.kills, lvl: g.p.lvl, win, map: g.map};
   if (g.mode === 'surv') run.wave = g.wave || 1;
   const best = {...loadJSON(TRAINER_RECORDS_KEY, {})};
-  if (!best.kills || run.kills > best.kills.kills) best.kills = run;
-  if (run.wave && (!best.wave || run.wave > best.wave.wave)) best.wave = run;
-  list.push(run);
-  list.sort((a, b) => b.t - a.t || b.kills - a.kills);
+  if (g.weekly) run.weekly = true;
+  else {
+    if (!best.kills || run.kills > best.kills.kills) best.kills = run;
+    if (run.wave && (!best.wave || run.wave > best.wave.wave)) best.wave = run;
+    list.push(run);
+    list.sort((a, b) => b.t - a.t || b.kills - a.kills);
+  }
+  best.recent = [run, ...(Array.isArray(best.recent) ? best.recent : [])].slice(0, 6);
   try {
-    localStorage.setItem('digibonk3d-records', JSON.stringify(list.slice(0, 10)));
+    if (!g.weekly) localStorage.setItem('digibonk3d-records', JSON.stringify(list.slice(0, 10)));
     localStorage.setItem(TRAINER_RECORDS_KEY, JSON.stringify(best));
   } catch(e){}
 }
@@ -9997,7 +10054,7 @@ function endGame(win){
   g.questDone = checkLongQuests(win);
   unlockMouse();
   g.reto = g.weekly ? retoRecord(win) : null;   // el reto lleva su propia marca semanal
-  if (!g.weekly) saveRecord(win);   // los récords normales no mezclan partidas del reto
+  saveRecord(win);   // la ficha incluye el reto en el historial, los récords normales lo excluyen
   recordCharRun(g.ch.id, win && g.mode !== 'surv', g.diff, g.kills, g.p.lvl);
   if (g.mode !== 'surv' && !g.weekly){ const mt = loadJSON('digibonk3d-maptime', {}), t = Math.floor(g.t); if (t > (mt[g.map] || 0)){ mt[g.map] = t; try { localStorage.setItem('digibonk3d-maptime', JSON.stringify(mt)); } catch(e){} } }   // récord de tiempo en cada mapa (Elige mapa)
   if (win && g.mode !== 'surv' && !g.weekly){ const mw = mapWins(), l = mw[g.map] || (mw[g.map] = []); if (!l.includes(g.diff)) l.push(g.diff); localStorage.setItem('digibonk3d-mapwins', JSON.stringify(mw)); }
@@ -12684,24 +12741,40 @@ function showPlayer(){
   const achDone = achDoneCount(), achTotal = achItems().length;
   const title = TITLES.find(t => t.id === extra.title);
   const number = n => n.toLocaleString(I18N.lang);
-  const tiles = items => items.map(([label, value]) =>
-    `<div class="trainer-stat"><b>${typeof value === 'number' ? number(value) : escHtml(value)}</b><small>${label}</small></div>`).join('');
-  const activity = tiles([
-    ['Partidas', sum('plays')], ['Bajas', sum('kills')], ['Mejor nivel', bestLevel || '—']
-  ]);
-  const collection = tiles([
-    ['Digimon', `${digiOwned}/${digiTotal}`], ['Evoluciones', Object.values(loadJSON('digibonk3d-evo', {})).filter(Boolean).length],
-    ['Skins', skins], ['Marcos', inv.frames.length], ['Títulos', inv.titles.length], ['Logros', `${achDone}/${achTotal}`]
-  ]);
+  const wins = stats.reduce((total, entry) => total + Object.values(entry.wins || {}).reduce((n, value) => n + (+value || 0), 0), 0);
+  const odds = chars.filter(key => ownsAt(key, 0, 'variocolor')).length;
+  const tiles = [
+    ['Partidas', sum('plays'), 'hub/ic_mision'], ['Victorias', wins, 'hub/ic_logros'],
+    ['Bajas', sum('kills'), 'hud/ic_bajas'], ['Mejor nivel', bestLevel || '—', 'hud/ic_dash'],
+    ['Digimon', `${digiOwned}/${digiTotal}`, 'hub/ic_digidex'],
+    ['Evoluciones', Object.values(loadJSON('digibonk3d-evo', {})).filter(Boolean).length, 'hub/ic_laboratorio'],
+    ['Skins', skins, 'hub/ic_tesoros'], ['Variocolores', odds, 'hub/ic_evento'],
+    ['Marcos', inv.frames.length, 'hub/ic_jugador'], ['Títulos', inv.titles.length, 'hub/ic_encargos'],
+    ['Logros', `${achDone}/${achTotal}`, 'hud/ic_emblema'], ['Bits', SAVE.bits, 'hud/ic_bits'],
+    ...(!GACHA_SOON ? [['Tickets', SAVE.tickets, 'hud/ic_ticket']] : [])
+  ].map(([label,value,icon]) => `<div class="trainer-stat"><img src="ui/${icon}.webp" alt="">
+    <span><b>${typeof value === 'number' ? number(value) : escHtml(value)}</b><small>${label}</small></span></div>`).join('');
   const {favorite, pinned, unlocked} = trainerIdentity();
   const companion = favorite || selectedKey;
   const pins = pinned.map(id => unlocked.find(item => item.id === id)).map(item => `<details class="trainer-pin">
     <summary><span class="trainer-pin-art">${trainerAchievementArt(item, avatarSrc())}</span><b>${escHtml(item.name)}</b></summary>
     <p>${escHtml(item.how)}</p></details>`).join('');
-  const recList = trainerRecordSummary(recs, chars).map(({label, mark, value}) => {
+  const recList = trainerRecordSummary(recs, chars).filter(({mark}) => mark).map(({label, mark, value}) => {
     const detail = [mark?.name, MAPS[mark?.map]?.name].filter(Boolean).map(escHtml).join(' · ');
     return `<div class="trainer-record"><span><b>${label}</b>${detail ? '<small>' + detail + '</small>' : ''}</span><strong>${typeof value === 'number' ? number(value) : value}</strong></div>`;
   }).join('');
+  const mapTimes = loadJSON('digibonk3d-maptime', {});
+  const mapRecords = MAP_ORDER.map(map => {
+    const time = +mapTimes[map] || 0, wave = +localStorage.getItem('digibonk3d-surv-wave-' + map) || 0;
+    return time || wave ? `<div class="trainer-record"><span><b>${MAPS[map].name}</b>
+      ${wave ? `<small>Oleada ${number(wave)}</small>` : ''}</span><strong>${time ? fmtTime(time) : '—'}</strong></div>` : '';
+  }).join('');
+  const recentRaw = loadJSON(TRAINER_RECORDS_KEY, {}).recent;
+  const recent = Array.isArray(recentRaw) ? recentRaw.filter(r => r && Number.isFinite(r.t)).slice(0, 5) : [];
+  const lastRuns = recent.map(r => `<div class="trainer-record trainer-run">
+    <span><b data-no-i18n>${escHtml(r.name || '—')}</b><small>${escHtml(MAPS[r.map]?.name || '')}</small></span>
+    <span>${r.weekly ? 'Reto semanal · ' : ''}${r.wave ? `Oleada ${number(r.wave)}` : r.win ? 'Victoria' : 'Derrota'} · ${number(+r.kills || 0)} bajas</span>
+    <strong>${fmtTime(r.t)}</strong></div>`).join('');
   const progress = achItems().filter(item => !unlocked.includes(item))
     .map(item => { const [value, max] = item.prog(); return {item, value: Math.max(0, Math.min(value, max)), max, plan:trainerGoalPlan(item.id)}; })
     .filter(x => x.max > 0).sort((a, b) => b.value/b.max - a.value/a.max);
@@ -12720,30 +12793,28 @@ function showPlayer(){
   showOverlay(`
     <main class="realhub pl4 trainer-screen" aria-labelledby="trainerHeading">
       <div class="trainer-wrap">
-        <header class="trainer-header"><button type="button" class="g-back" id="plBack">← Volver</button><h2 id="trainerHeading">Ficha de entrenador</h2></header>
+        <header class="trainer-header"><button type="button" class="g-back" id="plBack">← Volver</button><div class="trainer-heading-band"><h2 id="trainerHeading">Ficha de entrenador</h2></div></header>
         <section class="trainer-hero trainer-cover" style="${trainerCoverStyle()}">
-          <div class="hud-portrait pf-av${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img src="${avatarSrc()}" alt=""></div>
+          <div class="trainer-avatar-block"><div class="hud-portrait pf-av${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img src="${avatarSrc()}" alt=""></div>
+            <button type="button" class="pl4-chg" id="plChange">Personalizar ficha</button></div>
           <div class="trainer-identity">
             <label for="tcName">Nombre de entrenador</label>
             <input id="tcName" maxlength="16" autocomplete="off" value="${escHtml(trainerName || '')}" placeholder="Tu nombre">
             ${title ? `<strong class="trainer-title">${trainerTitleIcon(title)}${escHtml(title.name)}</strong>` : ''}
             ${CHARS[companion] ? `<div class="trainer-favorite"><img src="${charIcon(companion)}" alt=""><span><b>${favorite ? 'Digimon favorito' : 'Compañero actual'}</b><small>${CHARS[companion].name} · Maestría ${masteryLv(companion)}</small></span></div>` : ''}
           </div>
-          <div class="trainer-actions"><span class="trainer-wallet"><img src="ui/hud/ic_bits.webp" alt="">${number(SAVE.bits)} Bits</span>
-            ${GACHA_SOON ? '' : `<small>${number(SAVE.tickets)} tickets</small>`}
-            <button type="button" class="pl4-chg" id="plChange">Personalizar ficha</button>
-          </div>
+          <div class="trainer-hero-pins">${pinned.map(id => unlocked.find(item => item.id === id)).map(item =>
+            `<span class="trainer-pin-art" title="${escHtml(item.name)}">${trainerAchievementArt(item, avatarSrc())}</span>`).join('')}</div>
         </section>
-        <section class="trainer-panel trainer-showcase"><div class="trainer-panel-head"><h3>Logros destacados</h3><button type="button" class="trainer-panel-action" id="trainerPins">Elegir logros</button></div>
-          ${pins ? `<div class="trainer-pin-grid">${pins}</div>` : '<p class="trainer-empty">Puedes fijar hasta tres logros conseguidos.</p>'}</section>
-        <div class="trainer-summary">
-          <section class="trainer-panel"><h3>Actividad</h3><div class="trainer-stats">${activity}</div></section>
-          <section class="trainer-panel"><h3>Colección</h3><div class="trainer-stats">${collection}</div></section>
-        </div>
+        <div class="trainer-stats trainer-stat-board" aria-label="Estadísticas del entrenador">${tiles}</div>
         <div class="trainer-detail">
-          <section class="trainer-panel"><h3>Récords personales</h3>${recList}</section>
-          <section class="trainer-panel trainer-goals"><h3>Próximos logros</h3>${achievements}</section>
+          <section class="trainer-panel"><h3>Récords por mapa</h3>${mapRecords || '<p class="trainer-empty">Todavía no hay récords por mapa.</p>'}
+            ${recList ? `<h4 class="trainer-record-heading">Mejores marcas</h4>${recList}` : ''}</section>
+          <section class="trainer-panel trainer-showcase"><div class="trainer-panel-head"><h3>Logros destacados</h3><button type="button" class="trainer-panel-action" id="trainerPins">Elegir logros</button></div>
+            ${pins ? `<div class="trainer-pin-grid">${pins}</div>` : '<p class="trainer-empty">Puedes fijar hasta tres logros conseguidos.</p>'}</section>
         </div>
+        <section class="trainer-panel"><h3>Últimas partidas</h3>${lastRuns || '<p class="trainer-empty">Las próximas partidas aparecerán aquí al terminarlas.</p>'}</section>
+        <section class="trainer-panel trainer-goals"><h3>Próximos logros</h3>${achievements}</section>
         <section class="trainer-panel"><h3>Digimon con más bajas</h3><div class="trainer-digimon-grid">${specialists}</div></section>
       </div>
     </main>`);
