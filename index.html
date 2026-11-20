@@ -3378,17 +3378,19 @@ html.reduce-motion .living-actor.swim::after{animation:none!important}
 /* Ficha de entrenador y Laboratorio */
 .trainer-screen,.lab2{font-family:'Nunito',system-ui,sans-serif}
 :is(.trainer-screen,.trainer-custom){
-  --trainer-surface:#fff9eb;--trainer-inset:#e7f2e9;--trainer-ink:#1e3733;--trainer-subtle:#415f58;
-  --trainer-accent:#086258;--trainer-border:#c3d8cb;--trainer-tint:#f4f8eedd;
-  --trainer-action:#12625a;--trainer-action-ink:#fff
+  --trainer-surface:#fffdf7;--trainer-inset:#edf5ef;--trainer-ink:#243933;--trainer-subtle:#405f54;
+  --trainer-accent:#086258;--trainer-border:#d3ded3;--trainer-tint:#f8f7ede6;
+  --trainer-action:#12625a;--trainer-action-ink:#fff;
+  --trainer-lcd:linear-gradient(155deg,#e7f8ef,#cde8da);--trainer-lcd-ink:#173d32;--trainer-lcd-line:#578b744d
 }
 html[data-theme=oscuro] :is(.trainer-screen,.trainer-custom){
   --trainer-surface:#254644;--trainer-inset:#305653;--trainer-ink:#f7f5e7;--trainer-subtle:#cbe1d7;
   --trainer-accent:#a7edde;--trainer-border:#678f83;--trainer-tint:#294d49e6;
-  --trainer-action:#a7edde;--trainer-action-ink:#153c36
+  --trainer-action:#a7edde;--trainer-action-ink:#153c36;
+  --trainer-lcd:linear-gradient(155deg,#c0e6da,#9dd3c7);--trainer-lcd-ink:#173d32;--trainer-lcd-line:#39766359
 }
 .realhub.pl4.trainer-screen{
-  --trainer-scrim:linear-gradient(150deg,#fff3dcd9,#d0f0eda6 48%,#edf5f2ec);
+  --trainer-scrim:linear-gradient(150deg,#fbf2d9df,#e4f0e3c7 50%,#f5f7edf5);
   background:var(--trainer-scrim),url(ui/fondo_inicio.webp) center 45%/cover no-repeat!important;
   color:var(--trainer-ink);overscroll-behavior:contain
 }
@@ -3467,15 +3469,21 @@ html[lang] .trainer-screen .trainer-header .g-back,
 .trainer-collection .trainer-stat img{width:22px;height:22px}
 .trainer-device{min-width:0}
 .trainer-device h3{margin:0 0 5px;font-size:18px;line-height:1.2;text-align:center}
-.trainer-device-shell{position:relative;aspect-ratio:1752 / 897;min-height:154px;isolation:isolate}
+.trainer-device-shell{position:relative;aspect-ratio:1752 / 897;min-height:181px;isolation:isolate}
 .trainer-device-shell>img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;filter:drop-shadow(0 6px 7px #18353640)}
 .trainer-device-screen{position:absolute;inset:19.7% 14.3% 28.8%;display:grid;align-items:center;box-sizing:border-box;
-  padding:4px 7px;border-radius:clamp(6px,1.4vw,17px);background:linear-gradient(152deg,#dbf7e7,#b5e1d6);color:#113f38}
-.trainer-device-view{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;gap:6px;
-  text-align:center;min-width:0;margin:0}
+  padding:4px clamp(7px,1vw,14px);border-radius:clamp(6px,1.4vw,17px);background:var(--trainer-lcd);color:var(--trainer-lcd-ink)}
+.trainer-device-view{min-width:0;margin:0;line-height:1.12}
 .trainer-device-view[hidden]{display:none}
-.trainer-device-view dt{font-size:clamp(11px,1.25vw,15px);font-weight:800;line-height:1.15;overflow-wrap:anywhere}
-.trainer-device-view dd{margin:3px 0 0;font-size:clamp(18px,3vw,36px);font-weight:900;line-height:1.05;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.trainer-device-mark,.trainer-device-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:5px}
+.trainer-device-mark{margin:0 0 2px;padding-bottom:2px;border-bottom:1px solid var(--trainer-lcd-line)}
+.trainer-device-mark dt{font-size:clamp(11px,1.4vw,15px);font-weight:900;overflow-wrap:anywhere}
+.trainer-device-mark dd{margin:0;font:900 clamp(17px,2.3vw,30px)/1.05 'Nunito',system-ui;font-variant-numeric:tabular-nums}
+.trainer-device-rows{margin:0}
+.trainer-device-row{padding:1px 0;font-size:clamp(10px,1.15vw,14px);font-weight:750}
+.trainer-device-row dt,.trainer-device-row dd{min-width:0;overflow-wrap:anywhere}
+.trainer-device-row dd{margin:0;font-weight:900;text-align:right;font-variant-numeric:tabular-nums}
+.trainer-device-row .trainer-device-pending{font-weight:750;opacity:.83}
 .trainer-device-controls{position:absolute;inset:76% 10% 8%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;gap:5px}
 .trainer-device-controls button{min-height:36px;padding:4px 2px;border:1px solid #a69d8c;border-radius:9px;background:#fff7e9;
   color:#294741;box-shadow:0 2px 0 #a69d8c;font:850 clamp(10px,1.2vw,14px)/1.1 'Nunito',system-ui;cursor:pointer;overflow-wrap:anywhere}
@@ -3606,7 +3614,6 @@ html[lang] .trainer-screen .trainer-header .g-back,
   .trainer-hero{gap:12px;padding:14px}
   .trainer-screen .trainer-hero #plChange{line-height:1.2;font-size:13px!important}
   .trainer-stat{gap:6px}
-  .trainer-device-shell{min-height:182px}
   .trainer-run{grid-template-columns:minmax(0,1fr) auto;gap:4px 7px}
   .trainer-run span:nth-child(2){grid-row:2}
   .trainer-run strong{grid-column:2;grid-row:1/3}
@@ -13112,9 +13119,9 @@ function trainerGoalPlan(id){
   if (id === 't_surv') return {key, mode:'surv'};
   return null;
 }
-function trainerBestKills(recs, roster, saved){
-  return Math.max(0, Number(saved?.kills) || 0,
-    ...recs.map(run => Number(run.kills) || 0), ...roster.map(key => Number(statsOf(key).best) || 0));
+function trainerKillRecord(recs, roster, saved){
+  const candidates = [saved, ...recs, ...roster.map(key => ({name:CHARS[key].name, kills:statsOf(key).best}))];
+  return candidates.reduce((best, run) => Number(run?.kills) > Number(best?.kills || 0) ? run : best, null);
 }
 function trainerBestWave(saved){
   return Math.max(0, Number(saved?.wave) || 0,
@@ -13192,19 +13199,33 @@ function showPlayer(){
   const savedRecords = loadJSON(TRAINER_RECORDS_KEY, {});
   const recentRuns = Array.isArray(savedRecords.recent) ? savedRecords.recent.filter(r => r && Number.isFinite(r.t)) : [];
   const trial = timeTrialSummary(timeTrialMarks(savedRecords.timeTrial, [...recs, ...recentRuns]));
-  const bestKills = trainerBestKills(recs, chars, savedRecords.kills);
+  const bestKills = trainerKillRecord([...recs, ...recentRuns.filter(run => !run.weekly)], chars, savedRecords.kills);
   const bestWave = trainerBestWave(savedRecords.wave);
   const survival = loadJSON('digibonk3d-surv', {});
-  const bestSurvival = Math.max(0, ...chars.map(key => Number(survival[key]) || 0));
+  const [survivor, bestSurvival] = chars.reduce((best, key) => Number(survival[key]) > best[1] ? [key, Number(survival[key])] : best, ['', 0]);
+  const waveRecord = Number(savedRecords.wave?.wave) === bestWave ? savedRecords.wave : null;
   const time = seconds => seconds > 0 ? fmtTime(Math.floor(seconds)) : '—';
+  const mark = value => value > 0 ? number(+value) : '—';
   const recordModes = [
-    {id:'kills', name:'Bajas', values:[['Bajas totales', number(sum('kills'))], ['Más bajas en una partida', bestKills ? number(bestKills) : '—']]},
-    {id:'trial', name:'Contrarreloj', values:[[trial.completed === trial.maps.length ? 'Tiempo total' : 'Tiempo parcial', time(trial.total)], ['Mapas completados', `${trial.completed}/${trial.maps.length}`]]},
-    {id:'survival', name:'Supervivencia', values:[['Mejor tiempo', time(bestSurvival)], ['Mejor oleada', bestWave ? number(bestWave) : '—']]}
+    {id:'kills', name:'Bajas', label:'Récord de bajas', value:mark(bestKills?.kills), rows:[
+      ['Bajas totales', number(sum('kills'))],
+      ...(bestKills?.name ? [['Digimon', bestKills.name]] : []),
+      ...(MAPS[bestKills?.map] ? [['Mapa', MAPS[bestKills.map].name]] : [])
+    ]},
+    {id:'trial', name:'Contrarreloj', label:trial.completed === trial.maps.length ? 'Tiempo total' : 'Tiempo parcial', value:time(trial.total), rows:
+      trial.maps.map(([map, seconds]) => [MAPS[map].name, seconds ? time(seconds) : 'Pendiente', !seconds])
+    },
+    {id:'survival', name:'Supervivencia', label:'Mejor tiempo', value:time(bestSurvival), rows:[
+      ...(survivor ? [['Digimon', CHARS[survivor].name]] : []),
+      ['Mejor oleada', mark(bestWave)],
+      ...(waveRecord?.name ? [['Digimon de la oleada', waveRecord.name]] : [])
+    ]}
   ];
-  const recordsScreen = recordModes.map(({id,values}, index) => `<dl class="trainer-device-view" data-record-view="${id}"${index ? ' hidden' : ''}>
-    ${values.map(([label,value]) => `<div><dt>${label}</dt><dd>${escHtml(value)}</dd></div>`).join('')}
-  </dl>`).join('');
+  const recordsScreen = recordModes.map(({id,label,value,rows}, index) => `<div class="trainer-device-view" data-record-view="${id}"${index ? ' hidden' : ''}>
+    <dl class="trainer-device-mark"><dt>${label}</dt><dd>${escHtml(value)}</dd></dl>
+    <dl class="trainer-device-rows">${rows.map(([rowLabel,rowValue,pending]) => `<div class="trainer-device-row"><dt>${escHtml(rowLabel)}</dt>
+      <dd${pending ? ' class="trainer-device-pending"' : ''}>${escHtml(rowValue)}</dd></div>`).join('')}</dl>
+  </div>`).join('');
   const recent = recentRuns.slice(0, 5);
   const lastRuns = recent.map(r => `<div class="trainer-record trainer-run">
     <span><b data-no-i18n>${escHtml(r.name || '—')}</b><small>${escHtml(MAPS[r.map]?.name || '')}</small></span>

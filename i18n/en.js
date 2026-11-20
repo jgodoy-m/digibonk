@@ -141,6 +141,8 @@ I18N.add('en', {
   "Tiempo parcial": "Partial time",
   "Mapas completados": "Maps completed",
   "Más bajas en una partida": "Most kills in a run",
+  "Digimon de la oleada": "Wave Digimon",
+  "Pendiente": "Pending",
   "Récords por mapa": "Map records",
   "Todavía no hay récords por mapa.": "No map records yet.",
   "Mejores marcas": "Personal bests",
