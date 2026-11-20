@@ -2852,7 +2852,7 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
   background:var(--records-active); color:var(--records-surface);
 }
 #overlay .realhub.hb .hb-record-screen .hb-lbrow{
-  display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:3px;
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:3px;
 }
 #overlay .realhub.hb .hb-record-screen .hb-lbrow span{
   min-width:0; padding:4px 2px; border-radius:4px; background:var(--records-well); text-align:center;
@@ -5391,10 +5391,24 @@ function hideOverlay(){ overlay.classList.add('hidden'); refreshTopbar(); }
 
 // Récords locales (las 10 mejores partidas, guardadas en este navegador)
 function getRecords(){
-  try { return JSON.parse(localStorage.getItem('digibonk3d-records') || '[]'); } catch(e){ return []; }
+  const records = loadJSON('digibonk3d-records', []);
+  return Array.isArray(records) ? records.filter(Boolean) : [];
+}
+// Conserva las victorias más rápidas aunque salgan del historial de las diez partidas.
+function timeTrialMarks(saved, runs){
+  return Object.fromEntries(MAP_ORDER.map(map => {
+    const previous = Number(saved?.[map]);
+    let fastest = Number.isFinite(previous) && previous > 0 ? previous : Infinity;
+    for (const run of runs){
+      if (!run?.win || run.map !== map || run.weekly || run.wave) continue;
+      const time = Number(run.t);
+      if (Number.isFinite(time) && time > 0) fastest = Math.min(fastest, time);
+    }
+    return [map, Number.isFinite(fastest) ? fastest : 0];
+  }));
 }
 function saveRecord(win){
-  const stored = getRecords(), list = Array.isArray(stored) ? stored.filter(Boolean) : [];
+  const list = getRecords();
   const run = {name: stageName(g.ch.id, g.ch.evolved), key: g.ch.id, t: Math.floor(g.t), kills: g.kills, lvl: g.p.lvl, win, map: g.map};
   if (g.mode === 'surv') run.wave = g.wave || 1;
   const best = {...loadJSON(TRAINER_RECORDS_KEY, {})};
@@ -5405,7 +5419,9 @@ function saveRecord(win){
     list.push(run);
     list.sort((a, b) => b.t - a.t || b.kills - a.kills);
   }
-  best.recent = [run, ...(Array.isArray(best.recent) ? best.recent : [])].slice(0, 6);
+  const recent = Array.isArray(best.recent) ? best.recent : [];
+  best.timeTrial = timeTrialMarks(best.timeTrial, [...list, ...recent]);
+  best.recent = [run, ...recent].slice(0, 6);
   try {
     if (!g.weekly) localStorage.setItem('digibonk3d-records', JSON.stringify(list.slice(0, 10)));
     localStorage.setItem(TRAINER_RECORDS_KEY, JSON.stringify(best));
@@ -5809,8 +5825,9 @@ function showSelect(){
   const recs = getRecords();
   const st = loadJSON('digibonk3d-stats', {});
   const kills = Object.values(st).reduce((a, x) => a + (x.kills || 0), 0);
-  const bestT = recs.reduce((a, r) => Math.max(a, r.t), 0);
-  const bestL = recs.reduce((a, r) => Math.max(a, r.lvl || 0), 0);
+  const savedRecords = loadJSON(TRAINER_RECORDS_KEY, {});
+  const recentRecords = Array.isArray(savedRecords.recent) ? savedRecords.recent : [];
+  const trialTimes = timeTrialMarks(savedRecords.timeTrial, [...recs, ...recentRecords]);
   const d = loadDaily();
   const currentRuns = Math.min(DAILY.runsGoal, d.runs || 0);
   const safeText = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -5894,12 +5911,12 @@ function showSelect(){
               <div><h2 id="hbRecordsTitle">Tus récords</h2><small>${recs.length ? recs.length + ' partidas guardadas' : 'Juega para entrar en la tabla'}</small></div>
             </header>
             <div class="hb-tabs" role="tablist" aria-label="Ordenar récords">
-              <button type="button" role="tab" id="hbRecordsTime" aria-selected="true" aria-controls="hbRecordsPanel" data-k="t">Tiempo</button>
-              <button type="button" role="tab" id="hbRecordsLevel" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="lvl">Nivel</button>
-              <button type="button" role="tab" id="hbRecordsKills" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="kills">Bajas</button>
+              <button type="button" role="tab" id="hbRecordsKills" aria-selected="true" aria-controls="hbRecordsPanel" data-k="kills">Bajas</button>
+              <button type="button" role="tab" id="hbRecordsTrial" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="trial">Contrarreloj</button>
+              <button type="button" role="tab" id="hbRecordsSurvival" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="survival">Supervivencia</button>
             </div>
-            <div class="hb-lbrow"><span><b>${fmtTime(bestT)}</b><small>Mejor tiempo</small></span><span><b>${bestL}</b><small>Mejor nivel</small></span><span><b>${kills.toLocaleString('es-ES')}</b><small>Bajas totales</small></span></div>
-            <div class="hb-record-list" id="hbRecordsPanel" role="tabpanel" aria-labelledby="hbRecordsTime" tabindex="0">
+            <div class="hb-lbrow" id="hbRecordsSummary" aria-live="polite"></div>
+            <div class="hb-record-list" id="hbRecordsPanel" role="tabpanel" aria-labelledby="hbRecordsKills" tabindex="0">
               <ol class="hb-rank" id="hbRank"></ol>
             </div>
             <button type="button" class="hb-all" id="rhRecords">Ver todos los récords</button>
@@ -5987,11 +6004,44 @@ function showSelect(){
   document.getElementById('rhRecords').onclick=event=>openInfo('records',event.currentTarget);
   { const ol = document.getElementById('hbRank'), panel = document.getElementById('hbRecordsPanel');
     const tabs = [...document.querySelectorAll('.hb-record-screen .hb-tabs button')];
+    const summary = document.getElementById('hbRecordsSummary');
     const recKey = r => r.key || Object.keys(CHARS).find(k => CHARS[k].name === r.name || (EVO_LINE[k] || []).some(e => e.name === r.name)) || 'agumon';
-    const val = (r, k) => k === 't' ? fmtTime(r.t) : k === 'lvl' ? 'Nv ' + (r.lvl || 1) : (r.kills || 0).toLocaleString('es-ES');
-    const unit = k => k === 't' ? 'tiempo' : k === 'lvl' ? 'nivel' : 'bajas';
-    const draw = k => { const list = recs.slice().sort((a, b) => (b[k] || 0) - (a[k] || 0) || b.t - a.t).slice(0, 7);
-      ol.innerHTML = list.map((r, i) => `<li class="${i < 3 ? 'top p' + (i + 1) : ''}"><em>${i + 1}</em><img src="${charIcon(recKey(r))}" alt="" onerror="this.style.visibility='hidden'"><span><b>${safeText(r.name)}</b><small>${r.win ? 'Victoria' : 'Nivel ' + (r.lvl || 1)} · ${r.kills} bajas</small></span><strong>${val(r, k)}<small>${unit(k)}</small></strong></li>`).join('') || '<li class="hb-empty">Todavía no hay partidas. ¡Empieza una!</li>'; };
+    const stat = (label, value) => `<span><b>${safeText(value)}</b><small>${safeText(label)}</small></span>`;
+    const empty = '<li class="hb-empty">Todavía no hay partidas. ¡Empieza una!</li>';
+    const number = value => Number(value || 0).toLocaleString(LANG);
+    const time = seconds => seconds > 0 ? fmtTime(seconds) : '—';
+    const row = (rank, name, value, key, note) => `<li class="p${rank}">
+      <em>${rank}</em>${key ? `<img src="${charIcon(key)}" alt="" onerror="this.style.visibility='hidden'">` : ''}
+      <span><b>${safeText(name)}</b>${note ? `<small>${safeText(note)}</small>` : ''}</span>
+      <strong>${safeText(value)}</strong>
+    </li>`;
+    const draw = mode => {
+      if (mode === 'trial'){
+        const maps = MAP_ORDER.map(map => [map, trialTimes[map]]);
+        const completed = maps.filter(([, seconds]) => seconds > 0).length;
+        const total = maps.reduce((sum, [, seconds]) => sum + seconds, 0);
+        summary.innerHTML = stat(completed === maps.length ? 'Tiempo total' : 'Tiempo parcial', time(total))
+          + stat('Mapas completados', `${completed}/${maps.length}`);
+        ol.innerHTML = maps.map(([map, seconds], i) => row(i + 1, MAPS[map].name, time(seconds), '', seconds ? 'Completado' : 'Pendiente')).join('');
+        return;
+      }
+      if (mode === 'survival'){
+        const list = Object.keys(CHARS).map(key => [key, Number(survBest(key))])
+          .filter(([, seconds]) => Number.isFinite(seconds) && seconds > 0)
+          .sort((a, b) => b[1] - a[1]);
+        const bestWave = Math.max(Number(savedRecords.wave?.wave) || 0,
+          ...MAP_ORDER.map(map => Number(localStorage.getItem('digibonk3d-surv-wave-' + map)) || 0));
+        summary.innerHTML = stat('Mejor tiempo', time(list[0]?.[1])) + stat('Mejor oleada', bestWave || '—');
+        ol.innerHTML = list.slice(0, 7).map(([key, seconds], i) => row(i + 1, CHARS[key].name, time(seconds), key)).join('') || empty;
+        return;
+      }
+      const best = savedRecords.kills;
+      const list = best && !recs.some(run => run.key === best.key && run.map === best.map && run.t === best.t && run.kills === best.kills)
+        ? [...recs, best] : recs.slice();
+      list.sort((a, b) => b.kills - a.kills || b.t - a.t);
+      summary.innerHTML = stat('Bajas totales', number(kills)) + stat('Más bajas en una partida', list.length ? number(list[0].kills) : '—');
+      ol.innerHTML = list.slice(0, 7).map((run, i) => row(i + 1, run.name, number(run.kills), recKey(run), MAPS[run.map]?.name)).join('') || empty;
+    };
     const selectTab = tab => {
       tabs.forEach(button => {
         const active = button === tab;
@@ -6017,7 +6067,7 @@ function showSelect(){
         tabs[target].focus();
       };
     });
-    draw('t'); }
+    draw('kills'); }
   clearInterval(newsTimer);
 }
 // Guía «Cómo jugar»: diez pantallas en cuatro capítulos. Cada una tiene un vídeo grabado del propio juego
