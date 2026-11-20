@@ -218,8 +218,13 @@
   }
 
   function setLang(code){
-    if (!CODES.includes(code)) code = 'en';
-    try { localStorage.setItem(KEY, code); } catch (e) {}
+    if (code === 'auto'){
+      try { localStorage.removeItem(KEY); } catch (e) {}
+      code = detect();
+    } else {
+      if (!CODES.includes(code)) code = 'en';
+      try { localStorage.setItem(KEY, code); } catch (e) {}
+    }
     return load(code).then(() => {
       restore(document.body);
       I18N.lang = code;
@@ -258,10 +263,8 @@
     wrap.addEventListener('click', e => {
       const b = e.target.closest('button[data-code]');
       if (!b){ if (e.target === wrap) close(); return; }
-      let code = b.dataset.code;
-      if (code === 'auto'){ try { localStorage.removeItem(KEY); } catch (err) {} code = detect(); }
       close();
-      setLang(code).then(() => { if (b.dataset.code === 'auto'){ try { localStorage.removeItem(KEY); } catch (err) {} } if (onPick) onPick(code); });
+      setLang(b.dataset.code).then(() => { if (onPick) onPick(I18N.lang); });
     });
     document.body.appendChild(wrap);
   }
