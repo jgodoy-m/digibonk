@@ -2884,7 +2884,7 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
 #overlay .realhub.hb .nm-weekly>span>b{flex:0 0 auto;max-width:70%}
 @media (orientation:landscape) and (max-height:500px){#overlay .realhub.hb .nm-weekly .nm-wk-lbl{display:none}}
 #overlay .realhub.hb .nm-event.hm-soon{background:var(--m-sunk)!important;color:var(--m-mute)!important;box-shadow:none!important}
-#overlay .realhub.hb .nm-tiles{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important}
+#overlay .realhub.hb .nm-tiles{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important}
 #overlay .realhub.hb .nm-tiles .hb-tile{padding:8px 4px 7px!important;gap:1px!important;border:1px solid var(--m-cardline)!important;border-bottom:3px solid var(--tc)!important;transition:transform .14s,box-shadow .14s!important}
 #overlay .realhub.hb .nm-tiles .hb-tile i{transform:none!important;width:42px!important;height:42px!important;margin:0 0 5px!important;border-radius:12px!important;overflow:hidden;background:radial-gradient(circle at 50% 35%,#1d5fc4,#0a1a46 75%)!important;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--tc) 70%,#9aefff),0 2px 0 rgba(0,0,0,.18)}
 #overlay .realhub.hb .nm-tiles .hb-tile i::after{display:none!important}
@@ -3280,7 +3280,22 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 .shop-code-wrap summary{width:fit-content;color:var(--shop-muted);cursor:pointer}
 .shop-msg{margin:6px 0 0;font-size:.82em}
 .shop-msg:empty{display:none}
+.shop-preview-actions{display:flex;justify-content:flex-end;margin:-5px 0 10px}
+#overlay .shop-dialog .shop-preview-toggle{min-height:36px;padding:6px 12px;border:1px solid #6b91c8;border-radius:9px;background:#1c3b68;color:#f4f8ff;font:900 .82em/1.2 'Nunito',sans-serif}
+#overlay .shop-dialog .shop-preview-toggle:hover,#overlay .shop-dialog .shop-preview-toggle[aria-expanded=true]{background:#294f85}
+.shop-card-preview{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:center;gap:12px;margin:0 0 12px;padding:10px;background:#112747;border:1px solid #426694;border-radius:12px}
+.shop-card-preview[hidden]{display:none}
+.shop-card-preview .cz-prev{display:flex;align-items:center;gap:14px;min-height:86px;padding:8px 14px;border:1px solid #567cb9;border-radius:10px;text-align:left}
+.shop-card-preview .hud-portrait{width:50px!important;height:50px!important;margin:0;flex:none;overflow:visible}
+.shop-card-preview .cz-prev-copy{display:grid;gap:3px;min-width:0;overflow-wrap:anywhere;text-shadow:0 1px 3px #061126}
+#overlay .shop-card-preview .cz-preview-title{display:flex;align-items:center;gap:4px;color:#ffe298!important;font-size:.78em}
+.shop-preview-options{display:grid;gap:5px;font-size:.8em}
+.shop-preview-options label{display:flex;align-items:center;gap:8px;min-height:32px;cursor:pointer}
+.shop-preview-options input{width:18px;height:18px;flex:none;accent-color:#ffd35d}
+.shop-preview-options small{font-size:.9em}
 @media (max-width:690px){
+  .shop-card-preview{grid-template-columns:minmax(0,1fr)}
+  .shop-preview-actions{justify-content:flex-start}
   .shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .shop-card.featured{grid-column:1 / span 2;grid-row:auto;grid-template:1fr / minmax(0,.88fr) minmax(0,1fr)}
   .featured .shop-art{min-height:142px}
@@ -5606,7 +5621,6 @@ function showSelect(){
             <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio${labReady ? ': ' + labReady + ' mejoras disponibles' : ''}"><i><img class="nm-ic" src="ui/hub/ic_laboratorio.webp" alt=""></i><b>Laboratorio</b><small>${labReady ? labReady + (labReady === 1 ? ' mejora' : ' mejoras') : 'Mejoras'}</small>${labReady ? '<em class="nm-dot" aria-hidden="true"></em>' : ''}</button>
             <button type="button" class="hb-tile t3" id="mMaps" aria-label="Mapas: ${safeText(MAPS[runMap].name)}"><i><img class="nm-ic" src="ui/hub/ic_mapas.webp" alt=""></i><b>Mapas</b><small>${safeText(MAPS[runMap].name)}</small></button>
             <button type="button" class="hb-tile t4" id="mLog" aria-label="Logros: ${achOwned} de ${achAll}"><i><img class="nm-ic" src="ui/hub/ic_logros.webp" alt=""></i><b>Logros</b><small>${achOwned}/${achAll}</small></button>
-            <button type="button" class="hb-tile t5" id="mRecs" aria-label="Récords"><i><img class="nm-ic" src="ui/hub/ic_ranking.webp" alt=""></i><b>Récords</b><small>${recs.length ? 'Mejor ' + fmtTime(bestT) : 'Sin partidas'}</small></button>
             <button type="button" class="hb-tile t7" id="btnPlayer" aria-label="Jugador"><i><img class="nm-ic" src="ui/hub/ic_jugador.webp" alt=""></i><b>Jugador</b><small>Perfil y marcos</small></button>
           </div>
           <nav class="hb-bar" aria-label="Enlaces y ajustes">
@@ -5708,7 +5722,6 @@ function showSelect(){
     host.querySelector('#realClose').focus();
   };
   document.getElementById('rhRecords').onclick=()=>openInfo('records');
-  document.getElementById('mRecs').onclick=()=>openInfo('records');
   { const ol = document.getElementById('hbRank'), tabs = document.querySelectorAll('.hb-tabs button');
     const recKey = r => r.key || Object.keys(CHARS).find(k => CHARS[k].name === r.name || (EVO_LINE[k] || []).some(e => e.name === r.name)) || 'agumon';
     const val = (r, k) => k === 't' ? fmtTime(r.t) : k === 'lvl' ? 'Nv ' + (r.lvl || 1) : (r.kills || 0).toLocaleString('es-ES');
@@ -11910,7 +11923,17 @@ function showShop(msg = ''){
   const quest = featured.owned ? '' : `<div class="shop-quest"><div><b>${discounted ? 'Descuento conseguido' : 'Encargo de la tienda'}</b>
     <small>${discounted ? `Tu skin destacada tiene un ${SHOP_DISCOUNT_PCT}% de descuento hasta el lunes.` : `Derrota a un jefe de zona con ${CHARS[featured.k].name} y consigue un ${SHOP_DISCOUNT_PCT}% de descuento en su skin.`}</small></div>
     ${!discounted ? `<button type="button" id="shopQuest">${featured.locked ? 'Ver en Digidex' : 'Elegir mapa'}</button>` : ''}</div>`;
+  const frame = items.find(it => it.type === 'frame'), title = items.find(it => it.type === 'title');
   menuModal('Tienda semanal', `<div class="shop-meta"><span>Rotación del lunes · ${rotation}</span><strong class="shop-wallet"><img src="ui/hud/ic_bits.webp" alt="">${fmt(bits)} Bits</strong></div>
+    <div class="shop-preview-actions"><button type="button" class="shop-preview-toggle" id="shopCardToggle" aria-controls="shopCardPreview" aria-expanded="false">Ver en mi ficha</button></div>
+    <div class="shop-card-preview" id="shopCardPreview" hidden>
+      <div id="shopCardSample"></div>
+      <div class="shop-preview-options">
+        <label><input type="checkbox" id="shopCardFrame" checked><span>Marco · ${escHtml(frame.name)}</span></label>
+        <label><input type="checkbox" id="shopCardTitle" checked><span>Título · ${escHtml(title.name)}</span></label>
+        <small>Prueba las piezas con tu avatar actual.</small>
+      </div>
+    </div>
     <div class="shop-grid">${cards}</div>${quest}
     <details class="shop-code-wrap"><summary>Código de recompensa</summary>
       <div class="shop-code"><input id="shopCode" maxlength="24" aria-label="Código de recompensa" placeholder="Introduce tu código" autocomplete="off"><button type="button" id="shopRedeem">Canjear</button></div></details>
@@ -11920,6 +11943,24 @@ function showShop(msg = ''){
   dlg.classList.add('shop-dialog');
   const status = dlg.querySelector('#shopStatus');
   status.textContent = msg;
+  const toggleCard = dlg.querySelector('#shopCardToggle'), previewCard = dlg.querySelector('#shopCardPreview');
+  const sampleCard = dlg.querySelector('#shopCardSample');
+  const useFrame = dlg.querySelector('#shopCardFrame'), useTitle = dlg.querySelector('#shopCardTitle');
+  const drawCard = () => {
+    sampleCard.innerHTML = trainerCardPreview({
+      frame: useFrame.checked ? frame.id : extra.frame,
+      title: useTitle.checked ? title.id : extra.title
+    });
+  };
+  toggleCard.onclick = () => {
+    const open = previewCard.hidden;
+    if (open) drawCard();
+    previewCard.hidden = !open;
+    toggleCard.setAttribute('aria-expanded', String(open));
+    toggleCard.textContent = open ? 'Cerrar vista previa' : 'Ver en mi ficha';
+  };
+  useFrame.onchange = drawCard;
+  useTitle.onchange = drawCard;
   const reopen = m => { showSelect(); showShop(m); };
   const toDex = k => { colKey = k; colTab = 'digimon'; showCollection(); };
   dlg.querySelectorAll('[data-shop-dex]').forEach(b => b.onclick = () => toDex(b.dataset.shopDex));
@@ -12618,6 +12659,16 @@ function trainerRecordSummary(recs, roster){
     {label:'Mejor oleada', mark:wave, value:wave?.wave || '—'}
   ];
 }
+function trainerCardPreview({avatar, frame, title, background, favorite}){
+  const item = TITLES.find(x => x.id === title);
+  const key = favorite || selectedKey;
+  return `<div class="cz-prev trainer-cover" style="${trainerCoverStyle(background)}">
+    <div class="hud-portrait pf-av${frame ? ' fr-' + frame : ''}"><img src="${avatarSrc(avatar)}" alt=""></div>
+    <div class="cz-prev-copy">${trainerName ? `<b data-no-i18n>${escHtml(trainerName)}</b>` : '<b>Invitado</b>'}
+      ${item ? `<span class="cz-preview-title">${trainerTitleIcon(item)}${escHtml(item.name)}</span>` : ''}
+      ${favorite !== undefined && CHARS[key] ? `<small>${favorite ? 'Digimon favorito' : 'Compañero actual'} · ${CHARS[key].name}</small>` : ''}</div>
+    </div>`;
+}
 function showPlayer(){
   state = 'player';
   setHud(false);
@@ -12773,13 +12824,9 @@ function openCustomizer(initialTab = 'bg', trigger = document.getElementById('pl
   const normalized = value => value.normalize('NFD').replace(/\p{M}+/gu,'').toLocaleLowerCase(I18N.lang);
   const limited = () => ['dg','frame','title'].includes(tab);
   const renderPreview = () => {
-    const title = TITLES.find(x => x.id === pTitle);
-    const key = pFavorite || selectedKey;
-    box.querySelector('.cz-preview-slot').innerHTML = `<div class="cz-prev trainer-cover" style="${trainerCoverStyle(pBg)}">
-      <div class="hud-portrait pf-av${pFrame ? ' fr-' + pFrame : ''}"><img src="${avatarSrc(pAv)}" alt=""></div>
-      <div class="cz-prev-copy">${trainerName ? `<b data-no-i18n>${escHtml(trainerName)}</b>` : '<b>Invitado</b>'}
-        ${title ? `<span class="cz-preview-title">${trainerTitleIcon(title)}${escHtml(title.name)}</span>` : ''}
-        ${CHARS[key] ? `<small>${pFavorite ? 'Digimon favorito' : 'Compañero actual'} · ${CHARS[key].name}</small>` : ''}</div></div>`;
+    box.querySelector('.cz-preview-slot').innerHTML = trainerCardPreview({
+      avatar:pAv, frame:pFrame, title:pTitle, background:pBg, favorite:pFavorite
+    });
   };
   const renderList = focus => {
     const list = options().filter(item => {
