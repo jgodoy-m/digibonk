@@ -3318,12 +3318,16 @@ html.reduce-motion .living-actor.swim::after{animation:none!important}
 /* Ficha de entrenador y Laboratorio */
 .trainer-screen,.lab2{font-family:'Nunito',system-ui,sans-serif}
 .realhub.pl4.trainer-screen{
-  --trainer-scrim:linear-gradient(#f4f6fabb,#eceff5ef);
-  background:var(--trainer-scrim),url(ui/fondo_inicio.webp) center 42%/cover no-repeat!important;
+  --trainer-scrim:linear-gradient(150deg,#fff3dcd9,#d0f0eda6 48%,#edf5f2ec);
+  --trainer-paper:#fffcf2;--trainer-accent:#086258;--trainer-paper-line:#e6dac5;
+  background:var(--trainer-scrim),url(ui/fondo_inicio.webp) center 45%/cover no-repeat!important;
   color:var(--m-text);overscroll-behavior:contain
 }
-html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradient(#15131ab3,#16171af5)}
-.trainer-wrap{box-sizing:border-box;max-width:1420px;margin:auto;
+html[data-theme=oscuro] .realhub.pl4.trainer-screen{
+  --trainer-scrim:linear-gradient(150deg,#3a3343e8,#204a4fcc 51%,#273e47ef);
+  --trainer-paper:#e8f0e6;--trainer-paper-line:#ceddce
+}
+.trainer-wrap{box-sizing:border-box;max-width:1240px;margin:auto;
   padding:clamp(18px,3vw,36px) max(18px,env(safe-area-inset-right)) 36px max(18px,env(safe-area-inset-left));display:grid;gap:clamp(14px,2vw,24px)}
 .lab2-header{display:flex;align-items:center;gap:14px}
 .lab2-header h2{margin:0;font-size:clamp(18px,3.2vw,27px);line-height:1.12;color:var(--m-text);overflow-wrap:anywhere}
@@ -3332,9 +3336,12 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
 .trainer-heading{display:flex;align-items:center;gap:12px;min-width:0}
 .trainer-heading img{width:48px;height:48px;object-fit:contain;flex:none}
 .trainer-heading h2{margin:0;font-size:clamp(20px,3.1vw,34px);font-weight:900;line-height:1.12;overflow-wrap:anywhere}
-.trainer-hero,.trainer-panel,.lab2-group{min-width:0;padding:14px;background:var(--m-card);border:1px solid var(--m-cardline);border-radius:16px;color:var(--m-text);box-shadow:var(--m-shadow)}
-.trainer-hero{box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;
-  gap:clamp(18px,3vw,40px);padding:clamp(18px,3vw,32px);border-radius:24px;border-block-start:3px solid var(--m-acc)}
+.lab2-group{min-width:0;padding:14px;background:var(--m-card);border:1px solid var(--m-cardline);border-radius:16px;color:var(--m-text);box-shadow:var(--m-shadow)}
+.trainer-feature{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);align-items:center;gap:inherit}
+.trainer-hero{box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;min-width:0;
+  gap:14px clamp(12px,2vw,24px);padding:clamp(14px,2.4vw,28px);border-radius:24px;border:1px solid var(--trainer-paper-line);
+  box-shadow:0 5px 0 #775c3b44,0 12px 24px #1d2d3733}
+.trainer-hero:not(.has-trainer-bg){--trainer-muted:#4d5d59;--trainer-title:#086258;color:#233230;background:var(--trainer-paper)}
 .trainer-cover{--trainer-muted:var(--m-soft);--trainer-title:var(--m-acc);color:var(--m-text);background-color:var(--m-card)}
 .trainer-cover.has-trainer-bg{--trainer-muted:#e1e9fa;--trainer-title:#ffe298;color:#fff;
   background-image:linear-gradient(90deg,#131420ef 5%,#131420e0 38%,#13142055),var(--trainer-bg);
@@ -3351,35 +3358,54 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
 .hud-portrait.trainer-portrait.fr-mecenas{border:4px solid #ffd54f!important;background:linear-gradient(160deg,#fff7e0,#ff5e5b 45%,#29abe0)!important}
 .hud-portrait.trainer-portrait.fr-navidad{border:4px solid #1b5e20!important;background:linear-gradient(160deg,#fff,#e53935 45%,#1b5e20)!important}
 .hud-portrait.trainer-portrait:is(.fr-mecenas,.fr-navidad,[class*="fr-wk"]) img{width:100%!important;height:100%!important}
-.trainer-screen #tcAv{width:clamp(96px,10vw,132px);height:clamp(96px,10vw,132px)}
+.trainer-screen #tcAv{width:clamp(88px,9vw,120px);height:clamp(88px,9vw,120px)}
+.trainer-hero:not(.has-trainer-bg) #tcAv:not([class*="fr-"]){background:#d6e9df;border-color:#b9d4c3}
 .trainer-screen .trainer-hero #plChange{margin:4px 0 0!important;min-height:42px;letter-spacing:0;font-size:14px!important;text-align:left}
 .trainer-identity{min-width:0;display:grid;justify-items:start;gap:8px}
 .trainer-panel small,.trainer-empty{color:var(--m-soft);font-size:13px}
 .trainer-identity small{color:var(--trainer-muted);font-size:13px}
-.trainer-name{margin:0;color:inherit;font-size:clamp(25px,5vw,50px);font-weight:900;line-height:1.07;overflow-wrap:anywhere}
+.trainer-name{margin:0;color:inherit;font-size:clamp(25px,4vw,45px);font-weight:900;line-height:1.07;overflow-wrap:anywhere}
 .trainer-title{display:flex;align-items:center;gap:7px;font-size:15px;color:var(--trainer-title);overflow-wrap:anywhere}
 .trainer-title .title-badge-art{width:24px;height:24px;object-fit:contain}
 .trainer-wallet{display:inline-flex;align-items:center;gap:6px;color:var(--m-gold);font-weight:850;white-space:nowrap}
 .trainer-wallet img{width:18px;height:18px;object-fit:contain}
-.trainer-detail{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:start;gap:inherit}
-.trainer-column{display:grid;gap:inherit;min-width:0}
-.trainer-panel{padding:clamp(16px,2vw,24px);min-height:108px;border-radius:20px}
-.trainer-panel h3,.lab2-group h3{margin:0 0 9px;color:var(--m-text);font-size:15px;line-height:1.2}
-.trainer-panel h3{font-size:19px}
-.trainer-stat-board{min-height:0}
-.trainer-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;
-  padding:1px;border-radius:12px;background:var(--m-cardline);overflow:hidden}
-.trainer-stat{display:flex;align-items:center;gap:10px;min-width:0;min-height:52px;padding:10px 12px;
-  background:var(--m-sunk);overflow-wrap:anywhere}
+.trainer-detail{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(18px,4vw,50px)}
+.trainer-column{display:grid;align-content:start;gap:20px;min-width:0}
+.trainer-activity{min-width:0;padding:clamp(16px,3vw,30px);border-radius:24px;background:var(--trainer-paper);color:#233230}
+.trainer-panel{min-width:0}
+.trainer-panel h3,.lab2-group h3{margin:0 0 9px;font-size:15px;line-height:1.2}
+.trainer-panel h3{font-size:20px}
+.trainer-activity .trainer-panel small,.trainer-activity .trainer-empty,.trainer-activity .trainer-run span:nth-child(2){color:#4d5d59}
+.trainer-activity .trainer-record + .trainer-record,.trainer-activity .trainer-goal + .trainer-goal{border-color:var(--trainer-paper-line)}
+.trainer-activity .trainer-panel-action,.trainer-activity .trainer-goal-action{background:#e7efe7;border-color:#c0d3c5;color:#154f49}
+.trainer-activity :is(.trainer-pin,.trainer-digimon){background:#eef0e4}
+.trainer-stat-board{border-bottom:1px solid var(--trainer-paper-line);margin-bottom:20px;padding-bottom:16px}
+.trainer-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.trainer-stat{display:flex;align-items:center;gap:10px;min-width:0;min-height:52px;overflow-wrap:anywhere}
 .trainer-stat img{width:28px;height:28px;flex:none;object-fit:contain}
-.trainer-stat b{display:block;font-size:clamp(19px,2.4vw,29px);line-height:1.15;font-variant-numeric:tabular-nums}
-.trainer-stat small{color:var(--m-soft);font-size:13px;line-height:1.2}
-.trainer-collection{margin-top:14px;border-top:1px solid var(--m-line)}
-.trainer-collection summary{padding-block:12px 2px;color:var(--m-text);font-weight:800;cursor:pointer}
-.trainer-collection[open] summary{margin-bottom:10px}
+.trainer-stat b{display:block;color:var(--trainer-accent);font-size:clamp(21px,2.8vw,32px);line-height:1.15;font-variant-numeric:tabular-nums}
+.trainer-stat small{font-size:13px;line-height:1.2}
+.trainer-collection{margin-top:9px}
+.trainer-collection summary{padding-block:7px;color:var(--trainer-accent);font-weight:800;cursor:pointer}
+.trainer-collection[open] summary{margin-bottom:4px}
 .trainer-collection .trainer-stat{min-height:40px}
 .trainer-collection .trainer-stat b{font-size:16px}
 .trainer-collection .trainer-stat img{width:22px;height:22px}
+.trainer-device{min-width:0}
+.trainer-device h3{margin:0 0 5px;font-size:18px;line-height:1.2;text-align:center}
+.trainer-device-shell{position:relative;aspect-ratio:1752 / 897;min-height:154px;isolation:isolate}
+.trainer-device-shell>img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;filter:drop-shadow(0 6px 7px #18353640)}
+.trainer-device-screen{position:absolute;inset:19.7% 14.3% 28.8%;display:grid;grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;gap:4px;box-sizing:border-box;padding:5px clamp(4px,1vw,12px);border-radius:clamp(6px,1.4vw,17px);
+  background:linear-gradient(152deg,#dbf7e7,#b5e1d6);color:#113f38;text-align:center}
+.trainer-device-screen button{width:36px;height:44px;padding:0;border:1px solid #4a887a;border-radius:10px;background:#e9fff1;
+  color:#164a3e;font:900 22px/1 system-ui;cursor:pointer}
+.trainer-device-screen button:hover{background:#fff}
+.trainer-device-screen button:focus-visible{outline:3px solid #1b4d4b;outline-offset:2px}
+.trainer-device-view{min-width:0;line-height:1.1;overflow-wrap:anywhere}
+.trainer-device-view>strong{display:block;font-size:clamp(13px,2vw,21px)}
+.trainer-device-values{display:flex;justify-content:center;gap:4px 10px;flex-wrap:wrap;margin-top:4px;font-size:clamp(12px,1.6vw,17px);font-weight:850;font-variant-numeric:tabular-nums}
+.trainer-device-view>small{display:block;margin-top:3px;font-size:clamp(11px,1.3vw,13px);color:#25564c}
 .trainer-record{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;font-size:12px;padding:8px 0}
 .trainer-record + .trainer-record,.trainer-goal + .trainer-goal{border-top:1px solid var(--m-line)}
 .trainer-record span:first-child{min-width:0;overflow-wrap:anywhere}
@@ -3414,10 +3440,10 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
 .lab2-button.secondary{border-color:var(--m-line2);background:var(--m-card);color:var(--m-text)}
 .lab2-button:disabled{border-color:var(--m-line2);background:var(--m-sunk);color:var(--m-mute);cursor:default}
 .lab2-footer{justify-content:space-between;padding:10px 2px 2px}
-.trainer-favorite{display:flex;align-items:center;gap:12px;max-width:230px;padding:12px;border:1px solid var(--m-line);
-  border-radius:15px;background:var(--m-sunk)}
-.trainer-cover.has-trainer-bg .trainer-favorite{border-color:#fff4;background:#131420b8}
-.trainer-favorite img{width:48px;height:48px;object-fit:cover;border-radius:50%;flex:none}
+.trainer-favorite{grid-column:1/-1;display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid #c7ded0;
+  border-radius:14px;background:#e9f4e9;color:#233230}
+.trainer-cover.has-trainer-bg .trainer-favorite{border-color:#fff4;background:#17332cdb;color:#fff}
+.trainer-favorite img{width:42px;height:42px;object-fit:cover;border-radius:50%;flex:none}
 .trainer-favorite :is(b,small){display:block;overflow-wrap:anywhere}
 .trainer-favorite b{font-size:16px}
 .trainer-favorite small{font-size:13px;color:var(--trainer-muted)}
@@ -3432,7 +3458,6 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
 .trainer-pin-art{display:inline-grid;vertical-align:middle;place-items:center;width:34px;height:34px;margin-inline-end:7px;border-radius:8px;background:var(--m-card)}
 .trainer-pin-art .trainer-portrait{width:32px;height:32px}
 .trainer-record strong{font-size:17px}
-.trainer-record-heading{color:var(--m-soft);font-size:13px;margin:12px 0 3px}
 .trainer-run{grid-template-columns:minmax(0,1fr) auto auto}
 .trainer-run span:nth-child(2){color:var(--m-soft)}
 .trainer-custom{box-sizing:border-box;width:min(820px,calc(100vw - 24px));max-height:calc(100dvh - 16px);
@@ -3489,9 +3514,7 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
 .trainer-custom .cz-foot{flex:none;margin:0;padding:10px 16px;background:var(--m-sunk);border-color:var(--m-line);justify-content:flex-end}
 @media(max-width:660px){
   .realhub.pl4.trainer-screen{background-image:var(--trainer-scrim),url(ui/fondo_inicio_movil.webp)!important}
-  .trainer-detail,.lab2-grid{grid-template-columns:minmax(0,1fr)}
-  .trainer-hero{grid-template-columns:auto minmax(0,1fr);min-height:0}
-  .trainer-favorite{grid-column:1/-1;max-width:none}
+  .trainer-feature,.trainer-detail,.lab2-grid{grid-template-columns:minmax(0,1fr)}
   .trainer-heading img{width:36px;height:36px}
   .trainer-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
   .trainer-cover.has-trainer-bg{background-position:center,64% var(--trainer-bg-y,49%);
@@ -3504,7 +3527,9 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
   .trainer-screen #tcAv{width:86px;height:86px}
   .trainer-hero{gap:12px;padding:14px}
   .trainer-screen .trainer-hero #plChange{line-height:1.2;font-size:13px!important}
-  .trainer-stat{padding:9px}
+  .trainer-stat{gap:6px}
+  .trainer-device-screen button{width:29px;height:44px}
+  .trainer-device-values{gap:3px 5px}
   .trainer-run{grid-template-columns:minmax(0,1fr) auto;gap:4px 7px}
   .trainer-run span:nth-child(2){grid-row:2}
   .trainer-run strong{grid-column:2;grid-row:1/3}
@@ -12934,16 +12959,22 @@ function showPlayer(){
   const pins = pinned.map(id => unlocked.find(item => item.id === id)).map(item => `<details class="trainer-pin">
     <summary><span class="trainer-pin-art">${trainerAchievementArt(item, avatarSrc())}</span><b>${escHtml(item.name)}</b></summary>
     <p>${escHtml(item.how)}</p></details>`).join('');
-  const recList = trainerRecordSummary(recs, chars).filter(({mark}) => mark).map(({label, mark, value}) => {
-    const detail = [mark?.name, MAPS[mark?.map]?.name].filter(Boolean).map(escHtml).join(' · ');
-    return `<div class="trainer-record"><span><b>${label}</b>${detail ? '<small>' + detail + '</small>' : ''}</span><strong>${typeof value === 'number' ? number(value) : value}</strong></div>`;
-  }).join('');
   const mapTimes = loadJSON('digibonk3d-maptime', {});
-  const mapRecords = MAP_ORDER.map(map => {
-    const time = +mapTimes[map] || 0, wave = +localStorage.getItem('digibonk3d-surv-wave-' + map) || 0;
-    return time || wave ? `<div class="trainer-record"><span><b>${MAPS[map].name}</b>
-      ${wave ? `<small>Oleada ${number(wave)}</small>` : ''}</span><strong>${time ? fmtTime(time) : '—'}</strong></div>` : '';
-  }).join('');
+  const recordViews = MAP_ORDER.map(map => {
+    const time = +mapTimes[map] || 0;
+    const wave = +localStorage.getItem('digibonk3d-surv-wave-' + map) || 0;
+    return {label:MAPS[map].name, values:[time ? fmtTime(time) : '', wave ? `Oleada ${number(wave)}` : ''].filter(Boolean)};
+  });
+  for (const {label, mark, value} of trainerRecordSummary(recs, chars)){
+    if (!mark) continue;
+    const detail = [mark.name, MAPS[mark.map]?.name].filter(Boolean).join(' · ');
+    recordViews.push({label, values:[typeof value === 'number' ? number(value) : value], detail});
+  }
+  const recordsScreen = recordViews.map(({label,values,detail}, index) => `<div class="trainer-device-view"${index ? ' hidden' : ''}>
+    <strong>${escHtml(label)}</strong>
+    ${values.length ? `<div class="trainer-device-values">${values.map(value => `<span>${escHtml(value)}</span>`).join('')}</div>` : '<small>Sin récord</small>'}
+    ${detail ? `<small>${escHtml(detail)}</small>` : ''}
+  </div>`).join('');
   const recentRaw = loadJSON(TRAINER_RECORDS_KEY, {}).recent;
   const recent = Array.isArray(recentRaw) ? recentRaw.filter(r => r && Number.isFinite(r.t)).slice(0, 5) : [];
   const lastRuns = recent.map(r => `<div class="trainer-record trainer-run">
@@ -12972,37 +13003,59 @@ function showPlayer(){
           <div class="trainer-heading"><img src="ui/hub/digivice/jugador.png" alt=""><h2 id="trainerHeading">Ficha de entrenador</h2></div>
           <button type="button" class="g-back" id="plBack">← Volver</button>
         </header>
-        <section ${trainerCoverAttrs('trainer-hero')}>
-          <div class="hud-portrait trainer-portrait${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img src="${avatarSrc()}" alt=""></div>
-          <div class="trainer-identity">
-            <h3 class="trainer-name"${trainerName ? ' data-no-i18n' : ''}>${trainerName ? escHtml(trainerName) : 'Invitado'}</h3>
-            ${title ? `<strong class="trainer-title">${trainerTitleIcon(title)}${escHtml(title.name)}</strong>` : ''}
-            <button type="button" class="pl4-chg" id="plChange">Personalizar ficha</button>
-          </div>
-          ${CHARS[companion] ? `<div class="trainer-favorite"><img src="${charIcon(companion)}" alt=""><span><small>${favorite ? 'Digimon favorito' : 'Compañero actual'}</small><b>${CHARS[companion].name}</b><small>Maestría ${masteryLv(companion)}</small></span></div>` : ''}
-        </section>
-        <section class="trainer-panel trainer-stat-board" aria-labelledby="trainerStatsHeading">
-          <h3 id="trainerStatsHeading">Estadísticas del entrenador</h3>
-          <div class="trainer-stats">${statTiles(battleStats)}</div>
-          <details class="trainer-collection"><summary>Colección y recursos</summary><div class="trainer-stats">${statTiles(collectionStats)}</div></details>
-        </section>
-        <div class="trainer-detail">
-          <div class="trainer-column">
-            <section class="trainer-panel"><h3>Últimas partidas</h3>${lastRuns || '<p class="trainer-empty">Las próximas partidas aparecerán aquí al terminarlas.</p>'}</section>
-            <section class="trainer-panel"><h3>Récords por mapa</h3>${mapRecords || '<p class="trainer-empty">Todavía no hay récords por mapa.</p>'}
-              ${recList ? `<h4 class="trainer-record-heading">Mejores marcas</h4>${recList}` : ''}</section>
-            <section class="trainer-panel"><h3>Digimon con más bajas</h3><div class="trainer-digimon-grid">${specialists}</div></section>
-          </div>
-          <div class="trainer-column">
-            <section class="trainer-panel trainer-showcase"><div class="trainer-panel-head"><h3>Logros destacados</h3><button type="button" class="trainer-panel-action" id="trainerPins">Elegir logros</button></div>
-              ${pins ? `<div class="trainer-pin-grid">${pins}</div>` : '<p class="trainer-empty">Puedes fijar hasta tres logros conseguidos.</p>'}</section>
-            <section class="trainer-panel trainer-goals"><h3>Próximos logros</h3>${achievements}</section>
+        <div class="trainer-feature">
+          <section ${trainerCoverAttrs('trainer-hero')}>
+            <div class="hud-portrait trainer-portrait${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img src="${avatarSrc()}" alt=""></div>
+            <div class="trainer-identity">
+              <h3 class="trainer-name"${trainerName ? ' data-no-i18n' : ''}>${trainerName ? escHtml(trainerName) : 'Invitado'}</h3>
+              ${title ? `<strong class="trainer-title">${trainerTitleIcon(title)}${escHtml(title.name)}</strong>` : ''}
+              <button type="button" class="pl4-chg" id="plChange">Personalizar ficha</button>
+            </div>
+            ${CHARS[companion] ? `<div class="trainer-favorite"><img src="${charIcon(companion)}" alt=""><span><small>${favorite ? 'Digimon favorito' : 'Compañero actual'}</small><b>${CHARS[companion].name}</b><small>Maestría ${masteryLv(companion)}</small></span></div>` : ''}
+          </section>
+          <section class="trainer-device" aria-labelledby="trainerDeviceHeading">
+            <h3 id="trainerDeviceHeading">Récords</h3>
+            <div class="trainer-device-shell">
+              <img src="ui/trainer-digivice.png" alt="" width="898" height="460">
+              <div class="trainer-device-screen" id="trainerDeviceScreen">
+                <button type="button" id="trainerRecordPrev" aria-label="Récord anterior">‹</button>
+                <div aria-live="polite" aria-atomic="true">${recordsScreen}</div>
+                <button type="button" id="trainerRecordNext" aria-label="Récord siguiente">›</button>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="trainer-activity">
+          <section class="trainer-panel trainer-stat-board" aria-labelledby="trainerStatsHeading">
+            <h3 id="trainerStatsHeading">Estadísticas del entrenador</h3>
+            <div class="trainer-stats">${statTiles(battleStats)}</div>
+            <details class="trainer-collection"><summary>Colección y recursos</summary><div class="trainer-stats">${statTiles(collectionStats)}</div></details>
+          </section>
+          <div class="trainer-detail">
+            <div class="trainer-column">
+              <section class="trainer-panel"><h3>Últimas partidas</h3>${lastRuns || '<p class="trainer-empty">Las próximas partidas aparecerán aquí al terminarlas.</p>'}</section>
+              <section class="trainer-panel"><h3>Digimon con más bajas</h3><div class="trainer-digimon-grid">${specialists}</div></section>
+            </div>
+            <div class="trainer-column">
+              <section class="trainer-panel trainer-showcase"><div class="trainer-panel-head"><h3>Logros destacados</h3><button type="button" class="trainer-panel-action" id="trainerPins">Elegir logros</button></div>
+                ${pins ? `<div class="trainer-pin-grid">${pins}</div>` : '<p class="trainer-empty">Puedes fijar hasta tres logros conseguidos.</p>'}</section>
+              <section class="trainer-panel trainer-goals"><h3>Próximos logros</h3>${achievements}</section>
+            </div>
           </div>
         </div>
       </div>
     </main>`);
   document.getElementById('plBack').onclick = showSelect;
   document.getElementById('plChange').onclick = () => openCustomizer();
+  const recordsDisplay = [...document.getElementById('trainerDeviceScreen').querySelectorAll('.trainer-device-view')];
+  let recordPage = 0;
+  const browseRecords = step => {
+    recordsDisplay[recordPage].hidden = true;
+    recordPage = (recordPage + step + recordsDisplay.length) % recordsDisplay.length;
+    recordsDisplay[recordPage].hidden = false;
+  };
+  document.getElementById('trainerRecordPrev').onclick = () => browseRecords(-1);
+  document.getElementById('trainerRecordNext').onclick = () => browseRecords(1);
   const pinsButton = document.getElementById('trainerPins');
   pinsButton.onclick = () => openCustomizer('pins', pinsButton);
   const playGoal = document.getElementById('trainerGoalPlay');
