@@ -1169,14 +1169,14 @@ body:has(.tr11) #hudTop{display:none!important}
 .hud-portrait.fr-esperanza_angelical::before,.rw-frame.fr-esperanza_angelical{background-image:url(ui/marcos/esperanza_angelical.webp)}
 .hud-portrait.fr-sinceridad_palmon::before,.rw-frame.fr-sinceridad_palmon{background-image:url(ui/marcos/sinceridad_palmon.webp)}
 .hud-portrait.fr-bondad_botanica::before,.rw-frame.fr-bondad_botanica{background-image:url(ui/marcos/bondad_botanica.webp)}
-.hud-portrait.fr-tienda_agumon::before,.rw-frame.fr-tienda_agumon{background-image:url(ui/marcos/tienda_agumon.webp?v=2)}
-.hud-portrait.fr-tienda_gabumon::before,.rw-frame.fr-tienda_gabumon{background-image:url(ui/marcos/tienda_gabumon.webp?v=2)}
-.hud-portrait.fr-tienda_patamon::before,.rw-frame.fr-tienda_patamon{background-image:url(ui/marcos/tienda_patamon.webp?v=2)}
-.hud-portrait.fr-tienda_gatomon::before,.rw-frame.fr-tienda_gatomon{background-image:url(ui/marcos/tienda_gatomon.webp?v=2)}
-.hud-portrait.fr-tienda_leomon::before,.rw-frame.fr-tienda_leomon{background-image:url(ui/marcos/tienda_leomon.webp?v=2)}
-.hud-portrait.fr-tienda_hagurumon::before,.rw-frame.fr-tienda_hagurumon{background-image:url(ui/marcos/tienda_hagurumon.webp?v=2)}
-.hud-portrait.fr-tienda_frigimon::before,.rw-frame.fr-tienda_frigimon{background-image:url(ui/marcos/tienda_frigimon.webp?v=2)}
-.hud-portrait.fr-tienda_wizardmon::before,.rw-frame.fr-tienda_wizardmon{background-image:url(ui/marcos/tienda_wizardmon.webp?v=2)}
+.hud-portrait.fr-tienda_agumon::before,.rw-frame.fr-tienda_agumon{background-image:url(ui/marcos/tienda_agumon.png)}
+.hud-portrait.fr-tienda_gabumon::before,.rw-frame.fr-tienda_gabumon{background-image:url(ui/marcos/tienda_gabumon.png)}
+.hud-portrait.fr-tienda_patamon::before,.rw-frame.fr-tienda_patamon{background-image:url(ui/marcos/tienda_patamon.png)}
+.hud-portrait.fr-tienda_gatomon::before,.rw-frame.fr-tienda_gatomon{background-image:url(ui/marcos/tienda_gatomon.png)}
+.hud-portrait.fr-tienda_leomon::before,.rw-frame.fr-tienda_leomon{background-image:url(ui/marcos/tienda_leomon.png)}
+.hud-portrait.fr-tienda_hagurumon::before,.rw-frame.fr-tienda_hagurumon{background-image:url(ui/marcos/tienda_hagurumon.png)}
+.hud-portrait.fr-tienda_frigimon::before,.rw-frame.fr-tienda_frigimon{background-image:url(ui/marcos/tienda_frigimon.png)}
+.hud-portrait.fr-tienda_wizardmon::before,.rw-frame.fr-tienda_wizardmon{background-image:url(ui/marcos/tienda_wizardmon.png)}
 .rw-frame[class*="fr-tienda_"]::after{display:none}
 .pl4-chg{position:relative;z-index:5}
 .pl4-av .hud-portrait{width:96px!important;height:96px!important}
@@ -12232,7 +12232,7 @@ const SHOP_COSMETICS = {
 const titleBadge = item => item?.art ? `<img class="title-badge-art" src="${item.art}" alt="" decoding="async">` : '';
 const shopCosmetics = type => Object.entries(SHOP_COSMETICS).map(([key, set]) => ({
   id:'tienda_' + key, name:set[type], tier:'r', how:'Tienda semanal',
-  ...(type === 'title' ? {art:`ui/titulos/tienda_${key}.png`} : {})
+  ...(type === 'title' ? {art:`ui/titulos/tienda_${key}.png?v=2`} : {})
 }));
 const FRAMES = [
   ...shopCosmetics('frame'),
