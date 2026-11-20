@@ -1732,3 +1732,11 @@ I18N.add('en', {
   "Órbita arcana": "Arcane Orbit",
   "Tejedor de Relámpagos": "Lightning Weaver"
 });
+
+I18N.add('en', {
+  "Ver en mi ficha": "Preview on my profile",
+  "Cerrar vista previa": "Close preview",
+  "Marco · {0}": "Frame · {0}",
+  "Título · {0}": "Title · {0}",
+  "Prueba las piezas con tu avatar actual.": "Try the items with your current avatar."
+});
