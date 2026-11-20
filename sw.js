@@ -5,7 +5,7 @@
 //   actualizan por detrás. Se guardan a medida que el juego los pide, así que lo que ya se ha jugado funciona offline.
 // - Nada de otros dominios (nube, ranking, Ko-fi): pasa directo a la red y nunca se guarda.
 // - Al cambiar VERSION se borran las copias viejas.
-const VERSION = 'digibonk-v1';
+const VERSION = 'digibonk-v2';
 const CORE = [
   './', 'index.html', 'manifest.webmanifest', 'sitio.json',
   'i18n/i18n.js', 'fonts/fonts.css', 'vendor/three.module.min.js',
