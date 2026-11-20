@@ -2813,7 +2813,7 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
 #overlay .realhub.hb .hb-bar .hb-btn{flex:none}
 /* Digivice de récords: la carcasa PNG rodea la pantalla y sus controles reales. */
 #overlay .realhub.hb .hb-record-device{
-  position:relative; width:min(100%,380px); min-height:400px; aspect-ratio:0.85;
+  position:relative; width:min(100%,400px); min-height:550px; aspect-ratio:0.72;
   justify-self:center; align-self:center; margin-inline:auto;
   background:url('ui/hub/records-digivice.png') center/100% 100% no-repeat;
 }
@@ -2821,7 +2821,7 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
   --records-surface:#0d1c30; --records-ink:#e9f9ff; --records-muted:#abc8db;
   --records-well:#162e46; --records-line:#36566f; --records-active:#9de8fa;
   position:absolute; inset:14.8% 7.8% 17%; display:flex; flex-direction:column; gap:5px;
-  padding:8px; border:1px solid var(--records-line); border-radius:8px; min-width:0;
+  padding:7px; border:1px solid var(--records-line); border-radius:8px; min-width:0;
   background:var(--records-surface); color:var(--records-ink); text-align:left;
   box-shadow:inset 0 0 16px #1e58752f; color-scheme:dark;
 }
@@ -2831,15 +2831,26 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
   color-scheme:light;
 }
 #overlay .realhub.hb .hb-record-head{
-  display:flex; align-items:center; gap:7px; min-width:0;
-  padding:0 0 5px; border-bottom:1px solid var(--records-line);
+  display:flex; align-items:center; gap:7px; flex:none; width:100%; min-width:0;
+  padding:6px; border:1px solid #e2a447; border-radius:6px; text-align:left; cursor:pointer;
+  background:repeating-linear-gradient(135deg,#fff3be28 0 8px,transparent 8px 16px),linear-gradient(110deg,#ffd574,#ed9e36);
+  color:#36230e;
 }
-#overlay .realhub.hb .hb-record-head img{width:31px;height:31px;flex:none;object-fit:contain}
-#overlay .realhub.hb .hb-record-head h2{
-  margin:0; color:var(--records-ink); font:900 17px/1.05 'Nunito',sans-serif;
+#overlay .realhub.hb .hb-record-head img{width:33px;height:33px;flex:none;object-fit:contain}
+#overlay .realhub.hb .hb-record-head span{min-width:0}
+#overlay .realhub.hb .hb-record-head b{
+  display:block; font:900 clamp(12px,1.1vw,16px)/1.08 'Nunito',sans-serif;
 }
-#overlay .realhub.hb .hb-record-head small{
-  display:block; margin-top:2px; color:var(--records-muted); font-size:11px;
+#overlay .realhub.hb .hb-record-head small{display:block;margin-top:2px;font-size:10px;font-weight:800;line-height:1.15}
+#overlay .realhub.hb .hb-record-map{
+  display:flex; align-items:center; flex:none; gap:6px; min-width:0; min-height:34px; padding:2px 6px;
+  border:1px solid var(--records-line); border-radius:6px; background:var(--records-well); color:var(--records-ink);
+}
+#overlay .realhub.hb .hb-record-map img{width:23px;height:23px;flex:none;object-fit:contain}
+#overlay .realhub.hb .hb-record-map span{font:850 10px/1 'Nunito',sans-serif;color:var(--records-muted)}
+#overlay .realhub.hb .hb-record-map select{
+  flex:1; min-width:0; width:100%; min-height:29px; margin:0; padding:3px; border:0;
+  background:var(--records-well); color:var(--records-ink); font:900 12px/1.2 'Nunito',sans-serif; cursor:pointer;
 }
 #overlay .realhub.hb .hb-record-screen .hb-tabs{
   display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:3px;
@@ -2874,12 +2885,21 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 }
 #overlay .realhub.hb .hb-record-screen .hb-rank li{
   display:flex; align-items:center; gap:5px; min-width:0; padding:4px;
-  border-radius:4px; background:var(--records-well);
+  border:1px solid transparent; border-radius:7px; background:var(--records-well);
 }
 #overlay .realhub.hb .hb-record-screen .hb-rank em{
   flex:none; width:19px; height:19px; border-radius:50%; display:grid; place-items:center;
   color:var(--records-surface); background:var(--records-active); font:900 10px/1 'Nunito',sans-serif;
 }
+#overlay .realhub.hb .hb-record-screen .hb-rank li.podium{
+  min-height:43px; border-color:var(--podium-line);
+  background:linear-gradient(90deg,color-mix(in srgb,var(--podium-line) 22%,var(--records-well)),var(--records-well));
+}
+#overlay .realhub.hb .hb-record-screen .hb-rank li.p1{--podium-line:#d5a542}
+#overlay .realhub.hb .hb-record-screen .hb-rank li.p2{--podium-line:#a5b4cf}
+#overlay .realhub.hb .hb-record-screen .hb-rank li.p3{--podium-line:#bc8158}
+#overlay .realhub.hb .hb-record-screen .hb-rank li.podium img{width:31px;height:31px}
+#overlay .realhub.hb .hb-record-screen .hb-rank li.podium strong{font-size:14px}
 #overlay .realhub.hb .hb-record-screen .hb-rank li.p1 em{background:#ffd37a;color:#513300}
 #overlay .realhub.hb .hb-record-screen .hb-rank li.p2 em{background:#d8e4ec;color:#1d3549}
 #overlay .realhub.hb .hb-record-screen .hb-rank li.p3 em{background:#ffc39a;color:#582800}
@@ -2896,16 +2916,21 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 #overlay .realhub.hb .hb-record-screen .hb-rank .hb-empty{
   justify-content:center; text-align:center; color:var(--records-muted); padding:7px; font-size:11px;
 }
+#overlay .realhub.hb .hb-record-actions{display:grid;grid-template-columns:2fr 1fr;gap:4px;flex:none}
 #overlay .realhub.hb .hb-record-screen .hb-all{
-  flex:none; min-height:32px; margin:0; padding:4px 6px; border:1px solid var(--records-line);
-  border-radius:5px; background:var(--records-active); color:var(--records-surface);
-  font:900 11.5px/1.2 'Nunito',sans-serif; cursor:pointer;
+  min-width:0; min-height:33px; margin:0; padding:4px 5px; border:1px solid var(--records-line);
+  border-radius:6px; background:var(--records-well); color:var(--records-ink);
+  font:900 10.5px/1.15 'Nunito',sans-serif; cursor:pointer;
 }
-#overlay .realhub.hb .hb-record-screen :is(button,.hb-record-list):focus-visible{
+#overlay .realhub.hb .hb-record-screen .hb-record-online{
+  background:repeating-linear-gradient(135deg,#c1e5ff20 0 8px,transparent 8px 16px),linear-gradient(#427cce,#2354a0);
+  color:#fff; border-color:#659ce0;
+}
+#overlay .realhub.hb .hb-record-screen :is(button,select,.hb-record-list):focus-visible{
   outline:2px solid var(--records-ink); outline-offset:-2px;
 }
 @media (pointer:coarse){
-  #overlay .realhub.hb .hb-record-screen :is(.hb-tabs button,.hb-all){min-height:44px}
+  #overlay .realhub.hb .hb-record-screen :is(.hb-tabs button,.hb-all,select){min-height:44px}
 }
 @media (orientation:landscape) and (max-height:500px){
   #overlay .realhub.hb .hb-record-device{margin-block:12px}
@@ -6022,20 +6047,30 @@ function showSelect(){
         </div>
         <aside class="hb-record-device" aria-labelledby="hbRecordsTitle">
           <div class="hb-record-screen">
-            <header class="hb-record-head">
-              <img src="ui/hub/digivice/ranking.png" alt="">
-              <div><h2 id="hbRecordsTitle">Tus récords</h2><small>${recs.length ? recs.length + ' partidas guardadas' : 'Juega para entrar en la tabla'}</small></div>
-            </header>
+            <button type="button" class="hb-record-head" id="hubRecordsSeason" aria-haspopup="dialog">
+              <img src="ui/hub/digivice/evento.png" alt="">
+              <span><b id="hbRecordsTitle">Señal de File Island</b><small>${seasonStatus(seasonData())}</small></span>
+            </button>
             <div class="hb-tabs" role="tablist" aria-label="Ordenar récords">
               <button type="button" role="tab" id="hbRecordsKills" aria-selected="true" aria-controls="hbRecordsPanel" data-k="kills">Bajas</button>
               <button type="button" role="tab" id="hbRecordsTrial" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="trial">Contrarreloj</button>
               <button type="button" role="tab" id="hbRecordsSurvival" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="survival">Supervivencia</button>
             </div>
+            <label class="hb-record-map">
+              <img src="ui/hub/digivice/mapas.png" alt=""><span>Mapa</span>
+              <select id="hbRecordsMap">
+                <option value="">Global · Mis marcas</option>
+                ${MAP_ORDER.map(map => `<option value="${map}">${safeText(MAPS[map].name)}</option>`).join('')}
+              </select>
+            </label>
             <div class="hb-lbrow" id="hbRecordsSummary" aria-live="polite"></div>
             <div class="hb-record-list" id="hbRecordsPanel" role="tabpanel" aria-labelledby="hbRecordsKills" tabindex="0">
               <ol class="hb-rank" id="hbRank"></ol>
             </div>
-            <button type="button" class="hb-all" id="rhRecords">Ver todos los récords</button>
+            <div class="hb-record-actions">
+              <button type="button" class="hb-all hb-record-online" id="hbRecordsOnline">Clasificación online</button>
+              <button type="button" class="hb-all" id="rhRecords">Mi historial</button>
+            </div>
           </div>
         </aside>
         <footer class="hb-legal">${t('legal')} <button type="button" class="hb-credits" id="hmCredits">Créditos</button></footer>
@@ -6119,28 +6154,52 @@ function showSelect(){
     host.querySelector('#realClose').focus();
   };
   document.getElementById('rhRecords').onclick=event=>openInfo('records',event.currentTarget);
+  document.getElementById('hubRecordsSeason').onclick=event=>showSeason(event.currentTarget);
   { const ol = document.getElementById('hbRank'), panel = document.getElementById('hbRecordsPanel');
     const tabs = [...document.querySelectorAll('.hb-record-screen .hb-tabs button')];
     const summary = document.getElementById('hbRecordsSummary');
+    const mapFilter = document.getElementById('hbRecordsMap');
+    let mode = 'kills';
     const recKey = r => r.key || Object.keys(CHARS).find(k => CHARS[k].name === r.name || (EVO_LINE[k] || []).some(e => e.name === r.name)) || 'agumon';
     const stat = (label, value) => `<span><b>${safeText(value)}</b><small>${safeText(label)}</small></span>`;
     const empty = '<li class="hb-empty">Todavía no hay partidas. ¡Empieza una!</li>';
     const number = value => Number(value || 0).toLocaleString(LANG);
     const time = seconds => seconds > 0 ? fmtTime(seconds) : '—';
-    const row = (rank, name, value, key, note) => `<li class="p${rank}">
+    const row = (rank, name, value, key, note, podium = true) => `<li class="${podium && rank <= 3 ? 'podium p' + rank : ''}">
       <em>${rank}</em>${key ? `<img src="${charIcon(key)}" alt="" onerror="this.style.visibility='hidden'">` : ''}
       <span><b>${safeText(name)}</b>${note ? `<small>${safeText(note)}</small>` : ''}</span>
       <strong>${safeText(value)}</strong>
     </li>`;
-    const draw = mode => {
+    const draw = () => {
+      const map = mapFilter.value;
       if (mode === 'trial'){
+        if (map){
+          const seconds = trialTimes[map];
+          summary.innerHTML = stat('Mejor victoria', time(seconds)) + stat('Estado', seconds ? 'Completado' : 'Pendiente');
+          ol.innerHTML = row(MAP_ORDER.indexOf(map) + 1, MAPS[map].name, time(seconds), '', '', false);
+          return;
+        }
         const {maps, completed, total} = timeTrialSummary(trialTimes);
         summary.innerHTML = stat(completed === maps.length ? 'Tiempo total' : 'Tiempo parcial', time(total))
           + stat('Mapas completados', `${completed}/${maps.length}`);
-        ol.innerHTML = maps.map(([map, seconds], i) => row(i + 1, MAPS[map].name, time(seconds), '', seconds ? 'Completado' : 'Pendiente')).join('');
+        ol.innerHTML = maps.map(([map, seconds], i) => row(i + 1, MAPS[map].name, time(seconds), '', seconds ? 'Completado' : 'Pendiente', false)).join('');
         return;
       }
       if (mode === 'survival'){
+        if (map){
+          const wave = Number(localStorage.getItem('digibonk3d-surv-wave-' + map)) || 0;
+          const runs = [...recs, ...recentRecords].filter(r => r?.map === map && r.wave && !r.weekly);
+          const marks = new Map();
+          for (const run of runs){
+            const key = recKey(run);
+            const old = marks.get(key);
+            if (!old || run.t > old.t) marks.set(key, run);
+          }
+          const list = [...marks.values()].sort((a, b) => b.t - a.t);
+          summary.innerHTML = stat('Mejor tiempo registrado', time(list[0]?.t)) + stat('Mejor oleada', wave || '—');
+          ol.innerHTML = list.slice(0, 7).map((run, i) => row(i + 1, run.name, time(run.t), recKey(run), `Oleada ${run.wave}`)).join('') || empty;
+          return;
+        }
         const list = Object.keys(CHARS).map(key => [key, Number(survBest(key))])
           .filter(([, seconds]) => Number.isFinite(seconds) && seconds > 0)
           .sort((a, b) => b[1] - a[1]);
@@ -6150,10 +6209,11 @@ function showSelect(){
         return;
       }
       const best = savedRecords.kills;
-      const list = best && !recs.some(run => run.key === best.key && run.map === best.map && run.t === best.t && run.kills === best.kills)
-        ? [...recs, best] : recs.slice();
-      list.sort((a, b) => b.kills - a.kills || b.t - a.t);
-      summary.innerHTML = stat('Bajas totales', number(kills)) + stat('Más bajas en una partida', list.length ? number(list[0].kills) : '—');
+      const runs = best && !recs.some(run => run.key === best.key && run.map === best.map && run.t === best.t && run.kills === best.kills)
+        ? [...recs, best] : recs;
+      const list = runs.filter(run => !map || run.map === map).sort((a, b) => b.kills - a.kills || b.t - a.t);
+      summary.innerHTML = (map ? stat('Partidas registradas', list.length) : stat('Bajas totales', number(kills)))
+        + stat('Más bajas en una partida', list.length ? number(list[0].kills) : '—');
       ol.innerHTML = list.slice(0, 7).map((run, i) => row(i + 1, run.name, number(run.kills), recKey(run), MAPS[run.map]?.name)).join('') || empty;
     };
     const selectTab = tab => {
@@ -6163,7 +6223,8 @@ function showSelect(){
         button.tabIndex = active ? 0 : -1;
       });
       panel.setAttribute('aria-labelledby', tab.id);
-      draw(tab.dataset.k);
+      mode = tab.dataset.k;
+      draw();
       panel.scrollTop = 0;
     };
     tabs.forEach((tab, index) => {
@@ -6181,7 +6242,13 @@ function showSelect(){
         tabs[target].focus();
       };
     });
-    draw('kills'); }
+    mapFilter.onchange = () => { draw(); panel.scrollTop = 0; };
+    document.getElementById('hbRecordsOnline').onclick = () => {
+      Rk.mode = mode === 'survival' ? 'surv' : 'normal';
+      Rk.map = mapFilter.value || runMap;
+      showRanking('select');
+    };
+    draw(); }
   clearInterval(newsTimer);
 }
 // Guía «Cómo jugar»: diez pantallas en cuatro capítulos. Cada una tiene un vídeo grabado del propio juego
