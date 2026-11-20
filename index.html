@@ -3538,6 +3538,46 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
   .trainer-screen .trainer-hero{min-height:110px;padding-block:8px}
   .trainer-screen .trainer-hero #tcAv{width:55px;height:55px}
 }
+/* Movimiento ambiental y novedades del menú principal. */
+#overlay .realhub.hb button.hb-version{height:32px;padding:0 10px;border:1px solid #ffe59c;background:#ffcf66;color:#292014;font:900 12px/1 'Nunito',system-ui,sans-serif;white-space:nowrap;touch-action:manipulation}
+#overlay .realhub.hb button.hb-version:hover{background:#ffe190}
+#overlay .realhub.hb button.hb-version:focus-visible{outline:2px solid #d6f4ff;outline-offset:3px}
+.hub-atmosphere{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none}
+.hub-atmosphere>span{position:absolute;display:block;transform-origin:center;pointer-events:none}
+.hub-aurora-glow{top:1%;left:29%;width:64%;height:50%;opacity:.65;
+  background:radial-gradient(ellipse at 62% 22%,#57f4e945,transparent 43%),radial-gradient(ellipse at 75% 38%,#8d72ff30,transparent 65%);
+  animation:hub-aurora-drift 16s ease-in-out infinite alternate}
+.hub-portal-glow{left:60%;top:20%;width:23%;height:37%;opacity:.55;
+  background:radial-gradient(ellipse at center,#8cfafd41 4%,#56b3fc2e 26%,transparent 67%);
+  animation:hub-portal-breathe 8s ease-in-out infinite alternate}
+.hub-reflection{left:41%;top:69%;width:44%;height:25%;opacity:.62;
+  background:radial-gradient(ellipse at 64% 52%,#73dafa46,transparent 67%);
+  animation:hub-water-drift 12s ease-in-out infinite alternate}
+.hub-data-spark{position:absolute;left:var(--sx);top:var(--sy);width:clamp(3px,.45vw,5px);aspect-ratio:1;
+  border-radius:1px;background:#93e6ff;box-shadow:0 0 7px #61d7f8;opacity:.35;transform:rotate(45deg);
+  animation:hub-data-drift 10s var(--delay) linear infinite}
+@keyframes hub-aurora-drift{from{transform:translate(-5%,3%) rotate(-9deg);opacity:.42}to{transform:translate(7%,-4%) rotate(6deg);opacity:.83}}
+@keyframes hub-portal-breathe{from{transform:scale(.83);opacity:.42}to{transform:scale(1.13);opacity:.83}}
+@keyframes hub-water-drift{from{transform:translateX(-5%) scaleX(.83);opacity:.35}to{transform:translateX(7%) scaleX(1.12);opacity:.66}}
+@keyframes hub-data-drift{0%{transform:translateY(15px) rotate(45deg);opacity:0}23%,64%{opacity:.68}100%{transform:translateY(-75px) rotate(100deg);opacity:0}}
+@media(max-width:700px){
+  .hub-aurora-glow,.hub-reflection{left:17%;width:79%}
+  .hub-portal-glow{left:42%;width:49%}
+  .hub-data-spark:nth-of-type(even){display:none}
+}
+html.reduce-motion .hub-atmosphere :is(span,i){animation:none!important}
+html.reduce-motion .hub-data-spark{display:none}
+@media(prefers-reduced-motion:reduce){
+  .hub-atmosphere :is(span,i){animation:none!important}
+  .hub-data-spark{display:none}
+}
+#overlay .approved-info-dialog.menu-release-dialog{text-align:left}
+.menu-release-meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;font-size:.84em}
+.menu-release-meta b{border:1px solid var(--m-line2);border-radius:999px;background:var(--m-sunk);padding:4px 10px}
+.menu-release-meta time{color:var(--m-mute)}
+.menu-release-list{display:grid;gap:7px;padding:0;margin:0 0 12px;list-style:none}
+.menu-release-list li{border:1px solid var(--m-line);border-radius:10px;background:var(--m-sunk);padding:8px 10px;font-size:.88em}
+.menu-release-list li p{margin:2px 0 0;font-size:.9em;line-height:1.4}
 </style>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.min.js" } }
@@ -5613,6 +5653,24 @@ function hubLife(){
     parade: `<div class="lv-parade" aria-hidden="true">${parade}</div>`
   };
 }
+const MENU_RELEASE = {
+  version: '0.1.0',
+  date: '2026-11-20',
+  changes: [
+    ['Inicio animado', 'El portal, la aurora y los reflejos se mueven en el menú. Puedes reducir el movimiento desde Ajustes.'],
+    ['Ranking online', 'Abre la clasificación desde el inicio y filtra por mapa, modo, dificultad y región.'],
+    ['Tienda semanal', 'Prueba el marco y el título de la semana en tu propia ficha antes de comprarlos.'],
+    ['Ficha de entrenador', 'Personaliza tu fondo, consulta las marcas por mapa y destaca hasta tres logros.'],
+    ['Iconos Digivice', 'El menú principal tiene 16 iconos ilustrados.']
+  ]
+};
+function showMenuRelease(trigger){
+  const date = new Intl.DateTimeFormat(I18N.lang, {dateStyle:'long', timeZone:'UTC'}).format(new Date(MENU_RELEASE.date));
+  const entries = MENU_RELEASE.changes.map(([name, detail]) => `<li><strong>${name}</strong><p>${detail}</p></li>`).join('');
+  menuModal('Novedades', `<div class="menu-release-meta"><b>Beta ${MENU_RELEASE.version}</b><time datetime="${MENU_RELEASE.date}" data-no-i18n>${date}</time></div>
+    <ul class="menu-release-list">${entries}</ul>`, () => trigger.focus());
+  document.querySelector('#realModalHost .approved-info-dialog')?.classList.add('menu-release-dialog');
+}
 function showSelect(){
   if (mapLoad.on) mapLoadCancel();   // se vuelve al menú con una carga a medias: la capa no puede quedarse encima
   if (typeof Cloud !== 'undefined' && Cloud.pending){ cloudShowConflict(); return; }
@@ -5640,9 +5698,14 @@ function showSelect(){
   const savedTxt = saved ? `${safeText(stageName(saved.key, saved.evolved))} · Nv ${saved.g.p.lvl | 0} · ${fmtTime(Math.floor(+saved.g.t || 0))}` : '';
   showOverlay(`
     <main class="realhub hb" aria-label="Menú principal Digibonk">
-      <div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><div class="rw-scenery-core"></div><div class="rw-aurora"></div><div class="rw-light"></div><div class="rw-water"></div><div class="rw-stars"></div>${life.stage}</div>
+      <div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><div class="rw-scenery-core"></div><div class="rw-aurora"></div><div class="rw-light"></div><div class="rw-water"></div><div class="rw-stars"></div>
+        <div class="hub-atmosphere"><span class="hub-aurora-glow"></span><span class="hub-portal-glow"></span><span class="hub-reflection"></span>
+          ${[[58,51,0],[70,58,-3],[77,54,-7],[66,67,-4],[80,44,-8],[62,41,-5]].map(([x,y,delay]) =>
+            `<i class="hub-data-spark" style="--sx:${x}%;--sy:${y}%;--delay:${delay}s"></i>`).join('')}
+        </div>${life.stage}</div>
       <header class="hb-top">
         <div class="hb-utils">
+          <button class="hb-pill hb-version" id="hubRelease" type="button" aria-haspopup="dialog" title="Ver novedades">Beta ${MENU_RELEASE.version}</button>
           <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma"><img class="nm-ic" src="ui/hub/digivice/idioma.png" alt="">${LANG.toUpperCase()}</button>
           <button class="hb-pill hb-app" type="button" id="rhApp" aria-label="Instalar la app" title="Instalar la app"${appCanInstall() ? '' : ' hidden'}><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m-5-5 5 5 5-5M5 20h14"/></svg><span>App</span></button>
           <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>
@@ -5656,7 +5719,7 @@ function showSelect(){
       </header>
       <section class="hb-main">
         <div class="hb-left">
-          <h1 class="hb-brand"><span class="hb-logo-bg" aria-hidden="true"><i class="lb-glow"></i><i class="lb-orbit"><i class="lb-ring"></i></i><i class="lb-orbit lb-orbit2"><i class="lb-ring"></i></i><i class="lb-sparks"><i></i><i></i><i></i><i></i><i></i><i></i></i></span><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span><span class="hb-ver">BETA</span></h1>
+          <h1 class="hb-brand"><span class="hb-logo-bg" aria-hidden="true"><i class="lb-glow"></i><i class="lb-orbit"><i class="lb-ring"></i></i><i class="lb-orbit lb-orbit2"><i class="lb-ring"></i></i><i class="lb-sparks"><i></i><i></i><i></i><i></i><i></i><i></i></i></span><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span></h1>
           ${life.parade}
           ${saved ? `<button type="button" class="hb-continue" id="hbContinue" aria-label="Continuar partida guardada"><i><img src="${charIcon(saved.key)}" alt=""></i><span class="hbc-txt"><small>Partida guardada</small><b>Continuar partida</b></span><span class="hbc-info"><em>${savedTxt}</em><small><span>${safeText(MAPS[saved.map].name)}</span> · <span>${safeText(DIFFS[saved.diff].name)}</span>${saved.mode === 'surv' ? ' · <span>Supervivencia</span>' : saved.weekly ? ' · <span>Reto semanal</span>' : ''}</small></span><span class="hbc-go" aria-hidden="true">▶</span></button>` : ''}
           <div class="hb-modes nm-modes">
@@ -5756,6 +5819,7 @@ function showSelect(){
   document.getElementById('hmLogout').onclick=()=>logoutProfile();
   document.getElementById('rhProfile').onclick=showPlayer;
   document.getElementById('rhLang').onclick=toggleLang;
+  document.getElementById('hubRelease').onclick = e => showMenuRelease(e.currentTarget);
   document.getElementById('rhApp').onclick=()=>installEvt?installApp():openInfo('app');
   document.getElementById('rhFullscreen').onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{})};
   bindMenuFX();
@@ -11789,11 +11853,11 @@ function checkEncargos(){
   return won;
 }
 // Ventana del menú (mismo estilo que las de misión diaria y récords)
-function menuModal(title, content){
+function menuModal(title, content, onClose){
   const host = document.getElementById('realModalHost'); if (!host) return;
   const esc = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   host.innerHTML = `<div class="approved-info-scrim"><section class="approved-info-dialog" role="dialog" aria-modal="true" aria-label="${esc(title)}"><header><h2>${esc(title)}</h2><button type="button" id="realClose">✕</button></header>${content}<button type="button" id="realDone">Volver al menú</button></section></div>`;
-  const close = () => { host.innerHTML = ''; };
+  const close = () => { host.innerHTML = ''; onClose?.(); };
   host.querySelector('#realClose').onclick = close; host.querySelector('#realDone').onclick = close;
   host.querySelector('.approved-info-scrim').onclick = e => { if (e.target === e.currentTarget) close(); };
   host.querySelector('#realClose').focus();
