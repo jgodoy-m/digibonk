@@ -1838,5 +1838,8 @@ I18N.add('en', {
   "Elige mapa y dificultad.": "Choose a map and difficulty.",
   "Esta semana": "This week",
   "Nuevos encargos en {0}": "New missions in {0}",
-  "Cierre: {0}": "Ends {0}"
+  "Cierre: {0}": "Ends {0}",
+  "Objetivos del evento": "Event objectives",
+  "Las recompensas se desbloquean al completar cada objetivo.": "Rewards unlock when you complete each objective.",
+  "Ruta de la temporada": "Season route"
 });

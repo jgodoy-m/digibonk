@@ -3807,55 +3807,98 @@ html[lang] .trainer-screen .trainer-header .g-back,
 #overlay .realhub.hb .nm-encard .nm-eh small{overflow-wrap:anywhere}
 #overlay .realhub.hb .nm-encard:focus-visible{outline:2px solid var(--m-acc);outline-offset:2px}
 #overlay .activity-page{
-  width:min(1120px,96vw);max-height:calc(100dvh - 24px);overflow:auto;box-sizing:border-box;
-  padding:clamp(12px,2vw,24px);border:1px solid var(--m-cardline);border-radius:20px;
+  width:min(1320px,calc(100vw - 44px));max-height:calc(100dvh - 36px);overflow:auto;box-sizing:border-box;
+  padding:clamp(14px,2vw,26px);border:1px solid var(--m-line2);border-radius:21px;
   background:var(--m-card);color:var(--m-text);box-shadow:var(--m-shadow);
   font:700 15px/1.4 Nunito,system-ui,sans-serif
 }
-.activity-page-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-.activity-page-head h1{margin:0;flex:1;font-size:clamp(26px,3vw,40px);line-height:1.1}
-.activity-balance{display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:10px;background:var(--m-sunk);font-variant-numeric:tabular-nums}
-.activity-balance img{width:22px;height:22px;object-fit:contain}
-.activity-page .eq-grid{gap:clamp(8px,2vw,18px)}
-.activity-page .eq-day{--qc:#b66a12}
-.activity-page .eq-week{--qc:#6b52b9}
+.activity-page-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+#overlay .activity-page .activity-page-head h1{
+  margin:0;flex:1;font:900 clamp(24px,3vw,38px)/1.1 Nunito,system-ui,sans-serif;
+  color:var(--m-text);text-align:start;text-shadow:none;letter-spacing:-.025em
+}
+#overlay .activity-page .activity-page-head .activity-back{
+  color:var(--m-text);border:1px solid var(--m-line2);border-radius:9px;background:var(--m-sunk);
+  min-height:40px;padding:0 11px;font:800 13px/1 Nunito,system-ui,sans-serif;cursor:pointer
+}
+.activity-back:focus-visible,.activity-tabs button:focus-visible{outline:2px solid var(--m-acc);outline-offset:2px}
+.activity-balance{display:inline-flex;align-items:center;gap:6px;padding:7px 11px;border:1px solid var(--m-line);border-radius:10px;background:var(--m-sunk);font-variant-numeric:tabular-nums}
+.activity-balance img{width:23px;height:23px;object-fit:contain}
+.activity-page .eq-grid{gap:clamp(10px,2vw,20px)}
+.activity-page .eq-day{--qc:#c07b24;--quest-banner:linear-gradient(115deg,#ffe3a4,#f3bd65);--quest-ink:#2c1c09}
+.activity-page .eq-week{--qc:#5f65c7;--quest-banner:linear-gradient(115deg,#dddfff,#a8b4f2);--quest-ink:#161c42}
+.activity-page .eq-ev{--quest-banner:linear-gradient(115deg,#d8dcfb,#bacaf3);--quest-ink:#192646}
 .activity-page .eq-panel>header{
-  flex-wrap:wrap;padding:12px 14px;background:color-mix(in srgb,var(--m-sunk) 80%,var(--qc));
+  flex-wrap:wrap;padding:15px;background:var(--quest-banner);color:var(--quest-ink)
 }
-.activity-page .eq-panel>header b{font-size:clamp(21px,2.4vw,30px)}
-.activity-page .eq-panel>header small,.activity-page .eq-row>span small{color:var(--m-soft)}
-.activity-page .eq-panel>header progress{flex:0 0 100%;margin:0;accent-color:var(--qc);height:7px}
-.activity-page .eq-rows{padding-top:10px}
-.activity-page .eq-row{grid-template-columns:22px minmax(0,1fr) minmax(65px,24%);align-items:start;padding:10px}
-.activity-page .eq-row>em{grid-column:3;color:var(--m-text);text-align:right;overflow-wrap:anywhere}
+.activity-page .eq-panel>header b{font-size:clamp(24px,2.7vw,36px);color:inherit}
+.activity-page .eq-panel>header small{margin-top:3px;color:inherit}
+.activity-page .eq-panel>header em{color:inherit;background:#ffffff56}
+.activity-page .eq-panel>header progress{flex:0 0 100%;margin:2px 0 0;accent-color:var(--quest-ink);height:7px}
+.activity-page .eq-rows{padding:10px}
+.activity-page .eq-row{grid-template-columns:20px minmax(0,1fr) auto;grid-template-rows:auto auto;align-items:center;padding:10px;gap:5px 9px}
+.activity-page .eq-row>b{margin:0;grid-column:1;grid-row:1;align-self:center}
+.activity-page .eq-row .eq-t{grid-column:2;grid-row:1;min-width:0;font-size:14px;line-height:1.25}
 .activity-page .eq-row.done .eq-t{opacity:1;text-decoration:none}
-.event-hero{
-  display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:125px;padding:clamp(14px,3vw,30px);
-  margin:0 0 12px;border-radius:14px;color:#f3f9ff;background:linear-gradient(90deg,#101729f7,#1017299c),
-    url(ui/fondo_mundo_digital.png) center 48%/cover
+.activity-page .eq-prize-value{grid-column:3;grid-row:1;display:flex;align-items:center;gap:4px;padding:4px 6px;border-radius:8px;background:var(--m-sunk);color:var(--m-text);font-size:12px}
+.activity-page .eq-prize-value img{width:15px;height:15px;object-fit:contain}
+.activity-page .eq-track{grid-column:2/-1;display:flex;align-items:center;gap:8px;min-width:0}
+.activity-page .eq-track progress{width:100%;min-width:0;accent-color:var(--qc);height:6px}
+.activity-page .eq-track small{flex:none;font-size:11px;color:var(--m-soft);font-variant-numeric:tabular-nums}
+.activity-page .eq-extra{grid-column:2/-1;color:var(--m-soft);font-size:12px}
+.activity-page .eq-row.done>b{color:#fff;background:#23634c;border-color:#23634c}
+html[data-theme=oscuro] .activity-page .eq-panel>header{
+  background:linear-gradient(110deg,color-mix(in srgb,var(--m-card) 54%,var(--qc)),var(--m-sunk));
+  color:var(--m-text)
 }
-.event-hero.event-christmas{background-image:linear-gradient(90deg,#17203df7,#24295a9c),url(ui/fondo_inicio.webp)}
-.event-hero h2{margin:0 0 3px;color:inherit;font-size:clamp(25px,3.4vw,42px);line-height:1.05}
-.event-hero p{margin:5px 0 0}
-.event-hero img{width:clamp(48px,10vw,108px);height:auto;flex:none;object-fit:contain;filter:drop-shadow(0 4px 6px #04122280)}
-.activity-page .season-weeks{grid-template-columns:repeat(4,minmax(0,1fr))}
-.activity-page .season-prizes{grid-template-columns:repeat(3,minmax(0,1fr))}
-.activity-page .season-weeks li,.activity-page .season-prizes li{display:grid;align-content:start;border:1px solid var(--m-cardline)}
-.activity-page .season-weeks strong,.activity-page .season-prizes strong{white-space:normal}
+html[data-theme=oscuro] .activity-page .eq-panel>header em{background:#12172465}
+html[data-theme=oscuro] .activity-page .eq-panel>header progress{accent-color:#d8e3ff}
+.event-hero{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:clamp(152px,23vh,248px);
+  box-sizing:border-box;padding:clamp(16px,3vw,40px);margin-bottom:14px;border-radius:16px;color:#f3f9ff;
+  background:linear-gradient(90deg,#080f22ed 0%,#10192a90 45%,#10192918 80%),url(ui/hub/event-file-island.webp) center 51%/cover;
+  box-shadow:inset 0 0 0 1px #b1daf336
+}
+.event-hero.event-christmas{
+  background-image:linear-gradient(90deg,#190d25ed 0%,#2f214d91 45%,#30234f18 80%),url(ui/hub/event-digital-christmas.webp)
+}
+#overlay .activity-page .event-hero h2{
+  margin:0;color:#f6fbff;text-shadow:0 2px 7px #0008;text-align:start;
+  font:900 clamp(26px,4vw,51px)/1.02 Nunito,system-ui,sans-serif;letter-spacing:-.025em
+}
+.event-hero p{margin:9px 0 0;font-weight:800}
+.event-hero time{display:block;margin-top:5px;color:#e8f0fc;font-size:12px}
+.event-hero img{width:clamp(46px,9vw,95px);height:auto;flex:none;object-fit:contain;filter:drop-shadow(0 4px 6px #04122280)}
+.activity-page h3{margin:14px 0 4px;font:900 20px/1.2 Nunito,system-ui,sans-serif}
+.activity-page .season-weeks{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.activity-page .season-prizes{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.activity-page .season-weeks li,.activity-page .season-prizes li{
+  display:grid;grid-template-rows:auto 1fr auto;align-items:start;gap:6px;border:1px solid var(--m-cardline);
+  border-radius:12px;padding:11px
+}
+.activity-page .season-weeks li{border-top:3px solid #ca9c49}
+.activity-page .season-weeks li.season-future{border-top-color:var(--m-line2)}
+.activity-page .season-weeks li.season-done{border-top-color:var(--m-good)}
+.activity-page .season-weeks small{color:var(--m-soft);font-weight:900}
+.activity-page .season-weeks strong,.activity-page .season-prizes strong{white-space:normal;font-size:12px}
+.activity-page .season-prizes li{grid-template-columns:29px minmax(0,1fr);grid-template-rows:auto auto;column-gap:8px}
+.activity-page .season-prizes img{width:29px;height:29px;object-fit:contain;grid-row:1 / span 2}
+.activity-page .season-prizes strong{grid-column:2}
+.activity-tabs{display:flex;gap:5px;padding:4px;margin:0 0 12px;border:1px solid var(--m-cardline);border-radius:12px;background:var(--m-sunk)}
+.activity-tabs button{display:inline-flex;align-items:center;justify-content:center;gap:7px;flex:1;padding:8px;min-height:42px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--m-soft);font:800 14px/1.15 Nunito,system-ui,sans-serif;cursor:pointer}
+.activity-tabs button[aria-selected=true]{background:var(--m-card);border-color:var(--m-line2);color:var(--m-text);box-shadow:inset 0 -2px var(--m-acc)}
+.activity-tabs img{width:23px;height:23px;object-fit:contain}
 @media(max-width:760px){
   #overlay .activity-page{width:calc(100vw - 16px);max-height:calc(100dvh - 16px);border-radius:14px}
   .activity-page .eq-grid.eq-two{grid-template-columns:1fr}
   .activity-page .season-weeks,.activity-page .season-prizes{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:420px){
-  .activity-page .eq-row{grid-template-columns:20px minmax(0,1fr)}
-  .activity-page .eq-row>em{grid-column:2;text-align:left}
+  .activity-page-head{gap:7px}
+  .activity-page .eq-row{grid-template-columns:18px minmax(0,1fr) auto;gap:4px 5px;padding:8px}
+  .activity-page .eq-prize-value{font-size:11px}
+  .activity-page .season-prizes{grid-template-columns:1fr}
 }
-.activity-tabs{display:flex;flex-wrap:wrap;gap:5px;padding:5px;margin:4px 0 12px;border-radius:12px;background:var(--m-sunk)}
-.activity-tabs button{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:1 1 110px;padding:7px;min-height:40px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--m-soft);font:800 13px/1.15 Nunito,system-ui,sans-serif;cursor:pointer}
-.activity-tabs button[aria-selected=true]{background:var(--m-card);border-color:var(--m-cardline);color:var(--m-text);box-shadow:0 2px 4px #0001}
-.activity-tabs button:focus-visible{outline:2px solid var(--m-acc);outline-offset:-2px}
-.activity-tabs img{width:22px;height:22px;object-fit:contain}
 .activity-panel:focus-visible{outline:2px solid var(--m-acc);outline-offset:3px;border-radius:8px}
 .activity-panel .eq-grid.eq-single{grid-template-columns:1fr}
 .activity-panel .activity-action{margin-top:10px}
@@ -12523,25 +12566,48 @@ function featuredActivity(){
 }
 // Los encargos del evento y los habituales usan las mismas filas y recompensas.
 function questPanels(eventOnly = false){
-  const d = loadDaily(), enc = loadEncargos(), wk = weekState(), wq = weekQuestState(), ev = eventActive() ? eventQuestState() : null;
-  const fmt = n => Number(n).toLocaleString('es-ES');
-  const rw = (b, t) => GACHA_SOON ? (b ? '+' + fmt(b) + ' Bits' : '') : `${b ? '+' + fmt(b) + ' Bits · ' : ''}+${t} ${t === 1 ? 'ticket' : 'tickets'}`;
-  const row = (done, txt, prog, goal, reward) => `<div class="eq-row${done ? ' done' : ''}"><b aria-hidden="true">${done ? '✓' : ''}</b><span><span class="eq-t">${txt}</span>${goal > 1 ? `<span class="eq-bar"><i style="width:${Math.round(Math.min(prog, goal) / goal * 100)}%"></i></span><small>${fmt(Math.min(prog, goal))}/${fmt(goal)}</small>` : ''}</span><em>${reward}</em></div>`;
-  const panel = (cls, icon, title, sub, rows, done, all) => `<section class="eq-panel ${cls}"><header><img src="ui/hub/${icon}.webp" alt=""><span><b>${title}</b><small>${sub}</small></span><em>${done}/${all}</em><progress max="${all}" value="${done}" aria-label="${title}"></progress></header><div class="eq-rows">${rows.join('')}</div></section>`;
-  const dayDone = d.claimed || d.runs >= DAILY.runsGoal;
-  const dayRows = [row(dayDone, `Juega ${DAILY.runsGoal} partidas`, d.runs, DAILY.runsGoal, rw(DAILY.reward, DAILY.rewardTix)), ...enc.list.map(e => row(e.done, encText(e), e.done ? 1 : 0, 1, rw(ENC_REWARD.bits, ENC_REWARD.tix)))];
-  const weekRows = [...(!GACHA_SOON ? [row(wk.claimed, `Haz ${WEEK_PULLS} tiradas en la Incubadora`, wk.pulls, WEEK_PULLS, rw(0, 1))] : []), ...WEEK_QUESTS.map(q => row(wq.done.includes(q.id), q.t, questProg(wq, q), q.goal, rw(q.bits, q.tix) + (q.obj && !wq.done.includes(q.id) && weekItem() ? '<br><span class="eq-prize">+ Objeto: ' + ITEMS[weekItem()].name + '</span>' : '')))];
-  const days = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
-  const parts = [
-    panel('eq-day', 'ic_mision', 'Hoy', `Nuevos encargos en ${dailyQuestsLeft()}`, dayRows, dayRows.filter(r => r.includes(' done"')).length, dayRows.length),
-    panel('eq-week', 'ic_encargos', 'Esta semana', `Nuevos encargos en ${retoLeft()}`, weekRows, weekRows.filter(r => r.includes(' done"')).length, weekRows.length)
-  ];
-  if (eventOnly && ev){
-    const evRows = EVENT_QUESTS.map(q => row(ev.done.includes(q.id), q.t, questProg(ev, q), q.goal, rw(q.bits, q.tix) + (q.vale || q.extra ? '<br><span class="eq-prize">+ ' + eventPrizeText(q) + '</span>' : '')));
-    return `<div class="eq-grid eq-single">${panel('eq-ev', 'ic_evento', EVENT.name,
-      `Quedan ${days} ${days === 1 ? 'día' : 'días'}`, evRows, ev.done.length, evRows.length)}</div>`;
+  const fmt = n => Number(n).toLocaleString(LANG);
+  const row = (done, title, progress, goal, bits, tickets, extra = '') => {
+    const value = Math.min(goal, Math.max(0, Number(progress) || 0));
+    return `<div class="eq-row${done ? ' done' : ''}">
+      <b aria-hidden="true">${done ? '✓' : ''}</b><span class="eq-t">${escHtml(title)}</span>
+      ${bits ? `<span class="eq-prize-value"><img src="ui/hud/ic_bits.webp" alt="Bits">+${fmt(bits)}</span>` : ''}
+      <span class="eq-track">
+        <progress max="${goal}" value="${value}" aria-label="${escHtml(title)}"></progress>
+        <small>${fmt(value)}/${fmt(goal)}</small>
+      </span>
+      ${extra || (!GACHA_SOON && tickets) ? `<small class="eq-extra">${!GACHA_SOON && tickets ? `+${tickets} ${tickets === 1 ? 'ticket' : 'tickets'}` : ''}${extra ? ` <span>${escHtml(extra)}</span>` : ''}</small>` : ''}
+    </div>`;
+  };
+  const panel = (cls, icon, title, sub, rows, done) => `<section class="eq-panel ${cls}">
+    <header><img src="ui/hub/${icon}.webp" alt=""><span><b>${title}</b><small>${sub}</small></span>
+    <em>${done}/${rows.length}</em><progress max="${rows.length}" value="${done}" aria-label="${title}"></progress></header>
+    <div class="eq-rows">${rows.join('')}</div></section>`;
+  if (eventOnly){
+    if (!eventActive()) return '';
+    const ev = eventQuestState();
+    const rows = EVENT_QUESTS.map(q => row(ev.done.includes(q.id), q.t, questProg(ev, q), q.goal, q.bits, q.tix, eventPrizeText(q)));
+    return `<div class="eq-grid eq-single">${panel('eq-ev','ic_evento','Objetivos del evento',
+      'Las recompensas se desbloquean al completar cada objetivo.',rows,ev.done.length)}</div>`;
   }
-  return `<div class="eq-grid eq-two">${parts.join('')}</div>`;
+  const d = loadDaily(), enc = loadEncargos(), wk = weekState(), wq = weekQuestState();
+  const dayDone = d.claimed || d.runs >= DAILY.runsGoal;
+  const dayRows = [
+    row(dayDone, `Juega ${DAILY.runsGoal} partidas`, d.runs, DAILY.runsGoal, DAILY.reward, DAILY.rewardTix),
+    ...enc.list.map(e => row(e.done, encText(e), Number(Boolean(e.done)), 1, ENC_REWARD.bits, ENC_REWARD.tix))
+  ];
+  const weeklyItem = weekItem();
+  const weekRows = [
+    ...(!GACHA_SOON ? [row(wk.claimed, `Haz ${WEEK_PULLS} tiradas en la Incubadora`, wk.pulls, WEEK_PULLS, 0, 1)] : []),
+    ...WEEK_QUESTS.map(q => row(wq.done.includes(q.id), q.t, questProg(wq, q), q.goal, q.bits, q.tix,
+      q.obj && !wq.done.includes(q.id) && weeklyItem ? 'Objeto: ' + ITEMS[weeklyItem].name : ''))
+  ];
+  const daysDone = Number(dayDone) + enc.list.filter(e => e.done).length;
+  const weeksDone = Number(!GACHA_SOON && wk.claimed) + wq.done.length;
+  return `<div class="eq-grid eq-two">
+    ${panel('eq-day','ic_mision','Hoy',`Nuevos encargos en ${dailyQuestsLeft()}`,dayRows,daysDone)}
+    ${panel('eq-week','ic_encargos','Esta semana',`Nuevos encargos en ${retoLeft()}`,weekRows,weeksDone)}
+  </div>`;
 }
 function dailyQuestsLeft(now = Date.now()){
   const tomorrow = new Date(now);
@@ -12557,7 +12623,7 @@ function showActivityPage(page, title, content, balance = ''){
   state = page;
   setHud(false);
   showOverlay(`<main class="activity-page" aria-labelledby="activityPageTitle">
-    <header class="activity-page-head"><button type="button" class="g-back" id="activityBack">Volver</button>
+    <header class="activity-page-head"><button type="button" class="activity-back" id="activityBack"><span aria-hidden="true">‹</span> Volver</button>
       <h1 id="activityPageTitle">${title}</h1>${balance}</header>
     ${content}</main>`);
   const back = document.getElementById('activityBack');
@@ -14137,9 +14203,9 @@ const FILE_SEASON = {
     {id:'supervivencia', label:'Aguanta 5 minutos en Supervivencia', goal:1, count:run => Number(run.mode === 'surv' && run.t >= 300)}
   ],
   prizes: [
-    {at:1, label:'Título · Explorador de File', owns:() => inv.titles.includes('file_explorador')},
-    {at:3, label:'Marco · Señal de File', owns:() => inv.frames.includes('file_senal')},
-    {at:4, label:'Skin · Agumon Digivice LCD', owns:() => ownsAt('agumon', 0, 'lcd')}
+    {at:1, label:'Título · Explorador de File', icon:'ui/hub/digivice/logros.png', owns:() => inv.titles.includes('file_explorador')},
+    {at:3, label:'Marco · Señal de File', icon:'ui/marcos/digivice_azul.webp', owns:() => inv.frames.includes('file_senal')},
+    {at:4, label:'Skin · Agumon Digivice LCD', icon:charIcon('agumon','lcd'), owns:() => ownsAt('agumon', 0, 'lcd')}
   ]
 };
 function seasonData(now = Date.now()){
@@ -14186,18 +14252,21 @@ function seasonPanel(){
     const count = Math.min(task.goal, data.progress[task.id] || 0);
     const status = count === task.goal ? 'Completado' : data.phase === 'closed' ? 'Cerrado' :
       i >= data.week ? seasonDate(start + WEEK_MS * i) : `${count.toLocaleString(LANG)}/${task.goal.toLocaleString(LANG)}`;
-    return `<li><span><small>Semana ${i + 1}</small>${task.label}</span><strong>${status}</strong></li>`;
+    const css = count === task.goal ? 'season-done' : i >= data.week ? 'season-future' : '';
+    return `<li class="${css}"><small>Semana ${i + 1}</small><span>${task.label}</span><strong>${status}</strong></li>`;
   }).join('');
-  const rewards = prizes.map(({at, label, owns}) => `<li><span>${label}</span><strong>${owns() ? 'En tu colección' : `${at}/${weeks.length}`}</strong></li>`).join('');
+  const rewards = prizes.map(({at, label, owns, icon}) => `<li><img src="${icon}" alt=""><span>${label}</span>
+    <strong>${owns() ? 'En tu colección' : `${at}/${weeks.length}`}</strong></li>`).join('');
   return `<div class="season-dialog">
     <header class="event-hero">
-      <div><h2>Señal de File Island</h2><p>${seasonStatus(data)}</p></div>
+      <div><h2>Señal de File Island</h2><p>${seasonStatus(data)}</p>
+        <time datetime="${new Date(data.end).toISOString()}">Cierre: ${seasonDate(data.end)} · 00:00 UTC</time></div>
       <img src="ui/hub/digivice/file-island.png" alt="">
     </header>
     <article class="season-summary">
       <div><strong>${data.done}/${weeks.length} encargos</strong><progress max="${weeks.length}" value="${data.done}" aria-label="Progreso de temporada"></progress></div>
     </article>
-    <p>Cierre: ${seasonDate(data.end)} · 00:00 UTC</p>
+    <h3>Ruta de la temporada</h3>
     <p>Se abre un encargo cada lunes. Puedes completar los anteriores hasta el cierre.</p>
     <ol class="season-weeks">${tasks}</ol>
     ${data.phase === 'active' && data.week >= 2 ? '<button class="season-mode mini-btn" type="button" id="seasonReto">Abrir Reto semanal</button>' : ''}
