@@ -3297,7 +3297,10 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 .trainer-header h2,.lab2-header h2{margin:0;font-size:clamp(18px,3.2vw,27px);line-height:1.12;color:var(--m-text);overflow-wrap:anywhere}
 .trainer-header .g-back,.lab2-header .g-back{flex:none;min-height:38px}
 .trainer-hero,.trainer-panel,.lab2-group{min-width:0;padding:14px;background:var(--m-card);border:1px solid var(--m-cardline);border-radius:16px;color:var(--m-text);box-shadow:var(--m-shadow)}
-.trainer-hero{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;border-top:4px solid var(--m-acc)}
+.trainer-hero{box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;min-height:156px;
+  border-color:#35548a;border-top:4px solid #78a9f8;color:#f4f8ff;background-color:#0b1933;
+  background-image:linear-gradient(90deg,#09172ef7 5%,#0a1933e8 36%,#0a193369 65%,#09172e61),url(ui/fondo_inicio.webp);
+  background-position:center,center 49%;background-size:cover;background-repeat:no-repeat}
 .trainer-screen .trainer-hero #tcAv{width:76px;height:76px}
 .trainer-screen .trainer-hero #tcAv img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
 .trainer-identity,.trainer-actions{min-width:0;display:grid;justify-items:start;gap:4px}
@@ -3306,6 +3309,14 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 .trainer-title{font-size:13px;color:var(--m-acc);overflow-wrap:anywhere}
 .trainer-actions{justify-items:end;gap:6px}
 .trainer-actions #plChange{min-height:38px;padding:5px 12px}
+.trainer-hero .trainer-identity :is(label,small),.trainer-hero .trainer-actions>small{color:#d9e7ff;text-shadow:0 1px 2px #07132b}
+.trainer-hero .trainer-identity input{background:#102344;color:#fff;border-color:#6786b6}
+.trainer-hero .trainer-identity input::placeholder{color:#b6ccef}
+.trainer-hero .trainer-identity input:focus-visible,.trainer-hero #plChange:focus-visible{outline:2px solid #bde3ff;outline-offset:3px}
+.trainer-hero .trainer-title{color:#ffe298;text-shadow:0 1px 2px #07132b}
+.trainer-hero .trainer-wallet,.trainer-hero .trainer-actions>small{padding:4px 8px;background:#0d2044;border-radius:10px}
+.trainer-hero .trainer-wallet{color:#ffde7c}
+.trainer-screen .trainer-hero #plChange{background:#1a3970!important;color:#f4f8ff!important;border-color:#7ca3e5!important}
 .trainer-wallet{display:inline-flex;align-items:center;gap:6px;color:var(--m-gold);font-weight:850;white-space:nowrap}
 .trainer-wallet img{width:18px;height:18px;object-fit:contain}
 .trainer-summary,.trainer-detail{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
@@ -3367,7 +3378,8 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 .trainer-custom .cz-foot{margin:0;padding:8px;background:var(--m-sunk);border-color:var(--m-line)}
 @media(max-width:660px){
   .trainer-summary,.trainer-detail,.lab2-grid{grid-template-columns:minmax(0,1fr)}
-  .trainer-hero{grid-template-columns:auto minmax(0,1fr);gap:10px}
+  .trainer-hero{grid-template-columns:auto minmax(0,1fr);gap:10px;min-height:0;background-position:center,64% 48%;
+    background-image:linear-gradient(90deg,#09172ef2 5%,#0a1933d9 42%,#09172e88),url(ui/fondo_inicio.webp)}
   .trainer-actions{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap}
   .trainer-screen .trainer-hero #tcAv{width:58px;height:58px}
   .lab2-header{gap:6px;flex-wrap:wrap}
@@ -3377,6 +3389,7 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 @media(orientation:landscape) and (max-height:510px){
   .trainer-wrap{padding-top:8px;gap:7px}
   .trainer-hero,.trainer-panel,.lab2-group{padding:8px}
+  .trainer-hero{min-height:106px}
   .lab2-header{padding:5px}
   .lab2-host,.lab2-header p{display:none}
   .trainer-custom .cz-head{padding:4px 9px!important}
