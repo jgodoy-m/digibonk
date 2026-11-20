@@ -156,7 +156,6 @@ I18N.add('en', {
   "{0}/3 logros destacados": "{0}/3 featured achievements",
   "Buscar por nombre": "Search by name",
   "Anterior": "Previous",
-  "Azul liso": "Solid blue",
   "Portal nocturno": "Night portal",
   "Fondos": "Backgrounds",
   "Actividad": "Activity",

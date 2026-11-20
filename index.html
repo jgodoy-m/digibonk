@@ -3287,8 +3287,8 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 .shop-card-preview[hidden]{display:none}
 .shop-card-preview .cz-prev{display:flex;align-items:center;gap:14px;min-height:86px;padding:8px 14px;border:1px solid #567cb9;border-radius:10px;text-align:left}
 .shop-card-preview .hud-portrait{width:50px!important;height:50px!important;margin:0;flex:none;overflow:visible}
-.shop-card-preview .cz-prev-copy{display:grid;gap:3px;min-width:0;overflow-wrap:anywhere;text-shadow:0 1px 3px #061126}
-#overlay .shop-card-preview .cz-preview-title{display:flex;align-items:center;gap:4px;color:#ffe298!important;font-size:.78em}
+.shop-card-preview .cz-prev-copy{display:grid;gap:3px;min-width:0;overflow-wrap:anywhere}
+#overlay .shop-card-preview .cz-preview-title{display:flex;align-items:center;gap:4px;color:var(--trainer-title)!important;font-size:.78em}
 .shop-preview-options{display:grid;gap:5px;font-size:.8em}
 .shop-preview-options label{display:flex;align-items:center;gap:8px;min-height:32px;cursor:pointer}
 .shop-preview-options input{width:18px;height:18px;flex:none;accent-color:#ffd35d}
@@ -3309,42 +3309,66 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 }
 /* Ficha de entrenador y Laboratorio */
 .trainer-screen,.lab2{font-family:'Nunito',system-ui,sans-serif}
-.realhub.pl4.trainer-screen{background:var(--m-sunk)!important;color:var(--m-text);overscroll-behavior:contain}
-.trainer-wrap{box-sizing:border-box;max-width:1120px;margin:auto;padding:18px max(14px,env(safe-area-inset-right)) 22px max(14px,env(safe-area-inset-left));display:grid;gap:12px}
-.trainer-header,.lab2-header{display:flex;align-items:center;gap:12px}
+.realhub.pl4.trainer-screen{
+  --trainer-scrim:linear-gradient(#f4f6fabb,#eceff5ef);
+  background:var(--trainer-scrim),url(ui/fondo_inicio.webp) center 42%/cover no-repeat!important;
+  color:var(--m-text);overscroll-behavior:contain
+}
+html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradient(#15131ab3,#16171af5)}
+.trainer-wrap{box-sizing:border-box;max-width:1420px;margin:auto;
+  padding:clamp(18px,3vw,36px) max(18px,env(safe-area-inset-right)) 36px max(18px,env(safe-area-inset-left));display:grid;gap:clamp(14px,2vw,24px)}
+.trainer-header,.lab2-header{display:flex;align-items:center;gap:14px}
 .trainer-header h2,.lab2-header h2{margin:0;font-size:clamp(18px,3.2vw,27px);line-height:1.12;color:var(--m-text);overflow-wrap:anywhere}
 .trainer-header .g-back,.lab2-header .g-back{flex:none;min-height:38px}
+.trainer-heading-band{padding:12px clamp(14px,3vw,32px);border-radius:14px;
+  background:repeating-linear-gradient(135deg,#fff3 0 10px,transparent 10px 21px),linear-gradient(100deg,#ff866f,#ffc373);
+  box-shadow:0 4px 0 #9b4d58}
+.trainer-heading-band h2{color:#21192c;font-size:clamp(18px,3vw,30px);font-weight:900}
 .trainer-hero,.trainer-panel,.lab2-group{min-width:0;padding:14px;background:var(--m-card);border:1px solid var(--m-cardline);border-radius:16px;color:var(--m-text);box-shadow:var(--m-shadow)}
-.trainer-hero{box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;min-height:156px;
-  border-color:#35548a;border-top:4px solid #78a9f8}
-.trainer-cover{color:#f4f8ff;background-color:#0b1933;
-  background-image:linear-gradient(90deg,#09172ef7 5%,#0a1933e8 36%,#0a193369 65%,#09172e61),var(--trainer-bg);
+.trainer-hero{box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;
+  gap:clamp(16px,3vw,40px);min-height:230px;padding:clamp(18px,3vw,36px);border-radius:22px}
+.trainer-cover{--trainer-muted:var(--m-soft);--trainer-title:var(--m-acc);color:var(--m-text);background-color:var(--m-card)}
+.trainer-cover.has-trainer-bg{--trainer-muted:#e1e9fa;--trainer-title:#ffe298;color:#fff;
+  background-image:linear-gradient(90deg,#131420ef 5%,#131420e0 38%,#13142055),var(--trainer-bg);
   background-position:center,center var(--trainer-bg-y,49%);background-size:cover;background-repeat:no-repeat}
-.trainer-screen .trainer-hero #tcAv{width:76px;height:76px}
-.trainer-screen .trainer-hero #tcAv img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
-.trainer-identity,.trainer-actions{min-width:0;display:grid;justify-items:start;gap:4px}
-.trainer-identity label,.trainer-identity small,.trainer-actions small,.trainer-panel small,.trainer-empty{color:var(--m-soft);font-size:12px}
-.trainer-identity input{box-sizing:border-box;width:min(100%,320px);min-height:38px;margin:0;padding:4px 8px;color:var(--m-text);background:var(--m-sunk);border:1px solid var(--m-line2);border-radius:9px;font:850 clamp(16px,3vw,22px) 'Nunito',system-ui}
-.trainer-title{font-size:13px;color:var(--m-acc);overflow-wrap:anywhere}
-.trainer-actions{justify-items:end;gap:6px}
-.trainer-actions #plChange{min-height:38px;padding:5px 12px}
-.trainer-hero .trainer-identity :is(label,small),.trainer-hero .trainer-actions>small{color:#d9e7ff;text-shadow:0 1px 2px #07132b}
-.trainer-hero .trainer-identity input{background:#102344;color:#fff;border-color:#6786b6}
-.trainer-hero .trainer-identity input::placeholder{color:#b6ccef}
-.trainer-hero .trainer-identity input:focus-visible,.trainer-hero #plChange:focus-visible{outline:2px solid #bde3ff;outline-offset:3px}
-.trainer-hero .trainer-title{color:#ffe298;text-shadow:0 1px 2px #07132b}
-.trainer-hero .trainer-wallet,.trainer-hero .trainer-actions>small{padding:4px 8px;background:#0d2044;border-radius:10px}
-.trainer-hero .trainer-wallet{color:#ffde7c}
-.trainer-screen .trainer-hero #plChange{background:#1a3970!important;color:#f4f8ff!important;border-color:#7ca3e5!important}
+.hud-portrait.trainer-portrait{box-sizing:border-box;display:grid;place-items:center;border-radius:50%;overflow:hidden;
+  background:var(--m-sunk);border:1px solid var(--m-cardline);box-shadow:none}
+.hud-portrait.trainer-portrait img{display:block;width:100%;height:100%;aspect-ratio:1;object-fit:cover;border-radius:50%}
+.hud-portrait.trainer-portrait[class*="fr-"]::before{inset:0}
+.hud-portrait.trainer-portrait[class*="fr-"] img{width:var(--trainer-portrait-fill,68%)!important;height:var(--trainer-portrait-fill,68%)!important;margin:0}
+.trainer-portrait.fr-tienda_agumon,.trainer-portrait.fr-tienda_patamon,.trainer-portrait.fr-tienda_wizardmon{--trainer-portrait-fill:54%}
+.trainer-portrait.fr-tienda_leomon{--trainer-portrait-fill:52%}
+.trainer-portrait.fr-tienda_frigimon,.trainer-portrait.fr-tienda_gatomon{--trainer-portrait-fill:60%}
+.trainer-portrait.fr-tienda_gabumon,.trainer-portrait.fr-tienda_hagurumon{--trainer-portrait-fill:64%}
+.hud-portrait.trainer-portrait.fr-mecenas{border:4px solid #ffd54f!important;background:linear-gradient(160deg,#fff7e0,#ff5e5b 45%,#29abe0)!important}
+.hud-portrait.trainer-portrait.fr-navidad{border:4px solid #1b5e20!important;background:linear-gradient(160deg,#fff,#e53935 45%,#1b5e20)!important}
+.hud-portrait.trainer-portrait:is(.fr-mecenas,.fr-navidad,[class*="fr-wk"]) img{width:100%!important;height:100%!important}
+.trainer-avatar-block{display:grid;justify-items:center;gap:12px}
+.trainer-screen #tcAv{width:clamp(96px,10vw,132px);height:clamp(96px,10vw,132px)}
+.trainer-screen .trainer-hero #plChange{margin:0!important;min-height:42px;letter-spacing:0;font-size:14px!important}
+.trainer-identity{min-width:0;display:grid;justify-items:start;gap:8px}
+.trainer-identity :is(label,small),.trainer-panel small,.trainer-empty{color:var(--m-soft);font-size:13px}
+.trainer-identity :is(label,small){color:var(--trainer-muted)}
+.trainer-identity input{box-sizing:border-box;width:min(100%,360px);min-height:46px;margin:0;padding:4px 9px;
+  color:inherit;background:transparent;border:1px solid var(--m-line2);border-radius:9px;font:850 clamp(20px,3.1vw,33px) 'Nunito',system-ui}
+.trainer-identity input::placeholder{color:var(--trainer-muted)}
+.trainer-identity input:focus-visible{outline:2px solid var(--trainer-title);outline-offset:2px}
+.has-trainer-bg .trainer-identity input{background:#13142085;border-color:#ffffff69}
+.trainer-title{display:flex;align-items:center;gap:7px;font-size:15px;color:var(--trainer-title);overflow-wrap:anywhere}
+.trainer-title .title-badge-art{width:24px;height:24px;object-fit:contain}
 .trainer-wallet{display:inline-flex;align-items:center;gap:6px;color:var(--m-gold);font-weight:850;white-space:nowrap}
 .trainer-wallet img{width:18px;height:18px;object-fit:contain}
-.trainer-summary,.trainer-detail{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
-.trainer-detail{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+.trainer-detail{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:inherit}
+.trainer-panel{padding:clamp(16px,2vw,24px);min-height:108px;border-radius:20px}
 .trainer-panel h3,.lab2-group h3{margin:0 0 9px;color:var(--m-text);font-size:15px;line-height:1.2}
-.trainer-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(83px,1fr));gap:6px}
-.trainer-stat{min-width:0;padding:8px;background:var(--m-sunk);border-radius:9px;text-align:left;overflow-wrap:anywhere}
-.trainer-stat b{display:block;font-size:17px;line-height:1.15;font-variant-numeric:tabular-nums}
-.trainer-record{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px;font-size:12px;padding:8px 0}
+.trainer-panel h3{padding-inline-start:10px;border-inline-start:4px solid #ff9879;font-size:19px}
+.trainer-stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.trainer-stat{display:flex;align-items:center;gap:10px;min-width:0;min-height:55px;padding:12px;
+  background:var(--m-card);border:1px solid var(--m-cardline);border-radius:15px;overflow-wrap:anywhere}
+.trainer-stat img{width:28px;height:28px;flex:none;object-fit:contain}
+.trainer-stat b{display:block;font-size:clamp(17px,2vw,25px);line-height:1.15;font-variant-numeric:tabular-nums}
+.trainer-stat small{color:var(--m-soft);font-size:12px;line-height:1.2}
+.trainer-record{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;font-size:12px;padding:8px 0}
 .trainer-record + .trainer-record,.trainer-goal + .trainer-goal{border-top:1px solid var(--m-line)}
 .trainer-record span:first-child{min-width:0;overflow-wrap:anywhere}
 .trainer-record small{display:block}.trainer-record strong{font-variant-numeric:tabular-nums}
@@ -3378,165 +3402,109 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 .lab2-button.secondary{border-color:var(--m-line2);background:var(--m-card);color:var(--m-text)}
 .lab2-button:disabled{border-color:var(--m-line2);background:var(--m-sunk);color:var(--m-mute);cursor:default}
 .lab2-footer{justify-content:space-between;padding:10px 2px 2px}
-.trainer-custom{box-sizing:border-box;width:min(666px,calc(100vw - 20px));max-height:calc(100dvh - 12px);background:none;color:var(--m-text);padding:0;border:0;overflow:visible}
-.trainer-custom::backdrop{background:#050d22c0}
-.trainer-custom .cz-box{box-sizing:border-box;width:100%;max-height:calc(100dvh - 12px);background:var(--m-card);border:1px solid var(--m-line2);color:var(--m-text)}
-.trainer-custom h2{font-size:17px;line-height:1.15;margin:10px 12px 6px}
-.trainer-custom .cz-prev{flex:none;box-sizing:border-box;display:flex;align-items:center;gap:12px;min-height:76px;margin:0 10px;padding:8px 12px;border:1px solid #567cb9;border-radius:12px;text-align:left}
-.trainer-custom .cz-prev .hud-portrait{width:54px!important;height:54px!important;margin:0;flex:none;overflow:visible}
-.trainer-custom .cz-prev-copy{min-width:0;display:grid;justify-items:start;gap:3px;overflow-wrap:anywhere;text-shadow:0 1px 3px #061126}
-.trainer-custom .cz-preview-title{display:flex;align-items:center;gap:4px;color:#ffe298;font-size:12px;line-height:1.15}
-.trainer-custom .cz-preview-title .title-badge-art{width:19px;height:19px}
-.trainer-custom .cz-tabs{margin:7px 4px;gap:4px}
+.trainer-favorite{display:flex;align-items:center;gap:8px}
+.trainer-favorite img{width:30px;height:30px;object-fit:cover;border-radius:50%}
+.trainer-favorite :is(b,small){display:block}
+.trainer-favorite b{font-size:12px;color:var(--trainer-muted)}
+.trainer-panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.trainer-panel-head h3{margin:0}
+.trainer-panel-action,.trainer-goal-action{padding:7px 12px;border:1px solid var(--m-line2);border-radius:9px;background:var(--m-sunk);color:var(--m-text);font:800 13px 'Nunito',system-ui;cursor:pointer}
+.trainer-goal-action{margin-top:6px}
+.trainer-pin-grid{display:grid;gap:8px}
+.trainer-pin{min-width:0;padding:8px 10px;border-radius:10px;background:var(--m-sunk)}
+.trainer-pin summary{cursor:pointer;line-height:1.3;overflow-wrap:anywhere}
+.trainer-pin p{margin:5px 0 2px;font-size:13px;color:var(--m-soft)}
+.trainer-pin-art{display:inline-grid;vertical-align:middle;place-items:center;width:34px;height:34px;margin-inline-end:7px;border-radius:8px;background:var(--m-card)}
+.trainer-pin-art .trainer-portrait{width:32px;height:32px}
+.trainer-hero-pins{display:flex;flex-wrap:wrap;justify-content:end;gap:8px}
+.trainer-hero-pins:empty{display:none}
+.trainer-hero-pins .trainer-pin-art{width:46px;height:46px;margin:0;background:var(--m-sunk)}
+.trainer-hero-pins .trainer-portrait{width:44px;height:44px}
+.trainer-hero-pins .title-badge-art{width:32px;height:32px}
+.trainer-record strong{font-size:17px}
+.trainer-record-heading{color:var(--m-soft);font-size:13px;margin:12px 0 3px}
+.trainer-run{grid-template-columns:minmax(0,1fr) auto auto}
+.trainer-run span:nth-child(2){color:var(--m-soft)}
+.trainer-custom{box-sizing:border-box;width:min(820px,calc(100vw - 24px));max-height:calc(100dvh - 16px);
+  background:none;color:var(--m-text);padding:0;border:0;overflow:visible}
+.trainer-custom::backdrop{background:var(--m-scrim)}
+.trainer-custom .cz-box{box-sizing:border-box;width:100%;max-height:calc(100dvh - 16px);background:var(--m-card);
+  border:1px solid var(--m-line2);border-radius:18px;color:var(--m-text);font-family:'Nunito',system-ui,sans-serif}
+.trainer-custom h2{font-size:20px;line-height:1.15;margin:16px 18px 12px}
+.trainer-custom .cz-prev{box-sizing:border-box;display:flex;align-items:center;gap:14px;min-height:80px;margin:0 16px;
+  padding:10px 14px;border:1px solid var(--m-line2);border-radius:12px;text-align:left}
+.trainer-custom .cz-prev .trainer-portrait{width:58px!important;height:58px!important;margin:0;flex:none}
+.trainer-custom .cz-prev-copy{min-width:0;display:grid;justify-items:start;gap:4px;overflow-wrap:anywhere}
+.trainer-custom .cz-prev-copy small{color:var(--trainer-muted);font-size:13px}
+.trainer-custom .cz-preview-title{display:flex;align-items:center;gap:5px;color:var(--trainer-title);font-size:14px;line-height:1.15}
+.trainer-custom .cz-preview-title .title-badge-art{width:22px;height:22px}
+.trainer-custom .cz-tabs{justify-content:flex-start;margin:12px 16px;gap:6px}
 .trainer-custom .cz-tab,.trainer-custom .cz-btn{background:var(--m-btn);color:var(--m-text);border:1px solid var(--m-line2);box-shadow:none}
-.trainer-custom .cz-tab.on,.trainer-custom .cz-btn.ok{background:var(--m-cta);color:#fff;border-color:transparent}
-.trainer-custom .cz-grid{padding:4px 9px 8px;gap:6px;overscroll-behavior:contain}
-.trainer-custom .cz-tile{background:var(--m-sunk);border-color:var(--m-line2);box-shadow:none;padding:8px 4px;min-height:70px}
-.trainer-custom .cz-tile.sel{border-color:var(--m-acc);box-shadow:inset 0 0 0 1px var(--m-acc)}
-.trainer-custom .cz-tile.sel::after{content:"✓";position:absolute;top:6px;right:6px;width:17px;height:17px;display:grid;place-items:center;border-radius:50%;background:var(--m-cta);color:#fff;font-size:11px;font-weight:900}
-.trainer-custom .cz-tile .cz-art{display:grid;place-items:center;box-sizing:border-box;width:54px;height:54px;border-radius:11px;background:#162948}
-.trainer-custom .cz-tile .cz-av,.trainer-custom .cz-fr .hud-portrait{width:46px!important;height:46px!important;box-shadow:none}
-.trainer-custom .cz-fr .hud-portrait img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
-.trainer-custom .cz-tile .title-badge-art{width:37px;height:37px;object-fit:contain}
-.trainer-custom .cz-tile .cz-lock{top:5px;right:5px;border-radius:6px;padding:2px;color:#fff;background:#12213c}
-.trainer-custom .cz-tile small{text-transform:none;letter-spacing:0;overflow-wrap:anywhere}
-.trainer-custom .cz-backgrounds{grid-template-columns:repeat(auto-fit,minmax(92px,1fr))}
-.trainer-custom .cz-tile .cz-background{box-sizing:border-box;width:100%;height:50px;display:block;background:#162948 var(--trainer-bg) center var(--trainer-bg-y,49%)/cover no-repeat;border-radius:7px}
-.trainer-custom .cz-backgrounds .cz-tile{justify-content:start}
-.trainer-custom .cz-tile b,.trainer-custom .cz-tile.locked b{color:var(--m-text)}
-.trainer-custom .cz-tile:is(.locked,.sel) small,.trainer-custom .cz-tile small{color:var(--m-soft)}
-.trainer-custom .cz-foot{margin:0;padding:8px;background:var(--m-sunk);border-color:var(--m-line)}
+.trainer-custom .cz-tab{padding:7px 11px;font:800 14px 'Nunito',system-ui}
+.trainer-custom .cz-tab.on,.trainer-custom .cz-btn.ok{background:var(--m-tabon);color:var(--m-tabon-txt);border-color:transparent}
+.trainer-custom .cz-list{min-height:0;overflow:auto;overscroll-behavior:contain}
+.trainer-custom .cz-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:4px 16px 16px;overflow:visible}
+.trainer-custom .cz-tile,.trainer-custom .cz-tile.locked{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px;
+  min-height:84px;padding:10px 30px 10px 10px;text-align:left;background:var(--m-card);border-color:var(--m-cardline);box-shadow:none;opacity:1}
+.trainer-custom .cz-tile::before{display:none}
+.trainer-custom .cz-tile:hover:not(:disabled){transform:none;border-color:var(--m-acc)}
+.trainer-custom .cz-tile.sel{background:var(--m-selbg);border-color:var(--m-acc);box-shadow:inset 0 0 0 1px var(--m-acc)}
+.trainer-custom .cz-tile.sel::after{content:"✓";position:absolute;top:8px;right:8px;width:18px;height:18px;display:grid;place-items:center;border-radius:50%;
+  background:var(--m-tabon);color:var(--m-tabon-txt);font-size:12px;font-weight:900}
+.trainer-custom .cz-art{display:grid;place-items:center;width:64px;height:64px;border-radius:12px;background:var(--m-sunk)}
+.trainer-custom .cz-av,.trainer-custom .cz-fr .trainer-portrait{box-sizing:border-box;width:58px!important;height:58px!important;box-shadow:none}
+.trainer-custom .cz-av{border-color:var(--m-cardline)}
+.trainer-custom .cz-tile .title-badge-art{width:46px;height:46px;object-fit:contain}
+.trainer-custom .cz-tile .cz-lock{top:8px;right:8px;font-size:13px}
+.trainer-custom .cz-item-copy{min-width:0}
+.trainer-custom .cz-tile :is(b,small){display:block;text-align:left;overflow-wrap:anywhere}
+.trainer-custom .cz-tile b,.trainer-custom .cz-tile.locked b{color:var(--m-text);font-size:15px;line-height:1.2}
+.trainer-custom .cz-tile small,.trainer-custom .cz-tile.locked small{margin-top:3px;color:var(--m-soft);font-size:13px;line-height:1.3;text-transform:none;letter-spacing:0}
+.trainer-custom .cz-backgrounds .cz-tile{grid-template-columns:minmax(0,1fr);align-content:start;padding:10px 24px 12px 10px;gap:9px}
+.trainer-custom .cz-background{height:80px;display:grid;place-items:center;border-radius:8px;
+  background:var(--m-sunk) var(--trainer-bg,none) center var(--trainer-bg-y,49%)/cover no-repeat;color:var(--m-soft);font-size:22px}
+.trainer-custom .cz-filters{display:flex;gap:8px;margin:0 16px 10px}
+.trainer-custom .cz-filters :is(input,select){min-width:0;min-height:36px;padding:4px 8px;color:var(--m-text);background:var(--m-sunk);
+  border:1px solid var(--m-line2);border-radius:8px;font:700 14px 'Nunito',system-ui}
+.trainer-custom .cz-filters input{flex:1}
+.trainer-custom :is(.cz-pin-count,.cz-empty){margin:4px 16px 8px;color:var(--m-soft);font-size:14px}
+.trainer-custom .cz-empty{grid-column:1/-1}
+.trainer-custom .cz-foot{flex:none;margin:0;padding:10px 16px;background:var(--m-sunk);border-color:var(--m-line);justify-content:flex-end}
+@media(max-width:1060px){.trainer-stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:660px){
-  .trainer-summary,.trainer-detail,.lab2-grid{grid-template-columns:minmax(0,1fr)}
-  .trainer-hero{grid-template-columns:auto minmax(0,1fr);gap:10px;min-height:0}
-  .trainer-cover{background-position:center,64% var(--trainer-bg-y,49%);
-    background-image:linear-gradient(90deg,#09172ef2 5%,#0a1933d9 42%,#09172e99),var(--trainer-bg)}
-  .trainer-actions{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap}
-  .trainer-screen .trainer-hero #tcAv{width:58px;height:58px}
+  .realhub.pl4.trainer-screen{background-image:var(--trainer-scrim),url(ui/fondo_inicio_movil.webp)!important}
+  .trainer-detail,.lab2-grid{grid-template-columns:minmax(0,1fr)}
+  .trainer-hero{grid-template-columns:auto minmax(0,1fr);min-height:0}
+  .trainer-hero-pins{grid-column:1/-1;justify-content:start}
+  .trainer-cover.has-trainer-bg{background-position:center,64% var(--trainer-bg-y,49%);
+    background-image:linear-gradient(90deg,#131420ea,#131420c2),var(--trainer-bg)}
+  .trainer-stats{grid-template-columns:repeat(3,minmax(0,1fr))}
   .lab2-header{gap:6px;flex-wrap:wrap}
   .lab2-header .trainer-wallet{margin-left:0}
   .lab2-host{display:none}
 }
+@media(max-width:500px){
+  .trainer-screen #tcAv{width:86px;height:86px}
+  .trainer-hero{gap:12px;padding:14px}
+  .trainer-screen .trainer-hero #plChange{max-width:105px;line-height:1.2;font-size:12px!important}
+  .trainer-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .trainer-stat{padding:9px}
+  .trainer-run{grid-template-columns:minmax(0,1fr) auto;gap:4px 7px}
+  .trainer-run span:nth-child(2){grid-row:2}
+  .trainer-run strong{grid-column:2;grid-row:1/3}
+  .trainer-custom .cz-grid{grid-template-columns:minmax(0,1fr)}
+  .trainer-custom .cz-backgrounds{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .trainer-custom .cz-filters input{font-size:16px}
+}
 @media(orientation:landscape) and (max-height:510px){
-  .trainer-wrap{padding-top:8px;gap:7px}
-  .trainer-hero,.trainer-panel,.lab2-group{padding:8px}
-  .trainer-hero{min-height:106px}
+  .trainer-hero{min-height:144px;padding-block:12px}
+  .lab2-group{padding:8px}
   .lab2-header{padding:5px}
   .lab2-host,.lab2-header p{display:none}
-  .trainer-custom h2{margin:6px 10px 4px}
-  .trainer-custom .cz-prev{min-height:0;padding:4px 9px}
-  .trainer-custom .cz-prev .hud-portrait{width:36px!important;height:36px!important}
-}
-/* La ilustración ambiental de la pantalla es independiente del fondo de la tarjeta. */
-.realhub.pl4.trainer-screen{
-  background:linear-gradient(180deg,#071630c2 0%,#0b1e379b 38%,#08142aee 100%),url(ui/fondo_inicio.webp) center 42%/cover no-repeat!important
-}
-.trainer-screen .trainer-header h2{color:#f6f9ff;text-shadow:0 2px 5px #08162d}
-.trainer-favorite{display:flex;align-items:center;gap:6px;padding:3px 7px;background:#0d2044;border-radius:8px}
-.trainer-hero .trainer-favorite img{width:25px;height:25px;object-fit:cover;border-radius:50%}
-.trainer-favorite :is(b,small){display:block}
-.trainer-favorite b{font-size:11px;color:#ffe09a}
-.trainer-panel-head{display:flex;justify-content:space-between;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px}
-.trainer-panel-head h3{margin:0}
-.trainer-panel-action,.trainer-goal-action{padding:5px 9px;border:1px solid var(--m-line2);border-radius:8px;background:var(--m-sunk);color:var(--m-text);font:800 13px 'Nunito',system-ui;cursor:pointer}
-.trainer-goal-action{margin-top:6px;background:var(--m-cta);border-color:transparent;color:#fff}
-.trainer-pin-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.trainer-pin{min-width:0;padding:6px 8px;border-radius:9px;background:var(--m-sunk)}
-.trainer-pin summary{display:list-item;cursor:pointer;line-height:1.3;overflow-wrap:anywhere}
-.trainer-pin p{margin:5px 0 2px;font-size:12px;color:var(--m-soft)}
-.trainer-pin-art{display:inline-grid;vertical-align:middle;place-items:center;width:31px;height:31px;margin-inline-end:5px;background:#152a50;border-radius:8px}
-.trainer-pin-art .hud-portrait{width:20px!important;height:20px!important}
-.trainer-pin-art .hud-portrait img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
-.trainer-record{grid-template-columns:minmax(0,1fr) auto}
-.trainer-record strong{font-size:17px}
-.trainer-picker{width:min(760px,calc(100vw - 20px))}
-.trainer-picker .cz-box{border-radius:16px}
-.trainer-picker .cz-prev-copy small{color:#d1e1ff;font-size:11px}
-.trainer-picker .cz-tabs{justify-content:flex-start;padding:0 8px}
-.trainer-picker .cz-tab{padding:6px 10px;font:800 13px 'Nunito',system-ui}
-.trainer-picker .cz-list{min-height:0;overflow:auto;overscroll-behavior:contain}
-.trainer-picker .cz-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;overflow:visible}
-.trainer-picker .cz-backgrounds{grid-template-columns:repeat(auto-fit,minmax(103px,1fr))}
-.trainer-picker .cz-tile{display:grid;grid-template-columns:auto minmax(0,1fr);min-width:0;gap:9px;min-height:69px;padding:7px 25px 7px 8px;align-content:center;text-align:left}
-.trainer-picker .cz-tile.locked{opacity:1}
-.trainer-picker .cz-tile .cz-art{width:56px;height:56px}
-.trainer-picker .cz-tile .cz-av,.trainer-picker .cz-tile .cz-fr .hud-portrait{width:48px!important;height:48px!important}
-.trainer-picker .cz-item-copy{min-width:0}
-.trainer-picker .cz-tile :is(b,small){display:block;text-align:left;overflow-wrap:anywhere}
-.trainer-picker .cz-tile b{font-size:14px;line-height:1.2}
-.trainer-picker .cz-tile small{margin-top:3px;font-size:12px;line-height:1.28}
-.trainer-picker .cz-backgrounds .cz-tile{grid-template-columns:minmax(0,1fr);padding:6px;gap:5px}
-.trainer-picker .cz-backgrounds .cz-background{height:60px}
-.trainer-picker .cz-filters{display:flex;gap:6px;margin:0 9px 4px}
-.trainer-picker .cz-filters :is(input,select){min-width:0;min-height:32px;padding:3px 6px;color:var(--m-text);background:var(--m-sunk);border:1px solid var(--m-line2);border-radius:8px;font:700 13px 'Nunito',system-ui}
-.trainer-picker .cz-filters input{flex:1}
-.trainer-picker .cz-pages{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 0 8px;font-size:12px;font-variant-numeric:tabular-nums}
-.trainer-picker .cz-pages button{min-height:32px;padding:4px 8px;border:1px solid var(--m-line2);border-radius:8px;background:var(--m-btn);color:var(--m-text);font:800 12px 'Nunito',system-ui;cursor:pointer}
-.trainer-picker .cz-pages button:disabled{opacity:.65;cursor:default}
-.trainer-picker :is(.cz-pin-count,.cz-empty){margin:4px 10px;color:var(--m-soft);font-size:13px}
-.trainer-picker .cz-empty{grid-column:1/-1}
-@media(max-width:460px){
-  .trainer-picker .cz-grid,.trainer-pin-grid{grid-template-columns:minmax(0,1fr)}
-  .trainer-picker .cz-backgrounds{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .trainer-picker .cz-filters input{font-size:16px}
-}
-@media(orientation:landscape) and (max-height:510px){
-  .trainer-picker .cz-tile{min-height:58px;padding-block:5px}
-  .trainer-picker .cz-tile .cz-art{width:44px;height:44px}
-  .trainer-picker .cz-tile .cz-av,.trainer-picker .cz-tile .cz-fr .hud-portrait{width:38px!important;height:38px!important}
-}
-/* Ficha de entrenador: identidad, estadísticas y trayectoria. */
-.realhub.pl4.trainer-screen{
-  --m-card:#16213a;--m-cardline:#425479;--m-sunk:#111a30;--m-text:#f2f6ff;
-  --m-soft:#c0cde6;--m-mute:#a3b3d3;--m-line:#354769;--m-line2:#526889;
-  --m-acc:#92caff;--m-cta:#265ec7;--m-shadow:0 6px 17px #02091580;
-  background:linear-gradient(#0a1531a8,#17152bc0),url(ui/fondo_inicio.webp) center 46%/cover no-repeat!important
-}
-.trainer-screen .trainer-wrap{max-width:1390px;gap:12px;padding-inline:max(16px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-right))}
-.trainer-screen .trainer-header{gap:12px}
-.trainer-screen .trainer-heading-band{border-radius:12px;padding:10px clamp(12px,3vw,30px);
-  background:repeating-linear-gradient(135deg,#fff2 0 10px,transparent 10px 21px),linear-gradient(100deg,#ff866f,#ffc373);
-  box-shadow:0 4px 0 #9b4d58,0 5px 14px #09122875}
-.trainer-screen .trainer-heading-band h2{color:#21192c;text-shadow:none;font-size:clamp(17px,3vw,29px);font-weight:900}
-.trainer-screen .trainer-hero{grid-template-columns:auto minmax(0,1fr) auto;gap:clamp(12px,3vw,28px);min-height:174px;padding:16px clamp(10px,3vw,28px)}
-.trainer-avatar-block{display:grid;justify-items:center;gap:8px;min-width:0}
-.trainer-screen .trainer-hero #tcAv{width:92px;height:92px}
-.trainer-screen .trainer-hero #plChange{margin:0!important;padding:6px 10px;font-size:12px!important;max-width:100%}
-.trainer-hero-pins{display:flex;flex-wrap:wrap;justify-content:end;gap:5px}
-.trainer-hero-pins:empty{display:none}
-.trainer-hero-pins .trainer-pin-art{width:40px;height:40px;margin:0}
-.trainer-hero-pins .title-badge-art{width:29px;height:29px}
-.trainer-screen .trainer-cover .trainer-identity input{font-size:clamp(19px,3.2vw,31px);min-height:41px}
-.trainer-screen .trainer-stat-board{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
-.trainer-stat-board .trainer-stat{display:flex;align-items:center;gap:8px;min-height:52px;
-  padding:8px 10px;border:1px solid var(--m-cardline);border-radius:13px;background:var(--m-card);box-shadow:var(--m-shadow)}
-.trainer-stat-board .trainer-stat img{width:24px;height:24px;flex:none;object-fit:contain;image-rendering:auto}
-.trainer-stat-board .trainer-stat b{font-size:clamp(15px,2vw,22px)}
-.trainer-stat-board .trainer-stat small{color:var(--m-soft);font-size:11px;line-height:1.15}
-.trainer-screen .trainer-panel{border-radius:16px}
-.trainer-screen .trainer-panel h3{padding-inline-start:9px;border-inline-start:4px solid #ff9879;font-size:16px;line-height:1.25}
-.trainer-screen .trainer-record-heading{color:var(--m-soft);font-size:12px;margin:9px 0 1px}
-.trainer-screen .trainer-run{grid-template-columns:minmax(0,1fr) auto auto}
-.trainer-screen .trainer-run span:nth-child(2){color:var(--m-soft)}
-@media(max-width:960px){.trainer-screen .trainer-stat-board{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(max-width:620px){
-  .realhub.pl4.trainer-screen{background-image:linear-gradient(#0a1531b0,#17152bdf),url(ui/fondo_inicio_movil.webp)!important}
-  .trainer-screen .trainer-stat-board{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .trainer-screen .trainer-hero{grid-template-columns:auto minmax(0,1fr);padding:9px;min-height:117px}
-  .trainer-screen .trainer-hero #tcAv{width:61px;height:61px}
-  .trainer-hero-pins{grid-column:1/-1;justify-content:start}
-}
-@media(max-width:430px){
-  .trainer-screen .trainer-stat-board{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .trainer-screen .trainer-heading-band{padding:7px 10px}
-  .trainer-screen .trainer-hero #plChange{max-width:100px;line-height:1.15}
-  .trainer-screen .trainer-run{grid-template-columns:minmax(0,1fr) auto;gap:4px 7px}
-  .trainer-screen .trainer-run span:nth-child(2){grid-row:2}
-  .trainer-screen .trainer-run strong{grid-column:2;grid-row:1/3}
-}
-@media(orientation:landscape) and (max-height:510px){
-  .trainer-screen .trainer-hero{min-height:110px;padding-block:8px}
-  .trainer-screen .trainer-hero #tcAv{width:55px;height:55px}
+  .trainer-custom h2{margin:8px 16px 6px}
+  .trainer-custom .cz-prev{min-height:0;padding:4px 10px}
+  .trainer-custom .cz-prev .trainer-portrait{width:36px!important;height:36px!important}
+  .trainer-custom .cz-tabs{margin-block:6px}
 }
 /* Movimiento ambiental y novedades del menú principal. */
 #overlay .realhub.hb button.hb-version{height:32px;padding:0 10px;border:1px solid #ffe59c;background:#ffcf66;color:#292014;font:900 12px/1 'Nunito',system-ui,sans-serif;white-space:nowrap;touch-action:manipulation}
@@ -12725,18 +12693,25 @@ function avatarSrc(id){
 }
 function avatarKey(){ const k = localStorage.getItem('digibonk3d-avatar'); return CHARS[k] ? k : selectedKey; }
 const TRAINER_BACKGROUNDS = {
-  portal: {name:'Portal nocturno', src:'ui/fondo_inicio.webp', y:49},
-  bosque: {name:'Bosque File', src:'ui/pantallas-carga/carga_bosque.webp', y:37},
-  desierto: {name:'Desierto de Datos', src:'ui/pantallas-carga/carga_desierto.webp', y:43},
-  nieve: {name:'Montaña Helada', src:'ui/pantallas-carga/carga_nieve.webp', y:40},
-  liso: {name:'Azul liso'}
+  none: {name:'Ninguno'},
+  portal: {name:'Portal nocturno', src:'ui/fondo_inicio.webp', y:49, how:'Termina tu primera partida', unlocked:() => loadAch().runs > 0},
+  bosque: {name:'Bosque File', src:'ui/pantallas-carga/carga_bosque.webp', y:37, how:'Gana el Bosque File', unlocked:() => wonMap('bosque')},
+  desierto: {name:'Desierto de Datos', src:'ui/pantallas-carga/carga_desierto.webp', y:43, how:'Gana el Desierto de Datos', unlocked:() => wonMap('desierto')},
+  nieve: {name:'Montaña Helada', src:'ui/pantallas-carga/carga_nieve.webp', y:40, how:'Gana la Montaña Helada', unlocked:() => wonMap('nevado')}
 };
 function trainerBackgroundId(id = localStorage.getItem(TRAINER_BG_KEY)){
-  return Object.hasOwn(TRAINER_BACKGROUNDS, id) ? id : 'portal';
+  if (!Object.hasOwn(TRAINER_BACKGROUNDS, id)) return 'none';
+  const background = TRAINER_BACKGROUNDS[id];
+  return !background.unlocked || background.unlocked() ? id : 'none';
 }
-function trainerCoverStyle(id){
-  const {src, y} = TRAINER_BACKGROUNDS[trainerBackgroundId(id)];
-  return src ? `--trainer-bg:url('${src}');--trainer-bg-y:${y}%` : '--trainer-bg:none';
+function trainerCoverStyle({src, y}){
+  return src ? `--trainer-bg:url('${src}');--trainer-bg-y:${y}%` : '';
+}
+function trainerCoverAttrs(className, id){
+  const background = TRAINER_BACKGROUNDS[trainerBackgroundId(id)];
+  const classes = `${className} trainer-cover`;
+  if (!background.src) return `class="${classes}"`;
+  return `class="${classes} has-trainer-bg" style="${trainerCoverStyle(background)}"`;
 }
 function trainerTitleIcon(title){
   return title?.id ? (titleBadge(title) || '<img class="title-badge-art" src="ui/hub/ic_logros.webp" alt="">') : '';
@@ -12751,7 +12726,7 @@ function trainerIdentity() {
   return {available, unlocked, favorite, pinned};
 }
 function trainerAchievementArt(item, avatar){
-  return TITLES.includes(item) ? trainerTitleIcon(item) : `<span class="hud-portrait pf-av fr-${item.id}"><img src="${avatar}" alt=""></span>`;
+  return TITLES.includes(item) ? trainerTitleIcon(item) : `<span class="hud-portrait trainer-portrait fr-${item.id}"><img src="${avatar}" alt=""></span>`;
 }
 const TRAINER_GOAL_DIGIMON = {
   amistad_gabumon:'gabumon', sinceridad_palmon:'palmon', agua_fiabilidad:'gomamon',
@@ -12785,8 +12760,8 @@ function trainerRecordSummary(recs, roster){
 function trainerCardPreview({avatar, frame, title, background, favorite}){
   const item = TITLES.find(x => x.id === title);
   const key = favorite || selectedKey;
-  return `<div class="cz-prev trainer-cover" style="${trainerCoverStyle(background)}">
-    <div class="hud-portrait pf-av${frame ? ' fr-' + frame : ''}"><img src="${avatarSrc(avatar)}" alt=""></div>
+  return `<div ${trainerCoverAttrs('cz-prev', background)}>
+    <div class="hud-portrait trainer-portrait${frame ? ' fr-' + frame : ''}"><img src="${avatarSrc(avatar)}" alt=""></div>
     <div class="cz-prev-copy">${trainerName ? `<b data-no-i18n>${escHtml(trainerName)}</b>` : '<b>Invitado</b>'}
       ${item ? `<span class="cz-preview-title">${trainerTitleIcon(item)}${escHtml(item.name)}</span>` : ''}
       ${favorite !== undefined && CHARS[key] ? `<small>${favorite ? 'Digimon favorito' : 'Compañero actual'} · ${CHARS[key].name}</small>` : ''}</div>
@@ -12858,8 +12833,8 @@ function showPlayer(){
     <main class="realhub pl4 trainer-screen" aria-labelledby="trainerHeading">
       <div class="trainer-wrap">
         <header class="trainer-header"><button type="button" class="g-back" id="plBack">← Volver</button><div class="trainer-heading-band"><h2 id="trainerHeading">Ficha de entrenador</h2></div></header>
-        <section class="trainer-hero trainer-cover" style="${trainerCoverStyle()}">
-          <div class="trainer-avatar-block"><div class="hud-portrait pf-av${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img src="${avatarSrc()}" alt=""></div>
+        <section ${trainerCoverAttrs('trainer-hero')}>
+          <div class="trainer-avatar-block"><div class="hud-portrait trainer-portrait${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img src="${avatarSrc()}" alt=""></div>
             <button type="button" class="pl4-chg" id="plChange">Personalizar ficha</button></div>
           <div class="trainer-identity">
             <label for="tcName">Nombre de entrenador</label>
@@ -12878,8 +12853,10 @@ function showPlayer(){
             ${pins ? `<div class="trainer-pin-grid">${pins}</div>` : '<p class="trainer-empty">Puedes fijar hasta tres logros conseguidos.</p>'}</section>
         </div>
         <section class="trainer-panel"><h3>Últimas partidas</h3>${lastRuns || '<p class="trainer-empty">Las próximas partidas aparecerán aquí al terminarlas.</p>'}</section>
-        <section class="trainer-panel trainer-goals"><h3>Próximos logros</h3>${achievements}</section>
-        <section class="trainer-panel"><h3>Digimon con más bajas</h3><div class="trainer-digimon-grid">${specialists}</div></section>
+        <div class="trainer-detail">
+          <section class="trainer-panel trainer-goals"><h3>Próximos logros</h3>${achievements}</section>
+          <section class="trainer-panel"><h3>Digimon con más bajas</h3><div class="trainer-digimon-grid">${specialists}</div></section>
+        </div>
       </div>
     </main>`);
   document.getElementById('plBack').onclick = showSelect;
@@ -12917,7 +12894,7 @@ function openCustomizer(initialTab = 'bg', trigger = document.getElementById('pl
   const identity = trainerIdentity();
   let pAv = avatarIcon()?.id || '', pFrame = extra.frame || '', pTitle = extra.title || '', pBg = trainerBackgroundId();
   let pFavorite = identity.favorite, pPins = identity.pinned;
-  let tab = initialTab, query = '', access = 'owned', page = 0, saved = false;
+  let tab = initialTab, query = '', access = 'owned', saved = false;
   const tabs = [['bg','Fondos'], ['fav','Favorito'], ['pins','Logros'], ['av','Entrenadores'], ['dg','Iconos Digimon'], ['frame','Marcos'], ['title','Títulos']];
   const back = document.createElement('dialog');
   back.id = 'czBack'; back.className = 'trainer-custom trainer-picker';
@@ -12925,13 +12902,16 @@ function openCustomizer(initialTab = 'bg', trigger = document.getElementById('pl
   back.innerHTML = '<section class="cz-box"></section>';
   document.body.appendChild(back);
   const box = back.firstElementChild;
-  const avatarArt = src => `<span class="cz-art"><span class="cz-av"><img src="${src}" alt="" decoding="async"></span></span>`;
-  const frameArt = id => `<span class="cz-art cz-fr"><span class="hud-portrait pf-av${id ? ' fr-' + id : ''}"><img src="${avatarSrc(pAv)}" alt=""></span></span>`;
+  const avatarArt = src => `<span class="cz-art"><span class="cz-av"><img src="${src}" alt="" loading="lazy" decoding="async"></span></span>`;
+  const frameArt = id => `<span class="cz-art cz-fr"><span class="hud-portrait trainer-portrait${id ? ' fr-' + id : ''}"><img src="${avatarSrc(pAv)}" alt=""></span></span>`;
   const titleArt = title => `<span class="cz-art">${trainerTitleIcon(title) || '<span aria-hidden="true">—</span>'}</span>`;
   const option = (id, name, art, selected, locked = false, note = '') => ({id,name,art,selected,locked,note});
   const options = () => {
-    if (tab === 'bg') return Object.entries(TRAINER_BACKGROUNDS).map(([id,bg]) => option(id,bg.name,
-      `<span class="cz-background" style="${trainerCoverStyle(id)}" aria-hidden="true"></span>`, pBg === id));
+    if (tab === 'bg') return Object.entries(TRAINER_BACKGROUNDS).map(([id,bg]) => {
+      const locked = trainerBackgroundId(id) !== id;
+      const art = `<span class="cz-background" style="${trainerCoverStyle(bg)}" aria-hidden="true">${bg.src ? '' : '—'}</span>`;
+      return option(id,bg.name,art,pBg === id,locked,locked ? bg.how : '');
+    });
     if (tab === 'fav') return [
       option('', 'Compañero actual', avatarArt(charIcon(selectedKey)), !pFavorite),
       ...identity.available.map(key => option(key,CHARS[key].name,avatarArt(charIcon(key)),pFavorite === key,false,`Maestría ${masteryLv(key)}`))
@@ -12970,20 +12950,18 @@ function openCustomizer(initialTab = 'bg', trigger = document.getElementById('pl
       const visible = !limited() || (access === 'locked' ? item.locked : !item.locked);
       return visible && (!query || [item.name,I18N.tr(item.name)].some(name => normalized(name).includes(query)));
     });
-    const size = 6, pages = Math.max(1, Math.ceil(list.length/size));
-    page = Math.min(page, pages - 1);
-    const items = list.slice(page*size,(page + 1)*size).map(item => {
+    const items = list.map(item => {
       const disabled = item.locked || (tab === 'pins' && pPins.length === 3 && !item.selected);
       return `<button type="button" class="cz-tile${item.selected ? ' sel' : ''}${item.locked ? ' locked' : ''}" data-choice="${escHtml(item.id)}"
         aria-pressed="${item.selected}" ${disabled ? 'disabled' : ''}>${item.art}<span class="cz-item-copy"><b>${escHtml(item.name)}</b>${item.note ? `<small>${escHtml(item.note)}</small>` : ''}</span>
         ${item.locked ? '<i class="cz-lock" aria-hidden="true">🔒</i>' : ''}</button>`;
     }).join('');
     const body = box.querySelector('.cz-list');
+    const scrollTop = focus ? body.scrollTop : 0;
     body.innerHTML = `
       ${tab === 'pins' ? `<p class="cz-pin-count" role="status">${pPins.length}/3 logros destacados</p>` : ''}
-      <div class="cz-grid${tab === 'bg' ? ' cz-backgrounds' : ''}">${items || '<p class="cz-empty">No hay opciones para mostrar.</p>'}</div>
-      ${pages > 1 ? `<nav class="cz-pages" aria-label="Páginas"><button type="button" data-page="-1" ${page === 0 ? 'disabled' : ''}>Anterior</button><span role="status">${page + 1}/${pages}</span>
-        <button type="button" data-page="1" ${page === pages - 1 ? 'disabled' : ''}>Siguiente</button></nav>` : ''}`;
+      <div class="cz-grid${tab === 'bg' ? ' cz-backgrounds' : ''}">${items || '<p class="cz-empty">No hay opciones para mostrar.</p>'}</div>`;
+    body.scrollTop = scrollTop;
     body.querySelectorAll('[data-choice]:not(:disabled)').forEach(button => button.onclick = () => {
       const id = button.dataset.choice;
       if (tab === 'bg') pBg = trainerBackgroundId(id);
@@ -12996,10 +12974,6 @@ function openCustomizer(initialTab = 'bg', trigger = document.getElementById('pl
       renderList(`[data-choice="${CSS.escape(id)}"]`);
       sfx('ready');
     });
-    body.querySelectorAll('[data-page]:not(:disabled)').forEach(button => button.onclick = () => {
-      page += +button.dataset.page;
-      renderList(`[data-page="${button.dataset.page}"]:not(:disabled)`);
-    });
     if (focus) (body.querySelector(focus) || body.querySelector('[data-choice]:not(:disabled)') || box.querySelector('.cz-tab.on'))?.focus({preventScroll:true});
   };
   const render = () => {
@@ -13011,12 +12985,12 @@ function openCustomizer(initialTab = 'bg', trigger = document.getElementById('pl
       <div class="cz-list"></div>
       <div class="cz-foot"><button type="button" class="cz-btn" id="czCancel">Cancelar</button><button type="button" class="cz-btn ok" id="czSave">Guardar</button></div>`;
     box.querySelectorAll('[data-tab]').forEach(button => button.onclick = () => {
-      tab = button.dataset.tab; query = ''; access = 'owned'; page = 0;
+      tab = button.dataset.tab; query = ''; access = 'owned';
       render(); box.querySelector('.cz-tab.on').focus({preventScroll:true});
     });
     const search = box.querySelector('#czSearch'), filter = box.querySelector('#czAccess');
-    if (search) search.oninput = () => { query = normalized(search.value.trim()); page = 0; renderList(); };
-    if (filter) filter.onchange = () => { access = filter.value; page = 0; renderList(); };
+    if (search) search.oninput = () => { query = normalized(search.value.trim()); renderList(); };
+    if (filter) filter.onchange = () => { access = filter.value; renderList(); };
     box.querySelector('#czCancel').onclick = () => back.close();
     box.querySelector('#czSave').onclick = () => {
       if (pAv) localStorage.setItem('digibonk3d-avatar', pAv);
