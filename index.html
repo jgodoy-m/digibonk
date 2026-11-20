@@ -3280,6 +3280,99 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
   #overlay .approved-info-dialog.shop-dialog{width:calc(100vw - 20px)!important;padding:10px}
   .shop-grid{gap:7px}
 }
+/* Ficha de entrenador y Laboratorio */
+.trainer-screen,.lab2{font-family:'Nunito',system-ui,sans-serif}
+.realhub.pl4.trainer-screen{background:var(--m-sunk)!important;color:var(--m-text);overscroll-behavior:contain}
+.trainer-wrap{box-sizing:border-box;max-width:1120px;margin:auto;padding:18px max(14px,env(safe-area-inset-right)) 22px max(14px,env(safe-area-inset-left));display:grid;gap:12px}
+.trainer-header,.lab2-header{display:flex;align-items:center;gap:12px}
+.trainer-header h2,.lab2-header h2{margin:0;font-size:clamp(18px,3.2vw,27px);line-height:1.12;color:var(--m-text);overflow-wrap:anywhere}
+.trainer-header .g-back,.lab2-header .g-back{flex:none;min-height:38px}
+.trainer-hero,.trainer-panel,.lab2-group{min-width:0;padding:14px;background:var(--m-card);border:1px solid var(--m-cardline);border-radius:16px;color:var(--m-text);box-shadow:var(--m-shadow)}
+.trainer-hero{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;border-top:4px solid var(--m-acc)}
+.trainer-screen .trainer-hero #tcAv{width:76px;height:76px}
+.trainer-screen .trainer-hero #tcAv img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.trainer-identity,.trainer-actions{min-width:0;display:grid;justify-items:start;gap:4px}
+.trainer-identity label,.trainer-identity small,.trainer-actions small,.trainer-panel small,.trainer-empty{color:var(--m-soft);font-size:12px}
+.trainer-identity input{box-sizing:border-box;width:min(100%,320px);min-height:38px;margin:0;padding:4px 8px;color:var(--m-text);background:var(--m-sunk);border:1px solid var(--m-line2);border-radius:9px;font:850 clamp(16px,3vw,22px) 'Nunito',system-ui}
+.trainer-title{font-size:13px;color:var(--m-acc);overflow-wrap:anywhere}
+.trainer-actions{justify-items:end;gap:6px}
+.trainer-actions #plChange{min-height:38px;padding:5px 12px}
+.trainer-wallet{display:inline-flex;align-items:center;gap:6px;color:var(--m-gold);font-weight:850;white-space:nowrap}
+.trainer-wallet img{width:18px;height:18px;object-fit:contain}
+.trainer-summary,.trainer-detail{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.trainer-detail{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+.trainer-panel h3,.lab2-group h3{margin:0 0 9px;color:var(--m-text);font-size:15px;line-height:1.2}
+.trainer-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(83px,1fr));gap:6px}
+.trainer-stat{min-width:0;padding:8px;background:var(--m-sunk);border-radius:9px;text-align:left;overflow-wrap:anywhere}
+.trainer-stat b{display:block;font-size:17px;line-height:1.15;font-variant-numeric:tabular-nums}
+.trainer-record{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px;font-size:12px;padding:8px 0}
+.trainer-record + .trainer-record,.trainer-goal + .trainer-goal{border-top:1px solid var(--m-line)}
+.trainer-record span:first-child{min-width:0;overflow-wrap:anywhere}
+.trainer-record small{display:block}.trainer-record strong{font-variant-numeric:tabular-nums}
+.trainer-record small.win{font-weight:850;color:var(--m-acc)}
+.trainer-goal{padding:7px 0}.trainer-goal div{display:flex;justify-content:space-between;gap:6px;font-size:13px}
+.trainer-goal div small{white-space:nowrap}
+.trainer-goal progress,.lab2-card progress{display:block;width:100%;height:6px;margin:5px 0 0;accent-color:var(--m-acc)}
+.trainer-digimon-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px}
+.trainer-digimon{min-width:0;display:flex;align-items:center;gap:7px;padding:6px;background:var(--m-sunk);border-radius:10px}
+.trainer-digimon img{width:34px;height:34px;border-radius:50%;object-fit:cover}
+.trainer-digimon b,.trainer-digimon small{display:block;overflow-wrap:anywhere}
+.trainer-empty{margin:6px 0}
+#overlay:not(.menu-mode)>.lab2{max-height:calc((100dvh - var(--ui-top) - var(--ui-bot))/var(--ui-scale,1))!important;height:auto!important;padding:12px!important;overscroll-behavior:contain;color:var(--m-text)}
+.lab2-header{position:sticky;top:0;z-index:2;padding:10px;border:1px solid var(--m-line);border-radius:12px;background:var(--m-card)}
+.lab2-header p{margin:2px 0 0;font-size:12px;color:var(--m-soft)}
+.lab2-header .trainer-wallet{margin-left:auto}
+.lab2-host{flex:none;width:42px;height:42px;object-fit:contain;image-rendering:pixelated}
+.lab2-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:10px}
+.lab2-status{margin:7px 2px;color:var(--m-acc);font-size:13px;font-weight:800;min-height:1em}
+.lab2-card{padding:9px;border:1px solid var(--m-line);border-radius:10px;background:var(--m-sunk)}
+.lab2-card + .lab2-card{margin-top:7px}
+.lab2-card-head,.lab2-bottom,.lab2-footer{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.lab2-icon{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;color:#fff;background:var(--m-tilesel);font-weight:900}
+.lab2-card h4{margin:0;flex:1;min-width:0;font-size:14px;overflow-wrap:anywhere}
+.lab2-level,.lab2-full{font-size:12px;font-weight:850;white-space:nowrap;color:var(--m-acc)}
+.lab2-card p{margin:4px 0;color:var(--m-soft);font-size:12px;line-height:1.25}
+.lab2-bottom{justify-content:space-between;margin-top:5px}.lab2-bonus{font-size:12px}
+.lab2-bonus small,.lab2-buy small{color:var(--m-soft);font-size:11px}
+.lab2-buy{display:grid;gap:2px;justify-items:end;text-align:right}
+.lab2-button{box-sizing:border-box;min-height:34px;padding:4px 9px;border:1px solid transparent;border-radius:8px;background:var(--m-cta);color:#fff;font:800 12px 'Nunito',system-ui;cursor:pointer}
+.lab2-button.secondary{border-color:var(--m-line2);background:var(--m-card);color:var(--m-text)}
+.lab2-button:disabled{border-color:var(--m-line2);background:var(--m-sunk);color:var(--m-mute);cursor:default}
+.lab2-footer{justify-content:space-between;padding:10px 2px 2px}
+.trainer-custom{box-sizing:border-box;width:min(666px,calc(100vw - 20px));max-height:calc(100dvh - 12px);background:none;color:var(--m-text);padding:0;border:0;overflow:visible}
+.trainer-custom::backdrop{background:#050d22c0}
+.trainer-custom .cz-box{box-sizing:border-box;width:100%;max-height:calc(100dvh - 12px);background:var(--m-card);border:1px solid var(--m-line2);color:var(--m-text)}
+.trainer-custom .cz-head{padding:10px 12px!important;gap:12px;background:var(--m-sunk);flex-direction:row;text-align:left}
+.trainer-custom .cz-prev{flex:0 0 auto;min-width:58px;padding:0}
+.trainer-custom .cz-prev .hud-portrait{width:54px!important;height:54px!important}
+.trainer-custom .cz-ttl{margin-top:3px!important;font-size:10px}
+.trainer-custom .cz-copy h2{font-size:17px;line-height:1.15;margin:0}
+.trainer-custom .cz-tabs{margin:7px 4px;gap:4px}
+.trainer-custom .cz-tab,.trainer-custom .cz-btn{background:var(--m-btn);color:var(--m-text);border:1px solid var(--m-line2);box-shadow:none}
+.trainer-custom .cz-tab.on,.trainer-custom .cz-btn.ok{background:var(--m-cta);color:#fff;border-color:transparent}
+.trainer-custom .cz-grid{padding:4px 9px 8px;gap:6px;overscroll-behavior:contain}
+.trainer-custom .cz-tile{background:var(--m-sunk);border-color:var(--m-line2);box-shadow:none;padding:8px 4px;min-height:70px}
+.trainer-custom .cz-tile.sel{border-color:var(--m-acc);box-shadow:inset 0 0 0 1px var(--m-acc)}
+.trainer-custom .cz-tile b,.trainer-custom .cz-tile.locked b{color:var(--m-text)}
+.trainer-custom .cz-tile:is(.locked,.sel) small,.trainer-custom .cz-tile small{color:var(--m-soft)}
+.trainer-custom .cz-foot{margin:0;padding:8px;background:var(--m-sunk);border-color:var(--m-line)}
+@media(max-width:660px){
+  .trainer-summary,.trainer-detail,.lab2-grid{grid-template-columns:minmax(0,1fr)}
+  .trainer-hero{grid-template-columns:auto minmax(0,1fr);gap:10px}
+  .trainer-actions{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .trainer-screen .trainer-hero #tcAv{width:58px;height:58px}
+  .lab2-header{gap:6px;flex-wrap:wrap}
+  .lab2-header .trainer-wallet{margin-left:0}
+  .lab2-host{display:none}
+}
+@media(orientation:landscape) and (max-height:510px){
+  .trainer-wrap{padding-top:8px;gap:7px}
+  .trainer-hero,.trainer-panel,.lab2-group{padding:8px}
+  .lab2-header{padding:5px}
+  .lab2-host,.lab2-header p{display:none}
+  .trainer-custom .cz-head{padding:4px 9px!important}
+  .trainer-custom .cz-prev .hud-portrait{width:36px!important;height:36px!important}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.min.js" } }
@@ -11763,7 +11856,7 @@ function showLogros(){
 }
 /* ---------- Laboratorio: mejoras permanentes que se compran con Bits ---------- */
 // per = bonus por nivel (multiplicador sumado) · flat = bonus entero · costs = precio de cada nivel
-const LAB_COSTS = [150, 300, 500, 800, 1200];
+const LAB_COSTS = [150, 300, 500, 800, 1200], LAB_LEVELS_KEY = 'digibonk3d-lab';
 const LAB = [
   {id:'hp',     name:'Vida máxima',       icon:'❤', per:0.04, unit:'%', d:'Más vida máxima al empezar cada partida.'},
   {id:'dmg',    name:'Daño',              icon:'⚔', per:0.03, unit:'%', d:'Todos tus ataques hacen más daño.'},
@@ -11771,7 +11864,7 @@ const LAB = [
   {id:'pickup', name:'Imán',              icon:'◎', per:0.08, unit:'%', d:'Recoges la experiencia desde más lejos.'},
   {id:'xp',     name:'Experiencia',       icon:'✦', per:0.04, unit:'%', d:'Cada orbe de experiencia vale más.'},
   {id:'bonk',   name:'Carga del Bonk',    icon:'✸', per:0.06, unit:'%', d:'El medidor Bonk se llena más rápido.'},
-  {id:'rer',    name:'Refrescos de cartas', icon:'↻', flat:[0, 1, 1, 2, 2], unit:'', d:'Más refrescos de cartas al subir de nivel (+1 en los niveles 2 y 4).'},
+  {id:'rer',    name:'Refrescos de cartas', icon:'↻', flat:[0, 1, 1, 2, 2, 2], unit:'', d:'Más refrescos de cartas al subir de nivel (+1 en los niveles 1 y 3).'},
   {id:'bits',   name:'Bits por partida',  icon:'Ⓑ', per:0.05, unit:'%', d:'Ganas más Bits al terminar cada partida.'},
   {id:'revive', name:'Segunda oportunidad', icon:'✚', max:1, costs:[2500], d:'Una vez por partida, al caer vuelves con el 50% de la vida.'},
   {id:'skill',  name:'Habilidad inicial', icon:'★', max:1, costs:[2000], d:'Empiezas cada partida con una habilidad de tu Digimon a nivel 1.'}
@@ -11779,29 +11872,46 @@ const LAB = [
 const LAB_BY_ID = Object.fromEntries(LAB.map(u => [u.id, u]));
 const labMax = u => u.max || LAB_COSTS.length;
 const labCosts = u => u.costs || LAB_COSTS;
-function labLevels(){ return loadJSON('digibonk3d-lab', {}); }
-function labLv(id){ return Math.min(labMax(LAB_BY_ID[id]), labLevels()[id] | 0); }
+function labLevels(){
+  const levels = loadJSON(LAB_LEVELS_KEY, {});
+  return levels && typeof levels === 'object' && !Array.isArray(levels) ? levels : {};
+}
+function labLv(id, levels = labLevels()){
+  if (!Object.hasOwn(LAB_BY_ID, id)) return 0;
+  return Math.max(0, Math.min(labMax(LAB_BY_ID[id]), levels[id] | 0));
+}
 // Multiplicador de una mejora con porcentaje: 1 + nivel × bonus
 function labMul(id){ const u = LAB_BY_ID[id]; return 1 + (u.per || 0) * labLv(id); }
 function labFlat(id){ const u = LAB_BY_ID[id], lv = labLv(id); return u.flat ? u.flat[lv] : lv; }
-function labSpent(){ return LAB.reduce((a, u) => a + labCosts(u).slice(0, labLv(u.id)).reduce((x, y) => x + y, 0), 0); }
+function labSpent(levels = labLevels()){ return LAB.reduce((a, u) => a + labCosts(u).slice(0, labLv(u.id, levels)).reduce((x, y) => x + y, 0), 0); }
+// Si falla la escritura de los Bits, se restaura el progreso previo antes de volver al menú.
+function saveLabProgress(levels, bits){
+  const previous = localStorage.getItem(LAB_LEVELS_KEY);
+  try {
+    localStorage.setItem(LAB_LEVELS_KEY, JSON.stringify(levels));
+  } catch(e){ return false; }
+  try {
+    SAVE.bits = bits;
+    return true;
+  } catch(e){
+    if (previous === null) localStorage.removeItem(LAB_LEVELS_KEY);
+    else localStorage.setItem(LAB_LEVELS_KEY, previous);
+    return false;
+  }
+}
 function labBuy(id){
-  const u = LAB_BY_ID[id], lv = labLv(id);
-  if (lv >= labMax(u)) return false;
-  const cost = labCosts(u)[lv];
-  if (SAVE.bits < cost){ announce('Bits insuficientes', `Necesitas ${cost} Bits`, '#ef5350', 'low'); return false; }
-  SAVE.bits = SAVE.bits - cost;
-  const L = labLevels(); L[id] = lv + 1;
-  localStorage.setItem('digibonk3d-lab', JSON.stringify(L));
+  if (!Object.hasOwn(LAB_BY_ID, id)) return false;
+  const u = LAB_BY_ID[id], levels = labLevels(), bits = SAVE.bits;
+  const lv = labLv(id, levels), cost = labCosts(u)[lv];
+  if (lv >= labMax(u) || !(bits >= cost)) return false;
+  if (!saveLabProgress({...levels, [id]: lv + 1}, bits - cost)) return false;
   sfx('ready');
   return true;
 }
-// Reembolso total: devuelve todos los Bits gastados y deja las mejoras a cero
+// Reembolso total: devuelve todos los Bits gastados y deja las mejoras a cero.
 function labRefund(){
   const back = labSpent();
-  SAVE.bits = SAVE.bits + back;
-  localStorage.removeItem('digibonk3d-lab');
-  return back;
+  return back && saveLabProgress({}, SAVE.bits + back) ? back : 0;
 }
 // Aplica el Laboratorio al empezar la partida (después del equilibrio)
 // Modificador de la semana: una regla distinta cada semana con +25% de Bits
@@ -11894,45 +12004,66 @@ function applyLab(){
   }
 }
 function labBonusText(u, lv){
-  if (!lv) return 'Sin mejorar';
   if (u.per) return `+${Math.round(u.per*lv*100)}${u.unit}`;
   if (u.flat) return `+${u.flat[lv]}`;
-  return 'Activa';
+  return lv ? 'Activa' : 'Inactiva';
 }
-function showLab(){
+function showLab(message = '', focusId = ''){
   state = 'lab';
   setHud(false);
-  const esc = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const bits = SAVE.bits;
-  const cards = LAB.map(u => {
-    const lv = labLv(u.id), max = labMax(u), full = lv >= max, cost = full ? 0 : labCosts(u)[lv];
-    const pips = Array.from({length: max}, (_, i) => `<i class="${i < lv ? 'on' : ''}"></i>`).join('');
-    return `<article class="lab-card${full ? ' full' : ''}">
-      <span class="lab-ic" aria-hidden="true">${u.icon}</span>
-      <div class="lab-txt"><h3>${esc(u.name)}</h3><p>${esc(u.d)}</p>
-        <div class="lab-pips" aria-label="Nivel ${lv} de ${max}">${pips}</div>
-        <small>${esc(labBonusText(u, lv))}${!full && u.per ? ` → +${Math.round(u.per*(lv + 1)*100)}%` : ''}</small></div>
-      <button type="button" class="lab-buy" data-lab="${u.id}" ${full || bits < cost ? 'disabled' : ''}>${full ? 'Máximo' : `Ⓑ ${cost}`}</button>
+  const bits = SAVE.bits, levels = labLevels(), spent = labSpent(levels);
+  const number = n => n.toLocaleString(I18N.lang);
+  const card = u => {
+    const lv = labLv(u.id, levels), max = labMax(u), full = lv === max;
+    const cost = full ? 0 : labCosts(u)[lv];
+    const missing = Math.max(0, cost - bits);
+    const bonus = labBonusText(u, lv);
+    const next = full ? bonus : labBonusText(u, lv + 1);
+    return `<article class="lab2-card${full ? ' full' : ''}" id="lab-card-${u.id}">
+      <div class="lab2-card-head"><span class="lab2-icon" aria-hidden="true">${u.icon}</span><h4 tabindex="-1">${escHtml(u.name)}</h4><span class="lab2-level">Nv. ${lv}/${max}</span></div>
+      <p>${escHtml(u.d)}</p>
+      <progress aria-label="${escHtml(u.name)}" value="${lv}" max="${max}"></progress>
+      <div class="lab2-bottom"><span class="lab2-bonus">
+        ${full ? `<b>${bonus}</b>` : `<small>Ahora</small> <b>${bonus}</b> <span aria-hidden="true">→</span> <small>Siguiente</small> <b>${next}</b>`}
+        </span>
+        ${full ? '<span class="lab2-full">Máximo</span>' : `<div class="lab2-buy"><button type="button" class="lab2-button" data-lab="${u.id}" aria-label="Comprar ${escHtml(u.name)} por ${number(cost)} Bits" ${missing ? 'disabled' : ''}>${number(cost)} Bits</button>${missing ? `<small>Faltan ${number(missing)} Bits</small>` : ''}</div>`}
+      </div>
     </article>`;
-  }).join('');
+  };
+  const group = (title, ids) => `<section class="lab2-group"><h3>${title}</h3>${ids.map(id => card(LAB_BY_ID[id])).join('')}</section>`;
   showOverlay(`
-    <div class="lab-screen">
-      <header class="lab-top">
-        <button class="g-back" id="labBack">← Volver</button>
-        <div class="lab-head"><img src="sprites/adventure/elecmon.png" alt="" class="lab-host"><div><h2>Laboratorio</h2><small>Mejoras permanentes para todas las partidas</small></div></div>
-        <span class="lab-bits">Ⓑ ${bits.toLocaleString('es-ES')}</span>
+    <main class="lab-screen lab2" aria-labelledby="labHeading">
+      <header class="lab2-header">
+        <button type="button" class="g-back" id="labBack">← Volver</button>
+        <img src="sprites/adventure/elecmon.png" alt="" class="lab2-host">
+        <div><h2 id="labHeading">Laboratorio</h2><p>Mejoras permanentes para todos los Digimon</p></div>
+        <strong class="trainer-wallet"><img src="ui/hud/ic_bits.webp" alt="">${number(bits)} Bits</strong>
       </header>
-      <p class="lab-say">Elecmon: «Con los Bits que traes de tus partidas puedo mejorar a tu compañero. Las mejoras valen para todos los Digimon.»</p>
-      <div class="lab-grid">${cards}</div>
-      <footer class="lab-foot">
-        <button type="button" class="mini-btn" id="labRefund" ${labSpent() ? '' : 'disabled'}>Reembolsar todo (Ⓑ ${labSpent()})</button>
-        <button type="button" class="g-btn" id="labGacha">${!GACHA_SOON ? '🎟 Ir a la Incubadora' : '🛒 Ir a la tienda'}</button>
+      <p class="lab2-status" role="status">${escHtml(message)}</p>
+      <div class="lab2-grid">
+        ${group('Combate', ['hp','dmg','speed','bonk','revive'])}
+        ${group('Progreso de partida', ['pickup','xp','rer','bits','skill'])}
+      </div>
+      <footer class="lab2-footer">
+        <button type="button" class="lab2-button secondary" id="labRefund" ${spent ? '' : 'disabled'}>Reembolsar todo${spent ? ` · ${number(spent)} Bits` : ''}</button>
+        <button type="button" class="lab2-button secondary" id="labGacha">${GACHA_SOON ? 'Ir a la tienda' : 'Ir a la Incubadora'}</button>
       </footer>
-    </div>`);
-  document.getElementById('labBack').onclick = () => showSelect();
+    </main>`);
+  document.getElementById('labBack').onclick = showSelect;
   document.getElementById('labGacha').onclick = () => { if (!GACHA_SOON) return showGacha(); showSelect(); showShop(); };
-  document.getElementById('labRefund').onclick = () => { const b = labRefund(); announce('Reembolso', `+${b} Bits`, '#ffd54f', 'low'); showLab(); };
-  overlay.querySelectorAll('.lab-buy').forEach(b => b.onclick = () => { if (labBuy(b.dataset.lab)) showLab(); });
+  document.getElementById('labRefund').onclick = () => {
+    const returned = labRefund();
+    showLab(returned ? `Bits devueltos: ${number(returned)}` : 'No se pudo guardar el cambio.');
+    document.getElementById('labBack').focus({preventScroll:true});
+  };
+  overlay.querySelectorAll('[data-lab]').forEach(button => button.onclick = () => {
+    const id = button.dataset.lab;
+    showLab(labBuy(id) ? `Mejora comprada: ${LAB_BY_ID[id].name}` : 'No se pudo comprar la mejora.', id);
+  });
+  if (focusId){
+    const selected = document.getElementById('lab-card-' + focusId);
+    (selected?.querySelector('button:not(:disabled)') || selected?.querySelector('h4'))?.focus({preventScroll:true});
+  }
 }
 const SAVE = {
   get bits(){ return +(localStorage.getItem('digibonk3d-bits') || 0); },
@@ -12309,108 +12440,111 @@ function normAv(v){ return v || ''; }
 function avatarIcon(){ const id = normAv(localStorage.getItem('digibonk3d-avatar')); return AVATAR_KIDS.find(x => x.id === id) || PLAYER_ICONS.find(x => x.id === id) || SKIN_ICONS.find(x => x.id === id && ownsSkinIcon(x)) || null; }
 function avatarSrc(){ const ic = avatarIcon(); if (ic) return ic.src; return PLAYER_ICONS.some(x => x.id === avatarKey()) ? charIcon(avatarKey()) : headUrl(spriteOf(avatarKey(), false)); }
 function avatarKey(){ const k = localStorage.getItem('digibonk3d-avatar'); return CHARS[k] ? k : selectedKey; }
-// Tarjeta de entrenador: una sola pantalla. Pasar el ratón previsualiza; clic equipa; el nombre se edita en la propia tarjeta
 function showPlayer(){
   state = 'player';
   setHud(false);
-  const st = loadJSON('digibonk3d-stats', {});
-  const plays = Object.values(st).reduce((a, x) => a + (x.plays || 0), 0);
-  const kills = Object.values(st).reduce((a, x) => a + (x.kills || 0), 0);
-  const evos = Object.keys(loadJSON('digibonk3d-evo', {})).length;
-  const ach = loadAch(), day = loadDaily();
-  const pct = day.claimed ? 100 : Math.min(100, Math.round(day.runs / DAILY.runsGoal * 100));
-  const idNum = String([...(trainerName || 'x')].reduce((a, c) => (a*31 + c.charCodeAt(0)) % 99999, 7)).padStart(5, '0');
-  const tt = extra.title ? TITLES.find(t => t.id === extra.title) : null;
-  const recs = getRecords();
-  const bestT = recs.reduce((a, r) => Math.max(a, r.t), 0), bestL = recs.reduce((a, r) => Math.max(a, r.lvl || 0), 0);
-  const skinsRaw = loadJSON('digibonk3d-skins', []);
-  const skinsOwned = Array.isArray(skinsRaw) ? skinsRaw.length : Object.keys(skinsRaw).length;
+  const stats = Object.values(loadJSON('digibonk3d-stats', {})).filter(s => s && typeof s === 'object');
+  const sum = key => stats.reduce((total, s) => total + (+s[key] || 0), 0);
+  const records = getRecords(), recs = Array.isArray(records) ? records.filter(r => r && Number.isFinite(r.t)) : [];
+  const bestTime = recs.reduce((best, r) => Math.max(best, r.t), 0);
+  const bestLevel = Math.max(0, ...stats.map(s => +s.maxLvl || 0), ...recs.map(r => +r.lvl || 0));
+  const {done: digiOwned, total: digiTotal} = pickProgress();
+  const chars = SEASONS.adventure.chars;
+  const skins = chars.reduce((total, key) => total + lineSkins(key).filter(sk => sk.id !== 'clasico' && ownsAt(key, 0, sk.id)).length, 0);
   const achDone = achDoneCount(), achTotal = achItems().length;
-  const {done: digiOwned, total: digiTotal} = pickProgress();   // mismo recuento que el inicio y los logros (12)
-  const statList = [
-    ['🎮', plays, 'Partidas'], ['⚔', kills, 'Bajas'], ['⏱', bestT ? fmtTime(bestT) : '—', 'Mejor tiempo'], ['⭐', bestL || '—', 'Mejor nivel'],
-    ['🧬', evos, 'Evoluciones'], ['📘', `${digiOwned}/${digiTotal}`, 'Digimon'], ['Ⓑ', SAVE.bits, 'Bits'], ...(GACHA_SOON ? [] : [['🎟', SAVE.tickets, 'Tickets']]),
-    ['🖼', (inv.frames || []).length, 'Marcos'], ['🏷', (inv.titles || []).length, 'Títulos'], ['🎨', skinsOwned, 'Skins'], ['🏆', achDone, 'Logros']
-  ];
-  const statTiles = statList.map(([ic, v, l]) => `<div class="pl4-stat"><i>${ic}</i><span><b${typeof v === 'number' ? ` data-n="${v}"` : ''}>${typeof v === 'number' ? '0' : v}</b><small>${l}</small></span></div>`).join('');
-  const recRows = recs.slice(0, 5).map(r => `<div class="pl4-rec"><b>${String(r.name).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</b><span>${fmtTime(r.t)}</span><span>${r.kills} bajas</span><span>Nv. ${r.lvl}</span><em class="${r.win ? 'ok' : ''}">${r.win ? 'Victoria' : 'Derrota'}</em></div>`).join('') || '<p class="pl4-empty">Aún no hay partidas. Juega una para ver tus récords.</p>';
-  // Vitrina: los 5 logros pendientes más cerca de cumplirse
-  const achRows = achItems().map(t => { const [a, b] = t.prog(); return {t, a: Math.min(a, b), b, own: (TITLES.includes(t) ? inv.titles : inv.frames).includes(t.id)}; })
-    .filter(x => !x.own).sort((x, y) => y.a / y.b - x.a / x.b).slice(0, 5)
-    .map(({t, a, b}) => `<div class="pl4-ach"><div class="pl4-ach-top"><b>${t.name}</b><em>${a.toLocaleString('es-ES')}/${b.toLocaleString('es-ES')}</em></div><small>${t.how}</small><i><u style="width:${Math.round(a / b * 100)}%"></u></i></div>`).join('') || '<p class="pl4-empty">¡Todos los logros conseguidos!</p>';
-  const specRows = SEASONS.adventure.chars.map(k => ({k, s: statsOf(k)})).filter(x => x.s.plays || x.s.kills).sort((a, b) => b.s.kills - a.s.kills).slice(0, 8).map(({k, s}) => `<div class="pl4-spec"><img src="${headUrl(spriteOf(k, false))}" alt=""><span><b>${CHARS[k].name}</b><small>${s.kills} bajas · ${s.plays} partidas</small></span></div>`).join('') || '<p class="pl4-empty">Juega con un Digimon para ver su especialidad.</p>';
-  const pct2 = day.claimed ? 100 : pct;
-  const esc12 = v => String(v).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
-  const medalIcon = {novato: '🏁', cazador: '⚔', explorador: '🧭', maestro: '👑', leyenda: '💎', navidad: '🎄'};
-  const medalDone = id => inv.titles.includes(id);
-  const medals = Object.keys(medalIcon).map(id => { const ok = medalDone(id); return `<span class="pl5-medal${ok ? ' ok' : ''}" title="${esc12(TITLES.find(t => t.id === id)?.name || id)}"><i>${medalIcon[id]}</i><b>x${ok ? 1 : 0}</b></span>`; }).join('');
-  const companion = CHARS[selectedKey] ? `<span>Compañero: ${esc12(CHARS[selectedKey].name)}</span>` : '';
-  const recList = recs.slice(0, 4).map(r => `<div class="pl5-rec"><span class="pl5-acc${r.win ? ' win' : ''}"></span><span class="pl5-rn"><b>${esc12(r.name)}</b><small>${r.win ? 'Victoria' : 'Derrota'}</small></span><span class="pl5-rv">${r.kills} bajas</span><span class="pl5-rv">Nv. ${r.lvl}</span><span class="pl5-rt">${fmtTime(r.t)}</span></div>`).join('') || '<p class="pl4-empty">Aún no hay partidas. Juega una para ver tus récords.</p>';
+  const title = TITLES.find(t => t.id === extra.title);
+  const number = n => n.toLocaleString(I18N.lang);
+  const tiles = items => items.map(([label, value]) =>
+    `<div class="trainer-stat"><b>${typeof value === 'number' ? number(value) : escHtml(value)}</b><small>${label}</small></div>`).join('');
+  const activity = tiles([
+    ['Partidas', sum('plays')], ['Bajas', sum('kills')], ['Mejor tiempo', bestTime ? fmtTime(bestTime) : '—'], ['Mejor nivel', bestLevel || '—']
+  ]);
+  const collection = tiles([
+    ['Digimon', `${digiOwned}/${digiTotal}`], ['Evoluciones', Object.values(loadJSON('digibonk3d-evo', {})).filter(Boolean).length],
+    ['Skins', skins], ['Marcos', inv.frames.length], ['Títulos', inv.titles.length], ['Logros', `${achDone}/${achTotal}`]
+  ]);
+  const recList = recs.slice(0, 4).map(r => `<div class="trainer-record">
+    <span><b data-no-i18n>${escHtml(r.name || '—')}</b><small class="${r.win ? 'win' : ''}">${r.win ? 'Victoria' : 'Derrota'}</small></span>
+    <span>${number(+r.kills || 0)} bajas · Nv. ${+r.lvl || '—'}</span><strong>${fmtTime(r.t)}</strong></div>`).join('')
+    || '<p class="trainer-empty">Aún no hay partidas. Juega una para ver tus récords.</p>';
+  const progress = achItems().filter(item => !(TITLES.includes(item) ? inv.titles : inv.frames).includes(item.id))
+    .map(item => { const [value, max] = item.prog(); return {item, value: Math.max(0, Math.min(value, max)), max}; })
+    .filter(x => x.max > 0).sort((a, b) => b.value/b.max - a.value/a.max).slice(0, 3);
+  const achievements = progress.map(({item, value, max}) => `<div class="trainer-goal">
+    <div><b>${escHtml(item.name)}</b><small>${number(value)}/${number(max)}</small></div>
+    <small>${escHtml(item.how)}</small><progress aria-label="${escHtml(item.name)}" value="${value}" max="${max}"></progress>
+    </div>`).join('') || '<p class="trainer-empty">¡Todos los logros conseguidos!</p>';
+  const specialists = chars.map(key => ({key, data: statsOf(key)}))
+    .filter(x => x.data.plays || x.data.kills)
+    .sort((a, b) => (b.data.kills || 0) - (a.data.kills || 0)).slice(0, 4)
+    .map(({key, data}) => `<div class="trainer-digimon"><img src="${charIcon(key)}" alt=""><div><b>${CHARS[key].name}</b><small>${number(+data.kills || 0)} bajas · ${number(+data.plays || 0)} partidas</small></div></div>`).join('')
+    || '<p class="trainer-empty">Juega con un Digimon para ver su especialidad.</p>';
   showOverlay(`
-    <main class="realhub pl4" aria-label="Ficha de entrenador"><div class="real-world" aria-hidden="true"><div class="rw-scenery"></div></div><div class="pl4-wrap">
-      <header class="pl4-top"><button class="g-back" id="plBack"><kbd>Esc</kbd> Volver</button>
-        <div class="pl4-banner"><b>Ficha de entrenador</b><small>Tu tarjeta, tus estadísticas y tus logros</small></div>
-        <button type="button" class="pl5-share" disabled title="Próximamente">Compartir mi ficha</button></header>
-      <section class="pl5-hero" id="tc">
-        <div class="pl5-id">
-          <div class="pl4-id">
-            <input class="pl4-name" id="tcName" maxlength="16" value="${escHtml(trainerName || '')}" placeholder="Tu nombre" title="Haz clic para cambiar tu nombre">
-            <span class="pl4-title-badge" id="tcTitle">${tt ? tt.name : 'Sin título'}</span>
-            <div class="pl4-chips"><span>ID ${idNum}</span>${companion}</div>
+    <main class="realhub pl4 trainer-screen" aria-labelledby="trainerHeading">
+      <div class="trainer-wrap">
+        <header class="trainer-header"><button type="button" class="g-back" id="plBack">← Volver</button><h2 id="trainerHeading">Ficha de entrenador</h2></header>
+        <section class="trainer-hero">
+          <div class="hud-portrait pf-av${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img src="${avatarSrc()}" alt=""></div>
+          <div class="trainer-identity">
+            <label for="tcName">Nombre de entrenador</label>
+            <input id="tcName" maxlength="16" autocomplete="off" value="${escHtml(trainerName || '')}" placeholder="Tu nombre">
+            ${title ? `<strong class="trainer-title">${escHtml(title.name)}</strong>` : ''}
+            ${CHARS[selectedKey] ? `<small>Compañero: ${escHtml(CHARS[selectedKey].name)}</small>` : ''}
           </div>
-        </div>
-        <div class="pl5-center">
-          <div class="pl4-av">
-            <div class="hud-portrait pf-av${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img id="tcImg" src="${avatarSrc()}" alt=""></div>
-            <button type="button" class="pl4-chg" id="plChange">Cambiar</button>
+          <div class="trainer-actions"><span class="trainer-wallet"><img src="ui/hud/ic_bits.webp" alt="">${number(SAVE.bits)} Bits</span>
+            ${GACHA_SOON ? '' : `<small>${number(SAVE.tickets)} tickets</small>`}
+            <button type="button" class="pl4-chg" id="plChange">Personalizar ficha</button>
           </div>
+        </section>
+        <div class="trainer-summary">
+          <section class="trainer-panel"><h3>Actividad</h3><div class="trainer-stats">${activity}</div></section>
+          <section class="trainer-panel"><h3>Colección</h3><div class="trainer-stats">${collection}</div></section>
         </div>
-        <div class="pl5-medals">${medals}</div>
-      </section>
-      <div class="pl4-stats">${statTiles}</div>
-      <div class="pl5-grid">
-        <section class="pl5-panel pl5-left"><h3>Récords <small>Bajas · contrarreloj</small></h3>${recList}
-          <h4>Eventos <small>Piso · tiempo</small></h4><p class="pl4-empty">Sin eventos todavía.</p></section>
-        <section class="pl5-panel pl5-right"><h3>Vitrina de logros <small>${achDone} de ${achTotal}</small></h3>${achRows}</section>
-        <section class="pl5-panel pl5-wide"><h3>Especialista en <small>Digimon con más bajas</small></h3><div class="pl4-specs">${specRows}</div></section>
+        <div class="trainer-detail">
+          <section class="trainer-panel"><h3>Mejores partidas por tiempo</h3>${recList}</section>
+          <section class="trainer-panel trainer-goals"><h3>Próximos logros</h3>${achievements}</section>
+        </div>
+        <section class="trainer-panel"><h3>Digimon con más bajas</h3><div class="trainer-digimon-grid">${specialists}</div></section>
       </div>
-    </div></main>`);
-
-  document.getElementById('plBack').onclick = () => showSelect();
+    </main>`);
+  document.getElementById('plBack').onclick = showSelect;
   document.getElementById('plChange').onclick = openCustomizer;
-  const tc = document.getElementById('tc');
-  // Contadores animados
-  document.querySelectorAll('.pl4 [data-n]').forEach(el => {
-    const n = +el.dataset.n, t0 = performance.now();
-    const step = now => { const k = Math.min(1, (now - t0)/700); el.textContent = Math.round(n*k*(2 - k)); if (k < 1 && document.body.contains(el)) requestAnimationFrame(step); };
-    requestAnimationFrame(step);
+  const name = document.getElementById('tcName');
+  name.onblur = () => {
+    const value = name.value.trim();
+    if (value && value !== trainerName){
+      setTrainerName(value);
+      announce('Nombre guardado', escHtml(trainerName), '#3de0ff', 'low');
+    }
+    name.value = trainerName || '';
+  };
+  name.addEventListener('keydown', e => {
+    e.stopPropagation();
+    if (e.key === 'Escape') name.value = trainerName || '';
+    if (e.key === 'Escape' || e.key === 'Enter'){ e.preventDefault(); name.blur(); }
   });
-  // Nombre editable en la tarjeta
-  const nameIn = document.getElementById('tcName');
-  const saveName = () => { const v = nameIn.value.trim(); if (v && v !== trainerName){ setTrainerName(v); announce('Nombre guardado', v, '#3de0ff', 'low'); } else if (!v) nameIn.value = trainerName || ''; };
-  nameIn.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') nameIn.blur(); });
-  nameIn.onblur = saveName;
 }
 
 // Diálogo "Avatar, marco y título" (botón Cambiar de la ficha). Solo guarda al pulsar Guardar.
 function openCustomizer(){
-  const host = document.getElementById('overlay');
-  if (!host || document.getElementById('czBack')) return;
+  if (document.getElementById('czBack')) return;
+  const trigger = document.getElementById('plChange');
   let pAv = normAv(localStorage.getItem('digibonk3d-avatar'));
   let pFrame = extra.frame || '', pTitle = extra.title || '';
-  let tab = 'av';
+  let tab = 'av', saved = false;
   const ownsFrame = id => !id || inv.frames.includes(id);
   const ownsTitle = id => !id || inv.titles.includes(id);
-  const back = document.createElement('div');
-  back.id = 'czBack'; back.className = 'cz-back';
-  back.innerHTML = '<div class="cz-box" role="dialog" aria-label="Avatar, marco y título"></div>';
-  host.appendChild(back);
+  const back = document.createElement('dialog');
+  back.id = 'czBack'; back.className = 'trainer-custom';
+  back.setAttribute('aria-labelledby', 'czTitle');
+  back.innerHTML = '<section class="cz-box"></section>';
+  document.body.appendChild(back);
   const box = back.firstElementChild;
-  const tile = (sel, cls, img, name, sub, locked, extraCls) => `<button type="button" class="cz-tile${sel ? ' sel' : ''}${locked ? ' locked' : ''}${extraCls || ''}" ${locked ? 'disabled' : ''} data-v="${cls}">${img}<b>${name}</b>${sub ? `<small>${sub}</small>` : ''}${locked ? '<i class="cz-lock">🔒</i>' : ''}</button>`;
   const rar = t => ({c:'Común', r:'Rara', e:'Épica', l:'Legendaria'})[t] || '';
-  const card = (sel, v, inner, locked, tier) => `<button type="button" class="cz-tile cz-t-${tier || 'c'}${sel ? ' sel' : ''}${locked ? ' locked' : ''}" ${locked ? 'disabled' : ''} data-v="${v}">${inner}${locked ? '<i class="cz-lock">🔒</i>' : ''}</button>`;
+  const card = (sel, v, inner, locked, tier) => `<button type="button" class="cz-tile cz-t-${tier || 'c'}${sel ? ' sel' : ''}${locked ? ' locked' : ''}" ${locked ? 'disabled' : ''} data-v="${v}" aria-pressed="${sel}">${inner}${locked ? '<i class="cz-lock">🔒</i>' : ''}</button>`;
   const grid = () => {
-    if (tab === 'av') return AVATAR_KIDS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av"><img src="${ic.src}" alt=""></span><b>${ic.name}</b>`, false, 'c')).join('');
+    if (tab === 'av') return card(!pAv, 'av:', `<span class="cz-av"><img src="${charIcon(selectedKey)}" alt=""></span><b>Automático</b>`, false, 'c')
+      + AVATAR_KIDS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av"><img src="${ic.src}" alt=""></span><b>${ic.name}</b>`, false, 'c')).join('');
     if (tab === 'dg') return PLAYER_ICONS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av">${ic.src ? `<img src="${ic.src}" alt="">` : sprEl(spriteWith(ic.id, false, 'clasico'), 44)}</span><b>${ic.name}</b>`, false, 'c')).join('')
       + SKIN_ICONS.filter(ic => ownsSkinIcon(ic) || !(SKINS.find(s => s.id === ic.skin) || {}).hidden).map(ic => { const ok = ownsSkinIcon(ic); return card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av"><img src="${ic.src}" alt=""${ok ? '' : ' style="filter:grayscale(1) brightness(.45)"'}></span><b>${skinIconName(ic)}</b>`, !ok, ok ? 'r' : 'c'); }).join('');
     if (tab === 'frame') return [{id: '', name: 'Sin marco', tier: 'c'}, ...FRAMES].map(f => {
@@ -12426,38 +12560,48 @@ function openCustomizer(){
   };
   const preview = () => {
     const ic = AVATAR_KIDS.find(x => x.id === pAv) || PLAYER_ICONS.find(x => x.id === pAv) || SKIN_ICONS.find(x => x.id === pAv);
-    const img = ic ? ic.src : headUrl(spriteOf(avatarKey(), false));
+    const img = ic ? ic.src : charIcon(selectedKey);
     const t = pTitle ? TITLES.find(x => x.id === pTitle) : null;
     return `<div class="cz-prev"><div class="hud-portrait pf-av${pFrame ? ' fr-' + pFrame : ''}"><img src="${img}" alt=""></div><span class="cz-ttl">${t ? t.name : 'Sin título'}</span></div>`;
   };
-  const render = () => {
+  const render = (focus = '', scroll = 0) => {
     box.innerHTML = `
       <div class="cz-head">${preview()}
-        <div class="cz-copy"><small>Tu imagen en la clasificación y en tu ficha</small><h2>Avatar, marco y título</h2>
-          <p>Los marcos y títulos se ganan con los logros, la maestría de cada Digimon, el evento y la tienda. Los iconos de entrenador están disponibles desde el principio.</p></div></div>
-      <div class="cz-tabs">${[['av', 'Entrenadores'], ['dg', 'Digimon'], ['frame', 'Marcos'], ['title', 'Títulos']].map(([k, l]) => `<button type="button" class="cz-tab${tab === k ? ' on' : ''}" data-tab="${k}">${l}</button>`).join('')}</div>
+        <div class="cz-copy"><h2 id="czTitle">Avatar, marco y título</h2></div></div>
+      <div class="cz-tabs">${[['av', 'Entrenadores'], ['dg', 'Digimon'], ['frame', 'Marcos'], ['title', 'Títulos']].map(([k, l]) => `<button type="button" class="cz-tab${tab === k ? ' on' : ''}" data-tab="${k}" aria-pressed="${tab === k}">${l}</button>`).join('')}</div>
       <div class="cz-grid">${grid()}</div>
       <div class="cz-foot"><button type="button" class="cz-btn" id="czCancel">Cancelar</button><button type="button" class="cz-btn ok" id="czSave">Guardar</button></div>`;
-    box.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { tab = b.dataset.tab; render(); });
+    const gridEl = box.querySelector('.cz-grid');
+    gridEl.scrollTop = scroll;
+    if (focus) box.querySelector(focus)?.focus({preventScroll:true});
+    box.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => {
+      tab = b.dataset.tab;
+      render(`[data-tab="${CSS.escape(tab)}"]`);
+    });
     box.querySelectorAll('.cz-tile:not(.locked)').forEach(b => b.onclick = () => {
       const [k, v] = b.dataset.v.split(':');
       if (k === 'av') pAv = v; else if (k === 'fr') pFrame = v; else pTitle = v;
-      render(); sfx('ready');
+      render(`[data-v="${CSS.escape(b.dataset.v)}"]`, gridEl.scrollTop); sfx('ready');
     });
-    box.querySelector('#czCancel').onclick = close;
+    box.querySelector('#czCancel').onclick = () => back.close();
     box.querySelector('#czSave').onclick = save;
   };
-  const close = () => { back.remove(); document.removeEventListener('keydown', onKey, true); };
   const save = () => {
     if (pAv) localStorage.setItem('digibonk3d-avatar', pAv);
+    else localStorage.removeItem('digibonk3d-avatar');
     if (pFrame) equipExtra('frame', pFrame); else unequipExtra('frame');
     if (pTitle) equipExtra('title', pTitle); else unequipExtra('title');
-    close(); sfx('ready'); showPlayer();
+    saved = true;
+    back.close();
   };
-  const onKey = e => { if (e.key === 'Escape'){ e.stopPropagation(); close(); } };
-  document.addEventListener('keydown', onKey, true);
-  back.addEventListener('mousedown', e => { if (e.target === back) close(); });
+  back.addEventListener('keydown', e => e.stopPropagation());
+  back.addEventListener('close', () => {
+    back.remove();
+    if (saved){ sfx('ready'); showPlayer(); }
+    (document.getElementById('plChange') || trigger)?.focus({preventScroll:true});
+  }, {once:true});
   render();
+  back.showModal();
 }
 
 /* ---------- Gacha: skins, marcos, títulos y objetos ---------- */
