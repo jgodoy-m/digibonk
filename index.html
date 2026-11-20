@@ -1566,16 +1566,11 @@ body:has(.tr11) #hudTop{display:none!important}
 .enc-row{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(19,41,77,.65);border:1px solid #2c4a78;font-size:14px;line-height:1.35}
 .enc-row b{font-size:18px;text-align:center}
 .enc-row span{text-align:left}
-.ach-prog{display:flex;flex-direction:column;align-items:flex-end;gap:3px;font-style:normal}
 .enc-row small{color:#b9f6ca;font-weight:700;white-space:nowrap}
 .enc-row.done{border-color:#7cf29c;opacity:.85}
 .enc-row.done span{text-decoration:line-through}
 .enc-row.done span strong{text-decoration:none}
 .enc-note{font-size:12px;color:#9fb3d1;margin:6px 0 0}
-.ach-bar{display:inline-block;width:70px;height:6px;border-radius:3px;background:#22385e;overflow:hidden;vertical-align:middle}
-.ach-bar u{display:block;height:100%;background:#ffd54f}
-.ach-stats{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:#cdd5e6;margin-bottom:6px}
-.ach-stats b{color:#ffd54f;margin-left:4px}
 /* Digimon de apoyo (selector) */
 /* ===================== HUD en partida · estilo Material (superficies, elevación, color por función) ===================== */
 :root{--h-surf:rgba(14,18,30,.74);--h-surf2:rgba(255,255,255,.07);--h-line:rgba(255,255,255,.10);--h-txt:#eef3ff;--h-mut:#a9b6d3;
@@ -2205,8 +2200,76 @@ html[lang] #overlay:not(.menu-mode) .mini-btn.danger{border-radius:99px!importan
 .approved-info-dialog .enc-row{background:var(--m-sunk)!important;border:1px solid var(--m-line)!important;border-radius:12px!important;color:var(--m-text)!important}
 .approved-info-dialog :is(b,strong,span,p){color:var(--m-text)!important}
 .approved-info-dialog small{color:var(--m-good)!important}
-.approved-info-dialog :is(.approved-info-meter,.ach-bar){background:var(--m-line2)!important;border:0!important}
-.approved-info-dialog .ach-bar u,.approved-info-dialog .approved-info-meter i{background:var(--m-meter)!important}
+.approved-info-dialog .approved-info-meter{background:var(--m-line2)!important;border:0!important}
+.approved-info-dialog .approved-info-meter i{background:var(--m-meter)!important}
+#overlay:not(.hidden):has(>.achievement-page){display:block;padding:0;align-items:initial;overflow:auto}
+.achievement-page{
+  --ach-accent:#007980;--ach-epic:#7546ab;--ach-screen:#eaf4f6;--ach-glow:#cceae9;
+  min-height:100%;color:var(--m-text);font-family:'Nunito',system-ui,sans-serif;text-align:left;
+  background:radial-gradient(ellipse at 100% 0%,var(--ach-glow),transparent 65%),var(--ach-screen);
+}
+html[data-theme=oscuro] .achievement-page{
+  --ach-accent:#5ce0d6;--ach-epic:#d2a9ff;--ach-screen:#101925;--ach-glow:#173343;
+}
+.achievement-wrap{box-sizing:border-box;width:min(1180px,100%);margin:auto;padding:clamp(16px,3vw,38px)}
+.achievement-back,.achievement-filters button{
+  min-height:44px;border-radius:10px;padding:8px 15px;border:1px solid var(--m-line2);
+  background:var(--m-card);color:var(--m-text);font:850 14px 'Nunito',system-ui,sans-serif;cursor:pointer;
+}
+.achievement-back:hover,.achievement-filters button:hover{border-color:var(--ach-accent)}
+.achievement-hero{
+  box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) minmax(96px,28%);align-items:center;
+  gap:16px;margin-top:14px;padding:clamp(20px,4.4vw,56px);overflow:hidden;
+  min-height:220px;border:1px solid #498e9e;border-radius:22px;color:#fff;
+  background:linear-gradient(95deg,#081e35 4%,#0b2945ed 43%,#08244254 100%),url(ui/pantallas-carga/carga_bosque.webp) 60% 53%/cover;
+  box-shadow:0 8px 18px #06182f36;
+}
+#overlay .achievement-hero h1{margin:0 0 16px;color:inherit;text-shadow:none;letter-spacing:0;font:900 clamp(24px,4.8vw,54px)/1.1 'Orbitron','Nunito',system-ui,sans-serif;overflow-wrap:anywhere}
+.achievement-hero>img{width:min(100%,158px);height:auto;justify-self:center;filter:drop-shadow(0 12px 14px #041b34cc)}
+.achievement-total{display:flex;flex-wrap:wrap;align-items:baseline;gap:5px 10px;color:#deeffa}
+.achievement-total b{font-size:clamp(18px,2.5vw,30px);color:#fff;font-variant-numeric:tabular-nums}
+.achievement-page progress{
+  display:block;width:100%;height:7px;appearance:none;overflow:hidden;border:0;border-radius:99px;
+  background:var(--m-line2);accent-color:var(--ach-accent);
+}
+.achievement-page progress::-webkit-progress-bar{background:transparent}
+.achievement-page progress::-webkit-progress-value{background:var(--ach-accent);border-radius:99px}
+.achievement-page progress::-moz-progress-bar{background:var(--ach-accent);border-radius:99px}
+.achievement-hero progress{max-width:340px;height:9px;margin-top:10px;background:#193e53;--ach-accent:#71e5cd}
+.achievement-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--m-cardline);border:1px solid var(--m-cardline);border-radius:14px;overflow:hidden;margin:14px 0 24px}
+.achievement-stats>div{display:grid;gap:3px;background:var(--m-card);padding:10px clamp(8px,2vw,20px);overflow-wrap:anywhere}
+.achievement-stats span,.achievement-card p,.achievement-progress span{color:var(--m-soft);font-size:14px}
+.achievement-stats b{font-size:clamp(14px,2vw,20px);font-variant-numeric:tabular-nums}
+.achievement-filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
+.achievement-filters button span{margin-inline-start:6px;font-variant-numeric:tabular-nums}
+.achievement-filters button[aria-pressed=true]{background:var(--m-tabon);color:var(--m-tabon-txt);border-color:var(--m-tabon)}
+.achievement-group+.achievement-group{margin-top:24px}
+#overlay .achievement-group h2{display:flex;align-items:center;gap:10px;font-size:21px;margin:0 0 10px;color:inherit;text-shadow:none;letter-spacing:0}
+.achievement-group h2::after{content:'';flex:1;border-top:1px solid var(--m-line2)}
+.achievement-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:10px}
+.achievement-card{
+  --ach-card-accent:var(--ach-accent);display:grid;grid-template-columns:58px minmax(0,1fr);align-items:start;gap:11px;
+  min-width:0;padding:14px;background:var(--m-card);border:1px solid var(--m-cardline);
+  border-inline-start:3px solid var(--m-line2);border-radius:12px;
+}
+.achievement-card[data-tier=e]{--ach-card-accent:var(--ach-epic)}
+.achievement-card[data-state=earned]{border-inline-start-color:var(--ach-card-accent)}
+.achievement-art{width:58px;height:58px;display:grid;place-items:center;border-radius:10px;background:var(--m-rowbg)}
+.achievement-art>.title-badge-art{width:44px;height:44px;object-fit:contain}
+.achievement-art>.trainer-portrait{width:54px;height:54px;margin:0}
+.achievement-card h3{margin:0;font-size:17px;line-height:1.2;overflow-wrap:anywhere}
+.achievement-card p{margin:4px 0 10px;line-height:1.3}
+.achievement-progress{display:flex;align-items:center;gap:8px}
+.achievement-progress progress{min-width:24px;--ach-accent:var(--ach-card-accent)}
+.achievement-progress span{flex:none;font-variant-numeric:tabular-nums;font-size:12px}
+.achievement-earned{color:var(--ach-card-accent);font-size:13px;font-weight:900}
+.achievement-empty{border:1px dashed var(--m-line2);padding:20px;border-radius:12px;color:var(--m-soft)}
+.achievement-page [hidden]{display:none!important}
+@media(max-width:540px){
+  .achievement-hero{grid-template-columns:minmax(0,1fr) 72px;min-height:156px;border-radius:16px}
+  .achievement-stats{margin-bottom:16px}
+  .achievement-stats span{font-size:12px}
+}
 #overlay:not(.menu-mode) :is(.cl4,.settings,.help-box,.lab-screen,.ms,.pk2-starter) :is(.pk-head,.set-head,.lab-top,.pk2-top) h2{flex:none!important;width:auto!important}
 #overlay:not(.menu-mode) .ms-diff{border-color:color-mix(in srgb,var(--dc) 45%,var(--m-line))!important}
 #overlay:not(.menu-mode) .ms-diff b{color:var(--dc)!important;filter:brightness(.85)}
@@ -2471,7 +2534,6 @@ html[lang] body #topbar .tb-id .hud-portrait{width:26px;height:26px}}
 .approved-info-dialog .enc-row.ach-row.got>b{background:color-mix(in srgb,var(--m-gold) 22%,transparent)}
 .approved-info-dialog .enc-row.ach-row:not(.got){opacity:.8}
 .approved-info-dialog .enc-row.ach-row{grid-template-columns:34px 1fr auto!important}
-.ach-got{font:900 12px 'Nunito',system-ui,sans-serif;font-style:normal;color:var(--m-good);white-space:nowrap}
 @media (max-width:700px){
   .tr11 .treasure-card .tc-art{transform:none!important;margin:0!important;height:52px!important;font-size:34px!important}
   .tr11 .treasure-card .tc-art svg{width:40px!important;height:40px!important}
@@ -5224,6 +5286,7 @@ addEventListener('keydown', e => {
   // Esc cierra las ventanas del menú (Logros, Encargos, Récords…) antes que nada
   if (k === 'escape'){ const x = overlay.querySelector('.approved-info-scrim #realClose'); if (x){ x.click(); return; } }
   if (state === 'savecode'){ if (k === 'escape') showSettings(); return; }
+  if (state === 'logros'){ if (k === 'escape') document.getElementById('achBack').click(); return; }
   if (state === 'cloud' || state === 'ranking'){ if (k === 'escape'){ const b = document.getElementById(state === 'cloud' ? 'cdBack' : 'rkBack'); if (b) b.click(); } return; }
   if (state === 'register') return;
   if (k === 'n'){ toggleMute(); return; }
@@ -10485,6 +10548,7 @@ function pickUpgrade(i){
 }
 
 function endGame(win){
+  if (state !== 'play' || !g) return;   // cada partida solo puede conceder sus premios una vez
   if (g.runId && !runIsLive()){ runTakenOver(); return; }   // la partida siguió en otra pestaña: aquí no da premios
   runEnd();   // fin de la partida: se libera el hueco de guardado
   state = 'end';
@@ -12215,6 +12279,14 @@ function endEmergency(){
 }
 /* ---------- Supervivencia: récord por Digimon ---------- */
 function survBest(k){ return loadJSON('digibonk3d-surv', {})[k] || 0; }
+function bestSurvivalRecord(){
+  let best = null;
+  for (const [key, value] of Object.entries(loadJSON('digibonk3d-surv', {}))){
+    const seconds = Math.floor(Number(value));
+    if (Object.hasOwn(CHARS, key) && Number.isFinite(seconds) && seconds > (best?.seconds || 0)) best = {key, seconds};
+  }
+  return best;
+}
 function recordSurv(k, t){
   const all = loadJSON('digibonk3d-surv', {});
   if (t <= (all[k] || 0)) return false;
@@ -12528,17 +12600,76 @@ function showShop(msg = ''){
   };
 }
 function showLogros(){
-  const ach = loadAch();
-  const kills = sumStats('kills'), plays = sumStats('plays');
-  const best = Object.entries(loadJSON('digibonk3d-surv', {})).sort((a, b) => b[1] - a[1])[0];
-  const fmt = n => Number(n).toLocaleString('es-ES');
-  const rows = achItems().map(tl => {
-    const isT = TITLES.includes(tl), own = (isT ? inv.titles : inv.frames).includes(tl.id), pr = tl.prog();
-    const bar = `<em class="ach-prog"><i class="ach-bar"><u style="width:${Math.round(Math.min(1, pr[0]/pr[1])*100)}%"></u></i><small>${fmt(Math.min(pr[0], pr[1]))}/${fmt(pr[1])}</small></em>`;
-    return `<div class="enc-row ach-row${own ? ' got' : ''}"><b>${own ? (isT ? '🏅' : '🖼') : '🔒'}</b><span><strong>${tl.name}</strong> <small>${isT ? 'Título' : 'Marco'}</small><br>${tl.how}</span>${own ? '<em class="ach-got">✓ Conseguido</em>' : bar}</div>`;
-  }).join('');
-  const stats = `<div class="ach-stats"><span>Partidas <b>${plays}</b></span><span>Bajas <b>${kills}</b></span><span>Supervivencia <b>${best ? fmtTime(best[1]) + ' · ' + CHARS[best[0]].name : '—'}</b></span></div>`;
-  menuModal('Logros', stats + `<div class="enc-list">${rows}</div>`);
+  state = 'logros';
+  setHud(false);
+  const fmt = n => Number(n).toLocaleString(LANG);
+  const entries = achItems().map(item => {
+    const title = TITLES.includes(item);
+    const earned = (title ? inv.titles : inv.frames).includes(item.id);
+    const [current, goal] = item.prog();
+    const value = Math.max(0, Math.min(Number(current) || 0, goal));
+    return {item, title, earned, value, goal};
+  }).sort((a, b) => Number(a.earned) - Number(b.earned) || b.value / b.goal - a.value / a.goal);
+  const earned = entries.filter(entry => entry.earned).length;
+  const best = bestSurvivalRecord();
+  const avatar = avatarSrc();
+  const card = ({item, earned, value, goal}) => `<article class="achievement-card" data-state="${earned ? 'earned' : 'pending'}" data-tier="${item.tier}">
+    <span class="achievement-art" aria-hidden="true">${trainerAchievementArt(item, avatar)}</span>
+    <div>
+      <h3 id="achievement-${item.id}">${escHtml(item.name)}</h3>
+      <p>${escHtml(item.how)}</p>
+      ${earned ? '<span class="achievement-earned">✓ Conseguido</span>' : `<div class="achievement-progress">
+        <progress aria-labelledby="achievement-${item.id}" value="${value}" max="${goal}"></progress>
+        <span aria-hidden="true">${fmt(value)} / ${fmt(goal)}</span>
+      </div>`}
+    </div>
+  </article>`;
+  const group = (name, title) => `<section class="achievement-group"><h2>${name}</h2>
+    <div class="achievement-grid">${entries.filter(entry => entry.title === title).map(card).join('')}</div>
+  </section>`;
+  showOverlay(`<main class="achievement-page" aria-labelledby="achHeading">
+    <div class="achievement-wrap">
+      <button class="achievement-back" type="button" id="achBack"><span aria-hidden="true">‹</span> <span>Volver al menú</span></button>
+      <header class="achievement-hero">
+        <div>
+          <h1 id="achHeading">Logros</h1>
+          <div class="achievement-total"><b>${fmt(earned)} / ${fmt(entries.length)}</b><span id="achTotalLabel">Conseguidos</span></div>
+          <progress aria-labelledby="achTotalLabel" value="${earned}" max="${entries.length}"></progress>
+        </div>
+        <img src="ui/hub/digivice/logros.png" alt="" width="158" height="158">
+      </header>
+      <div class="achievement-stats">
+        <div><span>Partidas</span><b>${fmt(sumStats('plays'))}</b></div>
+        <div><span>Bajas</span><b>${fmt(sumStats('kills'))}</b></div>
+        <div><span>Supervivencia</span><b>${best ? `${fmtTime(best.seconds)} · ${escHtml(CHARS[best.key].name)}` : '—'}</b></div>
+      </div>
+      <div class="achievement-filters" role="group" aria-label="Filtrar logros">
+        <button type="button" data-ach-filter="all" aria-pressed="true" aria-controls="achResults">Todos<span>${fmt(entries.length)}</span></button>
+        <button type="button" data-ach-filter="pending" aria-pressed="false" aria-controls="achResults">Pendientes<span>${fmt(entries.length - earned)}</span></button>
+        <button type="button" data-ach-filter="earned" aria-pressed="false" aria-controls="achResults">Conseguidos<span>${fmt(earned)}</span></button>
+      </div>
+      <div id="achResults">
+        ${group('Títulos', true)}
+        ${group('Marcos', false)}
+        <p class="achievement-empty" role="status" hidden>No hay logros para este filtro.</p>
+      </div>
+    </div>
+  </main>`);
+  const back = document.getElementById('achBack');
+  back.onclick = () => { showSelect(); document.getElementById('mLog')?.focus(); };
+  back.focus();
+  const filters = [...overlay.querySelectorAll('[data-ach-filter]')];
+  const groups = [...overlay.querySelectorAll('.achievement-group')];
+  const empty = overlay.querySelector('.achievement-empty');
+  for (const filter of filters) filter.onclick = () => {
+    for (const button of filters) button.setAttribute('aria-pressed', String(button === filter));
+    for (const section of groups){
+      const cards = [...section.querySelectorAll('.achievement-card')];
+      for (const entry of cards) entry.hidden = filter.dataset.achFilter !== 'all' && entry.dataset.state !== filter.dataset.achFilter;
+      section.hidden = cards.every(entry => entry.hidden);
+    }
+    empty.hidden = groups.some(section => !section.hidden);
+  };
 }
 /* ---------- Laboratorio: mejoras permanentes que se compran con Bits ---------- */
 // per = bonus por nivel (multiplicador sumado) · flat = bonus entero · costs = precio de cada nivel
@@ -13530,7 +13661,7 @@ const wonMap = m => (mapWins()[m] || []).length ? 1 : 0;
 const wonDiff = ds => Object.values(mapWins()).some(l => l.some(d => ds.includes(d))) ? 1 : 0;
 const HARD_DIFFS = ['dificil', 'pesadilla'];
 const wonMapDiff = (m, ds) => (mapWins()[m] || []).some(d => ds.includes(d)) ? 1 : 0;
-const bestSurvMin = () => Math.floor(Math.max(0, ...Object.values(loadJSON('digibonk3d-surv', {}))) / 60);
+const bestSurvMin = () => Math.floor((bestSurvivalRecord()?.seconds || 0) / 60);
 // Contadores de toda la vida del jugador (cofres, apoyos, fusiones, jefes menores, días seguidos)
 const LIFE_DEF = {chests: 0, sups: 0, fusions: 0, minis: [], streak: 0, best: 0, last: ''};
 function loadLife(){ return {...LIFE_DEF, ...loadJSON('digibonk3d-life', {})}; }
@@ -13602,6 +13733,20 @@ const TITLES = [
 ];
 // Progreso de logros guardado en 'digibonk3d-ach'
 function loadAch(){ return loadJSON('digibonk3d-ach', {runs: 0, zone2: false, boss: false}); }
+function achievementDay(day){
+  const parts = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(day);
+  if (!parts) return NaN;
+  const [, year, month, date] = parts.map(Number);
+  return Date.UTC(year, month - 1, date) / 86400000;
+}
+function recordDailyStreak(life, today){
+  const lastDay = achievementDay(life.last);
+  const elapsed = achievementDay(today) - lastDay;
+  if (elapsed <= 0) return;   // repetir el día o atrasar el reloj no suma ni borra la racha
+  life.streak = elapsed === 1 ? (Number(life.streak) || 0) + 1 : 1;
+  life.last = today;
+  life.best = Math.max(life.best, life.streak);
+}
 // Tras cada partida: guarda lo que ha pasado en ella (logros, contadores y días seguidos)
 function recordRunProgress(win){
   const ach = loadAch();
@@ -13614,11 +13759,7 @@ function recordRunProgress(win){
   life.sups += (g.supsJoined || 0);
   life.fusions += (g.fus || []).length;
   life.minis = [...new Set([...life.minis, ...(g.minisKilled || [])])];
-  if (g.t >= 5){
-    const today = dayKey(), y = new Date(Date.now() - 86400000), yKey = `${y.getFullYear()}-${y.getMonth()+1}-${y.getDate()}`;
-    if (life.last !== today){ life.streak = life.last === yKey ? life.streak + 1 : 1; life.last = today; }
-    life.best = Math.max(life.best, life.streak);
-  }
+  if (g.t >= 5) recordDailyStreak(life, dayKey());
   saveLife(life);
 }
 // Concede los marcos y títulos cuya meta ya se cumple. Devuelve los nuevos ({name, kind})
