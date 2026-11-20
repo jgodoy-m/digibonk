@@ -5251,10 +5251,10 @@ addEventListener('resize', () => { if (tJoyId === null) tJoyHome(); });
 
 // ---------- Pausa ----------
 const pauseEl = document.getElementById('pause');
-function pauseGame(){
+function pauseGame(save = true){
   if (state !== 'play' || !g) return;
   state = 'paused';
-  runSave();   // punto de guardado: al pausar se guarda la partida
+  if (save) runSave();   // punto de guardado: al pausar se guarda la partida
   for (const k in keys) keys[k] = false;   // que ninguna tecla quede "pulsada" al volver
   touchReset();
   unlockMouse();
@@ -5394,6 +5394,16 @@ function getRecords(){
   const records = loadJSON('digibonk3d-records', []);
   return Array.isArray(records) ? records.filter(Boolean) : [];
 }
+function killRecordTable(saved, runs){
+  const previous = Array.isArray(saved.killsRuns) ? saved.killsRuns : [];
+  const unique = new Map();
+  for (const run of [...previous, saved.kills, ...runs]){
+    if (!run || run.weekly) continue;
+    const key = run.id || JSON.stringify([run.key || run.name, run.map, run.t, run.kills, run.lvl, run.wave, run.win]);
+    unique.set(key, run);
+  }
+  return [...unique.values()].sort((a, b) => b.kills - a.kills || b.t - a.t).slice(0, 10);
+}
 // Conserva las victorias más rápidas aunque salgan del historial de las diez partidas.
 function timeTrialMarks(saved, runs){
   return Object.fromEntries(MAP_ORDER.map(map => {
@@ -5409,17 +5419,18 @@ function timeTrialMarks(saved, runs){
 }
 function saveRecord(win){
   const list = getRecords();
-  const run = {name: stageName(g.ch.id, g.ch.evolved), key: g.ch.id, t: Math.floor(g.t), kills: g.kills, lvl: g.p.lvl, win, map: g.map};
+  const run = {id: g.runId || runNewId(), name: stageName(g.ch.id, g.ch.evolved), key: g.ch.id, t: Math.floor(g.t), kills: g.kills, lvl: g.p.lvl, win, map: g.map};
   if (g.mode === 'surv') run.wave = g.wave || 1;
   const best = {...loadJSON(TRAINER_RECORDS_KEY, {})};
+  const recent = Array.isArray(best.recent) ? best.recent : [];
   if (g.weekly) run.weekly = true;
-  else {
+  best.killsRuns = killRecordTable(best, [...list, ...recent, run]);
+  if (!g.weekly){
     if (!best.kills || run.kills > best.kills.kills) best.kills = run;
     if (run.wave && (!best.wave || run.wave > best.wave.wave)) best.wave = run;
     list.push(run);
     list.sort((a, b) => b.t - a.t || b.kills - a.kills);
   }
-  const recent = Array.isArray(best.recent) ? best.recent : [];
   best.timeTrial = timeTrialMarks(best.timeTrial, [...list, ...recent]);
   best.recent = [run, ...recent].slice(0, 6);
   try {
@@ -5980,6 +5991,42 @@ function showSelect(){
   document.getElementById('rhApp').onclick=()=>installEvt?installApp():openInfo('app');
   document.getElementById('rhFullscreen').onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{})};
   bindMenuFX();
+  const number = value => Number(value || 0).toLocaleString(LANG);
+  const time = seconds => seconds > 0 ? fmtTime(seconds) : '—';
+  const recordView = mode => {
+    if (mode === 'trial'){
+      const maps = MAP_ORDER.map(map => [map, trialTimes[map]]);
+      const completed = maps.filter(([, seconds]) => seconds > 0).length;
+      const total = maps.reduce((sum, [, seconds]) => sum + seconds, 0);
+      return {
+        label: 'Contrarreloj',
+        stats: [[completed === maps.length ? 'Tiempo total' : 'Tiempo parcial', time(total)], ['Mapas completados', `${completed}/${maps.length}`]],
+        rows: maps.map(([map, seconds]) => ({name: MAPS[map].name, value: time(seconds), note: seconds ? 'Completado' : 'Pendiente'}))
+      };
+    }
+    if (mode === 'survival'){
+      const list = Object.keys(CHARS).map(key => [key, Number(survBest(key))])
+        .filter(([, seconds]) => Number.isFinite(seconds) && seconds > 0)
+        .sort((a, b) => b[1] - a[1]);
+      const bestWave = Math.max(Number(savedRecords.wave?.wave) || 0,
+        ...MAP_ORDER.map(map => Number(localStorage.getItem('digibonk3d-surv-wave-' + map)) || 0));
+      return {
+        label: 'Supervivencia',
+        stats: [['Mejor tiempo', time(list[0]?.[1])], ['Mejor oleada', bestWave || '—']],
+        rows: list.map(([key, seconds]) => ({key, name: CHARS[key].name, value: time(seconds)}))
+      };
+    }
+    const list = killRecordTable(savedRecords, [...recs, ...recentRecords]);
+    return {
+      label: 'Bajas',
+      stats: [['Bajas totales', number(kills)], ['Más bajas en una partida', list.length ? number(list[0].kills) : '—']],
+      rows: list.map(run => ({
+        key: run.key || Object.keys(CHARS).find(k => CHARS[k].name === run.name || (EVO_LINE[k] || []).some(e => e.name === run.name)) || 'agumon',
+        name: run.name, value: number(run.kills), note: MAPS[run.map]?.name
+      }))
+    };
+  };
+  let recordMode = 'kills';
   const openInfo=(type,trigger)=>{
     const host=document.getElementById('realModalHost');if(!host)return;
     let title,content;
@@ -5991,8 +6038,11 @@ function showSelect(){
       title=t('daily');
       content=`<p>${safeText(dailyText())}</p><div class="approved-info-meter"><i style="width:${Math.round(currentRuns/DAILY.runsGoal*100)}%"></i></div><p>${currentRuns}/${DAILY.runsGoal} partidas · +${DAILY.reward} Bits${GACHA_SOON ? '' : ' · +' + DAILY.rewardTix + ' 🎟'}</p>`;
     }else{
-      title=t('recs');
-      content=recs.length?`<div class="approved-info-records">${recs.slice(0,10).map((r,i)=>`<div><b>${i+1}. ${safeText(r.name)}</b><span>${fmtTime(r.t)} · Nv. ${Number(r.lvl)||0} · ${Number(r.kills)||0} bajas</span></div>`).join('')}</div>`:`<p>${safeText(t('none'))}</p>`;
+      const {label, stats, rows} = recordView(recordMode);
+      title = `${t('recs')} · ${I18N.tr(label)}`;
+      const statistics = stats.map(([name, value]) => `<div><b>${safeText(name)}</b><span>${safeText(value)}</span></div>`).join('');
+      const marks = rows.map(({name, value, note}, i) => `<div><b>${i+1}. ${safeText(name)}</b><span>${note ? `<small>${safeText(note)}</small> · ` : ''}${safeText(value)}</span></div>`).join('');
+      content = `<div class="approved-info-records">${statistics}${marks}</div>${rows.length ? '' : `<p>${safeText(t('none'))}</p>`}`;
     }
     host.innerHTML=`<div class="approved-info-scrim"><section class="approved-info-dialog" role="dialog" aria-modal="true" aria-label="${safeText(title)}"><header><h2>${safeText(title)}</h2><button type="button" id="realClose">✕</button></header>${content}${type==='records'&&CLOUD_ON?'<button type="button" id="realRank">Ranking por regiones</button>':''}<button type="button" id="realDone">Volver al menú</button></section></div>`;
     { const rk=host.querySelector('#realRank'); if(rk) rk.onclick=()=>{host.innerHTML='';showRanking('select');}; }
@@ -6005,42 +6055,17 @@ function showSelect(){
   { const ol = document.getElementById('hbRank'), panel = document.getElementById('hbRecordsPanel');
     const tabs = [...document.querySelectorAll('.hb-record-screen .hb-tabs button')];
     const summary = document.getElementById('hbRecordsSummary');
-    const recKey = r => r.key || Object.keys(CHARS).find(k => CHARS[k].name === r.name || (EVO_LINE[k] || []).some(e => e.name === r.name)) || 'agumon';
     const stat = (label, value) => `<span><b>${safeText(value)}</b><small>${safeText(label)}</small></span>`;
     const empty = '<li class="hb-empty">Todavía no hay partidas. ¡Empieza una!</li>';
-    const number = value => Number(value || 0).toLocaleString(LANG);
-    const time = seconds => seconds > 0 ? fmtTime(seconds) : '—';
-    const row = (rank, name, value, key, note) => `<li class="p${rank}">
-      <em>${rank}</em>${key ? `<img src="${charIcon(key)}" alt="" onerror="this.style.visibility='hidden'">` : ''}
+    const row = ({name, value, key, note}, i) => `<li class="p${i+1}">
+      <em>${i+1}</em>${key ? `<img src="${charIcon(key)}" alt="" onerror="this.style.visibility='hidden'">` : ''}
       <span><b>${safeText(name)}</b>${note ? `<small>${safeText(note)}</small>` : ''}</span>
       <strong>${safeText(value)}</strong>
     </li>`;
-    const draw = mode => {
-      if (mode === 'trial'){
-        const maps = MAP_ORDER.map(map => [map, trialTimes[map]]);
-        const completed = maps.filter(([, seconds]) => seconds > 0).length;
-        const total = maps.reduce((sum, [, seconds]) => sum + seconds, 0);
-        summary.innerHTML = stat(completed === maps.length ? 'Tiempo total' : 'Tiempo parcial', time(total))
-          + stat('Mapas completados', `${completed}/${maps.length}`);
-        ol.innerHTML = maps.map(([map, seconds], i) => row(i + 1, MAPS[map].name, time(seconds), '', seconds ? 'Completado' : 'Pendiente')).join('');
-        return;
-      }
-      if (mode === 'survival'){
-        const list = Object.keys(CHARS).map(key => [key, Number(survBest(key))])
-          .filter(([, seconds]) => Number.isFinite(seconds) && seconds > 0)
-          .sort((a, b) => b[1] - a[1]);
-        const bestWave = Math.max(Number(savedRecords.wave?.wave) || 0,
-          ...MAP_ORDER.map(map => Number(localStorage.getItem('digibonk3d-surv-wave-' + map)) || 0));
-        summary.innerHTML = stat('Mejor tiempo', time(list[0]?.[1])) + stat('Mejor oleada', bestWave || '—');
-        ol.innerHTML = list.slice(0, 7).map(([key, seconds], i) => row(i + 1, CHARS[key].name, time(seconds), key)).join('') || empty;
-        return;
-      }
-      const best = savedRecords.kills;
-      const list = best && !recs.some(run => run.key === best.key && run.map === best.map && run.t === best.t && run.kills === best.kills)
-        ? [...recs, best] : recs.slice();
-      list.sort((a, b) => b.kills - a.kills || b.t - a.t);
-      summary.innerHTML = stat('Bajas totales', number(kills)) + stat('Más bajas en una partida', list.length ? number(list[0].kills) : '—');
-      ol.innerHTML = list.slice(0, 7).map((run, i) => row(i + 1, run.name, number(run.kills), recKey(run), MAPS[run.map]?.name)).join('') || empty;
+    const draw = () => {
+      const {stats, rows} = recordView(recordMode);
+      summary.innerHTML = stats.map(([label, value]) => stat(label, value)).join('');
+      ol.innerHTML = rows.slice(0, 7).map(row).join('') || empty;
     };
     const selectTab = tab => {
       tabs.forEach(button => {
@@ -6049,7 +6074,8 @@ function showSelect(){
         button.tabIndex = active ? 0 : -1;
       });
       panel.setAttribute('aria-labelledby', tab.id);
-      draw(tab.dataset.k);
+      recordMode = tab.dataset.k;
+      draw();
       panel.scrollTop = 0;
     };
     tabs.forEach((tab, index) => {
@@ -6067,7 +6093,7 @@ function showSelect(){
         tabs[target].focus();
       };
     });
-    draw('kills'); }
+    draw(); }
   clearInterval(newsTimer);
 }
 // Guía «Cómo jugar»: diez pantallas en cuatro capítulos. Cada una tiene un vídeo grabado del propio juego
@@ -7300,13 +7326,10 @@ function runSlot(){
   if (!s){ try { localStorage.removeItem(RUN_SLOT); } catch(e){} }
   return s;
 }
-// Botón del menú: carga la partida guardada (el hueco se borra al cargarlo)
+// Botón del menú: conserva el hueco mientras se reconstruye la partida.
 function runContinue(){
   const s = runSlot();
   if (!s){ showSelect(); return; }
-  if (!ensureRenderer()) return;
-  try { localStorage.removeItem(RUN_SLOT); } catch(e){}
-  runMode = s.mode === 'surv' ? 'surv' : 'normal'; runWeekly = !!s.weekly; runMap = s.map; runDiff = s.diff;
   startGame(s.key, s);
 }
 // Otra pestaña ha cargado o empezado otra partida: esta deja de valer (sin premios) para no duplicarla
@@ -7494,9 +7517,13 @@ function mapLoadCancel(){
 function startGame(key, resume){
   if (!ensureRenderer()) return;
   // Hay una partida guardada: empezar otra la descarta (solo hay un hueco)
-  if (!resume && runSlot()){
-    if (!confirm(I18N.tr('Tienes una partida guardada. Si empiezas otra, se perderá. ¿Empezar una partida nueva?'))) return;
-    runDrop();
+  const saved = resume || runSlot();
+  if (!resume && saved && !confirm(I18N.tr('Tienes una partida guardada. Si empiezas otra, se perderá. ¿Empezar una partida nueva?'))) return;
+  if (resume){
+    runMode = resume.mode === 'surv' ? 'surv' : 'normal';
+    runWeekly = !!resume.weekly;
+    runMap = resume.map;
+    runDiff = resume.diff;
   }
   lockLandscape();   // necesita el gesto del jugador: antes de esperar a la pantalla de carga
   if (!resume && isRetoRun()){ const rs = retoSetup(); runMap = rs.map; runDiff = rs.diff; }   // el reto no se elige: es el de la semana
@@ -7504,8 +7531,19 @@ function startGame(key, resume){
   // Dos vueltas: el navegador pinta la pantalla de carga antes de que la construcción del mapa ocupe el hilo
   requestAnimationFrame(() => setTimeout(() => {
     if (tok !== mapLoad.tok) return;   // otro destino o cancelada mientras tanto
-    try { buildRun(key, resume); }
-    catch(e){ mapLoadCancel(); throw e; }
+    const current = runSlot();
+    if (current?.id !== saved?.id){ showSelect(); return; }
+    try { buildRun(key, resume ? current : null); }
+    catch(e){
+      console.error(e);
+      mapLoadCancel();
+      unlockMouse();
+      showSelect();
+      const message = document.getElementById('hmMsg');
+      if (message) message.textContent = I18N.tr('No se pudo cargar el mapa. Inténtalo de nuevo.');
+      return;
+    }
+    if (saved && !resume) runDrop();
     mapLoadArm(tok);
   }, 0));
 }
@@ -7559,9 +7597,6 @@ function buildRun(key, resume){
   initSupport();
   evHud(null);
   world.add(g.hiRing);
-  // Identificador de la partida viva (punto de guardado) y si cuenta para el ranking global
-  g.runId = runNewId(); runSetLive(g.runId);
-  if (runLiveId() !== g.runId) g.runId = null;   // sin almacenamiento local: no se guarda ni se comprueba
   g.ranked = !resume && runRanked();
   if (resume) runApply(resume);
   else { const si = startItem(); if (si) addItem(si); }   // objeto inicial elegido en la vitrina del Digidex
@@ -7574,11 +7609,25 @@ function buildRun(key, resume){
   if (resume){
     announce('Partida continuada', 'El mapa se ha reconstruido con oleadas nuevas', '#7cf29c');
     if (g.reopenUp){ g.reopenUp = false; openUpgrades(); }
-    else if (!g.pendingUp) pauseGame();   // empieza en pausa para que dé tiempo a situarse
+    else if (!g.pendingUp) pauseGame(false);   // el guardado se actualiza al terminar la carga
   }
   else if (g.weekly){   // al quitarse la pantalla de carga, recuerda la regla de la semana
     const gg = g, show = () => { if (g !== gg) return; if (mapLoad.on || state !== 'play') return setTimeout(show, 300); announce('Reto semanal', weeklyMod().name, '#2bb673'); };
     setTimeout(show, 600);
+  }
+  // La partida anterior sigue siendo válida hasta que el mapa y su interfaz están listos.
+  const previousId = runLiveId();
+  g.runId = runNewId();
+  runSetLive(g.runId);
+  if (!runIsLive()) g.runId = null;   // sin almacenamiento local: no se guarda ni se comprueba
+  if (resume){
+    let saved = false;
+    try {
+      saved = runSave();
+      if (!saved) throw new Error('Could not update the resumed run checkpoint');
+    } finally {
+      if (!saved && runIsLive()) runSetLive(previousId);
+    }
   }
 }
 
