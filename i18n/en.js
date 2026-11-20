@@ -134,6 +134,7 @@ I18N.add('en', {
   "Nombre de entrenador": "Trainer name",
   "Personalizar ficha": "Customize profile",
   "Estadísticas del entrenador": "Trainer stats",
+  "Colección y recursos": "Collection and resources",
   "Récords por mapa": "Map records",
   "Todavía no hay récords por mapa.": "No map records yet.",
   "Mejores marcas": "Personal bests",

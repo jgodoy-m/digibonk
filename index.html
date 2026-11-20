@@ -3320,16 +3320,16 @@ html.reduce-motion .living-actor.swim::after{animation:none!important}
 html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradient(#15131ab3,#16171af5)}
 .trainer-wrap{box-sizing:border-box;max-width:1420px;margin:auto;
   padding:clamp(18px,3vw,36px) max(18px,env(safe-area-inset-right)) 36px max(18px,env(safe-area-inset-left));display:grid;gap:clamp(14px,2vw,24px)}
-.trainer-header,.lab2-header{display:flex;align-items:center;gap:14px}
-.trainer-header h2,.lab2-header h2{margin:0;font-size:clamp(18px,3.2vw,27px);line-height:1.12;color:var(--m-text);overflow-wrap:anywhere}
-.trainer-header .g-back,.lab2-header .g-back{flex:none;min-height:38px}
-.trainer-heading-band{padding:12px clamp(14px,3vw,32px);border-radius:14px;
-  background:repeating-linear-gradient(135deg,#fff3 0 10px,transparent 10px 21px),linear-gradient(100deg,#ff866f,#ffc373);
-  box-shadow:0 4px 0 #9b4d58}
-.trainer-heading-band h2{color:#21192c;font-size:clamp(18px,3vw,30px);font-weight:900}
+.lab2-header{display:flex;align-items:center;gap:14px}
+.lab2-header h2{margin:0;font-size:clamp(18px,3.2vw,27px);line-height:1.12;color:var(--m-text);overflow-wrap:anywhere}
+.lab2-header .g-back,.trainer-header .g-back{flex:none;min-height:38px}
+.trainer-header{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}
+.trainer-heading{display:flex;align-items:center;gap:12px;min-width:0}
+.trainer-heading img{width:48px;height:48px;object-fit:contain;flex:none}
+.trainer-heading h2{margin:0;font-size:clamp(20px,3.1vw,34px);font-weight:900;line-height:1.12;overflow-wrap:anywhere}
 .trainer-hero,.trainer-panel,.lab2-group{min-width:0;padding:14px;background:var(--m-card);border:1px solid var(--m-cardline);border-radius:16px;color:var(--m-text);box-shadow:var(--m-shadow)}
 .trainer-hero{box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;
-  gap:clamp(16px,3vw,40px);min-height:230px;padding:clamp(18px,3vw,36px);border-radius:22px}
+  gap:clamp(18px,3vw,40px);padding:clamp(18px,3vw,32px);border-radius:24px;border-block-start:3px solid var(--m-acc)}
 .trainer-cover{--trainer-muted:var(--m-soft);--trainer-title:var(--m-acc);color:var(--m-text);background-color:var(--m-card)}
 .trainer-cover.has-trainer-bg{--trainer-muted:#e1e9fa;--trainer-title:#ffe298;color:#fff;
   background-image:linear-gradient(90deg,#131420ef 5%,#131420e0 38%,#13142055),var(--trainer-bg);
@@ -3346,9 +3346,8 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
 .hud-portrait.trainer-portrait.fr-mecenas{border:4px solid #ffd54f!important;background:linear-gradient(160deg,#fff7e0,#ff5e5b 45%,#29abe0)!important}
 .hud-portrait.trainer-portrait.fr-navidad{border:4px solid #1b5e20!important;background:linear-gradient(160deg,#fff,#e53935 45%,#1b5e20)!important}
 .hud-portrait.trainer-portrait:is(.fr-mecenas,.fr-navidad,[class*="fr-wk"]) img{width:100%!important;height:100%!important}
-.trainer-avatar-block{display:grid;justify-items:center;gap:12px}
 .trainer-screen #tcAv{width:clamp(96px,10vw,132px);height:clamp(96px,10vw,132px)}
-.trainer-screen .trainer-hero #plChange{margin:0!important;min-height:42px;letter-spacing:0;font-size:14px!important}
+.trainer-screen .trainer-hero #plChange{margin:4px 0 0!important;min-height:42px;letter-spacing:0;font-size:14px!important;text-align:left}
 .trainer-identity{min-width:0;display:grid;justify-items:start;gap:8px}
 .trainer-panel small,.trainer-empty{color:var(--m-soft);font-size:13px}
 .trainer-identity small{color:var(--trainer-muted);font-size:13px}
@@ -3357,16 +3356,25 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
 .trainer-title .title-badge-art{width:24px;height:24px;object-fit:contain}
 .trainer-wallet{display:inline-flex;align-items:center;gap:6px;color:var(--m-gold);font-weight:850;white-space:nowrap}
 .trainer-wallet img{width:18px;height:18px;object-fit:contain}
-.trainer-detail{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:inherit}
+.trainer-detail{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:start;gap:inherit}
+.trainer-column{display:grid;gap:inherit;min-width:0}
 .trainer-panel{padding:clamp(16px,2vw,24px);min-height:108px;border-radius:20px}
 .trainer-panel h3,.lab2-group h3{margin:0 0 9px;color:var(--m-text);font-size:15px;line-height:1.2}
-.trainer-panel h3{padding-inline-start:10px;border-inline-start:4px solid #ff9879;font-size:19px}
-.trainer-stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
-.trainer-stat{display:flex;align-items:center;gap:10px;min-width:0;min-height:55px;padding:12px;
-  background:var(--m-card);border:1px solid var(--m-cardline);border-radius:15px;overflow-wrap:anywhere}
+.trainer-panel h3{font-size:19px}
+.trainer-stat-board{min-height:0}
+.trainer-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;
+  padding:1px;border-radius:12px;background:var(--m-cardline);overflow:hidden}
+.trainer-stat{display:flex;align-items:center;gap:10px;min-width:0;min-height:52px;padding:10px 12px;
+  background:var(--m-sunk);overflow-wrap:anywhere}
 .trainer-stat img{width:28px;height:28px;flex:none;object-fit:contain}
-.trainer-stat b{display:block;font-size:clamp(17px,2vw,25px);line-height:1.15;font-variant-numeric:tabular-nums}
-.trainer-stat small{color:var(--m-soft);font-size:12px;line-height:1.2}
+.trainer-stat b{display:block;font-size:clamp(19px,2.4vw,29px);line-height:1.15;font-variant-numeric:tabular-nums}
+.trainer-stat small{color:var(--m-soft);font-size:13px;line-height:1.2}
+.trainer-collection{margin-top:14px;border-top:1px solid var(--m-line)}
+.trainer-collection summary{padding-block:12px 2px;color:var(--m-text);font-weight:800;cursor:pointer}
+.trainer-collection[open] summary{margin-bottom:10px}
+.trainer-collection .trainer-stat{min-height:40px}
+.trainer-collection .trainer-stat b{font-size:16px}
+.trainer-collection .trainer-stat img{width:22px;height:22px}
 .trainer-record{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;font-size:12px;padding:8px 0}
 .trainer-record + .trainer-record,.trainer-goal + .trainer-goal{border-top:1px solid var(--m-line)}
 .trainer-record span:first-child{min-width:0;overflow-wrap:anywhere}
@@ -3401,10 +3409,13 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
 .lab2-button.secondary{border-color:var(--m-line2);background:var(--m-card);color:var(--m-text)}
 .lab2-button:disabled{border-color:var(--m-line2);background:var(--m-sunk);color:var(--m-mute);cursor:default}
 .lab2-footer{justify-content:space-between;padding:10px 2px 2px}
-.trainer-favorite{display:flex;align-items:center;gap:8px}
-.trainer-favorite img{width:30px;height:30px;object-fit:cover;border-radius:50%}
-.trainer-favorite :is(b,small){display:block}
-.trainer-favorite b{font-size:12px;color:var(--trainer-muted)}
+.trainer-favorite{display:flex;align-items:center;gap:12px;max-width:230px;padding:12px;border:1px solid var(--m-line);
+  border-radius:15px;background:var(--m-sunk)}
+.trainer-cover.has-trainer-bg .trainer-favorite{border-color:#fff4;background:#131420b8}
+.trainer-favorite img{width:48px;height:48px;object-fit:cover;border-radius:50%;flex:none}
+.trainer-favorite :is(b,small){display:block;overflow-wrap:anywhere}
+.trainer-favorite b{font-size:16px}
+.trainer-favorite small{font-size:13px;color:var(--trainer-muted)}
 .trainer-panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .trainer-panel-head h3{margin:0}
 .trainer-panel-action,.trainer-goal-action{padding:7px 12px;border:1px solid var(--m-line2);border-radius:9px;background:var(--m-sunk);color:var(--m-text);font:800 13px 'Nunito',system-ui;cursor:pointer}
@@ -3415,11 +3426,6 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
 .trainer-pin p{margin:5px 0 2px;font-size:13px;color:var(--m-soft)}
 .trainer-pin-art{display:inline-grid;vertical-align:middle;place-items:center;width:34px;height:34px;margin-inline-end:7px;border-radius:8px;background:var(--m-card)}
 .trainer-pin-art .trainer-portrait{width:32px;height:32px}
-.trainer-hero-pins{display:flex;flex-wrap:wrap;justify-content:end;gap:8px}
-.trainer-hero-pins:empty{display:none}
-.trainer-hero-pins .trainer-pin-art{width:46px;height:46px;margin:0;background:var(--m-sunk)}
-.trainer-hero-pins .trainer-portrait{width:44px;height:44px}
-.trainer-hero-pins .title-badge-art{width:32px;height:32px}
 .trainer-record strong{font-size:17px}
 .trainer-record-heading{color:var(--m-soft);font-size:13px;margin:12px 0 3px}
 .trainer-run{grid-template-columns:minmax(0,1fr) auto auto}
@@ -3476,15 +3482,15 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
 .trainer-custom :is(.cz-pin-count,.cz-empty){margin:4px 16px 8px;color:var(--m-soft);font-size:14px}
 .trainer-custom .cz-empty{grid-column:1/-1}
 .trainer-custom .cz-foot{flex:none;margin:0;padding:10px 16px;background:var(--m-sunk);border-color:var(--m-line);justify-content:flex-end}
-@media(max-width:1060px){.trainer-stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:660px){
   .realhub.pl4.trainer-screen{background-image:var(--trainer-scrim),url(ui/fondo_inicio_movil.webp)!important}
   .trainer-detail,.lab2-grid{grid-template-columns:minmax(0,1fr)}
   .trainer-hero{grid-template-columns:auto minmax(0,1fr);min-height:0}
-  .trainer-hero-pins{grid-column:1/-1;justify-content:start}
+  .trainer-favorite{grid-column:1/-1;max-width:none}
+  .trainer-heading img{width:36px;height:36px}
+  .trainer-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
   .trainer-cover.has-trainer-bg{background-position:center,64% var(--trainer-bg-y,49%);
     background-image:linear-gradient(90deg,#131420ea,#131420c2),var(--trainer-bg)}
-  .trainer-stats{grid-template-columns:repeat(3,minmax(0,1fr))}
   .lab2-header{gap:6px;flex-wrap:wrap}
   .lab2-header .trainer-wallet{margin-left:0}
   .lab2-host{display:none}
@@ -3492,8 +3498,7 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
 @media(max-width:500px){
   .trainer-screen #tcAv{width:86px;height:86px}
   .trainer-hero{gap:12px;padding:14px}
-  .trainer-screen .trainer-hero #plChange{max-width:105px;line-height:1.2;font-size:12px!important}
-  .trainer-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .trainer-screen .trainer-hero #plChange{line-height:1.2;font-size:13px!important}
   .trainer-stat{padding:9px}
   .trainer-run{grid-template-columns:minmax(0,1fr) auto;gap:4px 7px}
   .trainer-run span:nth-child(2){grid-row:2}
@@ -3503,7 +3508,7 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
   .trainer-custom .cz-filters input{font-size:16px}
 }
 @media(orientation:landscape) and (max-height:510px){
-  .trainer-hero{min-height:144px;padding-block:12px}
+  .trainer-hero{padding-block:12px}
   .lab2-group{padding:8px}
   .lab2-header{padding:5px}
   .lab2-host,.lab2-header p{display:none}
@@ -12876,16 +12881,19 @@ function showPlayer(){
   const number = n => n.toLocaleString(I18N.lang);
   const wins = stats.reduce((total, entry) => total + Object.values(entry.wins || {}).reduce((n, value) => n + (+value || 0), 0), 0);
   const odds = chars.filter(key => ownsAt(key, 0, 'variocolor')).length;
-  const tiles = [
+  const battleStats = [
     ['Partidas', sum('plays'), 'hub/ic_mision'], ['Victorias', wins, 'hub/ic_logros'],
-    ['Bajas', sum('kills'), 'hud/ic_bajas'], ['Mejor nivel', bestLevel || '—', 'hud/ic_dash'],
+    ['Bajas', sum('kills'), 'hud/ic_bajas'], ['Mejor nivel', bestLevel || '—', 'hud/ic_dash']
+  ];
+  const collectionStats = [
     ['Digimon', `${digiOwned}/${digiTotal}`, 'hub/ic_digidex'],
     ['Evoluciones', Object.values(loadJSON('digibonk3d-evo', {})).filter(Boolean).length, 'hub/ic_laboratorio'],
     ['Skins', skins, 'hub/ic_tesoros'], ['Variocolores', odds, 'hub/ic_evento'],
     ['Marcos', inv.frames.length, 'hub/ic_jugador'], ['Títulos', inv.titles.length, 'hub/ic_encargos'],
     ['Logros', `${achDone}/${achTotal}`, 'hud/ic_emblema'], ['Bits', SAVE.bits, 'hud/ic_bits'],
     ...(!GACHA_SOON ? [['Tickets', SAVE.tickets, 'hud/ic_ticket']] : [])
-  ].map(([label,value,icon]) => `<div class="trainer-stat"><img src="ui/${icon}.webp" alt="">
+  ];
+  const statTiles = stats => stats.map(([label,value,icon]) => `<div class="trainer-stat"><img src="ui/${icon}.webp" alt="">
     <span><b>${typeof value === 'number' ? number(value) : escHtml(value)}</b><small>${label}</small></span></div>`).join('');
   const {favorite, pinned, unlocked} = trainerIdentity();
   const companion = favorite || selectedKey;
@@ -12926,29 +12934,36 @@ function showPlayer(){
   showOverlay(`
     <main class="realhub pl4 trainer-screen" aria-labelledby="trainerHeading">
       <div class="trainer-wrap">
-        <header class="trainer-header"><button type="button" class="g-back" id="plBack">← Volver</button><div class="trainer-heading-band"><h2 id="trainerHeading">Ficha de entrenador</h2></div></header>
+        <header class="trainer-header">
+          <div class="trainer-heading"><img src="ui/hub/digivice/jugador.png" alt=""><h2 id="trainerHeading">Ficha de entrenador</h2></div>
+          <button type="button" class="g-back" id="plBack">← Volver</button>
+        </header>
         <section ${trainerCoverAttrs('trainer-hero')}>
-          <div class="trainer-avatar-block"><div class="hud-portrait trainer-portrait${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img src="${avatarSrc()}" alt=""></div>
-            <button type="button" class="pl4-chg" id="plChange">Personalizar ficha</button></div>
+          <div class="hud-portrait trainer-portrait${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img src="${avatarSrc()}" alt=""></div>
           <div class="trainer-identity">
             <h3 class="trainer-name"${trainerName ? ' data-no-i18n' : ''}>${trainerName ? escHtml(trainerName) : 'Invitado'}</h3>
             ${title ? `<strong class="trainer-title">${trainerTitleIcon(title)}${escHtml(title.name)}</strong>` : ''}
-            ${CHARS[companion] ? `<div class="trainer-favorite"><img src="${charIcon(companion)}" alt=""><span><b>${favorite ? 'Digimon favorito' : 'Compañero actual'}</b><small>${CHARS[companion].name} · Maestría ${masteryLv(companion)}</small></span></div>` : ''}
+            <button type="button" class="pl4-chg" id="plChange">Personalizar ficha</button>
           </div>
-          <div class="trainer-hero-pins">${pinned.map(id => unlocked.find(item => item.id === id)).map(item =>
-            `<span class="trainer-pin-art" title="${escHtml(item.name)}">${trainerAchievementArt(item, avatarSrc())}</span>`).join('')}</div>
+          ${CHARS[companion] ? `<div class="trainer-favorite"><img src="${charIcon(companion)}" alt=""><span><small>${favorite ? 'Digimon favorito' : 'Compañero actual'}</small><b>${CHARS[companion].name}</b><small>Maestría ${masteryLv(companion)}</small></span></div>` : ''}
         </section>
-        <div class="trainer-stats trainer-stat-board" aria-label="Estadísticas del entrenador">${tiles}</div>
+        <section class="trainer-panel trainer-stat-board" aria-labelledby="trainerStatsHeading">
+          <h3 id="trainerStatsHeading">Estadísticas del entrenador</h3>
+          <div class="trainer-stats">${statTiles(battleStats)}</div>
+          <details class="trainer-collection"><summary>Colección y recursos</summary><div class="trainer-stats">${statTiles(collectionStats)}</div></details>
+        </section>
         <div class="trainer-detail">
-          <section class="trainer-panel"><h3>Récords por mapa</h3>${mapRecords || '<p class="trainer-empty">Todavía no hay récords por mapa.</p>'}
-            ${recList ? `<h4 class="trainer-record-heading">Mejores marcas</h4>${recList}` : ''}</section>
-          <section class="trainer-panel trainer-showcase"><div class="trainer-panel-head"><h3>Logros destacados</h3><button type="button" class="trainer-panel-action" id="trainerPins">Elegir logros</button></div>
-            ${pins ? `<div class="trainer-pin-grid">${pins}</div>` : '<p class="trainer-empty">Puedes fijar hasta tres logros conseguidos.</p>'}</section>
-        </div>
-        <section class="trainer-panel"><h3>Últimas partidas</h3>${lastRuns || '<p class="trainer-empty">Las próximas partidas aparecerán aquí al terminarlas.</p>'}</section>
-        <div class="trainer-detail">
-          <section class="trainer-panel trainer-goals"><h3>Próximos logros</h3>${achievements}</section>
-          <section class="trainer-panel"><h3>Digimon con más bajas</h3><div class="trainer-digimon-grid">${specialists}</div></section>
+          <div class="trainer-column">
+            <section class="trainer-panel"><h3>Últimas partidas</h3>${lastRuns || '<p class="trainer-empty">Las próximas partidas aparecerán aquí al terminarlas.</p>'}</section>
+            <section class="trainer-panel"><h3>Récords por mapa</h3>${mapRecords || '<p class="trainer-empty">Todavía no hay récords por mapa.</p>'}
+              ${recList ? `<h4 class="trainer-record-heading">Mejores marcas</h4>${recList}` : ''}</section>
+            <section class="trainer-panel"><h3>Digimon con más bajas</h3><div class="trainer-digimon-grid">${specialists}</div></section>
+          </div>
+          <div class="trainer-column">
+            <section class="trainer-panel trainer-showcase"><div class="trainer-panel-head"><h3>Logros destacados</h3><button type="button" class="trainer-panel-action" id="trainerPins">Elegir logros</button></div>
+              ${pins ? `<div class="trainer-pin-grid">${pins}</div>` : '<p class="trainer-empty">Puedes fijar hasta tres logros conseguidos.</p>'}</section>
+            <section class="trainer-panel trainer-goals"><h3>Próximos logros</h3>${achievements}</section>
+          </div>
         </div>
       </div>
     </main>`);
