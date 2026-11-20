@@ -2298,17 +2298,25 @@ html[lang] #overlay .end3 .mini-btn{background:var(--m-btn)!important;color:var(
 #overlay .realhub.hb{--hb-ink:var(--m-text);font-family:'Nunito',system-ui,sans-serif!important;color:var(--m-text)!important;display:flex!important;flex-direction:column!important}
 #overlay .realhub.hb button{font-family:inherit!important;cursor:pointer;-webkit-tap-highlight-color:transparent}
 #overlay .realhub.hb .hb-top{position:relative;z-index:15;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px clamp(14px,2vw,30px) 0;flex-wrap:wrap}
-#overlay .realhub.hb .hb-utils,#overlay .realhub.hb .hb-user{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-#overlay .realhub.hb .hb-pill,#overlay .realhub.hb .hb-out,#overlay .realhub.hb .hb-chip,#overlay .realhub.hb .hb-me{height:40px;box-sizing:border-box;display:inline-flex;align-items:center;gap:6px;padding:0 14px;border-radius:999px;border:1px solid var(--m-cardline);background:var(--m-card);color:var(--m-text);font:800 14px/1 'Nunito',system-ui,sans-serif;box-shadow:var(--m-pillsh),0 4px 14px rgba(0,0,0,.12);transition:transform .12s}
+#overlay .realhub.hb .hb-utils{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#overlay .realhub.hb .hb-pill{height:40px;box-sizing:border-box;display:inline-flex;align-items:center;gap:6px;padding:0 14px;border-radius:999px;border:1px solid var(--m-cardline);background:var(--m-card);color:var(--m-text);font:800 14px/1 'Nunito',system-ui,sans-serif;box-shadow:var(--m-pillsh),0 4px 14px rgba(0,0,0,.12);transition:transform .12s}
 #overlay .realhub.hb .hb-sq{width:40px;padding:0;justify-content:center}
-#overlay .realhub.hb .hb-me{padding:0 14px 0 4px;height:46px;gap:8px;text-align:left}
+#overlay .realhub.hb .hb-user-card{display:flex;align-items:center;gap:6px;min-width:0;max-width:100%;margin-inline-start:auto;padding:4px 5px 4px 9px;border:1px solid var(--m-cardline);border-inline-start:3px solid #f7ad43;border-radius:16px;background:linear-gradient(140deg,color-mix(in srgb,var(--m-card) 92%,#37a7e5),var(--m-card) 65%);box-shadow:var(--m-pillsh),0 5px 16px #0002}
+#overlay .realhub.hb .hb-me{display:flex;align-items:center;gap:8px;min-width:0;height:40px;padding:0 8px 0 2px;border:0;border-radius:9px;background:transparent;color:var(--m-text);font-weight:800;text-align:left}
+#overlay .realhub.hb .hb-me .hb-id{min-width:0}
+#overlay .realhub.hb .hb-me :is(strong,small){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #overlay .realhub.hb .hb-me .hud-portrait{width:38px;height:38px;border-radius:50%;overflow:hidden;flex:none;background:var(--m-sunk);display:grid;place-items:center;margin:0!important}
 #overlay .realhub.hb .hb-me .hud-portrait img{width:100%;height:100%;object-fit:cover}
 #overlay .realhub.hb .hb-me strong{display:block;font-size:14px;color:var(--m-text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #overlay .realhub.hb .hb-me small{display:block;font-size:11px;color:var(--m-mute);font-weight:700}
-#overlay .realhub.hb .hb-chip{background:var(--m-sunk);box-shadow:none;padding:0 12px 0 6px;font-variant-numeric:tabular-nums}
-#overlay .realhub.hb .hb-chip img{width:24px;height:24px;object-fit:contain}
-#overlay .realhub.hb .hb-out{color:var(--m-bad);font-size:13px}
+#overlay .realhub.hb .hb-wallet{display:flex;align-items:center;gap:8px;max-width:55%;padding:4px 8px;border:1px solid var(--m-line2);border-radius:9px;background:var(--m-sunk);color:var(--m-text);font:900 13px/1 'Nunito',system-ui,sans-serif;font-variant-numeric:tabular-nums}
+#overlay .realhub.hb .hb-chip{display:flex;align-items:center;gap:4px;min-width:0;white-space:nowrap}
+#overlay .realhub.hb .hb-chip span{overflow:hidden;text-overflow:ellipsis}
+#overlay .realhub.hb .hb-chip img{width:21px;height:21px;flex:none;object-fit:contain}
+#overlay .realhub.hb .hb-out{display:grid;place-items:center;flex:none;width:40px;height:40px;padding:0;border:0;border-radius:9px;background:transparent;color:var(--m-mute)}
+#overlay .realhub.hb .hb-out svg{width:19px;height:19px}
+#overlay .realhub.hb .hb-user-card :is(button:hover,button:focus-visible){background:var(--m-sunk);transform:none}
+#overlay .realhub.hb .hb-user-card button:focus-visible{outline:2px solid var(--m-acc);outline-offset:1px}
 #overlay .realhub.hb .hb-main{position:relative;z-index:2;flex:1;display:grid;grid-template-columns:minmax(500px,44%) minmax(0,1fr) minmax(270px,22%);gap:clamp(14px,1.8vw,28px);padding:14px clamp(14px,2vw,30px) 34px;align-items:start}
 #overlay .realhub.hb .hb-left{display:flex;flex-direction:column;gap:12px;min-width:0}
 #overlay .realhub.hb .hb-brand{margin:0;display:flex;align-items:flex-end;gap:10px;line-height:0}
@@ -2395,16 +2403,13 @@ html[lang] #overlay .end3 .mini-btn{background:var(--m-btn)!important;color:var(
 @media(max-width:760px){
   #overlay .realhub.hb{overflow-x:hidden!important}
   #overlay .realhub.hb .hb-top{padding:10px 12px 0;gap:8px}
-  #overlay .realhub.hb .hb-top,#overlay .realhub.hb .hb-user{display:contents}
-  #overlay .realhub.hb .hb-top{display:flex;justify-content:flex-start}
-  #overlay .realhub.hb .hb-utils{display:contents}
-  #overlay .realhub.hb .hb-me{flex:1 0 120px;min-width:0;height:40px;order:-2}
-  #overlay .realhub.hb .hb-out{order:-1}
-  #overlay .realhub.hb .hb-pill.hb-sq{margin-right:auto}
-  #overlay .realhub.hb .hb-top{gap:6px!important}
+  #overlay .realhub.hb .hb-top{gap:8px}
+  #overlay .realhub.hb .hb-utils{gap:5px}
+  #overlay .realhub.hb .hb-user-card{flex:1 1 100%;box-sizing:border-box}
+  #overlay .realhub.hb .hb-me{flex:1}
   #overlay .realhub.hb .hb-me strong{max-width:100%}
   #overlay .realhub.hb .hb-me .hud-portrait{width:32px;height:32px}
-  #overlay .realhub.hb .hb-pill,#overlay .realhub.hb .hb-out,#overlay .realhub.hb .hb-chip{height:34px;font-size:12.5px;padding:0 9px;gap:4px}
+  #overlay .realhub.hb .hb-pill{height:34px;font-size:12.5px;padding:0 9px;gap:4px}
   #overlay .realhub.hb .hb-chip img{width:20px;height:20px}
   #overlay .realhub.hb .hb-sq{width:34px;padding:0}
   #overlay .realhub.hb .hb-main{display:flex!important;flex-direction:column;padding:10px 12px 40px;gap:14px}
@@ -2953,7 +2958,6 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
   #overlay .realhub.hb .nm-play .hb-play-face>*{width:116px!important;height:116px!important}
   #overlay .realhub.hb .hm-msg{bottom:18px;font-size:13px!important;white-space:nowrap}
 }
-#overlay .realhub.hb .hb-me{height:40px!important;padding:0 14px 0 4px!important}
 #overlay .realhub.hb .hb-me .hud-portrait{width:32px!important;height:32px!important}
 #overlay .realhub.hb .hb-me strong{font-size:13px!important;line-height:1.1}
 #overlay .realhub.hb .hb-me small{font-size:10.5px!important;line-height:1.1}
@@ -3525,6 +3529,21 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
 .menu-release-list{display:grid;gap:7px;padding:0;margin:0 0 12px;list-style:none}
 .menu-release-list li{border:1px solid var(--m-line);border-radius:10px;background:var(--m-sunk);padding:8px 10px;font-size:.88em}
 .menu-release-list li p{margin:2px 0 0;font-size:.9em;line-height:1.4}
+/* Idiomas del Digivice: la superficie se ancla al botón y queda sobre el menú. */
+#rhLang .hb-lang-arrow{width:6px;height:6px;margin:-3px 1px 0 2px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(45deg)}
+#rhLang[aria-expanded="true"] .hb-lang-arrow{margin-top:3px;transform:rotate(225deg)}
+#hubLanguages{position:fixed;inset:auto;margin:0;box-sizing:border-box;width:min(234px,calc(100vw - 16px));padding:5px;overflow:auto;overscroll-behavior:contain;border:1px solid var(--m-cardline);border-top:2px solid #f7ad43;border-radius:12px;background:var(--m-card);color:var(--m-text);box-shadow:0 10px 26px #0004;font-family:'Nunito',system-ui,sans-serif}
+#hubLanguages:popover-open{animation:hb-lang-open .15s ease-out}
+#hubLanguages button{display:flex;align-items:center;gap:10px;width:100%;min-height:40px;padding:6px 9px;border:0;border-radius:8px;background:transparent;color:inherit;line-height:1.2;font-family:inherit;font-size:14px;font-weight:800;text-align:left;cursor:pointer}
+#hubLanguages button small{width:30px;flex:none;color:var(--m-mute);font-size:10px;font-weight:900;letter-spacing:.06em}
+#hubLanguages button[aria-current="true"]{background:color-mix(in srgb,var(--m-card) 84%,#39a6e8)}
+#hubLanguages button:hover,#hubLanguages button:focus-visible{background:var(--m-sunk)}
+#hubLanguages button:focus-visible{outline:2px solid var(--m-acc);outline-offset:-2px}
+#hubLanguages button[aria-current="true"]::after{content:"✓";margin-inline-start:auto;color:var(--m-acc);font-weight:900}
+#hubLanguages .hb-lang-auto{border-top:1px solid var(--m-line);border-radius:0 0 8px 8px}
+@keyframes hb-lang-open{from{opacity:0;transform:translateY(-4px)}}
+@media(prefers-reduced-motion:reduce){#hubLanguages:popover-open{animation:none}}
+
 </style>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.min.js" } }
@@ -3572,7 +3591,6 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
   #overlay .realhub.hb .nm-tiles .hb-tile small{display:none!important}
   #overlay .realhub.hb .hb-bar{grid-column:1;grid-row:3;align-self:end;margin:0!important;height:auto!important}
   #overlay .realhub.hb .hb-bar .hb-btn{width:34px!important;height:34px!important}
-  #overlay .realhub.hb .hb-out{color:var(--m-text)!important;font-size:12px!important;opacity:.75}
 }
 /* Revisión 2026-11-16: móvil en horizontal (p. ej. 844×390). La ficha del Digimon se desplaza por dentro y
    «¡Elegir mapa!» queda siempre a la vista (antes quedaba fuera de la pantalla y no se podía empezar);
@@ -4995,7 +5013,7 @@ addEventListener('keydown', e => {
   if (state === 'register') return;
   if (k === 'n'){ toggleMute(); return; }
   // Tab abre y cierra el mapa completo (la partida se queda parada mientras está abierto)
-  if (k === 'tab'){ e.preventDefault(); if (state === 'play') openMap(); else if (state === 'map') closeMap(); return; }
+  if (k === 'tab'){ if (state === 'play' || state === 'map') e.preventDefault(); if (state === 'play') openMap(); else if (state === 'map') closeMap(); return; }
   if (state === 'map'){ if (k === 'escape') closeMap(); return; }
   if (k === 'q' && state === 'play'){ bonkRelease(); return; }
   if (k === 'r' && state === 'play'){ triggerEmergency(); return; }
@@ -5342,6 +5360,56 @@ function toggleLang(){
     if (state === 'register') showRegister(); else if (state === 'select') showSelect(); else refreshTopbar();
   });
 }
+function bindHubLanguages(){
+  const button = document.getElementById('rhLang');
+  const menu = document.getElementById('hubLanguages');
+  if (!window.I18N || typeof menu.showPopover !== 'function'){
+    menu.hidden = true;
+    button.onclick = toggleLang;
+    return;
+  }
+  menu.addEventListener('beforetoggle', event => {
+    const open = event.newState === 'open';
+    button.setAttribute('aria-expanded', String(open));
+    if (!open) return;
+    const rect = button.getBoundingClientRect();
+    const viewport = document.documentElement;
+    const width = Math.min(234, viewport.clientWidth - 16);
+    const top = rect.bottom + 6;
+    menu.style.left = Math.max(8, Math.min(rect.left, viewport.clientWidth - width - 8)) + 'px';
+    menu.style.top = top + 'px';
+    menu.style.maxHeight = Math.max(0, viewport.clientHeight - top - 8) + 'px';
+  });
+  button.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') event.stopPropagation();
+  });
+  menu.addEventListener('focusout', event => {
+    const next = event.relatedTarget;
+    if (next && next !== button && !menu.contains(next) && menu.matches(':popover-open')) menu.hidePopover();
+  });
+  menu.addEventListener('keydown', event => {
+    event.stopPropagation();
+    const keys = ['ArrowUp', 'ArrowDown', 'Home', 'End'];
+    if (!keys.includes(event.key)) return;
+    event.preventDefault();
+    const options = [...menu.querySelectorAll('button')];
+    const index = options.indexOf(document.activeElement);
+    const step = event.key === 'ArrowUp' ? -1 : 1;
+    const next = event.key === 'Home' ? 0 : event.key === 'End' ? options.length - 1 :
+      (index + step + options.length) % options.length;
+    options[next].focus();
+  });
+  menu.addEventListener('click', async event => {
+    const option = event.target.closest('button[data-code]');
+    if (!option) return;
+    menu.hidePopover();
+    await I18N.setLang(option.dataset.code);
+    LANG = I18N.lang;
+    if (!button.isConnected) return;
+    showSelect();
+    document.getElementById('rhLang').focus({preventScroll:true});
+  });
+}
 // Colección: todo lo que se puede conseguir, con porcentaje de completado (solo consulta)
 // Colección: lista de Digimon a la izquierda, etapas y skins de cada etapa a la derecha; marcos y títulos en otra pestaña
 let colKey = null, colTab = 'digimon', colStage = 0, colStageFor = null;
@@ -5668,15 +5736,21 @@ function showSelect(){
       <header class="hb-top">
         <div class="hb-utils">
           <button class="hb-pill hb-version" id="hubRelease" type="button" aria-haspopup="dialog" title="Ver novedades">Beta ${MENU_RELEASES[0].version}</button>
-          <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma"><img class="nm-ic" src="ui/hub/digivice/idioma.png" alt="">${LANG.toUpperCase()}</button>
+          <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma" aria-expanded="false" popovertarget="hubLanguages"><img class="nm-ic" src="ui/hub/digivice/idioma.png" alt=""><span data-no-i18n>${LANG.toUpperCase()}</span><span class="hb-lang-arrow" aria-hidden="true"></span></button>
+          <div id="hubLanguages" popover="auto" role="group" aria-labelledby="rhLang" data-no-i18n>
+            ${(window.I18N?.langs || []).map(({code,name}) => `<button type="button" data-code="${code}" lang="${code}"${code === LANG ? ' aria-current="true" autofocus' : ''}><small aria-hidden="true">${code.toUpperCase()}</small>${name}</button>`).join('')}
+            <button class="hb-lang-auto" type="button" data-code="auto"><small aria-hidden="true">🌐</small>Auto · ${safeText((navigator.language || '').toUpperCase())}</button>
+          </div>
           <button class="hb-pill hb-app" type="button" id="rhApp" aria-label="Instalar la app" title="Instalar la app"${appCanInstall() ? '' : ' hidden'}><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m-5-5 5 5 5-5M5 20h14"/></svg><span>App</span></button>
           <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>
         </div>
-        <div class="hb-user" role="toolbar" aria-label="Jugador">
-          <button type="button" class="hb-me" id="rhProfile"><span class="hud-portrait mini hm-pl-frame${extra.frame ? ' fr-' + extra.frame : ''}"><img id="rhProfileImg" src="${avatarSrc()}" alt=""></span><span><strong>${safeText(trainerName || 'Invitado')}</strong><small>${isGuest() ? t('guestTag') : (extra.title ? (TITLES.find(x => x.id === extra.title) || {}).name || '' : t('noTitle'))}</small></span></button>
-          <span class="hb-chip" title="Bits"><img src="ui/hud/ic_bits.webp" alt="">${SAVE.bits.toLocaleString('es-ES')}</span>
-          ${GACHA_SOON ? '' : `<span class="hb-chip" title="Tickets"><img src="ui/hud/ic_ticket.webp" alt="">${usableTickets('std')}</span>`}
-          <button type="button" class="hb-out" id="hmLogout">Cerrar sesión</button>
+        <div class="hb-user-card" role="group" aria-label="Jugador">
+          <button type="button" class="hb-me" id="rhProfile"><span class="hud-portrait mini hm-pl-frame${extra.frame ? ' fr-' + extra.frame : ''}"><img id="rhProfileImg" src="${avatarSrc()}" alt=""></span><span class="hb-id"><strong>${safeText(trainerName || 'Invitado')}</strong><small>${isGuest() ? t('guestTag') : (extra.title ? (TITLES.find(x => x.id === extra.title) || {}).name || '' : t('noTitle'))}</small></span></button>
+          <div class="hb-wallet">
+            <span class="hb-chip" title="${SAVE.bits.toLocaleString('es-ES')} Bits"><img src="ui/hud/ic_bits.webp" alt="Bits"><span>${SAVE.bits.toLocaleString('es-ES')}</span></span>
+            ${GACHA_SOON ? '' : `<span class="hb-chip" title="${usableTickets('std')} Tickets"><img src="ui/hud/ic_ticket.webp" alt="Tickets"><span>${usableTickets('std')}</span></span>`}
+          </div>
+          <button type="button" class="hb-out" id="hmLogout" aria-label="Cerrar sesión" title="Cerrar sesión"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h5m-1-8h11m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </header>
       <section class="hb-main">
@@ -5780,7 +5854,7 @@ function showSelect(){
   document.getElementById('hmCredits').onclick=()=>showCredits('hub');
   document.getElementById('hmLogout').onclick=()=>logoutProfile();
   document.getElementById('rhProfile').onclick=showPlayer;
-  document.getElementById('rhLang').onclick=toggleLang;
+  bindHubLanguages();
   document.getElementById('hubRelease').onclick = e => showMenuRelease(e.currentTarget);
   document.getElementById('rhApp').onclick=()=>installEvt?installApp():openInfo('app');
   document.getElementById('rhFullscreen').onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{})};
