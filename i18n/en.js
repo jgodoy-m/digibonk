@@ -1900,5 +1900,9 @@ I18N.add('en', {
   "Cobrado": "Claimed",
   "Niveles anteriores": "Previous levels",
   "Niveles siguientes": "Next levels",
-  "Has cobrado {0} Digicoins": "You claimed {0} Digicoins"
+  "Has cobrado {0} Digicoins": "You claimed {0} Digicoins",
+  "Ofertas semanales": "Weekly offers",
+  "Vista previa en tu ficha": "Preview on your trainer card",
+  "Ver ataque y ulti": "Preview attack and ultimate",
+  "Combinar marco y título": "Combine frame and title"
 });
