@@ -871,19 +871,6 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .cl4-skin.vale{cursor:pointer;opacity:1;border-color:var(--m-gold,#ffc24f)!important;box-shadow:0 0 10px rgba(255,194,79,.45)}
 .cl4-skin.vale small{color:var(--m-gold,#ffc24f);font-weight:800}
 .eq-prize{color:var(--m-good,#4fd68e)}
-.shop-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin:0 0 10px;font:800 13px/1.3 'Nunito',sans-serif;color:var(--m-mute)}
-.shop-top b{color:var(--m-text)}
-.shop-rows{padding:0;max-height:min(52vh,420px);overflow:auto}
-.eq-row.shop-row{grid-template-columns:40px 1fr auto;align-items:center;text-align:left}
-.shop-ic{width:40px;height:40px;border-radius:50%;object-fit:cover;background:var(--m-sunk)}
-.eq-row.shop-row>em{grid-column:auto;color:var(--m-good)}
-.shop-row.done .eq-t{text-decoration:none}
-.shop-buy{padding:7px 12px;border:0;border-radius:999px;background:var(--m-cta,#ff8a1e);color:#fff;font:900 13px/1 'Nunito',sans-serif;cursor:pointer;box-shadow:0 3px 0 var(--m-cta-sh,#b44700);white-space:nowrap}
-.shop-buy:disabled{filter:grayscale(1);opacity:.5;cursor:default}
-.shop-code{display:flex;gap:8px;margin-top:12px}
-.shop-code input{flex:1;min-width:0;padding:8px 12px;border-radius:999px;border:1px solid var(--m-line);background:var(--m-sunk);color:var(--m-text);font:700 13px 'Nunito',sans-serif}
-.shop-code button{padding:8px 14px;border-radius:999px;border:1px solid var(--m-line);background:var(--m-btn);color:var(--m-text);font:800 13px 'Nunito',sans-serif;cursor:pointer}
-.approved-info-dialog.shop-dialog{width:min(560px,94vw)}
 @media (max-height:820px){.pk2-stage{height:110px!important}
 .anim.pk2-hero-img{width:100px!important;height:100px!important}
 .pk2-hero{padding:8px!important}
@@ -3207,6 +3194,72 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 #overlay .realhub.hb .nm-dot{animation:lv-dot 1.8s ease-in-out infinite}
 @keyframes lv-dot{0%,100%{scale:1}50%{scale:1.25}}
 @media(prefers-reduced-motion:reduce){#overlay .realhub.hb :is(.lv-stage,.lv-parade,.nm-play,.nm-event,.nm-stack,.nm-tiles) *,#overlay .realhub.hb :is(.nm-play,.lv-sheen)::before,#overlay .realhub.hb .lv-sheen::after{animation:none!important}#overlay .realhub.hb .lv-fx{display:none}}
+/* Escaparate semanal: una oferta principal y cuatro tarjetas de igual peso. */
+#overlay .approved-info-dialog.shop-dialog {
+  --shop-ink:#f3f9ff; --shop-muted:#bacde8; --shop-gold:#ffda65;
+  width:min(920px,calc(100vw - 32px))!important; max-width:none!important;
+  max-height:calc(100dvh - 28px); padding:clamp(14px,2.6vw,26px);
+  color:var(--shop-ink)!important; text-align:left; background:#0a1a34!important;
+  border:1px solid #365781!important; overscroll-behavior:contain;
+}
+#overlay .shop-dialog :is(b,strong,span,p){color:inherit!important}
+#overlay .shop-dialog small{color:var(--shop-muted)!important}
+#overlay .shop-dialog header{margin:0 0 10px}
+#overlay .shop-dialog header h2{background:none;padding:0;margin:0;color:var(--shop-ink)!important}
+#overlay .shop-dialog #realDone{display:none}
+.shop-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;color:var(--shop-muted);font-size:.85em}
+.shop-wallet{display:inline-flex;align-items:center;gap:7px;flex:none;background:#173156;border:1px solid #3a567d;border-radius:999px;padding:5px 12px;font-weight:900;color:var(--shop-gold)!important}
+.shop-wallet img{width:18px;height:18px;object-fit:contain}
+.shop-grid{display:grid;grid-template-columns:minmax(0,1.22fr) repeat(2,minmax(0,1fr));gap:10px}
+.shop-card{display:grid;grid-template-rows:1fr auto;min-width:0;overflow:hidden;border:1px solid #32517a;border-radius:16px;background:#112747}
+.shop-card.featured{grid-row:span 2;border-color:#d39737;background:#173053}
+.shop-art{position:relative;display:flex;align-items:center;justify-content:center;isolation:isolate;overflow:hidden;min-height:92px;
+  background:radial-gradient(ellipse at 50% 75%,#426bb2 0%,#203b72 44%,#122749 86%)}
+.shop-art::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.3;
+  background-image:linear-gradient(#81b5f535 1px,transparent 1px),linear-gradient(90deg,#81b5f535 1px,transparent 1px);background-size:20px 20px}
+.featured .shop-art{min-height:224px;background:radial-gradient(ellipse at 50% 75%,#9b6c48 0%,#365080 40%,#172c58 79%)}
+.shop-art .shop-tag{position:absolute;z-index:1;top:8px;left:9px;max-width:calc(100% - 48px);padding:3px 7px;border-radius:6px;background:#0b1b32;font-size:10px;font-weight:900;line-height:1.2}
+#overlay .shop-dialog .featured .shop-tag{background:var(--shop-gold);color:#202632!important}
+.shop-sprite{--shop-sprite-size:88px;display:block;flex:none;width:var(--shop-sprite-size);height:var(--shop-sprite-size);object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 6px 8px #061024b0)}
+.shop-sprite.is-sheet{background:var(--sheet) left center / 500% 100% no-repeat}
+.featured .shop-sprite{--shop-sprite-size:clamp(156px,22vw,230px)}
+.shop-art .rw-frame{width:52px;height:52px;display:grid;place-items:center;overflow:hidden}
+.shop-art .rw-frame img{width:100%;height:100%;object-fit:contain}
+.shop-title-art{display:grid;place-items:center;width:54px;height:54px;border:2px solid #e9bd64;border-radius:50%;background:#25375d;color:var(--shop-gold)}
+.shop-title-art .ico{width:28px;height:28px}
+.shop-card-copy{display:grid;gap:5px;padding:9px 11px 11px}
+.shop-card-copy h3{margin:0;font:900 .94em/1.15 'Nunito',sans-serif;overflow-wrap:anywhere}
+.shop-card-copy small{font-size:.72em;line-height:1.2}
+.featured .shop-card-copy{padding:13px;gap:8px}
+.featured .shop-card-copy h3{font-size:clamp(18px,3vw,27px)}
+.shop-card-price{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;margin-top:2px;align-items:center}
+.shop-card-price del{font-size:.74em;color:var(--shop-muted)}
+#overlay .shop-dialog :is(.shop-buy,.shop-unlock,.shop-quest button,#shopRedeem){min-height:36px;border:1px solid #4f73a1;border-radius:9px;padding:6px 8px;background:#1c3b68;font:900 .82em/1.2 'Nunito',sans-serif;box-shadow:none}
+#overlay .shop-dialog button.shop-buy:not([disabled]){background:#ffd35d;border-color:#ffd35d;color:#272a31}
+#overlay .shop-dialog button.shop-buy:not([disabled]):hover{background:#ffe398}
+#overlay .shop-dialog button.shop-buy:disabled{opacity:.65;cursor:default}
+.shop-owned{font-size:.78em;font-weight:900}
+#overlay .shop-dialog button.shop-fav{position:absolute;right:7px;top:6px;z-index:2;width:34px;height:34px;padding:0;background:#10233d;border:1px solid #5278a5;border-radius:50%;font-size:18px;color:var(--shop-gold)}
+.shop-quest{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-top:12px;padding:9px 11px;border:1px solid #395b85;border-radius:11px;background:#142d4e;font-size:.82em}
+.shop-quest>div{display:grid;gap:2px;flex:1}
+.shop-code{display:flex;flex-wrap:wrap;gap:8px;margin-top:7px}
+.shop-code input{flex:1;min-width:130px;padding:8px 11px;border-radius:8px;border:1px solid #48678f;background:#0c203c;color:var(--shop-ink);font:700 .9em 'Nunito',sans-serif}
+.shop-code-wrap{margin-top:10px;font-size:.86em}
+.shop-code-wrap summary{width:fit-content;color:var(--shop-muted);cursor:pointer}
+.shop-msg{margin:6px 0 0;font-size:.82em}
+.shop-msg:empty{display:none}
+@media (max-width:690px){
+  .shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .shop-card.featured{grid-column:1 / span 2;grid-row:auto;grid-template:1fr / minmax(0,.88fr) minmax(0,1fr)}
+  .featured .shop-art{min-height:142px}
+  .featured .shop-sprite{--shop-sprite-size:clamp(105px,31vw,155px)}
+  .featured .shop-card-copy{align-content:center;padding:10px}
+  .shop-card-copy{padding-inline:8px}
+}
+@media (max-width:360px){
+  #overlay .approved-info-dialog.shop-dialog{width:calc(100vw - 20px)!important;padding:10px}
+  .shop-grid{gap:7px}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.min.js" } }
@@ -5532,7 +5585,7 @@ function showHelp(){
 }
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
-const SAVE_KEYS = ['digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
+const SAVE_KEYS = ['digibonk3d-shop-favorites', 'digibonk3d-shop-discount', 'digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
   'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-maptime', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
   'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales', 'digibonk3d-objetos', 'digibonk3d-obj-ini', 'digibonk3d-reto', 'digibonk3d-sist'];
 // También cuentan los contadores por banner (pity) y la mejor oleada de cada mapa
@@ -8379,7 +8432,7 @@ function update(dt){
     if (e.kind === 'elite' && Math.random() < 0.25){ g.tix++; if (!GACHA_SOON) popText(e.x, e.z, '+1 ticket', '#3de0ff', 1); }
     if (e.kind === 'mini'){ g.tix++; announce('¡' + e.name + ' derrotado!', GACHA_SOON ? 'Cofre dorado' : '+1 ticket de tirada · cofre dorado', '#3de0ff'); spawnChestAt(e.x, e.z, true); if (!e.special){ (g.minisKilled || (g.minisKilled = [])).push(e.name); grantEmblem(); } }
     if (e.kind === 'elite' && Math.random() < 0.3) spawnChestAt(e.x, e.z, true);   // 30% de las élites dejan un cofre dorado
-    if (e.boss) g.tix += 3;
+    if (e.boss){ g.tix += 3; shopBossDiscount(); }
     if (e.boss || (e.kind === 'mini' && !e.wild)) bossKO(e);
     if (e.mesh.material !== spriteMats[e.sprite] && (e.kind === 'charger' || e.kind === 'elite')) e.mesh.material.dispose();
     world.remove(e.mesh);
@@ -9485,6 +9538,7 @@ function endGame(win){
   if (g.weekly && g.ch.id === g.star) rewards.push(`<li>Digimon de la semana: <b>+25%</b> Bits</li>`);
   for (const h of g.retoDone || []) rewards.push(`<li>Hito del reto: <b>${h.t}</b> · +${h.bits} Bits${GACHA_SOON ? '' : ` y +${h.tix} tickets`}</li>`);
   if (g.extraBits) rewards.push(`<li><b>+${g.extraBits}</b> Bits de eventos del mapa</li>`);
+  if (g.shopDiscount === weekNum()) rewards.push(`<li>Encargo de la tienda: <b>−${SHOP_DISCOUNT_PCT}% en tu skin destacada</b></li>`);
   if (g.emblems && g.emblems.length) rewards.push(`<li>Emblemas: <b>${g.emblems.length}/8</b></li>`);
   if (g.bonus) rewards.push(GACHA_SOON ? `<li><b>+${g.bonus}</b> Bits · misión diaria completada</li>` : `<li><b>+${g.bonus}</b> Bits y <b>+${g.dailyTix}</b> tickets · misión diaria completada</li>`);
   if (g.tix && !GACHA_SOON) rewards.push(`<li><b>+${g.tix}</b> tickets de tirada</li>`);
@@ -11281,34 +11335,52 @@ function showEncargos(){
   menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios se renuevan cada día. Los semanales y los de evento suman lo que haces en todas tus partidas. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d} <span>Solo se aplica en el Reto semanal, que tiene su propio botón en el menú.</span></p>`);
   const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('eq-dialog');
 }
-/* ---------- Tienda: gasta Bits en lo de la línea de la semana (cambia cada lunes) ---------- */
-// Mientras la Incubadora está en «Próximamente», la tienda es la otra forma de conseguir skins, marcos y títulos
-const SHOP_PRICE = {title: 600, frame: 1200, galactico: 2500, holografica: 5000, festival: 4000, reno: 4000};
-// Dos Digimon por semana: el de la semana del banner permanente y otro tres puestos más allá
-function shopItems(){
-  const chars = SEASONS.adventure.chars, i = weeklyIndex(), out = [];
-  for (const k of [...new Set([chars[i], chars[(i + 3) % chars.length]])]){
-    const w = 'wk' + wkIndex(k);
-    out.push({k, type: 'title', id: w, name: 'Título «' + TITLES.find(t => t.id === w).name + '»', price: SHOP_PRICE.title, owned: inv.titles.includes(w)});
-    out.push({k, type: 'frame', id: w, name: FRAMES.find(f => f.id === w).name, price: SHOP_PRICE.frame, owned: inv.frames.includes(w)});
-  }
-  // Skins: dos líneas por semana entre las que ya tienen hojas dibujadas (sin hoja no se vende)
-  const ids = ['galactico', 'holografica', ...(eventActive() ? ['festival', 'reno'] : [])];
-  const withArt = chars.filter(k => isUnlocked(k) && ids.some(sk => skinLineArt(k, sk) >= 0));
-  const n = withArt.length, wn = ((weekNum() % Math.max(1, n)) + n) % Math.max(1, n);
-  for (const k of [...new Set([withArt[wn], withArt[(wn + 1) % n]])].filter(Boolean))
-    for (const sk of ids) if (skinLineArt(k, sk) >= 0) out.push({k, type: 'skin', id: sk, name: 'Skin ' + SKIN_BY_ID[sk].name, price: SHOP_PRICE[sk], owned: ownsAnyStage(k, sk)});
-  return out;
+/* ---------- Escaparate semanal de cosméticos ---------- */
+const SHOP_PRICE = {title:600, frame:1200, galactico:2500, holografica:5000, festival:4000, reno:4000};
+const SHOP_FAVORITES = 'digibonk3d-shop-favorites', SHOP_DISCOUNT = 'digibonk3d-shop-discount';
+const SHOP_DISCOUNT_PCT = 20;
+
+function shopRotation(week = weekNum()){
+  const chars = SEASONS.adventure.chars.filter(k => skinLineArt(k, 'galactico') >= 0);
+  const at = offset => chars[((week + offset) % chars.length + chars.length) % chars.length];
+  return {featured:at(0), secondary:at(3), returning:at(-2)};
 }
-function shopBuy(n){
-  const it = shopItems()[n];
-  if (!it || it.owned || SAVE.bits < it.price) return false;
+function shopItems(week = weekNum()){
+  const {featured, secondary, returning} = shopRotation(week);
+  const cosmeticId = 'wk' + wkIndex(featured), discounted = loadJSON(SHOP_DISCOUNT, {}).week === week;
+  const skin = (k, id, slot) => {
+    const stage = skinLineArt(k, id), basePrice = SHOP_PRICE[id];
+    const price = slot === 'featured' && discounted ? Math.floor(basePrice * (100 - SHOP_DISCOUNT_PCT) / 100) : basePrice;
+    return {k, id, stage, slot, type:'skin', name:SKIN_BY_ID[id].name, price, basePrice,
+      owned:ownsAnyStage(k, id), locked:!isUnlocked(k)};
+  };
+  const secondarySkins = [...(eventActive() ? ['festival', 'reno'] : []), 'holografica'].filter(id => skinLineArt(secondary,id) >= 0);
+  const secondarySkin = secondarySkins.length ? secondarySkins[week % secondarySkins.length] : 'galactico';
+  return [
+    skin(featured, 'galactico', 'featured'),
+    {k:featured, id:cosmeticId, type:'frame', name:FRAMES.find(i => i.id === cosmeticId).name, price:SHOP_PRICE.frame, owned:inv.frames.includes(cosmeticId)},
+    {k:featured, id:cosmeticId, type:'title', name:TITLES.find(i => i.id === cosmeticId).name, price:SHOP_PRICE.title, owned:inv.titles.includes(cosmeticId)},
+    skin(secondary, secondarySkin, 'secondary'),
+    skin(returning, 'galactico', 'returning')
+  ].map(it => ({...it, key:`${it.type}:${it.k}:${it.id}`}));
+}
+function shopBuy(key, price, week){
+  if (week !== weekNum()) return false;
+  const it = shopItems(week).find(x => x.key === key);
+  if (!it || it.owned || it.locked || price !== it.price || SAVE.bits < it.price) return false;
   SAVE.bits = SAVE.bits - it.price;
   if (it.type === 'title') inv.titles.push(it.id);
   else if (it.type === 'frame') inv.frames.push(it.id);
   else grantSkinLine(it.k, it.id);
   saveInv(); grantProgress();
   return true;
+}
+function shopBossDiscount(){
+  if (!GACHA_SOON) return;
+  const week = weekNum(), {featured} = shopRotation(week);
+  if (g.ch.id !== featured || ownsAnyStage(featured, 'galactico') || loadJSON(SHOP_DISCOUNT, {}).week === week) return;
+  localStorage.setItem(SHOP_DISCOUNT, JSON.stringify({week}));
+  g.shopDiscount = week;
 }
 // Códigos de recompensa (p. ej. el de Ko-fi). Se guarda solo su huella, no el código
 const REWARD_CODES = {'90ba4f7e': {frame: 'mecenas', title: 'mecenas'}};
@@ -11322,21 +11394,81 @@ function redeemCode(raw){
   saveInv();
   return got ? '¡Gracias! Marco y título «Mecenas» desbloqueados' : 'Ya tienes las recompensas de este código';
 }
-function showShop(msg){
+function showShop(msg = ''){
   const fmt = n => Number(n).toLocaleString('es-ES');
-  const next = (weekNum() + 1) * WEEK_MS + 4 * 86400000, days = Math.max(1, Math.ceil((next - Date.now()) / 86400000));
-  const bits = SAVE.bits, items = shopItems();
-  const rows = items.map((it, n) => `<div class="eq-row shop-row${it.owned ? ' done' : ''}"><img class="shop-ic" src="${charIcon(it.k, it.type === 'skin' ? it.id : 'clasico')}" alt=""><span><span class="eq-t">${it.name}</span><small>${CHARS[it.k].name}</small></span>${it.owned ? '<em>✓ Ya lo tienes</em>' : `<button type="button" class="shop-buy" data-n="${n}" ${bits < it.price ? 'disabled' : ''}>Ⓑ ${fmt(it.price)}</button>`}</div>`).join('');
-  menuModal('Tienda', `<p class="shop-top"><span>Tus Bits: <b>Ⓑ ${fmt(bits)}</b></span><span>Se renueva el lunes · ${days === 1 ? 'queda 1 día' : `quedan ${days} días`}</span></p>
-    <div class="eq-rows shop-rows">${rows}</div>
-    <div class="shop-code"><input id="shopCode" maxlength="24" placeholder="Código de recompensa" autocomplete="off"><button type="button" id="shopRedeem">Canjear</button></div>
-    <p class="enc-note shop-msg" aria-live="polite">${msg || ''}</p>`);
-  const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('shop-dialog');
+  const week = weekNum(), items = shopItems(week), featured = items[0], bits = SAVE.bits;
+  const next = (week + 1) * WEEK_MS + 4 * 86400000;
+  const hours = Math.max(1, Math.ceil((next - Date.now()) / 3600000));
+  const rotation = hours <= 24 ? `Quedan ${hours} h` : `Quedan ${Math.ceil(hours / 24)} días`;
+  const savedFavorites = loadJSON(SHOP_FAVORITES, []);
+  const favorites = new Set(Array.isArray(savedFavorites) ? savedFavorites : []);
+  const tag = {featured:'Destacada', secondary:'Otra línea', returning:'De vuelta', frame:'Marco', title:'Título'};
+  const cards = items.map(it => {
+    const digi = CHARS[it.k].name, isSkin = it.type === 'skin', wish = favorites.has(it.key);
+    const src = isSkin ? spriteWith(it.k, it.stage, it.id) : '', sheet = isSkin ? sheetOf(src) : '';
+    const art = isSkin ? (sheet ? `<span class="shop-sprite is-sheet" style="--sheet:url('${sheet}')" aria-hidden="true"></span>` : `<img class="shop-sprite" src="${src}" alt="">`)
+      : it.type === 'frame' ? `<span class="rw-frame fr-${it.id}"><img src="${charIcon(it.k, 'clasico')}" alt=""></span>`
+        : `<span class="shop-title-art">${svgIcon('utilidad')}</span>`;
+    const action = it.owned ? '<span class="shop-owned">✓ En tu colección</span>'
+      : it.locked ? `<button type="button" class="shop-unlock" data-shop-dex="${it.k}">Cómo desbloquear</button>`
+        : `<button type="button" class="shop-buy" data-shop-buy="${it.key}" ${bits < it.price ? 'disabled' : ''}>${bits < it.price ? `Faltan ${fmt(it.price - bits)} Bits` : `Comprar · ${fmt(it.price)} Bits`}</button>`;
+    return `<article class="shop-card ${it.slot || it.type}">
+      <div class="shop-art"><small class="shop-tag" ${it.slot === 'returning' ? 'data-shop-return' : ''}>${it.slot === 'returning' && wish && !it.owned ? 'Vuelve tu favorita' : tag[it.slot || it.type]}</small>
+        ${art}
+        ${isSkin && !it.owned ? `<button type="button" class="shop-fav" data-shop-fav="${it.key}" aria-pressed="${wish}" aria-label="Favorita: ${digi} ${it.name}">${wish ? '★' : '☆'}</button>` : ''}
+      </div>
+      <div class="shop-card-copy"><h3>${it.name}</h3><small>${digi}${it.locked ? ' · Bloqueado' : ''}</small>
+        <div class="shop-card-price">${!it.owned && it.price < it.basePrice ? `<del>${fmt(it.basePrice)} Bits</del>` : ''}
+          ${!it.owned && (it.locked || bits < it.price) ? `<small>${fmt(it.price)} Bits</small>` : ''}${action}</div>
+      </div>
+    </article>`;
+  }).join('');
+  const discounted = featured.price < featured.basePrice;
+  const quest = featured.owned ? '' : `<div class="shop-quest"><div><b>${discounted ? 'Descuento conseguido' : 'Encargo de la tienda'}</b>
+    <small>${discounted ? `Tu skin destacada tiene un ${SHOP_DISCOUNT_PCT}% de descuento hasta el lunes.` : `Derrota a un jefe de zona con ${CHARS[featured.k].name} y consigue un ${SHOP_DISCOUNT_PCT}% de descuento en su skin.`}</small></div>
+    ${!discounted ? `<button type="button" id="shopQuest">${featured.locked ? 'Ver en Digidex' : 'Elegir mapa'}</button>` : ''}</div>`;
+  menuModal('Tienda semanal', `<div class="shop-meta"><span>Rotación del lunes · ${rotation}</span><strong class="shop-wallet"><img src="ui/hud/ic_bits.webp" alt="">${fmt(bits)} Bits</strong></div>
+    <div class="shop-grid">${cards}</div>${quest}
+    <details class="shop-code-wrap"><summary>Código de recompensa</summary>
+      <div class="shop-code"><input id="shopCode" maxlength="24" aria-label="Código de recompensa" placeholder="Introduce tu código" autocomplete="off"><button type="button" id="shopRedeem">Canjear</button></div></details>
+    <p class="shop-msg" id="shopStatus" aria-live="polite"></p>`);
+  const dlg = document.querySelector('#realModalHost .approved-info-dialog');
+  if (!dlg) return;
+  dlg.classList.add('shop-dialog');
+  const status = dlg.querySelector('#shopStatus');
+  status.textContent = msg;
   const reopen = m => { showSelect(); showShop(m); };
-  document.querySelectorAll('#realModalHost .shop-buy').forEach(b => b.onclick = () => { const it = items[+b.dataset.n]; if (shopBuy(+b.dataset.n)){ sfx('evolve'); reopen('Comprado: ' + it.name + ' (' + CHARS[it.k].name + ')'); } });
-  const inp = document.getElementById('shopCode');
-  inp.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') document.getElementById('shopRedeem').click(); });
-  document.getElementById('shopRedeem').onclick = () => { if (inp.value.trim()) reopen(redeemCode(inp.value)); };
+  const toDex = k => { colKey = k; colTab = 'digimon'; showCollection(); };
+  dlg.querySelectorAll('[data-shop-dex]').forEach(b => b.onclick = () => toDex(b.dataset.shopDex));
+  const questButton = dlg.querySelector('#shopQuest');
+  if (questButton) questButton.onclick = () => {
+    if (featured.locked) return toDex(featured.k);
+    selectedKey = featured.k; runMode = 'normal'; runWeekly = false;
+    restoreRunPrefs(); showMapSelect();
+  };
+  dlg.querySelectorAll('[data-shop-fav]').forEach(b => b.onclick = () => {
+    const key = b.dataset.shopFav, on = !favorites.has(key);
+    if (on) favorites.add(key); else favorites.delete(key);
+    localStorage.setItem(SHOP_FAVORITES, JSON.stringify([...favorites]));
+    b.setAttribute('aria-pressed', on); b.textContent = on ? '★' : '☆';
+    const returning = b.closest('.shop-art').querySelector('[data-shop-return]');
+    if (returning) returning.textContent = on ? 'Vuelve tu favorita' : 'De vuelta';
+  });
+  dlg.querySelectorAll('[data-shop-buy]').forEach(b => b.onclick = () => {
+    const it = items.find(x => x.key === b.dataset.shopBuy);
+    if (!shopBuy(it.key, it.price, week)) return reopen('La oferta ha cambiado. Revisa el escaparate.');
+    sfx('evolve'); reopen(`Comprado: ${it.name} · ${CHARS[it.k].name}`);
+  });
+  const input = dlg.querySelector('#shopCode'), redeem = dlg.querySelector('#shopRedeem');
+  input.addEventListener('keydown', e => {
+    e.stopPropagation();
+    if (e.key === 'Enter') redeem.click();
+  });
+  redeem.onclick = () => {
+    if (!input.value.trim()) return;
+    reopen(redeemCode(input.value));
+    document.querySelector('#realModalHost .shop-code-wrap').open = true;
+  };
 }
 function showLogros(){
   const ach = loadAch();
