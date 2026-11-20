@@ -152,6 +152,7 @@ I18N.add('en', {
   "Todavía no hay récords por mapa.": "No map records yet.",
   "Mejores marcas": "Personal bests",
   "Últimas partidas": "Recent runs",
+  "Sin partidas.": "No runs yet.",
   "Las próximas partidas aparecerán aquí al terminarlas.": "Your next runs will appear here when you finish them.",
   "Variocolores": "Shiny Digimon",
   "Digimon favorito": "Favorite Digimon",

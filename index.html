@@ -3465,26 +3465,26 @@ html.reduce-motion .living-actor.swim::after{animation:none!important}
 /* Ficha de entrenador y Laboratorio */
 .trainer-screen,.lab2{font-family:'Nunito',system-ui,sans-serif}
 :is(.trainer-screen,.trainer-custom){
-  --trainer-surface:#fffdf7;--trainer-inset:#edf5ef;--trainer-ink:#243933;--trainer-subtle:#405f54;
-  --trainer-accent:#086258;--trainer-border:#d3ded3;--trainer-tint:#f8f7ede6;
-  --trainer-action:#12625a;--trainer-action-ink:#fff;
-  --trainer-lcd:linear-gradient(155deg,#e7f8ef,#cde8da);--trainer-lcd-ink:#173d32;--trainer-lcd-line:#578b744d
+  --trainer-surface:#fffdf9;--trainer-inset:#edf1f9;--trainer-ink:#1f2940;--trainer-subtle:#4c5976;
+  --trainer-accent:#3154a3;--trainer-border:#d6ddec;--trainer-warm:#ffebe0;
+  --trainer-action:#315db5;--trainer-action-ink:#fff;
+  --trainer-lcd:linear-gradient(155deg,#f0f5ff,#d4e0f5);--trainer-lcd-ink:#233657;--trainer-lcd-line:#52698755
 }
 html[data-theme=oscuro] :is(.trainer-screen,.trainer-custom){
-  --trainer-surface:#254644;--trainer-inset:#305653;--trainer-ink:#f7f5e7;--trainer-subtle:#cbe1d7;
-  --trainer-accent:#a7edde;--trainer-border:#678f83;--trainer-tint:#294d49e6;
-  --trainer-action:#a7edde;--trainer-action-ink:#153c36;
-  --trainer-lcd:linear-gradient(155deg,#c0e6da,#9dd3c7);--trainer-lcd-ink:#173d32;--trainer-lcd-line:#39766359
+  --trainer-surface:#252b3d;--trainer-inset:#303851;--trainer-ink:#f4f5ff;--trainer-subtle:#bec8e0;
+  --trainer-accent:#b3ccff;--trainer-border:#48546f;--trainer-warm:#453849;
+  --trainer-action:#b3ccff;--trainer-action-ink:#172b50;
+  --trainer-lcd:linear-gradient(155deg,#e4edff,#bacbe9);--trainer-lcd-ink:#233657;--trainer-lcd-line:#52698755
 }
 .realhub.pl4.trainer-screen{
-  --trainer-scrim:linear-gradient(150deg,#fbf2d9df,#e4f0e3c7 50%,#f5f7edf5);
+  --trainer-scrim:linear-gradient(150deg,#f8e9e0db,#e4eaf8bb 50%,#f3f4faf2);
   background:var(--trainer-scrim),url(ui/fondo_inicio.webp) center 45%/cover no-repeat!important;
   color:var(--trainer-ink);overscroll-behavior:contain
 }
 html[data-theme=oscuro] .realhub.pl4.trainer-screen{
-  --trainer-scrim:linear-gradient(148deg,#2e4746d6,#28544fbb 47%,#1e403ce8)
+  --trainer-scrim:linear-gradient(148deg,#2d223bdb,#242c47bb 47%,#1c2339ea)
 }
-.trainer-wrap{box-sizing:border-box;max-width:1240px;margin:auto;
+.trainer-wrap{box-sizing:border-box;max-width:1440px;margin:auto;
   padding:clamp(18px,3vw,36px) max(18px,env(safe-area-inset-right)) 36px max(18px,env(safe-area-inset-left));display:grid;gap:clamp(14px,2vw,24px)}
 .lab2-header{display:flex;align-items:center;gap:14px}
 .lab2-header h2{margin:0;font-size:clamp(18px,3.2vw,27px);line-height:1.12;color:var(--m-text);overflow-wrap:anywhere}
@@ -3494,13 +3494,11 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{
 .trainer-heading img{width:48px;height:48px;object-fit:contain;flex:none}
 .trainer-heading h2{margin:0;font-size:clamp(20px,3.1vw,34px);font-weight:900;line-height:1.12;overflow-wrap:anywhere}
 .lab2-group{min-width:0;padding:14px;background:var(--m-card);border:1px solid var(--m-cardline);border-radius:16px;color:var(--m-text);box-shadow:var(--m-shadow)}
-.trainer-feature{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);align-items:center;gap:inherit;
-  padding:clamp(10px,2vw,22px);border:1px solid var(--trainer-border);border-radius:26px;background:var(--trainer-tint)}
-.trainer-hero{box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;min-width:0;
-  gap:14px clamp(12px,2vw,24px);padding:clamp(14px,2.4vw,28px);border-radius:24px;border:1px solid var(--trainer-border);
-  box-shadow:0 5px 0 #775c3b44,0 12px 24px #1d2d3733}
-.trainer-hero:not(.has-trainer-bg){--trainer-muted:var(--trainer-subtle);--trainer-title:var(--trainer-accent);
-  color:var(--trainer-ink);background:var(--trainer-surface)}
+.trainer-hero{box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;min-width:0;
+  min-height:clamp(165px,20vw,236px);gap:clamp(14px,3vw,38px);padding:clamp(17px,3vw,36px);
+  border-radius:24px;border:1px solid var(--trainer-border);box-shadow:0 8px 24px #181e3729}
+.trainer-hero:not(.has-trainer-bg){--trainer-muted:var(--trainer-subtle);--trainer-title:var(--trainer-accent);color:var(--trainer-ink);
+  background:linear-gradient(112deg,var(--trainer-surface) 55%,var(--trainer-warm))}
 .trainer-cover{--trainer-muted:var(--m-soft);--trainer-title:var(--m-acc);color:var(--m-text);background-color:var(--m-card)}
 .trainer-cover.has-trainer-bg{--trainer-muted:#e1e9fa;--trainer-title:#ffe298;color:#fff;
   background-image:linear-gradient(90deg,#131420ef 5%,#131420e0 38%,#13142055),var(--trainer-bg);
@@ -3520,9 +3518,9 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{
 .trainer-screen #tcAv{width:clamp(88px,9vw,120px);height:clamp(88px,9vw,120px)}
 .trainer-hero:not(.has-trainer-bg) #tcAv:not([class*="fr-"]){background:var(--trainer-inset);border-color:var(--trainer-border)}
 html[lang] .trainer-screen .trainer-header .g-back,
-.trainer-screen .trainer-hero .trainer-owner-actions button{background:var(--trainer-action)!important;color:var(--trainer-action-ink)!important;
+.trainer-screen #plShare,.trainer-screen #plChange{background:var(--trainer-action)!important;color:var(--trainer-action-ink)!important;
   border:1px solid transparent!important;box-shadow:none!important}
-.trainer-screen .trainer-hero .trainer-owner-actions button{margin:4px 0 0!important;min-height:42px;letter-spacing:0;font-size:14px!important;text-align:left}
+.trainer-screen :is(#plShare,#plChange){margin:0!important;min-height:42px;letter-spacing:0;font-size:14px!important}
 .trainer-identity{min-width:0;display:grid;justify-items:start;gap:8px}
 .trainer-panel small,.trainer-empty{color:var(--m-soft);font-size:13px}
 .trainer-identity small{color:var(--trainer-muted);font-size:13px}
@@ -3531,22 +3529,25 @@ html[lang] .trainer-screen .trainer-header .g-back,
 .trainer-title .title-badge-art{width:24px;height:24px;object-fit:contain}
 .trainer-wallet{display:inline-flex;align-items:center;gap:6px;color:var(--m-gold);font-weight:850;white-space:nowrap}
 .trainer-wallet img{width:18px;height:18px;object-fit:contain}
-.trainer-activity{min-width:0;padding:clamp(16px,3vw,30px);border-radius:24px;background:var(--trainer-surface);color:var(--trainer-ink);border:1px solid var(--trainer-border)}
+.trainer-showcase-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:inherit}
+.trainer-showcase-grid>.trainer-panel,.trainer-recent{min-width:0;padding:clamp(16px,2.6vw,26px);border-radius:20px;
+  background:var(--trainer-surface);color:var(--trainer-ink);border:1px solid var(--trainer-border)}
+.trainer-screen .trainer-empty,.trainer-screen .trainer-panel small{color:var(--trainer-subtle)}
 .trainer-panel{min-width:0}
 .trainer-panel h3,.lab2-group h3{margin:0 0 9px;font-size:15px;line-height:1.2}
 .trainer-panel h3{font-size:20px}
-.trainer-activity .trainer-panel small,.trainer-activity .trainer-empty{color:var(--trainer-subtle)}
-.trainer-activity .trainer-panel-action{background:var(--trainer-inset);border-color:var(--trainer-border);color:var(--trainer-ink)}
-.trainer-activity :is(.trainer-pin,.trainer-pin-art){background:var(--trainer-inset)}
-.trainer-stat-board{border-bottom:1px solid var(--trainer-border);margin-bottom:20px;padding-bottom:16px}
-.trainer-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.trainer-stat{display:flex;align-items:center;gap:10px;min-width:0;min-height:52px;overflow-wrap:anywhere}
+.trainer-screen .trainer-panel-action{background:var(--trainer-inset);border-color:var(--trainer-border);color:var(--trainer-ink)}
+.trainer-screen :is(.trainer-pin,.trainer-pin-art){background:var(--trainer-inset)}
+.trainer-stat-board{min-width:0}
+.trainer-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.trainer-stat{display:flex;align-items:center;gap:10px;min-width:0;min-height:68px;padding:8px 12px;border-radius:15px;
+  background:var(--trainer-surface);border:1px solid var(--trainer-border);overflow-wrap:anywhere}
 .trainer-stat img{width:28px;height:28px;flex:none;object-fit:contain}
 .trainer-stat b{display:block;color:var(--trainer-accent);font-size:clamp(21px,2.8vw,32px);line-height:1.15;font-variant-numeric:tabular-nums}
 .trainer-stat small{font-size:13px;line-height:1.2}
 .trainer-device{min-width:0}
-.trainer-device h3{margin:0 0 5px;font-size:18px;line-height:1.2;text-align:center}
-.trainer-device-shell{position:relative;aspect-ratio:1752 / 897;min-height:181px;isolation:isolate}
+.trainer-device h3{margin:0 0 12px}
+.trainer-device-shell{position:relative;aspect-ratio:1752 / 897;width:100%;max-width:430px;min-height:176px;margin-inline:auto;isolation:isolate}
 .trainer-device-shell>img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;filter:drop-shadow(0 6px 7px #18353640)}
 .trainer-device-screen{position:absolute;inset:19.7% 14.3% 28.8%;display:grid;align-items:center;box-sizing:border-box;
   padding:4px clamp(7px,1vw,14px);border-radius:clamp(6px,1.4vw,17px);background:var(--trainer-lcd);color:var(--trainer-lcd-ink)}
@@ -3563,10 +3564,10 @@ html[lang] .trainer-screen .trainer-header .g-back,
 .trainer-device-row .trainer-device-pending{font-weight:750;opacity:.83}
 .trainer-device-controls{position:absolute;inset:76% 10% 8%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;gap:5px}
 .trainer-device-controls button{min-height:36px;padding:4px 2px;border:1px solid #a69d8c;border-radius:9px;background:#fff7e9;
-  color:#294741;box-shadow:0 2px 0 #a69d8c;font:850 clamp(10px,1.2vw,14px)/1.1 'Nunito',system-ui;cursor:pointer;overflow-wrap:anywhere}
-.trainer-device-controls button[aria-pressed="true"]{border-color:#155e52;background:#155e52;color:#fff;box-shadow:0 2px 0 #0a473e}
+  color:#273954;box-shadow:0 2px 0 #a69d8c;font:850 clamp(10px,1.2vw,14px)/1.1 'Nunito',system-ui;cursor:pointer;overflow-wrap:anywhere}
+.trainer-device-controls button[aria-pressed="true"]{border-color:#365d9d;background:#365d9d;color:#fff;box-shadow:0 2px 0 #213f77}
 .trainer-device-controls button[aria-pressed="false"]:hover{background:#fff}
-.trainer-device-controls button:focus-visible{outline:3px solid #155e52;outline-offset:2px}
+.trainer-device-controls button:focus-visible{outline:3px solid #365d9d;outline-offset:2px}
 .lab2-card progress{display:block;width:100%;height:6px;margin:5px 0 0;accent-color:var(--m-acc)}
 .trainer-empty{margin:6px 0}
 #overlay:not(.menu-mode)>.lab2{max-height:calc((100dvh - var(--ui-top) - var(--ui-bot))/var(--ui-scale,1))!important;height:auto!important;padding:12px!important;overscroll-behavior:contain;color:var(--m-text)}
@@ -3590,9 +3591,9 @@ html[lang] .trainer-screen .trainer-header .g-back,
 .lab2-button.secondary{border-color:var(--m-line2);background:var(--m-card);color:var(--m-text)}
 .lab2-button:disabled{border-color:var(--m-line2);background:var(--m-sunk);color:var(--m-mute);cursor:default}
 .lab2-footer{justify-content:space-between;padding:10px 2px 2px}
-.trainer-favorite{grid-column:1/-1;display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--trainer-border);
+.trainer-favorite{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--trainer-border);
   border-radius:14px;background:var(--trainer-inset);color:var(--trainer-ink)}
-.trainer-cover.has-trainer-bg .trainer-favorite{border-color:#fff4;background:#17332cdb;color:#fff}
+.trainer-cover.has-trainer-bg .trainer-favorite{border-color:#fff4;background:#202c4bdb;color:#fff}
 .trainer-favorite img{width:42px;height:42px;object-fit:cover;border-radius:50%;flex:none}
 .trainer-favorite :is(b,small){display:block;overflow-wrap:anywhere}
 .trainer-favorite b{font-size:16px}
@@ -3600,11 +3601,17 @@ html[lang] .trainer-screen .trainer-header .g-back,
 .trainer-panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .trainer-panel-head h3{margin:0}
 .trainer-panel-action{padding:7px 12px;border:1px solid var(--m-line2);border-radius:9px;background:var(--m-sunk);color:var(--m-text);font:800 13px 'Nunito',system-ui;cursor:pointer}
-.trainer-pin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:10px}
+.trainer-pin-grid{display:grid;gap:10px}
 .trainer-pin{min-width:0;padding:8px 10px;border-radius:10px;background:var(--m-sunk)}
 .trainer-pin{display:flex;gap:8px;align-items:center;line-height:1.3;overflow-wrap:anywhere}
 .trainer-pin-art{flex:none}
-.trainer-owner-actions{display:flex;gap:6px 10px;flex-wrap:wrap}
+.trainer-owner-actions{display:flex;gap:6px 10px;flex-wrap:wrap;justify-content:flex-end}
+.trainer-run-list{display:grid;margin:0;padding:0;list-style:none}
+.trainer-run-list li{min-width:0;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px 16px;padding:10px 0}
+.trainer-run-list li+li{border-top:1px solid var(--trainer-border)}
+.trainer-run-list li>span{min-width:0;overflow-wrap:anywhere}
+.trainer-run-list :is(b,small){display:block}
+@media(max-width:410px){.trainer-run-list li{grid-template-columns:minmax(0,1fr) auto;gap:4px 9px}.trainer-run-list li>span:nth-child(2){grid-row:2}.trainer-run-list li>strong{grid-row:1/3;grid-column:2}}
 .trainer-pin p{margin:5px 0 2px;font-size:13px;color:var(--trainer-subtle)}
 .trainer-pin-art{display:inline-grid;vertical-align:middle;place-items:center;width:34px;height:34px;margin-inline-end:7px;border-radius:8px;background:var(--m-card)}
 .trainer-pin-art .trainer-portrait{width:32px;height:32px}
@@ -3664,7 +3671,9 @@ html[lang] .trainer-screen .trainer-header .g-back,
 .trainer-custom .cz-foot{flex:none;margin:0;padding:10px 16px;background:var(--trainer-inset);border-color:var(--trainer-border);justify-content:flex-end}
 @media(max-width:660px){
   .realhub.pl4.trainer-screen{background-image:var(--trainer-scrim),url(ui/fondo_inicio_movil.webp)!important}
-  .trainer-feature,.lab2-grid{grid-template-columns:minmax(0,1fr)}
+  .trainer-showcase-grid,.lab2-grid{grid-template-columns:minmax(0,1fr)}
+  .trainer-hero{grid-template-columns:auto minmax(0,1fr);min-height:0}
+  .trainer-favorite{grid-column:1/-1}
   .trainer-heading img{width:36px;height:36px}
   .trainer-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
   .trainer-cover.has-trainer-bg{background-position:center,64% var(--trainer-bg-y,49%);
@@ -3676,7 +3685,7 @@ html[lang] .trainer-screen .trainer-header .g-back,
 @media(max-width:500px){
   .trainer-screen #tcAv{width:86px;height:86px}
   .trainer-hero{gap:12px;padding:14px}
-  .trainer-screen .trainer-hero .trainer-owner-actions button{line-height:1.2;font-size:13px!important}
+  .trainer-screen :is(#plShare,#plChange){line-height:1.2;font-size:13px!important}
   .trainer-stat{gap:6px}
   .trainer-custom .cz-grid{grid-template-columns:minmax(0,1fr)}
   .trainer-custom .cz-backgrounds{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -5535,6 +5544,7 @@ document.addEventListener('pointerlockchange', () => {
 // la animación de entrada y se conserva el scroll de las listas, para que no parezca una recarga
 let overlayShownState = null;
 function showOverlay(html){
+  if (overlayShownState === 'player' && state !== 'player') stopSoundEffects();
   const same = overlayShownState === state && !overlay.classList.contains('hidden') && overlay.firstElementChild;
   const scrolls = [];
   if (same) overlay.querySelectorAll('*').forEach((el, i) => {
@@ -5559,7 +5569,10 @@ function showOverlay(html){
   }
   refreshTopbar();
 }
-function hideOverlay(){ overlay.classList.add('hidden'); refreshTopbar(); }
+function hideOverlay(){
+  if (overlayShownState === 'player') stopSoundEffects();
+  overlay.classList.add('hidden'); refreshTopbar();
+}
 
 // Récords locales (las 10 mejores partidas, guardadas en este navegador)
 function getRecords(){
@@ -11269,6 +11282,7 @@ function midiHz(m){ return 440 * Math.pow(2, (m - 69) / 12); }
 const MUSIC_FILES = {menu: 'audio/together-we-are-strong.mp3', bosque: 'audio/musica/bosque.mp3', desierto: 'audio/musica/desierto.mp3', nevado: 'audio/musica/nevado.mp3'};
 Music.track = 'menu';
 function musicStart(){
+  if (document.hidden) return;
   if (!Music.file){
     Music.file = new Audio(MUSIC_FILES[Music.track] || MUSIC_FILES.menu);
     Music.file.loop = true;
@@ -11279,9 +11293,9 @@ function musicStart(){
   const p = Music.file.play();
   if (p && p.catch) p.catch(() => {});
 }
-function musicStop(){
+function musicStop(immediate = false){
   if (Music.file) Music.file.pause();
-  musicSynth(true);
+  musicSynthStop(immediate);
 }
 // Cambia de pista según dónde está el jugador: la del mapa durante la partida, la de los menús fuera
 function musicSync(){
@@ -11291,9 +11305,8 @@ function musicSync(){
   if (Music.file){ Music.file.pause(); Music.file.onerror = null; Music.file = null; }
   if (Music.on && Sfx.ctx) musicStart();
 }
-function musicSynth(stopOnly){
-  if (stopOnly) return musicSynthStop();
-  if (!Sfx.ctx || Music.nodes) return;
+function musicSynth(){
+  if (document.hidden || !Sfx.ctx || Music.nodes) return;
   const c = Sfx.ctx;
   const out = c.createGain(); out.gain.value = 0;
   const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 3200;
@@ -11342,18 +11355,42 @@ function musicSynth(stopOnly){
   nodes.timer = setInterval(schedule, 60);
   Music.nodes = nodes;
 }
-function musicSynthStop(){
+function musicSynthStop(immediate){
   if (!Music.nodes) return;
   const {out, timer} = Music.nodes;
   Music.nodes.stopped = true;
   clearInterval(timer);
-  out.gain.setTargetAtTime(0, Sfx.ctx.currentTime, 0.3);
-  setTimeout(() => { try { out.disconnect(); } catch(e){} }, 1200);
+  if (immediate) out.disconnect();
+  else {
+    out.gain.setTargetAtTime(0, Sfx.ctx.currentTime, 0.3);
+    setTimeout(() => out.disconnect(), 1200);
+  }
   Music.nodes = null;
 }
 
 /* ---------- Sonido: efectos sintetizados con Web Audio (sin archivos) ---------- */
-const Sfx = {ctx:null, master:null, muted: localStorage.getItem('digibonk3d-sfx') === '0', last:{}, noiseBuf:null, vol: Math.min(1, Math.max(0, +(localStorage.getItem('digibonk3d-sfxvol') ?? 1)))};
+const Sfx = {ctx:null, master:null, muted: localStorage.getItem('digibonk3d-sfx') === '0', last:{}, playing:new Set(), noiseBuf:null, vol: Math.min(1, Math.max(0, +(localStorage.getItem('digibonk3d-sfxvol') ?? 1)))};
+function trackSoundEffect(source){
+  Sfx.playing.add(source);
+  source.addEventListener('ended', () => Sfx.playing.delete(source), {once:true});
+}
+function stopSoundEffects(){
+  for (const source of Sfx.playing) source.stop();
+  Sfx.playing.clear();
+}
+function pausePageAudio(){
+  stopSoundEffects();
+  musicStop(true);
+}
+function resumePageAudio(){
+  if (Sfx.ctx && Music.on) musicStart();
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) pausePageAudio();
+  else resumePageAudio();
+});
+addEventListener('pagehide', pausePageAudio);
+addEventListener('pageshow', event => { if (event.persisted) resumePageAudio(); });
 function audioInit(){
   if (Sfx.ctx){ if (Sfx.ctx.state === 'suspended') Sfx.ctx.resume(); return; }
   const AC = window.AudioContext || window.webkitAudioContext;
@@ -11385,7 +11422,8 @@ function sfxSample(name){
   s.buffer = list[Math.floor(Math.random() * list.length)];
   if (name === 'hit') s.playbackRate.value = 0.9 + Math.random() * 0.25;   // que los golpes seguidos no suenen idénticos
   gn.gain.value = SFX_VOL[name] || .5;
-  s.connect(gn); gn.connect(Sfx.master); s.start();
+  s.connect(gn); gn.connect(Sfx.master);
+  trackSoundEffect(s); s.start();
   return true;
 }
 function tone(freq, dur, type, vol, slideTo, delay){
@@ -11397,7 +11435,7 @@ function tone(freq, dur, type, vol, slideTo, delay){
   gn.gain.exponentialRampToValueAtTime(vol, t0 + 0.01);
   gn.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
   o.connect(gn); gn.connect(Sfx.master);
-  o.start(t0); o.stop(t0 + dur + 0.05);
+  trackSoundEffect(o); o.start(t0); o.stop(t0 + dur + 0.05);
 }
 function noise(dur, vol, delay, hp){
   const c = Sfx.ctx, t0 = c.currentTime + (delay || 0);
@@ -11407,13 +11445,13 @@ function noise(dur, vol, delay, hp){
   gn.gain.setValueAtTime(vol, t0);
   gn.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
   src.connect(f); f.connect(gn); gn.connect(Sfx.master);
-  src.start(t0, Math.random() * 0.3); src.stop(t0 + dur + 0.05);
+  trackSoundEffect(src); src.start(t0, Math.random() * 0.3); src.stop(t0 + dur + 0.05);
 }
 // Intervalo mínimo entre repeticiones para que los efectos frecuentes no saturen
 const SFX_GAP = {shoot:70, hit:60, kill:40, hurt:250, uiHover:50};
 function sfx(name){
   const c = Sfx.ctx;
-  if (!c || Sfx.muted || c.state !== 'running') return;
+  if (!c || Sfx.muted || document.hidden || c.state !== 'running') return;
   if (SFX_GAP[name]){
     const now = performance.now();
     if (now - (Sfx.last[name] || 0) < SFX_GAP[name]) return;
@@ -13346,6 +13384,7 @@ function trainerProfile(){
     v:1, name:trainerName, avatar:avatar?.id || selectedKey, frame:extra.frame, title:extra.title,
     background:trainerBackgroundId(), companion, favorite:!!favorite, mastery:masteryLv(companion), pins:pinned,
     plays:sum('plays'), wins:stats.reduce((total, entry) => total + Object.values(entry.wins || {}).reduce((n, value) => n + (+value || 0), 0), 0),
+    collection:pickProgress().done, achievements:achDoneCount(), recent:recent.filter(run => !run.weekly).slice(0,3),
     kills:sum('kills'), level:Math.max(0, ...stats.map(entry => +entry.maxLvl || 0), ...recs.map(run => +run.lvl || 0)),
     trial:timeTrialMarks(savedRecords.timeTrial, [...recs, ...recent]),
     killRecord:{value:Number(bestKills?.kills), name:bestKills?.name, map:bestKills?.map},
@@ -13368,6 +13407,10 @@ function normalizeTrainerProfile(raw){
     companion:char(raw.companion), favorite:raw.favorite === true, mastery:count(raw.mastery),
     pins:Array.isArray(raw.pins) ? [...new Set(raw.pins)].filter(value => id(achievements, value)).slice(0, 3) : [],
     plays:count(raw.plays), wins:count(raw.wins), kills:count(raw.kills), level:count(raw.level),
+    collection:raw.collection == null ? null : count(raw.collection), achievements:raw.achievements == null ? null : count(raw.achievements),
+    recent:Array.isArray(raw.recent) ? raw.recent.slice(0,3).filter(run => run && count(run.t) > 0).map(run => ({
+      t:count(run.t), map:map(run.map), name:text(run.name,36), kills:count(run.kills), wave:count(run.wave), win:run.win === true
+    })) : [],
     trial:Object.fromEntries(MAP_ORDER.map(key => [key, count(raw.trial?.[key])])),
     killRecord:{value:count(raw.killRecord?.value), name:text(raw.killRecord?.name, 36), map:map(raw.killRecord?.map)},
     wave:count(raw.wave), waveName:text(raw.waveName, 36), survivor:char(raw.survivor), survivalTime:count(raw.survivalTime)
@@ -13404,8 +13447,9 @@ function showTrainerProfile(profile, shared = false){
   const number = n => n.toLocaleString(I18N.lang);
   const battleStats = [
     ['Partidas', profile.plays, 'hub/ic_mision'], ['Victorias', profile.wins, 'hub/ic_logros'],
-    ['Bajas', profile.kills, 'hud/ic_bajas'], ['Mejor nivel', profile.level || '—', 'hud/ic_dash']
-  ].map(([label,value,icon]) => `<div class="trainer-stat"><img src="ui/${icon}.webp" alt="">
+    ['Bajas', profile.kills, 'hud/ic_bajas'], ['Mejor nivel', profile.level || '—', 'hud/ic_dash'],
+    ['Digimon', profile.collection, 'hub/ic_digidex'], ['Logros', profile.achievements, 'hub/ic_logros']
+  ].filter(([,value]) => value !== null).map(([label,value,icon]) => `<div class="trainer-stat"><img src="ui/${icon}.webp" alt="">
     <span><b>${typeof value === 'number' ? number(value) : escHtml(value)}</b><small>${label}</small></span></div>`).join('');
   const pinned = achItems().filter(item => pins.includes(item.id)).sort((a,b) => pins.indexOf(a.id) - pins.indexOf(b.id));
   const badges = pinned.map(item => `<div class="trainer-pin">
@@ -13434,27 +13478,34 @@ function showTrainerProfile(profile, shared = false){
     <dl class="trainer-device-rows">${rows.map(([rowLabel,rowValue,pending]) => `<div class="trainer-device-row"><dt>${escHtml(rowLabel)}</dt>
       <dd${pending ? ' class="trainer-device-pending"' : ''}>${escHtml(rowValue)}</dd></div>`).join('')}</dl>
   </div>`).join('');
+  const recent = profile.recent.map(run => `<li>
+    <span><b data-no-i18n>${escHtml(run.name || '—')}</b><small>${escHtml(MAPS[run.map]?.name || '')}</small></span>
+    <span>${run.wave ? `Oleada ${number(run.wave)}` : run.win ? 'Victoria' : 'Derrota'} · ${number(run.kills)} bajas</span><strong>${time(run.t)}</strong>
+  </li>`).join('');
   showOverlay(`
     <main class="realhub pl4 trainer-screen" aria-labelledby="trainerHeading">
       <div class="trainer-wrap">
         <header class="trainer-header">
           <div class="trainer-heading"><img src="ui/hub/digivice/jugador.png" alt=""><h2 id="trainerHeading">${shared ? 'Ficha compartida' : 'Ficha de entrenador'}</h2></div>
-          <button type="button" class="g-back" id="plBack">← Volver</button>
+          <div class="trainer-owner-actions">
+            <button type="button" class="g-back" id="plBack">← Volver</button>
+            ${shared ? '' : '<button type="button" class="pl4-chg" id="plShare">Compartir ficha</button>'}
+          </div>
         </header>
-        <div class="trainer-feature">
-          <section ${trainerCoverAttrs('trainer-hero', background, shared)}>
+        <section ${trainerCoverAttrs('trainer-hero', background, shared)}>
             <div class="hud-portrait trainer-portrait${frame ? ' fr-' + frame : ''}" id="tcAv"><img src="${portrait}" alt=""></div>
             <div class="trainer-identity">
               <h3 class="trainer-name"${name ? ' data-no-i18n' : ''}>${name ? escHtml(name) : 'Invitado'}</h3>
               ${title ? `<strong class="trainer-title">${trainerTitleIcon(title)}${escHtml(title.name)}</strong>` : ''}
-              ${shared ? '' : `<div class="trainer-owner-actions">
-                <button type="button" class="pl4-chg" id="plChange">Personalizar ficha</button>
-                <button type="button" class="pl4-chg" id="plShare">Compartir ficha</button>
-              </div>`}
+              ${shared ? '' : '<button type="button" class="pl4-chg" id="plChange">Personalizar ficha</button>'}
             </div>
             ${CHARS[companion] ? `<div class="trainer-favorite"><img src="${charIcon(companion, 'clasico')}" alt=""><span><small>${favorite ? 'Digimon favorito' : 'Compañero actual'}</small><b>${CHARS[companion].name}</b><small>Maestría ${mastery}</small></span></div>` : ''}
-          </section>
-          <section class="trainer-device" aria-labelledby="trainerDeviceHeading">
+        </section>
+        <section class="trainer-panel trainer-stat-board" aria-label="Estadísticas del entrenador">
+          <div class="trainer-stats">${battleStats}</div>
+        </section>
+        <div class="trainer-showcase-grid">
+          <section class="trainer-panel trainer-device" aria-labelledby="trainerDeviceHeading">
             <h3 id="trainerDeviceHeading">Récords</h3>
             <div class="trainer-device-shell">
               <img src="ui/trainer-digivice.png" alt="" width="898" height="460">
@@ -13464,12 +13515,6 @@ function showTrainerProfile(profile, shared = false){
               </div>
             </div>
           </section>
-        </div>
-        <div class="trainer-activity">
-          <section class="trainer-panel trainer-stat-board" aria-labelledby="trainerStatsHeading">
-            <h3 id="trainerStatsHeading">Estadísticas del entrenador</h3>
-            <div class="trainer-stats">${battleStats}</div>
-          </section>
           <section class="trainer-panel trainer-showcase">
             <div class="trainer-panel-head"><h3>Logros destacados</h3>
               ${shared ? '' : '<button type="button" class="trainer-panel-action" id="trainerPins">Elegir logros</button>'}
@@ -13477,6 +13522,9 @@ function showTrainerProfile(profile, shared = false){
             ${badges ? `<div class="trainer-pin-grid">${badges}</div>` : '<p class="trainer-empty">Todavía no hay logros destacados.</p>'}
           </section>
         </div>
+        <section class="trainer-panel trainer-recent"><h3>Últimas partidas</h3>
+          ${recent ? `<ul class="trainer-run-list">${recent}</ul>` : '<p class="trainer-empty">Sin partidas.</p>'}
+        </section>
       </div>
     </main>`);
   document.getElementById('plBack').onclick = shared ? closeSharedTrainerProfile : showSelect;
@@ -13489,6 +13537,7 @@ function showTrainerProfile(profile, shared = false){
   const recordsDisplay = [...document.getElementById('trainerDeviceScreen').querySelectorAll('[data-record-view]')];
   const recordButtons = [...document.getElementById('trainerDeviceControls').querySelectorAll('button')];
   recordButtons.forEach(button => button.onclick = () => {
+    stopSoundEffects();
     for (const view of recordsDisplay) view.hidden = view.dataset.recordView !== button.dataset.recordMode;
     for (const control of recordButtons) control.setAttribute('aria-pressed', String(control === button));
   });
@@ -13619,6 +13668,7 @@ function openCustomizer(initialTab = 'bg', trigger = document.getElementById('pl
       <div class="cz-list"></div>
       <div class="cz-foot"><button type="button" class="cz-btn" id="czCancel">Cancelar</button><button type="button" class="cz-btn ok" id="czSave">Guardar</button></div>`;
     box.querySelectorAll('[data-tab]').forEach(button => button.onclick = () => {
+      stopSoundEffects();
       tab = button.dataset.tab; query = ''; access = 'owned';
       render(); box.querySelector('.cz-tab.on').focus({preventScroll:true});
     });
@@ -13655,8 +13705,9 @@ function openCustomizer(initialTab = 'bg', trigger = document.getElementById('pl
   };
   back.addEventListener('keydown', e => e.stopPropagation());
   back.addEventListener('close', () => {
+    stopSoundEffects();
     back.remove();
-    if (saved){ sfx('ready'); showPlayer(); }
+    if (saved) showPlayer();
     (trigger?.id ? document.getElementById(trigger.id) : trigger)?.focus({preventScroll:true});
   }, {once:true});
   render();
