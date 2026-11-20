@@ -3427,6 +3427,64 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
   .trainer-custom .cz-prev{min-height:0;padding:4px 9px}
   .trainer-custom .cz-prev .hud-portrait{width:36px!important;height:36px!important}
 }
+/* La ilustración ambiental de la pantalla es independiente del fondo de la tarjeta. */
+.realhub.pl4.trainer-screen{
+  background:linear-gradient(180deg,#071630c2 0%,#0b1e379b 38%,#08142aee 100%),url(ui/fondo_inicio.webp) center 42%/cover no-repeat!important
+}
+.trainer-screen .trainer-header h2{color:#f6f9ff;text-shadow:0 2px 5px #08162d}
+.trainer-favorite{display:flex;align-items:center;gap:6px;padding:3px 7px;background:#0d2044;border-radius:8px}
+.trainer-hero .trainer-favorite img{width:25px;height:25px;object-fit:cover;border-radius:50%}
+.trainer-favorite :is(b,small){display:block}
+.trainer-favorite b{font-size:11px;color:#ffe09a}
+.trainer-panel-head{display:flex;justify-content:space-between;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px}
+.trainer-panel-head h3{margin:0}
+.trainer-panel-action,.trainer-goal-action{padding:5px 9px;border:1px solid var(--m-line2);border-radius:8px;background:var(--m-sunk);color:var(--m-text);font:800 13px 'Nunito',system-ui;cursor:pointer}
+.trainer-goal-action{margin-top:6px;background:var(--m-cta);border-color:transparent;color:#fff}
+.trainer-pin-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.trainer-pin{min-width:0;padding:6px 8px;border-radius:9px;background:var(--m-sunk)}
+.trainer-pin summary{display:list-item;cursor:pointer;line-height:1.3;overflow-wrap:anywhere}
+.trainer-pin p{margin:5px 0 2px;font-size:12px;color:var(--m-soft)}
+.trainer-pin-art{display:inline-grid;vertical-align:middle;place-items:center;width:31px;height:31px;margin-inline-end:5px;background:#152a50;border-radius:8px}
+.trainer-pin-art .hud-portrait{width:20px!important;height:20px!important}
+.trainer-pin-art .hud-portrait img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.trainer-record{grid-template-columns:minmax(0,1fr) auto}
+.trainer-record strong{font-size:17px}
+.trainer-picker{width:min(760px,calc(100vw - 20px))}
+.trainer-picker .cz-box{border-radius:16px}
+.trainer-picker .cz-prev-copy small{color:#d1e1ff;font-size:11px}
+.trainer-picker .cz-tabs{justify-content:flex-start;padding:0 8px}
+.trainer-picker .cz-tab{padding:6px 10px;font:800 13px 'Nunito',system-ui}
+.trainer-picker .cz-list{min-height:0;overflow:auto;overscroll-behavior:contain}
+.trainer-picker .cz-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;overflow:visible}
+.trainer-picker .cz-backgrounds{grid-template-columns:repeat(auto-fit,minmax(103px,1fr))}
+.trainer-picker .cz-tile{display:grid;grid-template-columns:auto minmax(0,1fr);min-width:0;gap:9px;min-height:69px;padding:7px 25px 7px 8px;align-content:center;text-align:left}
+.trainer-picker .cz-tile.locked{opacity:1}
+.trainer-picker .cz-tile .cz-art{width:56px;height:56px}
+.trainer-picker .cz-tile .cz-av,.trainer-picker .cz-tile .cz-fr .hud-portrait{width:48px!important;height:48px!important}
+.trainer-picker .cz-item-copy{min-width:0}
+.trainer-picker .cz-tile :is(b,small){display:block;text-align:left;overflow-wrap:anywhere}
+.trainer-picker .cz-tile b{font-size:14px;line-height:1.2}
+.trainer-picker .cz-tile small{margin-top:3px;font-size:12px;line-height:1.28}
+.trainer-picker .cz-backgrounds .cz-tile{grid-template-columns:minmax(0,1fr);padding:6px;gap:5px}
+.trainer-picker .cz-backgrounds .cz-background{height:60px}
+.trainer-picker .cz-filters{display:flex;gap:6px;margin:0 9px 4px}
+.trainer-picker .cz-filters :is(input,select){min-width:0;min-height:32px;padding:3px 6px;color:var(--m-text);background:var(--m-sunk);border:1px solid var(--m-line2);border-radius:8px;font:700 13px 'Nunito',system-ui}
+.trainer-picker .cz-filters input{flex:1}
+.trainer-picker .cz-pages{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 0 8px;font-size:12px;font-variant-numeric:tabular-nums}
+.trainer-picker .cz-pages button{min-height:32px;padding:4px 8px;border:1px solid var(--m-line2);border-radius:8px;background:var(--m-btn);color:var(--m-text);font:800 12px 'Nunito',system-ui;cursor:pointer}
+.trainer-picker .cz-pages button:disabled{opacity:.65;cursor:default}
+.trainer-picker :is(.cz-pin-count,.cz-empty){margin:4px 10px;color:var(--m-soft);font-size:13px}
+.trainer-picker .cz-empty{grid-column:1/-1}
+@media(max-width:460px){
+  .trainer-picker .cz-grid,.trainer-pin-grid{grid-template-columns:minmax(0,1fr)}
+  .trainer-picker .cz-backgrounds{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .trainer-picker .cz-filters input{font-size:16px}
+}
+@media(orientation:landscape) and (max-height:510px){
+  .trainer-picker .cz-tile{min-height:58px;padding-block:5px}
+  .trainer-picker .cz-tile .cz-art{width:44px;height:44px}
+  .trainer-picker .cz-tile .cz-av,.trainer-picker .cz-tile .cz-fr .hud-portrait{width:38px!important;height:38px!important}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.min.js" } }
@@ -5185,10 +5243,18 @@ function getRecords(){
   try { return JSON.parse(localStorage.getItem('digibonk3d-records') || '[]'); } catch(e){ return []; }
 }
 function saveRecord(win){
-  const list = getRecords();
-  list.push({name: stageName(g.ch.id, g.ch.evolved), key: g.ch.id, t: Math.floor(g.t), kills: g.kills, lvl: g.p.lvl, win});
+  const stored = getRecords(), list = Array.isArray(stored) ? stored.filter(Boolean) : [];
+  const run = {name: stageName(g.ch.id, g.ch.evolved), key: g.ch.id, t: Math.floor(g.t), kills: g.kills, lvl: g.p.lvl, win, map: g.map};
+  if (g.mode === 'surv') run.wave = g.wave || 1;
+  const best = {...loadJSON(TRAINER_RECORDS_KEY, {})};
+  if (!best.kills || run.kills > best.kills.kills) best.kills = run;
+  if (run.wave && (!best.wave || run.wave > best.wave.wave)) best.wave = run;
+  list.push(run);
   list.sort((a, b) => b.t - a.t || b.kills - a.kills);
-  try { localStorage.setItem('digibonk3d-records', JSON.stringify(list.slice(0, 10))); } catch(e){}
+  try {
+    localStorage.setItem('digibonk3d-records', JSON.stringify(list.slice(0, 10)));
+    localStorage.setItem(TRAINER_RECORDS_KEY, JSON.stringify(best));
+  } catch(e){}
 }
 const fmtTime = s => `${Math.floor(s/60)}:${String(s%60).padStart(2, '0')}`;
 
@@ -5755,7 +5821,9 @@ function showHelp(){
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const TRAINER_BG_KEY = 'digibonk3d-trainer-bg';
-const SAVE_KEYS = [TRAINER_BG_KEY, 'digibonk3d-shop-favorites', 'digibonk3d-shop-discount', 'digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
+const TRAINER_IDENTITY_KEY = 'digibonk3d-trainer-identity';
+const TRAINER_RECORDS_KEY = 'digibonk3d-trainer-records';
+const SAVE_KEYS = [TRAINER_BG_KEY, TRAINER_IDENTITY_KEY, TRAINER_RECORDS_KEY, 'digibonk3d-shop-favorites', 'digibonk3d-shop-discount', 'digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
   'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-maptime', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
   'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales', 'digibonk3d-objetos', 'digibonk3d-obj-ini', 'digibonk3d-reto', 'digibonk3d-sist'];
 // También cuentan los contadores por banner (pity) y la mejor oleada de cada mapa
@@ -12550,12 +12618,55 @@ function trainerCoverStyle(id){
 function trainerTitleIcon(title){
   return title?.id ? (titleBadge(title) || '<img class="title-badge-art" src="ui/hub/ic_logros.webp" alt="">') : '';
 }
-function trainerCardPreview({avatar, frame, title, background}){
+function trainerIdentity() {
+  const entries = achItems();
+  const unlocked = entries.filter(item => (TITLES.includes(item) ? inv.titles : inv.frames).includes(item.id));
+  const saved = loadJSON(TRAINER_IDENTITY_KEY, {});
+  const available = SEASONS.adventure.chars.filter(isUnlocked);
+  const favorite = available.includes(saved.favorite) ? saved.favorite : '';
+  const pinned = Array.isArray(saved.pinned) ? [...new Set(saved.pinned)].filter(id => unlocked.some(item => item.id === id)).slice(0, 3) : [];
+  return {available, unlocked, favorite, pinned};
+}
+function trainerAchievementArt(item, avatar){
+  return TITLES.includes(item) ? trainerTitleIcon(item) : `<span class="hud-portrait pf-av fr-${item.id}"><img src="${avatar}" alt=""></span>`;
+}
+const TRAINER_GOAL_DIGIMON = {
+  amistad_gabumon:'gabumon', sinceridad_palmon:'palmon', agua_fiabilidad:'gomamon',
+  conocimiento_digital:'tentomon', alas_rosadas:'biyomon', esperanza_angelical:'patamon'
+};
+function trainerGoalPlan(id){
+  const key = TRAINER_GOAL_DIGIMON[id] || selectedKey;
+  if (!isUnlocked(key)) return null;
+  if (Object.hasOwn(TRAINER_GOAL_DIGIMON, id) || ['novato','cazador','t_millon','maestro'].includes(id)) return {key};
+  const map = /^t_(?:dif_)?(bosque|desierto|nevado)$/.exec(id)?.[1];
+  if (map) return {key, map, diff:id.startsWith('t_dif_') ? 'dificil' : ''};
+  if (id === 't_surv') return {key, mode:'surv'};
+  return null;
+}
+function trainerRecordSummary(recs, roster){
+  const saved = loadJSON(TRAINER_RECORDS_KEY, {});
+  const time = recs.reduce((best, r) => r.t > (best?.t || 0) ? r : best, null);
+  const compare = (first, second, field) => +(second?.[field] || 0) > +(first?.[field] || 0) ? second : first;
+  let kills = recs.reduce((best, r) => compare(best, r, 'kills'), saved.kills);
+  let wave = recs.reduce((best, r) => compare(best, r, 'wave'), saved.wave);
+  for (const key of roster) kills = compare(kills, {kills:+statsOf(key).best || 0, name:CHARS[key].name}, 'kills');
+  for (const map of MAP_ORDER){
+    wave = compare(wave, {wave:+localStorage.getItem('digibonk3d-surv-wave-' + map) || 0, map}, 'wave');
+  }
+  return [
+    {label:'Mejor tiempo', mark:time, value:time ? fmtTime(time.t) : '—'},
+    {label:'Más bajas', mark:kills, value:kills?.kills || '—'},
+    {label:'Mejor oleada', mark:wave, value:wave?.wave || '—'}
+  ];
+}
+function trainerCardPreview({avatar, frame, title, background, favorite}){
   const item = TITLES.find(x => x.id === title);
+  const key = favorite || selectedKey;
   return `<div class="cz-prev trainer-cover" style="${trainerCoverStyle(background)}">
     <div class="hud-portrait pf-av${frame ? ' fr-' + frame : ''}"><img src="${avatarSrc(avatar)}" alt=""></div>
     <div class="cz-prev-copy">${trainerName ? `<b data-no-i18n>${escHtml(trainerName)}</b>` : '<b>Invitado</b>'}
-      ${item ? `<span class="cz-preview-title">${trainerTitleIcon(item)}${escHtml(item.name)}</span>` : ''}</div>
+      ${item ? `<span class="cz-preview-title">${trainerTitleIcon(item)}${escHtml(item.name)}</span>` : ''}
+      ${favorite !== undefined && CHARS[key] ? `<small>${favorite ? 'Digimon favorito' : 'Compañero actual'} · ${CHARS[key].name}</small>` : ''}</div>
     </div>`;
 }
 function showPlayer(){
@@ -12564,7 +12675,6 @@ function showPlayer(){
   const stats = Object.values(loadJSON('digibonk3d-stats', {})).filter(s => s && typeof s === 'object');
   const sum = key => stats.reduce((total, s) => total + (+s[key] || 0), 0);
   const records = getRecords(), recs = Array.isArray(records) ? records.filter(r => r && Number.isFinite(r.t)) : [];
-  const bestTime = recs.reduce((best, r) => Math.max(best, r.t), 0);
   const bestLevel = Math.max(0, ...stats.map(s => +s.maxLvl || 0), ...recs.map(r => +r.lvl || 0));
   const {done: digiOwned, total: digiTotal} = pickProgress();
   const chars = SEASONS.adventure.chars;
@@ -12575,22 +12685,30 @@ function showPlayer(){
   const tiles = items => items.map(([label, value]) =>
     `<div class="trainer-stat"><b>${typeof value === 'number' ? number(value) : escHtml(value)}</b><small>${label}</small></div>`).join('');
   const activity = tiles([
-    ['Partidas', sum('plays')], ['Bajas', sum('kills')], ['Mejor tiempo', bestTime ? fmtTime(bestTime) : '—'], ['Mejor nivel', bestLevel || '—']
+    ['Partidas', sum('plays')], ['Bajas', sum('kills')], ['Mejor nivel', bestLevel || '—']
   ]);
   const collection = tiles([
     ['Digimon', `${digiOwned}/${digiTotal}`], ['Evoluciones', Object.values(loadJSON('digibonk3d-evo', {})).filter(Boolean).length],
     ['Skins', skins], ['Marcos', inv.frames.length], ['Títulos', inv.titles.length], ['Logros', `${achDone}/${achTotal}`]
   ]);
-  const recList = recs.slice(0, 4).map(r => `<div class="trainer-record">
-    <span><b data-no-i18n>${escHtml(r.name || '—')}</b><small class="${r.win ? 'win' : ''}">${r.win ? 'Victoria' : 'Derrota'}</small></span>
-    <span>${number(+r.kills || 0)} bajas · Nv. ${+r.lvl || '—'}</span><strong>${fmtTime(r.t)}</strong></div>`).join('')
-    || '<p class="trainer-empty">Aún no hay partidas. Juega una para ver tus récords.</p>';
-  const progress = achItems().filter(item => !(TITLES.includes(item) ? inv.titles : inv.frames).includes(item.id))
-    .map(item => { const [value, max] = item.prog(); return {item, value: Math.max(0, Math.min(value, max)), max}; })
-    .filter(x => x.max > 0).sort((a, b) => b.value/b.max - a.value/a.max).slice(0, 3);
-  const achievements = progress.map(({item, value, max}) => `<div class="trainer-goal">
+  const {favorite, pinned, unlocked} = trainerIdentity();
+  const companion = favorite || selectedKey;
+  const pins = pinned.map(id => unlocked.find(item => item.id === id)).map(item => `<details class="trainer-pin">
+    <summary><span class="trainer-pin-art">${trainerAchievementArt(item, avatarSrc())}</span><b>${escHtml(item.name)}</b></summary>
+    <p>${escHtml(item.how)}</p></details>`).join('');
+  const recList = trainerRecordSummary(recs, chars).map(({label, mark, value}) => {
+    const detail = [mark?.name, MAPS[mark?.map]?.name].filter(Boolean).map(escHtml).join(' · ');
+    return `<div class="trainer-record"><span><b>${label}</b>${detail ? '<small>' + detail + '</small>' : ''}</span><strong>${typeof value === 'number' ? number(value) : value}</strong></div>`;
+  }).join('');
+  const progress = achItems().filter(item => !unlocked.includes(item))
+    .map(item => { const [value, max] = item.prog(); return {item, value: Math.max(0, Math.min(value, max)), max, plan:trainerGoalPlan(item.id)}; })
+    .filter(x => x.max > 0).sort((a, b) => b.value/b.max - a.value/a.max);
+  const goal = progress.find(x => x.plan);
+  const ordered = goal ? [goal, ...progress.filter(x => x !== goal)] : progress;
+  const achievements = ordered.slice(0, 3).map(({item, value, max}, i) => `<div class="trainer-goal">
     <div><b>${escHtml(item.name)}</b><small>${number(value)}/${number(max)}</small></div>
     <small>${escHtml(item.how)}</small><progress aria-label="${escHtml(item.name)}" value="${value}" max="${max}"></progress>
+    ${i === 0 && goal ? '<button type="button" class="trainer-goal-action" id="trainerGoalPlay">Elegir mapa</button>' : ''}
     </div>`).join('') || '<p class="trainer-empty">¡Todos los logros conseguidos!</p>';
   const specialists = chars.map(key => ({key, data: statsOf(key)}))
     .filter(x => x.data.plays || x.data.kills)
@@ -12607,26 +12725,39 @@ function showPlayer(){
             <label for="tcName">Nombre de entrenador</label>
             <input id="tcName" maxlength="16" autocomplete="off" value="${escHtml(trainerName || '')}" placeholder="Tu nombre">
             ${title ? `<strong class="trainer-title">${trainerTitleIcon(title)}${escHtml(title.name)}</strong>` : ''}
-            ${CHARS[selectedKey] ? `<small>Compañero: ${escHtml(CHARS[selectedKey].name)}</small>` : ''}
+            ${CHARS[companion] ? `<div class="trainer-favorite"><img src="${charIcon(companion)}" alt=""><span><b>${favorite ? 'Digimon favorito' : 'Compañero actual'}</b><small>${CHARS[companion].name} · Maestría ${masteryLv(companion)}</small></span></div>` : ''}
           </div>
           <div class="trainer-actions"><span class="trainer-wallet"><img src="ui/hud/ic_bits.webp" alt="">${number(SAVE.bits)} Bits</span>
             ${GACHA_SOON ? '' : `<small>${number(SAVE.tickets)} tickets</small>`}
             <button type="button" class="pl4-chg" id="plChange">Personalizar ficha</button>
           </div>
         </section>
+        <section class="trainer-panel trainer-showcase"><div class="trainer-panel-head"><h3>Logros destacados</h3><button type="button" class="trainer-panel-action" id="trainerPins">Elegir logros</button></div>
+          ${pins ? `<div class="trainer-pin-grid">${pins}</div>` : '<p class="trainer-empty">Puedes fijar hasta tres logros conseguidos.</p>'}</section>
         <div class="trainer-summary">
           <section class="trainer-panel"><h3>Actividad</h3><div class="trainer-stats">${activity}</div></section>
           <section class="trainer-panel"><h3>Colección</h3><div class="trainer-stats">${collection}</div></section>
         </div>
         <div class="trainer-detail">
-          <section class="trainer-panel"><h3>Mejores partidas por tiempo</h3>${recList}</section>
+          <section class="trainer-panel"><h3>Récords personales</h3>${recList}</section>
           <section class="trainer-panel trainer-goals"><h3>Próximos logros</h3>${achievements}</section>
         </div>
         <section class="trainer-panel"><h3>Digimon con más bajas</h3><div class="trainer-digimon-grid">${specialists}</div></section>
       </div>
     </main>`);
   document.getElementById('plBack').onclick = showSelect;
-  document.getElementById('plChange').onclick = openCustomizer;
+  document.getElementById('plChange').onclick = () => openCustomizer();
+  const pinsButton = document.getElementById('trainerPins');
+  pinsButton.onclick = () => openCustomizer('pins', pinsButton);
+  const playGoal = document.getElementById('trainerGoalPlay');
+  if (playGoal && goal) playGoal.onclick = () => {
+    selectedKey = goal.plan.key;
+    runWeekly = false; runMode = goal.plan.mode || 'normal';
+    restoreRunPrefs();
+    runMap = goal.plan.map || runMap; runDiff = goal.plan.diff || runDiff;
+    localStorage.setItem('digibonk3d-last-choice', selectedKey);
+    showMapSelect();
+  };
   const name = document.getElementById('tcName');
   name.onblur = () => {
     const value = name.value.trim();
@@ -12644,86 +12775,128 @@ function showPlayer(){
 }
 
 // Personalización de la ficha. Solo guarda al pulsar Guardar.
-function openCustomizer(){
+function openCustomizer(initialTab = 'bg', trigger = document.getElementById('plChange')){
   if (document.getElementById('czBack')) return;
-  const trigger = document.getElementById('plChange');
-  let pAv = avatarIcon()?.id || '';
-  let pFrame = extra.frame || '', pTitle = extra.title || '', pBg = trainerBackgroundId();
-  let tab = 'bg', saved = false;
-  const ownsFrame = id => !id || inv.frames.includes(id);
-  const ownsTitle = id => !id || inv.titles.includes(id);
+  const identity = trainerIdentity();
+  let pAv = avatarIcon()?.id || '', pFrame = extra.frame || '', pTitle = extra.title || '', pBg = trainerBackgroundId();
+  let pFavorite = identity.favorite, pPins = identity.pinned;
+  let tab = initialTab, query = '', access = 'owned', page = 0, saved = false;
+  const tabs = [['bg','Fondos'], ['fav','Favorito'], ['pins','Logros'], ['av','Entrenadores'], ['dg','Iconos Digimon'], ['frame','Marcos'], ['title','Títulos']];
   const back = document.createElement('dialog');
-  back.id = 'czBack'; back.className = 'trainer-custom';
+  back.id = 'czBack'; back.className = 'trainer-custom trainer-picker';
   back.setAttribute('aria-labelledby', 'czTitle');
   back.innerHTML = '<section class="cz-box"></section>';
   document.body.appendChild(back);
   const box = back.firstElementChild;
-  const rar = t => ({c:'Común', r:'Rara', e:'Épica', l:'Legendaria'})[t] || '';
-  const card = (sel, v, inner, locked, tier) => `<button type="button" class="cz-tile cz-t-${tier || 'c'}${sel ? ' sel' : ''}${locked ? ' locked' : ''}" ${locked ? 'disabled' : ''} data-v="${v}" aria-pressed="${sel}">${inner}${locked ? '<i class="cz-lock" aria-hidden="true">🔒</i>' : ''}</button>`;
-  const avatarArt = src => `<span class="cz-art"><span class="cz-av"><img src="${src}" alt=""></span></span>`;
+  const avatarArt = src => `<span class="cz-art"><span class="cz-av"><img src="${src}" alt="" decoding="async"></span></span>`;
   const frameArt = id => `<span class="cz-art cz-fr"><span class="hud-portrait pf-av${id ? ' fr-' + id : ''}"><img src="${avatarSrc(pAv)}" alt=""></span></span>`;
-  const grid = () => {
-    if (tab === 'bg') return Object.entries(TRAINER_BACKGROUNDS).map(([id, bg]) => card(pBg === id, 'bg:' + id,
-      `<span class="cz-background" style="${trainerCoverStyle(id)}" aria-hidden="true"></span><b>${bg.name}</b>`, false, 'c')).join('');
-    if (tab === 'av') return card(!pAv, 'av:', avatarArt(avatarSrc('')) + '<b>Automático</b>', false, 'c')
-      + AVATAR_KIDS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `${avatarArt(ic.src)}<b>${ic.name}</b>`, false, 'c')).join('');
-    if (tab === 'dg') return PLAYER_ICONS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `${avatarArt(ic.src)}<b>${ic.name}</b>`, false, 'c')).join('')
-      + SKIN_ICONS.map(ic => {
-        const ok = ownsSkinIcon(ic), sk = SKIN_BY_ID[ic.skin];
-        if (sk?.hidden && !ok) return '';
+  const titleArt = title => `<span class="cz-art">${trainerTitleIcon(title) || '<span aria-hidden="true">—</span>'}</span>`;
+  const option = (id, name, art, selected, locked = false, note = '') => ({id,name,art,selected,locked,note});
+  const options = () => {
+    if (tab === 'bg') return Object.entries(TRAINER_BACKGROUNDS).map(([id,bg]) => option(id,bg.name,
+      `<span class="cz-background" style="${trainerCoverStyle(id)}" aria-hidden="true"></span>`, pBg === id));
+    if (tab === 'fav') return [
+      option('', 'Compañero actual', avatarArt(charIcon(selectedKey)), !pFavorite),
+      ...identity.available.map(key => option(key,CHARS[key].name,avatarArt(charIcon(key)),pFavorite === key,false,`Maestría ${masteryLv(key)}`))
+    ];
+    if (tab === 'pins') return identity.unlocked.map(item => option(item.id,item.name,
+      TITLES.includes(item) ? titleArt(item) : frameArt(item.id),pPins.includes(item.id),false,item.how));
+    if (tab === 'av') return [option('', 'Automático', avatarArt(avatarSrc('')), !pAv),
+      ...AVATAR_KIDS.map(ic => option(ic.id,ic.name,avatarArt(ic.src),pAv === ic.id))];
+    if (tab === 'dg') return [
+      ...PLAYER_ICONS.map(ic => option(ic.id,ic.name,avatarArt(ic.src),pAv === ic.id)),
+      ...SKIN_ICONS.flatMap(ic => {
+        const owned = ownsSkinIcon(ic), sk = SKIN_BY_ID[ic.skin];
+        if (sk?.hidden && !owned) return [];
         const hint = sk?.src === 'evento' ? sk.desc : sk ? howTo(ic.key, sk) : '';
-        return card(pAv === ic.id, 'av:' + ic.id, `${avatarArt(ic.src)}<b>${escHtml(skinIconName(ic))}</b>${ok ? '' : '<small>' + escHtml(hint || 'Bloqueado') + '</small>'}`, !ok, ok ? 'r' : 'c');
-      }).join('');
-    if (tab === 'frame') return [{id: '', name: 'Sin marco', tier: 'c'}, ...FRAMES].map(f => {
-      const ok = ownsFrame(f.id), pg = !ok && f.prog ? f.prog() : null;
-      const bar = pg && pg[1] > 1 ? `<i class="cz-bar"><u style="width:${Math.round(Math.min(1, pg[0] / pg[1]) * 100)}%"></u></i><em>${Math.min(pg[0], pg[1])}/${pg[1]}</em>` : '';
-      return card(pFrame === f.id, 'fr:' + f.id, `${frameArt(f.id)}<b>${f.name}</b><small>${ok ? (f.id ? rar(f.tier) : 'Sin marco') : f.how}</small>${bar}`, !ok, ok ? f.tier : 'c');
-    }).join('');
-    return [{id: '', name: 'Sin título', how: '', tier: 'c'}, ...TITLES].map(t => {
-      const ok = ownsTitle(t.id), pg = !ok && t.prog ? t.prog() : null;
-      const bar = pg && pg[1] > 1 ? `<i class="cz-bar"><u style="width:${Math.round(Math.min(1, pg[0] / pg[1]) * 100)}%"></u></i><em>${Math.min(pg[0], pg[1])}/${pg[1]}</em>` : '';
-      return card(pTitle === t.id, 'ti:' + t.id, `<span class="cz-art">${trainerTitleIcon(t) || '<span aria-hidden="true">—</span>'}</span><b>${t.name}</b><small>${ok ? (t.id ? rar(t.tier) : 'Sin título') : t.how}</small>${bar}`, !ok, ok ? (t.tier || 'c') : 'c');
-    }).join('');
+        return [option(ic.id,skinIconName(ic),avatarArt(ic.src),pAv === ic.id,!owned,owned ? '' : hint || 'Bloqueado')];
+      })
+    ];
+    const items = tab === 'frame' ? FRAMES : TITLES, inventory = tab === 'frame' ? inv.frames : inv.titles;
+    const label = tab === 'frame' ? 'Sin marco' : 'Sin título';
+    const art = item => tab === 'frame' ? frameArt(item.id) : titleArt(item);
+    const current = tab === 'frame' ? pFrame : pTitle;
+    return [{id:'',name:label},...items].map(item => {
+      const locked = !!item.id && !inventory.includes(item.id);
+      return option(item.id,item.name,art(item),current === item.id,locked,locked ? item.how : TIER_NAME[item.tier] || '');
+    });
   };
-  const preview = () => trainerCardPreview({avatar:pAv, frame:pFrame, title:pTitle, background:pBg});
-  const render = (focus = '', scroll = 0) => {
+  const normalized = value => value.normalize('NFD').replace(/\p{M}+/gu,'').toLocaleLowerCase(I18N.lang);
+  const limited = () => ['dg','frame','title'].includes(tab);
+  const renderPreview = () => {
+    box.querySelector('.cz-preview-slot').innerHTML = trainerCardPreview({
+      avatar:pAv, frame:pFrame, title:pTitle, background:pBg, favorite:pFavorite
+    });
+  };
+  const renderList = focus => {
+    const list = options().filter(item => {
+      const visible = !limited() || (access === 'locked' ? item.locked : !item.locked);
+      return visible && (!query || [item.name,I18N.tr(item.name)].some(name => normalized(name).includes(query)));
+    });
+    const size = 6, pages = Math.max(1, Math.ceil(list.length/size));
+    page = Math.min(page, pages - 1);
+    const items = list.slice(page*size,(page + 1)*size).map(item => {
+      const disabled = item.locked || (tab === 'pins' && pPins.length === 3 && !item.selected);
+      return `<button type="button" class="cz-tile${item.selected ? ' sel' : ''}${item.locked ? ' locked' : ''}" data-choice="${escHtml(item.id)}"
+        aria-pressed="${item.selected}" ${disabled ? 'disabled' : ''}>${item.art}<span class="cz-item-copy"><b>${escHtml(item.name)}</b>${item.note ? `<small>${escHtml(item.note)}</small>` : ''}</span>
+        ${item.locked ? '<i class="cz-lock" aria-hidden="true">🔒</i>' : ''}</button>`;
+    }).join('');
+    const body = box.querySelector('.cz-list');
+    body.innerHTML = `
+      ${tab === 'pins' ? `<p class="cz-pin-count" role="status">${pPins.length}/3 logros destacados</p>` : ''}
+      <div class="cz-grid${tab === 'bg' ? ' cz-backgrounds' : ''}">${items || '<p class="cz-empty">No hay opciones para mostrar.</p>'}</div>
+      ${pages > 1 ? `<nav class="cz-pages" aria-label="Páginas"><button type="button" data-page="-1" ${page === 0 ? 'disabled' : ''}>Anterior</button><span role="status">${page + 1}/${pages}</span>
+        <button type="button" data-page="1" ${page === pages - 1 ? 'disabled' : ''}>Siguiente</button></nav>` : ''}`;
+    body.querySelectorAll('[data-choice]:not(:disabled)').forEach(button => button.onclick = () => {
+      const id = button.dataset.choice;
+      if (tab === 'bg') pBg = trainerBackgroundId(id);
+      else if (tab === 'fav') pFavorite = id;
+      else if (tab === 'pins') pPins = pPins.includes(id) ? pPins.filter(pin => pin !== id) : [...pPins, id];
+      else if (tab === 'frame') pFrame = id;
+      else if (tab === 'title') pTitle = id;
+      else pAv = id;
+      renderPreview();
+      renderList(`[data-choice="${CSS.escape(id)}"]`);
+      sfx('ready');
+    });
+    body.querySelectorAll('[data-page]:not(:disabled)').forEach(button => button.onclick = () => {
+      page += +button.dataset.page;
+      renderList(`[data-page="${button.dataset.page}"]:not(:disabled)`);
+    });
+    if (focus) (body.querySelector(focus) || body.querySelector('[data-choice]:not(:disabled)') || box.querySelector('.cz-tab.on'))?.focus({preventScroll:true});
+  };
+  const render = () => {
     box.innerHTML = `
-      <h2 id="czTitle">Personalizar ficha</h2>${preview()}
-      <div class="cz-tabs">${[['bg', 'Fondos'], ['av', 'Entrenadores'], ['dg', 'Digimon'], ['frame', 'Marcos'], ['title', 'Títulos']].map(([k, l]) => `<button type="button" class="cz-tab${tab === k ? ' on' : ''}" data-tab="${k}" aria-pressed="${tab === k}">${l}</button>`).join('')}</div>
-      <div class="cz-grid${tab === 'bg' ? ' cz-backgrounds' : ''}">${grid()}</div>
+      <h2 id="czTitle">Personalizar ficha</h2><div class="cz-preview-slot"></div>
+      <div class="cz-tabs">${tabs.map(([id,name]) => `<button type="button" class="cz-tab${tab === id ? ' on' : ''}" data-tab="${id}" aria-pressed="${tab === id}">${name}</button>`).join('')}</div>
+      ${limited() ? `<div class="cz-filters"><input id="czSearch" type="search" maxlength="50" aria-label="Buscar por nombre" placeholder="Buscar por nombre">
+        <select id="czAccess" aria-label="Disponibilidad"><option value="owned">Disponibles</option><option value="locked">Bloqueados</option></select></div>` : ''}
+      <div class="cz-list"></div>
       <div class="cz-foot"><button type="button" class="cz-btn" id="czCancel">Cancelar</button><button type="button" class="cz-btn ok" id="czSave">Guardar</button></div>`;
-    const gridEl = box.querySelector('.cz-grid');
-    gridEl.scrollTop = scroll;
-    if (focus) box.querySelector(focus)?.focus({preventScroll:true});
-    box.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => {
-      tab = b.dataset.tab;
-      render(`[data-tab="${CSS.escape(tab)}"]`);
+    box.querySelectorAll('[data-tab]').forEach(button => button.onclick = () => {
+      tab = button.dataset.tab; query = ''; access = 'owned'; page = 0;
+      render(); box.querySelector('.cz-tab.on').focus({preventScroll:true});
     });
-    box.querySelectorAll('.cz-tile:not(.locked)').forEach(b => b.onclick = () => {
-      const [k, v] = b.dataset.v.split(':');
-      if (k === 'bg') pBg = trainerBackgroundId(v);
-      else if (k === 'av') pAv = v;
-      else if (k === 'fr') pFrame = v;
-      else pTitle = v;
-      render(`[data-v="${CSS.escape(b.dataset.v)}"]`, gridEl.scrollTop); sfx('ready');
-    });
+    const search = box.querySelector('#czSearch'), filter = box.querySelector('#czAccess');
+    if (search) search.oninput = () => { query = normalized(search.value.trim()); page = 0; renderList(); };
+    if (filter) filter.onchange = () => { access = filter.value; page = 0; renderList(); };
     box.querySelector('#czCancel').onclick = () => back.close();
-    box.querySelector('#czSave').onclick = save;
-  };
-  const save = () => {
-    if (pAv) localStorage.setItem('digibonk3d-avatar', pAv);
-    else localStorage.removeItem('digibonk3d-avatar');
-    localStorage.setItem(TRAINER_BG_KEY, pBg);
-    if (pFrame) equipExtra('frame', pFrame); else unequipExtra('frame');
-    if (pTitle) equipExtra('title', pTitle); else unequipExtra('title');
-    saved = true;
-    back.close();
+    box.querySelector('#czSave').onclick = () => {
+      if (pAv) localStorage.setItem('digibonk3d-avatar', pAv);
+      else localStorage.removeItem('digibonk3d-avatar');
+      localStorage.setItem(TRAINER_BG_KEY, pBg);
+      localStorage.setItem(TRAINER_IDENTITY_KEY, JSON.stringify({favorite:pFavorite,pinned:pPins}));
+      if (pFrame) equipExtra('frame', pFrame); else unequipExtra('frame');
+      if (pTitle) equipExtra('title', pTitle); else unequipExtra('title');
+      saved = true; back.close();
+    };
+    renderPreview(); renderList();
   };
   back.addEventListener('keydown', e => e.stopPropagation());
   back.addEventListener('close', () => {
     back.remove();
     if (saved){ sfx('ready'); showPlayer(); }
-    (document.getElementById('plChange') || trigger)?.focus({preventScroll:true});
+    (trigger?.id ? document.getElementById(trigger.id) : trigger)?.focus({preventScroll:true});
   }, {once:true});
   render();
   back.showModal();
