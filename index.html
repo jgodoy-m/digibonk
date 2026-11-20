@@ -3583,6 +3583,88 @@ html[lang] .trainer-screen .trainer-header .g-back,
 .lab2-button.secondary{border-color:var(--m-line2);background:var(--m-card);color:var(--m-text)}
 .lab2-button:disabled{border-color:var(--m-line2);background:var(--m-sunk);color:var(--m-mute);cursor:default}
 .lab2-footer{justify-content:space-between;padding:10px 2px 2px}
+/* Laboratorio: estaciones de investigación y una sola consola de diagnóstico. */
+#overlay:not(.menu-mode)>.lab-console{
+  --lab-bg:#edf3fa;--lab-panel:#fff;--lab-well:#e5edf7;--lab-line:#b4c5db;
+  --lab-ink:#162943;--lab-muted:#425b79;--lab-accent:#3d568f;--lab-signal:#73dbef;
+  width:min(1150px,96vw)!important;height:auto!important;max-height:calc((100dvh - var(--ui-top) - var(--ui-bot))/var(--ui-scale,1))!important;
+  padding:clamp(8px,1.5vw,18px)!important;overscroll-behavior:contain;
+  background:linear-gradient(135deg,var(--lab-bg),var(--lab-well))!important;
+  color:var(--lab-ink)!important;font:700 14px/1.35 'Nunito',system-ui,sans-serif;
+}
+html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
+  --lab-bg:#121f31;--lab-panel:#182a40;--lab-well:#102033;--lab-line:#416080;
+  --lab-ink:#eef6ff;--lab-muted:#a9c1d9;--lab-accent:#9cdaef;
+}
+.lab-console .lab-head{
+  display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:clamp(6px,1.8vw,16px);
+  padding:8px 10px;border:1px solid var(--lab-line);border-radius:10px;background:var(--lab-panel);
+}
+.lab-console .lab-name{display:flex;align-items:center;gap:8px;min-width:0}
+.lab-console .lab-name img{width:44px;height:44px;object-fit:contain}
+.lab-console h2{margin:0;font:900 clamp(17px,3vw,30px)/1.1 'Orbitron','Nunito',sans-serif;overflow-wrap:anywhere}
+.lab-console .lab-name p{margin:4px 0 0;font-size:12px}
+.lab-console .lab-wallet{
+  display:flex;align-items:center;gap:5px;padding:5px 7px;border:1px solid var(--lab-line);border-radius:7px;
+  color:var(--lab-ink);background:var(--lab-well);font-variant-numeric:tabular-nums;text-align:right;
+}
+.lab-console .lab-wallet img{width:23px;height:23px;object-fit:contain}
+.lab-console .lab-layout{display:grid;grid-template-columns:minmax(210px,.72fr) minmax(0,1.4fr);gap:12px;margin-top:12px}
+.lab-console .lab-bench,.lab-console .lab-instrument{min-width:0;border:1px solid var(--lab-line);border-radius:10px;background:var(--lab-panel)}
+.lab-console .lab-bench{padding:10px;align-self:start}
+.lab-console .lab-bench h3{margin:0 0 9px;font-size:17px}
+.lab-console .lab-stations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.lab-console :is(.lab-station,.lab-project,.lab-reset,.lab-apply){
+  min-height:40px;border:1px solid var(--lab-line);border-radius:7px;background:var(--lab-well);color:var(--lab-ink);
+  font:850 13px/1.15 'Nunito',system-ui,sans-serif;cursor:pointer;
+}
+.lab-console .lab-station{padding:5px 2px;overflow-wrap:anywhere}
+.lab-console .lab-station[aria-pressed=true]{background:#325489;color:#fff;border-color:#567cb9}
+.lab-console .lab-projects{display:grid;gap:6px;margin-top:9px}
+.lab-console .lab-project{
+  display:grid;grid-template-columns:26px minmax(0,1fr) auto;align-items:center;gap:5px;padding:7px 5px;text-align:left;
+}
+.lab-console .lab-project[aria-pressed=true]{border-color:var(--lab-accent);box-shadow:inset 3px 0 var(--lab-accent)}
+.lab-console .lab-project span:first-child{color:var(--lab-accent);font-size:17px;text-align:center}
+.lab-console .lab-project span:last-child{font-size:11px;color:var(--lab-muted);white-space:nowrap}
+.lab-console .lab-reset{margin-top:9px;padding:5px 8px;width:100%;background:var(--lab-panel)}
+.lab-console .lab-instrument{overflow:hidden}
+.lab-console .lab-chamber{
+  position:relative;isolation:isolate;display:grid;place-items:center;min-height:clamp(120px,20vw,207px);
+  background:linear-gradient(0deg,#10305245,#0b173a00),url('ui/hub/laboratorio-camara.webp') center 53%/cover no-repeat,#102640;
+  border-bottom:2px solid #4594ad;
+}
+.lab-console .lab-chamber::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 3px,#06152924 3px 4px);pointer-events:none}
+.lab-console .lab-chamber .lab-specimen{
+  width:clamp(110px,16vw,155px);height:clamp(110px,16vw,155px);
+  object-fit:contain;filter:drop-shadow(0 0 9px #78d8ffaf);
+}
+.lab-console .lab-diagnostic{padding:12px}
+.lab-console .lab-diagnostic h3{margin:0;font-size:clamp(21px,3vw,31px)}
+.lab-console .lab-diagnostic p{margin:4px 0 9px}
+.lab-console .lab-calibration{display:flex;align-items:center;justify-content:space-between;gap:5px;margin-bottom:5px;font-size:12px}
+.lab-console .lab-diagnostic progress{display:block;width:100%;height:7px;accent-color:var(--lab-accent)}
+.lab-console .lab-reading{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:10px 0}
+.lab-console .lab-reading div{padding:6px 8px;border:1px solid var(--lab-line);border-radius:6px;background:var(--lab-well)}
+.lab-console .lab-reading dt{font-size:11px;color:var(--lab-muted)}
+.lab-console .lab-reading dd{margin:2px 0 0;font:850 clamp(15px,2vw,23px)/1.15 'Nunito',sans-serif;color:var(--lab-accent)}
+.lab-console .lab-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lab-console .lab-apply{background:linear-gradient(125deg,#375fc0,#26376c);color:#fff;padding:5px 14px;border-color:#557fc4}
+.lab-console :is(.lab-apply,.lab-reset):disabled{opacity:.65;cursor:default}
+.lab-console .lab-status{min-height:1.2em;margin:8px 1px 0}
+.lab-console :is(button,h3):focus-visible{outline:2px solid var(--lab-accent);outline-offset:-2px}
+@media(max-width:680px){
+  .lab-console .lab-layout{grid-template-columns:minmax(0,1fr)}
+  .lab-console .lab-name img{width:29px;height:29px}
+  .lab-console .lab-wallet{font-size:11px}
+}
+@media(max-width:400px){
+  .lab-console .lab-head{grid-template-columns:auto minmax(0,1fr)}
+  .lab-console .lab-wallet{grid-column:2;justify-self:start}
+}
+@media(prefers-reduced-motion:reduce){.lab-console .lab-chamber .anim{animation:none!important}}
+@media(pointer:coarse){.lab-console :is(.lab-station,.lab-project,.lab-reset,.lab-apply){min-height:44px}}
+
 .trainer-favorite{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--trainer-border);
   border-radius:14px;background:var(--trainer-inset);color:var(--trainer-ink)}
 .trainer-cover.has-trainer-bg .trainer-favorite{border-color:#fff4;background:#202c4bdb;color:#fff}
@@ -13223,62 +13305,95 @@ function labBonusText(u, lv){
   if (u.flat) return `+${u.flat[lv]}`;
   return lv ? 'Activa' : 'Inactiva';
 }
+const LAB_STATIONS = [
+  {name:'Fisiología', projects:['hp','speed','revive']},
+  {name:'Arsenal', projects:['dmg','bonk','skill']},
+  {name:'Captación', projects:['pickup','xp','rer','bits']}
+];
+let labSelected = 'hp';
 function showLab(message = '', focusId = ''){
   state = 'lab';
   setHud(false);
+  if (Object.hasOwn(LAB_BY_ID, focusId)) labSelected = focusId;
   const bits = SAVE.bits, levels = labLevels(), spent = labSpent(levels);
   const number = n => n.toLocaleString(I18N.lang);
-  const card = u => {
-    const lv = labLv(u.id, levels), max = labMax(u), full = lv === max;
-    const cost = full ? 0 : labCosts(u)[lv];
-    const missing = Math.max(0, cost - bits);
-    const bonus = labBonusText(u, lv);
-    const next = full ? bonus : labBonusText(u, lv + 1);
-    return `<article class="lab2-card${full ? ' full' : ''}" id="lab-card-${u.id}">
-      <div class="lab2-card-head"><span class="lab2-icon" aria-hidden="true">${u.icon}</span><h4 tabindex="-1">${escHtml(u.name)}</h4><span class="lab2-level">Nv. ${lv}/${max}</span></div>
-      <p>${escHtml(u.d)}</p>
-      <progress aria-label="${escHtml(u.name)}" value="${lv}" max="${max}"></progress>
-      <div class="lab2-bottom"><span class="lab2-bonus">
-        ${full ? `<b>${bonus}</b>` : `<small>Ahora</small> <b>${bonus}</b> <span aria-hidden="true">→</span> <small>Siguiente</small> <b>${next}</b>`}
-        </span>
-        ${full ? '<span class="lab2-full">Máximo</span>' : `<div class="lab2-buy"><button type="button" class="lab2-button" data-lab="${u.id}" aria-label="Comprar ${escHtml(u.name)} por ${number(cost)} Bits" ${missing ? 'disabled' : ''}>${number(cost)} Bits</button>${missing ? `<small>Faltan ${number(missing)} Bits</small>` : ''}</div>`}
-      </div>
-    </article>`;
-  };
-  const group = (title, ids) => `<section class="lab2-group"><h3>${title}</h3>${ids.map(id => card(LAB_BY_ID[id])).join('')}</section>`;
   showOverlay(`
-    <main class="lab-screen lab2" aria-labelledby="labHeading">
-      <header class="lab2-header">
+    <main class="lab-screen lab-console" aria-labelledby="labHeading">
+      <header class="lab-head">
         <button type="button" class="g-back" id="labBack">← Volver</button>
-        <img src="sprites/adventure/elecmon.png" alt="" class="lab2-host">
-        <div><h2 id="labHeading">Laboratorio</h2><p>Mejoras permanentes para todos los Digimon</p></div>
-        <strong class="trainer-wallet"><img src="ui/hud/ic_bits.webp" alt="">${number(bits)} Bits</strong>
+        <div class="lab-name"><img src="ui/hub/digivice/laboratorio.png" alt="">
+          <div><h2 id="labHeading">Laboratorio</h2><p>Mejoras permanentes para todos los Digimon</p></div>
+        </div>
+        <div class="lab-wallet"><img src="ui/hud/ic_bits.webp" alt=""><span>${number(bits)} Bits</span></div>
       </header>
-      <p class="lab2-status" role="status">${escHtml(message)}</p>
-      <div class="lab2-grid">
-        ${group('Combate', ['hp','dmg','speed','bonk','revive'])}
-        ${group('Progreso de partida', ['pickup','xp','rer','bits','skill'])}
+      <div class="lab-layout">
+        <section class="lab-bench" aria-labelledby="labBenchTitle">
+          <h3 id="labBenchTitle">Banco de investigación</h3>
+          <div class="lab-stations" role="group" aria-label="Estaciones de investigación">
+            ${LAB_STATIONS.map((station, i) => `<button type="button" class="lab-station" data-station="${i}" aria-pressed="false" aria-controls="labProjects">${station.name}</button>`).join('')}
+          </div>
+          <div class="lab-projects" id="labProjects" role="group" aria-label="Proyectos"></div>
+          <button type="button" class="lab-reset" id="labRefund" ${spent ? '' : 'disabled'}>Reembolsar todo${spent ? ` · ${number(spent)} Bits` : ''}</button>
+        </section>
+        <section class="lab-instrument" aria-labelledby="labProjectTitle">
+          <div class="lab-chamber" aria-hidden="true">${animEl(spriteOf('hagurumon', false), 'lab-specimen')}</div>
+          <div class="lab-diagnostic" id="labDiagnostic"></div>
+        </section>
       </div>
-      <footer class="lab2-footer">
-        <button type="button" class="lab2-button secondary" id="labRefund" ${spent ? '' : 'disabled'}>Reembolsar todo${spent ? ` · ${number(spent)} Bits` : ''}</button>
-        <button type="button" class="lab2-button secondary" id="labGacha">${GACHA_SOON ? 'Ir a la tienda' : 'Ir a la Incubadora'}</button>
-      </footer>
+      <p class="lab-status" id="labStatus" role="status">${escHtml(typeof message === 'string' ? message : '')}</p>
     </main>`);
+  const projects = document.getElementById('labProjects');
+  const detail = document.getElementById('labDiagnostic');
+  const status = document.getElementById('labStatus');
+  const stations = [...overlay.querySelectorAll('[data-station]')];
+  const draw = () => {
+    const station = LAB_STATIONS.findIndex(group => group.projects.includes(labSelected));
+    stations.forEach((button, i) => button.setAttribute('aria-pressed', String(i === station)));
+    projects.innerHTML = LAB_STATIONS[station].projects.map(id => {
+      const u = LAB_BY_ID[id];
+      return `<button type="button" class="lab-project" data-project="${id}" aria-pressed="${labSelected === id}" aria-controls="labDiagnostic">
+        <span aria-hidden="true">${u.icon}</span><span>${escHtml(u.name)}</span><span>Nv. ${labLv(id, levels)}/${labMax(u)}</span>
+      </button>`;
+    }).join('');
+    projects.querySelectorAll('[data-project]').forEach(button => {
+      button.onclick = () => { labSelected = button.dataset.project; status.textContent = ''; draw(); projects.querySelector('[aria-pressed="true"]')?.focus({preventScroll:true}); };
+    });
+    const u = LAB_BY_ID[labSelected], lv = labLv(u.id, levels), max = labMax(u);
+    const full = lv === max, cost = full ? 0 : labCosts(u)[lv], missing = Math.max(0, cost - bits);
+    detail.innerHTML = `
+      <h3 id="labProjectTitle" tabindex="-1">${escHtml(u.name)}</h3>
+      <p>${escHtml(u.d)}</p>
+      <div class="lab-calibration"><span>Nivel de mejora</span><span>${lv} / ${max}</span></div>
+      <progress aria-label="Nivel de mejora" value="${lv}" max="${max}"></progress>
+      <dl class="lab-reading">
+        <div><dt>Efecto actual</dt><dd>${labBonusText(u, lv)}</dd></div>
+        <div><dt>Siguiente nivel</dt><dd>${full ? 'Máximo' : labBonusText(u, lv + 1)}</dd></div>
+      </dl>
+      ${full ? '' : `<div class="lab-controls">
+        <button type="button" class="lab-apply" id="labApply" ${missing ? 'disabled' : ''}>Aplicar mejora · ${number(cost)} Bits</button>
+        ${missing ? `<small>Faltan ${number(missing)} Bits</small>` : ''}
+      </div>`}`;
+    const apply = document.getElementById('labApply');
+    if (apply) apply.onclick = () => {
+      showLab(labBuy(u.id) ? `Mejora aplicada: ${u.name}` : 'No se pudo guardar el cambio.', u.id);
+    };
+  };
+  stations.forEach((button, i) => {
+    button.onclick = () => {
+      if (LAB_STATIONS[i].projects.includes(labSelected)) return;
+      labSelected = LAB_STATIONS[i].projects[0];
+      status.textContent = '';
+      draw();
+    };
+  });
   document.getElementById('labBack').onclick = showSelect;
-  document.getElementById('labGacha').onclick = () => { if (!GACHA_SOON) return showGacha(); showSelect(); showShop(); };
   document.getElementById('labRefund').onclick = () => {
     const returned = labRefund();
     showLab(returned ? `Bits devueltos: ${number(returned)}` : 'No se pudo guardar el cambio.');
     document.getElementById('labBack').focus({preventScroll:true});
   };
-  overlay.querySelectorAll('[data-lab]').forEach(button => button.onclick = () => {
-    const id = button.dataset.lab;
-    showLab(labBuy(id) ? `Mejora comprada: ${LAB_BY_ID[id].name}` : 'No se pudo comprar la mejora.', id);
-  });
-  if (focusId){
-    const selected = document.getElementById('lab-card-' + focusId);
-    (selected?.querySelector('button:not(:disabled)') || selected?.querySelector('h4'))?.focus({preventScroll:true});
-  }
+  draw();
+  if (focusId) (detail.querySelector('button:not(:disabled)') || document.getElementById('labProjectTitle'))?.focus({preventScroll:true});
 }
 const SAVE = {
   get bits(){ return +(localStorage.getItem('digibonk3d-bits') || 0); },
