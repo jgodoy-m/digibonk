@@ -11,4 +11,6 @@ Hojas redibujadas con IA para Digibonk: Puppetmon (referencia del sprite de Band
 
 Frigimon clásico retocado con manos blancas de nieve, siguiendo la ilustración oficial de Bandai. Las cinco skins reutilizan sus poses y añaden paletas o accesorios del arte existente. Iconos de Digivice LCD y Holográfica de Agumon y Patamon generados con IA a partir del arte del juego.
 
+Las skins de Gatomon y Angewomon se ajustaron sobre los fotogramas clásicos, con las paletas, los accesorios y los destellos de ataque de sus skins.
+
 Música: "Together we are strong (178 BPM)" de ThisIsBeatKitchen (BeatKitchen), en Pixabay, bajo la Pixabay Content License. Archivo: audio/together-we-are-strong.mp3
