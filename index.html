@@ -250,12 +250,6 @@ body.dbk-noplay #tutoTip{opacity:0!important}   /* el consejo no tapa las cartas
 .rw-title{font-size:30px;line-height:44px;height:44px}
 .rw-item{font-size:32px;line-height:44px;height:44px}
 .hud-title{font-size:11px;color:#bfe9ff;letter-spacing:.5px;margin-top:2px;text-shadow:0 1px 2px #000}
-.help-box{width:min(640px,94vw);padding:18px 22px;color:#e6f4ff}
-.tuto-video{display:block;margin:0 auto;width:100%;max-width:480px;height:auto;aspect-ratio:16/9;border-radius:12px;border:2px solid #3a6fc4;background:#000;object-fit:cover}
-.tuto-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}
-.tuto-dots{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-.tuto-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#2a4a7a;cursor:pointer}
-.tuto-dot.on{background:#ffd54f}
 .hud-portrait.mini{width:44px;height:44px;border-radius:12px}
 .hud-portrait.mini img{width:34px;height:34px}
 #menubg{position:fixed;inset:0;width:100%;height:100%;z-index:0;image-rendering:pixelated;display:block}
@@ -2185,8 +2179,6 @@ html[lang] #overlay:not(.menu-mode) .mini-btn.danger{border-radius:99px!importan
 #overlay:not(.menu-mode) .lab-buy{background:var(--m-cta)!important;color:#fff!important;border-radius:10px!important;box-shadow:0 3px 0 var(--m-cta-sh)!important;text-shadow:0 1px 0 var(--m-cta-sh)}
 #overlay:not(.menu-mode) .lab-pips i{background:var(--m-line2)!important}
 #overlay:not(.menu-mode) .lab-pips i.on{background:var(--m-acc)!important}
-#overlay:not(.menu-mode) .tuto-dot{background:var(--m-line2)!important}
-#overlay:not(.menu-mode) .tuto-dot.on{background:var(--m-sel)!important}
 #overlay:not(.menu-mode) .ms-card em{background:var(--m-banner)!important;border:0!important;color:#fff!important}
 #overlay:not(.menu-mode) .ms-card .ms-tags i{background:var(--m-panel)!important;border:1px solid var(--m-line2)!important;color:var(--m-soft)!important;font-style:normal}
 #overlay:not(.menu-mode) .ms-rec{color:var(--m-gold)!important}
@@ -3149,10 +3141,10 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
   #overlay .realhub.hb .nm-encard{flex-wrap:wrap;gap:8px 10px;padding:10px 12px}
   #overlay .realhub.hb .nm-encard>i,#overlay .realhub.hb .nm-encard>i .nm-ic{width:34px;height:34px}
 }
-/* Mismo tamaño para todos los paneles: grandes (Colección, Laboratorio, Mapa) y medianos (Ajustes, Guía, Código) */
+/* Mismo tamaño para todos los paneles: grandes (Colección, Laboratorio, Mapa) y medianos (Ajustes, Código) */
 #overlay .picker-screen.cl4,#overlay:not(.menu-mode)>.picker-screen.ms,#overlay .picker-screen.ms,#overlay .lab-screen{width:min(1080px,94vw)!important;max-width:none!important;height:min(780px,calc(100vh - 60px))!important;max-height:none!important;box-sizing:border-box!important;overflow-y:auto}
 #overlay .picker-screen.cl4{overflow:hidden}
-#overlay :is(.settings,.help-box,.sc-box){width:min(720px,94vw)!important;max-width:none!important;box-sizing:border-box!important}
+#overlay :is(.settings,.sc-box){width:min(720px,94vw)!important;max-width:none!important;box-sizing:border-box!important}
 #overlay .approved-info-dialog{width:min(520px,94vw)!important;box-sizing:border-box!important}
 @media(max-width:760px){#overlay .picker-screen.cl4,#overlay:not(.menu-mode)>.picker-screen.ms,#overlay .picker-screen.ms,#overlay .lab-screen{height:auto!important;max-height:none!important}}
 /* Nube y ranking por regiones */
@@ -3185,37 +3177,48 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 .cr-sec.cr-warn{background:color-mix(in srgb,#f5a623 14%,transparent);border:1px dashed #f5a623;border-radius:12px;padding:10px 12px;margin:8px 0}
 .cr-sec.cr-warn h3::before{content:'⚠ '}
 @media (max-width:760px){.cd-in{max-width:none;flex:1 1 100%}.rk-list li{grid-template-columns:26px 30px 1fr auto;gap:6px}.rk-list li img{width:30px;height:30px}}
-/* Guía «Cómo jugar»: capítulos, vídeo o captura a la izquierda, texto y teclas a la derecha */
-#overlay .help-box.gd{display:flex;flex-direction:column;gap:12px;padding:18px 22px 16px!important}
-#overlay .help-box.gd .set-head{display:flex;align-items:center;gap:12px;margin:0}
-#overlay .help-box.gd .gd-count{margin-left:auto;padding:4px 11px;border-radius:999px;background:var(--m-rowbg);color:var(--m-mute);font:800 13px 'Nunito',system-ui,sans-serif}
-#overlay .help-box.gd .gd-tabs{display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--m-sunk);border:1px solid var(--m-line)}
-#overlay .help-box.gd .gd-tabs button{flex:1;padding:7px 6px;border:0;border-radius:999px;background:none;color:var(--m-mute);font:800 13px 'Nunito',system-ui,sans-serif;cursor:pointer}
-#overlay .help-box.gd .gd-tabs button:hover{color:var(--m-text)}
-#overlay .help-box.gd .gd-tabs button.on{background:var(--m-tabon);color:var(--m-tabon-txt)}
-html[data-theme=oscuro] #overlay .help-box.gd .gd-tabs button.on{background:#3d4148;color:#fff}
-#overlay .help-box.gd .gd-stage{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;align-items:start;min-height:236px}
-#overlay .help-box.gd .gd-media{margin:0}
-#overlay .help-box.gd .tuto-video{display:block;width:100%;max-width:none;height:auto;aspect-ratio:16/9;margin:0;object-fit:cover;border-radius:14px;border:1px solid var(--m-cardline);background:var(--m-sunk);box-shadow:0 4px 14px rgba(0,0,0,.14)}
-#overlay:not(.menu-mode) .help-box.gd .gd-txt h3{margin:2px 0 6px!important;font:900 20px/1.2 'Nunito',system-ui,sans-serif!important;text-align:left}
-#overlay .help-box.gd .gd-txt p{margin:0 0 12px;font-size:14px;line-height:1.45;text-align:left;min-height:0;max-width:none}
-#overlay .help-box.gd .gd-keys{display:grid;gap:7px;margin:0;padding:0;list-style:none}
-#overlay .help-box.gd .gd-keys[hidden]{display:none}
-#overlay .help-box.gd .gd-keys li{display:flex;align-items:center;gap:10px;color:var(--m-soft);font-size:13px;font-weight:700}
-#overlay .help-box.gd .gd-keys kbd{flex:none;min-width:46px;padding:4px 9px;box-sizing:border-box;border-radius:9px;border:1px solid var(--m-line2);background:var(--m-btn);box-shadow:var(--m-pillsh);color:var(--m-text);font:900 12px 'Nunito',system-ui,sans-serif;text-align:center;white-space:nowrap}
-#overlay .help-box.gd .tuto-nav{margin:0}
-#overlay .help-box.gd .tuto-dots{gap:7px}
-#overlay .help-box.gd .tuto-dot{width:9px;height:9px;padding:0;border:0;cursor:pointer}
-#overlay .help-box.gd .gd-prev:disabled{opacity:.35;cursor:default}
-#overlay .help-box.gd .gd-next{min-width:128px;padding:10px 18px;border:0;border-radius:14px;background:var(--m-cta);box-shadow:0 3px 0 var(--m-cta-sh);color:#fff;font:900 14px 'Nunito',system-ui,sans-serif;cursor:pointer}
-#overlay .help-box.gd .gd-next:active{transform:translateY(2px);box-shadow:0 1px 0 var(--m-cta-sh)}
-#overlay .help-box.gd .gd-hint{margin:0;text-align:center;font-size:12px}
-@media(max-width:760px){
-  #overlay .help-box.gd{gap:10px;padding:14px 14px 12px!important}
-  #overlay .help-box.gd .gd-stage{grid-template-columns:1fr;gap:10px;min-height:0}
-  #overlay .help-box.gd .gd-tabs button{padding:7px 2px;font-size:12px}
-  #overlay .help-box.gd .gd-next{min-width:0;padding:10px 14px}
-  #overlay .help-box.gd .gd-count{display:none}
+/* Guía «Cómo jugar» */
+#overlay:not(.menu-mode)>.help-box.gd{
+  width:min(1200px,calc((100vw - 36px)/var(--ui-scale,1)))!important;
+  max-height:calc((100dvh - var(--ui-top) - var(--ui-bot))/var(--ui-scale,1));
+  display:grid;gap:clamp(14px,2vw,24px);padding:clamp(14px,2.3vw,32px);
+}
+#overlay .gd .set-head{margin:0}
+#overlay:not(.menu-mode) .gd .set-head h2{font-size:clamp(20px,3vw,29px)!important}
+#overlay .gd-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:5px;border:1px solid var(--m-line);border-radius:16px;background:var(--m-sunk)}
+#overlay .gd-tabs button{
+  min-height:46px;padding:8px 4px;border:1px solid transparent;border-radius:11px;
+  background:none;color:var(--m-soft);font:900 clamp(14px,1.5vw,17px)/1.2 'Nunito',system-ui,sans-serif;
+  cursor:pointer;overflow-wrap:anywhere;
+}
+#overlay .gd-tabs button:hover{color:var(--m-text);border-color:var(--m-line2)}
+#overlay .gd-tabs button[aria-selected=true]{background:var(--m-tabon);color:var(--m-tabon-txt)}
+#overlay .gd :focus-visible{outline:2px solid var(--m-text);outline-offset:2px}
+#overlay .gd-stage{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(16px,2.5vw,32px);align-items:center}
+#overlay .gd-media{
+  display:block;width:100%;aspect-ratio:16/9;object-fit:contain;box-sizing:border-box;
+  border:1px solid var(--m-cardline);border-radius:var(--sh-mid);background:var(--m-sunk);
+}
+#overlay .gd-copy{min-width:0}
+#overlay:not(.menu-mode) .gd .gd-copy h3{font:900 clamp(23px,3vw,34px)/1.12 'Nunito',system-ui,sans-serif!important;margin:0 0 12px;text-align:left}
+#overlay .gd-copy p{margin:0 0 16px;font:700 clamp(16px,1.5vw,19px)/1.46 'Nunito',system-ui,sans-serif;text-align:left}
+#overlay .gd-rows{display:grid;gap:1px;margin:0;padding:0;list-style:none}
+#overlay .gd-rows li{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--m-line);color:var(--m-text);font:800 16px/1.3 'Nunito',system-ui,sans-serif}
+#overlay .gd-rows kbd{
+  flex:none;min-width:66px;max-width:44%;box-sizing:border-box;padding:5px 7px;
+  border-radius:8px;border:1px solid var(--m-line2);background:var(--m-btn);box-shadow:var(--m-pillsh);
+  color:var(--m-text);font:900 14px/1.2 'Nunito',system-ui,sans-serif;text-align:center;overflow-wrap:anywhere;
+}
+@media(max-width:700px) and (orientation:portrait){
+  #overlay .gd-stage{grid-template-columns:1fr}
+  #overlay .gd-copy{order:-1}
+}
+@media(orientation:landscape) and (max-height:500px){
+  #overlay:not(.menu-mode):has(>.gd){--ui-top:8px;--ui-bot:8px}
+  #overlay:not(.menu-mode)>.help-box.gd{gap:10px;padding:12px 14px}
+  #overlay .gd-tabs button{min-height:38px}
+  #overlay .gd-copy p{margin-bottom:8px}
+  #overlay .gd-rows li{padding:4px 0;font-size:14px}
 }
 /* ===== Móvil en horizontal durante la partida: HUD compacto y subida de nivel en fila ===== */
 @media (orientation:landscape) and (max-height:500px){
@@ -5407,7 +5410,7 @@ addEventListener('keydown', e => {
   if (k === 'b' && state === 'play'){ summonBoss(); return; }
   if (state === 'play' && (k === '4' || k === '5' || k === '6')){ useCons(Object.keys(CONS).find(id => CONS[id].key === k)); return; }
   if (MENU_NAV.includes(state) && menuNav(k, e)) return;
-  if (state === 'help'){ if (k === 'escape') showSelect(); if (k === 'arrowright') tutoStep(1); if (k === 'arrowleft') tutoStep(-1); return; }
+  if (state === 'help'){ if (k === 'escape') closeHelp(); return; }
   if (state === 'credits'){ if (k === 'escape') creditsFrom === 'hub' ? showSelect() : showSettings(); return; }
   if (state === 'gacha' || state === 'lab' || state === 'settings' || state === 'player' || state === 'collection'){
     if (k === 'escape'){
@@ -6445,91 +6448,79 @@ function showSelect(){
     draw(); }
   clearInterval(newsTimer);
 }
-// Guía «Cómo jugar»: diez pantallas en cuatro capítulos. Cada una tiene un vídeo grabado del propio juego
-// (tutorial/*.webm) o una captura del menú en el tema activo (tutorial/*_claro.webp / *_oscuro.webp),
-// un texto corto y las teclas que usa. En pantallas táctiles se muestran los controles táctiles.
-// Teclas: k = teclado, tc = táctil (null = no aplica en táctil), d = qué hace
-const GUIDE_CH = ['Controles', 'Partida', 'Mapas', 'Menú'];
+// Guía «Cómo jugar». Cada pestaña reúne lo esencial y muestra una escena del propio juego.
 const GUIDE = [
-  {ch: 0, t: 'Muévete y mira', clip: 'mover',
-    d: 'Tu Digimon va adonde le digas y la cámara le sigue. Gírala para ver qué se te acerca.',
-    keys: [{k: 'WASD', tc: 'Joystick', d: 'Moverte'}, {k: 'Ratón', tc: null, d: 'Girar la cámara'}, {k: 'Rueda', tc: null, d: 'Acercar o alejar'}, {k: 'Esc / P', tc: '❚❚', d: 'Pausa'}]},
-  {ch: 0, t: 'Ataca solo', clip: 'ataque',
-    d: 'No hay botón de ataque: tu Digimon dispara al enemigo más cercano. Tú te ocupas de moverte, esquivar y recoger la experiencia.',
-    keys: []},
-  {ch: 0, t: 'Dash y salto', clip: 'dash',
-    d: 'El dash te lanza hacia delante y mientras dura no recibes daño por contacto. Úsalo para salir de un cerco: tarda un poco en recargarse.',
-    keys: [{k: 'Shift', tc: 'DASH', d: 'Dash'}, {k: 'Espacio', tc: 'SALTO', d: 'Saltar'}]},
-  {ch: 1, t: 'Sube de nivel', clip: 'nivel',
-    d: 'Los enemigos sueltan orbes de experiencia. Al subir de nivel la partida se para y eliges una carta de tres: mejoras, habilidades nuevas o evoluciones.',
-    keys: [{k: '1 2 3', tc: 'Toca la carta', d: 'Elegir carta'}, {k: 'F', tc: 'Refrescar', d: 'Cartas nuevas (2 por partida)'}, {k: 'X', tc: 'Saltar', d: '+15 Bits sin elegir (2)'}, {k: 'Z', tc: 'Desterrar', d: 'Quitar una carta para siempre (1)'}]},
-  {ch: 1, t: 'Cofres y BONK', clip: 'cofre',
-    d: 'Abre los cofres para curarte y elegir una mejora. Cada baja carga el BONK: al 100 % suéltalo para dañar y empujar todo lo que te rodea y borrar los disparos del jefe.',
-    keys: [{k: 'E', tc: 'Toca el aviso', d: 'Abrir cofre'}, {k: 'Q', tc: 'Toca BONK', d: 'Soltar el BONK'}]},
-  {ch: 1, t: 'Digievoluciona', clip: 'evo',
-    d: 'Tu Digimon digievoluciona al subir de nivel (15, 30 y 45). Si tu vida baja del 20 %, una vez por partida puedes evolucionar de emergencia durante 15 s. Con dos habilidades al nivel máximo, habla con Centarumon (✦ en el mapa) para fusionarlas: la fusión ocupa un hueco de ataque y también sube de nivel.',
-    keys: [{k: 'R', tc: 'EVO', d: 'Evolución de emergencia (tienes 6 s)'}]},
-  {ch: 2, t: 'Jefe y portal', clip: 'jefe',
-    d: 'Cada mapa tiene dos pantallas. Cuando estés listo, ve al portal del norte (el minimapa lo marca) e invoca allí al jefe: al derrotarlo se abre el portal. Si pasas 20 minutos en una pantalla empieza el Infierno. Atento a los eventos: nodos que defender, datos corruptos y Numemon dorados.',
-    keys: [{k: 'B', tc: 'Invocar jefe', d: 'Llamar al jefe junto al portal'}, {k: 'Tab', tc: null, d: 'Mapa completo'}]},
-  {ch: 2, t: 'Mapas, dificultad y Supervivencia', img: 'mapas',
-    d: 'Después de elegir Digimon eliges mapa (Bosque File, Desierto de Datos o Montaña Helada) y dificultad. Cuanto más difícil, más premios: hasta ×2,2 Bits y tickets en Pesadilla. En Supervivencia no hay jefe final: llega una oleada por minuto y un jefe menor cada 5.',
-    keys: [{k: '← →', tc: null, d: 'Cambiar de mapa'}, {k: '↑ ↓', tc: null, d: 'Dificultad'}, {k: 'Enter', tc: null, d: 'Empezar'}]},
-  {ch: 3, t: 'El menú de inicio', img: 'menu',
-    d: 'Jugar empieza con tu último Digimon, Supervivencia es el modo infinito y el Reto semanal cambia una regla cada semana a cambio de más Bits. Los encargos diarios, semanales y de evento dan premios, y el evento trae skins de temporada. Abajo tienes el Digidex, el laboratorio, los mapas, los logros, los récords y tu perfil.',
-    keys: []},
-  {ch: 3, t: 'Bits, tienda y laboratorio', img: 'lab',
-    d: 'Cada partida da Bits y sube la maestría del Digimon con el que juegas, que regala títulos, marcos y skins. En la tienda los Bits compran lo de la línea de la semana, y en el laboratorio mejoran a todos tus Digimon para siempre.',
-    keys: []}
+  {tab: 'Controles', title: 'Muévete y mira', clip: 'mover',
+    intro: 'Tu Digimon ataca solo. Muévete para esquivar y recoge los orbes de experiencia.',
+    keys: [
+      ['WASD', 'Joystick', 'Moverte'],
+      ['Ratón', null, 'Girar la cámara'],
+      ['Shift', 'DASH', 'Esquivar'],
+      ['Espacio', 'SALTO', 'Dar un salto'],
+      ['Esc / P', '❚❚', 'Pausa']
+    ]},
+  {tab: 'Primera partida', title: 'Sube de nivel', clip: 'nivel',
+    intro: 'Elige una carta al subir de nivel. Mejora tus ataques y digievoluciona para enfrentarte al jefe.',
+    keys: [
+      ['1 2 3', 'Toca la carta', 'Elegir carta'],
+      ['E', 'Toca el aviso', 'Abrir cofre'],
+      ['Q', 'Toca BONK', 'Soltar el BONK al 100 %'],
+      ['B', 'Invocar jefe', 'Llamar al jefe junto al portal']
+    ]},
+  {tab: 'Progreso', title: 'Recompensas', img: 'lab',
+    intro: 'Ganas Bits al jugar. Úsalos en el Laboratorio para mejorar a todos tus Digimon.',
+    tips: [
+      'Juega con un Digimon para subir su maestría y desbloquear recompensas.',
+      'Completa encargos para conseguir premios adicionales.'
+    ]}
 ];
-let tutoIdx = 0;
-const guideTouch = () => document.body.classList.contains('is-touch') || matchMedia('(pointer:coarse)').matches;
-function tutoShow(i){
-  tutoIdx = Math.max(0, Math.min(GUIDE.length - 1, i));
-  const s = GUIDE[tutoIdx], touch = guideTouch();
-  const media = document.getElementById('gdMedia');
-  if (!media) return;
-  media.innerHTML = s.clip
-    ? `<video class="tuto-video" src="tutorial/${s.clip}.webm" muted loop playsinline autoplay aria-label="Vídeo: ${s.t}"></video>`
-    : `<img class="tuto-video" src="tutorial/${s.img}_${uiTheme()}.webp" alt="Captura: ${s.t}">`;
-  const v = media.querySelector('video'); if (v) v.play().catch(() => {});
-  document.getElementById('tutoT').textContent = s.t;
-  document.getElementById('tutoD').textContent = s.d;
-  const keys = s.keys.filter(k => !touch || k.tc);
-  document.getElementById('gdKeys').innerHTML = keys.map(k => `<li><kbd>${touch ? k.tc : k.k}</kbd><span>${k.d}</span></li>`).join('');
-  document.getElementById('gdKeys').hidden = !keys.length;
-  document.getElementById('gdCount').textContent = `${tutoIdx + 1}/${GUIDE.length}`;
-  document.querySelectorAll('#gdTabs button').forEach(b => { const on = +b.dataset.ch === s.ch; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
-  document.getElementById('tutoDots').innerHTML = GUIDE.map((g2, j) => `<button type="button" class="tuto-dot${j === tutoIdx ? ' on' : ''}" data-i="${j}" aria-label="Pantalla ${j + 1}: ${g2.t}"></button>`).join('');
-  document.querySelectorAll('#tutoDots .tuto-dot').forEach(d => d.onclick = () => tutoShow(+d.dataset.i));
-  document.getElementById('tutoPrev').disabled = tutoIdx === 0;
-  const last = tutoIdx === GUIDE.length - 1;
-  document.getElementById('tutoNext').innerHTML = last ? '¡A jugar!' : 'Siguiente ▶';
+function closeHelp(){
+  showSelect();
+  document.getElementById('btnHelp')?.focus();
 }
-function tutoStep(dir){ if (state === 'help') tutoShow(tutoIdx + dir); }
 function showHelp(){
   state = 'help';
-  const touch = guideTouch();
   showOverlay(`
-    <div class="help-box tuto gd">
-      <header class="set-head"><button class="g-back" id="helpBack">← Volver</button><h2>Cómo jugar</h2><span class="gd-count" id="gdCount"></span></header>
-      <nav class="gd-tabs" id="gdTabs" role="tablist" aria-label="Capítulos">${GUIDE_CH.map((c, i) => `<button type="button" role="tab" data-ch="${i}">${c}</button>`).join('')}</nav>
-      <div class="gd-stage">
-        <figure class="gd-media" id="gdMedia"></figure>
-        <div class="gd-txt"><h3 id="tutoT"></h3><p id="tutoD"></p><ul class="gd-keys" id="gdKeys"></ul></div>
-      </div>
-      <div class="tuto-nav">
-        <button class="g-back gd-prev" id="tutoPrev" aria-label="Pantalla anterior">◀</button>
-        <div class="tuto-dots" id="tutoDots"></div>
-        <button class="gd-next" id="tutoNext"></button>
-      </div>
-      ${touch ? '' : '<div class="muted gd-hint">← → cambian de pantalla · Esc vuelve</div>'}
+    <div class="help-box gd">
+      <header class="set-head"><button type="button" class="g-back" id="helpBack">← Volver</button><h2 id="gdTitle">Cómo jugar</h2></header>
+      <div class="gd-tabs" role="tablist" aria-labelledby="gdTitle">${GUIDE.map((page, i) =>
+        `<button type="button" role="tab" id="gdTab${i}" aria-controls="gdStage">${page.tab}</button>`
+      ).join('')}</div>
+      <div class="gd-stage" id="gdStage" role="tabpanel" tabindex="0"></div>
     </div>`);
-  document.getElementById('helpBack').onclick = () => showSelect();
-  document.getElementById('tutoPrev').onclick = () => tutoStep(-1);
-  document.getElementById('tutoNext').onclick = () => tutoIdx === GUIDE.length - 1 ? showSelect() : tutoStep(1);
-  document.querySelectorAll('#gdTabs button').forEach(b => b.onclick = () => tutoShow(GUIDE.findIndex(x => x.ch === +b.dataset.ch)));
-  tutoShow(0);
+  const tabs = [...overlay.querySelectorAll('.gd-tabs button')];
+  const stage = document.getElementById('gdStage');
+  function openPage(index, focus = false){
+    const page = GUIDE[index];
+    const touch = document.body.classList.contains('is-touch');
+    const play = !reduceMotion() && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const media = page.clip
+      ? `<video class="gd-media" src="tutorial/${page.clip}.webm" muted loop playsinline controls ${play ? 'autoplay' : 'preload="metadata"'} aria-label="Vídeo: ${page.title}"></video>`
+      : `<img class="gd-media" src="tutorial/${page.img}_${uiTheme()}.webp" alt="Captura: Laboratorio">`;
+    const rows = page.keys
+      ? page.keys.filter(([, mobile]) => !touch || mobile).map(([desktop, mobile, label]) =>
+        `<li><kbd>${touch ? mobile : desktop}</kbd><span>${label}</span></li>`)
+      : page.tips.map(tip => `<li>${tip}</li>`);
+    stage.setAttribute('aria-labelledby', tabs[index].id);
+    stage.innerHTML = `${media}<div class="gd-copy"><h3>${page.title}</h3><p>${page.intro}</p><ul class="gd-rows">${rows.join('')}</ul></div>`;
+    tabs.forEach((tab, i) => {
+      tab.setAttribute('aria-selected', i === index);
+      tab.tabIndex = i === index ? 0 : -1;
+    });
+    if (focus) tabs[index].focus();
+  }
+  document.getElementById('helpBack').onclick = closeHelp;
+  tabs.forEach((tab, i) => {
+    tab.onclick = () => { if (tab.getAttribute('aria-selected') !== 'true') openPage(i); };
+    tab.onkeydown = e => {
+      const next = {ArrowLeft: (i + tabs.length - 1) % tabs.length, ArrowRight: (i + 1) % tabs.length, Home: 0, End: tabs.length - 1}[e.key];
+      if (next === undefined) return;
+      e.preventDefault();
+      openPage(next, true);
+    };
+  });
+  openPage(0);
+  document.getElementById('helpBack').focus();
 }
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
