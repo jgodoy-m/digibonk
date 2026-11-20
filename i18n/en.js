@@ -1693,3 +1693,22 @@ I18N.add('en', {
   "dificultad": "difficulty",
   "empezar": "start"
 });
+
+I18N.add('en', {
+  "Ascua valiente": "Valiant Ember",
+  "Coraje en llamas": "Courage in Flames",
+  "Colmillos de escarcha": "Frost Fangs",
+  "Rastro del Lobo": "Wolf Trail",
+  "Alas del alba": "Wings of Dawn",
+  "Mensajero del Alba": "Messenger of Dawn",
+  "Anillo sagrado": "Holy Ring",
+  "Guardiana del Anillo": "Guardian of the Ring",
+  "Melena de bronce": "Bronze Mane",
+  "Puño de la Bestia": "Fist of the Beast",
+  "Engranaje digital": "Digital Gear",
+  "Maestro de las Torretas": "Turret Master",
+  "Cristal de ventisca": "Blizzard Crystal",
+  "Centinela de la Nieve": "Snow Sentinel",
+  "Órbita arcana": "Arcane Orbit",
+  "Tejedor de Relámpagos": "Lightning Weaver"
+});
