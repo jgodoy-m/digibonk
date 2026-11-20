@@ -3301,9 +3301,10 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 .trainer-header .g-back,.lab2-header .g-back{flex:none;min-height:38px}
 .trainer-hero,.trainer-panel,.lab2-group{min-width:0;padding:14px;background:var(--m-card);border:1px solid var(--m-cardline);border-radius:16px;color:var(--m-text);box-shadow:var(--m-shadow)}
 .trainer-hero{box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;min-height:156px;
-  border-color:#35548a;border-top:4px solid #78a9f8;color:#f4f8ff;background-color:#0b1933;
-  background-image:linear-gradient(90deg,#09172ef7 5%,#0a1933e8 36%,#0a193369 65%,#09172e61),url(ui/fondo_inicio.webp);
-  background-position:center,center 49%;background-size:cover;background-repeat:no-repeat}
+  border-color:#35548a;border-top:4px solid #78a9f8}
+.trainer-cover{color:#f4f8ff;background-color:#0b1933;
+  background-image:linear-gradient(90deg,#09172ef7 5%,#0a1933e8 36%,#0a193369 65%,#09172e61),var(--trainer-bg);
+  background-position:center,center var(--trainer-bg-y,49%);background-size:cover;background-repeat:no-repeat}
 .trainer-screen .trainer-hero #tcAv{width:76px;height:76px}
 .trainer-screen .trainer-hero #tcAv img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
 .trainer-identity,.trainer-actions{min-width:0;display:grid;justify-items:start;gap:4px}
@@ -3365,24 +3366,36 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 .trainer-custom{box-sizing:border-box;width:min(666px,calc(100vw - 20px));max-height:calc(100dvh - 12px);background:none;color:var(--m-text);padding:0;border:0;overflow:visible}
 .trainer-custom::backdrop{background:#050d22c0}
 .trainer-custom .cz-box{box-sizing:border-box;width:100%;max-height:calc(100dvh - 12px);background:var(--m-card);border:1px solid var(--m-line2);color:var(--m-text)}
-.trainer-custom .cz-head{padding:10px 12px!important;gap:12px;background:var(--m-sunk);flex-direction:row;text-align:left}
-.trainer-custom .cz-prev{flex:0 0 auto;min-width:58px;padding:0}
-.trainer-custom .cz-prev .hud-portrait{width:54px!important;height:54px!important}
-.trainer-custom .cz-ttl{margin-top:3px!important;font-size:10px}
-.trainer-custom .cz-copy h2{font-size:17px;line-height:1.15;margin:0}
+.trainer-custom h2{font-size:17px;line-height:1.15;margin:10px 12px 6px}
+.trainer-custom .cz-prev{flex:none;box-sizing:border-box;display:flex;align-items:center;gap:12px;min-height:76px;margin:0 10px;padding:8px 12px;border:1px solid #567cb9;border-radius:12px;text-align:left}
+.trainer-custom .cz-prev .hud-portrait{width:54px!important;height:54px!important;margin:0;flex:none;overflow:visible}
+.trainer-custom .cz-prev-copy{min-width:0;display:grid;justify-items:start;gap:3px;overflow-wrap:anywhere;text-shadow:0 1px 3px #061126}
+.trainer-custom .cz-preview-title{display:flex;align-items:center;gap:4px;color:#ffe298;font-size:12px;line-height:1.15}
+.trainer-custom .cz-preview-title .title-badge-art{width:19px;height:19px}
 .trainer-custom .cz-tabs{margin:7px 4px;gap:4px}
 .trainer-custom .cz-tab,.trainer-custom .cz-btn{background:var(--m-btn);color:var(--m-text);border:1px solid var(--m-line2);box-shadow:none}
 .trainer-custom .cz-tab.on,.trainer-custom .cz-btn.ok{background:var(--m-cta);color:#fff;border-color:transparent}
 .trainer-custom .cz-grid{padding:4px 9px 8px;gap:6px;overscroll-behavior:contain}
 .trainer-custom .cz-tile{background:var(--m-sunk);border-color:var(--m-line2);box-shadow:none;padding:8px 4px;min-height:70px}
 .trainer-custom .cz-tile.sel{border-color:var(--m-acc);box-shadow:inset 0 0 0 1px var(--m-acc)}
+.trainer-custom .cz-tile.sel::after{content:"✓";position:absolute;top:6px;right:6px;width:17px;height:17px;display:grid;place-items:center;border-radius:50%;background:var(--m-cta);color:#fff;font-size:11px;font-weight:900}
+.trainer-custom .cz-tile .cz-art{display:grid;place-items:center;box-sizing:border-box;width:54px;height:54px;border-radius:11px;background:#162948}
+.trainer-custom .cz-tile .cz-av,.trainer-custom .cz-fr .hud-portrait{width:46px!important;height:46px!important;box-shadow:none}
+.trainer-custom .cz-fr .hud-portrait img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.trainer-custom .cz-tile .title-badge-art{width:37px;height:37px;object-fit:contain}
+.trainer-custom .cz-tile .cz-lock{top:5px;right:5px;border-radius:6px;padding:2px;color:#fff;background:#12213c}
+.trainer-custom .cz-tile small{text-transform:none;letter-spacing:0;overflow-wrap:anywhere}
+.trainer-custom .cz-backgrounds{grid-template-columns:repeat(auto-fit,minmax(92px,1fr))}
+.trainer-custom .cz-tile .cz-background{box-sizing:border-box;width:100%;height:50px;display:block;background:#162948 var(--trainer-bg) center var(--trainer-bg-y,49%)/cover no-repeat;border-radius:7px}
+.trainer-custom .cz-backgrounds .cz-tile{justify-content:start}
 .trainer-custom .cz-tile b,.trainer-custom .cz-tile.locked b{color:var(--m-text)}
 .trainer-custom .cz-tile:is(.locked,.sel) small,.trainer-custom .cz-tile small{color:var(--m-soft)}
 .trainer-custom .cz-foot{margin:0;padding:8px;background:var(--m-sunk);border-color:var(--m-line)}
 @media(max-width:660px){
   .trainer-summary,.trainer-detail,.lab2-grid{grid-template-columns:minmax(0,1fr)}
-  .trainer-hero{grid-template-columns:auto minmax(0,1fr);gap:10px;min-height:0;background-position:center,64% 48%;
-    background-image:linear-gradient(90deg,#09172ef2 5%,#0a1933d9 42%,#09172e88),url(ui/fondo_inicio.webp)}
+  .trainer-hero{grid-template-columns:auto minmax(0,1fr);gap:10px;min-height:0}
+  .trainer-cover{background-position:center,64% var(--trainer-bg-y,49%);
+    background-image:linear-gradient(90deg,#09172ef2 5%,#0a1933d9 42%,#09172e99),var(--trainer-bg)}
   .trainer-actions{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap}
   .trainer-screen .trainer-hero #tcAv{width:58px;height:58px}
   .lab2-header{gap:6px;flex-wrap:wrap}
@@ -3395,7 +3408,8 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
   .trainer-hero{min-height:106px}
   .lab2-header{padding:5px}
   .lab2-host,.lab2-header p{display:none}
-  .trainer-custom .cz-head{padding:4px 9px!important}
+  .trainer-custom h2{margin:6px 10px 4px}
+  .trainer-custom .cz-prev{min-height:0;padding:4px 9px}
   .trainer-custom .cz-prev .hud-portrait{width:36px!important;height:36px!important}
 }
 </style>
@@ -5727,7 +5741,8 @@ function showHelp(){
 }
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
-const SAVE_KEYS = ['digibonk3d-shop-favorites', 'digibonk3d-shop-discount', 'digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
+const TRAINER_BG_KEY = 'digibonk3d-trainer-bg';
+const SAVE_KEYS = [TRAINER_BG_KEY, 'digibonk3d-shop-favorites', 'digibonk3d-shop-discount', 'digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
   'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-maptime', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
   'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales', 'digibonk3d-objetos', 'digibonk3d-obj-ini', 'digibonk3d-reto', 'digibonk3d-sist'];
 // También cuentan los contadores por banner (pity) y la mejor oleada de cada mapa
@@ -12470,9 +12485,30 @@ function skinIconName(ic){ const sk = SKINS.find(s => s.id === ic.skin); return 
 function ownsSkinIcon(ic){ return ownsAnyStage(ic.key, ic.skin); }
 function skinIconFor(key, skin){ return SKIN_ICONS.find(x => x.key === key && x.skin === skin) || null; }
 function normAv(v){ return v || ''; }
-function avatarIcon(){ const id = normAv(localStorage.getItem('digibonk3d-avatar')); return AVATAR_KIDS.find(x => x.id === id) || PLAYER_ICONS.find(x => x.id === id) || SKIN_ICONS.find(x => x.id === id && ownsSkinIcon(x)) || null; }
-function avatarSrc(){ const ic = avatarIcon(); if (ic) return ic.src; return PLAYER_ICONS.some(x => x.id === avatarKey()) ? charIcon(avatarKey()) : headUrl(spriteOf(avatarKey(), false)); }
+function avatarIcon(id = normAv(localStorage.getItem('digibonk3d-avatar'))){
+  return AVATAR_KIDS.find(x => x.id === id) || PLAYER_ICONS.find(x => x.id === id) || SKIN_ICONS.find(x => x.id === id && ownsSkinIcon(x)) || null;
+}
+function avatarSrc(id){
+  return avatarIcon(id)?.src || charIcon(selectedKey);
+}
 function avatarKey(){ const k = localStorage.getItem('digibonk3d-avatar'); return CHARS[k] ? k : selectedKey; }
+const TRAINER_BACKGROUNDS = {
+  portal: {name:'Portal nocturno', src:'ui/fondo_inicio.webp', y:49},
+  bosque: {name:'Bosque File', src:'ui/pantallas-carga/carga_bosque.webp', y:37},
+  desierto: {name:'Desierto de Datos', src:'ui/pantallas-carga/carga_desierto.webp', y:43},
+  nieve: {name:'Montaña Helada', src:'ui/pantallas-carga/carga_nieve.webp', y:40},
+  liso: {name:'Azul liso'}
+};
+function trainerBackgroundId(id = localStorage.getItem(TRAINER_BG_KEY)){
+  return Object.hasOwn(TRAINER_BACKGROUNDS, id) ? id : 'portal';
+}
+function trainerCoverStyle(id){
+  const {src, y} = TRAINER_BACKGROUNDS[trainerBackgroundId(id)];
+  return src ? `--trainer-bg:url('${src}');--trainer-bg-y:${y}%` : '--trainer-bg:none';
+}
+function trainerTitleIcon(title){
+  return title?.id ? (titleBadge(title) || '<img class="title-badge-art" src="ui/hub/ic_logros.webp" alt="">') : '';
+}
 function showPlayer(){
   state = 'player';
   setHud(false);
@@ -12516,12 +12552,12 @@ function showPlayer(){
     <main class="realhub pl4 trainer-screen" aria-labelledby="trainerHeading">
       <div class="trainer-wrap">
         <header class="trainer-header"><button type="button" class="g-back" id="plBack">← Volver</button><h2 id="trainerHeading">Ficha de entrenador</h2></header>
-        <section class="trainer-hero">
+        <section class="trainer-hero trainer-cover" style="${trainerCoverStyle()}">
           <div class="hud-portrait pf-av${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img src="${avatarSrc()}" alt=""></div>
           <div class="trainer-identity">
             <label for="tcName">Nombre de entrenador</label>
             <input id="tcName" maxlength="16" autocomplete="off" value="${escHtml(trainerName || '')}" placeholder="Tu nombre">
-            ${title ? `<strong class="trainer-title">${titleBadge(title)}${escHtml(title.name)}</strong>` : ''}
+            ${title ? `<strong class="trainer-title">${trainerTitleIcon(title)}${escHtml(title.name)}</strong>` : ''}
             ${CHARS[selectedKey] ? `<small>Compañero: ${escHtml(CHARS[selectedKey].name)}</small>` : ''}
           </div>
           <div class="trainer-actions"><span class="trainer-wallet"><img src="ui/hud/ic_bits.webp" alt="">${number(SAVE.bits)} Bits</span>
@@ -12558,13 +12594,13 @@ function showPlayer(){
   });
 }
 
-// Diálogo "Avatar, marco y título" (botón Cambiar de la ficha). Solo guarda al pulsar Guardar.
+// Personalización de la ficha. Solo guarda al pulsar Guardar.
 function openCustomizer(){
   if (document.getElementById('czBack')) return;
   const trigger = document.getElementById('plChange');
-  let pAv = normAv(localStorage.getItem('digibonk3d-avatar'));
-  let pFrame = extra.frame || '', pTitle = extra.title || '';
-  let tab = 'av', saved = false;
+  let pAv = avatarIcon()?.id || '';
+  let pFrame = extra.frame || '', pTitle = extra.title || '', pBg = trainerBackgroundId();
+  let tab = 'bg', saved = false;
   const ownsFrame = id => !id || inv.frames.includes(id);
   const ownsTitle = id => !id || inv.titles.includes(id);
   const back = document.createElement('dialog');
@@ -12574,35 +12610,44 @@ function openCustomizer(){
   document.body.appendChild(back);
   const box = back.firstElementChild;
   const rar = t => ({c:'Común', r:'Rara', e:'Épica', l:'Legendaria'})[t] || '';
-  const card = (sel, v, inner, locked, tier) => `<button type="button" class="cz-tile cz-t-${tier || 'c'}${sel ? ' sel' : ''}${locked ? ' locked' : ''}" ${locked ? 'disabled' : ''} data-v="${v}" aria-pressed="${sel}">${inner}${locked ? '<i class="cz-lock">🔒</i>' : ''}</button>`;
+  const card = (sel, v, inner, locked, tier) => `<button type="button" class="cz-tile cz-t-${tier || 'c'}${sel ? ' sel' : ''}${locked ? ' locked' : ''}" ${locked ? 'disabled' : ''} data-v="${v}" aria-pressed="${sel}">${inner}${locked ? '<i class="cz-lock" aria-hidden="true">🔒</i>' : ''}</button>`;
+  const avatarArt = src => `<span class="cz-art"><span class="cz-av"><img src="${src}" alt=""></span></span>`;
+  const frameArt = id => `<span class="cz-art cz-fr"><span class="hud-portrait pf-av${id ? ' fr-' + id : ''}"><img src="${avatarSrc(pAv)}" alt=""></span></span>`;
   const grid = () => {
-    if (tab === 'av') return card(!pAv, 'av:', `<span class="cz-av"><img src="${charIcon(selectedKey)}" alt=""></span><b>Automático</b>`, false, 'c')
-      + AVATAR_KIDS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av"><img src="${ic.src}" alt=""></span><b>${ic.name}</b>`, false, 'c')).join('');
-    if (tab === 'dg') return PLAYER_ICONS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av">${ic.src ? `<img src="${ic.src}" alt="">` : sprEl(spriteWith(ic.id, false, 'clasico'), 44)}</span><b>${ic.name}</b>`, false, 'c')).join('')
-      + SKIN_ICONS.filter(ic => ownsSkinIcon(ic) || !(SKINS.find(s => s.id === ic.skin) || {}).hidden).map(ic => { const ok = ownsSkinIcon(ic); return card(pAv === ic.id, 'av:' + ic.id, `<span class="cz-av"><img src="${ic.src}" alt=""${ok ? '' : ' style="filter:grayscale(1) brightness(.45)"'}></span><b>${skinIconName(ic)}</b>`, !ok, ok ? 'r' : 'c'); }).join('');
+    if (tab === 'bg') return Object.entries(TRAINER_BACKGROUNDS).map(([id, bg]) => card(pBg === id, 'bg:' + id,
+      `<span class="cz-background" style="${trainerCoverStyle(id)}" aria-hidden="true"></span><b>${bg.name}</b>`, false, 'c')).join('');
+    if (tab === 'av') return card(!pAv, 'av:', avatarArt(avatarSrc('')) + '<b>Automático</b>', false, 'c')
+      + AVATAR_KIDS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `${avatarArt(ic.src)}<b>${ic.name}</b>`, false, 'c')).join('');
+    if (tab === 'dg') return PLAYER_ICONS.map(ic => card(pAv === ic.id, 'av:' + ic.id, `${avatarArt(ic.src)}<b>${ic.name}</b>`, false, 'c')).join('')
+      + SKIN_ICONS.map(ic => {
+        const ok = ownsSkinIcon(ic), sk = SKIN_BY_ID[ic.skin];
+        if (sk?.hidden && !ok) return '';
+        const hint = sk?.src === 'evento' ? sk.desc : sk ? howTo(ic.key, sk) : '';
+        return card(pAv === ic.id, 'av:' + ic.id, `${avatarArt(ic.src)}<b>${escHtml(skinIconName(ic))}</b>${ok ? '' : '<small>' + escHtml(hint || 'Bloqueado') + '</small>'}`, !ok, ok ? 'r' : 'c');
+      }).join('');
     if (tab === 'frame') return [{id: '', name: 'Sin marco', tier: 'c'}, ...FRAMES].map(f => {
       const ok = ownsFrame(f.id), pg = !ok && f.prog ? f.prog() : null;
       const bar = pg && pg[1] > 1 ? `<i class="cz-bar"><u style="width:${Math.round(Math.min(1, pg[0] / pg[1]) * 100)}%"></u></i><em>${Math.min(pg[0], pg[1])}/${pg[1]}</em>` : '';
-      return card(pFrame === f.id, 'fr:' + f.id, `<span class="cz-fr">${f.id ? `<span class="rw-frame fr-${f.id}"></span>` : '<span class="cz-none">∅</span>'}</span><b>${f.name}</b><small>${ok ? (f.id ? rar(f.tier) : 'Sin marco') : f.how}</small>${bar}`, !ok, ok ? f.tier : 'c');
+      return card(pFrame === f.id, 'fr:' + f.id, `${frameArt(f.id)}<b>${f.name}</b><small>${ok ? (f.id ? rar(f.tier) : 'Sin marco') : f.how}</small>${bar}`, !ok, ok ? f.tier : 'c');
     }).join('');
     return [{id: '', name: 'Sin título', how: '', tier: 'c'}, ...TITLES].map(t => {
       const ok = ownsTitle(t.id), pg = !ok && t.prog ? t.prog() : null;
       const bar = pg && pg[1] > 1 ? `<i class="cz-bar"><u style="width:${Math.round(Math.min(1, pg[0] / pg[1]) * 100)}%"></u></i><em>${Math.min(pg[0], pg[1])}/${pg[1]}</em>` : '';
-      return card(pTitle === t.id, 'ti:' + t.id, `${titleBadge(t)}<b>${t.name}</b><small>${ok ? (t.id ? rar(t.tier) : 'Sin título') : t.how}</small>${bar}`, !ok, ok ? (t.tier || 'c') : 'c');
+      return card(pTitle === t.id, 'ti:' + t.id, `<span class="cz-art">${trainerTitleIcon(t) || '<span aria-hidden="true">—</span>'}</span><b>${t.name}</b><small>${ok ? (t.id ? rar(t.tier) : 'Sin título') : t.how}</small>${bar}`, !ok, ok ? (t.tier || 'c') : 'c');
     }).join('');
   };
   const preview = () => {
-    const ic = AVATAR_KIDS.find(x => x.id === pAv) || PLAYER_ICONS.find(x => x.id === pAv) || SKIN_ICONS.find(x => x.id === pAv);
-    const img = ic ? ic.src : charIcon(selectedKey);
-    const t = pTitle ? TITLES.find(x => x.id === pTitle) : null;
-    return `<div class="cz-prev"><div class="hud-portrait pf-av${pFrame ? ' fr-' + pFrame : ''}"><img src="${img}" alt=""></div><span class="cz-ttl">${titleBadge(t)}${t ? t.name : 'Sin título'}</span></div>`;
+    const t = TITLES.find(x => x.id === pTitle);
+    return `<div class="cz-prev trainer-cover" style="${trainerCoverStyle(pBg)}">
+      <div class="hud-portrait pf-av${pFrame ? ' fr-' + pFrame : ''}"><img src="${avatarSrc(pAv)}" alt=""></div>
+      <div class="cz-prev-copy">${trainerName ? `<b data-no-i18n>${escHtml(trainerName)}</b>` : '<b>Invitado</b>'}
+        ${t ? `<span class="cz-preview-title">${trainerTitleIcon(t)}${escHtml(t.name)}</span>` : ''}</div></div>`;
   };
   const render = (focus = '', scroll = 0) => {
     box.innerHTML = `
-      <div class="cz-head">${preview()}
-        <div class="cz-copy"><h2 id="czTitle">Avatar, marco y título</h2></div></div>
-      <div class="cz-tabs">${[['av', 'Entrenadores'], ['dg', 'Digimon'], ['frame', 'Marcos'], ['title', 'Títulos']].map(([k, l]) => `<button type="button" class="cz-tab${tab === k ? ' on' : ''}" data-tab="${k}" aria-pressed="${tab === k}">${l}</button>`).join('')}</div>
-      <div class="cz-grid">${grid()}</div>
+      <h2 id="czTitle">Personalizar ficha</h2>${preview()}
+      <div class="cz-tabs">${[['bg', 'Fondos'], ['av', 'Entrenadores'], ['dg', 'Digimon'], ['frame', 'Marcos'], ['title', 'Títulos']].map(([k, l]) => `<button type="button" class="cz-tab${tab === k ? ' on' : ''}" data-tab="${k}" aria-pressed="${tab === k}">${l}</button>`).join('')}</div>
+      <div class="cz-grid${tab === 'bg' ? ' cz-backgrounds' : ''}">${grid()}</div>
       <div class="cz-foot"><button type="button" class="cz-btn" id="czCancel">Cancelar</button><button type="button" class="cz-btn ok" id="czSave">Guardar</button></div>`;
     const gridEl = box.querySelector('.cz-grid');
     gridEl.scrollTop = scroll;
@@ -12613,7 +12658,10 @@ function openCustomizer(){
     });
     box.querySelectorAll('.cz-tile:not(.locked)').forEach(b => b.onclick = () => {
       const [k, v] = b.dataset.v.split(':');
-      if (k === 'av') pAv = v; else if (k === 'fr') pFrame = v; else pTitle = v;
+      if (k === 'bg') pBg = trainerBackgroundId(v);
+      else if (k === 'av') pAv = v;
+      else if (k === 'fr') pFrame = v;
+      else pTitle = v;
       render(`[data-v="${CSS.escape(b.dataset.v)}"]`, gridEl.scrollTop); sfx('ready');
     });
     box.querySelector('#czCancel').onclick = () => back.close();
@@ -12622,6 +12670,7 @@ function openCustomizer(){
   const save = () => {
     if (pAv) localStorage.setItem('digibonk3d-avatar', pAv);
     else localStorage.removeItem('digibonk3d-avatar');
+    localStorage.setItem(TRAINER_BG_KEY, pBg);
     if (pFrame) equipExtra('frame', pFrame); else unequipExtra('frame');
     if (pTitle) equipExtra('title', pTitle); else unequipExtra('title');
     saved = true;
