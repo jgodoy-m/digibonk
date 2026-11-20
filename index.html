@@ -871,19 +871,6 @@ body:has(.realhub) #topbar,body:has(.realhub) #menubg,body:has(.realhub) #menuar
 .cl4-skin.vale{cursor:pointer;opacity:1;border-color:var(--m-gold,#ffc24f)!important;box-shadow:0 0 10px rgba(255,194,79,.45)}
 .cl4-skin.vale small{color:var(--m-gold,#ffc24f);font-weight:800}
 .eq-prize{color:var(--m-good,#4fd68e)}
-.shop-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin:0 0 10px;font:800 13px/1.3 'Nunito',sans-serif;color:var(--m-mute)}
-.shop-top b{color:var(--m-text)}
-.shop-rows{padding:0;max-height:min(52vh,420px);overflow:auto}
-.eq-row.shop-row{grid-template-columns:40px 1fr auto;align-items:center;text-align:left}
-.shop-ic{width:40px;height:40px;border-radius:50%;object-fit:cover;background:var(--m-sunk)}
-.eq-row.shop-row>em{grid-column:auto;color:var(--m-good)}
-.shop-row.done .eq-t{text-decoration:none}
-.shop-buy{padding:7px 12px;border:0;border-radius:999px;background:var(--m-cta,#ff8a1e);color:#fff;font:900 13px/1 'Nunito',sans-serif;cursor:pointer;box-shadow:0 3px 0 var(--m-cta-sh,#b44700);white-space:nowrap}
-.shop-buy:disabled{filter:grayscale(1);opacity:.5;cursor:default}
-.shop-code{display:flex;gap:8px;margin-top:12px}
-.shop-code input{flex:1;min-width:0;padding:8px 12px;border-radius:999px;border:1px solid var(--m-line);background:var(--m-sunk);color:var(--m-text);font:700 13px 'Nunito',sans-serif}
-.shop-code button{padding:8px 14px;border-radius:999px;border:1px solid var(--m-line);background:var(--m-btn);color:var(--m-text);font:800 13px 'Nunito',sans-serif;cursor:pointer}
-.approved-info-dialog.shop-dialog{width:min(560px,94vw)}
 @media (max-height:820px){.pk2-stage{height:110px!important}
 .anim.pk2-hero-img{width:100px!important;height:100px!important}
 .pk2-hero{padding:8px!important}
@@ -1182,6 +1169,15 @@ body:has(.tr11) #hudTop{display:none!important}
 .hud-portrait.fr-esperanza_angelical::before,.rw-frame.fr-esperanza_angelical{background-image:url(ui/marcos/esperanza_angelical.webp)}
 .hud-portrait.fr-sinceridad_palmon::before,.rw-frame.fr-sinceridad_palmon{background-image:url(ui/marcos/sinceridad_palmon.webp)}
 .hud-portrait.fr-bondad_botanica::before,.rw-frame.fr-bondad_botanica{background-image:url(ui/marcos/bondad_botanica.webp)}
+.hud-portrait.fr-tienda_agumon::before,.rw-frame.fr-tienda_agumon{background-image:url(ui/marcos/tienda_agumon.webp)}
+.hud-portrait.fr-tienda_gabumon::before,.rw-frame.fr-tienda_gabumon{background-image:url(ui/marcos/tienda_gabumon.webp)}
+.hud-portrait.fr-tienda_patamon::before,.rw-frame.fr-tienda_patamon{background-image:url(ui/marcos/tienda_patamon.webp)}
+.hud-portrait.fr-tienda_gatomon::before,.rw-frame.fr-tienda_gatomon{background-image:url(ui/marcos/tienda_gatomon.webp)}
+.hud-portrait.fr-tienda_leomon::before,.rw-frame.fr-tienda_leomon{background-image:url(ui/marcos/tienda_leomon.webp)}
+.hud-portrait.fr-tienda_hagurumon::before,.rw-frame.fr-tienda_hagurumon{background-image:url(ui/marcos/tienda_hagurumon.webp)}
+.hud-portrait.fr-tienda_frigimon::before,.rw-frame.fr-tienda_frigimon{background-image:url(ui/marcos/tienda_frigimon.webp)}
+.hud-portrait.fr-tienda_wizardmon::before,.rw-frame.fr-tienda_wizardmon{background-image:url(ui/marcos/tienda_wizardmon.webp)}
+.rw-frame[class*="fr-tienda_"]::after{display:none}
 .pl4-chg{position:relative;z-index:5}
 .pl4-av .hud-portrait{width:96px!important;height:96px!important}
 .cz-box{background:linear-gradient(180deg,#1d2640,#111728);border:1px solid #34437a;border-radius:20px;box-shadow:0 24px 70px #000c,inset 0 1px 0 #ffffff14}
@@ -1888,8 +1884,25 @@ body.dbk-noplay #hudEmb{visibility:hidden}   /* subida de nivel, pausa y demás 
 #bonkBar::before{inset:6px!important;background:url(ui/hud/bonk.webp) center/contain no-repeat!important;box-shadow:none!important;border-radius:0!important}
 #bonkBar.ready::before{background:url(ui/hud/bonk_listo.webp) center/contain no-repeat!important}
 #bonkTxt{top:auto!important;bottom:-20px!important;height:auto!important;flex-direction:row!important;gap:5px!important;font-size:11px!important;
-  padding:2px 9px;border-radius:9px;background:var(--h-surf);left:50%!important;right:auto!important;transform:translateX(-50%);white-space:nowrap;box-shadow:var(--h-elev)}
-#bonkTxt small{font-size:11px!important}
+  width:max-content;max-width:min(160px, 40vw);padding:2px 7px;border-radius:9px;background:var(--h-surf);left:auto!important;right:-5px!important;transform:none;
+  text-align:center;letter-spacing:0!important;box-shadow:var(--h-elev)}
+#bonkName{min-width:0;line-height:1.15;overflow-wrap:anywhere}
+#bonkTxt small{flex:none;white-space:nowrap;font-size:11px!important}
+#bonkHint{position:absolute;right:-5px;bottom:calc(100% + 5px);width:max-content;max-width:min(160px,40vw);padding:4px 7px;border-radius:8px;background:var(--h-surf);color:#ffe0a2;font:750 11px/1.2 var(--h-font);text-align:center;pointer-events:none}
+#bonkHint:empty{display:none}
+.attack-preview-open{margin-top:6px;background:transparent;color:inherit;border:1px solid currentColor;border-radius:11px;padding:7px 10px;font:700 12px var(--h-font);cursor:pointer}
+.attack-preview{box-sizing:border-box;width:min(420px,calc(100vw - 24px));max-height:calc(100dvh - 18px);padding:12px 16px;border:1px solid #719ce8;border-radius:18px;background:#122548;color:#eff5ff;font:600 14px var(--h-font);overflow:auto}
+.attack-preview::backdrop{background:#050c20b8}
+.attack-preview header{display:flex;justify-content:space-between;gap:12px;align-items:start}
+.attack-preview h3,.attack-preview p{margin:0}
+.attack-preview header p{color:#b6c8ee;font-size:12px;margin:3px 0 8px}
+.attack-preview button{background:#28477e;color:#fff;border:1px solid #8cafea;border-radius:10px;min-height:36px;padding:0 10px;font:700 13px var(--h-font);cursor:pointer}
+.attack-preview-stage{position:relative;aspect-ratio:384/160;max-height:32dvh;overflow:hidden;border-radius:11px;background:radial-gradient(ellipse at 31% 64%,#234678,#0d1b36 70%)}
+.attack-preview-stage>.spr{position:absolute;left:31%;top:53%;transform:translate(-50%,-50%);max-height:70%;object-fit:contain}
+.attack-preview-stage canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.attack-preview .attack-preview-status{min-height:1.2em;margin:7px 0;color:#ffe17d;font-size:12px}
+.attack-preview-actions{display:flex;justify-content:end;gap:8px}
+
 #bonkBar.ready #bonkTxt{color:#2a1200!important;background:#ffcf73}
 /* Barra del jefe dibujada */
 #bossbar{width:min(560px,80vw)!important;height:auto!important;aspect-ratio:900/111;background:none!important;box-shadow:none!important;overflow:visible!important}
@@ -1897,6 +1910,9 @@ body.dbk-noplay #hudEmb{visibility:hidden}   /* subida de nivel, pausa y demás 
 #bosshp{position:absolute!important;left:12%;top:41%;height:38%!important;max-width:76%;border-radius:3px!important;z-index:1;
   background:linear-gradient(180deg,#ff6b8a,#c2185b)!important;box-shadow:0 0 10px rgba(255,80,120,.6)}
 #bossbar::before{top:-16px!important}
+#bossPhaseMark{position:absolute;z-index:3;top:41%;height:38%;width:3px;left:var(--boss-phase);transform:translateX(-50%);background:#ffe69e;box-shadow:0 0 0 1px #35162d;border-radius:2px}
+@media (orientation:landscape) and (max-height:500px){#bossbar{top:110px!important;width:min(380px,60vw)!important}}
+@media (max-width:700px) and (orientation:landscape) and (max-height:500px){#hudObj.retreat{display:block!important;margin-top:1px}}
 @media (max-width:760px){
   #hudEmb{top:104px;left:10px}#hudEmb img{width:30px}
   #bonkBar{width:84px!important;height:84px!important}
@@ -3207,6 +3223,72 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 #overlay .realhub.hb .nm-dot{animation:lv-dot 1.8s ease-in-out infinite}
 @keyframes lv-dot{0%,100%{scale:1}50%{scale:1.25}}
 @media(prefers-reduced-motion:reduce){#overlay .realhub.hb :is(.lv-stage,.lv-parade,.nm-play,.nm-event,.nm-stack,.nm-tiles) *,#overlay .realhub.hb :is(.nm-play,.lv-sheen)::before,#overlay .realhub.hb .lv-sheen::after{animation:none!important}#overlay .realhub.hb .lv-fx{display:none}}
+/* Escaparate semanal: una oferta principal y cuatro tarjetas de igual peso. */
+#overlay .approved-info-dialog.shop-dialog {
+  --shop-ink:#f3f9ff; --shop-muted:#bacde8; --shop-gold:#ffda65;
+  width:min(920px,calc(100vw - 32px))!important; max-width:none!important;
+  max-height:calc(100dvh - 28px); padding:clamp(14px,2.6vw,26px);
+  color:var(--shop-ink)!important; text-align:left; background:#0a1a34!important;
+  border:1px solid #365781!important; overscroll-behavior:contain;
+}
+#overlay .shop-dialog :is(b,strong,span,p){color:inherit!important}
+#overlay .shop-dialog small{color:var(--shop-muted)!important}
+#overlay .shop-dialog header{margin:0 0 10px}
+#overlay .shop-dialog header h2{background:none;padding:0;margin:0;color:var(--shop-ink)!important}
+#overlay .shop-dialog #realDone{display:none}
+.shop-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;color:var(--shop-muted);font-size:.85em}
+.shop-wallet{display:inline-flex;align-items:center;gap:7px;flex:none;background:#173156;border:1px solid #3a567d;border-radius:999px;padding:5px 12px;font-weight:900;color:var(--shop-gold)!important}
+.shop-wallet img{width:18px;height:18px;object-fit:contain}
+.shop-grid{display:grid;grid-template-columns:minmax(0,1.22fr) repeat(2,minmax(0,1fr));gap:10px}
+.shop-card{display:grid;grid-template-rows:1fr auto;min-width:0;overflow:hidden;border:1px solid #32517a;border-radius:16px;background:#112747}
+.shop-card.featured{grid-row:span 2;border-color:#d39737;background:#173053}
+.shop-art{position:relative;display:flex;align-items:center;justify-content:center;isolation:isolate;overflow:hidden;min-height:92px;
+  background:radial-gradient(ellipse at 50% 75%,#426bb2 0%,#203b72 44%,#122749 86%)}
+.shop-art::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.3;
+  background-image:linear-gradient(#81b5f535 1px,transparent 1px),linear-gradient(90deg,#81b5f535 1px,transparent 1px);background-size:20px 20px}
+.featured .shop-art{min-height:224px;background:radial-gradient(ellipse at 50% 75%,#9b6c48 0%,#365080 40%,#172c58 79%)}
+.shop-art .shop-tag{position:absolute;z-index:1;top:8px;left:9px;max-width:calc(100% - 48px);padding:3px 7px;border-radius:6px;background:#0b1b32;font-size:10px;font-weight:900;line-height:1.2}
+#overlay .shop-dialog .featured .shop-tag{background:var(--shop-gold);color:#202632!important}
+.shop-sprite{--shop-sprite-size:88px;display:block;flex:none;width:var(--shop-sprite-size);height:var(--shop-sprite-size);object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 6px 8px #061024b0)}
+.shop-sprite.is-sheet{background:var(--sheet) left center / 500% 100% no-repeat}
+.featured .shop-sprite{--shop-sprite-size:clamp(156px,22vw,230px)}
+.shop-art .rw-frame{width:70px;height:70px;display:grid;place-items:center;overflow:hidden}
+.shop-art .rw-frame img{width:68%;height:68%;border-radius:50%;object-fit:cover}
+.shop-title-art{display:grid;place-items:center;width:54px;height:54px;border:2px solid var(--title-accent,var(--shop-gold));border-radius:50%;background:#25375d;color:var(--title-accent,var(--shop-gold))}
+.shop-title-art .ico{width:28px;height:28px}
+.shop-card-copy{display:grid;gap:5px;padding:9px 11px 11px}
+.shop-card-copy h3{margin:0;font:900 .94em/1.15 'Nunito',sans-serif;overflow-wrap:anywhere}
+.shop-card-copy small{font-size:.72em;line-height:1.2}
+.featured .shop-card-copy{padding:13px;gap:8px}
+.featured .shop-card-copy h3{font-size:clamp(18px,3vw,27px)}
+.shop-card-price{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;margin-top:2px;align-items:center}
+.shop-card-price del{font-size:.74em;color:var(--shop-muted)}
+#overlay .shop-dialog :is(.shop-buy,.shop-unlock,.shop-quest button,#shopRedeem){min-height:36px;border:1px solid #4f73a1;border-radius:9px;padding:6px 8px;background:#1c3b68;font:900 .82em/1.2 'Nunito',sans-serif;box-shadow:none}
+#overlay .shop-dialog button.shop-buy:not([disabled]){background:#ffd35d;border-color:#ffd35d;color:#272a31}
+#overlay .shop-dialog button.shop-buy:not([disabled]):hover{background:#ffe398}
+#overlay .shop-dialog button.shop-buy:disabled{opacity:.65;cursor:default}
+.shop-owned{font-size:.78em;font-weight:900}
+#overlay .shop-dialog button.shop-fav{position:absolute;right:7px;top:6px;z-index:2;width:34px;height:34px;padding:0;background:#10233d;border:1px solid #5278a5;border-radius:50%;font-size:18px;color:var(--shop-gold)}
+.shop-quest{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-top:12px;padding:9px 11px;border:1px solid #395b85;border-radius:11px;background:#142d4e;font-size:.82em}
+.shop-quest>div{display:grid;gap:2px;flex:1}
+.shop-code{display:flex;flex-wrap:wrap;gap:8px;margin-top:7px}
+.shop-code input{flex:1;min-width:130px;padding:8px 11px;border-radius:8px;border:1px solid #48678f;background:#0c203c;color:var(--shop-ink);font:700 .9em 'Nunito',sans-serif}
+.shop-code-wrap{margin-top:10px;font-size:.86em}
+.shop-code-wrap summary{width:fit-content;color:var(--shop-muted);cursor:pointer}
+.shop-msg{margin:6px 0 0;font-size:.82em}
+.shop-msg:empty{display:none}
+@media (max-width:690px){
+  .shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .shop-card.featured{grid-column:1 / span 2;grid-row:auto;grid-template:1fr / minmax(0,.88fr) minmax(0,1fr)}
+  .featured .shop-art{min-height:142px}
+  .featured .shop-sprite{--shop-sprite-size:clamp(105px,31vw,155px)}
+  .featured .shop-card-copy{align-content:center;padding:10px}
+  .shop-card-copy{padding-inline:8px}
+}
+@media (max-width:360px){
+  #overlay .approved-info-dialog.shop-dialog{width:calc(100vw - 20px)!important;padding:10px}
+  .shop-grid{gap:7px}
+}
 </style>
 <script type="importmap">
 { "imports": { "three": "./vendor/three.module.min.js" } }
@@ -3623,7 +3705,7 @@ body.is-touch #overlay :is(button,.g-back) kbd{display:none!important}
 <canvas id="edgeCv"></canvas>
 <div id="skillBar"></div>
 <div id="consBar"></div>
-<div id="bonkBar" style="display:none"><div id="bonkFill"></div><span id="bonkTxt">BONK 0%</span></div>
+<div id="bonkBar" style="display:none"><div id="bonkFill"></div><span id="bonkTxt"><b id="bonkName">BONK</b><small id="bonkStatus">0%</small></span><span id="bonkHint"></span></div>
 <div id="mapLoad" aria-hidden="true"><img class="ml-bg" alt="" decoding="async"><div class="ml-glow"></div><div class="ml-shade"></div><img class="ml-logo" src="ui/logo_digibonk.webp" alt="DigiBonk"><div class="ml-foot"><div class="ml-txt"><b id="mlName"></b><span id="mlStatus">Cargando el Mundo Digital…</span></div><div class="ml-meter"><div class="ml-track" id="mlBar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="ml-fill"></div></div><span class="ml-cap"></span><span class="ml-pct" id="mlPct"></span></div></div></div>
 <div id="rotateHint" aria-live="polite"><div><b>⟳</b><strong>Gira el móvil</strong><span>DigiBonk se juega en horizontal</span><small>¿No gira? Quita el bloqueo de rotación del móvil</small><small class="rh-ios">En iPhone, para jugar a pantalla completa: Compartir y «Añadir a pantalla de inicio»</small></div></div>
 <div id="touchCtl">
@@ -3636,7 +3718,7 @@ body.is-touch #overlay :is(button,.g-back) kbd{display:none!important}
 <div id="xpTxt"></div>
 <div id="overlay"></div>
 <div id="topbar"></div>
-<div id="bossbar" style="position:fixed;top:56px;left:50%;transform:translateX(-50%);width:420px;height:14px;background:#000;border:1px solid #888;display:none;pointer-events:none"><div id="bosshp" style="height:100%;background:#ab47bc;width:100%"></div></div>
+<div id="bossbar" style="position:fixed;top:56px;left:50%;transform:translateX(-50%);width:420px;height:14px;background:#000;border:1px solid #888;display:none;pointer-events:none"><div id="bosshp" style="height:100%;background:#ab47bc;width:100%"></div><span id="bossPhaseMark" hidden></span></div>
 <div id="combo"style="position:fixed;right:24px;top:200px;font-size:34px;font-weight:bold;color:#ffd54f;text-shadow:0 2px 4px #000;pointer-events:none"></div>
 <div id="flash"style="position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none"></div>
 <div id="hurt"></div>
@@ -5536,7 +5618,7 @@ function showHelp(){
 }
 
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
-const SAVE_KEYS = ['digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
+const SAVE_KEYS = ['digibonk3d-shop-favorites', 'digibonk3d-shop-discount', 'digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
   'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-maptime', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
   'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales', 'digibonk3d-objetos', 'digibonk3d-obj-ini', 'digibonk3d-reto', 'digibonk3d-sist'];
 // También cuentan los contadores por banner (pity) y la mejor oleada de cada mapa
@@ -6292,8 +6374,10 @@ function renderRoster(){
     const list = lineSkins(k).filter(sk => owned.includes(sk.id));
     el.innerHTML = `<div class="ps-lbl">La skin se aplica a toda la línea de ${CHARS[k].name}</div>
       <div class="ps-grid">${list.map(sk => `<button type="button" class="ps-tile${eq === sk.id ? ' sel' : ''}" data-skin="${sk.id}" title="${sk.name}">${skinThumb(k, sk)}<b>${sk.name}</b></button>`).join('')}</div>
+      <button type="button" class="attack-preview-open">Vista previa de combate</button>
       ${list.length <= 1 ? '<p class="ps-note">Consigue skins con la maestría, el evento y la tienda.</p>' : ''}`;
     el.querySelectorAll('[data-skin]').forEach(b => b.onclick = () => { equipSkinAt(k, 0, b.dataset.skin); showPicker(); });
+    el.querySelector('.attack-preview-open').onclick = e => showAttackPreview(k, Math.max(0, skinLineArt(k, eq)), eq, e.currentTarget);
     return;
   }
   if (rosterTab === 'apoyo') rosterTab = 'todos';
@@ -7231,12 +7315,17 @@ function removeDigivice(a){
 function animateEvo(dt){
   for (const r of rings){
     r.t += dt;
-    const sc = 1.4*(1 + r.t*r.grow); r.mesh.scale.set(sc, 1, sc);
-    r.mesh.material.opacity = Math.max(0, 1 - r.t/r.life);
+    const progress = Math.min(1, r.t/r.life);
+    if (r.motion) r.motion(progress);
+    else {
+      const sc = 1.4*(1 + r.t*r.grow);
+      r.mesh.scale.set(sc, 1, sc);
+    }
+    r.mesh.material.opacity = (r.opacity ?? 1)*(1 - progress);
   }
   rings = rings.filter(r => {
     if (r.t < r.life) return true;
-    world.remove(r.mesh); r.mesh.material.dispose(); return false;   // cada anillo tiene geometría y material propios: liberarlos o se acumulan en la GPU
+    world.remove(r.mesh); r.mesh.material.dispose(); return false;   // la geometría es compartida, el material es propio
   });
   screenFlash = Math.max(0, screenFlash - dt*1.5);
   document.getElementById('flash').style.opacity = screenFlash;
@@ -7305,30 +7394,208 @@ function bonkRelease(){
     popText(e.x, e.z, 80, '#ffd54f', 0.7);
   }
   for (const s of g.eshots) s.life = 0;   // el bucle de proyectiles retira las bolas del jefe
-  shake = Math.max(shake, 0.8);
-  spawnRing(p.x, p.z, 0xffd54f, 14, 0.5);
-  screenFlash = 0.6;
+  const fx = BONK_FX[g.ch.id];
+  spawnRing(p.x, p.z, fx?.color ?? 0xffd54f, R, 0.5);
+  if (!reduceMotion()){
+    shake = Math.max(shake, 0.8);
+    screenFlash = 0.35;
+    fx?.animate(p, spawnAttackEffect, g.dir);
+    playSkinAttackFx(p, true);
+    g.atkT = Math.max(g.atkT || 0, 0.28);
+  }
   sfx('evolve');
   g.bonks = (g.bonks || 0) + 1;
-  const fx = BONK_FX[g.ch.id];
-  if (fx){ fx.f(p); announce('¡BONK!', fx.name, '#ffd54f', 'top'); }
-  else announce('¡BONK!', 'Onda de choque', '#ffd54f', 'top');
+  fx?.f(p);
+  announce(fx?.title ?? '¡BONK!', fx?.name ?? 'Onda de choque', fx ? '#' + fx.color.toString(16).padStart(6, '0') : '#ffd54f', 'top');
+}
+// Efectos visuales sin colisiones. Comparten el ciclo de vida de los anillos del suelo.
+function attackEffectMotion({x, z}, {angle = 0, radius = 0, travel = 0, turn = 0, size = 5, length = 1, height = 0.35, lift = 0}){
+  return progress => {
+    const direction = angle + turn*progress, distance = radius + travel*progress;
+    const scale = size*(0.55 + 0.45*progress);
+    return {x: x + Math.cos(direction)*distance, z: z + Math.sin(direction)*distance,
+      offsetY: Math.max(0.08, height + lift*progress), direction, scale, width: scale*length};
+  };
+}
+function spawnAttackEffect(kind, p, color, options = {}){
+  const {life = 0.7, opacity = 1, additive = true} = options;
+  const mesh = new THREE.Mesh(FX_PLANE, fxMatOwn(kind, color, opacity, additive));
+  const at = attackEffectMotion(p, options);
+  const motion = progress => {
+    const {x, z, offsetY, direction, scale, width} = at(progress);
+    mesh.position.set(x, terrainH(x, z) + offsetY, z);
+    mesh.rotation.y = -direction;
+    mesh.scale.set(width, 1, scale);
+  };
+  motion(0);
+  world.add(mesh);
+  rings.push({mesh, t: 0, life, motion, opacity});
+}
+function spawnRadialAttackEffect(kind, p, color, count, options, emit = spawnAttackEffect){
+  for (let i = 0; i < count; i++){
+    emit(kind, p, color, {...options, angle: i/count*Math.PI*2});
+  }
+}
+// La skin decora el ataque del jugador. Usamos la etapa visible, igual que al resolver el sprite.
+const SKIN_ATTACK_FX = {
+  festival: {kind: 'gift', accent: 'snow', color: 0xd7f4ff},
+  reno: {kind: 'bell', accent: 'star', color: 0xffd88a},
+  galactico: {kind: 'constellation', accent: 'star', color: 0xa9bfff},
+  lcd: {kind: 'lcdPixels', accent: 'lcdPixels', color: 0xc8df9a}
+};
+function skinAttackTheme(id, stage, skin){
+  return skinHasArt(id, stage, skin) ? SKIN_ATTACK_FX[skin] : undefined;
+}
+function playSkinAttackFx(origin, ultimate = false){
+  const {id, evolved = 0} = g.ch;
+  const theme = skinAttackTheme(id, evolved, equippedAt(id, evolved));
+  if (!theme || reduceMotion()) return;
+  if (!ultimate){
+    if (g.t < (g.skinFxNext ?? 0)) return;
+    g.skinFxNext = g.t + 0.24;
+  }
+  emitSkinAttackFx(theme, origin, ultimate, Math.atan2(g.dir.z, g.dir.x), spawnAttackEffect);
+}
+function emitSkinAttackFx(theme, origin, ultimate, angle, emit){
+  if (ultimate){
+    spawnRadialAttackEffect(theme.kind, origin, 0xffffff, 5, {radius: 3.5, travel: 6, turn: 0.9, size: 2.8, height: 0.6, lift: 2.2, life: 0.66, opacity: 0.92, additive: false}, emit);
+    spawnRadialAttackEffect(theme.accent, origin, theme.color, 5, {radius: 5, travel: 7, turn: -0.6, size: 2.2, lift: 1.4, life: 0.55, opacity: 0.7}, emit);
+    return;
+  }
+  emit(theme.kind, origin, 0xffffff, {angle, radius: 0.5, travel: 1.1, size: 1.35, height: 0.8, lift: 0.8, life: 0.28, opacity: 0.85, additive: false});
+  emit(theme.accent, origin, theme.color, {angle: angle + 0.9, radius: 0.6, travel: 1.5, size: 0.95, height: 0.8, lift: 0.4, life: 0.25, opacity: 0.7});
+}
+function playBasicAttackFx(){
+  g.atkT = 0.26;
+  playSkinAttackFx(g.p);
+}
+// La vista previa comparte los motivos y recorridos de los efectos del combate.
+function showAttackPreview(key, stage, skin, trigger){
+  const ch = CHARS[key], ulti = BONK_FX[key], theme = skinAttackTheme(key, stage, skin);
+  const dialog = document.createElement('dialog');
+  dialog.className = 'attack-preview';
+  dialog.setAttribute('aria-labelledby', 'attackPreviewTitle');
+  dialog.innerHTML = `<header><div><h3 id="attackPreviewTitle">Vista previa de combate</h3><p>${escHtml(stageName(key, stage))} · ${escHtml(SKIN_BY_ID[skin].name)}</p></div><button type="button" data-close aria-label="Cerrar">✕</button></header>
+    <div class="attack-preview-stage">${sprEl(spriteWith(key, stage, skin), 62)}<canvas width="384" height="160" aria-hidden="true"></canvas></div>
+    <p class="attack-preview-status" aria-live="polite"></p>
+    <div class="attack-preview-actions"><button type="button" data-attack>Ataque</button><button type="button" data-ulti>Ulti</button></div>`;
+  document.body.appendChild(dialog);
+  const cv = dialog.querySelector('canvas'), ctx = cv.getContext('2d');
+  const status = dialog.querySelector('.attack-preview-status');
+  let frame = 0;
+  const textures = new Map();
+  const previewTexture = (kind, color) => {
+    const source = fxTex(kind).image;
+    if (color === 0xffffff) return source;
+    const id = kind + ':' + color;
+    if (!textures.has(id)){
+      const image = document.createElement('canvas');
+      image.width = source.width; image.height = source.height;
+      const ink = image.getContext('2d');
+      ink.drawImage(source, 0, 0);
+      ink.globalCompositeOperation = 'multiply';
+      ink.fillStyle = '#' + color.toString(16).padStart(6, '0');
+      ink.fillRect(0, 0, image.width, image.height);
+      ink.globalCompositeOperation = 'destination-in';
+      ink.drawImage(source, 0, 0);
+      textures.set(id, image);
+    }
+    return textures.get(id);
+  };
+  const play = ultimate => {
+    cancelAnimationFrame(frame);
+    const origin = {x: 0, z: 0}, effects = [];
+    const emit = (kind, p, color, options = {}) => {
+      effects.push({image:previewTexture(kind, color), at:attackEffectMotion(p, options), life:options.life ?? 0.7,
+        opacity:options.opacity ?? 1, additive:options.additive ?? true});
+    };
+    if (ultimate) ulti.animate(origin, emit, {x:1, z:0});
+    else emit(ch.fx || 'air', origin, 0xffffff, {radius:2, travel:ch.kind === 'shot' ? 14 : 4, size:4.5, life:0.48});
+    if (theme) emitSkinAttackFx(theme, origin, ultimate, 0, emit);
+    status.textContent = ultimate ? `${ulti.title} · ${ulti.tip}` : ch.desc;
+    const started = performance.now(), staticFrame = reduceMotion();
+    const paint = now => {
+      const dt = staticFrame ? 0.17 : (now - started)/1000;
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      for (const effect of effects){
+        const progress = dt/effect.life;
+        if (progress >= 1) continue;
+        const {x, z, direction, scale, width, offsetY} = effect.at(progress);
+        ctx.save();
+        ctx.globalAlpha = effect.opacity*(1 - progress);
+        ctx.globalCompositeOperation = effect.additive ? 'lighter' : 'source-over';
+        ctx.translate(cv.width*0.31 + x*7.4, cv.height*0.56 + z*2.3 - offsetY*7);
+        ctx.rotate(Math.sin(direction)*0.5);
+        ctx.drawImage(effect.image, -width*4, -scale*3, width*8, scale*6);
+        ctx.restore();
+      }
+      if (!staticFrame && effects.some(effect => dt < effect.life)) frame = requestAnimationFrame(paint);
+    };
+    paint(started);
+  };
+  dialog.querySelector('[data-attack]').onclick = () => play(false);
+  dialog.querySelector('[data-ulti]').onclick = () => play(true);
+  dialog.querySelector('[data-close]').onclick = () => dialog.close();
+  dialog.addEventListener('keydown', e => e.stopPropagation());
+  dialog.addEventListener('close', () => {
+    cancelAnimationFrame(frame);
+    dialog.remove();
+    trigger.focus();
+  }, {once:true});
+  dialog.showModal();
 }
 // Efecto extra del Bonk según el compañero (además de la onda base)
 const BONK_FX = {
-  agumon:   {name: 'Llamarada en línea', f: p => { const dx = g.dir.x, dz = g.dir.z; for (const e of g.enemies){ const rx = e.x - p.x, rz = e.z - p.z, along = rx*dx + rz*dz; if (along > 0 && along < 32 && Math.abs(rx*dz - rz*dx) < 2.8){ e.hp -= 150; popText(e.x, e.z, 150, '#ff7043', 0.7); } } }},
-  gabumon:  {name: 'Aliento helado: enemigos congelados', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 18) e.frozenT = e.boss ? 1 : 3; }},
-  palmon:   {name: 'Lianas: enemigos atrapados', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 18) e.frozenT = e.boss ? 1.2 : 4; }},
-  biyomon:  {name: 'Espiral de fuego', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 20){ e.hp -= 60; popText(e.x, e.z, 60, '#ff7043', 0.6); } spawnRing(p.x, p.z, 0xff7043, 20, 0.6); }},
-  tentomon: {name: 'Descarga en cadena', f: p => { g.enemies.filter(e => dist2(e.x, e.z, p.x, p.z) < 30).sort((a, b) => dist2(a.x, a.z, p.x, p.z) - dist2(b.x, b.z, p.x, p.z)).slice(0, 12).forEach(e => { e.hp -= 120; popText(e.x, e.z, 120, '#40c4ff', 0.7); }); }},
-  gomamon:  {name: 'Marea: la horda sale despedida', f: p => { for (const e of g.enemies){ const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz) || 1; if (d < 20) [e.x, e.z] = clampArena(e.x + dx/d*10, e.z + dz/d*10, ARENA_R - 0.5); } }},
-  patamon:  {name: 'Aire curativo: +30% vida', f: p => { if (!(g.mod && g.mod.noHeal)) p.hp = Math.min(p.maxHp, p.hp + p.maxHp*0.3); }},
-  gatomon:  {name: 'Luz sagrada: críticos 5 s', f: () => { g.critT = 5; }},
-  leomon:   {name: 'Rugido: golpe enorme alrededor', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 12){ e.hp -= 200; popText(e.x, e.z, 200, '#ffb74d', 0.7); } spawnRing(p.x, p.z, 0xffb74d, 12, 0.5); }},
-  hagurumon:{name: 'Fábrica: 3 torretas extra', f: p => { for (let i = 0; i < 3; i++){ const a = i/3*Math.PI*2; placeTurret(p.x + Math.cos(a)*2.5, p.z + Math.sin(a)*2.5, true); } }},
-  frigimon: {name: 'Ventisca: todo congelado', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 24) e.frozenT = e.boss ? 1.5 : 5; spawnRing(p.x, p.z, 0x81d4fa, 24, 0.8); }},
-  wizardmon:{name: 'Lluvia de truenos', f: p => { g.enemies.filter(e => dist2(e.x, e.z, p.x, p.z) < 24).slice(0, 10).forEach(e => castZone(e.x, e.z, 0.25, 3.2, 90)); }}
+  agumon:   {title: 'Infierno Carmesí', tip: 'Llamarada frontal', color: 0xff6332, name: 'Llamarada en línea',
+    animate: (p, emit, dir) => emit('fire', p, 0xffc176, {angle: Math.atan2(dir.z, dir.x), radius: 3, travel: 23, size: 8, length: 2.2, height: 0.9, life: 0.75}),
+    f: p => { const dx = g.dir.x, dz = g.dir.z; for (const e of g.enemies){ const rx = e.x - p.x, rz = e.z - p.z, along = rx*dx + rz*dz; if (along > 0 && along < 32 && Math.abs(rx*dz - rz*dx) < 2.8){ e.hp -= 150; popText(e.x, e.z, 150, '#ff7043', 0.7); } } }},
+  gabumon:  {title: 'Aliento Glacial', tip: 'Congela enemigos', color: 0x62b8ff, name: 'Aliento helado: enemigos congelados',
+    animate: (p, emit) => spawnRadialAttackEffect('bluefire', p, 0xa7ddff, 7, {radius: 2, travel: 14, size: 6, height: 0.65, life: 0.78}, emit),
+    f: p => { bonkImmobilize(p, 18, 1, 3, 'snow'); }},
+  palmon:   {title: 'Abrazo de Lianas', tip: 'Inmoviliza enemigos', color: 0x70ea78, name: 'Lianas: enemigos atrapados',
+    animate: (p, emit) => spawnRadialAttackEffect('vine', p, 0x9aff9a, 6, {radius: 2, travel: 10, turn: 0.55, size: 8, length: 1.75, life: 0.9}, emit),
+    f: p => { bonkImmobilize(p, 18, 1.2, 4, 'vine'); }},
+  biyomon:  {title: 'Espiral Ígnea', tip: 'Quema en área', color: 0xff8246, name: 'Espiral de fuego',
+    animate: (p, emit) => spawnRadialAttackEffect('fire', p, 0xff9c65, 5, {radius: 4, travel: 15, turn: Math.PI, size: 6, height: 0.5, lift: 1.4, life: 0.9}, emit),
+    f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 20){ e.hp -= 60; popText(e.x, e.z, 60, '#ff7043', 0.6); } spawnRing(p.x, p.z, 0xff7043, 20, 0.6); }},
+  tentomon: {title: 'Red Centella', tip: 'Descarga en cadena', color: 0x52d8ff, name: 'Descarga en cadena',
+    animate: (p, emit) => spawnRadialAttackEffect('spark', p, 0x78e8ff, 5, {radius: 3, travel: 15, size: 8, life: 0.55}, emit),
+    f: p => { g.enemies.filter(e => dist2(e.x, e.z, p.x, p.z) < 30).sort((a, b) => dist2(a.x, a.z, p.x, p.z) - dist2(b.x, b.z, p.x, p.z)).slice(0, 12).forEach(e => { e.hp -= 120; popText(e.x, e.z, 120, '#40c4ff', 0.7); }); }},
+  gomamon:  {title: 'Marea Rompiente', tip: 'Empuja la horda', color: 0x47d8e5, name: 'Marea: la horda sale despedida',
+    animate: (p, emit) => spawnRadialAttackEffect('bubble', p, 0xa3f6ff, 10, {radius: 4, travel: 16, size: 3.4, height: 0.55, lift: 2, life: 0.85}, emit),
+    f: p => { for (const e of g.enemies){ const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz) || 1; if (d < 20) [e.x, e.z] = clampArena(e.x + dx/d*10, e.z + dz/d*10, ARENA_R - 0.5); } }},
+  patamon:  {title: 'Brisa Vital', tip: 'Cura 30% de vida', color: 0x8ef5b6, name: 'Aire curativo: +30% vida',
+    animate: (p, emit) => spawnRadialAttackEffect('air', p, 0x9affbe, 4, {radius: 3, travel: 3, turn: 1.2, size: 4.5, height: 0.4, lift: 4, life: 0.88}, emit),
+    f: p => { if (!(g.mod && g.mod.noHeal)) p.hp = Math.min(p.maxHp, p.hp + p.maxHp*0.3); }},
+  gatomon:  {title: 'Zarpa Celestial', tip: 'Críticos durante 5 s', color: 0xffe293, name: 'Luz sagrada: críticos 5 s',
+    animate: (p, emit) => spawnRadialAttackEffect('claw', p, 0xffebad, 3, {radius: 3, travel: 7, turn: 0.9, size: 8, height: 1.15, life: 0.62}, emit),
+    f: () => { g.critT = 5; }},
+  leomon:   {title: 'Rugido de la Bestia', tip: 'Golpe de área', color: 0xffac55, name: 'Rugido: golpe enorme alrededor',
+    animate: (p, emit) => emit('air', p, 0xffad5b, {size: 24, height: 0.5, life: 0.6}),
+    f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 12){ e.hp -= 200; popText(e.x, e.z, 200, '#ffb74d', 0.7); } spawnRing(p.x, p.z, 0xffb74d, 12, 0.5); }},
+  hagurumon:{title: 'Fábrica Relámpago', tip: 'Coloca 3 torretas', color: 0xffcb68, name: 'Fábrica: 3 torretas extra',
+    animate: (p, emit) => spawnRadialAttackEffect('gear', p, 0xffde8f, 3, {radius: 2.5, turn: Math.PI*2, size: 5, height: 0.7, lift: 2.3, life: 0.85}, emit),
+    f: p => { for (let i = 0; i < 3; i++){ const a = i/3*Math.PI*2; placeTurret(p.x + Math.cos(a)*2.5, p.z + Math.sin(a)*2.5, true); } }},
+  frigimon: {title: 'Cero Absoluto', tip: 'Congela en área', color: 0x9de9ff, name: 'Ventisca: todo congelado',
+    animate: (p, emit) => spawnRadialAttackEffect('snow', p, 0xbff4ff, 9, {radius: 11, travel: 9, turn: 0.35, size: 4.5, height: 3.5, lift: -3.3, life: 0.95}, emit),
+    f: p => { bonkImmobilize(p, 24, 1.5, 5, 'snow'); spawnRing(p.x, p.z, 0x81d4fa, 24, 0.8); }},
+  wizardmon:{title: 'Tormenta Arcana', tip: 'Invoca rayos', color: 0xc799ff, name: 'Lluvia de truenos',
+    animate: (p, emit) => emit('rune', p, 0xc799ff, {turn: 1.2, size: 27, life: 0.85}),
+    f: p => { g.enemies.filter(e => dist2(e.x, e.z, p.x, p.z) < 24).slice(0, 10).forEach(e => castZone(e.x, e.z, 0.25, 3.2, 90)); }}
 };
+function bonkImmobilize(p, radius, bossDuration, duration, kind){
+  for (const e of g.enemies){
+    if (dist2(e.x, e.z, p.x, p.z) >= radius) continue;
+    e.frozenT = e.boss ? bossDuration : duration;
+    e.bonkLock = kind;
+  }
+}
+function bonkHint(){
+  if (g.critT > 0) return `Críticos · ${Math.ceil(g.critT)} s`;
+  if (g.bonk < 100) return '';
+  if (g.ch.id === 'patamon' && g.mod?.noHeal) return 'Curación desactivada';
+  return BONK_FX[g.ch.id]?.tip ?? 'Onda de choque';
+}
 /* ---------- Ataques de Leomon (melee), Hagurumon (turret), Frigimon (frost) y Wizardmon (zone) ---------- */
 const TURRET_GEO = new THREE.CylinderGeometry(0.45, 0.6, 0.9, 8), TURRET_MAT = new THREE.MeshLambertMaterial({color: 0x9e9e9e});
 function placeTurret(x, z, extra){
@@ -7391,14 +7658,14 @@ function updateKindAttacks(dt){
       const fd = dist2(far.x, far.z, p.x, p.z) || 1;
       fireProjectile(p.x, p.z, (far.x - p.x)/fd*22, (far.z - p.z)/fd*22, ch.dmg*p.dmg*0.6, 0.7*p.area, 0xffb74d, {pierce: 1 + p.count, fx: 'fire', big: 1.6});
     }
-    if (hit || far){ g.wCd = ch.cd * p.cdMul; g.atkT = 0.26; if (hit) spawnRing(p.x + dx*R*0.55, p.z + dz*R*0.55, 0xffb74d, R*0.6, 0.25); }
+    if (hit || far){ g.wCd = ch.cd * p.cdMul; playBasicAttackFx(); if (hit) spawnRing(p.x + dx*R*0.55, p.z + dz*R*0.55, 0xffb74d, R*0.6, 0.25); }
     else g.wCd = 0.1;
   }
   if (ch.kind === 'chain' && g.wCd <= 0 && g.enemies.length){
     // Puño de Gato: golpea al más cercano (6 m) y salta a otros cercanos (4 m); un salto más por proyectil extra
     let cur = nearestIn(p.x, p.z, 6*p.area);
     if (cur){
-      g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+      g.wCd = ch.cd * p.cdMul; playBasicAttackFx();
       const hit = new Set(), jumps = 2 + p.count;
       let fx = p.x, fz = p.z;
       for (let i = 0; i < jumps && cur; i++){
@@ -7413,11 +7680,11 @@ function updateKindAttacks(dt){
     } else g.wCd = 0.1;
   }
   if (ch.kind === 'turret' && g.wCd <= 0){
-    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    g.wCd = ch.cd * p.cdMul; playBasicAttackFx();
     placeTurret(p.x - g.dir.x*1.2, p.z - g.dir.z*1.2, false);
   }
   if (ch.kind === 'frost' && g.wCd <= 0){
-    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    g.wCd = ch.cd * p.cdMul; playBasicAttackFx();
     const R = 7.5*p.area;   // 7,5 m (antes 6): con 6 m casi no tocaba a la horda al huir
     for (const e of g.enemies){
       if (e.hp > 0 && dist2(e.x, e.z, p.x, p.z) < R + e.r){ hurt(e, ch.dmg*p.dmg); e.slowT = 2 + 0.3*(p.count - 1); }
@@ -7425,7 +7692,7 @@ function updateKindAttacks(dt){
     spawnRing(p.x, p.z, 0x81d4fa, R, 0.5);
   }
   if (ch.kind === 'zone' && g.wCd <= 0 && g.enemies.length){
-    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    g.wCd = ch.cd * p.cdMul; playBasicAttackFx();
     const near = g.enemies.filter(e => e.hp > 0 && dist2(e.x, e.z, p.x, p.z) < 16).sort(() => Math.random() - 0.5);
     for (let i = 0; i < Math.min(p.count, near.length); i++) castZone(near[i].x, near[i].z, 0.5, 3*p.area, ch.dmg*p.dmg);
   }
@@ -8253,7 +8520,7 @@ function update(dt){
   // Enemigos: persiguen y dañan por contacto
   if (g.critT > 0) g.critT -= dt;
   for (const e of g.enemies){
-    if (e.frozenT > 0){ e.frozenT -= dt; continue; }   // congelado o atrapado por el Bonk: ni se mueve ni daña
+    if (e.frozenT > 0){ e.frozenT -= dt; if (e.frozenT <= 0) e.bonkLock = null; continue; }   // congelado o atrapado por el Bonk: ni se mueve ni daña
     const dx = p.x - e.x, dz = p.z - e.z, d = Math.hypot(dx, dz) || 1;
     if (e.golden){ [e.x, e.z] = clampArena(e.x - dx/d*e.spd*dt, e.z - dz/d*e.spd*dt, ARENA_R - 2); continue; }   // el Numemon dorado huye
     if (e.wild){ if (!e.weak && d < 14) [e.x, e.z] = clampArena(e.x - dx/d*e.spd*dt, e.z - dz/d*e.spd*dt, ARENA_R - 2); continue; }   // el salvaje huye hasta quedar debilitado
@@ -8298,7 +8565,7 @@ function update(dt){
   if (g.evoRushT > 0) g.evoRushT -= dt;
   g.wCd -= dt * (g.evoRushT > 0 ? 1.8 : 1);
   if (ch.kind === 'shot' && g.wCd <= 0 && g.enemies.length){
-    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    g.wCd = ch.cd * p.cdMul; playBasicAttackFx();
     const sorted = [...g.enemies].sort((a,b) => dist2(a.x,a.z,p.x,p.z) - dist2(b.x,b.z,p.x,p.z));
     for (let i = 0; i < Math.min(p.count, sorted.length); i++){
       const e = sorted[i], d = dist2(e.x, e.z, p.x, p.z) || 1;
@@ -8307,7 +8574,7 @@ function update(dt){
     }
   }
   if (ch.kind === 'ring' && g.wCd <= 0){
-    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    g.wCd = ch.cd * p.cdMul; playBasicAttackFx();
     const n = 6*p.count, off = Math.random()*Math.PI*2;
     for (let i = 0; i < n; i++){
       const an = off + i/n*Math.PI*2;
@@ -8356,6 +8623,7 @@ function update(dt){
       for (const e of g.enemies){
         if (e.cd <= 0 && dist2(bx, bz, e.x, e.z) < e.r + 0.9){
           hurt(e, ch.dmg*p.dmg); e.cd = 0.25;
+          playSkinAttackFx({x: bx, z: bz});
         }
       }
     }
@@ -8383,7 +8651,7 @@ function update(dt){
     if (e.kind === 'elite' && Math.random() < 0.25){ g.tix++; if (!GACHA_SOON) popText(e.x, e.z, '+1 ticket', '#3de0ff', 1); }
     if (e.kind === 'mini'){ g.tix++; announce('¡' + e.name + ' derrotado!', GACHA_SOON ? 'Cofre dorado' : '+1 ticket de tirada · cofre dorado', '#3de0ff'); spawnChestAt(e.x, e.z, true); if (!e.special){ (g.minisKilled || (g.minisKilled = [])).push(e.name); grantEmblem(); } }
     if (e.kind === 'elite' && Math.random() < 0.3) spawnChestAt(e.x, e.z, true);   // 30% de las élites dejan un cofre dorado
-    if (e.boss) g.tix += 3;
+    if (e.boss){ g.tix += 3; shopBossDiscount(); }
     if (e.boss || (e.kind === 'mini' && !e.wild)) bossKO(e);
     if (e.mesh.material !== spriteMats[e.sprite] && (e.kind === 'charger' || e.kind === 'elite')) e.mesh.material.dispose();
     world.remove(e.mesh);
@@ -8909,6 +9177,42 @@ function fxTex(kind){
       x.strokeStyle = '#ffffff'; x.lineWidth = 6;
       for (let i = 0; i < 5; i++){ const a = i/5*Math.PI*2; x.beginPath(); x.moveTo(m, m); x.lineTo(m + Math.cos(a + 0.3)*24, m + Math.sin(a + 0.3)*24); x.lineTo(m + Math.cos(a - 0.2)*34, m + Math.sin(a - 0.2)*34); x.lineTo(m + Math.cos(a)*56, m + Math.sin(a)*56); x.stroke(); }
       break;
+    case 'constellation':
+      x.strokeStyle = '#9ca9ff'; x.lineWidth = 3;
+      x.beginPath(); x.moveTo(21, 82); x.lineTo(53, 48); x.lineTo(77, 69); x.lineTo(109, 29); x.stroke();
+      x.fillStyle = '#e2eaff';
+      for (const [px, py] of [[21,82], [53,48], [77,69], [109,29]]){
+        x.beginPath(); x.arc(px, py, 6, 0, Math.PI*2); x.fill();
+      }
+      break;
+    case 'lcdPixels':
+      x.fillStyle = '#baca91';
+      for (const [px, py, w] of [[24,58,18], [49,35,25], [55,66,22], [86,48,16], [82,84,24]]) x.fillRect(px, py, w, w);
+      break;
+    case 'gift':
+      x.fillStyle = '#a92e54'; x.fillRect(29, 53, 70, 48);
+      x.fillStyle = '#ed4c67'; x.fillRect(25, 45, 78, 18);
+      x.fillStyle = '#ffe29a'; x.fillRect(58, 45, 12, 56); x.fillRect(29, 70, 70, 8);
+      x.strokeStyle = '#ffe29a'; x.lineWidth = 7;
+      for (const side of [-1, 1]){
+        x.beginPath(); x.moveTo(m, 46);
+        x.bezierCurveTo(m + side*32, 47, m + side*26, 18, m, 46); x.stroke();
+      }
+      break;
+    case 'bell':
+      x.fillStyle = '#c5752e'; x.beginPath(); x.arc(m, 91, 11, 0, Math.PI*2); x.fill();
+      x.fillStyle = '#ffcc56'; x.beginPath(); x.moveTo(26, 83);
+      x.quadraticCurveTo(39, 73, 39, 55); x.bezierCurveTo(39, 23, 89, 23, 89, 55);
+      x.quadraticCurveTo(89, 73, 102, 83); x.quadraticCurveTo(m, 96, 26, 83); x.fill();
+      x.strokeStyle = '#fff1bb'; x.lineWidth = 6; x.beginPath(); x.moveTo(34, 83); x.quadraticCurveTo(m, 87, 94, 83); x.stroke();
+      x.strokeStyle = '#a34753'; x.lineWidth = 7; x.beginPath(); x.arc(m, 31, 9, Math.PI, 2*Math.PI); x.stroke();
+      break;
+    case 'vine':
+      for (const [offset, w] of [[-12, 7], [9, 4]]){
+        x.strokeStyle = offset < 0 ? '#70d487' : '#d4ff9a'; x.lineWidth = w;
+        x.beginPath(); x.moveTo(10, m + offset); x.bezierCurveTo(49, m + 39, 78, m - 41, 119, m + offset); x.stroke();
+      }
+      break;
     case 'leaf':
       x.fillStyle = '#66bb6a'; x.beginPath(); x.moveTo(m + 54, m); x.quadraticCurveTo(m, m - 40, m - 54, m); x.quadraticCurveTo(m, m + 40, m + 54, m); x.fill();
       x.fillStyle = '#c5e1a5'; x.beginPath(); x.moveTo(m + 44, m); x.quadraticCurveTo(m, m - 22, m - 40, m); x.quadraticCurveTo(m, m + 8, m + 44, m); x.fill();
@@ -8987,8 +9291,8 @@ function fxMat(kind, color = 0xffffff, add = true){
   return FX_MATS[k] || (FX_MATS[k] = new THREE.MeshBasicMaterial({map: fxTex(kind), color, transparent: true, depthWrite: false, depthTest: !FX_GROUND.has(kind), blending: add ? THREE.AdditiveBlending : THREE.NormalBlending, side: THREE.DoubleSide}));
 }
 // Material propio (para lo que cambia de opacidad por separado): hay que liberarlo al quitarlo
-function fxMatOwn(kind, color = 0xffffff, opacity = 1){
-  return new THREE.MeshBasicMaterial({map: fxTex(kind), color, transparent: true, opacity, depthWrite: false, depthTest: !FX_GROUND.has(kind), blending: THREE.AdditiveBlending, side: THREE.DoubleSide});
+function fxMatOwn(kind, color = 0xffffff, opacity = 1, additive = true){
+  return new THREE.MeshBasicMaterial({map: fxTex(kind), color, transparent: true, opacity, depthWrite: false, depthTest: !FX_GROUND.has(kind), blending: additive ? THREE.AdditiveBlending : THREE.NormalBlending, side: THREE.DoubleSide});
 }
 function fxMesh(kind, size, color, add){
   const m = new THREE.Mesh(FX_PLANE, fxMat(kind, color, add));
@@ -9014,6 +9318,21 @@ function markDanger(e, color){
   m.userData.base = e.r*2.6/k; m.scale.set(m.userData.base, 1, m.userData.base);
   m.renderOrder = 1; m.position.y = 0.02;
   e.shadow.add(m); e.mark = m;
+}
+// Los marcadores usan geometría y materiales compartidos y siguen la sombra del enemigo.
+function syncBonkStatus(e){
+  const kind = e.frozenT > 0 ? (e.bonkLock ?? null) : null;
+  if ((e.bonkMark?.userData.kind ?? null) === kind) return;
+  if (e.bonkMark) e.shadow.remove(e.bonkMark);
+  e.bonkMark = null;
+  if (!kind) return;
+  const markerSize = Math.max(1.5, e.r*1.6) / (e.shadow.scale.x || 1);
+  const mark = fxMesh(kind, markerSize, kind === 'snow' ? 0xbbeeff : 0xb9ff9a);
+  mark.userData.kind = kind;
+  mark.position.y = 0.035;
+  mark.renderOrder = 2;
+  e.shadow.add(mark);
+  e.bonkMark = mark;
 }
 // Aviso de ataque: carril rojo en el suelo desde el enemigo hacia (dx, dz), de largo len y ancho w. null lo quita
 // soft: enemigos normales (más tenue, para que con muchos a la vez no tape la horda); las élites lo llevan fuerte
@@ -9489,6 +9808,7 @@ function endGame(win){
   if (g.weekly && g.ch.id === g.star) rewards.push(`<li>Digimon de la semana: <b>+25%</b> Bits</li>`);
   for (const h of g.retoDone || []) rewards.push(`<li>Hito del reto: <b>${h.t}</b> · +${h.bits} Bits${GACHA_SOON ? '' : ` y +${h.tix} tickets`}</li>`);
   if (g.extraBits) rewards.push(`<li><b>+${g.extraBits}</b> Bits de eventos del mapa</li>`);
+  if (g.shopDiscount === weekNum()) rewards.push(`<li>Encargo de la tienda: <b>−${SHOP_DISCOUNT_PCT}% en tu skin destacada</b></li>`);
   if (g.emblems && g.emblems.length) rewards.push(`<li>Emblemas: <b>${g.emblems.length}/8</b></li>`);
   if (g.bonus) rewards.push(GACHA_SOON ? `<li><b>+${g.bonus}</b> Bits · misión diaria completada</li>` : `<li><b>+${g.bonus}</b> Bits y <b>+${g.dailyTix}</b> tickets · misión diaria completada</li>`);
   if (g.tix && !GACHA_SOON) rewards.push(`<li><b>+${g.tix}</b> tickets de tirada</li>`);
@@ -9543,6 +9863,7 @@ function syncMeshes(){
     const ge = terrainH(e.x, e.z);
     e.mesh.position.set(e.x, ge + e.mesh.scale.y/2, e.z);
     e.shadow.position.set(e.x, ge + 0.02, e.z);
+    syncBonkStatus(e);
     if (e.mark){ const k = e.mark.userData.base*(1 + 0.08*Math.sin(g.t*6)); e.mark.scale.set(k, 1, k); }
     // Los enemigos miran hacia el jugador (margen para que no tiemblen cuando está justo encima o debajo)
     const sx = screenDx(p.x - e.x, p.z - e.z);
@@ -10023,12 +10344,15 @@ function updateWaves(){
   } else announce('Oleada ' + w, 'La horda se hace más fuerte', '#ef5350');
 }
 // Objetivo actual, para el HUD
+function bossFled(){
+  return !!(g.portalOpen && g.bossLeftK && zoneDef().boss?.retreatAt);
+}
 function hudObjective(){
   if (g.mode === 'surv') return `Oleada ${g.wave || 1} · siguiente en ${Math.ceil(60 - g.t % 60)} s`;
   if (!isPortalMap()) return g.bossSpawned ? 'Derrota a Piedmon' : 'Piedmon llega a los 20:00';
   const def = zoneDef().boss;
   if (g.inferno) return '¡Infierno! No hay salida';
-  if (g.portalOpen) return '¡Portal abierto! Ve al norte';
+  if (g.portalOpen) return bossFled() ? 'Huye por el portal · Síguelo' : '¡Portal abierto! Ve al norte';
   if (g.boss && g.enemies.includes(g.boss)) return `Derrota a ${def.name}` + (def.retreatAt ? ' (huye a mitad de vida)' : def.final ? ' para ganar' : ' para abrir el portal');
   if (!nearPortal()) return `Ve al portal del norte para invocar a ${def.name}`;
   return `${isTouchUI() ? '' : '[B] '}Invoca a ${def.name}` + (def.final ? ' · jefe final' : ' · abre el portal');
@@ -10058,7 +10382,7 @@ function updateHUD(){
   timerEl.classList.toggle('inferno', !!g.inferno);
   const obj = document.getElementById('hudObj'), objTxt = hudObjective();
   if (obj.textContent !== objTxt) obj.textContent = objTxt;
-  obj.className = g.inferno ? 'inf' : g.portalOpen ? 'hot' : '';
+  obj.className = g.inferno ? 'inf' : g.portalOpen ? (bossFled() ? 'retreat' : 'hot') : '';
   const canSummon = portalMap && canSummonBoss() && nearPortal();
   const sumEl = document.getElementById('hudSummon');
   sumEl.style.display = canSummon ? 'flex' : 'none';
@@ -10108,7 +10432,13 @@ function updateHUD(){
     bf.style.width = Math.min(100, g.bonk).toFixed(1) + '%';
     bbar.classList.toggle('ready', g.bonk >= 100);
     bbar.style.setProperty('--p', Math.min(100, g.bonk).toFixed(1));
-    document.getElementById('bonkTxt').innerHTML = g.bonk >= 100 ? (isTouchUI() ? 'BONK<small>¡toca!</small>' : 'BONK<small>pulsa Q</small>') : `BONK<small>${Math.floor(g.bonk)}%</small>`;
+    const title = BONK_FX[g.ch.id]?.title ?? 'BONK';
+    const status = g.bonk >= 100 ? (isTouchUI() ? '¡toca!' : 'pulsa Q') : `${Math.floor(g.bonk)}%`;
+    const nameEl = document.getElementById('bonkName'), statusEl = document.getElementById('bonkStatus');
+    if (nameEl.dataset.src !== title){ nameEl.dataset.src = title; nameEl.textContent = title; }
+    if (statusEl.dataset.src !== status){ statusEl.dataset.src = status; statusEl.textContent = status; }
+    const hint = document.getElementById('bonkHint'), text = bonkHint();
+    if (hint.dataset.src !== text){ hint.dataset.src = text; hint.textContent = text; }
   }
   // Daño recibido: activa la viñeta roja (se desvanece en frame)
   if (g.lastHp !== undefined && p.hp < g.lastHp - 0.01){ hurtT = 0.45; sfx('hurt'); }
@@ -10126,6 +10456,12 @@ function updateHUD(){
     bb.style.display = 'block';
     const bl = (g.boss.name || 'Piedmon').toUpperCase() + ' · ' + (g.boss.def ? (g.boss.def.final ? 'JEFE FINAL' : 'JEFE DE ZONA') : 'JEFE FINAL');
     if (bb.dataset.label !== bl) bb.dataset.label = bl;
+    const mark = document.getElementById('bossPhaseMark'), retreat = g.boss.def?.retreatAt;
+    mark.hidden = !retreat;
+    if (retreat && mark.dataset.threshold !== String(retreat)){
+      mark.dataset.threshold = retreat;
+      mark.style.setProperty('--boss-phase', (12 + 76*retreat) + '%');
+    }
     document.getElementById('bosshp').style.width = (76*Math.max(0, g.boss.hp)/g.boss.max) + '%';   // 76%: ancho del hueco de la barra dibujada
   } else bb.style.display = 'none';
 }
@@ -11289,34 +11625,52 @@ function showEncargos(){
   menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios se renuevan cada día. Los semanales y los de evento suman lo que haces en todas tus partidas. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d} <span>Solo se aplica en el Reto semanal, que tiene su propio botón en el menú.</span></p>`);
   const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('eq-dialog');
 }
-/* ---------- Tienda: gasta Bits en lo de la línea de la semana (cambia cada lunes) ---------- */
-// Mientras la Incubadora está en «Próximamente», la tienda es la otra forma de conseguir skins, marcos y títulos
-const SHOP_PRICE = {title: 600, frame: 1200, galactico: 2500, holografica: 5000, festival: 4000, reno: 4000};
-// Dos Digimon por semana: el de la semana del banner permanente y otro tres puestos más allá
-function shopItems(){
-  const chars = SEASONS.adventure.chars, i = weeklyIndex(), out = [];
-  for (const k of [...new Set([chars[i], chars[(i + 3) % chars.length]])]){
-    const w = 'wk' + wkIndex(k);
-    out.push({k, type: 'title', id: w, name: 'Título «' + TITLES.find(t => t.id === w).name + '»', price: SHOP_PRICE.title, owned: inv.titles.includes(w)});
-    out.push({k, type: 'frame', id: w, name: FRAMES.find(f => f.id === w).name, price: SHOP_PRICE.frame, owned: inv.frames.includes(w)});
-  }
-  // Skins: dos líneas por semana entre las que ya tienen hojas dibujadas (sin hoja no se vende)
-  const ids = ['galactico', 'holografica', ...(eventActive() ? ['festival', 'reno'] : [])];
-  const withArt = chars.filter(k => isUnlocked(k) && ids.some(sk => skinLineArt(k, sk) >= 0));
-  const n = withArt.length, wn = ((weekNum() % Math.max(1, n)) + n) % Math.max(1, n);
-  for (const k of [...new Set([withArt[wn], withArt[(wn + 1) % n]])].filter(Boolean))
-    for (const sk of ids) if (skinLineArt(k, sk) >= 0) out.push({k, type: 'skin', id: sk, name: 'Skin ' + SKIN_BY_ID[sk].name, price: SHOP_PRICE[sk], owned: ownsAnyStage(k, sk)});
-  return out;
+/* ---------- Escaparate semanal de cosméticos ---------- */
+const SHOP_PRICE = {title:600, frame:1200, galactico:2500, holografica:5000, festival:4000, reno:4000};
+const SHOP_FAVORITES = 'digibonk3d-shop-favorites', SHOP_DISCOUNT = 'digibonk3d-shop-discount';
+const SHOP_DISCOUNT_PCT = 20;
+
+function shopRotation(week = weekNum()){
+  const chars = SEASONS.adventure.chars.filter(k => SHOP_COSMETICS[k] && skinLineArt(k, 'galactico') >= 0);
+  const at = offset => chars[((week + offset) % chars.length + chars.length) % chars.length];
+  return {featured:at(0), secondary:at(3), returning:at(-2)};
 }
-function shopBuy(n){
-  const it = shopItems()[n];
-  if (!it || it.owned || SAVE.bits < it.price) return false;
+function shopItems(week = weekNum()){
+  const {featured, secondary, returning} = shopRotation(week);
+  const cosmeticId = 'tienda_' + featured, discounted = loadJSON(SHOP_DISCOUNT, {}).week === week;
+  const skin = (k, id, slot) => {
+    const stage = skinLineArt(k, id), basePrice = SHOP_PRICE[id];
+    const price = slot === 'featured' && discounted ? Math.floor(basePrice * (100 - SHOP_DISCOUNT_PCT) / 100) : basePrice;
+    return {k, id, stage, slot, type:'skin', name:SKIN_BY_ID[id].name, price, basePrice,
+      owned:ownsAnyStage(k, id), locked:!isUnlocked(k)};
+  };
+  const secondarySkins = [...(eventActive() ? ['festival', 'reno'] : []), 'holografica'].filter(id => skinLineArt(secondary,id) >= 0);
+  const secondarySkin = secondarySkins.length ? secondarySkins[week % secondarySkins.length] : 'galactico';
+  return [
+    skin(featured, 'galactico', 'featured'),
+    {k:featured, id:cosmeticId, type:'frame', name:FRAMES.find(i => i.id === cosmeticId).name, price:SHOP_PRICE.frame, owned:inv.frames.includes(cosmeticId)},
+    {k:featured, id:cosmeticId, type:'title', name:TITLES.find(i => i.id === cosmeticId).name, price:SHOP_PRICE.title, owned:inv.titles.includes(cosmeticId)},
+    skin(secondary, secondarySkin, 'secondary'),
+    skin(returning, 'galactico', 'returning')
+  ].map(it => ({...it, key:`${it.type}:${it.k}:${it.id}`}));
+}
+function shopBuy(key, price, week){
+  if (week !== weekNum()) return false;
+  const it = shopItems(week).find(x => x.key === key);
+  if (!it || it.owned || it.locked || price !== it.price || SAVE.bits < it.price) return false;
   SAVE.bits = SAVE.bits - it.price;
   if (it.type === 'title') inv.titles.push(it.id);
   else if (it.type === 'frame') inv.frames.push(it.id);
   else grantSkinLine(it.k, it.id);
   saveInv(); grantProgress();
   return true;
+}
+function shopBossDiscount(){
+  if (!GACHA_SOON) return;
+  const week = weekNum(), {featured} = shopRotation(week);
+  if (g.ch.id !== featured || ownsAnyStage(featured, 'galactico') || loadJSON(SHOP_DISCOUNT, {}).week === week) return;
+  localStorage.setItem(SHOP_DISCOUNT, JSON.stringify({week}));
+  g.shopDiscount = week;
 }
 // Códigos de recompensa (p. ej. el de Ko-fi). Se guarda solo su huella, no el código
 const REWARD_CODES = {'90ba4f7e': {frame: 'mecenas', title: 'mecenas'}};
@@ -11330,21 +11684,86 @@ function redeemCode(raw){
   saveInv();
   return got ? '¡Gracias! Marco y título «Mecenas» desbloqueados' : 'Ya tienes las recompensas de este código';
 }
-function showShop(msg){
+function showShop(msg = ''){
   const fmt = n => Number(n).toLocaleString('es-ES');
-  const next = (weekNum() + 1) * WEEK_MS + 4 * 86400000, days = Math.max(1, Math.ceil((next - Date.now()) / 86400000));
-  const bits = SAVE.bits, items = shopItems();
-  const rows = items.map((it, n) => `<div class="eq-row shop-row${it.owned ? ' done' : ''}"><img class="shop-ic" src="${charIcon(it.k, it.type === 'skin' ? it.id : 'clasico')}" alt=""><span><span class="eq-t">${it.name}</span><small>${CHARS[it.k].name}</small></span>${it.owned ? '<em>✓ Ya lo tienes</em>' : `<button type="button" class="shop-buy" data-n="${n}" ${bits < it.price ? 'disabled' : ''}>Ⓑ ${fmt(it.price)}</button>`}</div>`).join('');
-  menuModal('Tienda', `<p class="shop-top"><span>Tus Bits: <b>Ⓑ ${fmt(bits)}</b></span><span>Se renueva el lunes · ${days === 1 ? 'queda 1 día' : `quedan ${days} días`}</span></p>
-    <div class="eq-rows shop-rows">${rows}</div>
-    <div class="shop-code"><input id="shopCode" maxlength="24" placeholder="Código de recompensa" autocomplete="off"><button type="button" id="shopRedeem">Canjear</button></div>
-    <p class="enc-note shop-msg" aria-live="polite">${msg || ''}</p>`);
-  const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('shop-dialog');
+  const week = weekNum(), items = shopItems(week), featured = items[0], bits = SAVE.bits;
+  const next = (week + 1) * WEEK_MS + 4 * 86400000;
+  const hours = Math.max(1, Math.ceil((next - Date.now()) / 3600000));
+  const rotation = hours <= 24 ? `Quedan ${hours} h` : `Quedan ${Math.ceil(hours / 24)} días`;
+  const savedFavorites = loadJSON(SHOP_FAVORITES, []);
+  const favorites = new Set(Array.isArray(savedFavorites) ? savedFavorites : []);
+  const tag = {featured:'Destacada', secondary:'Otra línea', returning:'De vuelta', frame:'Marco', title:'Título'};
+  const cards = items.map(it => {
+    const digi = CHARS[it.k].name, isSkin = it.type === 'skin', wish = favorites.has(it.key);
+    const src = isSkin ? spriteWith(it.k, it.stage, it.id) : '', sheet = isSkin ? sheetOf(src) : '';
+    const art = isSkin ? (sheet ? `<span class="shop-sprite is-sheet" style="--sheet:url('${sheet}')" aria-hidden="true"></span>` : `<img class="shop-sprite" src="${src}" alt="">`)
+      : it.type === 'frame' ? `<span class="rw-frame fr-${it.id}"><img src="${charIcon(it.k, 'clasico')}" alt=""></span>`
+        : `<span class="shop-title-art" style="--title-accent:${SHOP_COSMETICS[it.k].color}">${svgIcon(SHOP_COSMETICS[it.k].icon)}</span>`;
+    const action = it.owned ? '<span class="shop-owned">✓ En tu colección</span>'
+      : it.locked ? `<button type="button" class="shop-unlock" data-shop-dex="${it.k}">Cómo desbloquear</button>`
+        : `<button type="button" class="shop-buy" data-shop-buy="${it.key}" ${bits < it.price ? 'disabled' : ''}>${bits < it.price ? `Faltan ${fmt(it.price - bits)} Bits` : `Comprar · ${fmt(it.price)} Bits`}</button>`;
+    return `<article class="shop-card ${it.slot || it.type}">
+      <div class="shop-art"><small class="shop-tag" ${it.slot === 'returning' ? 'data-shop-return' : ''}>${it.slot === 'returning' && wish && !it.owned ? 'Vuelve tu favorita' : tag[it.slot || it.type]}</small>
+        ${art}
+        ${isSkin && !it.owned ? `<button type="button" class="shop-fav" data-shop-fav="${it.key}" aria-pressed="${wish}" aria-label="Favorita: ${digi} ${it.name}">${wish ? '★' : '☆'}</button>` : ''}
+      </div>
+      <div class="shop-card-copy"><h3>${it.name}</h3><small>${digi}${it.locked ? ' · Bloqueado' : ''}</small>
+        <div class="shop-card-price">${!it.owned && it.price < it.basePrice ? `<del>${fmt(it.basePrice)} Bits</del>` : ''}
+          ${!it.owned && (it.locked || bits < it.price) ? `<small>${fmt(it.price)} Bits</small>` : ''}${action}</div>
+        ${isSkin ? `<button type="button" class="attack-preview-open" data-shop-preview="${it.key}">Vista previa de combate</button>` : ''}
+      </div>
+    </article>`;
+  }).join('');
+  const discounted = featured.price < featured.basePrice;
+  const quest = featured.owned ? '' : `<div class="shop-quest"><div><b>${discounted ? 'Descuento conseguido' : 'Encargo de la tienda'}</b>
+    <small>${discounted ? `Tu skin destacada tiene un ${SHOP_DISCOUNT_PCT}% de descuento hasta el lunes.` : `Derrota a un jefe de zona con ${CHARS[featured.k].name} y consigue un ${SHOP_DISCOUNT_PCT}% de descuento en su skin.`}</small></div>
+    ${!discounted ? `<button type="button" id="shopQuest">${featured.locked ? 'Ver en Digidex' : 'Elegir mapa'}</button>` : ''}</div>`;
+  menuModal('Tienda semanal', `<div class="shop-meta"><span>Rotación del lunes · ${rotation}</span><strong class="shop-wallet"><img src="ui/hud/ic_bits.webp" alt="">${fmt(bits)} Bits</strong></div>
+    <div class="shop-grid">${cards}</div>${quest}
+    <details class="shop-code-wrap"><summary>Código de recompensa</summary>
+      <div class="shop-code"><input id="shopCode" maxlength="24" aria-label="Código de recompensa" placeholder="Introduce tu código" autocomplete="off"><button type="button" id="shopRedeem">Canjear</button></div></details>
+    <p class="shop-msg" id="shopStatus" aria-live="polite"></p>`);
+  const dlg = document.querySelector('#realModalHost .approved-info-dialog');
+  if (!dlg) return;
+  dlg.classList.add('shop-dialog');
+  const status = dlg.querySelector('#shopStatus');
+  status.textContent = msg;
   const reopen = m => { showSelect(); showShop(m); };
-  document.querySelectorAll('#realModalHost .shop-buy').forEach(b => b.onclick = () => { const it = items[+b.dataset.n]; if (shopBuy(+b.dataset.n)){ sfx('evolve'); reopen('Comprado: ' + it.name + ' (' + CHARS[it.k].name + ')'); } });
-  const inp = document.getElementById('shopCode');
-  inp.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') document.getElementById('shopRedeem').click(); });
-  document.getElementById('shopRedeem').onclick = () => { if (inp.value.trim()) reopen(redeemCode(inp.value)); };
+  const toDex = k => { colKey = k; colTab = 'digimon'; showCollection(); };
+  dlg.querySelectorAll('[data-shop-dex]').forEach(b => b.onclick = () => toDex(b.dataset.shopDex));
+  dlg.querySelectorAll('[data-shop-preview]').forEach(b => b.onclick = () => {
+    const it = items.find(x => x.key === b.dataset.shopPreview);
+    showAttackPreview(it.k, it.stage, it.id, b);
+  });
+  const questButton = dlg.querySelector('#shopQuest');
+  if (questButton) questButton.onclick = () => {
+    if (featured.locked) return toDex(featured.k);
+    selectedKey = featured.k; runMode = 'normal'; runWeekly = false;
+    restoreRunPrefs(); showMapSelect();
+  };
+  dlg.querySelectorAll('[data-shop-fav]').forEach(b => b.onclick = () => {
+    const key = b.dataset.shopFav, on = !favorites.has(key);
+    if (on) favorites.add(key); else favorites.delete(key);
+    localStorage.setItem(SHOP_FAVORITES, JSON.stringify([...favorites]));
+    b.setAttribute('aria-pressed', on); b.textContent = on ? '★' : '☆';
+    const returning = b.closest('.shop-art').querySelector('[data-shop-return]');
+    if (returning) returning.textContent = on ? 'Vuelve tu favorita' : 'De vuelta';
+  });
+  dlg.querySelectorAll('[data-shop-buy]').forEach(b => b.onclick = () => {
+    const it = items.find(x => x.key === b.dataset.shopBuy);
+    if (!shopBuy(it.key, it.price, week)) return reopen('La oferta ha cambiado. Revisa el escaparate.');
+    sfx('evolve'); reopen(`Comprado: ${it.name} · ${CHARS[it.k].name}`);
+  });
+  const input = dlg.querySelector('#shopCode'), redeem = dlg.querySelector('#shopRedeem');
+  input.addEventListener('keydown', e => {
+    e.stopPropagation();
+    if (e.key === 'Enter') redeem.click();
+  });
+  redeem.onclick = () => {
+    if (!input.value.trim()) return;
+    reopen(redeemCode(input.value));
+    document.querySelector('#realModalHost .shop-code-wrap').open = true;
+  };
 }
 function showLogros(){
   const ach = loadAch();
@@ -12083,7 +12502,21 @@ function bestSkinSet(){
   }
   return best;
 }
+const SHOP_COSMETICS = {
+  agumon: {frame:'Ascua valiente', title:'Coraje en llamas', color:'#ffae56', icon:'meteoro'},
+  gabumon: {frame:'Colmillos de escarcha', title:'Rastro del Lobo', color:'#9edeff', icon:'cuchilla'},
+  patamon: {frame:'Alas del alba', title:'Mensajero del Alba', color:'#ffdc88', icon:'utilidad'},
+  gatomon: {frame:'Anillo sagrado', title:'Guardiana del Anillo', color:'#e9c7ff', icon:'luz'},
+  leomon: {frame:'Melena de bronce', title:'Puño de la Bestia', color:'#f3c286', icon:'ofensiva'},
+  hagurumon: {frame:'Engranaje digital', title:'Maestro de las Torretas', color:'#d1f18a', icon:'chip'},
+  frigimon: {frame:'Cristal de ventisca', title:'Centinela de la Nieve', color:'#a5f0ff', icon:'pulso'},
+  wizardmon: {frame:'Órbita arcana', title:'Tejedor de Relámpagos', color:'#dbbaff', icon:'laser'},
+};
+const shopCosmetics = type => Object.entries(SHOP_COSMETICS).map(([key, set]) => ({
+  id:'tienda_' + key, name:set[type], tier:'r', how:'Tienda semanal'
+}));
 const FRAMES = [
+  ...shopCosmetics('frame'),
   {id:'amistad_gabumon', name:'Amistad de Gabumon', tier:'c', how:'Gana una partida con Gabumon', prog: () => [Math.min(1, winsWith('gabumon')), 1]},
   {id:'sinceridad_palmon', name:'Sinceridad de Palmon', tier:'c', how:'Gana una partida con Palmon', prog: () => [Math.min(1, winsWith('palmon')), 1]},
   {id:'agua_fiabilidad', name:'Agua y fiabilidad', tier:'c', how:'Gana una partida con Gomamon', prog: () => [Math.min(1, winsWith('gomamon')), 1]},
@@ -12098,6 +12531,7 @@ const FRAMES = [
   {id:'mecenas', name:'Mecenas', tier:'e', how:'Código de recompensa para quien apoya el juego en Ko-fi'}
 ];
 const TITLES = [
+  ...shopCosmetics('title'),
   {id:'novato',     name:'Novato',           tier:'c', how:'Termina tu primera partida', prog: () => [Math.min(1, loadAch().runs), 1]},
   {id:'cazador',    name:'Cazador de bajas', tier:'c', how:'Acumula 300 bajas en total', prog: () => [Math.min(300, sumStats('kills')), 300]},
   {id:'explorador', name:'Explorador',       tier:'r', how:'Llega a la zona 2 (Pantano de Datos)', prog: () => [loadAch().zone2 ? 1 : 0, 1]},
