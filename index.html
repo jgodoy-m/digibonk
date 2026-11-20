@@ -3386,14 +3386,18 @@ html.reduce-motion .living-actor.swim::after{animation:none!important}
 .shop-option small{color:var(--m-soft);font-size:11px}
 .shop-display{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);border:1px solid var(--m-line2);border-radius:15px;overflow:hidden;background:var(--m-sunk)}
 .shop-stage{
+  --shop-plinth-y:69%;
   display:grid;place-items:center;position:relative;box-sizing:border-box;min-height:244px;padding:23px 16px;
   background:#172c49 linear-gradient(0deg,#07132891,#0a19302b 58%,#09173238);
   background-image:linear-gradient(0deg,#07132891,#0a19302b 58%,#09173238),url(ui/hub/tienda-escaparate.webp);
-  background-position:center 65%;background-size:cover;
+  background-position:center var(--shop-plinth-y);background-size:cover;
   box-shadow:inset 0 0 0 1px #8bafde35
-
 }
-.shop-stage>.shop-art{width:clamp(130px,22vw,225px);height:clamp(130px,22vw,225px);filter:drop-shadow(0 12px 12px #040918b0)}
+.shop-stage>.shop-art{
+  position:absolute;left:50%;top:var(--shop-plinth-y);width:auto;height:min(69%,205px);aspect-ratio:1;
+  transform:translate(calc(0% - var(--shop-anchor-x,50%)),calc(0% - var(--shop-anchor-y,85%)));
+  filter:drop-shadow(0 9px 8px #04091898)
+}
 .shop-stage .cz-prev{
   --trainer-title:#c9deff;display:flex;align-items:center;gap:16px;width:min(100%,360px);min-height:110px;box-sizing:border-box;
   padding:15px;border:1px solid #9fbfff7d;border-radius:13px;background-color:#14263c;color:#f1f7ff;text-align:start
@@ -3432,7 +3436,6 @@ html.reduce-motion .living-actor.swim::after{animation:none!important}
   .shop-option{scroll-snap-align:start}
   .shop-display{grid-template-columns:minmax(0,1fr)}
   .shop-stage{min-height:136px;padding:10px}
-  .shop-stage>.shop-art{width:122px;height:122px}
 }
 @media(prefers-reduced-motion:reduce){.shop-stage .anim{animation:none}}
 .attack-preview.shop-combat-preview{width:min(700px,calc(100vw - 24px));padding:clamp(12px,2vw,20px)}
@@ -12998,6 +13001,56 @@ function redeemCode(raw){
   saveInv();
   return got ? '¡Gracias! Marco y título «Mecenas» desbloqueados' : 'Ya tienes las recompensas de este código';
 }
+const shopSpriteAnchors = new Map();
+function shopSpriteBounds(pixels, width, height, frames){
+  const frameWidth = Math.floor(width / frames);
+  const scanWidth = frameWidth * Math.min(2, frames);
+  let left = frameWidth, right = -1, bottom = -1;
+  for (let y = 0; y < height; y++){
+    for (let x = 0; x < scanWidth; x++){
+      if (pixels[(y * width + x) * 4 + 3] <= 24) continue;
+      const localX = x % frameWidth;
+      left = Math.min(left,localX);
+      right = Math.max(right,localX);
+      bottom = y;
+    }
+  }
+  if (bottom < 0) return null;
+  // El fondo animado llena su caja cuadrada. La imagen fija conserva su proporción.
+  const boxW = frames > 1 ? frameWidth : Math.max(frameWidth,height);
+  const boxH = frames > 1 ? height : boxW;
+  return {
+    x:((left + right + 1)/2 + (boxW - frameWidth)/2) / boxW,
+    y:(bottom + 1 + (boxH - height)/2) / boxH
+  };
+}
+function alignShopSkin(art,it){
+  if (!art) return;
+  const src = spriteWith(it.k,it.stage,it.id), sheet = sheetOf(src), asset = sheet || src;
+  if (!shopSpriteAnchors.has(asset)){
+    shopSpriteAnchors.set(asset,new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.naturalWidth;
+          canvas.height = img.naturalHeight;
+          const ctx = canvas.getContext('2d',{willReadFrequently:true});
+          ctx.drawImage(img,0,0);
+          const pixels = ctx.getImageData(0,0,canvas.width,canvas.height).data;
+          resolve(shopSpriteBounds(pixels,canvas.width,canvas.height,sheet ? ANIM_N : 1));
+        } catch { resolve(null); }
+      };
+      img.onerror = () => resolve(null);
+      img.src = asset;
+    }));
+  }
+  shopSpriteAnchors.get(asset).then(anchor => {
+    if (!anchor || !art.isConnected) return;
+    art.style.setProperty('--shop-anchor-x', `${anchor.x * 100}%`);
+    art.style.setProperty('--shop-anchor-y', `${anchor.y * 100}%`);
+  });
+}
 function shopItemArt(it, animate = false){
   if (it.type === 'skin'){
     const url = spriteWith(it.k,it.stage,it.id);
@@ -13064,6 +13117,7 @@ function showShop(msg = '', selected = ''){
         ${skin && !it.owned ? `<button type="button" class="shop-aux" data-shop-fav aria-pressed="${wish}" aria-label="Favorita: ${escHtml(digi)} ${escHtml(it.name)}">${wish ? '★' : '☆'}</button>` : ''}
       </div>
     </div>`;
+    if (skin) alignShopSkin(display.querySelector('.shop-stage > .shop-art'),it);
   };
   options.forEach((button, i) => button.onclick = () => draw(items[i]));
   draw(current);
