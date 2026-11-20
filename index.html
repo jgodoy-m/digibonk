@@ -3681,30 +3681,46 @@ html[lang] .trainer-screen .trainer-header .g-back,
   #overlay .pk2-starter .pk2-id p{font-size:13px!important;margin:2px 0 0!important}
 }
 
-/* Cabecera y señal de temporada del menú principal */
-#overlay .realhub.hb .hb-top{gap:12px 24px;align-items:center}
-#overlay .realhub.hb .hb-brand-block{display:flex;align-items:center;gap:12px 22px;flex-wrap:wrap;min-width:0}
-#overlay .realhub.hb .hb-top .hb-brand{margin:0;align-self:center}
-#overlay .realhub.hb .hb-top .hb-brand img{width:auto!important;height:clamp(70px,8.6vw,112px)!important;max-width:75vw}
-#overlay .realhub.hb .hb-user-card{gap:12px;padding:9px 8px 9px 13px;border-radius:22px;border-inline-start-color:#ffbc57;background:linear-gradient(140deg,#254c78,#162843 55%,#132039);color:#f1f7ff;box-shadow:inset 0 1px #9bd5ff40,0 5px 0 #0b172a,0 12px 25px #0004}
-#overlay .realhub.hb .hb-user-card .hb-me{height:64px;padding:3px 7px}
-#overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{width:54px!important;height:54px!important}
-#overlay .realhub.hb .hb-user-card .hb-me strong{font-size:18px!important;color:#f1f7ff;max-width:16ch}
-#overlay .realhub.hb .hb-user-card .hb-me small{font-size:12px!important;color:#b9cde6}
-#overlay .realhub.hb .hb-user-card .hb-wallet{gap:10px;border-color:#84ac905e;background:#142a32;color:#ccf5ad;padding:6px 10px;font-size:15px;box-shadow:inset 0 2px 5px #07171c}
-#overlay .realhub.hb .hb-user-card .hb-out{color:#c5d9f3}
-#overlay .realhub.hb .hb-user-card button:hover,#overlay .realhub.hb .hb-user-card button:focus-visible{background:#8dc7ff26;outline-color:#a8d8ff}
-#overlay .realhub.hb .hb-season{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(100px,190px) auto;align-items:center;gap:12px;box-sizing:border-box;position:relative;z-index:3;margin:10px clamp(14px,2vw,30px) 0;padding:8px 14px;text-align:left;border:1px solid #508b9b;border-radius:14px;background:linear-gradient(112deg,#17374c,#102334);color:#eefcff;box-shadow:0 4px 12px #0003}
-#overlay .realhub.hb .hb-season:hover{border-color:#f4bc67}
-#overlay .realhub.hb .hb-season:focus-visible{outline:2px solid #ffe0a0;outline-offset:2px}
-.hb-season img{width:34px;height:34px;object-fit:contain}
-.hb-season-copy{min-width:0}
-.hb-season-copy b,.hb-season-copy small,.hb-season-meter small{display:block}
-.hb-season-copy b{font-size:clamp(14px,1.5vw,18px);line-height:1.16}
-.hb-season-copy small,.hb-season-meter small{color:#cce3ef;font-size:12px}
-.hb-season-meter{min-width:0}
-.hb-season-meter progress,.season-dialog progress{width:100%;height:7px;accent-color:#e8a74f;display:block;margin-top:5px}
-.hb-season-next{color:#ffcb81;font-size:18px}
+/* La cabecera mantiene visibles las utilidades, el entrenador y su saldo. */
+#overlay .realhub.hb .hb-user-card{
+  --trainer-ring:color-mix(in srgb,var(--m-cardline) 72%,#549ccc);
+  min-width:min(100%,300px);gap:10px;padding:6px 7px 6px 9px;border:1px solid var(--trainer-ring);border-radius:18px;
+  background:linear-gradient(140deg,color-mix(in srgb,var(--m-card) 87%,#579ed0),var(--m-card) 65%);
+  box-shadow:inset 0 1px #ffffff24,0 5px 16px #071b291f
+}
+#overlay .realhub.hb .hb-user-card .hb-me{flex:1;height:52px;gap:11px;padding:0 4px}
+#overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{
+  width:46px!important;height:46px!important;border:1px solid var(--trainer-ring);box-sizing:border-box
+}
+#overlay .realhub.hb .hb-user-card .hb-me strong{font-size:16px!important;max-width:19ch}
+#overlay .realhub.hb .hb-user-card .hb-me small{font-size:11px!important;margin-top:3px}
+#overlay .realhub.hb .hb-user-card .hb-wallet{
+  align-self:stretch;padding:0 4px 0 12px;border:0;border-inline-start:1px solid var(--trainer-ring);border-radius:0;
+  background:transparent;font-size:15px
+}
+#overlay .realhub.hb .hb-user-card .hb-out{width:36px;height:40px}
+
+/* Logo y temporada comparten el espacio sobre los modos en escritorio. */
+#overlay .realhub.hb .hb-intro{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;column-gap:12px;row-gap:8px
+}
+#overlay .realhub.hb .hb-intro .hb-brand{align-self:auto}
+#overlay .realhub.hb .hb-intro .hb-brand img{height:clamp(65px,8vw,105px)!important}
+#overlay .realhub.hb .hb-season{
+  display:flex;align-items:center;gap:9px;flex:1 1 170px;min-width:0;max-width:245px;
+  padding:8px 10px;box-sizing:border-box;text-align:left;border:1px solid var(--m-cardline);border-radius:13px;
+  color:var(--m-text);background:linear-gradient(115deg,color-mix(in srgb,var(--m-card) 88%,#e6a43d),var(--m-card) 75%);
+  box-shadow:0 4px 10px #0002
+}
+#overlay .realhub.hb .hb-season:hover{border-color:#db9236}
+#overlay .realhub.hb .hb-season:focus-visible{outline:2px solid var(--m-acc);outline-offset:2px}
+.hb-season img{width:32px;height:32px;object-fit:contain;flex:none}
+.hb-season-copy{flex:1;min-width:0}
+.hb-season-copy b,.hb-season-copy small{display:block}
+.hb-season-copy b{font-size:14px;line-height:1.15}
+.hb-season-copy small{color:var(--m-soft);margin-top:3px;font-size:11px;line-height:1.2}
+.hb-season-copy progress,.season-dialog progress{width:100%;height:5px;accent-color:#db9236;display:block;margin-top:5px}
+.hb-season-next{color:var(--m-soft);font-size:18px;flex:none}
 .season-dialog article{border:1px solid var(--m-cardline);border-radius:12px;padding:10px 12px;background:var(--m-sunk)}
 .season-dialog .season-summary{display:flex;align-items:center;gap:12px}
 .season-summary img{width:42px;height:42px;object-fit:contain}
@@ -3716,21 +3732,19 @@ html[lang] .trainer-screen .trainer-header .g-back,
 .season-weeks li>strong,.season-prizes li>strong{white-space:nowrap;color:var(--m-acc)}
 .season-dialog button.season-mode{display:inline-flex;margin:4px 0 10px}
 @media(max-width:760px){
-  #overlay .realhub.hb .hb-top{gap:8px}
-  #overlay .realhub.hb .hb-brand-block{width:100%;justify-content:space-between;gap:5px 12px}
-  #overlay .realhub.hb .hb-top .hb-brand img{height:clamp(52px,13vw,76px)!important;max-width:100%;object-fit:contain}
-  #overlay .realhub.hb .hb-user-card{padding:5px 7px;gap:6px}
-  #overlay .realhub.hb .hb-user-card .hb-me{height:52px}
-  #overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{width:42px!important;height:42px!important}
-  #overlay .realhub.hb .hb-user-card .hb-me strong{font-size:16px!important}
-  #overlay .realhub.hb .hb-season{margin-inline:12px;gap:8px;grid-template-columns:auto minmax(0,1fr) minmax(48px,32%) auto;padding-inline:8px}
+  #overlay .realhub.hb .hb-user-card{padding:4px 6px}
+  #overlay .realhub.hb .hb-user-card .hb-me{height:47px}
+  #overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{width:40px!important;height:40px!important}
+  #overlay .realhub.hb .hb-intro{flex-direction:column;align-items:center}
+  #overlay .realhub.hb .hb-season{flex:auto;width:100%;max-width:none}
 }
 @media(orientation:landscape) and (max-height:500px){
-  #overlay .realhub.hb .hb-brand-block{width:auto}
-  #overlay .realhub.hb .hb-user-card .hb-me{height:38px}
+  #overlay .realhub.hb .hb-user-card .hb-me{height:34px}
   #overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{width:32px!important;height:32px!important}
-  #overlay .realhub.hb .hb-user-card{flex:0 1 auto;padding-block:3px}
-  #overlay .realhub.hb .hb-season{padding-block:4px;margin-top:6px}
+  #overlay .realhub.hb .hb-user-card{flex:0 1 auto;min-width:0;padding:2px 5px}
+  #overlay .realhub.hb .hb-intro{grid-column:2;grid-row:4}
+  #overlay .realhub.hb .hb-season{max-width:none;padding:4px 8px}
+  #overlay .realhub.hb .hb-season img{width:25px;height:25px}
 }
 
 /* Móvil en horizontal (poca altura): el inicio cabe sin desplazarse. Sin logo; a la izquierda Jugar y los modos,
@@ -5957,18 +5971,15 @@ function showSelect(){
     <main class="realhub hb" aria-label="Menú principal Digibonk">
       <div class="real-world" aria-hidden="true">${life.stage}</div>
       <header class="hb-top">
-        <div class="hb-brand-block">
-          <h1 class="hb-brand"><span class="hb-logo-bg" aria-hidden="true"><i class="lb-glow"></i><i class="lb-orbit"><i class="lb-ring"></i></i><i class="lb-orbit lb-orbit2"><i class="lb-ring"></i></i><i class="lb-sparks"><i></i><i></i><i></i><i></i><i></i><i></i></i></span><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span></h1>
-          <div class="hb-utils">
-            <button class="hb-pill hb-version" id="hubRelease" type="button" aria-haspopup="dialog" title="Ver novedades">Beta ${MENU_RELEASES[0].version}</button>
-            <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma" aria-expanded="false" popovertarget="hubLanguages"><img class="nm-ic" src="ui/hub/digivice/idioma.png" alt=""><span data-no-i18n>${LANG.toUpperCase()}</span><span class="hb-lang-arrow" aria-hidden="true"></span></button>
-            <div id="hubLanguages" popover="auto" role="group" aria-labelledby="rhLang" data-no-i18n>
-              ${(window.I18N?.langs || []).map(({code,name}) => `<button type="button" data-code="${code}" lang="${code}"${code === LANG ? ' aria-current="true" autofocus' : ''}><small aria-hidden="true">${code.toUpperCase()}</small>${name}</button>`).join('')}
-              <button class="hb-lang-auto" type="button" data-code="auto"><small aria-hidden="true">🌐</small>Auto · ${safeText((navigator.language || '').toUpperCase())}</button>
-            </div>
-            <button class="hb-pill hb-app" type="button" id="rhApp" aria-label="Instalar la app" title="Instalar la app"${appCanInstall() ? '' : ' hidden'}><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m-5-5 5 5 5-5M5 20h14"/></svg><span>App</span></button>
-            <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>
+        <div class="hb-utils">
+          <button class="hb-pill hb-version" id="hubRelease" type="button" aria-haspopup="dialog" title="Ver novedades">Beta ${MENU_RELEASES[0].version}</button>
+          <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma" aria-expanded="false" popovertarget="hubLanguages"><img class="nm-ic" src="ui/hub/digivice/idioma.png" alt=""><span data-no-i18n>${LANG.toUpperCase()}</span><span class="hb-lang-arrow" aria-hidden="true"></span></button>
+          <div id="hubLanguages" popover="auto" role="group" aria-labelledby="rhLang" data-no-i18n>
+            ${(window.I18N?.langs || []).map(({code,name}) => `<button type="button" data-code="${code}" lang="${code}"${code === LANG ? ' aria-current="true" autofocus' : ''}><small aria-hidden="true">${code.toUpperCase()}</small>${name}</button>`).join('')}
+            <button class="hb-lang-auto" type="button" data-code="auto"><small aria-hidden="true">🌐</small>Auto · ${safeText((navigator.language || '').toUpperCase())}</button>
           </div>
+          <button class="hb-pill hb-app" type="button" id="rhApp" aria-label="Instalar la app" title="Instalar la app"${appCanInstall() ? '' : ' hidden'}><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m-5-5 5 5 5-5M5 20h14"/></svg><span>App</span></button>
+          <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>
         </div>
         <div class="hb-user-card" role="group" aria-label="Jugador">
           <button type="button" class="hb-me" id="rhProfile"><span class="hud-portrait mini hm-pl-frame${extra.frame ? ' fr-' + extra.frame : ''}"><img id="rhProfileImg" src="${avatarSrc()}" alt=""></span><span class="hb-id"><strong>${safeText(trainerName || 'Invitado')}</strong><small>${TITLES.find(x => x.id === extra.title)?.name || (isGuest() ? t('guestTag') : t('noTitle'))}</small></span></button>
@@ -5979,9 +5990,12 @@ function showSelect(){
           <button type="button" class="hb-out" id="hmLogout" aria-label="Cerrar sesión" title="Cerrar sesión"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h5m-1-8h11m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </header>
-      ${seasonBanner()}
       <section class="hb-main">
         <div class="hb-left">
+          <div class="hb-intro">
+            <h1 class="hb-brand"><span class="hb-logo-bg" aria-hidden="true"><i class="lb-glow"></i><i class="lb-orbit"><i class="lb-ring"></i></i><i class="lb-orbit lb-orbit2"><i class="lb-ring"></i></i><i class="lb-sparks"><i></i><i></i><i></i><i></i><i></i><i></i></i></span><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span></h1>
+            ${seasonBanner()}
+          </div>
           ${life.parade}
           ${saved ? `<button type="button" class="hb-continue" id="hbContinue" aria-label="Continuar partida guardada"><i><img src="${charIcon(saved.key)}" alt=""></i><span class="hbc-txt"><small>Partida guardada</small><b>Continuar partida</b></span><span class="hbc-info"><em>${savedTxt}</em><small><span>${safeText(MAPS[saved.map].name)}</span> · <span>${safeText(DIFFS[saved.diff].name)}</span>${saved.mode === 'surv' ? ' · <span>Supervivencia</span>' : saved.weekly ? ' · <span>Reto semanal</span>' : ''}</small></span><span class="hbc-go" aria-hidden="true">▶</span></button>` : ''}
           <div class="hb-modes nm-modes">
@@ -13707,11 +13721,13 @@ function seasonStatus(data){
 function seasonBanner(){
   const data = seasonData(), total = FILE_SEASON.weeks.length;
   const next = FILE_SEASON.prizes.find(prize => prize.at > data.done);
-  const target = data.phase === 'closed' ? total : next?.at || total;
+  const target = next?.at || total;
   return `<button type="button" class="hb-season" id="hubSeason" aria-haspopup="dialog">
     <img src="ui/hub/digivice/evento.png" alt="">
-    <span class="hb-season-copy"><b>Señal de File Island</b><small>${seasonStatus(data)}</small></span>
-    <span class="hb-season-meter"><small>${data.phase === 'active' && next ? `Próximo premio · ${data.done}/${target}` : `${data.done}/${total} encargos`}</small><progress max="${target}" value="${data.done}" aria-label="Progreso de temporada"></progress></span>
+    <span class="hb-season-copy">
+      <b>Señal de File Island</b><small>${seasonStatus(data)}</small>
+      ${data.phase === 'active' ? `<progress max="${target}" value="${data.done}" aria-label="Progreso de temporada" title="${data.done}/${target}"></progress>` : ''}
+    </span>
     <span class="hb-season-next" aria-hidden="true">›</span>
   </button>`;
 }
