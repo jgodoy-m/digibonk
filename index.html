@@ -2886,7 +2886,7 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 }
 #overlay .realhub.hb .hb-record-head{
   display:flex; align-items:center; gap:7px; flex:none; width:100%; min-width:0;
-  padding:6px; border:1px solid #e2a447; border-radius:6px; text-align:left; cursor:pointer;
+  padding:6px; border:1px solid #e2a447; border-radius:6px; text-align:left;
   background:repeating-linear-gradient(135deg,#fff3be28 0 8px,transparent 8px 16px),linear-gradient(110deg,#ffd574,#ed9e36);
   color:#36230e;
 }
@@ -3027,11 +3027,6 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 #overlay .realhub.hb .nm-event b{font-size:14px!important;overflow:hidden;text-overflow:ellipsis}
 #overlay .realhub.hb .nm-event>em{flex:none;font:900 12px/1 'Nunito',sans-serif;font-style:normal;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.25)}
 /* Reto semanal: botón propio, aparte de Jugar (verde para no confundirlo con el evento ni con Jugar) */
-#overlay .realhub.hb .nm-weekly{background:linear-gradient(90deg,#0f8a5f,#2bb673)!important;box-shadow:0 3px 0 #0a5c3f,0 6px 16px rgba(0,0,0,.18)!important}
-#overlay .realhub.hb .nm-weekly>em{background:rgba(0,0,0,.22)}
-#overlay .realhub.hb .nm-weekly>span>small{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
-#overlay .realhub.hb .nm-weekly>span>b{flex:0 0 auto;max-width:70%}
-@media (orientation:landscape) and (max-height:500px){#overlay .realhub.hb .nm-weekly .nm-wk-lbl{display:none}}
 #overlay .realhub.hb .nm-event.hm-soon{background:var(--m-sunk)!important;color:var(--m-mute)!important;box-shadow:none!important}
 #overlay .realhub.hb .nm-tiles{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important}
 #overlay .realhub.hb .nm-tiles .hb-tile{padding:8px 4px 7px!important;gap:1px!important;border:1px solid var(--m-cardline)!important;border-bottom:3px solid var(--tc)!important;transition:transform .14s,box-shadow .14s!important}
@@ -3115,16 +3110,6 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 #overlay .realhub.hb .nm-eh{flex:none;min-width:0}
 #overlay .realhub.hb .nm-eh b{display:block;font-size:16px;font-weight:900;line-height:1.1}
 #overlay .realhub.hb .nm-eh small{display:block;font-size:11px;font-weight:700;color:var(--m-mute)}
-#overlay .realhub.hb .nm-eqs{flex:1;display:flex;gap:8px;min-width:0;justify-content:flex-end}
-#overlay .realhub.hb .nm-eq{flex:1;max-width:96px;min-width:0;padding:6px 8px;border-radius:10px;background:var(--m-sunk)}
-#overlay .realhub.hb .nm-eq small{display:block;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--m-mute)}
-#overlay .realhub.hb .nm-eq b{display:block;font-size:14px;font-weight:900;font-variant-numeric:tabular-nums}
-#overlay .realhub.hb .nm-eq .hb-meter{display:block;height:5px;margin-top:3px;border-radius:3px;background:var(--m-line);overflow:hidden}
-#overlay .realhub.hb .nm-eq .hb-meter i{display:block;height:100%;border-radius:3px}
-#overlay .realhub.hb .nm-eq.q-d .hb-meter i{background:#e2476b}
-#overlay .realhub.hb .nm-eq.q-w .hb-meter i{background:#12b4c8}
-#overlay .realhub.hb .nm-eq.q-e .hb-meter i{background:#8b4fe6}
-#overlay .approved-info-dialog.eq-dialog,.approved-info-dialog.eq-dialog{width:min(1040px,94vw)!important;max-width:none!important;max-height:calc(100vh - 40px);overflow-y:auto}
 .eq-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:6px 0 4px}
 .eq-grid.eq-two{grid-template-columns:repeat(2,minmax(0,1fr))}
 .eq-panel{--qc:#e2476b;display:flex;flex-direction:column;border:1px solid var(--m-line);border-top:4px solid var(--qc);border-radius:16px;background:var(--m-sunk);overflow:hidden;text-align:left}
@@ -3151,8 +3136,6 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 @media(max-width:760px){
   #overlay .realhub.hb .nm-encard{flex-wrap:wrap;gap:8px 10px;padding:10px 12px}
   #overlay .realhub.hb .nm-encard>i,#overlay .realhub.hb .nm-encard>i .nm-ic{width:34px;height:34px}
-  #overlay .realhub.hb .nm-eqs{flex-basis:100%;justify-content:stretch}
-  #overlay .realhub.hb .nm-eq{max-width:none}
 }
 /* Mismo tamaño para todos los paneles: grandes (Colección, Laboratorio, Mapa) y medianos (Ajustes, Guía, Código) */
 #overlay .picker-screen.cl4,#overlay:not(.menu-mode)>.picker-screen.ms,#overlay .picker-screen.ms,#overlay .lab-screen{width:min(1080px,94vw)!important;max-width:none!important;height:min(780px,calc(100vh - 60px))!important;max-height:none!important;box-sizing:border-box!important;overflow-y:auto}
@@ -3741,33 +3724,135 @@ html[lang] .trainer-screen .trainer-header .g-back,
   #overlay .pk2-starter .pk2-id p{font-size:13px!important;margin:2px 0 0!important}
 }
 
-/* Cabecera y señal de temporada del menú principal */
-#overlay .realhub.hb .hb-top{gap:12px 24px;align-items:center}
-#overlay .realhub.hb .hb-brand-block{display:flex;align-items:center;gap:12px 22px;flex-wrap:wrap;min-width:0}
-#overlay .realhub.hb .hb-top .hb-brand{margin:0;align-self:center}
-#overlay .realhub.hb .hb-top .hb-brand img{width:auto!important;height:clamp(70px,8.6vw,112px)!important;max-width:75vw}
-#overlay .realhub.hb .hb-user-card{gap:12px;padding:9px 8px 9px 13px;border-radius:22px;border-inline-start-color:#ffbc57;background:linear-gradient(140deg,#254c78,#162843 55%,#132039);color:#f1f7ff;box-shadow:inset 0 1px #9bd5ff40,0 5px 0 #0b172a,0 12px 25px #0004}
-#overlay .realhub.hb .hb-user-card .hb-me{height:64px;padding:3px 7px}
-#overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{width:54px!important;height:54px!important}
-#overlay .realhub.hb .hb-user-card .hb-me strong{font-size:18px!important;color:#f1f7ff;max-width:16ch}
-#overlay .realhub.hb .hb-user-card .hb-me small{font-size:12px!important;color:#b9cde6}
-#overlay .realhub.hb .hb-user-card .hb-wallet{gap:10px;border-color:#84ac905e;background:#142a32;color:#ccf5ad;padding:6px 10px;font-size:15px;box-shadow:inset 0 2px 5px #07171c}
-#overlay .realhub.hb .hb-user-card .hb-out{color:#c5d9f3}
-#overlay .realhub.hb .hb-user-card button:hover,#overlay .realhub.hb .hb-user-card button:focus-visible{background:#8dc7ff26;outline-color:#a8d8ff}
-#overlay .realhub.hb .hb-season{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(100px,190px) auto;align-items:center;gap:12px;box-sizing:border-box;position:relative;z-index:3;margin:10px clamp(14px,2vw,30px) 0;padding:8px 14px;text-align:left;border:1px solid #508b9b;border-radius:14px;background:linear-gradient(112deg,#17374c,#102334);color:#eefcff;box-shadow:0 4px 12px #0003}
-#overlay .realhub.hb .hb-season:hover{border-color:#f4bc67}
-#overlay .realhub.hb .hb-season:focus-visible{outline:2px solid #ffe0a0;outline-offset:2px}
-.hb-season img{width:34px;height:34px;object-fit:contain}
-.hb-season-copy{min-width:0}
-.hb-season-copy b,.hb-season-copy small,.hb-season-meter small{display:block}
-.hb-season-copy b{font-size:clamp(14px,1.5vw,18px);line-height:1.16}
-.hb-season-copy small,.hb-season-meter small{color:#cce3ef;font-size:12px}
-.hb-season-meter{min-width:0}
-.hb-season-meter progress,.season-dialog progress{width:100%;height:7px;accent-color:#e8a74f;display:block;margin-top:5px}
-.hb-season-next{color:#ffcb81;font-size:18px}
+/* La cabecera mantiene visibles las utilidades, el entrenador y su saldo. */
+#overlay .realhub.hb .hb-user-card{
+  --trainer-ring:color-mix(in srgb,var(--m-cardline) 72%,#549ccc);
+  min-width:min(100%,312px);gap:6px;padding:5px 6px;border:1px solid var(--trainer-ring);border-radius:18px;
+  background:linear-gradient(140deg,color-mix(in srgb,var(--m-card) 87%,#579ed0),var(--m-card) 65%);
+  box-shadow:inset 0 1px #ffffff24,0 5px 16px #071b291f
+}
+#overlay .realhub.hb .hb-trainer-face{
+  display:flex;align-items:center;gap:7px;flex:1;min-width:0;padding:3px 4px;
+  border:1px solid var(--trainer-ring);border-radius:13px;
+  background:color-mix(in srgb,var(--m-sunk) 94%,#378dc2);
+  box-shadow:inset 0 1px 3px #08162220
+}
+#overlay .realhub.hb .hb-user-card .hb-me{flex:1;height:46px;gap:8px;padding:0 3px}
+#overlay .realhub.hb .hb-user-card .hb-me:focus-visible{outline-offset:-1px}
+#overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{
+  width:42px!important;height:42px!important;border:1px solid var(--trainer-ring);box-sizing:border-box
+}
+#overlay .realhub.hb .hb-user-card .hb-me strong{font-size:16px!important;max-width:19ch}
+#overlay .realhub.hb .hb-user-card .hb-me small{font-size:11px!important;margin-top:3px}
+#overlay .realhub.hb .hb-user-card .hb-wallet{
+  --lcd-tint:#58a882;
+  flex:0 1 auto;align-self:stretch;justify-content:center;min-width:0;gap:5px;
+  padding:3px 7px;border:1px solid color-mix(in srgb,var(--m-line2) 55%,var(--lcd-tint));border-radius:8px;
+  color:var(--m-text);font:800 14px/1 'IBM Plex Mono',ui-monospace,monospace;
+  background:repeating-linear-gradient(180deg,transparent 0 3px,#385d4b10 3px 4px),
+    color-mix(in srgb,var(--m-sunk) 80%,var(--lcd-tint));
+  box-shadow:inset 0 2px 4px #061b1924
+}
+#overlay .realhub.hb .hb-user-card .hb-wallet .hb-chip img{width:17px;height:17px}
+#overlay .realhub.hb .hb-user-card .hb-out{width:36px;height:40px}
+
+/* Inicio: modos jugables arriba y actividades en la fila inferior. */
+#overlay .realhub.hb .nm-modes{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) minmax(0,.8fr)!important}
+#overlay .realhub.hb .nm-modes>.hb-mode{
+  min-width:0;flex-direction:column;justify-content:center;gap:8px;text-align:center;padding:10px 4px!important
+}
+#overlay .realhub.hb .nm-modes>.hb-mode i{margin:0}
+#overlay .realhub.hb .nm-modes>.hb-mode b{font-size:clamp(12px,1.25vw,17px)!important;overflow-wrap:anywhere}
+#overlay .realhub.hb .nm-modes>.hb-mode small{display:block;line-height:1.1}
+#overlay .realhub.hb .nm-modes .m-modes{background:linear-gradient(140deg,#4468b5,#2e4278);box-shadow:0 3px 0 #1b2b57}
+#overlay .realhub.hb .hb-activities{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:10px}
+#overlay .realhub.hb .hb-activities button{min-width:0;height:100%;box-sizing:border-box;padding:8px 10px;flex-wrap:nowrap}
+#overlay .realhub.hb .hb-activities #hubEvents{
+  background:linear-gradient(112deg,color-mix(in srgb,var(--m-card) 76%,#9070d0),var(--m-card) 82%);
+  border-inline-start:3px solid #9d79e1
+}
+#overlay .realhub.hb .hb-activities .nm-eh b,#overlay .realhub.hb .hb-activities .nm-eh small{overflow-wrap:anywhere}
+#overlay .realhub.hb .hb-activities .nm-eh b{font-size:clamp(13px,1.3vw,16px)}
+#overlay .realhub.hb .hb-activities .nm-eh small{margin-top:3px;line-height:1.2}
+.mode-options{display:grid;gap:8px}
+.mode-options button{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px;width:100%;text-align:left;border:1px solid var(--m-cardline);border-radius:11px;background:var(--m-sunk);color:var(--m-text);font:inherit;cursor:pointer}
+.mode-options button:hover,.mode-options button:focus-visible{border-color:var(--m-acc)}
+.mode-options button img{width:36px;height:36px;object-fit:contain}
+.mode-options button b,.mode-options button small{display:block}
+.mode-options button small{color:var(--m-soft)}
+@media(max-width:760px) and (orientation:portrait){
+  #overlay .realhub.hb .nm-modes{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #overlay .realhub.hb .nm-modes>.hb-play{grid-column:1/-1}
+  #overlay .realhub.hb .nm-modes>.hb-mode{flex-direction:row;text-align:left}
+  #overlay .realhub.hb .hb-activities{gap:6px}
+  #overlay .realhub.hb .hb-activities button{gap:5px;padding:6px}
+  #overlay .realhub.hb .hb-activities button>i,#overlay .realhub.hb .hb-activities button>i .nm-ic{width:29px;height:29px}
+}
+@media(orientation:landscape) and (max-height:500px){
+  #overlay .realhub.hb .hb-activities{grid-column:2;grid-row:1}
+  #overlay .realhub.hb .hb-activities button{gap:6px;padding:5px}
+  #overlay .realhub.hb .hb-activities button>i,#overlay .realhub.hb .hb-activities button>i .nm-ic{width:27px;height:27px}
+}
+
+#overlay .realhub.hb .nm-encard .nm-eh{flex:1;min-width:0}
+#overlay .realhub.hb .nm-encard .nm-eh small{overflow-wrap:anywhere}
+#overlay .realhub.hb .nm-encard:focus-visible{outline:2px solid var(--m-acc);outline-offset:2px}
+#overlay .activity-page{
+  width:min(1120px,96vw);max-height:calc(100dvh - 24px);overflow:auto;box-sizing:border-box;
+  padding:clamp(12px,2vw,24px);border:1px solid var(--m-cardline);border-radius:20px;
+  background:var(--m-card);color:var(--m-text);box-shadow:var(--m-shadow);
+  font:700 15px/1.4 Nunito,system-ui,sans-serif
+}
+.activity-page-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.activity-page-head h1{margin:0;flex:1;font-size:clamp(26px,3vw,40px);line-height:1.1}
+.activity-balance{display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:10px;background:var(--m-sunk);font-variant-numeric:tabular-nums}
+.activity-balance img{width:22px;height:22px;object-fit:contain}
+.activity-page .eq-grid{gap:clamp(8px,2vw,18px)}
+.activity-page .eq-day{--qc:#b66a12}
+.activity-page .eq-week{--qc:#6b52b9}
+.activity-page .eq-panel>header{
+  flex-wrap:wrap;padding:12px 14px;background:color-mix(in srgb,var(--m-sunk) 80%,var(--qc));
+}
+.activity-page .eq-panel>header b{font-size:clamp(21px,2.4vw,30px)}
+.activity-page .eq-panel>header small,.activity-page .eq-row>span small{color:var(--m-soft)}
+.activity-page .eq-panel>header progress{flex:0 0 100%;margin:0;accent-color:var(--qc);height:7px}
+.activity-page .eq-rows{padding-top:10px}
+.activity-page .eq-row{grid-template-columns:22px minmax(0,1fr) minmax(65px,24%);align-items:start;padding:10px}
+.activity-page .eq-row>em{grid-column:3;color:var(--m-text);text-align:right;overflow-wrap:anywhere}
+.activity-page .eq-row.done .eq-t{opacity:1;text-decoration:none}
+.event-hero{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:125px;padding:clamp(14px,3vw,30px);
+  margin:0 0 12px;border-radius:14px;color:#f3f9ff;background:linear-gradient(90deg,#101729f7,#1017299c),
+    url(ui/fondo_mundo_digital.png) center 48%/cover
+}
+.event-hero.event-christmas{background-image:linear-gradient(90deg,#17203df7,#24295a9c),url(ui/fondo_inicio.webp)}
+.event-hero h2{margin:0 0 3px;color:inherit;font-size:clamp(25px,3.4vw,42px);line-height:1.05}
+.event-hero p{margin:5px 0 0}
+.event-hero img{width:clamp(48px,10vw,108px);height:auto;flex:none;object-fit:contain;filter:drop-shadow(0 4px 6px #04122280)}
+.activity-page .season-weeks{grid-template-columns:repeat(4,minmax(0,1fr))}
+.activity-page .season-prizes{grid-template-columns:repeat(3,minmax(0,1fr))}
+.activity-page .season-weeks li,.activity-page .season-prizes li{display:grid;align-content:start;border:1px solid var(--m-cardline)}
+.activity-page .season-weeks strong,.activity-page .season-prizes strong{white-space:normal}
+@media(max-width:760px){
+  #overlay .activity-page{width:calc(100vw - 16px);max-height:calc(100dvh - 16px);border-radius:14px}
+  .activity-page .eq-grid.eq-two{grid-template-columns:1fr}
+  .activity-page .season-weeks,.activity-page .season-prizes{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:420px){
+  .activity-page .eq-row{grid-template-columns:20px minmax(0,1fr)}
+  .activity-page .eq-row>em{grid-column:2;text-align:left}
+}
+.activity-tabs{display:flex;flex-wrap:wrap;gap:5px;padding:5px;margin:4px 0 12px;border-radius:12px;background:var(--m-sunk)}
+.activity-tabs button{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:1 1 110px;padding:7px;min-height:40px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--m-soft);font:800 13px/1.15 Nunito,system-ui,sans-serif;cursor:pointer}
+.activity-tabs button[aria-selected=true]{background:var(--m-card);border-color:var(--m-cardline);color:var(--m-text);box-shadow:0 2px 4px #0001}
+.activity-tabs button:focus-visible{outline:2px solid var(--m-acc);outline-offset:-2px}
+.activity-tabs img{width:22px;height:22px;object-fit:contain}
+.activity-panel:focus-visible{outline:2px solid var(--m-acc);outline-offset:3px;border-radius:8px}
+.activity-panel .eq-grid.eq-single{grid-template-columns:1fr}
+.activity-panel .activity-action{margin-top:10px}
+.season-dialog progress{width:100%;height:5px;accent-color:#db9236;display:block;margin-top:5px}
 .season-dialog article{border:1px solid var(--m-cardline);border-radius:12px;padding:10px 12px;background:var(--m-sunk)}
 .season-dialog .season-summary{display:flex;align-items:center;gap:12px}
-.season-summary img{width:42px;height:42px;object-fit:contain}
 .season-summary div{flex:1}
 .season-dialog small{display:block;color:var(--m-mute)}
 .season-weeks,.season-prizes{display:grid;gap:6px;margin:10px 0;padding:0;list-style:none}
@@ -3776,39 +3861,27 @@ html[lang] .trainer-screen .trainer-header .g-back,
 .season-weeks li>strong,.season-prizes li>strong{white-space:nowrap;color:var(--m-acc)}
 .season-dialog button.season-mode{display:inline-flex;margin:4px 0 10px}
 @media(max-width:760px){
-  #overlay .realhub.hb .hb-top{gap:8px}
-  #overlay .realhub.hb .hb-brand-block{width:100%;justify-content:space-between;gap:5px 12px}
-  #overlay .realhub.hb .hb-top .hb-brand img{height:clamp(52px,13vw,76px)!important;max-width:100%;object-fit:contain}
-  #overlay .realhub.hb .hb-user-card{padding:5px 7px;gap:6px}
-  #overlay .realhub.hb .hb-user-card .hb-me{height:52px}
-  #overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{width:42px!important;height:42px!important}
-  #overlay .realhub.hb .hb-user-card .hb-me strong{font-size:16px!important}
-  #overlay .realhub.hb .hb-season{margin-inline:12px;gap:8px;grid-template-columns:auto minmax(0,1fr) minmax(48px,32%) auto;padding-inline:8px}
+  #overlay .realhub.hb .hb-user-card{padding:4px 6px}
+  #overlay .realhub.hb .hb-user-card .hb-me{height:43px}
+  #overlay .realhub.hb .hb-user-card .hb-wallet{padding-inline:5px;font-size:12px}
+  #overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{width:40px!important;height:40px!important}
 }
 @media(orientation:landscape) and (max-height:500px){
-  #overlay .realhub.hb .hb-brand-block{width:auto}
-  #overlay .realhub.hb .hb-user-card .hb-me{height:38px}
+  #overlay .realhub.hb .hb-user-card .hb-me{height:34px}
   #overlay .realhub.hb .hb-user-card .hb-me .hud-portrait{width:32px!important;height:32px!important}
-  #overlay .realhub.hb .hb-user-card{flex:0 1 auto;padding-block:3px}
-  #overlay .realhub.hb .hb-season{padding-block:4px;margin-top:6px}
+  #overlay .realhub.hb .hb-user-card{flex:0 1 auto;min-width:0;padding:2px 5px}
 }
 
 /* Móvil en horizontal (poca altura): el inicio cabe sin desplazarse. Sin logo; a la izquierda Jugar y los modos,
-   a la derecha encargos, evento y accesos en una cuadrícula de 3×2 */
+   a la derecha encargos y accesos en una cuadrícula de 3×2 */
 @media (orientation:landscape) and (max-height:500px){
   #overlay .realhub.hb .hb-brand{display:none!important}
   #overlay .realhub.hb .hb-main{display:block!important;padding:6px 12px 6px!important}
   #overlay .realhub.hb .hb-left{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)!important;grid-auto-rows:auto;align-content:start;gap:7px 12px!important;width:100%!important;max-width:none!important;margin:0!important}
   #overlay .realhub.hb .hb-left>*{margin:0!important;min-width:0}
   #overlay .realhub.hb .hb-modes{grid-column:1;grid-row:1 / span 2;align-self:start}
-  #overlay .realhub.hb #mWeekly{grid-column:1;grid-row:3;align-self:start;min-height:0!important;height:34px!important}
-  #overlay .realhub.hb .hb-left:has(#mWeekly) .hb-play{height:clamp(96px,29vh,132px)!important}
-  #overlay .realhub.hb .hb-left:has(#mWeekly) .nm-play .hb-play-face>*{width:min(116px,calc(29vh - 22px))!important;height:min(116px,calc(29vh - 22px))!important}
   #overlay .realhub.hb .hb-play{min-height:0!important;height:clamp(120px,40vh,170px)!important}
-  #overlay .realhub.hb #mEnc{grid-column:2;grid-row:1;padding:6px 10px!important;min-height:0!important}
-  #overlay .realhub.hb #mEnc .nm-eqs{font-size:11px!important;gap:2px!important}
-  #overlay .realhub.hb #rhEvent{grid-column:2;grid-row:2;min-height:0!important;height:34px!important}
-  #overlay .realhub.hb .hb-tiles{grid-column:2;grid-row:3;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
+  #overlay .realhub.hb .hb-tiles{grid-column:2;grid-row:2 / span 2;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
   #overlay .realhub.hb .nm-tiles .hb-tile{min-height:0!important;height:50px!important;padding:3px 4px!important;flex-direction:row!important;gap:6px!important;justify-content:flex-start!important}
   #overlay .realhub.hb .nm-tiles .hb-tile i{margin:0!important;flex:none}
   #overlay .realhub.hb .nm-tiles .hb-tile i img{width:24px!important;height:24px!important}
@@ -4132,8 +4205,6 @@ body.is-touch #overlay :is(button,.g-back) kbd{display:none!important}
   #overlay .realhub.hb .nm-tiles .hb-tile i{width:34px!important;height:34px!important;margin:0!important}
   #overlay .realhub.hb .nm-tiles .hb-tile i .nm-ic{width:34px!important;height:34px!important}
   #overlay .realhub.hb .nm-tiles .hb-tile b{font-size:11px!important;letter-spacing:-.1px}
-  #overlay .realhub.hb .nm-weekly>span>small{flex:none!important;overflow:visible!important}
-  #overlay .realhub.hb .nm-weekly>span>b{flex:0 1 auto!important;min-width:0;max-width:none!important}
   /* Reto semanal: los hitos se leen enteros (dos líneas si hace falta) */
   .rt-hitos span{white-space:normal!important;overflow:visible!important;line-height:1.15}
   /* Laboratorio y Ficha: cabeceras más bajas */
@@ -5258,6 +5329,9 @@ addEventListener('keydown', e => {
   audioInit();
   // Esc cierra las ventanas del menú (Logros, Encargos, Récords…) antes que nada
   if (k === 'escape'){ const x = overlay.querySelector('.approved-info-scrim #realClose'); if (x){ x.click(); return; } }
+  if (state === 'quests' || state === 'events'){
+    if (k === 'escape'){ returnFromActivityPage(state === 'events' ? 'hubEvents' : 'mEnc'); return; }
+  }
   if (state === 'savecode'){ if (k === 'escape') showSettings(); return; }
   if (state === 'logros'){ if (k === 'escape') document.getElementById('achBack').click(); return; }
   if (state === 'cloud' || state === 'ranking'){ if (k === 'escape'){ const b = document.getElementById(state === 'cloud' ? 'cdBack' : 'rkBack'); if (b) b.click(); } return; }
@@ -5309,7 +5383,7 @@ addEventListener('keydown', e => {
   else if (state === 'reto'){
     if (k === 'enter') startGame(selectedKey);
     else if (k === 'c') showPicker('personaje');
-    else if (k === 'escape') showSelect();
+    else if (k === 'escape') returnFromWeekly();
   }
   else if (state === 'mapsel'){
     const i = MAP_ORDER.indexOf(runMap);
@@ -5804,7 +5878,7 @@ function masteryHtml(k){
 }
 // ---------- Navegación con flechas y Enter en los menús ----------
 // Las flechas mueven el foco al botón más cercano en esa dirección; Enter pulsa el botón enfocado
-const MENU_NAV = ['select', 'gacha', 'lab', 'settings', 'player', 'collection', 'paused', 'end', 'levelup', 'savecode', 'cloud', 'ranking', 'credits'];
+const MENU_NAV = ['select', 'quests', 'events', 'gacha', 'lab', 'settings', 'player', 'collection', 'paused', 'end', 'levelup', 'savecode', 'cloud', 'ranking', 'credits'];
 function menuNavRoot(){
   const pz = document.getElementById('pause');
   if (pz && !pz.classList.contains('hidden') && pz.firstElementChild) return pz;
@@ -6012,8 +6086,7 @@ function showSelect(){
   const currentRuns = Math.min(DAILY.runsGoal, d.runs || 0);
   const safeText = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const choice = CHARS[selectedKey] || CHARS.agumon;
-  const dbEvDays = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
-  const qs = questSummary();
+  const daily = dailyQuestSummary(), featured = featuredActivity();
   const labReady = LAB.filter(u => labLv(u.id) < labMax(u) && labCosts(u)[labLv(u.id)] <= SAVE.bits).length;
   syncRewards();   // lo ya conseguido antes de existir estos premios se da al volver al menú
   const achAll = achItems().length, achOwned = achDoneCount();
@@ -6024,31 +6097,30 @@ function showSelect(){
     <main class="realhub hb" aria-label="Menú principal Digibonk">
       <div class="real-world" aria-hidden="true">${life.stage}</div>
       <header class="hb-top">
-        <div class="hb-brand-block">
-          <h1 class="hb-brand"><span class="hb-logo-bg" aria-hidden="true"><i class="lb-glow"></i><i class="lb-orbit"><i class="lb-ring"></i></i><i class="lb-orbit lb-orbit2"><i class="lb-ring"></i></i><i class="lb-sparks"><i></i><i></i><i></i><i></i><i></i><i></i></i></span><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span></h1>
-          <div class="hb-utils">
-            <button class="hb-pill hb-version" id="hubRelease" type="button" aria-haspopup="dialog" title="Ver novedades">Beta ${MENU_RELEASES[0].version}</button>
-            <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma" aria-expanded="false" popovertarget="hubLanguages"><img class="nm-ic" src="ui/hub/digivice/idioma.png" alt=""><span data-no-i18n>${LANG.toUpperCase()}</span><span class="hb-lang-arrow" aria-hidden="true"></span></button>
-            <div id="hubLanguages" popover="auto" role="group" aria-labelledby="rhLang" data-no-i18n>
-              ${(window.I18N?.langs || []).map(({code,name}) => `<button type="button" data-code="${code}" lang="${code}"${code === LANG ? ' aria-current="true" autofocus' : ''}><small aria-hidden="true">${code.toUpperCase()}</small>${name}</button>`).join('')}
-              <button class="hb-lang-auto" type="button" data-code="auto"><small aria-hidden="true">🌐</small>Auto · ${safeText((navigator.language || '').toUpperCase())}</button>
-            </div>
-            <button class="hb-pill hb-app" type="button" id="rhApp" aria-label="Instalar la app" title="Instalar la app"${appCanInstall() ? '' : ' hidden'}><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m-5-5 5 5 5-5M5 20h14"/></svg><span>App</span></button>
-            <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>
+        <div class="hb-utils">
+          <button class="hb-pill hb-version" id="hubRelease" type="button" aria-haspopup="dialog" title="Ver novedades">Beta ${MENU_RELEASES[0].version}</button>
+          <button class="hb-pill" type="button" id="rhLang" aria-label="Idioma" aria-expanded="false" popovertarget="hubLanguages"><img class="nm-ic" src="ui/hub/digivice/idioma.png" alt=""><span data-no-i18n>${LANG.toUpperCase()}</span><span class="hb-lang-arrow" aria-hidden="true"></span></button>
+          <div id="hubLanguages" popover="auto" role="group" aria-labelledby="rhLang" data-no-i18n>
+            ${(window.I18N?.langs || []).map(({code,name}) => `<button type="button" data-code="${code}" lang="${code}"${code === LANG ? ' aria-current="true" autofocus' : ''}><small aria-hidden="true">${code.toUpperCase()}</small>${name}</button>`).join('')}
+            <button class="hb-lang-auto" type="button" data-code="auto"><small aria-hidden="true">🌐</small>Auto · ${safeText((navigator.language || '').toUpperCase())}</button>
           </div>
+          <button class="hb-pill hb-app" type="button" id="rhApp" aria-label="Instalar la app" title="Instalar la app"${appCanInstall() ? '' : ' hidden'}><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m-5-5 5 5 5-5M5 20h14"/></svg><span>App</span></button>
+          <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>
         </div>
         <div class="hb-user-card" role="group" aria-label="Jugador">
-          <button type="button" class="hb-me" id="rhProfile"><span class="hud-portrait mini hm-pl-frame${extra.frame ? ' fr-' + extra.frame : ''}"><img id="rhProfileImg" src="${avatarSrc()}" alt=""></span><span class="hb-id"><strong>${safeText(trainerName || 'Invitado')}</strong><small>${TITLES.find(x => x.id === extra.title)?.name || (isGuest() ? t('guestTag') : t('noTitle'))}</small></span></button>
-          <div class="hb-wallet">
-            <span class="hb-chip" title="${SAVE.bits.toLocaleString('es-ES')} Bits"><img src="ui/hud/ic_bits.webp" alt="Bits"><span>${SAVE.bits.toLocaleString('es-ES')}</span></span>
-            ${GACHA_SOON ? '' : `<span class="hb-chip" title="${usableTickets('std')} Tickets"><img src="ui/hud/ic_ticket.webp" alt="Tickets"><span>${usableTickets('std')}</span></span>`}
+          <div class="hb-trainer-face">
+            <button type="button" class="hb-me" id="rhProfile"><span class="hud-portrait mini hm-pl-frame${extra.frame ? ' fr-' + extra.frame : ''}"><img id="rhProfileImg" src="${avatarSrc()}" alt=""></span><span class="hb-id"><strong>${safeText(trainerName || 'Invitado')}</strong><small>${TITLES.find(x => x.id === extra.title)?.name || (isGuest() ? t('guestTag') : t('noTitle'))}</small></span></button>
+            <div class="hb-wallet">
+              <span class="hb-chip" title="${SAVE.bits.toLocaleString('es-ES')} Bits"><img src="ui/hud/ic_bits.webp" alt="Bits"><span>${SAVE.bits.toLocaleString('es-ES')}</span></span>
+              ${GACHA_SOON ? '' : `<span class="hb-chip" title="${usableTickets('std')} Tickets"><img src="ui/hud/ic_ticket.webp" alt="Tickets"><span>${usableTickets('std')}</span></span>`}
+            </div>
           </div>
           <button type="button" class="hb-out" id="hmLogout" aria-label="Cerrar sesión" title="Cerrar sesión"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h5m-1-8h11m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </header>
-      ${seasonBanner()}
       <section class="hb-main">
         <div class="hb-left">
+          <h1 class="hb-brand"><span class="hb-logo-bg" aria-hidden="true"><i class="lb-glow"></i><i class="lb-orbit"><i class="lb-ring"></i></i><i class="lb-orbit lb-orbit2"><i class="lb-ring"></i></i><i class="lb-sparks"><i></i><i></i><i></i><i></i><i></i><i></i></i></span><span class="logo-fx"><img src="ui/logo_digibonk.webp" alt="DIGIBONK"></span></h1>
           ${life.parade}
           ${saved ? `<button type="button" class="hb-continue" id="hbContinue" aria-label="Continuar partida guardada"><i><img src="${charIcon(saved.key)}" alt=""></i><span class="hbc-txt"><small>Partida guardada</small><b>Continuar partida</b></span><span class="hbc-info"><em>${savedTxt}</em><small><span>${safeText(MAPS[saved.map].name)}</span> · <span>${safeText(DIFFS[saved.diff].name)}</span>${saved.mode === 'surv' ? ' · <span>Supervivencia</span>' : saved.weekly ? ' · <span>Reto semanal</span>' : ''}</small></span><span class="hbc-go" aria-hidden="true">▶</span></button>` : ''}
           <div class="hb-modes nm-modes">
@@ -6057,14 +6129,21 @@ function showSelect(){
               <span class="hb-play-face">${animEl(spriteOf(selectedKey, false), 'hb-face')}</span>
               <span class="lv-sheen"></span><span class="nm-band"><span class="hb-dev"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span>Modo clásico · <b>${safeText(choice.name)}</b></span></span>
             </button>
-            <div class="hb-stack nm-stack">
-              <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i><img class="nm-ic" src="ui/hub/digivice/supervivencia.png" alt=""></i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
-              ${!GACHA_SOON ? `<button type="button" class="hb-mode m-gacha" id="hbGacha3" aria-label="Incubadora: ${usableTickets('std')} tickets disponibles"><i><img class="nm-ic" src="ui/hub/digivice/incubadora.png" alt=""></i><span><b>Incubadora</b><small><em class="nm-tix">${usableTickets('std')}</em> tickets<span class="nm-long"> disponibles</span></small></span></button>` : `<button type="button" class="hb-mode m-gacha" id="hbShop" aria-label="Tienda: rotación semanal"><i><img class="nm-ic" src="ui/hub/digivice/tienda.png" alt=""></i><span><b>Tienda</b><small>Rotación semanal</small></span></button>`}
-            </div>
+            <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i><img class="nm-ic" src="ui/hub/digivice/supervivencia.png" alt=""></i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
+            <button type="button" class="hb-mode m-modes" id="mModes" aria-haspopup="dialog">
+              <i><img class="nm-ic" src="ui/hub/digivice/reto.png" alt=""></i><span><b>Modos</b><small>3 modos de juego</small></span>
+            </button>
           </div>
-          <button type="button" class="hb-event nm-event nm-weekly" id="mWeekly" aria-label="Reto semanal: ${safeText(weeklyMod().name)}" title="${safeText(weeklyMod().d)}"><i><img class="nm-ic" src="ui/hub/digivice/reto.png" alt=""></i><span><small>Reto semanal</small><b>${weeklyMod().name}</b></span><em><span class="nm-wk-lbl">Hitos</span> ${retoState().done.length}/${RETO_HITOS.length}</em></button>
-          <button type="button" class="nm-quests nm-encard" id="mEnc" aria-label="Encargos: hoy ${qs.day.done} de ${qs.day.all}, semana ${qs.week.done} de ${qs.week.all}${qs.ev ? ', evento ' + qs.ev.done + ' de ' + qs.ev.all : ''}"><i><img class="nm-ic" src="ui/hub/digivice/encargos.png" alt=""></i><span class="nm-eh"><b>Encargos</b><small>${qs.ev ? 'Diarios, semanales y de evento' : 'Diarios y semanales'}</small></span><span class="nm-eqs">${[['Hoy', qs.day, 'q-d'], ['Semana', qs.week, 'q-w'], ...(qs.ev ? [['Evento', qs.ev, 'q-e']] : [])].map(([n, q, c]) => `<span class="nm-eq ${c}"><small>${n}</small><b>${q.done}/${q.all}</b><span class="hb-meter"><i style="width:${Math.round(q.done / q.all * 100)}%"></i></span></span>`).join('')}</span></button>
-          ${(!GACHA_SOON ? (bannerOpen("navidadP") || bannerOpen("navidadR")) : eventActive()) ? `<button class="hb-event nm-event" id="rhEvent" type="button" aria-label="Evento Digimon: Papá Noel y Reno, quedan ${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}"><i><img class="nm-ic" src="ui/hub/digivice/evento.png" alt=""></i><span class="lv-sheen"></span><span><small>Evento</small><b>Papá Noel y Reno</b></span><em>${dbEvDays} ${dbEvDays === 1 ? 'día' : 'días'}</em></button>` : `<button type="button" class="hb-event nm-event hm-soon" id="mEvent"><i>★</i><span><small>Evento</small><b>Próximamente</b></span></button>`}
+          <div class="hb-activities">
+            <button type="button" class="nm-quests nm-encard" id="hubEvents" aria-haspopup="dialog">
+              <i><img class="nm-ic" src="ui/hub/digivice/${featured.icon}.png" alt=""></i>
+              <span class="nm-eh"><b>${featured.title}</b><small>${featured.status}</small></span>
+            </button>
+            <button type="button" class="nm-quests nm-encard" id="mEnc" aria-haspopup="dialog">
+              <i><img class="nm-ic" src="ui/hub/digivice/encargos.png" alt=""></i>
+              <span class="nm-eh"><b>Encargos</b><small>Hoy · ${daily.done}/${daily.all}</small></span>
+            </button>
+          </div>
           <div class="hb-tiles nm-tiles">
             <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex: ${pickProgress().done} de ${pickProgress().total} Digimon"><i><img class="nm-ic" src="ui/hub/digivice/digidex.png" alt=""></i><b>Digidex</b><small>${pickProgress().done}/${pickProgress().total} Digimon</small></button>
             <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio${labReady ? ': ' + labReady + ' mejoras disponibles' : ''}"><i><img class="nm-ic" src="ui/hub/digivice/laboratorio.png" alt=""></i><b>Laboratorio</b><small>${labReady ? labReady + (labReady === 1 ? ' mejora' : ' mejoras') : 'Mejoras'}</small>${labReady ? '<em class="nm-dot" aria-hidden="true"></em>' : ''}</button>
@@ -6074,6 +6153,7 @@ function showSelect(){
             <button type="button" class="hb-tile t7" id="btnPlayer" aria-label="Jugador"><i><img class="nm-ic" src="ui/hub/digivice/jugador.png" alt=""></i><b>Jugador</b><small>Perfil y marcos</small></button>
           </div>
           <nav class="hb-bar" aria-label="Enlaces y ajustes">
+            ${GACHA_SOON ? '<button type="button" class="hb-btn" id="hbShop" aria-label="Tienda semanal" title="Tienda semanal"><img class="nm-ic" src="ui/hub/digivice/tienda.png" alt=""><span class="nm-lbl">Tienda</span></button>' : '<button type="button" class="hb-btn" id="hbGacha3" aria-label="Incubadora" title="Incubadora"><img class="nm-ic" src="ui/hub/digivice/incubadora.png" alt=""><span class="nm-lbl">Incubadora</span></button>'}
             <button type="button" class="hb-btn" id="btnAjustes" aria-label="Ajustes"><img class="nm-ic" src="ui/hub/digivice/ajustes.png" alt=""><span class="nm-lbl">Ajustes</span></button>
             <button type="button" class="hb-btn" id="btnHelp" aria-label="Guía"><img class="nm-ic" src="ui/hub/digivice/guia.png" alt=""><span class="nm-lbl">Guía</span></button>
             <button type="button" class="hb-btn" id="mBug" aria-label="Reportar bugs en Discord" title="Reportar bugs en Discord"><img class="nm-ic" src="ui/hub/digivice/bugs.png" alt=""><span class="nm-lbl">Bugs</span></button>
@@ -6089,10 +6169,10 @@ function showSelect(){
         </div>
         <aside class="hb-record-device" aria-labelledby="hbRecordsTitle">
           <div class="hb-record-screen">
-            <button type="button" class="hb-record-head" id="hubRecordsSeason" aria-haspopup="dialog">
-              <img src="ui/hub/digivice/evento.png" alt="">
-              <span><b id="hbRecordsTitle">Señal de File Island</b><small>${seasonStatus(seasonData())}</small></span>
-            </button>
+            <div class="hb-record-head">
+              <img src="ui/hub/digivice/ranking.png" alt="">
+              <span><b id="hbRecordsTitle">Tus récords</b><small>Récords personales</small></span>
+            </div>
             <div class="hb-tabs" role="tablist" aria-label="Ordenar récords">
               <button type="button" role="tab" id="hbRecordsKills" aria-selected="true" aria-controls="hbRecordsPanel" data-k="kills">Bajas</button>
               <button type="button" role="tab" id="hbRecordsTrial" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="trial">Contrarreloj</button>
@@ -6131,9 +6211,7 @@ function showSelect(){
   if(!avatarIcon() && !PLAYER_ICONS.some(x => x.id === avatarKey())) headUrl(spriteOf(avatarKey(),false), data => { const im=document.getElementById('rhProfileImg'); if(im)im.src=data; });
   document.getElementById('playBtn').onclick=()=>{ runMode='normal'; runWeekly=false; restoreRunPrefs(); showPicker('personaje'); };
   // Reto semanal: modo aparte con su propia pantalla (mapa, dificultad y regla fijos de la semana)
-  document.getElementById('mWeekly').onclick=()=>{ runMode='normal'; runWeekly=true; showReto(); };
   { const el = document.getElementById('hbContinue'); if (el) el.onclick = runContinue; }
-  const evEl = document.getElementById('rhEvent'); if (evEl) evEl.onclick = () => { if (GACHA_SOON) return showEncargos(); gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR'; showGacha(); };
   { const el = document.getElementById('hbShop'); if (el) el.onclick = () => showShop(); }
   document.getElementById('btnColl').onclick=showCollection;
   document.getElementById('btnPlayer').onclick=showPlayer;
@@ -6147,7 +6225,9 @@ function showSelect(){
   const hmSoon=(msg)=>{const m=document.getElementById('hmMsg'); if(!m) return; m.textContent=msg||'Próximamente'; clearTimeout(m._t); m._t=setTimeout(()=>{m.textContent='';},1800);};
   ['mEvent','mRank','mBuild'].forEach(id=>{const el=document.getElementById(id); if(el) el.onclick=()=>hmSoon('Próximamente');});
   document.getElementById('mSurv').onclick=()=>{ runMode='surv'; runWeekly=false; restoreRunPrefs(); showPicker('personaje'); };
-  document.getElementById('mEnc').onclick=showEncargos;
+  document.getElementById('mEnc').onclick = showEncargos;
+  document.getElementById('hubEvents').onclick = () => showEvents(featured.tab);
+  document.getElementById('mModes').onclick = event => showModes(event.currentTarget);
   document.getElementById('mLog').onclick=showLogros;
   document.getElementById('hbRankOnline').onclick = () => showRanking('select');
   document.getElementById('mBug').onclick=()=>{
@@ -6170,7 +6250,6 @@ function showSelect(){
   document.getElementById('rhProfile').onclick=showPlayer;
   bindHubLanguages();
   document.getElementById('hubRelease').onclick = e => showMenuRelease(e.currentTarget);
-  document.getElementById('hubSeason').onclick = e => showSeason(e.currentTarget);
   document.getElementById('rhApp').onclick=()=>installEvt?installApp():openInfo('app');
   document.getElementById('rhFullscreen').onclick=()=>{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{})};
   bindMenuFX();
@@ -6196,7 +6275,6 @@ function showSelect(){
     host.querySelector('#realClose').focus();
   };
   document.getElementById('rhRecords').onclick=event=>openInfo('records',event.currentTarget);
-  document.getElementById('hubRecordsSeason').onclick=event=>showSeason(event.currentTarget);
   { const ol = document.getElementById('hbRank'), panel = document.getElementById('hbRecordsPanel');
     const tabs = [...document.querySelectorAll('.hb-record-screen .hb-tabs button')];
     const summary = document.getElementById('hbRecordsSummary');
@@ -7319,6 +7397,16 @@ function showMapSelect(){
 /* ---------- Reto semanal: pantalla propia del modo ----------
    Sustituye a «Elige mapa»: el mapa, la dificultad, la regla y la semilla son los de la semana y no se cambian.
    Solo se elige el Digimon. Tiene su propia marca semanal (puntos) y sus hitos. */
+let weeklyEntry = 'modes';
+function beginWeeklyFrom(entry){
+  weeklyEntry = entry;
+  showReto();
+}
+function returnFromWeekly(){
+  if (weeklyEntry === 'events'){ showEvents('season'); return; }
+  showSelect();
+  showModes(document.getElementById('mModes'));
+}
 function showReto(){
   runMode = 'normal'; runWeekly = true;
   state = 'reto';
@@ -7332,7 +7420,7 @@ function showReto(){
   showOverlay(`
     <div class="rt-screen rt">
       <header class="rt-top">
-        <button class="g-back" id="rtBack"><kbd>Esc</kbd> Menú</button>
+        <button class="g-back" id="rtBack"><kbd>Esc</kbd> Volver</button>
         <h2 class="rt-title"><small>Modo</small>Reto semanal</h2>
         <span class="rt-week"><b>Semana ${weekNum() % 1000}</b><small>Termina en ${retoLeft()}</small></span>
       </header>
@@ -7361,7 +7449,7 @@ function showReto(){
       </div>
       <footer class="rt-foot"><span class="rt-sum">${CHARS[k].name} · ${m.name} · ${d.name} · ${mod.name}</span><button type="button" class="rt-go" id="rtStart">¡Empezar reto! <kbd>Enter</kbd></button></footer>
     </div>`);
-  document.getElementById('rtBack').onclick = () => showSelect();
+  document.getElementById('rtBack').onclick = returnFromWeekly;
   document.getElementById('rtPick').onclick = () => showPicker('personaje');
   { const el = document.getElementById('rtStar'); if (el) el.onclick = () => { selectedKey = star; showReto(); }; }
   document.getElementById('rtStart').onclick = () => startGame(selectedKey);
@@ -12381,34 +12469,134 @@ function checkLongQuests(win){
   return won;
 }
 // Resumen para la tarjeta del menú: hechos/total de hoy, de la semana y del evento
-function questSummary(){
-  const d = loadDaily(), enc = loadEncargos().list, wk = weekState(), wq = weekQuestState();
-  const day = {done: (d.claimed || d.runs >= DAILY.runsGoal ? 1 : 0) + enc.filter(e => e.done).length, all: 1 + enc.length};
-  const week = {done: (!GACHA_SOON && wk.claimed ? 1 : 0) + wq.done.length, all: (!GACHA_SOON ? 1 : 0) + WEEK_QUESTS.length};
-  const ev = eventActive() ? {done: eventQuestState().done.length, all: EVENT_QUESTS.length} : null;
-  return {day, week, ev};
+function dailyQuestSummary(){
+  const day = loadDaily(), enc = loadEncargos().list;
+  return {done: Number(day.claimed || day.runs >= DAILY.runsGoal) + enc.filter(task => task.done).length, all:1 + enc.length};
 }
-// Ventana de encargos: tres paneles grandes (diarios, semanales y de evento si hay uno activo)
-function showEncargos(){
+function featuredActivity(){
+  const season = seasonData();
+  if (season.phase !== 'active' && eventActive()){
+    const days = Math.ceil((EVENT.end - Date.now()) / 86400000);
+    return {tab:'christmas',icon:'evento',title:EVENT.name,status:days === 1 ? 'Queda 1 día' : `Quedan ${days} días`};
+  }
+  return {tab:'season',icon:'file-island',title:'Señal de File Island',status:seasonStatus(season)};
+}
+// Los encargos del evento y los habituales usan las mismas filas y recompensas.
+function questPanels(eventOnly = false){
   const d = loadDaily(), enc = loadEncargos(), wk = weekState(), wq = weekQuestState(), ev = eventActive() ? eventQuestState() : null;
   const fmt = n => Number(n).toLocaleString('es-ES');
   const rw = (b, t) => GACHA_SOON ? (b ? '+' + fmt(b) + ' Bits' : '') : `${b ? '+' + fmt(b) + ' Bits · ' : ''}+${t} ${t === 1 ? 'ticket' : 'tickets'}`;
   const row = (done, txt, prog, goal, reward) => `<div class="eq-row${done ? ' done' : ''}"><b aria-hidden="true">${done ? '✓' : ''}</b><span><span class="eq-t">${txt}</span>${goal > 1 ? `<span class="eq-bar"><i style="width:${Math.round(Math.min(prog, goal) / goal * 100)}%"></i></span><small>${fmt(Math.min(prog, goal))}/${fmt(goal)}</small>` : ''}</span><em>${reward}</em></div>`;
-  const panel = (cls, icon, title, sub, rows, done, all) => `<section class="eq-panel ${cls}"><header><img src="ui/hub/${icon}.webp" alt=""><span><b>${title}</b><small>${sub}</small></span><em>${done}/${all}</em></header><div class="eq-rows">${rows.join('')}</div></section>`;
+  const panel = (cls, icon, title, sub, rows, done, all) => `<section class="eq-panel ${cls}"><header><img src="ui/hub/${icon}.webp" alt=""><span><b>${title}</b><small>${sub}</small></span><em>${done}/${all}</em><progress max="${all}" value="${done}" aria-label="${title}"></progress></header><div class="eq-rows">${rows.join('')}</div></section>`;
   const dayDone = d.claimed || d.runs >= DAILY.runsGoal;
   const dayRows = [row(dayDone, `Juega ${DAILY.runsGoal} partidas`, d.runs, DAILY.runsGoal, rw(DAILY.reward, DAILY.rewardTix)), ...enc.list.map(e => row(e.done, encText(e), e.done ? 1 : 0, 1, rw(ENC_REWARD.bits, ENC_REWARD.tix)))];
   const weekRows = [...(!GACHA_SOON ? [row(wk.claimed, `Haz ${WEEK_PULLS} tiradas en la Incubadora`, wk.pulls, WEEK_PULLS, rw(0, 1))] : []), ...WEEK_QUESTS.map(q => row(wq.done.includes(q.id), q.t, questProg(wq, q), q.goal, rw(q.bits, q.tix) + (q.obj && !wq.done.includes(q.id) && weekItem() ? '<br><span class="eq-prize">+ Objeto: ' + ITEMS[weekItem()].name + '</span>' : '')))];
   const days = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
   const parts = [
-    panel('eq-day', 'ic_mision', 'Diarios', 'Se renuevan cada día', dayRows, dayRows.filter(r => r.includes(' done"')).length, dayRows.length),
-    panel('eq-week', 'ic_encargos', 'Semanales', `Se renuevan cada lunes · ${weeklyMod().name}`, weekRows, weekRows.filter(r => r.includes(' done"')).length, weekRows.length)
+    panel('eq-day', 'ic_mision', 'Hoy', `Nuevos encargos en ${dailyQuestsLeft()}`, dayRows, dayRows.filter(r => r.includes(' done"')).length, dayRows.length),
+    panel('eq-week', 'ic_encargos', 'Esta semana', `Nuevos encargos en ${retoLeft()}`, weekRows, weekRows.filter(r => r.includes(' done"')).length, weekRows.length)
   ];
-  if (ev){
+  if (eventOnly && ev){
     const evRows = EVENT_QUESTS.map(q => row(ev.done.includes(q.id), q.t, questProg(ev, q), q.goal, rw(q.bits, q.tix) + (q.vale || q.extra ? '<br><span class="eq-prize">+ ' + eventPrizeText(q) + '</span>' : '')));
-    parts.push(panel('eq-ev', 'ic_evento', 'Evento', `${EVENT.name} · quedan ${days} ${days === 1 ? 'día' : 'días'}`, evRows, ev.done.length, evRows.length));
+    return `<div class="eq-grid eq-single">${panel('eq-ev', 'ic_evento', EVENT.name,
+      `Quedan ${days} ${days === 1 ? 'día' : 'días'}`, evRows, ev.done.length, evRows.length)}</div>`;
   }
-  menuModal('Encargos', `<div class="eq-grid${ev ? '' : ' eq-two'}">${parts.join('')}</div><p class="enc-note">Los diarios se renuevan cada día. Los semanales y los de evento suman lo que haces en todas tus partidas. Semana: <b>${weeklyMod().name}</b> · ${weeklyMod().d} <span>Solo se aplica en el Reto semanal, que tiene su propio botón en el menú.</span></p>`);
-  const dlg = document.querySelector('#realModalHost .approved-info-dialog'); if (dlg) dlg.classList.add('eq-dialog');
+  return `<div class="eq-grid eq-two">${parts.join('')}</div>`;
+}
+function dailyQuestsLeft(now = Date.now()){
+  const tomorrow = new Date(now);
+  tomorrow.setHours(24, 0, 0, 0);
+  const minutes = Math.ceil((tomorrow.getTime() - now) / 60000);
+  return `${Math.floor(minutes / 60)} h ${minutes % 60} min`;
+}
+function returnFromActivityPage(buttonId){
+  showSelect();
+  document.getElementById(buttonId)?.focus({preventScroll:true});
+}
+function showActivityPage(page, title, content, balance = ''){
+  state = page;
+  setHud(false);
+  showOverlay(`<main class="activity-page" aria-labelledby="activityPageTitle">
+    <header class="activity-page-head"><button type="button" class="g-back" id="activityBack">Volver</button>
+      <h1 id="activityPageTitle">${title}</h1>${balance}</header>
+    ${content}</main>`);
+  const back = document.getElementById('activityBack');
+  back.onclick = () => returnFromActivityPage(page === 'events' ? 'hubEvents' : 'mEnc');
+  back.focus({preventScroll:true});
+}
+function showEncargos(){
+  showActivityPage('quests','Encargos',questPanels(),
+    `<span class="activity-balance"><img src="ui/hud/ic_bits.webp" alt="Bits">${SAVE.bits.toLocaleString(LANG)}</span>`);
+}
+function showModes(trigger){
+  const {map, diff} = retoSetup(), mod = weeklyMod();
+  const modes = [
+    {id:'modeClassic', icon:'mapas', name:'Clásico', description:'Elige mapa y dificultad.'},
+    {id:'modeSurvival', icon:'supervivencia', name:'Supervivencia', description:'Modo infinito'},
+    {id:'modeWeekly', icon:'reto', name:'Reto semanal', description:`${MAPS[map].name} · ${DIFFS[diff].name} · ${mod.name}`}
+  ];
+  const options = modes.map(({id,icon,name,description}) => `<button type="button" id="${id}">
+    <img src="ui/hub/digivice/${icon}.png" alt=""><span><b>${name}</b><small>${description}</small></span>
+    <span aria-hidden="true">›</span></button>`).join('');
+  menuModal('Modos', `<div class="mode-options">${options}</div>`, () => trigger?.focus({preventScroll:true}));
+  document.getElementById('modeClassic').onclick = () => document.getElementById('playBtn').click();
+  document.getElementById('modeSurvival').onclick = () => document.getElementById('mSurv').click();
+  document.getElementById('modeWeekly').onclick = () => beginWeeklyFrom('modes');
+}
+function christmasPanel(){
+  const banner = !GACHA_SOON && (bannerOpen('navidadP') ? 'navidadP' : bannerOpen('navidadR') ? 'navidadR' : '');
+  const quests = eventActive() ? questPanels(true) : '';
+  const countdown = eventActive() ? `Cierre: ${seasonDate(EVENT.end)}` : '';
+  return `<header class="event-hero event-christmas"><div><h2>${EVENT.name}</h2><p>${countdown}</p></div>
+    <img src="${charIcon('agumon','festival')}" alt=""></header>
+    ${quests}${banner ? '<button class="mini-btn activity-action" type="button" id="activityChristmasBanner">Abrir Incubadora</button>' : ''}`;
+}
+function showEvents(selected = 'season'){
+  const tabs = [{id:'season', label:'Temporada', icon:'file-island', content:seasonPanel}];
+  if (eventActive() || (!GACHA_SOON && (bannerOpen('navidadP') || bannerOpen('navidadR')))){
+    tabs.push({id:'christmas', label:'Navidad', icon:'evento', content:christmasPanel});
+  }
+  const initial = Math.max(0, tabs.findIndex(tab => tab.id === selected));
+  const markup = tabs.map(({id,label,icon}, i) => `<button type="button" id="activity-tab-${id}" role="tab"
+    aria-selected="${i === initial}" tabindex="${i === initial ? 0 : -1}" aria-controls="activity-panel-${id}">
+    <img src="ui/hub/digivice/${icon}.png" alt="">${label}</button>`).join('');
+  const panels = tabs.map(({id,content}, i) => `<div class="activity-panel" id="activity-panel-${id}" role="tabpanel"
+    aria-labelledby="activity-tab-${id}" tabindex="0"${i === initial ? '' : ' hidden'}>${content()}</div>`).join('');
+  showActivityPage('events','Eventos',`<div class="activity-tabs" role="tablist" aria-label="Eventos">${markup}</div>${panels}`);
+  const dialog = overlay.querySelector('.activity-page');
+  const buttons = [...dialog.querySelectorAll('[role="tab"]')];
+  const views = [...dialog.querySelectorAll('[role="tabpanel"]')];
+  const select = index => {
+    buttons.forEach((button,i) => {
+      button.setAttribute('aria-selected', String(i === index));
+      button.tabIndex = i === index ? 0 : -1;
+      views[i].hidden = i !== index;
+    });
+    buttons[index].focus({preventScroll:true});
+  };
+  buttons.forEach((button, i) => {
+    button.onclick = () => select(i);
+    button.onkeydown = event => {
+      const key = event.key;
+      if (!['ArrowLeft','ArrowRight','Home','End'].includes(key)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const index = key === 'Home' ? 0 : key === 'End' ? buttons.length - 1 :
+        (i + (key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length;
+      select(index);
+    };
+  });
+  const bind = (id, action) => {
+    const button = dialog.querySelector('#' + id);
+    if (button) button.onclick = action;
+  };
+  bind('seasonReto', () => beginWeeklyFrom('events'));
+  bind('seasonSurv', () => { showSelect(); document.getElementById('mSurv').click(); });
+  bind('activityChristmasBanner', () => {
+    gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR';
+    showGacha();
+  });
+  buttons[initial].focus({preventScroll:true});
 }
 /* ---------- Escaparate semanal de cosméticos ---------- */
 const SHOP_PRICE = {title:600, frame:1200, galactico:2500, holografica:5000, festival:4000, reno:4000};
@@ -13939,18 +14127,7 @@ function seasonStatus(data){
   if (data.phase === 'closed') return 'Temporada finalizada';
   return `Semana ${data.week} de ${FILE_SEASON.weeks.length} · ${data.days === 1 ? 'Queda 1 día' : `Quedan ${data.days} días`}`;
 }
-function seasonBanner(){
-  const data = seasonData(), total = FILE_SEASON.weeks.length;
-  const next = FILE_SEASON.prizes.find(prize => prize.at > data.done);
-  const target = data.phase === 'closed' ? total : next?.at || total;
-  return `<button type="button" class="hb-season" id="hubSeason" aria-haspopup="dialog">
-    <img src="ui/hub/digivice/evento.png" alt="">
-    <span class="hb-season-copy"><b>Señal de File Island</b><small>${seasonStatus(data)}</small></span>
-    <span class="hb-season-meter"><small>${data.phase === 'active' && next ? `Próximo premio · ${data.done}/${target}` : `${data.done}/${total} encargos`}</small><progress max="${target}" value="${data.done}" aria-label="Progreso de temporada"></progress></span>
-    <span class="hb-season-next" aria-hidden="true">›</span>
-  </button>`;
-}
-function showSeason(trigger){
+function seasonPanel(){
   const data = seasonData(), {start, weeks, prizes} = FILE_SEASON;
   const tasks = weeks.map((task, i) => {
     const count = Math.min(task.goal, data.progress[task.id] || 0);
@@ -13959,10 +14136,13 @@ function showSeason(trigger){
     return `<li><span><small>Semana ${i + 1}</small>${task.label}</span><strong>${status}</strong></li>`;
   }).join('');
   const rewards = prizes.map(({at, label, owns}) => `<li><span>${label}</span><strong>${owns() ? 'En tu colección' : `${at}/${weeks.length}`}</strong></li>`).join('');
-  menuModal('Señal de File Island', `<div class="season-dialog">
+  return `<div class="season-dialog">
+    <header class="event-hero">
+      <div><h2>Señal de File Island</h2><p>${seasonStatus(data)}</p></div>
+      <img src="ui/hub/digivice/file-island.png" alt="">
+    </header>
     <article class="season-summary">
-      <img src="ui/hub/digivice/evento.png" alt="">
-      <div><b>${seasonStatus(data)}</b><small>${data.done}/${weeks.length} encargos</small><progress max="${weeks.length}" value="${data.done}" aria-label="Progreso de temporada"></progress></div>
+      <div><strong>${data.done}/${weeks.length} encargos</strong><progress max="${weeks.length}" value="${data.done}" aria-label="Progreso de temporada"></progress></div>
     </article>
     <p>Cierre: ${seasonDate(data.end)} · 00:00 UTC</p>
     <p>Se abre un encargo cada lunes. Puedes completar los anteriores hasta el cierre.</p>
@@ -13970,11 +14150,7 @@ function showSeason(trigger){
     ${data.phase === 'active' && data.week >= 2 ? '<button class="season-mode mini-btn" type="button" id="seasonReto">Abrir Reto semanal</button>' : ''}
     ${data.phase === 'active' && data.week >= 4 ? '<button class="season-mode mini-btn" type="button" id="seasonSurv">Ir a Supervivencia</button>' : ''}
     <h3>Recompensas</h3><ul class="season-prizes">${rewards}</ul>
-  </div>`, () => trigger.focus({preventScroll:true}));
-  const btnReto = document.getElementById('seasonReto');
-  if (btnReto) btnReto.onclick = showReto;
-  const btnSurv = document.getElementById('seasonSurv');
-  if (btnSurv) btnSurv.onclick = () => document.getElementById('mSurv').click();
+  </div>`;
 }
 
 function weeklyIndex(){ const n = SEASONS.adventure.chars.length; return ((weekNum() % n) + n) % n; }
