@@ -3559,86 +3559,128 @@ html[lang] .trainer-screen .trainer-header .g-back,
 .lab2-button.secondary{border-color:var(--m-line2);background:var(--m-card);color:var(--m-text)}
 .lab2-button:disabled{border-color:var(--m-line2);background:var(--m-sunk);color:var(--m-mute);cursor:default}
 .lab2-footer{justify-content:space-between;padding:10px 2px 2px}
-/* Laboratorio: estaciones de investigación y una sola consola de diagnóstico. */
+/* El banco de proyectos y la cámara comparten el bastidor y sus indicadores. */
 #overlay:not(.menu-mode)>.lab-console{
-  --lab-bg:#edf3fa;--lab-panel:#fff;--lab-well:#e5edf7;--lab-line:#b4c5db;
-  --lab-ink:#162943;--lab-muted:#425b79;--lab-accent:#3d568f;--lab-signal:#73dbef;
-  width:min(1150px,96vw)!important;height:auto!important;max-height:calc((100dvh - var(--ui-top) - var(--ui-bot))/var(--ui-scale,1))!important;
-  padding:clamp(8px,1.5vw,18px)!important;overscroll-behavior:contain;
-  background:linear-gradient(135deg,var(--lab-bg),var(--lab-well))!important;
+  --lab-bg:#dce7f2;--lab-panel:#f7faff;--lab-well:#e9f0f8;--lab-line:#a9bdd3;
+  --lab-ink:#172a43;--lab-muted:#415a76;--lab-accent:#28538a;--lab-signal:#39b9dc;
+  width:min(1200px,96vw)!important;height:auto!important;max-height:calc((100dvh - var(--ui-top) - var(--ui-bot))/var(--ui-scale,1))!important;
+  padding:clamp(7px,1.25vw,15px)!important;overscroll-behavior:contain;
+  background:repeating-linear-gradient(135deg,transparent 0 10px,#7795b312 10px 11px),var(--lab-bg)!important;
   color:var(--lab-ink)!important;font:700 14px/1.35 'Nunito',system-ui,sans-serif;
 }
 html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
-  --lab-bg:#121f31;--lab-panel:#182a40;--lab-well:#102033;--lab-line:#416080;
-  --lab-ink:#eef6ff;--lab-muted:#a9c1d9;--lab-accent:#9cdaef;
+  --lab-bg:#122236;--lab-panel:#1b2f48;--lab-well:#122338;--lab-line:#416080;
+  --lab-ink:#eef6ff;--lab-muted:#b6cde3;--lab-accent:#95def6;--lab-signal:#70dbf2;
 }
 .lab-console .lab-head{
-  display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:clamp(6px,1.8vw,16px);
-  padding:8px 10px;border:1px solid var(--lab-line);border-radius:10px;background:var(--lab-panel);
+  display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:clamp(6px,1.8vw,17px);
+  padding:8px 10px;border:1px solid var(--lab-line);border-bottom:3px solid var(--lab-accent);
+  border-radius:10px 10px 5px 5px;background:linear-gradient(95deg,var(--lab-panel),var(--lab-well));
 }
 .lab-console .lab-name{display:flex;align-items:center;gap:8px;min-width:0}
-.lab-console .lab-name img{width:44px;height:44px;object-fit:contain}
-.lab-console h2{margin:0;font:900 clamp(17px,3vw,30px)/1.1 'Orbitron','Nunito',sans-serif;overflow-wrap:anywhere}
-.lab-console .lab-name p{margin:4px 0 0;font-size:12px}
+.lab-console .lab-name img{width:48px;height:48px;object-fit:contain}
+#overlay .lab-console .lab-name h2{
+  margin:0;color:var(--lab-ink)!important;-webkit-text-fill-color:var(--lab-ink);background:none!important;text-shadow:none!important;
+  font:900 clamp(17px,3vw,31px)/1.1 'Orbitron','Nunito',sans-serif;overflow-wrap:anywhere;
+}
+.lab-console .lab-name p{margin:3px 0 0;font-size:12px}
 .lab-console .lab-wallet{
-  display:flex;align-items:center;gap:5px;padding:5px 7px;border:1px solid var(--lab-line);border-radius:7px;
+  display:flex;align-items:center;gap:5px;padding:6px 8px;border:1px solid var(--lab-line);border-radius:7px;
   color:var(--lab-ink);background:var(--lab-well);font-variant-numeric:tabular-nums;text-align:right;
 }
-.lab-console .lab-wallet img{width:23px;height:23px;object-fit:contain}
-.lab-console .lab-layout{display:grid;grid-template-columns:minmax(210px,.72fr) minmax(0,1.4fr);gap:12px;margin-top:12px}
-.lab-console .lab-bench,.lab-console .lab-instrument{min-width:0;border:1px solid var(--lab-line);border-radius:10px;background:var(--lab-panel)}
-.lab-console .lab-bench{padding:10px;align-self:start}
-.lab-console .lab-bench h3{margin:0 0 9px;font-size:17px}
+.lab-console .lab-wallet img{width:24px;height:24px;object-fit:contain}
+.lab-console .lab-layout{
+  display:grid;grid-template-columns:minmax(230px,.61fr) minmax(0,1.55fr);margin-top:10px;
+  border:1px solid var(--lab-line);border-radius:10px;background:var(--lab-panel);overflow:hidden;
+}
+.lab-console .lab-bench,.lab-console .lab-instrument{min-width:0}
+.lab-console .lab-bench{
+  display:flex;flex-direction:column;gap:8px;padding:10px;border-inline-end:1px solid var(--lab-line);
+  background:repeating-linear-gradient(90deg,transparent 0 17px,#7795b31a 17px 18px),linear-gradient(160deg,var(--lab-panel),var(--lab-well));
+}
+.lab-console .lab-bench h3{margin:0;font-size:17px}
 .lab-console .lab-stations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
 .lab-console :is(.lab-station,.lab-project,.lab-reset,.lab-apply){
   min-height:40px;border:1px solid var(--lab-line);border-radius:7px;background:var(--lab-well);color:var(--lab-ink);
   font:850 13px/1.15 'Nunito',system-ui,sans-serif;cursor:pointer;
 }
 .lab-console .lab-station{padding:5px 2px;overflow-wrap:anywhere}
-.lab-console .lab-station[aria-pressed=true]{background:#325489;color:#fff;border-color:#567cb9}
-.lab-console .lab-projects{display:grid;gap:6px;margin-top:9px}
+.lab-console .lab-station[aria-pressed=true]{background:#275384;color:#fff;border-color:#5b82ae}
+.lab-console .lab-projects{display:grid;gap:5px}
 .lab-console .lab-project{
-  display:grid;grid-template-columns:26px minmax(0,1fr) auto;align-items:center;gap:5px;padding:7px 5px;text-align:left;
+  position:relative;display:grid;grid-template-columns:26px minmax(0,1fr) auto;align-items:center;gap:5px;padding:6px 5px;text-align:left;
 }
-.lab-console .lab-project[aria-pressed=true]{border-color:var(--lab-accent);box-shadow:inset 3px 0 var(--lab-accent)}
+.lab-console .lab-project[aria-pressed=true]{
+  border-color:var(--lab-accent);box-shadow:inset 3px 0 var(--lab-signal);
+  background:linear-gradient(100deg,color-mix(in srgb,var(--lab-signal) 14%,var(--lab-panel)),var(--lab-panel) 86%);
+}
 .lab-console .lab-project span:first-child{color:var(--lab-accent);font-size:17px;text-align:center}
 .lab-console .lab-project span:last-child{font-size:11px;color:var(--lab-muted);white-space:nowrap}
-.lab-console .lab-reset{margin-top:9px;padding:5px 8px;width:100%;background:var(--lab-panel)}
-.lab-console .lab-instrument{overflow:hidden}
+.lab-console .lab-total{margin-top:auto;padding:7px 8px;border:1px solid var(--lab-line);border-radius:7px;background:var(--lab-well)}
+.lab-console .lab-reset{padding:5px 8px;width:100%;background:var(--lab-panel)}
 .lab-console .lab-chamber{
-  position:relative;isolation:isolate;display:grid;place-items:center;min-height:clamp(120px,20vw,207px);
-  background:linear-gradient(0deg,#10305245,#0b173a00),url('ui/hub/laboratorio-camara.webp') center 53%/cover no-repeat,#102640;
-  border-bottom:2px solid #4594ad;
+  position:relative;isolation:isolate;display:grid;place-items:center;min-height:clamp(135px,24vw,258px);overflow:hidden;
+  background:linear-gradient(0deg,#07152880 0%,#081b3a00 38%),url('ui/hub/laboratorio-camara.webp') center 47%/cover no-repeat,#102640;
+  border-bottom:1px solid #4594ad;
 }
-.lab-console .lab-chamber::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 3px,#06152924 3px 4px);pointer-events:none}
+.lab-console .lab-chamber::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 3px,#06152920 3px 4px);pointer-events:none}
 .lab-console .lab-chamber .lab-specimen{
-  width:clamp(110px,16vw,155px);height:clamp(110px,16vw,155px);
-  object-fit:contain;filter:drop-shadow(0 0 9px #78d8ffaf);
+  width:clamp(120px,16vw,172px);height:clamp(120px,16vw,172px);
+  object-fit:contain;transform:translateY(-4%);filter:drop-shadow(0 0 12px #78d8ffbb);
 }
-.lab-console .lab-diagnostic{padding:12px}
-.lab-console .lab-diagnostic h3{margin:0;font-size:clamp(21px,3vw,31px)}
-.lab-console .lab-diagnostic p{margin:4px 0 9px}
-.lab-console .lab-calibration{display:flex;align-items:center;justify-content:space-between;gap:5px;margin-bottom:5px;font-size:12px}
-.lab-console .lab-diagnostic progress{display:block;width:100%;height:7px;accent-color:var(--lab-accent)}
-.lab-console .lab-reading{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:10px 0}
-.lab-console .lab-reading div{padding:6px 8px;border:1px solid var(--lab-line);border-radius:6px;background:var(--lab-well)}
+.lab-console .lab-chamber-label{
+  position:absolute;z-index:1;inset:auto auto 9px 10px;display:flex;align-items:center;gap:6px;
+  padding:4px 7px;border:1px solid #84d0e780;border-radius:5px;background:#091f38e8;
+  color:#e5faff;font:800 11px/1.2 'Nunito',sans-serif;
+}
+.lab-console .lab-chamber-label::before{content:'';width:7px;height:7px;border-radius:50%;background:#91e9fc;box-shadow:0 0 8px #6ee7ff}
+.lab-console .lab-scan{
+  position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 40%,#86edff30 49%,#d2f9ffae 50%,#86edff30 51%,transparent 60%);
+  animation:lab-scan-pass .7s ease-out both;
+}
+@keyframes lab-scan-pass{from{transform:translateY(-80%)}to{transform:translateY(80%)}}
+.lab-console .lab-diagnostic{padding:11px 13px}
+.lab-console .lab-diagnostic h3{margin:0;font-size:clamp(20px,3vw,30px)}
+.lab-console .lab-diagnostic p{margin:3px 0 8px}
+.lab-console .lab-calibration{display:flex;align-items:center;justify-content:space-between;gap:5px;margin-bottom:4px;font-size:12px}
+.lab-console progress{
+  display:block;width:100%;height:8px;accent-color:var(--lab-accent);border:0;border-radius:7px;overflow:hidden;background:var(--lab-well);
+}
+.lab-console progress::-webkit-progress-bar{background:var(--lab-well)}
+.lab-console progress::-webkit-progress-value{background:linear-gradient(90deg,#416cbb,#4bb8df)!important}
+.lab-console progress::-moz-progress-bar{background:linear-gradient(90deg,#416cbb,#4bb8df)!important}
+.lab-console .lab-reading{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:21px;margin:8px 0}
+.lab-console .lab-reading div{min-width:0;padding:6px 8px;border:1px solid var(--lab-line);border-radius:7px;background:var(--lab-well)}
+.lab-console .lab-reading div:last-child{border-color:var(--lab-accent)}
 .lab-console .lab-reading dt{font-size:11px;color:var(--lab-muted)}
-.lab-console .lab-reading dd{margin:2px 0 0;font:850 clamp(15px,2vw,23px)/1.15 'Nunito',sans-serif;color:var(--lab-accent)}
+.lab-console .lab-reading dd{margin:1px 0 0;font:850 clamp(15px,2vw,23px)/1.15 'Nunito',sans-serif;color:var(--lab-accent)}
+.lab-console .lab-reading div:last-child{position:relative}
+.lab-console .lab-reading div:last-child::before{content:'→';position:absolute;inset:50% auto auto -18px;transform:translateY(-50%);color:var(--lab-accent);font-size:16px}
 .lab-console .lab-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.lab-console .lab-apply{background:linear-gradient(125deg,#375fc0,#26376c);color:#fff;padding:5px 14px;border-color:#557fc4}
+.lab-console .lab-apply{background:linear-gradient(#ffe08d,#f4aa42);color:#382608;padding:7px 14px;border-color:#d58b32}
 .lab-console :is(.lab-apply,.lab-reset):disabled{opacity:.65;cursor:default}
-.lab-console .lab-status{min-height:1.2em;margin:8px 1px 0}
+.lab-console .lab-status{margin:6px 1px 0}
+.lab-console .lab-status:empty{margin:0}
 .lab-console :is(button,h3):focus-visible{outline:2px solid var(--lab-accent);outline-offset:-2px}
 @media(max-width:680px){
   .lab-console .lab-layout{grid-template-columns:minmax(0,1fr)}
-  .lab-console .lab-name img{width:29px;height:29px}
+  .lab-console .lab-bench{border-inline-end:0;border-bottom:1px solid var(--lab-line)}
+  .lab-console .lab-total{display:none}
+  .lab-console .lab-projects{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lab-console .lab-name img{width:30px;height:30px}
   .lab-console .lab-wallet{font-size:11px}
 }
 @media(max-width:400px){
   .lab-console .lab-head{grid-template-columns:auto minmax(0,1fr)}
   .lab-console .lab-wallet{grid-column:2;justify-self:start}
+  .lab-console .lab-project{grid-template-columns:17px minmax(0,1fr);gap:2px 4px}
+  .lab-console .lab-project span:last-child{grid-column:2}
 }
-@media(prefers-reduced-motion:reduce){.lab-console .lab-chamber .anim{animation:none!important}}
+@media(prefers-reduced-motion:reduce){
+  .lab-console .lab-chamber .anim{animation:none!important}
+  .lab-console .lab-scan{display:none}
+}
+html.reduce-motion .lab-console .lab-scan{display:none}
 @media(pointer:coarse){.lab-console :is(.lab-station,.lab-project,.lab-reset,.lab-apply){min-height:44px}}
 
 .trainer-favorite{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--trainer-border);
@@ -13376,6 +13418,8 @@ function showLab(message = '', focusId = ''){
   if (Object.hasOwn(LAB_BY_ID, focusId)) labSelected = focusId;
   const bits = SAVE.bits, levels = labLevels(), spent = labSpent(levels);
   const number = n => n.toLocaleString(I18N.lang);
+  const installed = LAB.reduce((sum, u) => sum + labLv(u.id, levels), 0);
+  const capacity = LAB.reduce((sum, u) => sum + labMax(u), 0);
   showOverlay(`
     <main class="lab-screen lab-console" aria-labelledby="labHeading">
       <header class="lab-head">
@@ -13392,10 +13436,17 @@ function showLab(message = '', focusId = ''){
             ${LAB_STATIONS.map((station, i) => `<button type="button" class="lab-station" data-station="${i}" aria-pressed="false" aria-controls="labProjects">${station.name}</button>`).join('')}
           </div>
           <div class="lab-projects" id="labProjects" role="group" aria-label="Proyectos"></div>
+          <div class="lab-total">
+            <div class="lab-calibration"><span>Niveles instalados</span><span>${installed} / ${capacity}</span></div>
+            <progress aria-label="Niveles instalados" value="${installed}" max="${capacity}"></progress>
+          </div>
           <button type="button" class="lab-reset" id="labRefund" ${spent ? '' : 'disabled'}>Reembolsar todo${spent ? ` · ${number(spent)} Digicoins` : ''}</button>
         </section>
         <section class="lab-instrument" aria-labelledby="labProjectTitle">
-          <div class="lab-chamber" aria-hidden="true">${animEl(spriteOf('hagurumon', false), 'lab-specimen')}</div>
+          <div class="lab-chamber" aria-hidden="true">
+            ${animEl(spriteOf('hagurumon', false), 'lab-specimen')}
+            <span class="lab-chamber-label">Hagurumon</span>
+          </div>
           <div class="lab-diagnostic" id="labDiagnostic"></div>
         </section>
       </div>
@@ -13404,6 +13455,13 @@ function showLab(message = '', focusId = ''){
   const projects = document.getElementById('labProjects');
   const detail = document.getElementById('labDiagnostic');
   const status = document.getElementById('labStatus');
+  const chamber = overlay.querySelector('.lab-chamber');
+  const scan = () => {
+    chamber.querySelector('.lab-scan')?.remove();
+    const line = document.createElement('span');
+    line.className = 'lab-scan';
+    chamber.append(line);
+  };
   const stations = [...overlay.querySelectorAll('[data-station]')];
   const draw = () => {
     const station = LAB_STATIONS.findIndex(group => group.projects.includes(labSelected));
@@ -13415,7 +13473,7 @@ function showLab(message = '', focusId = ''){
       </button>`;
     }).join('');
     projects.querySelectorAll('[data-project]').forEach(button => {
-      button.onclick = () => { labSelected = button.dataset.project; status.textContent = ''; draw(); projects.querySelector('[aria-pressed="true"]')?.focus({preventScroll:true}); };
+      button.onclick = () => { labSelected = button.dataset.project; status.textContent = ''; draw(); scan(); projects.querySelector('[aria-pressed="true"]')?.focus({preventScroll:true}); };
     });
     const u = LAB_BY_ID[labSelected], lv = labLv(u.id, levels), max = labMax(u);
     const full = lv === max, cost = full ? 0 : labCosts(u)[lv], missing = Math.max(0, cost - bits);
@@ -13430,7 +13488,7 @@ function showLab(message = '', focusId = ''){
       </dl>
       ${full ? '' : `<div class="lab-controls">
         <button type="button" class="lab-apply" id="labApply" ${missing ? 'disabled' : ''}>Aplicar mejora · ${number(cost)} Digicoins</button>
-        ${missing ? `<small>Faltan ${number(missing)} Digicoins</small>` : ''}
+        <small>${missing ? `Faltan ${number(missing)} Digicoins` : `Saldo tras aplicar: ${number(bits - cost)} Digicoins`}</small>
       </div>`}`;
     const apply = document.getElementById('labApply');
     if (apply) apply.onclick = () => {
@@ -13443,6 +13501,7 @@ function showLab(message = '', focusId = ''){
       labSelected = LAB_STATIONS[i].projects[0];
       status.textContent = '';
       draw();
+      scan();
     };
   });
   document.getElementById('labBack').onclick = showSelect;
@@ -13452,7 +13511,10 @@ function showLab(message = '', focusId = ''){
     document.getElementById('labBack').focus({preventScroll:true});
   };
   draw();
-  if (focusId) (detail.querySelector('button:not(:disabled)') || document.getElementById('labProjectTitle'))?.focus({preventScroll:true});
+  if (focusId){
+    scan();
+    (detail.querySelector('button:not(:disabled)') || document.getElementById('labProjectTitle'))?.focus({preventScroll:true});
+  }
 }
 function digicoinAmount(value){
   const amount = Number(value);
