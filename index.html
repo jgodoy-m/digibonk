@@ -3155,58 +3155,57 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
   body.is-touch #overlay.menu-mode .realhub:not(.pl4){height:auto!important;min-height:100%!important;overflow:visible!important}
   #overlay .realhub.hb .hm-msg:not(:empty){top:58px!important}
 }
-/* ===== Vida en el menú de inicio (lv-*): Digimon paseando por el escenario, chispas del portal y tarjetas con movimiento =====
-   El escenario (.lv-stage) copia la geometría del fondo del inicio (125% de ancho, anclado a la derecha y al 72% en vertical),
-   así cada Digimon pisa siempre el mismo punto del dibujo sea cual sea el tamaño de la ventana. Coordenadas en % de la imagen. */
+/* Mundo Digital: la ilustración y los recorridos comparten el mismo plano. */
 #overlay .realhub.hb .real-world{container-type:size}
-#overlay .realhub.hb .lv-stage{position:absolute;right:0;width:125cqw;aspect-ratio:1672/941;top:calc((100cqh - 125cqw * 941 / 1672) * .72);z-index:3;pointer-events:none}
-#overlay .realhub.hb .lv-d{position:absolute;left:calc(var(--x) * 1%);top:calc(var(--y) * 1%);width:calc(var(--s) * 1%);aspect-ratio:1;transform:translate(-50%,-93%)}
-#overlay .realhub.hb .lv-d::after{content:'';position:absolute;left:24%;right:24%;bottom:3%;height:10%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,8,30,.55),transparent);z-index:-1}
-#overlay .realhub.hb .lv-spr{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;filter:brightness(.9) saturate(.92) drop-shadow(0 0 1px rgba(154,239,255,.7)) drop-shadow(0 3px 2px rgba(0,8,30,.45))}
-#overlay .realhub.hb .lv-d.flip .lv-spr{scale:-1 1}
-/* Caminar: ida (mirando a la derecha), pausa, vuelta (mirando a la izquierda), pausa */
-#overlay .realhub.hb .lv-walk{animation:lv-walk var(--t) linear var(--dl,0s) infinite}
-#overlay .realhub.hb .lv-walk .lv-spr{animation:animIdle .8s steps(1) infinite,lv-face var(--t) steps(1,end) var(--dl,0s) infinite,lv-step .42s ease-in-out infinite alternate}
-@keyframes lv-walk{0%{translate:0 0}42%,50%{translate:calc(var(--dx) * 100%) 0}92%,100%{translate:0 0}}
-@keyframes lv-face{0%{scale:-1 1}46%{scale:1 1}96%,100%{scale:-1 1}}
-@keyframes lv-step{to{translate:0 -3%}}
-/* Compañero elegido: delante del portal, con su círculo digital y un saltito de vez en cuando */
-#overlay .realhub.hb .lv-hero{animation:lv-hop 7s ease-in-out 1.2s infinite}
-#overlay .realhub.hb .lv-hero::before{content:'';position:absolute;left:4%;right:4%;bottom:-4%;height:24%;border-radius:50%;border:2px solid rgba(154,239,255,.75);background:radial-gradient(closest-side,rgba(89,251,255,.38),rgba(37,108,187,.12) 70%,transparent);box-shadow:0 0 18px rgba(89,251,255,.55),inset 0 0 12px rgba(154,239,255,.45);z-index:-2;animation:lv-ring 2.6s ease-in-out infinite alternate}
-#overlay .realhub.hb .lv-hero .lv-spr{filter:saturate(1) drop-shadow(0 0 2px rgba(154,239,255,.9)) drop-shadow(0 0 10px rgba(89,251,255,.35))}
-@keyframes lv-hop{0%,86%,100%{translate:0 0}90%{translate:0 -16%}93%{translate:0 0}95.5%{translate:0 -7%}98%{translate:0 0}}
-@keyframes lv-ring{from{opacity:.55;scale:.94}to{opacity:1;scale:1.04}}
-/* Volador: flota alrededor del árbol */
-#overlay .realhub.hb .lv-fly{animation:lv-fly 11s ease-in-out infinite}
-#overlay .realhub.hb .lv-fly::after{display:none}
-#overlay .realhub.hb .lv-fly .lv-spr{animation:animIdle .8s steps(1) infinite,lv-flap 1.6s ease-in-out infinite alternate}
-@keyframes lv-fly{0%,100%{translate:0 0}25%{translate:110% -40%}50%{translate:260% -10%}75%{translate:120% 25%}}
-/* Sentado entre las raíces: se balancea despacio */
-#overlay .realhub.hb .lv-sit .lv-spr{transform-origin:50% 93%;animation:animIdle 1.2s steps(1) infinite,lv-sway 4s ease-in-out infinite alternate}
-@keyframes lv-sway{from{rotate:-2deg}to{rotate:2deg}}
-/* Nadando: medio cuerpo bajo el agua, con ondas en lugar de sombra */
-#overlay .realhub.hb .lv-swim .lv-spr{clip-path:inset(0 0 30% 0);filter:brightness(.8) saturate(.9) drop-shadow(0 0 1px rgba(154,239,255,.6))}
-#overlay .realhub.hb .lv-swim::after{left:8%;right:8%;bottom:26%;height:12%;background:none;border:2px solid rgba(154,239,255,.55);box-shadow:0 0 8px rgba(89,251,255,.35);animation:lv-ripple 1.8s ease-out infinite}
-@keyframes lv-ripple{from{scale:.7;opacity:.9}to{scale:1.25;opacity:0}}
-@keyframes lv-flap{to{translate:0 -8%}}
-/* Bocadillo que aparece en la pausa del paseo */
-#overlay .realhub.hb .lv-emo{position:absolute;left:50%;top:-6%;translate:-50% 0;padding:2px 7px;border-radius:999px;background:#fff;color:#1d2b4a;font:900 13px/1.2 'Nunito',sans-serif;box-shadow:0 2px 0 rgba(0,0,0,.25);opacity:0;scale:.6;animation:lv-emo var(--t) ease-out var(--dl,0s) infinite}
-#overlay .realhub.hb .lv-emo::after{content:'';position:absolute;left:50%;bottom:-4px;width:8px;height:8px;background:#fff;transform:translateX(-50%) rotate(45deg)}
-@keyframes lv-emo{0%,42%{opacity:0;scale:.6}44%,49%{opacity:1;scale:1}51%,100%{opacity:0;scale:.6}}
-/* Chispas que suben del portal y luciérnagas sobre la hierba */
-#overlay .realhub.hb .lv-fx b{position:absolute;left:calc(var(--x) * 1%);top:calc(var(--y) * 1%);width:.32%;aspect-ratio:1;background:#9aefff;box-shadow:0 0 6px 2px rgba(89,251,255,.7);opacity:0;animation:lv-rise var(--t) linear var(--dl) infinite}
-#overlay .realhub.hb .lv-fx b.ff{width:.26%;border-radius:50%;background:#e8ff9a;box-shadow:0 0 8px 3px rgba(214,255,120,.55);animation:lv-ff var(--t) ease-in-out var(--dl) infinite alternate}
-@keyframes lv-rise{0%{opacity:0;translate:0 0}15%{opacity:.95}80%{opacity:.6}100%{opacity:0;translate:1.5vw -14vw}}
-@keyframes lv-ff{0%{opacity:0;translate:0 0}30%{opacity:.9}60%{opacity:.25}100%{opacity:.85;translate:3vw -2.4vw}}
-/* Móvil (fondo vertical): las tarjetas tapan el escenario, así que los Digimon pasean en una franja bajo el logo */
-#overlay .realhub.hb .lv-parade{display:none}
-@media(max-aspect-ratio:4/5){
-  #overlay .realhub.hb .lv-stage{display:none}
-  #overlay .realhub.hb .lv-parade{display:block;position:relative;z-index:3;align-self:stretch;height:56px;margin:-14px 12px -12px;pointer-events:none}
-  #overlay .realhub.hb .lv-p{position:absolute;bottom:calc(var(--s) * -.07);left:0;width:var(--s);height:var(--s);animation:lv-pwalk var(--t) linear var(--dl) infinite}
-  #overlay .realhub.hb .lv-p::after{content:'';position:absolute;left:22%;right:22%;bottom:4%;height:9%;border-radius:50%;background:radial-gradient(closest-side,rgba(60,20,0,.4),transparent);z-index:-1}
-  #overlay .realhub.hb .lv-p .lv-spr{animation:animIdle .8s steps(1) infinite,lv-face var(--t) steps(1,end) var(--dl) infinite,lv-step .42s ease-in-out infinite alternate}
-  @keyframes lv-pwalk{0%{left:0}42%,50%{left:calc(100% - var(--s))}92%,100%{left:0}}
+.living-world{--world-art:url('ui/fondo_mundo_digital.png');container-type:inline-size;position:absolute;z-index:0;
+  width:max(100cqw,177.66cqh);aspect-ratio:1535/864;left:50%;top:50%;transform:translate(-50%,-50%);
+  background:#10274a var(--world-art) center/100% 100% no-repeat;
+  animation:living-camera 20s ease-in-out infinite alternate;pointer-events:none}
+@keyframes living-camera{from{scale:1.035;translate:-.6% 0}to{scale:1.09;translate:.8% -.5%}}
+.living-world::before{content:"";position:absolute;left:24%;top:44%;width:41%;height:19%;opacity:.45;
+  background:repeating-linear-gradient(0deg,transparent 0 8px,#92f6ff52 10px,transparent 13px 20px);
+  mask-image:radial-gradient(ellipse at 54% 55%,#000 0%,transparent 71%);
+  animation:living-water 7s ease-in-out infinite alternate}
+@keyframes living-water{from{transform:translateX(-4%) skewX(-8deg);opacity:.28}to{transform:translateX(5%) skewX(8deg);opacity:.65}}
+.living-world::after{content:"";position:absolute;left:58%;top:21%;width:15%;height:24%;
+  background:radial-gradient(ellipse,#7bfaf34c 10%,#39dac324 45%,transparent 72%);opacity:.55;
+  animation:living-portal 5s ease-in-out infinite alternate;pointer-events:none}
+@keyframes living-portal{from{transform:scale(.86);opacity:.44}to{transform:scale(1.18);opacity:.83}}
+.living-actor{position:absolute;z-index:3;left:var(--x);top:var(--y);width:clamp(54px,var(--size),133px);aspect-ratio:1;
+  transform:translate(-50%,-81%);animation:living-route var(--duration) linear var(--delay) infinite}
+.living-actor::after,.living-strip-actor::after{content:"";position:absolute;left:23%;right:23%;bottom:16%;height:10%;z-index:-1;
+  background:radial-gradient(closest-side,#0009,transparent)}
+.living-sprite{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;
+  filter:drop-shadow(0 2px 1px #051524d9)}
+.living-actor .living-sprite,.living-strip-actor .living-sprite{animation:animIdle .52s steps(1) infinite,living-bob .39s ease-in-out infinite alternate,living-face var(--duration) steps(1,end) var(--delay) infinite}
+.living-actor.fly .living-sprite,.living-strip-actor.fly .living-sprite{animation-duration:.51s,.9s,var(--duration)}
+.living-actor.fly::after,.living-strip-actor.fly::after{display:none}
+.living-actor.swim .living-sprite{clip-path:inset(0 0 31% 0)}
+.living-actor.swim::after{left:13%;right:13%;bottom:31%;border-radius:50%;border:1px solid #97f7ff9e;background:none;animation:living-ripple 1.6s ease-out infinite}
+@keyframes living-ripple{from{scale:.6;opacity:.85}to{scale:1.55;opacity:0}}
+@keyframes living-route{0%,100%{translate:0 0}22%,73%{translate:calc(var(--dx) * .5) calc(var(--dy) * -.55)}47%,51%{translate:var(--dx) var(--dy)}}
+@keyframes living-bob{to{translate:0 -7%}}
+@keyframes living-face{0%,100%{scale:-1 1}50%{scale:1 1}}
+.living-strip{display:none}
+@media(max-width:1100px){
+  .living-world{left:61%;transform:translate(-61%,-50%)}
+}
+@media(max-width:1100px) and (min-height:501px){
+  .living-strip{display:block;container-type:inline-size;position:relative;height:clamp(66px,11vh,95px);margin:-5px 0;
+    border:1px solid #70cbe957;border-radius:12px;overflow:hidden;isolation:isolate;pointer-events:none}
+  .living-strip::before{content:"";position:absolute;inset:-9%;z-index:-1;
+    background:#10274a url('ui/fondo_mundo_digital.png') center 66%/cover no-repeat;
+    animation:living-camera 20s ease-in-out infinite alternate}
+  .living-strip-actor{position:absolute;left:var(--x);top:var(--y);width:clamp(53px,18cqw,85px);aspect-ratio:1;
+    transform:translate(-50%,-76%);animation:living-route var(--duration) linear var(--delay) infinite}
+  .living-strip-actor.fly{width:clamp(47px,14cqw,70px)}
+}
+html.reduce-motion .living-world,html.reduce-motion .living-world::before,html.reduce-motion .living-world::after,
+html.reduce-motion .living-strip::before,html.reduce-motion :is(.living-actor,.living-strip-actor) *,
+html.reduce-motion .living-actor.swim::after{animation:none!important}
+@media(prefers-reduced-motion:reduce){
+  .living-world,.living-world::before,.living-world::after,.living-strip::before,
+  :is(.living-actor,.living-strip-actor),:is(.living-actor,.living-strip-actor) *,.living-actor.swim::after{animation:none!important}
 }
 /* Tarjetas con más carácter: rayas del botón Jugar en marcha, brillo que cruza Jugar y el evento, iconos de modo flotando */
 #overlay .realhub.hb .nm-play::before{background-size:auto,34px 34px;animation:lv-stripes 2.4s linear infinite}
@@ -3222,7 +3221,7 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 @keyframes lv-float{0%,100%{translate:0 0;rotate:0deg}50%{translate:0 -3px;rotate:-4deg}}
 #overlay .realhub.hb .nm-dot{animation:lv-dot 1.8s ease-in-out infinite}
 @keyframes lv-dot{0%,100%{scale:1}50%{scale:1.25}}
-@media(prefers-reduced-motion:reduce){#overlay .realhub.hb :is(.lv-stage,.lv-parade,.nm-play,.nm-event,.nm-stack,.nm-tiles) *,#overlay .realhub.hb :is(.nm-play,.lv-sheen)::before,#overlay .realhub.hb .lv-sheen::after{animation:none!important}#overlay .realhub.hb .lv-fx{display:none}}
+@media(prefers-reduced-motion:reduce){#overlay .realhub.hb :is(.nm-play,.nm-event,.nm-stack,.nm-tiles) *,#overlay .realhub.hb :is(.nm-play,.lv-sheen)::before,#overlay .realhub.hb .lv-sheen::after{animation:none!important}#overlay .realhub.hb .lv-fx{display:none}}
 /* Escaparate semanal: una oferta principal y cuatro tarjetas de igual peso. */
 #overlay .approved-info-dialog.shop-dialog {
   --shop-ink:#f3f9ff; --shop-muted:#bacde8; --shop-gold:#ffda65;
@@ -3542,35 +3541,6 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 #overlay .realhub.hb button.hb-version{height:32px;padding:0 10px;border:1px solid #ffe59c;background:#ffcf66;color:#292014;font:900 12px/1 'Nunito',system-ui,sans-serif;white-space:nowrap;touch-action:manipulation}
 #overlay .realhub.hb button.hb-version:hover{background:#ffe190}
 #overlay .realhub.hb button.hb-version:focus-visible{outline:2px solid #d6f4ff;outline-offset:3px}
-.hub-atmosphere{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none}
-.hub-atmosphere>span{position:absolute;display:block;transform-origin:center;pointer-events:none}
-.hub-aurora-glow{top:1%;left:29%;width:64%;height:50%;opacity:.65;
-  background:radial-gradient(ellipse at 62% 22%,#57f4e945,transparent 43%),radial-gradient(ellipse at 75% 38%,#8d72ff30,transparent 65%);
-  animation:hub-aurora-drift 16s ease-in-out infinite alternate}
-.hub-portal-glow{left:60%;top:20%;width:23%;height:37%;opacity:.55;
-  background:radial-gradient(ellipse at center,#8cfafd41 4%,#56b3fc2e 26%,transparent 67%);
-  animation:hub-portal-breathe 8s ease-in-out infinite alternate}
-.hub-reflection{left:41%;top:69%;width:44%;height:25%;opacity:.62;
-  background:radial-gradient(ellipse at 64% 52%,#73dafa46,transparent 67%);
-  animation:hub-water-drift 12s ease-in-out infinite alternate}
-.hub-data-spark{position:absolute;left:var(--sx);top:var(--sy);width:clamp(3px,.45vw,5px);aspect-ratio:1;
-  border-radius:1px;background:#93e6ff;box-shadow:0 0 7px #61d7f8;opacity:.35;transform:rotate(45deg);
-  animation:hub-data-drift 10s var(--delay) linear infinite}
-@keyframes hub-aurora-drift{from{transform:translate(-5%,3%) rotate(-9deg);opacity:.42}to{transform:translate(7%,-4%) rotate(6deg);opacity:.83}}
-@keyframes hub-portal-breathe{from{transform:scale(.83);opacity:.42}to{transform:scale(1.13);opacity:.83}}
-@keyframes hub-water-drift{from{transform:translateX(-5%) scaleX(.83);opacity:.35}to{transform:translateX(7%) scaleX(1.12);opacity:.66}}
-@keyframes hub-data-drift{0%{transform:translateY(15px) rotate(45deg);opacity:0}23%,64%{opacity:.68}100%{transform:translateY(-75px) rotate(100deg);opacity:0}}
-@media(max-width:700px){
-  .hub-aurora-glow,.hub-reflection{left:17%;width:79%}
-  .hub-portal-glow{left:42%;width:49%}
-  .hub-data-spark:nth-of-type(even){display:none}
-}
-html.reduce-motion .hub-atmosphere :is(span,i){animation:none!important}
-html.reduce-motion .hub-data-spark{display:none}
-@media(prefers-reduced-motion:reduce){
-  .hub-atmosphere :is(span,i){animation:none!important}
-  .hub-data-spark{display:none}
-}
 #overlay .approved-info-dialog.menu-release-dialog{text-align:left}
 .menu-release-meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;font-size:.84em}
 .menu-release-meta b{border:1px solid var(--m-line2);border-radius:999px;background:var(--m-sunk);padding:4px 10px}
@@ -5624,40 +5594,43 @@ function bindMenuFX(){
 }
 // Vida en el menú de inicio: el compañero elegido delante del portal y otros Digimon paseando (primero los desbloqueados)
 function hubLife(){
-  const sprOf = k => { try { return spriteOf(k, false); } catch(e){ return 'sprites/adventure/' + k + '.png'; } };
-  const sprite = (k, cls = '') => animEl(sprOf(k), 'lv-spr ' + cls);
-  const hero = (CHARS[selectedKey] || SEASONS.adventure.chars.includes(selectedKey)) ? selectedKey : 'agumon';
-  // Cada sitio del dibujo tiene su habitante, elegido por lo que encaja con él (sin azar).
-  // Si el compañero elegido es ese habitante, pasa al siguiente de la lista.
-  const used = new Set([hero]);
-  const cast = list => { const k = list.find(x => !used.has(x)); if (k) used.add(k); return k; };
-  const tree = cast(['palmon', 'tentomon', 'hagurumon']);   // planta: sentada entre las raíces del árbol
-  const walker = cast(['gabumon', 'leomon', 'gatomon']);    // pasea por la hierba entre el árbol y las escaleras
-  const flyer = cast(['biyomon', 'patamon', 'tentomon']);   // vuela alrededor de la copa del árbol
-  const swimmer = cast(['gomamon']);                         // nada en el lago, al pie de la cascada
-  // Coordenadas en % de ui/fondo_inicio.webp: x = centro, y = línea de los pies; s = ancho; dx = recorrido en anchos del sprite
+  const hero = CHARS[selectedKey] ? selectedKey : 'agumon';
+  const chosen = new Set([hero]);
+  const cast = picks => {
+    const key = picks.find(k => !chosen.has(k));
+    chosen.add(key);
+    return key;
+  };
+  const walker = cast(['gabumon','leomon','gatomon']);
+  const slow = cast(['palmon','tentomon','hagurumon']);
+  const flyer = cast(['biyomon','patamon','tentomon']);
+  const scout = cast(['patamon','biyomon','gatomon','tentomon']);
+  const swimmer = cast(['gomamon','frigimon']);
+  const actor = (className, [key, route, x, y, dx, dy, size, duration, delay]) =>
+    `<span class="${className} ${route}" style="--x:${x}%;--y:${y}%;--dx:${dx}cqw;--dy:${dy}cqw;--size:${size}cqw;--duration:${duration}s;--delay:${delay}s">${animEl(spriteOf(key, false),'living-sprite')}</span>`;
   const stage = [
-    tree ? `<span class="lv-d lv-sit" style="--x:59;--y:61.3;--s:4.2">${sprite(tree)}</span>` : '',
-    walker ? `<span class="lv-d lv-walk" style="--x:62;--y:62.8;--s:4.6;--dx:1.1;--t:16s;--dl:-3s">${sprite(walker)}<em class="lv-emo">♪</em></span>` : '',
-    `<span class="lv-d lv-hero" style="--x:73.5;--y:65;--s:6.2">${sprite(hero)}</span>`,
-    flyer ? `<span class="lv-d lv-fly" style="--x:53;--y:45;--s:3.4">${sprite(flyer)}</span>` : '',
-    swimmer ? `<span class="lv-d lv-walk lv-swim" style="--x:64.8;--y:82.6;--s:4.6;--dx:1.1;--t:22s;--dl:-8s">${sprite(swimmer)}</span>` : ''
-  ].join('');
-  // Chispas del portal (x 70-80, y 40-60) y luciérnagas sobre la hierba (x 45-90, y 55-75)
-  const fx = Array.from({length: 14}, (_, i) => `<b style="--x:${70 + (i * 37) % 11};--y:${42 + (i * 29) % 20};--t:${4 + i % 4}s;--dl:${-(i * 0.73).toFixed(2)}s"></b>`).join('')
-    + Array.from({length: 10}, (_, i) => `<b class="ff" style="--x:${45 + (i * 43) % 45};--y:${56 + (i * 31) % 20};--t:${3 + i % 3}s;--dl:${-(i * 0.9).toFixed(2)}s"></b>`).join('');
-  // Móvil: el compañero y su pareja de paseo caminan por el borde de arriba de la tarjeta Jugar
-  const parade = [[hero, 64, 15, -1], [walker || flyer, 56, 19, -10]].filter(x => x[0]).map(([k, sz, t, dl]) => `<span class="lv-p" style="--s:${sz}px;--t:${t}s;--dl:${dl}s">${sprite(k)}</span>`).join('');
+    [walker,'walk',44,74,26,3,8,14,-2],
+    [slow,'walk',54,58,20,-1.3,6.5,17,-11],
+    [hero,'walk',49,81,22,-4,9.4,12,-7],
+    [flyer,'fly',45,33,30,-3.5,7,13,-4],
+    [scout,'fly',48,27,21,4,5.3,10,-8],
+    [swimmer,'swim',29,57,19,1.1,7.2,16,-5]
+  ];
+  const strip = [
+    [hero,'walk',12,91,76,-1,0,12,-2],
+    [walker,'walk',14,84,70,-4,0,16,-10],
+    [flyer,'fly',11,57,77,-7,0,10,-4]
+  ];
   return {
-    stage: `<div class="lv-stage" aria-hidden="true">${stage}<div class="lv-fx">${fx}</div></div>`,
-    parade: `<div class="lv-parade" aria-hidden="true">${parade}</div>`
+    stage: `<div class="living-world">${stage.map(data => actor('living-actor',data)).join('')}</div>`,
+    parade: `<div class="living-strip" aria-hidden="true">${strip.map(data => actor('living-strip-actor',data)).join('')}</div>`
   };
 }
 const MENU_RELEASE = {
-  version: '0.1.0',
+  version: '0.1.1',
   date: '2026-11-20',
   changes: [
-    ['Inicio animado', 'El portal, la aurora y los reflejos se mueven en el menú. Puedes reducir el movimiento desde Ajustes.'],
+    ['Inicio animado', 'Recorre el Mundo Digital desde el inicio. Los Digimon caminan, vuelan y nadan en el paisaje animado.'],
     ['Ranking online', 'Abre la clasificación desde el inicio y filtra por mapa, modo, dificultad y región.'],
     ['Tienda semanal', 'Prueba el marco y el título de la semana en tu propia ficha antes de comprarlos.'],
     ['Ficha de entrenador', 'Personaliza tu fondo, consulta las marcas por mapa y destaca hasta tres logros.'],
@@ -5698,11 +5671,7 @@ function showSelect(){
   const savedTxt = saved ? `${safeText(stageName(saved.key, saved.evolved))} · Nv ${saved.g.p.lvl | 0} · ${fmtTime(Math.floor(+saved.g.t || 0))}` : '';
   showOverlay(`
     <main class="realhub hb" aria-label="Menú principal Digibonk">
-      <div class="real-world" aria-hidden="true"><div class="rw-scenery"></div><div class="rw-scenery-core"></div><div class="rw-aurora"></div><div class="rw-light"></div><div class="rw-water"></div><div class="rw-stars"></div>
-        <div class="hub-atmosphere"><span class="hub-aurora-glow"></span><span class="hub-portal-glow"></span><span class="hub-reflection"></span>
-          ${[[58,51,0],[70,58,-3],[77,54,-7],[66,67,-4],[80,44,-8],[62,41,-5]].map(([x,y,delay]) =>
-            `<i class="hub-data-spark" style="--sx:${x}%;--sy:${y}%;--delay:${delay}s"></i>`).join('')}
-        </div>${life.stage}</div>
+      <div class="real-world" aria-hidden="true">${life.stage}</div>
       <header class="hb-top">
         <div class="hb-utils">
           <button class="hb-pill hb-version" id="hubRelease" type="button" aria-haspopup="dialog" title="Ver novedades">Beta ${MENU_RELEASE.version}</button>
