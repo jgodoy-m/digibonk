@@ -3346,13 +3346,9 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
 .trainer-screen #tcAv{width:clamp(96px,10vw,132px);height:clamp(96px,10vw,132px)}
 .trainer-screen .trainer-hero #plChange{margin:0!important;min-height:42px;letter-spacing:0;font-size:14px!important}
 .trainer-identity{min-width:0;display:grid;justify-items:start;gap:8px}
-.trainer-identity :is(label,small),.trainer-panel small,.trainer-empty{color:var(--m-soft);font-size:13px}
-.trainer-identity :is(label,small){color:var(--trainer-muted)}
-.trainer-identity input{box-sizing:border-box;width:min(100%,360px);min-height:46px;margin:0;padding:4px 9px;
-  color:inherit;background:transparent;border:1px solid var(--m-line2);border-radius:9px;font:850 clamp(20px,3.1vw,33px) 'Nunito',system-ui}
-.trainer-identity input::placeholder{color:var(--trainer-muted)}
-.trainer-identity input:focus-visible{outline:2px solid var(--trainer-title);outline-offset:2px}
-.has-trainer-bg .trainer-identity input{background:#13142085;border-color:#ffffff69}
+.trainer-panel small,.trainer-empty{color:var(--m-soft);font-size:13px}
+.trainer-identity small{color:var(--trainer-muted);font-size:13px}
+.trainer-name{margin:0;color:inherit;font-size:clamp(25px,5vw,50px);font-weight:900;line-height:1.07;overflow-wrap:anywhere}
 .trainer-title{display:flex;align-items:center;gap:7px;font-size:15px;color:var(--trainer-title);overflow-wrap:anywhere}
 .trainer-title .title-badge-art{width:24px;height:24px;object-fit:contain}
 .trainer-wallet{display:inline-flex;align-items:center;gap:6px;color:var(--m-gold);font-weight:850;white-space:nowrap}
@@ -3466,6 +3462,13 @@ html[data-theme=oscuro] .realhub.pl4.trainer-screen{--trainer-scrim:linear-gradi
 .trainer-custom .cz-filters :is(input,select){min-width:0;min-height:36px;padding:4px 8px;color:var(--m-text);background:var(--m-sunk);
   border:1px solid var(--m-line2);border-radius:8px;font:700 14px 'Nunito',system-ui}
 .trainer-custom .cz-filters input{flex:1}
+.trainer-custom .cz-name-panel{display:grid;justify-items:start;gap:8px;margin:4px 16px 16px;padding:14px;
+  border:1px solid var(--m-cardline);border-radius:12px;background:var(--m-sunk)}
+.trainer-custom .cz-name-panel input{box-sizing:border-box;width:min(100%,360px);min-height:42px;padding:6px 10px;
+  border:1px solid var(--m-line2);border-radius:8px;background:var(--m-card);color:var(--m-text);font:700 16px 'Nunito',system-ui}
+.trainer-custom .cz-name-panel p{margin:0;color:var(--m-soft);font-size:14px}
+.trainer-custom .cz-name-panel .cz-name-error{color:var(--m-bad)}
+.trainer-custom .cz-name-error:empty{display:none}
 .trainer-custom :is(.cz-pin-count,.cz-empty){margin:4px 16px 8px;color:var(--m-soft);font-size:14px}
 .trainer-custom .cz-empty{grid-column:1/-1}
 .trainer-custom .cz-foot{flex:none;margin:0;padding:10px 16px;background:var(--m-sunk);border-color:var(--m-line);justify-content:flex-end}
@@ -5882,8 +5885,9 @@ function showHelp(){
 /* ---------- Código de guardado: lleva el progreso a otro navegador ---------- */
 const TRAINER_BG_KEY = 'digibonk3d-trainer-bg';
 const TRAINER_IDENTITY_KEY = 'digibonk3d-trainer-identity';
+const TRAINER_RENAMED_KEY = 'digibonk3d-trainer-renamed-at';
 const TRAINER_RECORDS_KEY = 'digibonk3d-trainer-records';
-const SAVE_KEYS = [TRAINER_BG_KEY, TRAINER_IDENTITY_KEY, TRAINER_RECORDS_KEY, 'digibonk3d-shop-favorites', 'digibonk3d-shop-discount', 'digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
+const SAVE_KEYS = [TRAINER_BG_KEY, TRAINER_IDENTITY_KEY, TRAINER_RENAMED_KEY, TRAINER_RECORDS_KEY, 'digibonk3d-shop-favorites', 'digibonk3d-shop-discount', 'digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
   'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-maptime', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
   'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales', 'digibonk3d-objetos', 'digibonk3d-obj-ini', 'digibonk3d-reto', 'digibonk3d-sist'];
 // También cuentan los contadores por banner (pity) y la mejor oleada de cada mapa
@@ -12726,12 +12730,37 @@ function trainerRecordSummary(recs, roster){
     {label:'Mejor oleada', mark:wave, value:wave?.wave || '—'}
   ];
 }
-function trainerCardPreview({avatar, frame, title, background, favorite}){
+const TRAINER_RENAME_INTERVAL = 30 * 24 * 60 * 60 * 1000;
+function trainerRenameAvailableAt(){
+  const renamedAt = Number(localStorage.getItem(TRAINER_RENAMED_KEY));
+  return Number.isFinite(renamedAt) && renamedAt > 0 ? renamedAt + TRAINER_RENAME_INTERVAL : 0;
+}
+function trainerRenameRestriction(){
+  if (isGuest()) return I18N.tr('El nombre se elige al crear un perfil.');
+  const availableAt = trainerRenameAvailableAt();
+  if (Date.now() < availableAt){
+    const date = new Date(availableAt).toLocaleString(I18N.lang, {dateStyle:'medium',timeStyle:'short'});
+    return I18N.tr('Puedes volver a cambiar tu nombre el {0}.').replace('{0}', date);
+  }
+  return '';
+}
+function trainerRenameError(name){
+  const restriction = trainerRenameRestriction();
+  if (restriction) return restriction;
+  if (!name || name.length > 16 || /[<>\p{Cc}]/u.test(name)){
+    return I18N.tr('Escribe un nombre de hasta 16 caracteres, sin signos < o >.');
+  }
+  if (profileKey(name) !== profileKey(trainerName) && localStorage.getItem(profileKey(name))){
+    return I18N.tr('Ese nombre ya pertenece a otro perfil de este navegador.');
+  }
+  return '';
+}
+function trainerCardPreview({avatar, frame, title, background, favorite, name = trainerName}){
   const item = TITLES.find(x => x.id === title);
   const key = favorite || selectedKey;
   return `<div ${trainerCoverAttrs('cz-prev', background)}>
     <div class="hud-portrait trainer-portrait${frame ? ' fr-' + frame : ''}"><img src="${avatarSrc(avatar)}" alt=""></div>
-    <div class="cz-prev-copy">${trainerName ? `<b data-no-i18n>${escHtml(trainerName)}</b>` : '<b>Invitado</b>'}
+    <div class="cz-prev-copy">${name ? `<b data-no-i18n>${escHtml(name)}</b>` : '<b>Invitado</b>'}
       ${item ? `<span class="cz-preview-title">${trainerTitleIcon(item)}${escHtml(item.name)}</span>` : ''}
       ${favorite !== undefined && CHARS[key] ? `<small>${favorite ? 'Digimon favorito' : 'Compañero actual'} · ${CHARS[key].name}</small>` : ''}</div>
     </div>`;
@@ -12806,8 +12835,7 @@ function showPlayer(){
           <div class="trainer-avatar-block"><div class="hud-portrait trainer-portrait${extra.frame ? ' fr-' + extra.frame : ''}" id="tcAv"><img src="${avatarSrc()}" alt=""></div>
             <button type="button" class="pl4-chg" id="plChange">Personalizar ficha</button></div>
           <div class="trainer-identity">
-            <label for="tcName">Nombre de entrenador</label>
-            <input id="tcName" maxlength="16" autocomplete="off" value="${escHtml(trainerName || '')}" placeholder="Tu nombre">
+            <h3 class="trainer-name"${trainerName ? ' data-no-i18n' : ''}>${trainerName ? escHtml(trainerName) : 'Invitado'}</h3>
             ${title ? `<strong class="trainer-title">${trainerTitleIcon(title)}${escHtml(title.name)}</strong>` : ''}
             ${CHARS[companion] ? `<div class="trainer-favorite"><img src="${charIcon(companion)}" alt=""><span><b>${favorite ? 'Digimon favorito' : 'Compañero actual'}</b><small>${CHARS[companion].name} · Maestría ${masteryLv(companion)}</small></span></div>` : ''}
           </div>
@@ -12841,20 +12869,6 @@ function showPlayer(){
     localStorage.setItem('digibonk3d-last-choice', selectedKey);
     showMapSelect();
   };
-  const name = document.getElementById('tcName');
-  name.onblur = () => {
-    const value = name.value.trim();
-    if (value && value !== trainerName){
-      setTrainerName(value);
-      announce('Nombre guardado', escHtml(trainerName), '#3de0ff', 'low');
-    }
-    name.value = trainerName || '';
-  };
-  name.addEventListener('keydown', e => {
-    e.stopPropagation();
-    if (e.key === 'Escape') name.value = trainerName || '';
-    if (e.key === 'Escape' || e.key === 'Enter'){ e.preventDefault(); name.blur(); }
-  });
 }
 
 // Personalización de la ficha. Solo guarda al pulsar Guardar.
@@ -12862,9 +12876,9 @@ function openCustomizer(initialTab = 'bg', trigger = document.getElementById('pl
   if (document.getElementById('czBack')) return;
   const identity = trainerIdentity();
   let pAv = avatarIcon()?.id || '', pFrame = extra.frame || '', pTitle = extra.title || '', pBg = trainerBackgroundId();
-  let pFavorite = identity.favorite, pPins = identity.pinned;
+  let pFavorite = identity.favorite, pPins = identity.pinned, pName = trainerName;
   let tab = initialTab, query = '', access = 'owned', saved = false;
-  const tabs = [['bg','Fondos'], ['fav','Favorito'], ['pins','Logros'], ['av','Entrenadores'], ['dg','Iconos Digimon'], ['frame','Marcos'], ['title','Títulos']];
+  const tabs = [['name','Nombre'], ['bg','Fondos'], ['fav','Favorito'], ['pins','Logros'], ['av','Entrenadores'], ['dg','Iconos Digimon'], ['frame','Marcos'], ['title','Títulos']];
   const back = document.createElement('dialog');
   back.id = 'czBack'; back.className = 'trainer-custom trainer-picker';
   back.setAttribute('aria-labelledby', 'czTitle');
@@ -12911,10 +12925,29 @@ function openCustomizer(initialTab = 'bg', trigger = document.getElementById('pl
   const limited = () => ['dg','frame','title'].includes(tab);
   const renderPreview = () => {
     box.querySelector('.cz-preview-slot').innerHTML = trainerCardPreview({
-      avatar:pAv, frame:pFrame, title:pTitle, background:pBg, favorite:pFavorite
+      avatar:pAv, frame:pFrame, title:pTitle, background:pBg, favorite:pFavorite, name:pName.trim() || trainerName
     });
   };
   const renderList = focus => {
+    if (tab === 'name'){
+      const restriction = trainerRenameRestriction();
+      const help = restriction || I18N.tr('Puedes cambiar tu nombre una vez cada 30 días.');
+      const body = box.querySelector('.cz-list');
+      body.innerHTML = `<div class="cz-name-panel">
+        <label for="czName">Nombre de entrenador</label>
+        <input id="czName" type="text" maxlength="16" autocomplete="off" aria-describedby="czNameHelp czNameError" value="${escHtml(pName)}" ${restriction ? 'readonly' : ''}>
+        <p id="czNameHelp" data-no-i18n>${escHtml(help)}</p>
+        <p class="cz-name-error" id="czNameError" role="alert" data-no-i18n></p>
+      </div>`;
+      const input = body.querySelector('#czName');
+      input.oninput = () => {
+        pName = input.value;
+        input.removeAttribute('aria-invalid');
+        body.querySelector('#czNameError').textContent = '';
+        renderPreview();
+      };
+      return;
+    }
     const list = options().filter(item => {
       const visible = !limited() || (access === 'locked' ? item.locked : !item.locked);
       return visible && (!query || [item.name,I18N.tr(item.name)].some(name => normalized(name).includes(query)));
@@ -12962,6 +12995,21 @@ function openCustomizer(initialTab = 'bg', trigger = document.getElementById('pl
     if (filter) filter.onchange = () => { access = filter.value; renderList(); };
     box.querySelector('#czCancel').onclick = () => back.close();
     box.querySelector('#czSave').onclick = () => {
+      const name = pName.trim();
+      const renamed = name !== trainerName;
+      if (renamed){
+        const error = trainerRenameError(name);
+        if (error){
+          tab = 'name'; render();
+          const input = box.querySelector('#czName');
+          input.setAttribute('aria-invalid', 'true');
+          box.querySelector('#czNameError').textContent = error;
+          input.focus();
+          return;
+        }
+        setTrainerName(name);
+        localStorage.setItem(TRAINER_RENAMED_KEY, String(Date.now()));
+      }
       if (pAv) localStorage.setItem('digibonk3d-avatar', pAv);
       else localStorage.removeItem('digibonk3d-avatar');
       localStorage.setItem(TRAINER_BG_KEY, pBg);
@@ -12969,6 +13017,7 @@ function openCustomizer(initialTab = 'bg', trigger = document.getElementById('pl
       if (pFrame) equipExtra('frame', pFrame); else unequipExtra('frame');
       if (pTitle) equipExtra('title', pTitle); else unequipExtra('title');
       saved = true; back.close();
+      if (renamed) cloudSync();
     };
     renderPreview(); renderList();
   };
