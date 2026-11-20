@@ -2884,7 +2884,7 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
 #overlay .realhub.hb .nm-weekly>span>b{flex:0 0 auto;max-width:70%}
 @media (orientation:landscape) and (max-height:500px){#overlay .realhub.hb .nm-weekly .nm-wk-lbl{display:none}}
 #overlay .realhub.hb .nm-event.hm-soon{background:var(--m-sunk)!important;color:var(--m-mute)!important;box-shadow:none!important}
-#overlay .realhub.hb .nm-tiles{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important}
+#overlay .realhub.hb .nm-tiles{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important}
 #overlay .realhub.hb .nm-tiles .hb-tile{padding:8px 4px 7px!important;gap:1px!important;border:1px solid var(--m-cardline)!important;border-bottom:3px solid var(--tc)!important;transition:transform .14s,box-shadow .14s!important}
 #overlay .realhub.hb .nm-tiles .hb-tile i{transform:none!important;width:42px!important;height:42px!important;margin:0 0 5px!important;border-radius:12px!important;overflow:hidden;background:radial-gradient(circle at 50% 35%,#1d5fc4,#0a1a46 75%)!important;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--tc) 70%,#9aefff),0 2px 0 rgba(0,0,0,.18)}
 #overlay .realhub.hb .nm-tiles .hb-tile i::after{display:none!important}
@@ -5555,7 +5555,6 @@ function showSelect(){
             <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio${labReady ? ': ' + labReady + ' mejoras disponibles' : ''}"><i><img class="nm-ic" src="ui/hub/ic_laboratorio.webp" alt=""></i><b>Laboratorio</b><small>${labReady ? labReady + (labReady === 1 ? ' mejora' : ' mejoras') : 'Mejoras'}</small>${labReady ? '<em class="nm-dot" aria-hidden="true"></em>' : ''}</button>
             <button type="button" class="hb-tile t3" id="mMaps" aria-label="Mapas: ${safeText(MAPS[runMap].name)}"><i><img class="nm-ic" src="ui/hub/ic_mapas.webp" alt=""></i><b>Mapas</b><small>${safeText(MAPS[runMap].name)}</small></button>
             <button type="button" class="hb-tile t4" id="mLog" aria-label="Logros: ${achOwned} de ${achAll}"><i><img class="nm-ic" src="ui/hub/ic_logros.webp" alt=""></i><b>Logros</b><small>${achOwned}/${achAll}</small></button>
-            <button type="button" class="hb-tile t5" id="mRecs" aria-label="Récords"><i><img class="nm-ic" src="ui/hub/ic_ranking.webp" alt=""></i><b>Récords</b><small>${recs.length ? 'Mejor ' + fmtTime(bestT) : 'Sin partidas'}</small></button>
             <button type="button" class="hb-tile t7" id="btnPlayer" aria-label="Jugador"><i><img class="nm-ic" src="ui/hub/ic_jugador.webp" alt=""></i><b>Jugador</b><small>Perfil y marcos</small></button>
           </div>
           <nav class="hb-bar" aria-label="Enlaces y ajustes">
@@ -5657,7 +5656,6 @@ function showSelect(){
     host.querySelector('#realClose').focus();
   };
   document.getElementById('rhRecords').onclick=()=>openInfo('records');
-  document.getElementById('mRecs').onclick=()=>openInfo('records');
   { const ol = document.getElementById('hbRank'), tabs = document.querySelectorAll('.hb-tabs button');
     const recKey = r => r.key || Object.keys(CHARS).find(k => CHARS[k].name === r.name || (EVO_LINE[k] || []).some(e => e.name === r.name)) || 'agumon';
     const val = (r, k) => k === 't' ? fmtTime(r.t) : k === 'lvl' ? 'Nv ' + (r.lvl || 1) : (r.kills || 0).toLocaleString('es-ES');
