@@ -97,33 +97,39 @@ end $$;
 create or replace function public.submit_score(p_mode text, p_map text, p_diff text, p_digimon text,
   p_t integer, p_kills integer, p_lvl integer, p_wave integer, p_win boolean)
 returns void language plpgsql security definer set search_path = public as $$
-declare v_last timestamptz;
+declare
+  v_user uuid := auth.uid();
+  v_last timestamptz;
 begin
-  if auth.uid() is null then raise exception 'not_signed_in'; end if;
-  if not exists (select 1 from profiles where user_id = auth.uid()) then raise exception 'no_profile'; end if;
+  if v_user is null then raise exception 'not_signed_in'; end if;
+  -- Serializa las comprobaciones y la escritura de una misma cuenta.
+  perform 1 from profiles where user_id = v_user for update;
+  if not found then raise exception 'no_profile'; end if;
   if p_t is null or p_kills is null or p_lvl is null then raise exception 'implausible'; end if;
   if p_t < 30 then return; end if;   -- partidas de menos de 30 s no cuentan
-  if exists (select 1 from devs where user_id = auth.uid()) then return; end if;   -- las cuentas de desarrollador no puntúan
+  if exists (select 1 from devs where user_id = v_user) then return; end if;   -- las cuentas de desarrollador no puntúan
   if p_mode is null or p_mode not in ('normal', 'surv')
      or p_map is null or p_map not in ('bosque', 'desierto', 'nevado')
      or (p_mode = 'normal' and (p_diff is null or p_diff not in ('facil', 'normal', 'dificil', 'pesadilla')))
-     or p_digimon is null or p_digimon !~ '^[a-z0-9_]{1,32}$' then raise exception 'unknown_run'; end if;
-  if p_kills < 0 or p_lvl < 1 or coalesce(p_wave, 0) < 0 then raise exception 'implausible'; end if;
+     or p_digimon is null or p_digimon not in ('agumon', 'gabumon', 'biyomon', 'tentomon', 'palmon', 'gomamon',
+       'patamon', 'gatomon', 'leomon', 'hagurumon', 'frigimon', 'wizardmon') then raise exception 'unknown_run'; end if;
+  if p_t > 14400 or p_kills < 0 or p_lvl not between 1 and 500 or coalesce(p_wave, 0) < 0 then raise exception 'implausible'; end if;
   if p_kills > p_t * 40 + 300 or p_lvl > p_t / 4 + 10 or coalesce(p_wave, 0) > p_t / 60 + 2 then raise exception 'implausible'; end if;
   if p_mode = 'normal' and p_t > 3600 then raise exception 'implausible'; end if;
-  if p_mode = 'surv' and coalesce(p_wave, 0) < 1 then raise exception 'implausible'; end if;
+  if (p_mode = 'surv' and coalesce(p_wave, 0) < 1)
+     or (p_mode = 'normal' and coalesce(p_wave, 0) <> 0) then raise exception 'implausible'; end if;
   -- Ganar el modo clásico exige vencer a los jefes del mapa: nunca en menos de minuto y medio
   if p_mode = 'normal' and coalesce(p_win, false) and p_t < 90 then raise exception 'implausible'; end if;
   -- Como mucho 12 partidas por hora y 120 por día por cuenta
-  if (select count(*) from scores where user_id = auth.uid() and created_at > now() - interval '1 hour') >= 12
-     or (select count(*) from scores where user_id = auth.uid() and created_at > now() - interval '1 day') >= 120
+  if (select count(*) from scores where user_id = v_user and created_at > now() - interval '1 hour') >= 12
+     or (select count(*) from scores where user_id = v_user and created_at > now() - interval '1 day') >= 120
   then raise exception 'too_many'; end if;
   -- desde la partida anterior o, si es la primera, desde que se creó la cuenta
-  select greatest((select max(created_at) from scores where user_id = auth.uid()),
-                  (select created_at from auth.users where id = auth.uid())) into v_last;
+  select greatest((select max(created_at) from scores where user_id = v_user),
+                  (select created_at from auth.users where id = v_user)) into v_last;
   if v_last is not null and extract(epoch from now() - v_last) < p_t * 0.9 then raise exception 'too_fast'; end if;
   insert into scores (user_id, mode, map, diff, digimon, t, kills, lvl, wave, win)
-  values (auth.uid(), p_mode, p_map, case when p_mode = 'surv' then '-' else p_diff end, p_digimon,
+  values (v_user, p_mode, p_map, case when p_mode = 'surv' then '-' else p_diff end, p_digimon,
           p_t, p_kills, p_lvl, coalesce(p_wave, 0), coalesce(p_win, false) and p_mode = 'normal');
 end $$;
 
