@@ -1169,14 +1169,14 @@ body:has(.tr11) #hudTop{display:none!important}
 .hud-portrait.fr-esperanza_angelical::before,.rw-frame.fr-esperanza_angelical{background-image:url(ui/marcos/esperanza_angelical.webp)}
 .hud-portrait.fr-sinceridad_palmon::before,.rw-frame.fr-sinceridad_palmon{background-image:url(ui/marcos/sinceridad_palmon.webp)}
 .hud-portrait.fr-bondad_botanica::before,.rw-frame.fr-bondad_botanica{background-image:url(ui/marcos/bondad_botanica.webp)}
-.hud-portrait.fr-tienda_agumon::before,.rw-frame.fr-tienda_agumon{background-image:url(ui/marcos/tienda_agumon.webp)}
-.hud-portrait.fr-tienda_gabumon::before,.rw-frame.fr-tienda_gabumon{background-image:url(ui/marcos/tienda_gabumon.webp)}
-.hud-portrait.fr-tienda_patamon::before,.rw-frame.fr-tienda_patamon{background-image:url(ui/marcos/tienda_patamon.webp)}
-.hud-portrait.fr-tienda_gatomon::before,.rw-frame.fr-tienda_gatomon{background-image:url(ui/marcos/tienda_gatomon.webp)}
-.hud-portrait.fr-tienda_leomon::before,.rw-frame.fr-tienda_leomon{background-image:url(ui/marcos/tienda_leomon.webp)}
-.hud-portrait.fr-tienda_hagurumon::before,.rw-frame.fr-tienda_hagurumon{background-image:url(ui/marcos/tienda_hagurumon.webp)}
-.hud-portrait.fr-tienda_frigimon::before,.rw-frame.fr-tienda_frigimon{background-image:url(ui/marcos/tienda_frigimon.webp)}
-.hud-portrait.fr-tienda_wizardmon::before,.rw-frame.fr-tienda_wizardmon{background-image:url(ui/marcos/tienda_wizardmon.webp)}
+.hud-portrait.fr-tienda_agumon::before,.rw-frame.fr-tienda_agumon{background-image:url(ui/marcos/tienda_agumon.webp?v=2)}
+.hud-portrait.fr-tienda_gabumon::before,.rw-frame.fr-tienda_gabumon{background-image:url(ui/marcos/tienda_gabumon.webp?v=2)}
+.hud-portrait.fr-tienda_patamon::before,.rw-frame.fr-tienda_patamon{background-image:url(ui/marcos/tienda_patamon.webp?v=2)}
+.hud-portrait.fr-tienda_gatomon::before,.rw-frame.fr-tienda_gatomon{background-image:url(ui/marcos/tienda_gatomon.webp?v=2)}
+.hud-portrait.fr-tienda_leomon::before,.rw-frame.fr-tienda_leomon{background-image:url(ui/marcos/tienda_leomon.webp?v=2)}
+.hud-portrait.fr-tienda_hagurumon::before,.rw-frame.fr-tienda_hagurumon{background-image:url(ui/marcos/tienda_hagurumon.webp?v=2)}
+.hud-portrait.fr-tienda_frigimon::before,.rw-frame.fr-tienda_frigimon{background-image:url(ui/marcos/tienda_frigimon.webp?v=2)}
+.hud-portrait.fr-tienda_wizardmon::before,.rw-frame.fr-tienda_wizardmon{background-image:url(ui/marcos/tienda_wizardmon.webp?v=2)}
 .rw-frame[class*="fr-tienda_"]::after{display:none}
 .pl4-chg{position:relative;z-index:5}
 .pl4-av .hud-portrait{width:96px!important;height:96px!important}
@@ -3254,8 +3254,11 @@ body.is-touch #overlay :is(.lv3-act,.lv3-card,.end3-act2,.pz2) kbd,body.is-touch
 .featured .shop-sprite{--shop-sprite-size:clamp(156px,22vw,230px)}
 .shop-art .rw-frame{width:70px;height:70px;display:grid;place-items:center;overflow:hidden}
 .shop-art .rw-frame img{width:68%;height:68%;border-radius:50%;object-fit:cover}
-.shop-title-art{display:grid;place-items:center;width:54px;height:54px;border:2px solid var(--title-accent,var(--shop-gold));border-radius:50%;background:#25375d;color:var(--title-accent,var(--shop-gold))}
-.shop-title-art .ico{width:28px;height:28px}
+.title-badge-art{display:inline-block;width:1.65em;height:1.65em;object-fit:contain;vertical-align:middle;flex:none}
+.shop-title-art .title-badge-art{width:80px;height:80px;filter:drop-shadow(0 5px 7px #0811249c)}
+.cl-medal .title-badge-art{width:48px;height:48px}
+.cz-tile .title-badge-art{width:38px;height:38px}
+.pl4-title-badge .title-badge-art,.trainer-title .title-badge-art,.cz-ttl .title-badge-art{margin-inline-end:4px;margin-block:-2px}
 .shop-card-copy{display:grid;gap:5px;padding:9px 11px 11px}
 .shop-card-copy h3{margin:0;font:900 .94em/1.15 'Nunito',sans-serif;overflow-wrap:anywhere}
 .shop-card-copy small{font-size:.72em;line-height:1.2}
@@ -5222,7 +5225,7 @@ function showCollection(){
     const frames = FRAMES.map(f => { const ok = inv.frames.includes(f.id);
       return `<div class="cl4-card${ok ? ' ok' : ' locked'}"><div class="rw-frame${f.id ? ' fr-' + f.id : ''}"></div><b>${f.name}</b><small>${ok ? TIER_NAME[f.tier] : f.how + progTxt(f)}</small></div>`; }).join('');
     const titles = TITLES.map(tl => { const ok = inv.titles.includes(tl.id);
-      return `<div class="cl4-card${ok ? ' ok' : ' locked'}"><span class="cl-medal">${svgIcon('utilidad')}</span><b>${tl.name}</b><small>${ok ? TIER_NAME[tl.tier] : tl.how + progTxt(tl)}</small></div>`; }).join('');
+      return `<div class="cl4-card${ok ? ' ok' : ' locked'}"><span class="cl-medal">${titleBadge(tl) || svgIcon('utilidad')}</span><b>${tl.name}</b><small>${ok ? TIER_NAME[tl.tier] : tl.how + progTxt(tl)}</small></div>`; }).join('');
     body = `<div class="cl4-other"><h3>Marcos</h3><div class="cl4-cards">${frames}</div><h3>Títulos</h3><div class="cl4-cards">${titles}</div></div>`;
   } else {
     const list = chars.map(k => {
@@ -11742,7 +11745,7 @@ function shopItems(week = weekNum()){
   return [
     skin(featured, 'galactico', 'featured'),
     {k:featured, id:cosmeticId, type:'frame', name:FRAMES.find(i => i.id === cosmeticId).name, price:SHOP_PRICE.frame, owned:inv.frames.includes(cosmeticId)},
-    {k:featured, id:cosmeticId, type:'title', name:TITLES.find(i => i.id === cosmeticId).name, price:SHOP_PRICE.title, owned:inv.titles.includes(cosmeticId)},
+    {...TITLES.find(i => i.id === cosmeticId), k:featured, type:'title', price:SHOP_PRICE.title, owned:inv.titles.includes(cosmeticId)},
     skin(secondary, secondarySkin, 'secondary'),
     skin(returning, 'galactico', 'returning')
   ].map(it => ({...it, key:`${it.type}:${it.k}:${it.id}`}));
@@ -11791,7 +11794,7 @@ function showShop(msg = ''){
     const src = isSkin ? spriteWith(it.k, it.stage, it.id) : '', sheet = isSkin ? sheetOf(src) : '';
     const art = isSkin ? (sheet ? `<span class="shop-sprite is-sheet" style="--sheet:url('${sheet}')" aria-hidden="true"></span>` : `<img class="shop-sprite" src="${src}" alt="">`)
       : it.type === 'frame' ? `<span class="rw-frame fr-${it.id}"><img src="${charIcon(it.k, 'clasico')}" alt=""></span>`
-        : `<span class="shop-title-art" style="--title-accent:${SHOP_COSMETICS[it.k].color}">${svgIcon(SHOP_COSMETICS[it.k].icon)}</span>`;
+        : `<span class="shop-title-art">${titleBadge(it)}</span>`;
     const action = it.owned ? '<span class="shop-owned">✓ En tu colección</span>'
       : it.locked ? `<button type="button" class="shop-unlock" data-shop-dex="${it.k}">Cómo desbloquear</button>`
         : `<button type="button" class="shop-buy" data-shop-buy="${it.key}" ${bits < it.price ? 'disabled' : ''}>${bits < it.price ? `Faltan ${fmt(it.price - bits)} Bits` : `Comprar · ${fmt(it.price)} Bits`}</button>`;
@@ -12505,7 +12508,7 @@ function showPlayer(){
           <div class="trainer-identity">
             <label for="tcName">Nombre de entrenador</label>
             <input id="tcName" maxlength="16" autocomplete="off" value="${escHtml(trainerName || '')}" placeholder="Tu nombre">
-            ${title ? `<strong class="trainer-title">${escHtml(title.name)}</strong>` : ''}
+            ${title ? `<strong class="trainer-title">${titleBadge(title)}${escHtml(title.name)}</strong>` : ''}
             ${CHARS[selectedKey] ? `<small>Compañero: ${escHtml(CHARS[selectedKey].name)}</small>` : ''}
           </div>
           <div class="trainer-actions"><span class="trainer-wallet"><img src="ui/hud/ic_bits.webp" alt="">${number(SAVE.bits)} Bits</span>
@@ -12572,14 +12575,14 @@ function openCustomizer(){
     return [{id: '', name: 'Sin título', how: '', tier: 'c'}, ...TITLES].map(t => {
       const ok = ownsTitle(t.id), pg = !ok && t.prog ? t.prog() : null;
       const bar = pg && pg[1] > 1 ? `<i class="cz-bar"><u style="width:${Math.round(Math.min(1, pg[0] / pg[1]) * 100)}%"></u></i><em>${Math.min(pg[0], pg[1])}/${pg[1]}</em>` : '';
-      return card(pTitle === t.id, 'ti:' + t.id, `<b>${t.name}</b><small>${ok ? (t.id ? rar(t.tier) : 'Sin título') : t.how}</small>${bar}`, !ok, ok ? (t.tier || 'c') : 'c');
+      return card(pTitle === t.id, 'ti:' + t.id, `${titleBadge(t)}<b>${t.name}</b><small>${ok ? (t.id ? rar(t.tier) : 'Sin título') : t.how}</small>${bar}`, !ok, ok ? (t.tier || 'c') : 'c');
     }).join('');
   };
   const preview = () => {
     const ic = AVATAR_KIDS.find(x => x.id === pAv) || PLAYER_ICONS.find(x => x.id === pAv) || SKIN_ICONS.find(x => x.id === pAv);
     const img = ic ? ic.src : charIcon(selectedKey);
     const t = pTitle ? TITLES.find(x => x.id === pTitle) : null;
-    return `<div class="cz-prev"><div class="hud-portrait pf-av${pFrame ? ' fr-' + pFrame : ''}"><img src="${img}" alt=""></div><span class="cz-ttl">${t ? t.name : 'Sin título'}</span></div>`;
+    return `<div class="cz-prev"><div class="hud-portrait pf-av${pFrame ? ' fr-' + pFrame : ''}"><img src="${img}" alt=""></div><span class="cz-ttl">${titleBadge(t)}${t ? t.name : 'Sin título'}</span></div>`;
   };
   const render = (focus = '', scroll = 0) => {
     box.innerHTML = `
@@ -12647,17 +12650,19 @@ function bestSkinSet(){
   return best;
 }
 const SHOP_COSMETICS = {
-  agumon: {frame:'Ascua valiente', title:'Coraje en llamas', color:'#ffae56', icon:'meteoro'},
-  gabumon: {frame:'Colmillos de escarcha', title:'Rastro del Lobo', color:'#9edeff', icon:'cuchilla'},
-  patamon: {frame:'Alas del alba', title:'Mensajero del Alba', color:'#ffdc88', icon:'utilidad'},
-  gatomon: {frame:'Anillo sagrado', title:'Guardiana del Anillo', color:'#e9c7ff', icon:'luz'},
-  leomon: {frame:'Melena de bronce', title:'Puño de la Bestia', color:'#f3c286', icon:'ofensiva'},
-  hagurumon: {frame:'Engranaje digital', title:'Maestro de las Torretas', color:'#d1f18a', icon:'chip'},
-  frigimon: {frame:'Cristal de ventisca', title:'Centinela de la Nieve', color:'#a5f0ff', icon:'pulso'},
-  wizardmon: {frame:'Órbita arcana', title:'Tejedor de Relámpagos', color:'#dbbaff', icon:'laser'},
+  agumon: {frame:'Ascua valiente', title:'Coraje en llamas'},
+  gabumon: {frame:'Colmillos de escarcha', title:'Rastro del Lobo'},
+  patamon: {frame:'Alas del alba', title:'Mensajero del Alba'},
+  gatomon: {frame:'Anillo sagrado', title:'Guardiana del Anillo'},
+  leomon: {frame:'Melena de bronce', title:'Puño de la Bestia'},
+  hagurumon: {frame:'Engranaje digital', title:'Maestro de las Torretas'},
+  frigimon: {frame:'Cristal de ventisca', title:'Centinela de la Nieve'},
+  wizardmon: {frame:'Órbita arcana', title:'Tejedor de Relámpagos'},
 };
+const titleBadge = item => item?.art ? `<img class="title-badge-art" src="${item.art}" alt="" decoding="async">` : '';
 const shopCosmetics = type => Object.entries(SHOP_COSMETICS).map(([key, set]) => ({
-  id:'tienda_' + key, name:set[type], tier:'r', how:'Tienda semanal'
+  id:'tienda_' + key, name:set[type], tier:'r', how:'Tienda semanal',
+  ...(type === 'title' ? {art:`ui/titulos/tienda_${key}.png`} : {})
 }));
 const FRAMES = [
   ...shopCosmetics('frame'),
