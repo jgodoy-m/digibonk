@@ -1875,8 +1875,10 @@ body.dbk-noplay #hudEmb{visibility:hidden}   /* subida de nivel, pausa y demás 
 #bonkBar::before{inset:6px!important;background:url(ui/hud/bonk.webp) center/contain no-repeat!important;box-shadow:none!important;border-radius:0!important}
 #bonkBar.ready::before{background:url(ui/hud/bonk_listo.webp) center/contain no-repeat!important}
 #bonkTxt{top:auto!important;bottom:-20px!important;height:auto!important;flex-direction:row!important;gap:5px!important;font-size:11px!important;
-  padding:2px 9px;border-radius:9px;background:var(--h-surf);left:50%!important;right:auto!important;transform:translateX(-50%);white-space:nowrap;box-shadow:var(--h-elev)}
-#bonkTxt small{font-size:11px!important}
+  width:max-content;max-width:min(160px, 40vw);padding:2px 7px;border-radius:9px;background:var(--h-surf);left:auto!important;right:-5px!important;transform:none;
+  text-align:center;letter-spacing:0!important;box-shadow:var(--h-elev)}
+#bonkName{min-width:0;line-height:1.15;overflow-wrap:anywhere}
+#bonkTxt small{flex:none;white-space:nowrap;font-size:11px!important}
 #bonkBar.ready #bonkTxt{color:#2a1200!important;background:#ffcf73}
 /* Barra del jefe dibujada */
 #bossbar{width:min(560px,80vw)!important;height:auto!important;aspect-ratio:900/111;background:none!important;box-shadow:none!important;overflow:visible!important}
@@ -3676,7 +3678,7 @@ body.is-touch #overlay :is(button,.g-back) kbd{display:none!important}
 <canvas id="edgeCv"></canvas>
 <div id="skillBar"></div>
 <div id="consBar"></div>
-<div id="bonkBar" style="display:none"><div id="bonkFill"></div><span id="bonkTxt">BONK 0%</span></div>
+<div id="bonkBar" style="display:none"><div id="bonkFill"></div><span id="bonkTxt"><b id="bonkName">BONK</b><small id="bonkStatus">0%</small></span></div>
 <div id="mapLoad" aria-hidden="true"><img class="ml-bg" alt="" decoding="async"><div class="ml-glow"></div><div class="ml-shade"></div><img class="ml-logo" src="ui/logo_digibonk.webp" alt="DigiBonk"><div class="ml-foot"><div class="ml-txt"><b id="mlName"></b><span id="mlStatus">Cargando el Mundo Digital…</span></div><div class="ml-meter"><div class="ml-track" id="mlBar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="ml-fill"></div></div><span class="ml-cap"></span><span class="ml-pct" id="mlPct"></span></div></div></div>
 <div id="rotateHint" aria-live="polite"><div><b>⟳</b><strong>Gira el móvil</strong><span>DigiBonk se juega en horizontal</span><small>¿No gira? Quita el bloqueo de rotación del móvil</small><small class="rh-ios">En iPhone, para jugar a pantalla completa: Compartir y «Añadir a pantalla de inicio»</small></div></div>
 <div id="touchCtl">
@@ -7280,12 +7282,17 @@ function removeDigivice(a){
 function animateEvo(dt){
   for (const r of rings){
     r.t += dt;
-    const sc = 1.4*(1 + r.t*r.grow); r.mesh.scale.set(sc, 1, sc);
-    r.mesh.material.opacity = Math.max(0, 1 - r.t/r.life);
+    const progress = Math.min(1, r.t/r.life);
+    if (r.motion) r.motion(progress);
+    else {
+      const sc = 1.4*(1 + r.t*r.grow);
+      r.mesh.scale.set(sc, 1, sc);
+    }
+    r.mesh.material.opacity = (r.opacity ?? 1)*(1 - progress);
   }
   rings = rings.filter(r => {
     if (r.t < r.life) return true;
-    world.remove(r.mesh); r.mesh.material.dispose(); return false;   // cada anillo tiene geometría y material propios: liberarlos o se acumulan en la GPU
+    world.remove(r.mesh); r.mesh.material.dispose(); return false;   // la geometría es compartida, el material es propio
   });
   screenFlash = Math.max(0, screenFlash - dt*1.5);
   document.getElementById('flash').style.opacity = screenFlash;
@@ -7354,29 +7361,107 @@ function bonkRelease(){
     popText(e.x, e.z, 80, '#ffd54f', 0.7);
   }
   for (const s of g.eshots) s.life = 0;   // el bucle de proyectiles retira las bolas del jefe
-  shake = Math.max(shake, 0.8);
-  spawnRing(p.x, p.z, 0xffd54f, 14, 0.5);
-  screenFlash = 0.6;
+  const fx = BONK_FX[g.ch.id];
+  spawnRing(p.x, p.z, fx?.color ?? 0xffd54f, R, 0.5);
+  if (!reduceMotion()){
+    shake = Math.max(shake, 0.8);
+    screenFlash = 0.35;
+    fx?.animate(p);
+    playSkinAttackFx(p, true);
+    g.atkT = Math.max(g.atkT || 0, 0.28);
+  }
   sfx('evolve');
   g.bonks = (g.bonks || 0) + 1;
-  const fx = BONK_FX[g.ch.id];
-  if (fx){ fx.f(p); announce('¡BONK!', fx.name, '#ffd54f', 'top'); }
-  else announce('¡BONK!', 'Onda de choque', '#ffd54f', 'top');
+  fx?.f(p);
+  announce(fx?.title ?? '¡BONK!', fx?.name ?? 'Onda de choque', fx ? '#' + fx.color.toString(16).padStart(6, '0') : '#ffd54f', 'top');
+}
+// Efectos visuales sin colisiones. Comparten el ciclo de vida de los anillos del suelo.
+function spawnAttackEffect(kind, p, color, {angle = 0, radius = 0, travel = 0, turn = 0, size = 5, length = 1, height = 0.35, lift = 0, life = 0.7, opacity = 1, additive = true} = {}){
+  const mesh = new THREE.Mesh(FX_PLANE, fxMatOwn(kind, color, opacity, additive));
+  const {x, z} = p;
+  const motion = progress => {
+    const direction = angle + turn*progress;
+    const distance = radius + travel*progress;
+    const px = x + Math.cos(direction)*distance;
+    const pz = z + Math.sin(direction)*distance;
+    mesh.position.set(px, terrainH(px, pz) + Math.max(0.08, height + lift*progress), pz);
+    mesh.rotation.y = -direction;
+    const scale = size*(0.55 + 0.45*progress);
+    mesh.scale.set(scale*length, 1, scale);
+  };
+  motion(0);
+  world.add(mesh);
+  rings.push({mesh, t: 0, life, motion, opacity});
+}
+function spawnRadialAttackEffect(kind, p, color, count, options){
+  for (let i = 0; i < count; i++){
+    spawnAttackEffect(kind, p, color, {...options, angle: i/count*Math.PI*2});
+  }
+}
+// La skin decora el ataque del jugador. Usamos la etapa visible, igual que al resolver el sprite.
+const SKIN_ATTACK_FX = {
+  festival: {kind: 'gift', accent: 'snow', color: 0xd7f4ff},
+  reno: {kind: 'bell', accent: 'star', color: 0xffd88a}
+};
+function playSkinAttackFx(origin, ultimate = false){
+  const {id, evolved} = g.ch;
+  const stage = evolved || 0;
+  const skin = equippedAt(id, stage);
+  const theme = SKIN_ATTACK_FX[skin];
+  if (!theme || !skinHasArt(id, stage, skin) || reduceMotion()) return;
+  if (ultimate){
+    spawnRadialAttackEffect(theme.kind, origin, 0xffffff, 5, {radius: 3.5, travel: 6, turn: 0.9, size: 2.8, height: 0.6, lift: 2.2, life: 0.66, opacity: 0.92, additive: false});
+    spawnRadialAttackEffect(theme.accent, origin, theme.color, 5, {radius: 5, travel: 7, turn: -0.6, size: 2.2, lift: 1.4, life: 0.55, opacity: 0.7});
+    return;
+  }
+  if (g.t < (g.skinFxNext ?? 0)) return;
+  g.skinFxNext = g.t + 0.24;
+  const angle = Math.atan2(g.dir.z, g.dir.x);
+  spawnAttackEffect(theme.kind, origin, 0xffffff, {angle, radius: 0.5, travel: 1.1, size: 1.35, height: 0.8, lift: 0.8, life: 0.28, opacity: 0.85, additive: false});
+  spawnAttackEffect(theme.accent, origin, theme.color, {angle: angle + 0.9, radius: 0.6, travel: 1.5, size: 0.95, height: 0.8, lift: 0.4, life: 0.25, opacity: 0.7});
+}
+function playBasicAttackFx(){
+  g.atkT = 0.26;
+  playSkinAttackFx(g.p);
 }
 // Efecto extra del Bonk según el compañero (además de la onda base)
 const BONK_FX = {
-  agumon:   {name: 'Llamarada en línea', f: p => { const dx = g.dir.x, dz = g.dir.z; for (const e of g.enemies){ const rx = e.x - p.x, rz = e.z - p.z, along = rx*dx + rz*dz; if (along > 0 && along < 32 && Math.abs(rx*dz - rz*dx) < 2.8){ e.hp -= 150; popText(e.x, e.z, 150, '#ff7043', 0.7); } } }},
-  gabumon:  {name: 'Aliento helado: enemigos congelados', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 18) e.frozenT = e.boss ? 1 : 3; }},
-  palmon:   {name: 'Lianas: enemigos atrapados', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 18) e.frozenT = e.boss ? 1.2 : 4; }},
-  biyomon:  {name: 'Espiral de fuego', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 20){ e.hp -= 60; popText(e.x, e.z, 60, '#ff7043', 0.6); } spawnRing(p.x, p.z, 0xff7043, 20, 0.6); }},
-  tentomon: {name: 'Descarga en cadena', f: p => { g.enemies.filter(e => dist2(e.x, e.z, p.x, p.z) < 30).sort((a, b) => dist2(a.x, a.z, p.x, p.z) - dist2(b.x, b.z, p.x, p.z)).slice(0, 12).forEach(e => { e.hp -= 120; popText(e.x, e.z, 120, '#40c4ff', 0.7); }); }},
-  gomamon:  {name: 'Marea: la horda sale despedida', f: p => { for (const e of g.enemies){ const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz) || 1; if (d < 20) [e.x, e.z] = clampArena(e.x + dx/d*10, e.z + dz/d*10, ARENA_R - 0.5); } }},
-  patamon:  {name: 'Aire curativo: +30% vida', f: p => { if (!(g.mod && g.mod.noHeal)) p.hp = Math.min(p.maxHp, p.hp + p.maxHp*0.3); }},
-  gatomon:  {name: 'Luz sagrada: críticos 5 s', f: () => { g.critT = 5; }},
-  leomon:   {name: 'Rugido: golpe enorme alrededor', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 12){ e.hp -= 200; popText(e.x, e.z, 200, '#ffb74d', 0.7); } spawnRing(p.x, p.z, 0xffb74d, 12, 0.5); }},
-  hagurumon:{name: 'Fábrica: 3 torretas extra', f: p => { for (let i = 0; i < 3; i++){ const a = i/3*Math.PI*2; placeTurret(p.x + Math.cos(a)*2.5, p.z + Math.sin(a)*2.5, true); } }},
-  frigimon: {name: 'Ventisca: todo congelado', f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 24) e.frozenT = e.boss ? 1.5 : 5; spawnRing(p.x, p.z, 0x81d4fa, 24, 0.8); }},
-  wizardmon:{name: 'Lluvia de truenos', f: p => { g.enemies.filter(e => dist2(e.x, e.z, p.x, p.z) < 24).slice(0, 10).forEach(e => castZone(e.x, e.z, 0.25, 3.2, 90)); }}
+  agumon:   {title: 'Infierno Carmesí', color: 0xff6332, name: 'Llamarada en línea',
+    animate: p => spawnAttackEffect('fire', p, 0xffc176, {angle: Math.atan2(g.dir.z, g.dir.x), radius: 3, travel: 23, size: 8, length: 2.2, height: 0.9, life: 0.75}),
+    f: p => { const dx = g.dir.x, dz = g.dir.z; for (const e of g.enemies){ const rx = e.x - p.x, rz = e.z - p.z, along = rx*dx + rz*dz; if (along > 0 && along < 32 && Math.abs(rx*dz - rz*dx) < 2.8){ e.hp -= 150; popText(e.x, e.z, 150, '#ff7043', 0.7); } } }},
+  gabumon:  {title: 'Aliento Glacial', color: 0x62b8ff, name: 'Aliento helado: enemigos congelados',
+    animate: p => spawnRadialAttackEffect('bluefire', p, 0xa7ddff, 7, {radius: 2, travel: 14, size: 6, height: 0.65, life: 0.78}),
+    f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 18) e.frozenT = e.boss ? 1 : 3; }},
+  palmon:   {title: 'Abrazo de Lianas', color: 0x70ea78, name: 'Lianas: enemigos atrapados',
+    animate: p => spawnRadialAttackEffect('vine', p, 0x9aff9a, 6, {radius: 2, travel: 10, turn: 0.55, size: 8, length: 1.75, life: 0.9}),
+    f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 18) e.frozenT = e.boss ? 1.2 : 4; }},
+  biyomon:  {title: 'Espiral Ígnea', color: 0xff8246, name: 'Espiral de fuego',
+    animate: p => spawnRadialAttackEffect('fire', p, 0xff9c65, 5, {radius: 4, travel: 15, turn: Math.PI, size: 6, height: 0.5, lift: 1.4, life: 0.9}),
+    f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 20){ e.hp -= 60; popText(e.x, e.z, 60, '#ff7043', 0.6); } spawnRing(p.x, p.z, 0xff7043, 20, 0.6); }},
+  tentomon: {title: 'Red Centella', color: 0x52d8ff, name: 'Descarga en cadena',
+    animate: p => spawnRadialAttackEffect('spark', p, 0x78e8ff, 5, {radius: 3, travel: 15, size: 8, life: 0.55}),
+    f: p => { g.enemies.filter(e => dist2(e.x, e.z, p.x, p.z) < 30).sort((a, b) => dist2(a.x, a.z, p.x, p.z) - dist2(b.x, b.z, p.x, p.z)).slice(0, 12).forEach(e => { e.hp -= 120; popText(e.x, e.z, 120, '#40c4ff', 0.7); }); }},
+  gomamon:  {title: 'Marea Rompiente', color: 0x47d8e5, name: 'Marea: la horda sale despedida',
+    animate: p => spawnRadialAttackEffect('bubble', p, 0xa3f6ff, 10, {radius: 4, travel: 16, size: 3.4, height: 0.55, lift: 2, life: 0.85}),
+    f: p => { for (const e of g.enemies){ const dx = e.x - p.x, dz = e.z - p.z, d = Math.hypot(dx, dz) || 1; if (d < 20) [e.x, e.z] = clampArena(e.x + dx/d*10, e.z + dz/d*10, ARENA_R - 0.5); } }},
+  patamon:  {title: 'Brisa Vital', color: 0x8ef5b6, name: 'Aire curativo: +30% vida',
+    animate: p => spawnRadialAttackEffect('air', p, 0x9affbe, 4, {radius: 3, travel: 3, turn: 1.2, size: 4.5, height: 0.4, lift: 4, life: 0.88}),
+    f: p => { if (!(g.mod && g.mod.noHeal)) p.hp = Math.min(p.maxHp, p.hp + p.maxHp*0.3); }},
+  gatomon:  {title: 'Zarpa Celestial', color: 0xffe293, name: 'Luz sagrada: críticos 5 s',
+    animate: p => spawnRadialAttackEffect('claw', p, 0xffebad, 3, {radius: 3, travel: 7, turn: 0.9, size: 8, height: 1.15, life: 0.62}),
+    f: () => { g.critT = 5; }},
+  leomon:   {title: 'Rugido de la Bestia', color: 0xffac55, name: 'Rugido: golpe enorme alrededor',
+    animate: p => spawnAttackEffect('air', p, 0xffad5b, {size: 24, height: 0.5, life: 0.6}),
+    f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 12){ e.hp -= 200; popText(e.x, e.z, 200, '#ffb74d', 0.7); } spawnRing(p.x, p.z, 0xffb74d, 12, 0.5); }},
+  hagurumon:{title: 'Fábrica Relámpago', color: 0xffcb68, name: 'Fábrica: 3 torretas extra',
+    animate: p => spawnRadialAttackEffect('gear', p, 0xffde8f, 3, {radius: 2.5, turn: Math.PI*2, size: 5, height: 0.7, lift: 2.3, life: 0.85}),
+    f: p => { for (let i = 0; i < 3; i++){ const a = i/3*Math.PI*2; placeTurret(p.x + Math.cos(a)*2.5, p.z + Math.sin(a)*2.5, true); } }},
+  frigimon: {title: 'Cero Absoluto', color: 0x9de9ff, name: 'Ventisca: todo congelado',
+    animate: p => spawnRadialAttackEffect('snow', p, 0xbff4ff, 9, {radius: 11, travel: 9, turn: 0.35, size: 4.5, height: 3.5, lift: -3.3, life: 0.95}),
+    f: p => { for (const e of g.enemies) if (dist2(e.x, e.z, p.x, p.z) < 24) e.frozenT = e.boss ? 1.5 : 5; spawnRing(p.x, p.z, 0x81d4fa, 24, 0.8); }},
+  wizardmon:{title: 'Tormenta Arcana', color: 0xc799ff, name: 'Lluvia de truenos',
+    animate: p => spawnAttackEffect('rune', p, 0xc799ff, {turn: 1.2, size: 27, life: 0.85}),
+    f: p => { g.enemies.filter(e => dist2(e.x, e.z, p.x, p.z) < 24).slice(0, 10).forEach(e => castZone(e.x, e.z, 0.25, 3.2, 90)); }}
 };
 /* ---------- Ataques de Leomon (melee), Hagurumon (turret), Frigimon (frost) y Wizardmon (zone) ---------- */
 const TURRET_GEO = new THREE.CylinderGeometry(0.45, 0.6, 0.9, 8), TURRET_MAT = new THREE.MeshLambertMaterial({color: 0x9e9e9e});
@@ -7440,14 +7525,14 @@ function updateKindAttacks(dt){
       const fd = dist2(far.x, far.z, p.x, p.z) || 1;
       fireProjectile(p.x, p.z, (far.x - p.x)/fd*22, (far.z - p.z)/fd*22, ch.dmg*p.dmg*0.6, 0.7*p.area, 0xffb74d, {pierce: 1 + p.count, fx: 'fire', big: 1.6});
     }
-    if (hit || far){ g.wCd = ch.cd * p.cdMul; g.atkT = 0.26; if (hit) spawnRing(p.x + dx*R*0.55, p.z + dz*R*0.55, 0xffb74d, R*0.6, 0.25); }
+    if (hit || far){ g.wCd = ch.cd * p.cdMul; playBasicAttackFx(); if (hit) spawnRing(p.x + dx*R*0.55, p.z + dz*R*0.55, 0xffb74d, R*0.6, 0.25); }
     else g.wCd = 0.1;
   }
   if (ch.kind === 'chain' && g.wCd <= 0 && g.enemies.length){
     // Puño de Gato: golpea al más cercano (6 m) y salta a otros cercanos (4 m); un salto más por proyectil extra
     let cur = nearestIn(p.x, p.z, 6*p.area);
     if (cur){
-      g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+      g.wCd = ch.cd * p.cdMul; playBasicAttackFx();
       const hit = new Set(), jumps = 2 + p.count;
       let fx = p.x, fz = p.z;
       for (let i = 0; i < jumps && cur; i++){
@@ -7462,11 +7547,11 @@ function updateKindAttacks(dt){
     } else g.wCd = 0.1;
   }
   if (ch.kind === 'turret' && g.wCd <= 0){
-    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    g.wCd = ch.cd * p.cdMul; playBasicAttackFx();
     placeTurret(p.x - g.dir.x*1.2, p.z - g.dir.z*1.2, false);
   }
   if (ch.kind === 'frost' && g.wCd <= 0){
-    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    g.wCd = ch.cd * p.cdMul; playBasicAttackFx();
     const R = 7.5*p.area;   // 7,5 m (antes 6): con 6 m casi no tocaba a la horda al huir
     for (const e of g.enemies){
       if (e.hp > 0 && dist2(e.x, e.z, p.x, p.z) < R + e.r){ hurt(e, ch.dmg*p.dmg); e.slowT = 2 + 0.3*(p.count - 1); }
@@ -7474,7 +7559,7 @@ function updateKindAttacks(dt){
     spawnRing(p.x, p.z, 0x81d4fa, R, 0.5);
   }
   if (ch.kind === 'zone' && g.wCd <= 0 && g.enemies.length){
-    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    g.wCd = ch.cd * p.cdMul; playBasicAttackFx();
     const near = g.enemies.filter(e => e.hp > 0 && dist2(e.x, e.z, p.x, p.z) < 16).sort(() => Math.random() - 0.5);
     for (let i = 0; i < Math.min(p.count, near.length); i++) castZone(near[i].x, near[i].z, 0.5, 3*p.area, ch.dmg*p.dmg);
   }
@@ -8347,7 +8432,7 @@ function update(dt){
   if (g.evoRushT > 0) g.evoRushT -= dt;
   g.wCd -= dt * (g.evoRushT > 0 ? 1.8 : 1);
   if (ch.kind === 'shot' && g.wCd <= 0 && g.enemies.length){
-    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    g.wCd = ch.cd * p.cdMul; playBasicAttackFx();
     const sorted = [...g.enemies].sort((a,b) => dist2(a.x,a.z,p.x,p.z) - dist2(b.x,b.z,p.x,p.z));
     for (let i = 0; i < Math.min(p.count, sorted.length); i++){
       const e = sorted[i], d = dist2(e.x, e.z, p.x, p.z) || 1;
@@ -8356,7 +8441,7 @@ function update(dt){
     }
   }
   if (ch.kind === 'ring' && g.wCd <= 0){
-    g.wCd = ch.cd * p.cdMul; g.atkT = 0.26;
+    g.wCd = ch.cd * p.cdMul; playBasicAttackFx();
     const n = 6*p.count, off = Math.random()*Math.PI*2;
     for (let i = 0; i < n; i++){
       const an = off + i/n*Math.PI*2;
@@ -8405,6 +8490,7 @@ function update(dt){
       for (const e of g.enemies){
         if (e.cd <= 0 && dist2(bx, bz, e.x, e.z) < e.r + 0.9){
           hurt(e, ch.dmg*p.dmg); e.cd = 0.25;
+          playSkinAttackFx({x: bx, z: bz});
         }
       }
     }
@@ -8958,6 +9044,30 @@ function fxTex(kind){
       x.strokeStyle = '#ffffff'; x.lineWidth = 6;
       for (let i = 0; i < 5; i++){ const a = i/5*Math.PI*2; x.beginPath(); x.moveTo(m, m); x.lineTo(m + Math.cos(a + 0.3)*24, m + Math.sin(a + 0.3)*24); x.lineTo(m + Math.cos(a - 0.2)*34, m + Math.sin(a - 0.2)*34); x.lineTo(m + Math.cos(a)*56, m + Math.sin(a)*56); x.stroke(); }
       break;
+    case 'gift':
+      x.fillStyle = '#a92e54'; x.fillRect(29, 53, 70, 48);
+      x.fillStyle = '#ed4c67'; x.fillRect(25, 45, 78, 18);
+      x.fillStyle = '#ffe29a'; x.fillRect(58, 45, 12, 56); x.fillRect(29, 70, 70, 8);
+      x.strokeStyle = '#ffe29a'; x.lineWidth = 7;
+      for (const side of [-1, 1]){
+        x.beginPath(); x.moveTo(m, 46);
+        x.bezierCurveTo(m + side*32, 47, m + side*26, 18, m, 46); x.stroke();
+      }
+      break;
+    case 'bell':
+      x.fillStyle = '#c5752e'; x.beginPath(); x.arc(m, 91, 11, 0, Math.PI*2); x.fill();
+      x.fillStyle = '#ffcc56'; x.beginPath(); x.moveTo(26, 83);
+      x.quadraticCurveTo(39, 73, 39, 55); x.bezierCurveTo(39, 23, 89, 23, 89, 55);
+      x.quadraticCurveTo(89, 73, 102, 83); x.quadraticCurveTo(m, 96, 26, 83); x.fill();
+      x.strokeStyle = '#fff1bb'; x.lineWidth = 6; x.beginPath(); x.moveTo(34, 83); x.quadraticCurveTo(m, 87, 94, 83); x.stroke();
+      x.strokeStyle = '#a34753'; x.lineWidth = 7; x.beginPath(); x.arc(m, 31, 9, Math.PI, 2*Math.PI); x.stroke();
+      break;
+    case 'vine':
+      for (const [offset, w] of [[-12, 7], [9, 4]]){
+        x.strokeStyle = offset < 0 ? '#70d487' : '#d4ff9a'; x.lineWidth = w;
+        x.beginPath(); x.moveTo(10, m + offset); x.bezierCurveTo(49, m + 39, 78, m - 41, 119, m + offset); x.stroke();
+      }
+      break;
     case 'leaf':
       x.fillStyle = '#66bb6a'; x.beginPath(); x.moveTo(m + 54, m); x.quadraticCurveTo(m, m - 40, m - 54, m); x.quadraticCurveTo(m, m + 40, m + 54, m); x.fill();
       x.fillStyle = '#c5e1a5'; x.beginPath(); x.moveTo(m + 44, m); x.quadraticCurveTo(m, m - 22, m - 40, m); x.quadraticCurveTo(m, m + 8, m + 44, m); x.fill();
@@ -9036,8 +9146,8 @@ function fxMat(kind, color = 0xffffff, add = true){
   return FX_MATS[k] || (FX_MATS[k] = new THREE.MeshBasicMaterial({map: fxTex(kind), color, transparent: true, depthWrite: false, depthTest: !FX_GROUND.has(kind), blending: add ? THREE.AdditiveBlending : THREE.NormalBlending, side: THREE.DoubleSide}));
 }
 // Material propio (para lo que cambia de opacidad por separado): hay que liberarlo al quitarlo
-function fxMatOwn(kind, color = 0xffffff, opacity = 1){
-  return new THREE.MeshBasicMaterial({map: fxTex(kind), color, transparent: true, opacity, depthWrite: false, depthTest: !FX_GROUND.has(kind), blending: THREE.AdditiveBlending, side: THREE.DoubleSide});
+function fxMatOwn(kind, color = 0xffffff, opacity = 1, additive = true){
+  return new THREE.MeshBasicMaterial({map: fxTex(kind), color, transparent: true, opacity, depthWrite: false, depthTest: !FX_GROUND.has(kind), blending: additive ? THREE.AdditiveBlending : THREE.NormalBlending, side: THREE.DoubleSide});
 }
 function fxMesh(kind, size, color, add){
   const m = new THREE.Mesh(FX_PLANE, fxMat(kind, color, add));
@@ -10158,7 +10268,11 @@ function updateHUD(){
     bf.style.width = Math.min(100, g.bonk).toFixed(1) + '%';
     bbar.classList.toggle('ready', g.bonk >= 100);
     bbar.style.setProperty('--p', Math.min(100, g.bonk).toFixed(1));
-    document.getElementById('bonkTxt').innerHTML = g.bonk >= 100 ? (isTouchUI() ? 'BONK<small>¡toca!</small>' : 'BONK<small>pulsa Q</small>') : `BONK<small>${Math.floor(g.bonk)}%</small>`;
+    const title = BONK_FX[g.ch.id]?.title ?? 'BONK';
+    const status = g.bonk >= 100 ? (isTouchUI() ? '¡toca!' : 'pulsa Q') : `${Math.floor(g.bonk)}%`;
+    const nameEl = document.getElementById('bonkName'), statusEl = document.getElementById('bonkStatus');
+    if (nameEl.dataset.src !== title){ nameEl.dataset.src = title; nameEl.textContent = title; }
+    if (statusEl.dataset.src !== status){ statusEl.dataset.src = status; statusEl.textContent = status; }
   }
   // Daño recibido: activa la viñeta roja (se desvanece en frame)
   if (g.lastHp !== undefined && p.hp < g.lastHp - 0.01){ hurtT = 0.45; sfx('hurt'); }
