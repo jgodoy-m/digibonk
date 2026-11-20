@@ -12738,7 +12738,7 @@ function showEvents(selected = 'season'){
   buttons[initial].focus({preventScroll:true});
 }
 /* ---------- Escaparate semanal de cosméticos ---------- */
-const SHOP_PRICE = {title:600, frame:1200, galactico:2500, holografica:5000, festival:4000, reno:4000};
+const SHOP_PRICE = {title:2700, frame:4800, galactico:7200, holografica:14000, festival:10000, reno:10000};
 const SHOP_FAVORITES = 'digibonk3d-shop-favorites', SHOP_DISCOUNT = 'digibonk3d-shop-discount';
 const SHOP_DISCOUNT_PCT = 20;
 
@@ -13043,7 +13043,9 @@ function showLogros(){
 }
 /* ---------- Laboratorio: mejoras permanentes que se compran con Digicoins ---------- */
 // per = bonus por nivel (multiplicador sumado) · flat = bonus entero · costs = precio de cada nivel
-const LAB_COSTS = [150, 300, 500, 800, 1200], LAB_LEVELS_KEY = 'digibonk3d-lab';
+const LAB_COSTS = [450, 950, 1800, 3200, 5000], LAB_LEVELS_KEY = 'digibonk3d-lab';
+const LAB_PREVIOUS_COSTS = [150, 300, 500, 800, 1200];
+const LAB_PREVIOUS_SPECIAL_COSTS = {revive:[2500], skill:[2000]};
 const LAB = [
   {id:'hp',     name:'Vida máxima',       icon:'❤', per:0.04, unit:'%', d:'Más vida máxima al empezar cada partida.'},
   {id:'dmg',    name:'Daño',              icon:'⚔', per:0.03, unit:'%', d:'Todos tus ataques hacen más daño.'},
@@ -13053,8 +13055,8 @@ const LAB = [
   {id:'bonk',   name:'Carga del Bonk',    icon:'✸', per:0.06, unit:'%', d:'El medidor Bonk se llena más rápido.'},
   {id:'rer',    name:'Refrescos de cartas', icon:'↻', flat:[0, 1, 1, 2, 2, 2], unit:'', d:'Más refrescos de cartas al subir de nivel (+1 en los niveles 1 y 3).'},
   {id:'bits',   name:'Digicoins por partida',  icon:'Ⓑ', per:0.05, unit:'%', d:'Ganas más Digicoins al terminar cada partida.'},
-  {id:'revive', name:'Segunda oportunidad', icon:'✚', max:1, costs:[2500], d:'Una vez por partida, al caer vuelves con el 50% de la vida.'},
-  {id:'skill',  name:'Habilidad inicial', icon:'★', max:1, costs:[2000], d:'Empiezas cada partida con una habilidad de tu Digimon a nivel 1.'}
+  {id:'revive', name:'Segunda oportunidad', icon:'✚', max:1, costs:[7500], d:'Una vez por partida, al caer vuelves con el 50% de la vida.'},
+  {id:'skill',  name:'Habilidad inicial', icon:'★', max:1, costs:[6000], d:'Empiezas cada partida con una habilidad de tu Digimon a nivel 1.'}
 ];
 const LAB_BY_ID = Object.fromEntries(LAB.map(u => [u.id, u]));
 const labMax = u => u.max || LAB_COSTS.length;
@@ -13070,7 +13072,13 @@ function labLv(id, levels = labLevels()){
 // Multiplicador de una mejora con porcentaje: 1 + nivel × bonus
 function labMul(id){ const u = LAB_BY_ID[id]; return 1 + (u.per || 0) * labLv(id); }
 function labFlat(id){ const u = LAB_BY_ID[id], lv = labLv(id); return u.flat ? u.flat[lv] : lv; }
-function labSpent(levels = labLevels()){ return LAB.reduce((a, u) => a + labCosts(u).slice(0, labLv(u.id, levels)).reduce((x, y) => x + y, 0), 0); }
+function labSpent(levels = labLevels()){
+  const totalFor = pricesFor => LAB.reduce((total, upgrade) =>
+    total + pricesFor(upgrade).slice(0, labLv(upgrade.id, levels)).reduce((sum, price) => sum + price, 0), 0);
+  if (Number.isSafeInteger(levels.paid) && levels.paid >= 0 && levels.paid <= totalFor(labCosts)) return levels.paid;
+  // Los guardados anteriores solo tienen niveles. Se reembolsan a su precio original.
+  return totalFor(upgrade => LAB_PREVIOUS_SPECIAL_COSTS[upgrade.id] || LAB_PREVIOUS_COSTS);
+}
 // Si falla la escritura de los Digicoins, se restaura el progreso previo antes de volver al menú.
 function saveLabProgress(levels, bits){
   const previous = localStorage.getItem(LAB_LEVELS_KEY);
@@ -13091,7 +13099,7 @@ function labBuy(id){
   const u = LAB_BY_ID[id], levels = labLevels(), bits = SAVE.bits;
   const lv = labLv(id, levels), cost = labCosts(u)[lv];
   if (lv >= labMax(u) || !(bits >= cost)) return false;
-  if (!saveLabProgress({...levels, [id]: lv + 1}, bits - cost)) return false;
+  if (!saveLabProgress({...levels, [id]:lv + 1, paid:labSpent(levels) + cost}, bits - cost)) return false;
   sfx('ready');
   return true;
 }
