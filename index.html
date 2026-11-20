@@ -3870,20 +3870,6 @@ html[data-theme=oscuro] .activity-page .eq-panel>header progress{accent-color:#d
 .event-hero time{display:block;margin-top:5px;color:#e8f0fc;font-size:12px}
 .event-hero img{width:clamp(46px,9vw,95px);height:auto;flex:none;object-fit:contain;filter:drop-shadow(0 4px 6px #04122280)}
 .activity-page h3{margin:14px 0 4px;font:900 20px/1.2 Nunito,system-ui,sans-serif}
-.activity-page .season-weeks{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
-.activity-page .season-prizes{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
-.activity-page .season-weeks li,.activity-page .season-prizes li{
-  display:grid;grid-template-rows:auto 1fr auto;align-items:start;gap:6px;border:1px solid var(--m-cardline);
-  border-radius:12px;padding:11px
-}
-.activity-page .season-weeks li{border-top:3px solid #ca9c49}
-.activity-page .season-weeks li.season-future{border-top-color:var(--m-line2)}
-.activity-page .season-weeks li.season-done{border-top-color:var(--m-good)}
-.activity-page .season-weeks small{color:var(--m-soft);font-weight:900}
-.activity-page .season-weeks strong,.activity-page .season-prizes strong{white-space:normal;font-size:12px}
-.activity-page .season-prizes li{grid-template-columns:29px minmax(0,1fr);grid-template-rows:auto auto;column-gap:8px}
-.activity-page .season-prizes img{width:29px;height:29px;object-fit:contain;grid-row:1 / span 2}
-.activity-page .season-prizes strong{grid-column:2}
 .activity-tabs{display:flex;gap:5px;padding:4px;margin:0 0 12px;border:1px solid var(--m-cardline);border-radius:12px;background:var(--m-sunk)}
 .activity-tabs button{display:inline-flex;align-items:center;justify-content:center;gap:7px;flex:1;padding:8px;min-height:42px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--m-soft);font:800 14px/1.15 Nunito,system-ui,sans-serif;cursor:pointer}
 .activity-tabs button[aria-selected=true]{background:var(--m-card);border-color:var(--m-line2);color:var(--m-text);box-shadow:inset 0 -2px var(--m-acc)}
@@ -3891,27 +3877,40 @@ html[data-theme=oscuro] .activity-page .eq-panel>header progress{accent-color:#d
 @media(max-width:760px){
   #overlay .activity-page{width:calc(100vw - 16px);max-height:calc(100dvh - 16px);border-radius:14px}
   .activity-page .eq-grid.eq-two{grid-template-columns:1fr}
-  .activity-page .season-weeks,.activity-page .season-prizes{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:420px){
   .activity-page-head{gap:7px}
   .activity-page .eq-row{grid-template-columns:18px minmax(0,1fr) auto;gap:4px 5px;padding:8px}
   .activity-page .eq-prize-value{font-size:11px}
-  .activity-page .season-prizes{grid-template-columns:1fr}
 }
+/* Pase de temporada y de evento */
+.pass-panel{margin:12px 0;padding:14px;border:1px solid var(--m-cardline);border-radius:14px;background:var(--m-sunk)}
+.pass-panel header{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:5px 12px}
+.pass-panel header h3{margin:0}
+.pass-panel header strong{color:var(--m-acc)}
+.pass-panel progress,.pass-missions progress{width:100%;height:7px;accent-color:var(--m-acc)}
+.pass-panel small{color:var(--m-soft)}
+.pass-levels{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px;padding:0;margin:12px 0;list-style:none}
+.pass-levels li{text-align:center;min-width:0;padding:4px 2px;border:1px solid var(--m-line2);border-radius:7px;font-variant-numeric:tabular-nums}
+.pass-levels .reached{background:var(--m-acc);color:var(--m-card);border-color:var(--m-acc)}
+.pass-levels .milestone{font-weight:900;border-color:var(--m-gold)}
+.pass-rewards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:12px 0 0;padding:0;list-style:none}
+.pass-rewards li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px 8px;align-items:center;padding:8px;border:1px solid var(--m-line2);border-radius:9px;background:var(--m-card);font-size:13px}
+.pass-rewards img{width:28px;height:28px;object-fit:contain;grid-row:1 / span 2}
+.pass-rewards .pass-unlocked{color:var(--m-good)}
+.pass-missions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+.pass-missions article{min-width:0;padding:12px;border:1px solid var(--m-line2);border-radius:12px;background:var(--m-sunk)}
+.pass-missions article h3{margin:0}
+.pass-missions ul{display:grid;gap:7px;padding:0;list-style:none}
+.pass-missions li{display:grid;gap:4px;padding:6px 8px;border-radius:8px;background:var(--m-card)}
+.pass-missions li b{color:var(--m-acc)}
+.pass-legacy{margin-top:10px}
+.pass-legacy summary{cursor:pointer;font-weight:900}
+@media(max-width:640px){.pass-missions{grid-template-columns:1fr}.pass-levels{grid-template-columns:repeat(10,minmax(0,1fr));gap:3px;font-size:11px}}
+
 .activity-panel:focus-visible{outline:2px solid var(--m-acc);outline-offset:3px;border-radius:8px}
 .activity-panel .eq-grid.eq-single{grid-template-columns:1fr}
 .activity-panel .activity-action{margin-top:10px}
-.season-dialog progress{width:100%;height:5px;accent-color:#db9236;display:block;margin-top:5px}
-.season-dialog article{border:1px solid var(--m-cardline);border-radius:12px;padding:10px 12px;background:var(--m-sunk)}
-.season-dialog .season-summary{display:flex;align-items:center;gap:12px}
-.season-summary div{flex:1}
-.season-dialog small{display:block;color:var(--m-mute)}
-.season-weeks,.season-prizes{display:grid;gap:6px;margin:10px 0;padding:0;list-style:none}
-.season-weeks li,.season-prizes li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 10px;border-radius:8px;background:var(--m-sunk)}
-.season-weeks li>span,.season-prizes li>span{min-width:0}
-.season-weeks li>strong,.season-prizes li>strong{white-space:nowrap;color:var(--m-acc)}
-.season-dialog button.season-mode{display:inline-flex;margin:4px 0 10px}
 @media(max-width:760px){
   #overlay .realhub.hb .hb-user-card{padding:4px 6px}
   #overlay .realhub.hb .hb-user-card .hb-me{height:43px}
@@ -5881,7 +5880,7 @@ function showCollection(){
       const evoRow = stages.map((x, i) => `${i ? '<span>➜</span>' : ''}<div class="cl4-st${x.on ? '' : ' off'}${i === st ? ' sel' : ''}" data-st="${i}">${sprEl(spriteWith(k, i, equippedAt(k, i)), 48)}<small>${x.on ? x.name : '???'}</small></div>`).join('');
       const vales = loadVales();
       const cards = lineSkins(k).map(sk => {
-        const has = ownsAt(k, 0, sk.id), on = eq === sk.id, vale = !has && sk.src === 'evento' && eventActive() && vales[sk.id] > 0;
+        const has = ownsAt(k, 0, sk.id), on = eq === sk.id, vale = !has && sk.src === 'evento' && vales[sk.id] > 0;
         return `<button class="cl4-skin${has ? ' owned' : vale ? ' vale' : ' locked'}${on ? ' eq' : ''}" data-skin="${sk.id}" ${has || vale ? '' : 'disabled'}>
           ${skinThumb(k, sk)}
           <b>${sk.name}</b><small>${has ? (on ? 'Equipada' : 'Pulsa para equipar') : howTo(k, sk)}</small></button>`;
@@ -5916,7 +5915,7 @@ function showCollection(){
   // Vale de evento: da la skin a este Digimon (toda la línea) y la equipa
   overlay.querySelectorAll('.cl4-skin.vale').forEach(b => b.onclick = () => {
     const id = b.dataset.skin;
-    if (!(loadVales()[id] > 0)) return;
+    if (!(loadVales()[id] > 0) || ownsAt(colKey, 0, id) || skinLineArt(colKey, id) < 0) return;
     addVale(id, -1); grantSkinLine(colKey, id); equipSkinAt(colKey, 0, id); grantProgress();
     sfx('evolve'); showCollection();
   });
@@ -6084,6 +6083,13 @@ function hubLife(){
   };
 }
 const MENU_RELEASES = [
+  {
+    version: '0.1.3',
+    date: '2026-11-23',
+    changes: [
+      ['Pases de 50 niveles', 'Completa encargos para avanzar en File Island y misiones propias para avanzar en Navidad Digital.']
+    ]
+  },
   {
     version: '0.1.2',
     date: '2026-11-20',
@@ -6521,7 +6527,9 @@ const TRAINER_IDENTITY_KEY = 'digibonk3d-trainer-identity';
 const TRAINER_RENAMED_KEY = 'digibonk3d-trainer-renamed-at';
 const TRAINER_RECORDS_KEY = 'digibonk3d-trainer-records';
 const SEASON_KEY = 'digibonk3d-season-file-island';
-const SAVE_KEYS = [SEASON_KEY, TRAINER_BG_KEY, TRAINER_IDENTITY_KEY, TRAINER_RENAMED_KEY, TRAINER_RECORDS_KEY, 'digibonk3d-shop-favorites', 'digibonk3d-shop-discount', 'digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
+const FILE_PASS_KEY = 'digibonk3d-file-pass-2026';
+const CHRISTMAS_PASS_KEY = 'digibonk3d-christmas-pass-2026';
+const SAVE_KEYS = [FILE_PASS_KEY, CHRISTMAS_PASS_KEY, SEASON_KEY, TRAINER_BG_KEY, TRAINER_IDENTITY_KEY, TRAINER_RENAMED_KEY, TRAINER_RECORDS_KEY, 'digibonk3d-shop-favorites', 'digibonk3d-shop-discount', 'digibonk3d-sfxvol', 'digibonk3d-musvol', 'digibonk3d-uiscale', 'digibonk3d-reducemotion', 'digibonk3d-bits', 'digibonk3d-skins', 'digibonk3d-equip', 'digibonk3d-stats', 'digibonk3d-daily',
   'digibonk3d-inv', 'digibonk3d-extra', 'digibonk3d-evo', 'digibonk3d-name', 'digibonk3d-records', 'digibonk3d-ach', 'digibonk3d-avatar', 'digibonk3d-tickets', 'digibonk3d-tix', 'digibonk3d-pity', 'digibonk3d-legnew', 'digibonk3d-lab', 'digibonk3d-surv', 'digibonk3d-enc2', 'digibonk3d-support', 'digibonk3d-mapwins', 'digibonk3d-maptime', 'digibonk3d-map', 'digibonk3d-diff', 'digibonk3d-surv-wave-bosque', 'digibonk3d-surv-wave-desierto', 'digibonk3d-surv-wave-nevado', 'digibonk3d-gift', 'digibonk3d-theme',
   'digibonk3d-unlocked', 'digibonk3d-wq3', 'digibonk3d-evq3', 'digibonk3d-weekly', 'digibonk3d-favs', 'digibonk3d-picksort', 'digibonk3d-life', 'digibonk3d-vales', 'digibonk3d-objetos', 'digibonk3d-obj-ini', 'digibonk3d-reto', 'digibonk3d-sist'];
 // También cuentan los contadores por banner (pity) y la mejor oleada de cada mapa
@@ -7454,13 +7462,7 @@ function showMapSelect(){
 /* ---------- Reto semanal: pantalla propia del modo ----------
    Sustituye a «Elige mapa»: el mapa, la dificultad, la regla y la semilla son los de la semana y no se cambian.
    Solo se elige el Digimon. Tiene su propia marca semanal (puntos) y sus hitos. */
-let weeklyEntry = 'modes';
-function beginWeeklyFrom(entry){
-  weeklyEntry = entry;
-  showReto();
-}
 function returnFromWeekly(){
-  if (weeklyEntry === 'events'){ showEvents('season'); return; }
   showSelect();
   showModes(document.getElementById('mModes'));
 }
@@ -10704,7 +10706,9 @@ function endGame(win){
   g.survBest = g.mode === 'surv' ? recordSurv(g.ch.id, g.t) : null;
   g.encDone = checkEncargos();
   g.questDone = checkLongQuests(win);
-  g.seasonDone = recordSeasonRun(g);
+  g.filePassXP = syncFilePass();
+  g.christmasPassXP = recordChristmasPass(g);
+  grantChristmasPassVouchers();
   const seasonSkin = grantSeasonSkin();
   if (seasonSkin) g.unlocked.push(seasonSkin);
   unlockMouse();
@@ -10740,7 +10744,8 @@ function endGame(win){
   for (const sy of g.newSys || []) rewards.push(`<li>Nuevo en tus partidas: <b>${sy.name}</b> · ${sy.d}</li>`);
   for (const it of g.newItems || []) rewards.push(`<li>Objeto desbloqueado: <b>${it}</b> · míralo en la vitrina del Digidex</li>`);
   for (const q of (g.questDone || [])) rewards.push(`<li>Encargo cumplido: <b>${q.t}</b> · +${q.bits} Bits${GACHA_SOON ? '' : ` y +${q.tix} tickets`}</li>`);
-  for (const task of g.seasonDone) rewards.push(`<li>Encargo de temporada: <b>${task}</b></li>`);
+  if (g.filePassXP) rewards.push(`<li>Señal de File Island · <b>+${g.filePassXP} XP</b></li>`);
+  if (g.christmasPassXP) rewards.push(`<li>Navidad Digital · <b>+${g.christmasPassXP} XP</b></li>`);
   for (const e of g.encDone) rewards.push(`<li>Encargo cumplido: <b>${e}</b> · +${ENC_REWARD.bits} Bits${GACHA_SOON ? '' : ` y +${ENC_REWARD.tix} ticket`}</li>`);
   if (g.survBest) rewards.push(`<li>¡Nuevo récord de Supervivencia con ${g.ch.name}!</li>`);
   if (g.waveBest) rewards.push(`<li>¡Nueva mejor oleada en ${mapDef().name}: <b>${g.wave}</b>!</li>`);
@@ -12557,21 +12562,24 @@ function dailyQuestSummary(){
   return {done: Number(day.claimed || day.runs >= DAILY.runsGoal) + enc.filter(task => task.done).length, all:1 + enc.length};
 }
 function featuredActivity(){
-  const season = seasonData();
+  const season = {phase:passPhase(FILE_PASS)};
   if (season.phase !== 'active' && eventActive()){
     const days = Math.ceil((EVENT.end - Date.now()) / 86400000);
     return {tab:'christmas',icon:'evento',title:EVENT.name,status:days === 1 ? 'Queda 1 día' : `Quedan ${days} días`};
   }
-  return {tab:'season',icon:'file-island',title:'Señal de File Island',status:seasonStatus(season)};
+  return {tab:'season',icon:'file-island',title:'Señal de File Island',status:passStatus(FILE_PASS)};
 }
 // Los encargos del evento y los habituales usan las mismas filas y recompensas.
 function questPanels(eventOnly = false){
   const fmt = n => Number(n).toLocaleString(LANG);
-  const row = (done, title, progress, goal, bits, tickets, extra = '') => {
+  const row = (done, title, progress, goal, bits, tickets, extra = '', xp = 0) => {
     const value = Math.min(goal, Math.max(0, Number(progress) || 0));
     return `<div class="eq-row${done ? ' done' : ''}">
       <b aria-hidden="true">${done ? '✓' : ''}</b><span class="eq-t">${escHtml(title)}</span>
-      ${bits ? `<span class="eq-prize-value"><img src="ui/hud/ic_bits.webp" alt="Bits">+${fmt(bits)}</span>` : ''}
+      ${bits || xp ? `<span class="eq-prize-value">
+        ${bits ? `<img src="ui/hud/ic_bits.webp" alt="Bits">+${fmt(bits)}` : ''}
+        ${xp ? `<strong>+${xp} XP</strong>` : ''}
+      </span>` : ''}
       <span class="eq-track">
         <progress max="${goal}" value="${value}" aria-label="${escHtml(title)}"></progress>
         <small>${fmt(value)}/${fmt(goal)}</small>
@@ -12592,15 +12600,17 @@ function questPanels(eventOnly = false){
   }
   const d = loadDaily(), enc = loadEncargos(), wk = weekState(), wq = weekQuestState();
   const dayDone = d.claimed || d.runs >= DAILY.runsGoal;
+  const fileActive = passPhase(FILE_PASS) === 'active';
+  const dailyXP = fileActive ? FILE_PASS.dailyXP : 0, weeklyXP = fileActive ? FILE_PASS.weeklyXP : 0;
   const dayRows = [
-    row(dayDone, `Juega ${DAILY.runsGoal} partidas`, d.runs, DAILY.runsGoal, DAILY.reward, DAILY.rewardTix),
-    ...enc.list.map(e => row(e.done, encText(e), Number(Boolean(e.done)), 1, ENC_REWARD.bits, ENC_REWARD.tix))
+    row(dayDone, `Juega ${DAILY.runsGoal} partidas`, d.runs, DAILY.runsGoal, DAILY.reward, DAILY.rewardTix, '', dailyXP),
+    ...enc.list.map(e => row(e.done, encText(e), Number(Boolean(e.done)), 1, ENC_REWARD.bits, ENC_REWARD.tix, '', dailyXP))
   ];
   const weeklyItem = weekItem();
   const weekRows = [
-    ...(!GACHA_SOON ? [row(wk.claimed, `Haz ${WEEK_PULLS} tiradas en la Incubadora`, wk.pulls, WEEK_PULLS, 0, 1)] : []),
+    ...(!GACHA_SOON ? [row(wk.claimed, `Haz ${WEEK_PULLS} tiradas en la Incubadora`, wk.pulls, WEEK_PULLS, 0, 1, '', weeklyXP)] : []),
     ...WEEK_QUESTS.map(q => row(wq.done.includes(q.id), q.t, questProg(wq, q), q.goal, q.bits, q.tix,
-      q.obj && !wq.done.includes(q.id) && weeklyItem ? 'Objeto: ' + ITEMS[weeklyItem].name : ''))
+      q.obj && !wq.done.includes(q.id) && weeklyItem ? 'Objeto: ' + ITEMS[weeklyItem].name : '', weeklyXP))
   ];
   const daysDone = Number(dayDone) + enc.list.filter(e => e.done).length;
   const weeksDone = Number(!GACHA_SOON && wk.claimed) + wq.done.length;
@@ -12647,19 +12657,22 @@ function showModes(trigger){
   menuModal('Modos', `<div class="mode-options">${options}</div>`, () => trigger?.focus({preventScroll:true}));
   document.getElementById('modeClassic').onclick = () => document.getElementById('playBtn').click();
   document.getElementById('modeSurvival').onclick = () => document.getElementById('mSurv').click();
-  document.getElementById('modeWeekly').onclick = () => beginWeeklyFrom('modes');
+  document.getElementById('modeWeekly').onclick = showReto;
 }
 function christmasPanel(){
   const banner = !GACHA_SOON && (bannerOpen('navidadP') ? 'navidadP' : bannerOpen('navidadR') ? 'navidadR' : '');
   const quests = eventActive() ? questPanels(true) : '';
-  const countdown = eventActive() ? `Cierre: ${seasonDate(EVENT.end)}` : '';
-  return `<header class="event-hero event-christmas"><div><h2>${EVENT.name}</h2><p>${countdown}</p></div>
+  const countdown = `Cierre del pase: ${seasonDate(CHRISTMAS_PASS.end - 1)}`;
+  return `<header class="event-hero event-christmas"><div><h2>${EVENT.name}</h2><p>${passStatus(CHRISTMAS_PASS)} · ${countdown}</p></div>
     <img src="${charIcon('agumon','festival')}" alt=""></header>
-    ${quests}${banner ? '<button class="mini-btn activity-action" type="button" id="activityChristmasBanner">Abrir Incubadora</button>' : ''}`;
+    ${passPanel(CHRISTMAS_PASS)}
+    ${christmasMissionsPanel()}
+    ${quests ? `<details class="pass-legacy"><summary>Hitos de Navidad</summary>${quests}</details>` : ''}
+    ${banner ? '<button class="mini-btn activity-action" type="button" id="activityChristmasBanner">Abrir Incubadora</button>' : ''}`;
 }
 function showEvents(selected = 'season'){
   const tabs = [{id:'season', label:'Temporada', icon:'file-island', content:seasonPanel}];
-  if (eventActive() || (!GACHA_SOON && (bannerOpen('navidadP') || bannerOpen('navidadR')))){
+  if (eventActive() || passProgress(CHRISTMAS_PASS).xp > 0 || (!GACHA_SOON && (bannerOpen('navidadP') || bannerOpen('navidadR')))){
     tabs.push({id:'christmas', label:'Navidad', icon:'evento', content:christmasPanel});
   }
   const initial = Math.max(0, tabs.findIndex(tab => tab.id === selected));
@@ -12696,8 +12709,7 @@ function showEvents(selected = 'season'){
     const button = dialog.querySelector('#' + id);
     if (button) button.onclick = action;
   };
-  bind('seasonReto', () => beginWeeklyFrom('events'));
-  bind('seasonSurv', () => { showSelect(); document.getElementById('mSurv').click(); });
+  bind('filePassQuests', showEncargos);
   bind('activityChristmasBanner', () => {
     gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR';
     showGacha();
@@ -14028,7 +14040,7 @@ const shopCosmetics = type => Object.entries(SHOP_COSMETICS).map(([key, set]) =>
 }));
 const FRAMES = [
   ...shopCosmetics('frame'),
-  {id:'file_senal', name:'Señal de File', tier:'r', how:'Completa 3 encargos de Señal de File Island', seasonal:true, prog:() => [seasonData().done, 3]},
+  {id:'file_senal', name:'Señal de File', tier:'r', how:'Alcanza el nivel 30 del pase de File Island', seasonal:true, prog:() => [passProgress(FILE_PASS).level, 30]},
   {id:'amistad_gabumon', name:'Amistad de Gabumon', tier:'c', how:'Gana una partida con Gabumon', prog: () => [Math.min(1, winsWith('gabumon')), 1]},
   {id:'sinceridad_palmon', name:'Sinceridad de Palmon', tier:'c', how:'Gana una partida con Palmon', prog: () => [Math.min(1, winsWith('palmon')), 1]},
   {id:'agua_fiabilidad', name:'Agua y fiabilidad', tier:'c', how:'Gana una partida con Gomamon', prog: () => [Math.min(1, winsWith('gomamon')), 1]},
@@ -14044,7 +14056,7 @@ const FRAMES = [
 ];
 const TITLES = [
   ...shopCosmetics('title'),
-  {id:'file_explorador', name:'Explorador de File', tier:'r', how:'Completa 1 encargo de Señal de File Island', seasonal:true, prog:() => [seasonData().done, 1]},
+  {id:'file_explorador', name:'Explorador de File', tier:'r', how:'Alcanza el nivel 10 del pase de File Island', seasonal:true, prog:() => [passProgress(FILE_PASS).level, 10]},
   {id:'novato',     name:'Novato',           tier:'c', how:'Termina tu primera partida', prog: () => [Math.min(1, loadAch().runs), 1]},
   {id:'cazador',    name:'Cazador de bajas', tier:'c', how:'Acumula 300 bajas en total', prog: () => [Math.min(300, sumStats('kills')), 300]},
   {id:'explorador', name:'Explorador',       tier:'r', how:'Llega a la zona 2 (Pantano de Datos)', prog: () => [loadAch().zone2 ? 1 : 0, 1]},
@@ -14119,7 +14131,7 @@ function syncRewards(){
     for (const sk of SKINS) if (sk.src === 'logro' && skinHasArt(k, 0, sk.id) && !ownsAt(k, 0, sk.id) && meetsReq(sk, st)) grantSkinLine(k, sk.id);
   }
   if (eventActive()){ const ev = eventQuestState(); if (payEventPrizes(ev).length) localStorage.setItem('digibonk3d-evq3', JSON.stringify(ev)); }
-  grantSeasonSkin(); grantMastery(); checkUnlocks(false); grantProgress();
+  syncFilePass(); grantSeasonSkin(); grantChristmasPassVouchers(); grantMastery(); checkUnlocks(false); grantProgress();
 }
 // Logros que se ven en la ventana Logros (los que salen jugando, no de la maestría ni del evento)
 const achItems = () => [...TITLES, ...FRAMES].filter(x => x.prog && !x.weekly && !x.seasonal);
@@ -14167,8 +14179,10 @@ function grantMastery(){
 }
 // Marcos y títulos de cada línea evolutiva: salen de la maestría (o de la tienda en su semana)
 FRAMES.push(...SEASONS.adventure.chars.map((k, i) => ({id: 'wk' + i, name: 'Marco de ' + CHARS[k].name, tier: 'e', weekly: true, how: 'Maestría 4 con ' + CHARS[k].name})));
-FRAMES.push({id: 'navidad', name: 'Marco Navideño', tier: 'e', seasonal: true, how: 'Evento de Navidad: derrota a 400.000 enemigos'});
-TITLES.push({id: 'navidad', name: 'Espíritu Navideño', tier: 'e', how: 'Evento de Navidad: derrota a 400.000 enemigos', seasonal: true});
+FRAMES.push({id:'navidad', name:'Marco Navideño', tier:'e', seasonal:true, how:'Alcanza el nivel 30 del pase de Navidad',
+  prog:() => [passProgress(CHRISTMAS_PASS).level, 30]});
+TITLES.push({id:'navidad', name:'Espíritu Navideño', tier:'e', seasonal:true, how:'Alcanza el nivel 10 del pase de Navidad',
+  prog:() => [passProgress(CHRISTMAS_PASS).level, 10]});
 TITLES.push(...SEASONS.adventure.chars.map((k, i) => ({id: 'wk' + i, name: 'Heraldo de ' + CHARS[k].name, tier: 'e', how: 'Maestría 2 con ' + CHARS[k].name, weekly: true})));
 let inv = loadJSON('digibonk3d-inv', {frames: [], titles: [], items: {}});
 let extra = loadJSON('digibonk3d-extra', {frame: null, title: null, item: null});
@@ -14193,86 +14207,179 @@ function frameClass(){ return extra.frame ? ' fr-' + extra.frame : ''; }
 const WEEK_MS = 7 * 86400000;
 // Número de semana con cambio los lunes (el 1970-01-05 fue lunes; 4 días después del 1 de enero de 1970)
 const weekNum = () => Math.floor((Date.now() - 4 * 86400000) / WEEK_MS);
-// Season 1 uses the same Monday UTC boundary as the weekly challenge.
-const FILE_SEASON = {
-  start: Date.UTC(2026, 10, 23),
-  weeks: [
-    {id:'partida', label:'Aguanta 3 minutos en una partida', goal:1, count:run => Number(run.t >= 180)},
-    {id:'reto', label:'Aguanta 3 minutos en el Reto semanal', goal:1, count:run => Number(run.weekly && run.t >= 180)},
-    {id:'bajas', label:'Suma 5.000 bajas entre partidas', goal:5000, count:run => Math.max(0, run.kills || 0)},
-    {id:'supervivencia', label:'Aguanta 5 minutos en Supervivencia', goal:1, count:run => Number(run.mode === 'surv' && run.t >= 300)}
-  ],
-  prizes: [
-    {at:1, label:'Título · Explorador de File', icon:'ui/hub/digivice/logros.png', owns:() => inv.titles.includes('file_explorador')},
-    {at:3, label:'Marco · Señal de File', icon:'ui/marcos/digivice_azul.webp', owns:() => inv.frames.includes('file_senal')},
-    {at:4, label:'Skin · Agumon Digivice LCD', icon:charIcon('agumon','lcd'), owns:() => ownsAt('agumon', 0, 'lcd')}
+// Ambos pases empiezan el lunes del lanzamiento, en el límite UTC del reto semanal.
+const PASS_LEVELS = 50;
+const PASS_START = Date.UTC(2026, 10, 23);
+const FILE_PASS = {
+  key:FILE_PASS_KEY, start:PASS_START, end:PASS_START + 4 * WEEK_MS, perLevel:40, dailyXP:25, weeklyXP:100,
+  prizes:[
+    {at:10,label:'Título · Explorador de File',icon:'ui/hub/digivice/logros.png'},
+    {at:30,label:'Marco · Señal de File',icon:'ui/marcos/digivice_azul.webp'},
+    {at:50,label:'Skin · Agumon Digivice LCD',icon:charIcon('agumon','lcd')}
   ]
 };
-function seasonData(now = Date.now()){
-  const {start, weeks} = FILE_SEASON;
-  const end = start + weeks.length * WEEK_MS;
-  const phase = now < start ? 'upcoming' : now >= end ? 'closed' : 'active';
-  const week = Math.min(weeks.length, Math.max(0, Math.floor((now - start) / WEEK_MS) + 1));
-  const progress = loadJSON(SEASON_KEY, {});
-  const done = weeks.filter(task => (progress[task.id] || 0) >= task.goal).length;
-  return {phase, week, progress, done, days:Math.max(0, Math.ceil((end - now) / 86400000)), end};
+const CHRISTMAS_PASS = {
+  key:CHRISTMAS_PASS_KEY, start:PASS_START, end:Date.UTC(2027, 0, 1), perLevel:24, dailyXP:20, weeklyXP:80,
+  prizes:[
+    {at:10,label:'Título · Espíritu Navideño',icon:'ui/hub/digivice/logros.png'},
+    {at:30,label:'Marco Navideño',icon:'ui/hub/digivice/evento.png'},
+    {at:40,label:'Vale de skin Papá Noel',icon:charIcon('agumon','festival'),vale:'festival'},
+    {at:50,label:'Vale de skin Reno',icon:charIcon('agumon','reno'),vale:'reno'}
+  ]
+};
+const CHRISTMAS_MISSIONS = {
+  day:[
+    {id:'runs', goal:1, label:'Aguanta 3 minutos en una partida'},
+    {id:'kills', goal:2000, label:'Suma 2.000 bajas entre partidas'},
+    {id:'chests', goal:2, label:'Abre 2 cofres'}
+  ],
+  week:[
+    {id:'runs', goal:4, label:'Juega 4 partidas de al menos 3 minutos'},
+    {id:'kills', goal:10000, label:'Suma 10.000 bajas entre partidas'},
+    {id:'chests', goal:8, label:'Abre 8 cofres'}
+  ]
+};
+function passPhase(pass, now = Date.now()){
+  return now < pass.start ? 'upcoming' : now >= pass.end ? 'closed' : 'active';
 }
-function recordSeasonRun(run, now = Date.now()){
-  const {phase, week, progress} = seasonData(now);
-  if (phase !== 'active') return [];
-  const completed = [];
-  let changed = false;
-  for (const task of FILE_SEASON.weeks.slice(0, week)){
-    const previous = progress[task.id] || 0;
-    const next = Math.min(task.goal, previous + task.count(run));
-    if (next <= previous) continue;
-    progress[task.id] = next;
-    changed = true;
-    if (next === task.goal) completed.push(task.label);
+function passState(pass){
+  const st = loadJSON(pass.key, {});
+  const period = value => value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+  return {
+    xp:Math.max(0,Math.min(pass.perLevel * PASS_LEVELS,Math.floor(Number(st.xp)||0))),
+    days:period(st.days), weeks:period(st.weeks)
+  };
+}
+function passProgress(pass){
+  const {xp} = passState(pass);
+  const level = Math.floor(xp / pass.perLevel);
+  return {xp, level, next:level === PASS_LEVELS ? pass.perLevel : xp % pass.perLevel};
+}
+function savePassProgress(pass, st, points){
+  const before = st.xp;
+  st.xp = Math.min(pass.perLevel * PASS_LEVELS, before + points);
+  localStorage.setItem(pass.key, JSON.stringify(st));
+  return st.xp - before;
+}
+function syncFilePass(){
+  if (passPhase(FILE_PASS) !== 'active') return 0;
+  const st = passState(FILE_PASS), day = dayKey(), week = weekNum();
+  const nDay = dailyQuestSummary().done;
+  const done = new Set(weekQuestState().done);
+  const nWeek = WEEK_QUESTS.filter(q => done.has(q.id)).length + Number(!GACHA_SOON && weekState().claimed);
+  const d = Math.max(0, nDay - (st.days[day] || 0));
+  const w = Math.max(0, nWeek - (st.weeks[week] || 0));
+  if (!d && !w) return 0;
+  if (d) st.days[day] = nDay;
+  if (w) st.weeks[week] = nWeek;
+  return savePassProgress(FILE_PASS, st, d * FILE_PASS.dailyXP + w * FILE_PASS.weeklyXP);
+}
+function christmasWeek(now){
+  return Math.floor((now - CHRISTMAS_PASS.start) / WEEK_MS);
+}
+function christmasWeekFor(st, now){
+  const current = christmasWeek(now);
+  for (let week = 0; week <= current; week++){
+    const data = st.weeks[week] || {};
+    if (CHRISTMAS_MISSIONS.week.some(m => (data[m.id] || 0) < m.goal)) return week;
   }
-  if (changed) localStorage.setItem(SEASON_KEY, JSON.stringify(progress));
-  return completed;
+  return current;
+}
+function recordChristmasPass(run, now = Date.now()){
+  const phase = passPhase(CHRISTMAS_PASS, now);
+  if (phase !== 'active') return 0;
+  const st = passState(CHRISTMAS_PASS);
+  const counts = {runs:Number(run.t >= 180), kills:Math.max(0, run.kills || 0), chests:Math.max(0, run.chestsOpened || 0)};
+  let changed = false;
+  const advance = (bucket, key, missions, xp) => {
+    const saved = bucket[key];
+    const current = saved && typeof saved === 'object' ? saved : {};
+    let earned = 0;
+    for (const m of missions){
+      const before = Math.max(0, Number(current[m.id]) || 0), after = Math.min(m.goal, before + counts[m.id]);
+      if (after <= before) continue;
+      current[m.id] = after;
+      changed = true;
+      if (after === m.goal) earned += xp;
+    }
+    bucket[key] = current;
+    return earned;
+  };
+  const day = new Date(now), dayId = `${day.getFullYear()}-${day.getMonth()+1}-${day.getDate()}`;
+  const earned = advance(st.days, dayId, CHRISTMAS_MISSIONS.day, CHRISTMAS_PASS.dailyXP) +
+    advance(st.weeks, christmasWeekFor(st, now), CHRISTMAS_MISSIONS.week, CHRISTMAS_PASS.weeklyXP);
+  return changed ? savePassProgress(CHRISTMAS_PASS, st, earned) : 0;
+}
+function grantChristmasPassVouchers(){
+  const {level} = passProgress(CHRISTMAS_PASS), vales = loadVales();
+  const receipts = Array.isArray(vales.christmasPass2026) ? vales.christmasPass2026 : [];
+  const rewarded = new Set(receipts);
+  for (const {at,vale} of CHRISTMAS_PASS.prizes){
+    if (!vale || at > level || rewarded.has(vale)) continue;
+    vales[vale] = (vales[vale] || 0) + 1;
+    rewarded.add(vale);
+  }
+  if (rewarded.size === receipts.length) return;
+  vales.christmasPass2026 = [...rewarded];
+  localStorage.setItem('digibonk3d-vales', JSON.stringify(vales));
 }
 function grantSeasonSkin(){
-  if (seasonData().done < FILE_SEASON.weeks.length || ownsAt('agumon', 0, 'lcd')) return null;
-  grantSkinLine('agumon', 'lcd');
+  if (passProgress(FILE_PASS).level < PASS_LEVELS || ownsAt('agumon',0,'lcd')) return null;
+  grantSkinLine('agumon','lcd');
   return 'Agumon · Digivice LCD';
 }
 function seasonDate(ms){
   return new Intl.DateTimeFormat(LANG, {day:'numeric', month:'long', timeZone:'UTC'}).format(ms);
 }
-function seasonStatus(data){
-  if (data.phase === 'upcoming') return `Empieza el ${seasonDate(FILE_SEASON.start)}`;
-  if (data.phase === 'closed') return 'Temporada finalizada';
-  return `Semana ${data.week} de ${FILE_SEASON.weeks.length} · ${data.days === 1 ? 'Queda 1 día' : `Quedan ${data.days} días`}`;
+function passStatus(pass){
+  const now = Date.now(), phase = passPhase(pass, now);
+  if (phase === 'upcoming') return `Empieza el ${seasonDate(pass.start)}`;
+  if (phase === 'closed') return 'Pase finalizado';
+  const days = Math.ceil((pass.end - now)/86400000);
+  return days === 1 ? 'Queda 1 día' : `Quedan ${days} días`;
+}
+function passPanel(pass){
+  const {xp, level, next} = passProgress(pass);
+  const milestones = new Set(pass.prizes.map(prize => prize.at));
+  const levels = Array.from({length:PASS_LEVELS},(_,i) => {
+    const n = i + 1;
+    return `<li class="${n <= level ? 'reached' : ''}${milestones.has(n) ? ' milestone' : ''}"${n === level ? ' aria-current="step"' : ''}>${n}</li>`;
+  }).join('');
+  const prizes = pass.prizes.map(({at,label,icon}) => `<li><img src="${icon}" alt=""><b>${label}</b>
+    <small class="${at <= level ? 'pass-unlocked' : ''}">${at <= level ? 'Desbloqueado' : `Nivel ${at}`}</small></li>`).join('');
+  return `<section class="pass-panel" aria-label="Pase de 50 niveles">
+    <header><h3>Pase de 50 niveles</h3><strong>Nivel ${level} de ${PASS_LEVELS}</strong></header>
+    <progress max="${pass.perLevel}" value="${next}" aria-label="XP para el siguiente nivel"></progress>
+    <small>${level === PASS_LEVELS ? 'Pase completado' : `${next}/${pass.perLevel} XP para el siguiente nivel · ${xp} XP totales`}</small>
+    <ol class="pass-levels" aria-label="Niveles del pase">${levels}</ol>
+    <h3>Recompensas</h3><ul class="pass-rewards">${prizes}</ul>
+  </section>`;
+}
+function christmasMissionsPanel(){
+  const phase = passPhase(CHRISTMAS_PASS), now = Date.now();
+  if (phase !== 'active') return `<p>${passStatus(CHRISTMAS_PASS)}</p>`;
+  const st = passState(CHRISTMAS_PASS), week = christmasWeekFor(st, now);
+  const draw = (title, sub, xp, missions, data) => `<article><h3>${title}</h3><small>${sub}</small>
+    <ul>${missions.map(m => {
+      const count = Math.min(m.goal, data[m.id] || 0);
+      return `<li><strong>${m.label}</strong><progress max="${m.goal}" value="${count}" aria-label="${m.label}"></progress>
+        <small>${count.toLocaleString(LANG)}/${m.goal.toLocaleString(LANG)} · <b>${count === m.goal ? 'Completado' : `+${xp} XP`}</b></small></li>`;
+    }).join('')}</ul></article>`;
+  return `<section class="pass-missions">
+    ${draw('Misiones navideñas de hoy',`Nuevos encargos en ${dailyQuestsLeft()}`,CHRISTMAS_PASS.dailyXP,CHRISTMAS_MISSIONS.day,st.days[dayKey()] || {})}
+    ${draw('Misiones navideñas semanales',`Semana ${week + 1} · Los bloques anteriores siguen abiertos hasta el cierre.`,
+      CHRISTMAS_PASS.weeklyXP,CHRISTMAS_MISSIONS.week,st.weeks[week] || {})}
+  </section>`;
 }
 function seasonPanel(){
-  const data = seasonData(), {start, weeks, prizes} = FILE_SEASON;
-  const tasks = weeks.map((task, i) => {
-    const count = Math.min(task.goal, data.progress[task.id] || 0);
-    const status = count === task.goal ? 'Completado' : data.phase === 'closed' ? 'Cerrado' :
-      i >= data.week ? seasonDate(start + WEEK_MS * i) : `${count.toLocaleString(LANG)}/${task.goal.toLocaleString(LANG)}`;
-    const css = count === task.goal ? 'season-done' : i >= data.week ? 'season-future' : '';
-    return `<li class="${css}"><small>Semana ${i + 1}</small><span>${task.label}</span><strong>${status}</strong></li>`;
-  }).join('');
-  const rewards = prizes.map(({at, label, owns, icon}) => `<li><img src="${icon}" alt=""><span>${label}</span>
-    <strong>${owns() ? 'En tu colección' : `${at}/${weeks.length}`}</strong></li>`).join('');
-  return `<div class="season-dialog">
-    <header class="event-hero">
-      <div><h2>Señal de File Island</h2><p>${seasonStatus(data)}</p>
-        <time datetime="${new Date(data.end).toISOString()}">Cierre: ${seasonDate(data.end)} · 00:00 UTC</time></div>
+  return `<header class="event-hero">
+      <div><h2>Señal de File Island</h2><p>${passStatus(FILE_PASS)}</p>
+        <time datetime="${new Date(FILE_PASS.end).toISOString()}">Cierre: ${seasonDate(FILE_PASS.end)} · 00:00 UTC</time></div>
       <img src="ui/hub/digivice/file-island.png" alt="">
     </header>
-    <article class="season-summary">
-      <div><strong>${data.done}/${weeks.length} encargos</strong><progress max="${weeks.length}" value="${data.done}" aria-label="Progreso de temporada"></progress></div>
-    </article>
-    <h3>Ruta de la temporada</h3>
-    <p>Se abre un encargo cada lunes. Puedes completar los anteriores hasta el cierre.</p>
-    <ol class="season-weeks">${tasks}</ol>
-    ${data.phase === 'active' && data.week >= 2 ? '<button class="season-mode mini-btn" type="button" id="seasonReto">Abrir Reto semanal</button>' : ''}
-    ${data.phase === 'active' && data.week >= 4 ? '<button class="season-mode mini-btn" type="button" id="seasonSurv">Ir a Supervivencia</button>' : ''}
-    <h3>Recompensas</h3><ul class="season-prizes">${rewards}</ul>
-  </div>`;
+    ${passPanel(FILE_PASS)}
+    <p>Completa los encargos normales para sumar XP a este pase.</p>
+    <button class="mini-btn" type="button" id="filePassQuests">Abrir Encargos</button>`;
 }
 
 function weeklyIndex(){ const n = SEASONS.adventure.chars.length; return ((weekNum() % n) + n) % n; }
