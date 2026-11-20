@@ -2229,38 +2229,50 @@ html[lang] #overlay:not(.menu-mode) .mini-btn.danger{border-radius:99px!importan
 .achievement-toolbar button[aria-pressed=true]{background:var(--m-tabon);color:var(--m-tabon-txt);border-color:var(--m-tabon)}
 .achievement-toolbar :is(button,select):hover,.achievement-pages button:not(:disabled):hover{border-color:var(--m-acc)}
 .achievement-pages button:disabled{opacity:.48;cursor:default}
-.achievement-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.achievement-card{
-  display:grid;grid-template-columns:44px minmax(0,1fr);align-items:center;gap:9px;min-width:0;
-  padding:8px;background:var(--m-sunk);border:1px solid var(--m-line);border-radius:10px;
+.achievement-showcase{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,.9fr);gap:12px}
+.achievement-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-content:start;gap:8px;min-width:0}
+.achievement-tile{
+  position:relative;display:grid;justify-items:center;align-content:center;gap:4px;min-width:0;min-height:78px;padding:6px;
+  border:1px solid var(--m-line);border-radius:10px;background:var(--m-sunk);color:var(--m-text);cursor:pointer;
+  font:800 12px/1.2 'Nunito',system-ui,sans-serif;text-align:center;overflow-wrap:anywhere;
 }
-.achievement-card.earned{border-inline-start:3px solid var(--m-good)}
-.achievement-art{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--m-line);border-radius:9px;background:var(--m-card)}
-.achievement-art>.title-badge-art{width:32px;height:32px;object-fit:contain}
-.achievement-art>.trainer-portrait{width:42px;height:42px;margin:0}
-.achievement-card-head{display:flex;align-items:baseline;justify-content:space-between;gap:6px}
-.achievement-card h3{margin:0;font-size:14px;line-height:1.2;overflow-wrap:anywhere}
-.achievement-card p,.achievement-card small,.achievement-page output{color:var(--m-soft);font-size:12px;line-height:1.25}
-.achievement-card p{margin:3px 0 4px;overflow-wrap:anywhere}
+.achievement-tile[aria-pressed=true]{border-color:var(--m-acc);background:color-mix(in srgb,var(--m-acc) 12%,var(--m-card));box-shadow:inset 0 0 0 1px var(--m-acc)}
+.achievement-tile:hover{border-color:var(--m-acc)}
+.achievement-tile-check{position:absolute;inset:5px 6px auto auto;font-size:13px;font-weight:900;color:var(--m-good)}
+.achievement-art{display:grid;place-items:center;width:36px;height:36px}
+.achievement-art>.title-badge-art{width:100%;height:100%;object-fit:contain}
+.achievement-art>.trainer-portrait{width:100%;height:100%;margin:0}
+.achievement-detail{
+  display:grid;align-content:center;justify-items:center;gap:5px;min-width:0;padding:12px;
+  border:1px solid var(--m-line);border-radius:12px;background:var(--m-sunk);text-align:center;
+}
+.achievement-detail .achievement-art{width:72px;height:72px;margin-bottom:3px}
+.achievement-detail h3{margin:0;font-size:17px;line-height:1.15;overflow-wrap:anywhere}
+.achievement-detail p,.achievement-detail small,.achievement-page output{margin:0;color:var(--m-soft);font-size:12px;line-height:1.25}
+.achievement-detail .achievement-progress{width:min(100%,230px)}
 .achievement-progress{display:flex;align-items:center;gap:7px}
 .achievement-progress progress{flex:1;min-width:0}
 .achievement-progress span{font-size:11px;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--m-soft)}
 .achievement-earned{color:var(--m-good);font-size:12px;font-weight:850}
 .achievement-pages{margin-top:10px;justify-content:center;flex-wrap:nowrap}
 .achievement-page output{min-width:44px;text-align:center;font-variant-numeric:tabular-nums}
-.achievement-empty{grid-column:1/-1;margin:0;padding:14px;background:var(--m-sunk);border-radius:10px;color:var(--m-soft)}
+.achievement-empty{margin:0;padding:14px;background:var(--m-sunk);border-radius:10px;color:var(--m-soft)}
 .achievement-page [hidden]{display:none!important}
 @media(max-width:650px){
   #overlay:not(.hidden)>.achievement-page{padding:8px}
   .achievement-page .lab2-header{padding:6px}
   .achievement-heading img{width:26px;height:26px}
-  .achievement-grid{grid-template-columns:minmax(0,1fr)}
+  .achievement-showcase{grid-template-columns:minmax(0,1fr);gap:8px}
+  .achievement-tile{min-height:65px}
+  .achievement-detail{grid-template-columns:52px minmax(0,1fr);align-items:center;justify-items:start;text-align:left;gap:2px 8px;padding:8px}
+  .achievement-detail .achievement-art{grid-row:1/5;width:48px;height:48px;margin:0}
+  .achievement-detail h3{font-size:15px}
   .achievement-toolbar :is(button,select),.achievement-pages button{min-height:40px}
   .achievement-total b{font-size:12px}
 }
 @media(max-width:370px){
   .achievement-heading img{display:none}
-  .achievement-card-head{flex-wrap:wrap;gap:2px 6px}
+  .achievement-tile{padding-inline:3px}
 }
 #overlay:not(.menu-mode) :is(.cl4,.settings,.help-box,.lab-screen,.ms,.pk2-starter) :is(.pk-head,.set-head,.lab-top,.pk2-top) h2{flex:none!important;width:auto!important}
 #overlay:not(.menu-mode) .ms-diff{border-color:color-mix(in srgb,var(--dc) 45%,var(--m-line))!important}
@@ -12818,17 +12830,26 @@ function showLogros(){
   }).sort((a, b) => Number(a.earned) - Number(b.earned) || b.value / b.goal - a.value / a.goal);
   const earned = entries.filter(entry => entry.earned).length;
   const avatar = avatarSrc();
-  const card = ({item, title, earned, value, goal}) => `<article class="achievement-card${earned ? ' earned' : ''}">
-    <span class="achievement-art" aria-hidden="true">${trainerAchievementArt(item, avatar)}</span>
-    <div>
-      <div class="achievement-card-head"><h3 id="achievement-${item.id}">${escHtml(item.name)}</h3><small>${title ? 'Título' : 'Marco'}</small></div>
-      <p>${escHtml(item.how)}</p>
-      ${earned ? '<span class="achievement-earned">✓ Conseguido</span>' : `<div class="achievement-progress">
-        <progress aria-labelledby="achievement-${item.id}" value="${value}" max="${goal}"></progress>
-        <span aria-hidden="true">${fmt(value)} / ${fmt(goal)}</span>
-      </div>`}
-    </div>
-  </article>`;
+  const art = item => {
+    let icon;
+    if (item.id === 't_surv') icon = 'supervivencia';
+    else if (item.id === 'leyenda') icon = 'digidex';
+    else if (item.id === 'explorador' || /^t_(?:dif_|bosque|desierto|nevado)/.test(item.id)) icon = 'mapas';
+    return `<span class="achievement-art" aria-hidden="true">${icon
+      ? `<img class="title-badge-art" src="ui/hub/digivice/${icon}.png" alt="">`
+      : trainerAchievementArt(item, avatar)}</span>`;
+  };
+  const tile = ({item, earned}) => `<button class="achievement-tile" type="button" data-ach-id="${item.id}" aria-pressed="false" aria-controls="achDetail">
+    ${earned ? '<span class="achievement-tile-check" aria-hidden="true">✓</span>' : ''}
+    ${art(item)}<span>${escHtml(item.name)}</span>
+  </button>`;
+  const detail = ({item, title, earned, value, goal}) => `${art(item)}<small>${title ? 'Título' : 'Marco'}</small>
+    <h3 id="achievement-detail-label">${escHtml(item.name)}</h3>
+    <p>${escHtml(item.how)}</p>
+    ${earned ? '<span class="achievement-earned">✓ Conseguido</span>' : `<div class="achievement-progress">
+      <progress aria-labelledby="achievement-detail-label" value="${value}" max="${goal}"></progress>
+      <span aria-hidden="true">${fmt(value)} / ${fmt(goal)}</span>
+    </div>`}`;
   showOverlay(`<main class="achievement-page" aria-labelledby="achHeading">
     <header class="lab2-header">
       <button class="g-back" type="button" id="achBack">← Volver</button>
@@ -12847,7 +12868,13 @@ function showLogros(){
         <option value="all">Títulos · Marcos</option><option value="title">Títulos</option><option value="frame">Marcos</option>
       </select>
     </div>
-    <div class="achievement-grid" id="achResults"></div>
+    <div id="achResults">
+      <div class="achievement-showcase">
+        <div class="achievement-grid"></div>
+        <article class="achievement-detail" id="achDetail" aria-live="polite"></article>
+      </div>
+      <p class="achievement-empty" role="status" hidden>No hay logros para este filtro.</p>
+    </div>
     <nav class="achievement-pages" aria-labelledby="achHeading" hidden>
       <button type="button" id="achPrev" aria-controls="achResults"><span aria-hidden="true">‹</span> <span>Anterior</span></button>
       <output id="achPage" aria-live="polite"></output>
@@ -12858,21 +12885,39 @@ function showLogros(){
   const back = view.querySelector('#achBack');
   const filters = [...view.querySelectorAll('[data-ach-filter]')];
   const type = view.querySelector('#achType');
-  const results = view.querySelector('#achResults');
+  const showcase = view.querySelector('.achievement-showcase');
+  const results = view.querySelector('.achievement-grid');
+  const info = view.querySelector('#achDetail');
+  const empty = view.querySelector('.achievement-empty');
   const pager = view.querySelector('.achievement-pages');
   const previous = view.querySelector('#achPrev'), next = view.querySelector('#achNext');
   const position = view.querySelector('#achPage');
-  let filter = 'all', page = 0;
-  const pageSize = () => innerWidth <= 650 ? (innerHeight <= 460 ? 2 : innerHeight < 680 ? 3 : 4) : (innerHeight <= 460 ? 2 : innerHeight < 540 ? 4 : 6);
+  let filter = 'all', page = 0, selected = '', visible = [];
+  const pageSize = () => {
+    if (innerHeight <= 460) return 3;
+    return innerWidth <= 650 || innerHeight < 540 ? 6 : 9;
+  };
   let size = pageSize();
+  const selectAchievement = entry => {
+    selected = entry.item.id;
+    for (const button of results.querySelectorAll('[data-ach-id]')){
+      button.setAttribute('aria-pressed', String(button.dataset.achId === selected));
+    }
+    info.innerHTML = detail(entry);
+  };
   const render = () => {
     const list = entries.filter(entry =>
       (filter === 'all' || entry.earned === (filter === 'earned')) &&
       (type.value === 'all' || entry.title === (type.value === 'title')));
     const pages = Math.max(1, Math.ceil(list.length / size));
     page = Math.max(0, Math.min(page, pages - 1));
-    results.innerHTML = list.slice(page * size, (page + 1) * size).map(card).join('') ||
-      '<p class="achievement-empty" role="status">No hay logros para este filtro.</p>';
+    visible = list.slice(page * size, (page + 1) * size);
+    results.innerHTML = visible.map(tile).join('');
+    showcase.hidden = visible.length === 0;
+    empty.hidden = !showcase.hidden;
+    const entry = visible.find(mark => mark.item.id === selected) || visible[0];
+    if (entry) selectAchievement(entry);
+    else info.innerHTML = '';
     pager.hidden = pages <= 1;
     previous.disabled = page === 0;
     next.disabled = page === pages - 1;
@@ -12886,13 +12931,20 @@ function showLogros(){
     render();
   };
   type.onchange = () => { page = 0; render(); };
+  results.onclick = event => {
+    const button = event.target.closest('[data-ach-id]');
+    if (!button) return;
+    const entry = visible.find(mark => mark.item.id === button.dataset.achId);
+    if (entry) selectAchievement(entry);
+  };
   previous.onclick = () => { page--; render(); if (previous.disabled) next.focus({preventScroll:true}); };
   next.onclick = () => { page++; render(); if (next.disabled) previous.focus({preventScroll:true}); };
   const resize = new ResizeObserver(() => {
     if (!view.isConnected){ resize.disconnect(); return; }
     const nextSize = pageSize();
     if (nextSize === size) return;
-    page = Math.floor(page * size / nextSize);
+    const offset = Math.max(0, visible.findIndex(entry => entry.item.id === selected));
+    page = Math.floor((page * size + offset) / nextSize);
     size = nextSize;
     render();
   });
