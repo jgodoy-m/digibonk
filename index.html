@@ -2867,7 +2867,7 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
 #overlay .realhub.hb .hb-bar .hb-btn{flex:none}
 /* Digivice de récords: la carcasa PNG rodea la pantalla y sus controles reales. */
 #overlay .realhub.hb .hb-record-device{
-  position:relative; width:min(100%,400px); min-height:550px; aspect-ratio:0.72;
+  position:relative; width:min(100%,400px); min-height:590px; aspect-ratio:0.68;
   justify-self:center; align-self:center; margin-inline:auto;
   background:url('ui/hub/records-digivice.png') center/100% 100% no-repeat;
 }
@@ -2896,16 +2896,6 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
   display:block; font:900 clamp(12px,1.1vw,16px)/1.08 'Nunito',sans-serif;
 }
 #overlay .realhub.hb .hb-record-head small{display:block;margin-top:2px;font-size:10px;font-weight:800;line-height:1.15}
-#overlay .realhub.hb .hb-record-map{
-  display:flex; align-items:center; flex:none; gap:6px; min-width:0; min-height:34px; padding:2px 6px;
-  border:1px solid var(--records-line); border-radius:6px; background:var(--records-well); color:var(--records-ink);
-}
-#overlay .realhub.hb .hb-record-map img{width:23px;height:23px;flex:none;object-fit:contain}
-#overlay .realhub.hb .hb-record-map span{font:850 10px/1 'Nunito',sans-serif;color:var(--records-muted)}
-#overlay .realhub.hb .hb-record-map select{
-  flex:1; min-width:0; width:100%; min-height:29px; margin:0; padding:3px; border:0;
-  background:var(--records-well); color:var(--records-ink); font:900 12px/1.2 'Nunito',sans-serif; cursor:pointer;
-}
 #overlay .realhub.hb .hb-record-screen .hb-tabs{
   display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:3px;
   padding:2px; border:1px solid var(--records-line); border-radius:6px; background:var(--records-well);
@@ -3162,6 +3152,48 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 .rk-list li.me{background:color-mix(in srgb,var(--m-acc,#4e63e8) 14%,transparent);border-radius:10px}
 .rk-list li.rk-empty{display:block;text-align:center;color:var(--m-mute,#9fd4ff);padding:24px 8px}
 .approved-info-dialog #realRank{margin-right:8px}
+/* El mismo selector de ámbito en el Digivice y en la clasificación. */
+#overlay .realhub.hb .hb-record-screen .hb-lbrow[hidden]{display:none}
+.hb-record-screen .hb-record-scope{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.hb-record-screen .hb-record-scope button,.sr-selector button,.sr-filters button{
+  color:inherit;border:1px solid var(--records-line,var(--m-line2));background:var(--records-well,var(--m-sunk));
+  border-radius:7px;font:850 12px/1.2 'Nunito',sans-serif;cursor:pointer;min-height:34px;padding:5px 7px;
+}
+.hb-record-screen .hb-record-scope [aria-pressed=true],.sr-selector [aria-pressed=true],.sr-filters [aria-pressed=true]{
+  background:var(--records-active,var(--m-acc));color:var(--records-surface,#fff);
+}
+.sr-selector{position:relative;flex:none;text-align:left}
+.sr-selector summary{display:flex;align-items:center;gap:7px;min-height:38px;padding:4px 6px;border:1px solid var(--records-line);border-radius:7px;background:var(--records-well);cursor:pointer;list-style:none}
+.sr-selector summary::-webkit-details-marker{display:none}
+.sr-selector summary::after{content:'⌄';margin-left:auto}
+.sr-selector[open] summary::after{content:'⌃'}
+.sr-selector img,.sr-filters img{width:24px;height:24px;object-fit:contain;flex:none}
+.sr-selector b,.sr-selector small{display:block}
+.sr-selector small{color:var(--records-muted);font-size:10px}
+.sr-options{position:absolute;z-index:5;inset:calc(100% + 4px) 0 auto;display:grid;gap:3px;max-height:240px;overflow:auto;padding:5px;border:1px solid var(--records-line);border-radius:7px;background:var(--records-surface);box-shadow:0 8px 16px #07142d70}
+.sr-options button{display:flex;align-items:center;gap:6px;text-align:left}
+.sr-options [aria-pressed=true] small{color:inherit}
+.sr-options h3{margin:5px 3px 1px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--records-muted)}
+#overlay .settings.sr-screen{width:min(1250px,96vw)!important;max-height:94dvh;overflow:auto;padding:clamp(10px,2vw,24px);text-align:left}
+.sr-screen .set-head{margin-bottom:12px}
+.sr-layout{display:grid;grid-template-columns:minmax(166px,250px) minmax(0,1fr);gap:14px;align-items:start}
+.sr-filters{display:grid;gap:6px}
+.sr-filters h3{margin:9px 0 0;font-size:13px;color:var(--m-mute)}
+.sr-filters button{display:flex;align-items:center;gap:7px;text-align:left;font-size:13px}
+.sr-banner{padding:14px;border-radius:12px;color:#fff;background:repeating-linear-gradient(135deg,#fff1 0 10px,transparent 10px 20px),linear-gradient(125deg,#343d8d,#654078)}
+.sr-banner h3{font-size:clamp(19px,3vw,33px);margin:0}
+.sr-banner p{margin:3px 0 0;font-size:13px}
+.sr-podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+.sr-podium article{display:grid;justify-items:center;align-content:center;min-width:0;min-height:112px;gap:4px;padding:7px;border:2px solid var(--medal);border-radius:12px;background:color-mix(in srgb,var(--medal) 17%,var(--m-card));text-align:center}
+.sr-podium .p1{--medal:#d5a542}.sr-podium .p2{--medal:#a5b4cf}.sr-podium .p3{--medal:#bc8158}
+.sr-podium img{width:clamp(30px,6vw,56px);aspect-ratio:1;object-fit:contain}
+.sr-podium b,.sr-podium strong{overflow-wrap:anywhere}
+.sr-screen .rk-list{min-height:0}
+.sr-screen .sr-account{display:block;margin:12px 0 0;padding:9px 12px;border:1px solid var(--m-line2);border-radius:8px;color:var(--m-mute)}
+@media(max-width:640px){.sr-layout{grid-template-columns:minmax(0,1fr)}.sr-filters{display:flex;flex-wrap:wrap}.sr-filters h3{width:100%}.sr-podium article{font-size:12px}}
+@media(pointer:coarse){.hb-record-screen .hb-record-scope button,.sr-selector summary,.sr-options button,.sr-filters button{min-height:44px}}
+.sr-podium .p1{grid-column:2;grid-row:1;min-height:135px}
+.sr-podium .p2{grid-column:1;grid-row:1;align-self:end}.sr-podium .p3{grid-column:3;grid-row:1;align-self:end}
 /* Créditos y licencias */
 .cr-box{max-height:92dvh;display:flex;flex-direction:column}
 .cr-list{overflow:auto;flex:1;padding-right:4px}
@@ -6192,19 +6224,20 @@ function showSelect(){
               <button type="button" role="tab" id="hbRecordsTrial" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="trial">Contrarreloj</button>
               <button type="button" role="tab" id="hbRecordsSurvival" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="survival">Supervivencia</button>
             </div>
-            <label class="hb-record-map">
-              <img src="ui/hub/digivice/mapas.png" alt=""><span>Mapa</span>
-              <select id="hbRecordsMap">
-                <option value="">Global · Mis marcas</option>
-                ${MAP_ORDER.map(map => `<option value="${map}">${safeText(MAPS[map].name)}</option>`).join('')}
-              </select>
-            </label>
+            <div class="hb-record-scope" aria-label="Clasificación">
+              <button type="button" data-record-scope="personal" aria-pressed="true">Mis récords</button>
+              <button type="button" data-record-scope="online" aria-pressed="false">Global</button>
+            </div>
+            <details class="sr-selector" id="hbRecordsMap">
+              <summary><img src="ui/hub/digivice/mapas.png" alt=""><span><b id="hbRecordMapLabel">Global</b><small id="hbRecordMapNote">Todos tus mapas</small></span></summary>
+              <div class="sr-options"></div>
+            </details>
             <div class="hb-lbrow" id="hbRecordsSummary" aria-live="polite"></div>
             <div class="hb-record-list" id="hbRecordsPanel" role="tabpanel" aria-labelledby="hbRecordsKills" tabindex="0">
               <ol class="hb-rank" id="hbRank"></ol>
             </div>
             <div class="hb-record-actions">
-              <button type="button" class="hb-all hb-record-online" id="hbRecordsOnline">Clasificación online</button>
+              <button type="button" class="hb-all hb-record-online" id="hbRecordsOnline">Ver clasificación completa</button>
               <button type="button" class="hb-all" id="rhRecords">Mi historial</button>
             </div>
           </div>
@@ -6293,7 +6326,23 @@ function showSelect(){
     const tabs = [...document.querySelectorAll('.hb-record-screen .hb-tabs button')];
     const summary = document.getElementById('hbRecordsSummary');
     const mapFilter = document.getElementById('hbRecordsMap');
-    let mode = 'kills';
+    const options = mapFilter.querySelector('.sr-options');
+    const scopeButtons = [...document.querySelectorAll('[data-record-scope]')];
+    const view = seasonRankView;
+    let requestId = 0;
+    const drawFilter = () => {
+      const label = document.getElementById('hbRecordMapLabel');
+      label.textContent = seasonRankScopeLabel(view);
+      document.getElementById('hbRecordMapNote').textContent =
+        view.map || view.digimon ? SEASON_RANK_METRICS[view.metric].name
+        : view.scope === 'online' ? 'Mapas de la rotación' : 'Todos tus mapas';
+      options.innerHTML = seasonRankMaps(view);
+      bindSeasonRankOptions(options, view, () => {
+        mapFilter.open = false;
+        mapFilter.querySelector('summary').focus();
+        selectTab(tabs.find(tab => tab.dataset.k === view.metric));
+      });
+    };
     const recKey = r => r.key || Object.keys(CHARS).find(k => CHARS[k].name === r.name || (EVO_LINE[k] || []).some(e => e.name === r.name)) || 'agumon';
     const stat = (label, value) => `<span><b>${safeText(value)}</b><small>${safeText(label)}</small></span>`;
     const empty = '<li class="hb-empty">Todavía no hay partidas. ¡Empieza una!</li>';
@@ -6305,7 +6354,25 @@ function showSelect(){
       <strong>${safeText(value)}</strong>
     </li>`;
     const draw = () => {
-      const map = mapFilter.value;
+      const current = ++requestId;
+      const {metric:mode, map} = view;
+      drawFilter();
+      if (view.scope === 'online'){
+        summary.innerHTML = '';
+        summary.hidden = true;
+        ol.innerHTML = '<li class="hb-empty">Cargando…</li>';
+        seasonRankRows({...view}, 7).then(rows => {
+          if (current !== requestId || !ol.isConnected) return;
+          ol.innerHTML = rows.filter(r => Number(r.pos) <= 7).map(r =>
+            row(Number(r.pos), r.name + (r.me ? ' (tú)' : ''), seasonRankScore(r.score, mode),
+              CHARS[r.digimon] ? r.digimon : '', `${Number(r.map_count)} mapas`)).join('')
+            || '<li class="hb-empty">Aún no hay marcas para esta selección.</li>';
+        }).catch(() => {
+          if (current === requestId && ol.isConnected) ol.innerHTML = '<li class="hb-empty">Clasificación de temporada no disponible.</li>';
+        });
+        return;
+      }
+      summary.hidden = false;
       if (mode === 'trial'){
         if (map){
           const seconds = trialTimes[map];
@@ -6357,7 +6424,7 @@ function showSelect(){
         button.tabIndex = active ? 0 : -1;
       });
       panel.setAttribute('aria-labelledby', tab.id);
-      mode = tab.dataset.k;
+      view.metric = tab.dataset.k;
       draw();
       panel.scrollTop = 0;
     };
@@ -6376,13 +6443,19 @@ function showSelect(){
         tabs[target].focus();
       };
     });
-    mapFilter.onchange = () => { draw(); panel.scrollTop = 0; };
-    document.getElementById('hbRecordsOnline').onclick = () => {
-      Rk.mode = mode === 'survival' ? 'surv' : 'normal';
-      Rk.map = mapFilter.value || runMap;
-      showRanking('select');
-    };
-    draw(); }
+    scopeButtons.forEach(button => {
+      button.onclick = () => {
+        view.scope = button.dataset.recordScope;
+        if (view.scope === 'personal') view.digimon = '';
+        scopeButtons.forEach(scope => scope.setAttribute('aria-pressed', String(scope === button)));
+        mapFilter.open = false;
+        draw();
+        panel.scrollTop = 0;
+      };
+      button.setAttribute('aria-pressed', String(button.dataset.recordScope === view.scope));
+    });
+    document.getElementById('hbRecordsOnline').onclick = () => showSeasonRanking(view);
+    selectTab(tabs.find(tab => tab.dataset.k === view.metric)); }
   clearInterval(newsTimer);
 }
 // Guía «Cómo jugar»: diez pantallas en cuatro capítulos. Cada una tiene un vídeo grabado del propio juego
@@ -6848,6 +6921,101 @@ async function showRanking(from){
   const res = r => Rk.mode === 'surv' ? `Oleada ${r.wave}<small>${fmtTime(r.t)}</small>` : r.win ? `${fmtTime(r.t)}<small>Victoria</small>` : `${fmtTime(r.t)}<small>Sin victoria</small>`;
   ol.innerHTML = rows.map(r => `<li class="${r.me ? 'me ' : ''}${r.pos <= 3 ? 'top p' + r.pos : ''}"><em>${r.pos}</em><img src="${CHARS[r.digimon] ? charIcon(r.digimon) : ''}" alt="" onerror="this.style.visibility='hidden'"><span><b>${safe(r.name)}${r.me ? ' (tú)' : ''}</b><small>${REGIONS[r.region] || ''} · ${r.kills.toLocaleString('es-ES')} bajas · Nv ${r.lvl}</small></span><strong>${res(r)}</strong></li>`).join('')
     || '<li class="rk-empty">Nadie ha entrado aún en este ranking. ¡Sé el primero!</li>';
+}
+const seasonRankView = {scope:'personal', metric:'kills', map:'', digimon:''};
+const SEASON_RANK_METRICS = {
+  kills:{name:'Bajas', icon:'logros', rule:'Bajas acumuladas en las partidas registradas.'},
+  trial:{name:'Contrarreloj', icon:'reto', rule:'La victoria más rápida de cada mapa. Global suma todos los mapas disponibles.'},
+  survival:{name:'Supervivencia', icon:'supervivencia', rule:'El mejor tiempo de cada mapa. Global suma las mejores marcas disponibles.'}
+};
+function seasonRankText(value){
+  return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function seasonRankMaps(view){
+  const safe = seasonRankText;
+  const option = (map, title, icon, detail) => `<button type="button" data-season-map="${map}" aria-pressed="${!view.digimon && view.map === map}"><img src="${icon}" alt=""><span><b>${safe(title)}</b><small>${safe(detail)}</small></span></button>`;
+  return option('', 'Global', 'ui/hub/digivice/ranking.png', view.scope === 'online' ? `Todos los mapas de la temporada · ${MAP_ORDER.length}` : 'Todos tus mapas')
+    + '<h3>Mapas de la rotación</h3>'
+    + MAP_ORDER.map(map => option(map, MAPS[map].name, loadArt(map).src, SEASON_RANK_METRICS[view.metric].name)).join('')
+    + (view.scope === 'online' ? `<h3>Por Digimon</h3><button type="button" data-season-digimon="${selectedKey}" aria-pressed="${view.digimon === selectedKey}"><img src="${charIcon(selectedKey)}" alt=""><span><b>${safe(CHARS[selectedKey].name)}</b><small>Tu Digimon seleccionado</small></span></button>` : '');
+}
+function seasonRankScopeLabel(view){
+  return view.digimon ? CHARS[view.digimon].name : view.map ? MAPS[view.map].name : 'Global';
+}
+function bindSeasonRankOptions(root, view, redraw){
+  root.querySelectorAll('[data-season-map],[data-season-digimon]').forEach(button => {
+    button.onclick = () => {
+      view.map = button.dataset.seasonMap || '';
+      view.digimon = button.dataset.seasonDigimon || '';
+      redraw();
+    };
+  });
+}
+async function seasonRankRows(view, limit){
+  if (!CLOUD_ON) throw new Error('ranking_disabled');
+  const args = {
+    p_metric:view.metric, p_maps:view.map ? [view.map] : MAP_ORDER,
+    p_start:new Date(FILE_SEASON.start).toISOString(), p_end:new Date(seasonData().end).toISOString(),
+    p_digimon:view.digimon || null, p_limit:limit
+  };
+  if (Cloud.st.at || (cloudEnabled() && !Cloud.st.expired)) return cloudRpc('get_season_leaderboard', args);
+  const response = await fetch(CLOUD_CFG.url.replace(/\/$/, '') + '/rest/v1/rpc/get_season_leaderboard', {
+    method:'POST', headers:{apikey:CLOUD_CFG.key,'Content-Type':'application/json'}, body:JSON.stringify(args)
+  });
+  if (!response.ok) throw new Error('ranking_unavailable');
+  return response.json();
+}
+function seasonRankScore(score, metric){
+  return metric === 'kills' ? Number(score).toLocaleString(LANG) : fmtTime(Number(score));
+}
+function showSeasonRanking(selection){
+  state = 'ranking';
+  setHud(false);
+  const view = {...selection,scope:'online'};
+  const safe = seasonRankText;
+  const metric = SEASON_RANK_METRICS[view.metric];
+  showOverlay(`
+    <section class="settings sr-screen" aria-labelledby="seasonRankTitle">
+      <header class="set-head"><button type="button" class="g-back" id="rkBack">← Volver</button><h2 id="seasonRankTitle">Clasificación</h2></header>
+      <div class="sr-layout">
+        <nav class="sr-filters" aria-label="Filtros de clasificación">
+          ${Object.entries(SEASON_RANK_METRICS).map(([k, m]) => `<button type="button" data-season-metric="${k}" aria-pressed="${k === view.metric}"><img src="ui/hub/digivice/${m.icon}.png" alt="">${m.name}</button>`).join('')}
+          ${seasonRankMaps(view)}
+        </nav>
+        <div>
+          <header class="sr-banner"><b>${metric.name} · Señal de File Island</b><h3>${safe(seasonRankScopeLabel(view))}</h3><p>${metric.rule}</p><p>${safe(seasonStatus(seasonData()))}</p></header>
+          <div class="sr-podium" id="seasonRankPodium"></div>
+          <ol class="rk-list" id="seasonRankRows" aria-label="Clasificación" aria-live="polite"><li class="rk-empty">Cargando…</li></ol>
+          ${isGuest() ? '<p class="sr-account">Los invitados pueden consultar la clasificación. Vincula una cuenta para competir.</p>' : ''}
+          <button class="g-back" id="seasonRankHistoric" type="button" hidden>Ver clasificación histórica</button>
+        </div>
+      </div>
+    </section>`);
+  document.getElementById('rkBack').onclick = () => showSelect();
+  const root = document.querySelector('.sr-screen');
+  const redraw = () => showSeasonRanking(view);
+  bindSeasonRankOptions(root, view, redraw);
+  root.querySelectorAll('[data-season-metric]').forEach(button => {
+    button.onclick = () => { view.metric = button.dataset.seasonMetric; redraw(); };
+  });
+  const list = document.getElementById('seasonRankRows');
+  const podium = document.getElementById('seasonRankPodium');
+  const historical = document.getElementById('seasonRankHistoric');
+  historical.onclick = () => { Rk.mode = view.metric === 'survival' ? 'surv' : 'normal'; Rk.map = view.map || runMap; showRanking('select'); };
+  seasonRankRows(view, 100).then(rows => {
+    if (!list.isConnected) return;
+    const icon = r => `<img src="${charIcon(CHARS[r.digimon] ? r.digimon : 'agumon')}" alt="">`;
+    const name = r => safe(r.name) + (r.me ? ' (tú)' : '');
+    podium.innerHTML = rows.filter(r => Number(r.pos) <= 3).map(r =>
+      `<article class="p${Number(r.pos)}">${icon(r)}<b>${name(r)}</b><strong>${safe(seasonRankScore(r.score, view.metric))}</strong><span>#${Number(r.pos)}</span></article>`).join('');
+    list.innerHTML = rows.filter(r => Number(r.pos) > 3).map(r =>
+      `<li class="${r.me ? 'me' : ''}"><em>${Number(r.pos)}</em>${icon(r)}<span><b>${name(r)}</b><small>${Number(r.map_count)} mapas</small></span><strong>${safe(seasonRankScore(r.score, view.metric))}</strong></li>`).join('')
+      || (rows.length ? '' : '<li class="rk-empty">Aún no hay marcas para esta selección.</li>');
+  }).catch(() => {
+    if (!list.isConnected) return;
+    list.innerHTML = '<li class="rk-empty">La clasificación de temporada no está disponible.</li>';
+    historical.hidden = false;
+  });
 }
 // Créditos y licencias: lo que consta en sprites/CREDITS.txt, textures/CREDITOS.txt y fonts/LICENCIAS.txt.
 // Los recuadros naranjas marcan lo que falta verificar antes de publicar (permisos de sprites y autoría)
