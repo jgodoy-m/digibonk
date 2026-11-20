@@ -3765,7 +3765,7 @@ html[lang] .trainer-screen .trainer-header .g-back,
 #overlay .realhub.hb .hb-user-card .hb-wallet .hb-chip img{width:17px;height:17px}
 #overlay .realhub.hb .hb-user-card .hb-out{width:36px;height:40px}
 
-/* Inicio: modos jugables arriba y actividades en la fila inferior. */
+/* Inicio: accesos a partidas y actividades. */
 #overlay .realhub.hb .nm-modes{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) minmax(0,.8fr)!important}
 #overlay .realhub.hb .nm-modes>.hb-mode{
   min-width:0;flex-direction:column;justify-content:center;gap:8px;text-align:center;padding:10px 4px!important
@@ -3773,6 +3773,19 @@ html[lang] .trainer-screen .trainer-header .g-back,
 #overlay .realhub.hb .nm-modes>.hb-mode i{margin:0}
 #overlay .realhub.hb .nm-modes>.hb-mode b{font-size:clamp(12px,1.25vw,17px)!important;overflow-wrap:anywhere}
 #overlay .realhub.hb .nm-modes>.hb-mode small{display:block;line-height:1.1}
+#overlay .realhub.hb .hb-mode-stack{display:grid;grid-template-rows:repeat(2,minmax(44px,1fr));gap:7px;min-width:0}
+#overlay .realhub.hb .hb-mode-stack .hb-mode{min-width:0;gap:6px;padding:5px 6px!important}
+#overlay .realhub.hb .hb-mode-stack .hb-mode>i{width:26px!important;height:26px!important;border-radius:8px}
+#overlay .realhub.hb .hb-mode-stack .hb-mode .nm-ic{width:22px;height:22px}
+#overlay .realhub.hb .hb-mode-stack .hb-mode>span{min-width:0}
+#overlay .realhub.hb .hb-mode-stack .hb-mode b{font-size:clamp(12px,1.15vw,16px)!important;overflow-wrap:anywhere}
+#overlay .realhub.hb .hb-mode-stack .hb-mode small{font-size:11px;line-height:1.1}
+#overlay .realhub.hb .hb-mode-stack .m-coop{
+  background:color-mix(in srgb,var(--m-card) 82%,#6c95d3);color:var(--m-text);
+  border:1px solid var(--m-line2);box-shadow:0 3px 0 var(--m-line2)
+}
+#overlay .realhub.hb .hb-mode-stack .m-coop small{color:var(--m-soft)}
+#overlay .realhub.hb .hb-mode-stack .m-coop::after{display:none}
 #overlay .realhub.hb .nm-modes .m-modes{background:linear-gradient(140deg,#4468b5,#2e4278);box-shadow:0 3px 0 #1b2b57}
 #overlay .realhub.hb .hb-activities{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:10px}
 #overlay .realhub.hb .hb-activities button{min-width:0;height:100%;box-sizing:border-box;padding:8px 10px;flex-wrap:nowrap}
@@ -6143,9 +6156,14 @@ function showSelect(){
               <span class="hb-play-face">${animEl(spriteOf(selectedKey, false), 'hb-face')}</span>
               <span class="lv-sheen"></span><span class="nm-band"><span class="hb-dev"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span>Modo clásico · <b>${safeText(choice.name)}</b></span></span>
             </button>
-            <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i><img class="nm-ic" src="ui/hub/digivice/supervivencia.png" alt=""></i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
+            <div class="hb-mode-stack">
+              <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i><img class="nm-ic" src="ui/hub/digivice/supervivencia.png" alt=""></i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
+              <button type="button" class="hb-mode m-coop" id="mCoop">
+                <i><img class="nm-ic" src="ui/hub/digivice/jugador.png" alt=""></i><span><b>Cooperativo</b><small>Próximamente</small></span>
+              </button>
+            </div>
             <button type="button" class="hb-mode m-modes" id="mModes" aria-haspopup="dialog">
-              <i><img class="nm-ic" src="ui/hub/digivice/reto.png" alt=""></i><span><b>Modos</b><small>3 modos de juego</small></span>
+              <i><img class="nm-ic" src="ui/hub/digivice/reto.png" alt=""></i><span><b>Modos</b><small>Reto semanal</small></span>
             </button>
           </div>
           <div class="hb-activities">
@@ -6239,6 +6257,7 @@ function showSelect(){
   const hmSoon=(msg)=>{const m=document.getElementById('hmMsg'); if(!m) return; m.textContent=msg||'Próximamente'; clearTimeout(m._t); m._t=setTimeout(()=>{m.textContent='';},1800);};
   ['mEvent','mRank','mBuild'].forEach(id=>{const el=document.getElementById(id); if(el) el.onclick=()=>hmSoon('Próximamente');});
   document.getElementById('mSurv').onclick=()=>{ runMode='surv'; runWeekly=false; restoreRunPrefs(); showPicker('personaje'); };
+  document.getElementById('mCoop').onclick=()=>hmSoon('Cooperativo: próximamente');
   document.getElementById('mEnc').onclick = showEncargos;
   document.getElementById('hubEvents').onclick = () => showEvents(featured.tab);
   document.getElementById('mModes').onclick = event => showModes(event.currentTarget);
@@ -12570,17 +12589,9 @@ function showEncargos(){
 }
 function showModes(trigger){
   const {map, diff} = retoSetup(), mod = weeklyMod();
-  const modes = [
-    {id:'modeClassic', icon:'mapas', name:'Clásico', description:'Elige mapa y dificultad.'},
-    {id:'modeSurvival', icon:'supervivencia', name:'Supervivencia', description:'Modo infinito'},
-    {id:'modeWeekly', icon:'reto', name:'Reto semanal', description:`${MAPS[map].name} · ${DIFFS[diff].name} · ${mod.name}`}
-  ];
-  const options = modes.map(({id,icon,name,description}) => `<button type="button" id="${id}">
-    <img src="ui/hub/digivice/${icon}.png" alt=""><span><b>${name}</b><small>${description}</small></span>
-    <span aria-hidden="true">›</span></button>`).join('');
-  menuModal('Modos', `<div class="mode-options">${options}</div>`, () => trigger?.focus({preventScroll:true}));
-  document.getElementById('modeClassic').onclick = () => document.getElementById('playBtn').click();
-  document.getElementById('modeSurvival').onclick = () => document.getElementById('mSurv').click();
+  menuModal('Modos', `<div class="mode-options"><button type="button" id="modeWeekly">
+    <img src="ui/hub/digivice/reto.png" alt=""><span><b>Reto semanal</b><small>${MAPS[map].name} · ${DIFFS[diff].name} · ${mod.name}</small></span>
+    <span aria-hidden="true">›</span></button></div>`, () => trigger?.focus({preventScroll:true}));
   document.getElementById('modeWeekly').onclick = () => beginWeeklyFrom('modes');
 }
 function christmasPanel(){
