@@ -1827,5 +1827,8 @@ I18N.add('en', {
   "Abrir Incubadora": "Open Incubator",
   "3 modos de juego": "3 game modes",
   "Modos": "Modes",
-  "Elige mapa y dificultad.": "Choose a map and difficulty."
+  "Elige mapa y dificultad.": "Choose a map and difficulty.",
+  "Esta semana": "This week",
+  "Nuevos encargos en {0}": "New missions in {0}",
+  "Cierre: {0}": "Ends {0}"
 });

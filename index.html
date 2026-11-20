@@ -3118,7 +3118,6 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 #overlay .realhub.hb .nm-eh{flex:none;min-width:0}
 #overlay .realhub.hb .nm-eh b{display:block;font-size:16px;font-weight:900;line-height:1.1}
 #overlay .realhub.hb .nm-eh small{display:block;font-size:11px;font-weight:700;color:var(--m-mute)}
-#overlay .approved-info-dialog.eq-dialog,.approved-info-dialog.eq-dialog{width:min(1040px,94vw)!important;max-width:none!important;max-height:calc(100vh - 40px);overflow-y:auto}
 .eq-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:6px 0 4px}
 .eq-grid.eq-two{grid-template-columns:repeat(2,minmax(0,1fr))}
 .eq-panel{--qc:#e2476b;display:flex;flex-direction:column;border:1px solid var(--m-line);border-top:4px solid var(--qc);border-radius:16px;background:var(--m-sunk);overflow:hidden;text-align:left}
@@ -3825,23 +3824,62 @@ html[lang] .trainer-screen .trainer-header .g-back,
 #overlay .realhub.hb .nm-encard .nm-eh{flex:1;min-width:0}
 #overlay .realhub.hb .nm-encard .nm-eh small{overflow-wrap:anywhere}
 #overlay .realhub.hb .nm-encard:focus-visible{outline:2px solid var(--m-acc);outline-offset:2px}
+#overlay .activity-page{
+  width:min(1120px,96vw);max-height:calc(100dvh - 24px);overflow:auto;box-sizing:border-box;
+  padding:clamp(12px,2vw,24px);border:1px solid var(--m-cardline);border-radius:20px;
+  background:var(--m-card);color:var(--m-text);box-shadow:var(--m-shadow);
+  font:700 15px/1.4 Nunito,system-ui,sans-serif
+}
+.activity-page-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.activity-page-head h1{margin:0;flex:1;font-size:clamp(26px,3vw,40px);line-height:1.1}
+.activity-balance{display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:10px;background:var(--m-sunk);font-variant-numeric:tabular-nums}
+.activity-balance img{width:22px;height:22px;object-fit:contain}
+.activity-page .eq-grid{gap:clamp(8px,2vw,18px)}
+.activity-page .eq-day{--qc:#b66a12}
+.activity-page .eq-week{--qc:#6b52b9}
+.activity-page .eq-panel>header{
+  flex-wrap:wrap;padding:12px 14px;background:color-mix(in srgb,var(--m-sunk) 80%,var(--qc));
+}
+.activity-page .eq-panel>header b{font-size:clamp(21px,2.4vw,30px)}
+.activity-page .eq-panel>header small,.activity-page .eq-row>span small{color:var(--m-soft)}
+.activity-page .eq-panel>header progress{flex:0 0 100%;margin:0;accent-color:var(--qc);height:7px}
+.activity-page .eq-rows{padding-top:10px}
+.activity-page .eq-row{grid-template-columns:22px minmax(0,1fr) minmax(65px,24%);align-items:start;padding:10px}
+.activity-page .eq-row>em{grid-column:3;color:var(--m-text);text-align:right;overflow-wrap:anywhere}
+.activity-page .eq-row.done .eq-t{opacity:1;text-decoration:none}
+.event-hero{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:125px;padding:clamp(14px,3vw,30px);
+  margin:0 0 12px;border-radius:14px;color:#f3f9ff;background:linear-gradient(90deg,#101729f7,#1017299c),
+    url(ui/fondo_mundo_digital.png) center 48%/cover
+}
+.event-hero.event-christmas{background-image:linear-gradient(90deg,#17203df7,#24295a9c),url(ui/fondo_inicio.webp)}
+.event-hero h2{margin:0 0 3px;color:inherit;font-size:clamp(25px,3.4vw,42px);line-height:1.05}
+.event-hero p{margin:5px 0 0}
+.event-hero img{width:clamp(48px,10vw,108px);height:auto;flex:none;object-fit:contain;filter:drop-shadow(0 4px 6px #04122280)}
+.activity-page .season-weeks{grid-template-columns:repeat(4,minmax(0,1fr))}
+.activity-page .season-prizes{grid-template-columns:repeat(3,minmax(0,1fr))}
+.activity-page .season-weeks li,.activity-page .season-prizes li{display:grid;align-content:start;border:1px solid var(--m-cardline)}
+.activity-page .season-weeks strong,.activity-page .season-prizes strong{white-space:normal}
+@media(max-width:760px){
+  #overlay .activity-page{width:calc(100vw - 16px);max-height:calc(100dvh - 16px);border-radius:14px}
+  .activity-page .eq-grid.eq-two{grid-template-columns:1fr}
+  .activity-page .season-weeks,.activity-page .season-prizes{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:420px){
+  .activity-page .eq-row{grid-template-columns:20px minmax(0,1fr)}
+  .activity-page .eq-row>em{grid-column:2;text-align:left}
+}
 .activity-tabs{display:flex;flex-wrap:wrap;gap:5px;padding:5px;margin:4px 0 12px;border-radius:12px;background:var(--m-sunk)}
 .activity-tabs button{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:1 1 110px;padding:7px;min-height:40px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--m-soft);font:800 13px/1.15 Nunito,system-ui,sans-serif;cursor:pointer}
 .activity-tabs button[aria-selected=true]{background:var(--m-card);border-color:var(--m-cardline);color:var(--m-text);box-shadow:0 2px 4px #0001}
 .activity-tabs button:focus-visible{outline:2px solid var(--m-acc);outline-offset:-2px}
 .activity-tabs img{width:22px;height:22px;object-fit:contain}
 .activity-panel:focus-visible{outline:2px solid var(--m-acc);outline-offset:3px;border-radius:8px}
-.activity-detail{padding:12px;border:1px solid var(--m-cardline);border-radius:12px;background:var(--m-sunk)}
-.activity-detail h3{margin:0 0 2px}
-.activity-detail p{margin:6px 0 0}
-.activity-detail small{color:var(--m-soft)}
 .activity-panel .eq-grid.eq-single{grid-template-columns:1fr}
 .activity-panel .activity-action{margin-top:10px}
 .season-dialog progress{width:100%;height:5px;accent-color:#db9236;display:block;margin-top:5px}
-.season-summary img{flex:none;object-fit:contain}
 .season-dialog article{border:1px solid var(--m-cardline);border-radius:12px;padding:10px 12px;background:var(--m-sunk)}
 .season-dialog .season-summary{display:flex;align-items:center;gap:12px}
-.season-summary img{width:44px;height:44px}
 .season-summary div{flex:1}
 .season-dialog small{display:block;color:var(--m-mute)}
 .season-weeks,.season-prizes{display:grid;gap:6px;margin:10px 0;padding:0;list-style:none}
@@ -5318,6 +5356,9 @@ addEventListener('keydown', e => {
   audioInit();
   // Esc cierra las ventanas del menú (Logros, Encargos, Récords…) antes que nada
   if (k === 'escape'){ const x = overlay.querySelector('.approved-info-scrim #realClose'); if (x){ x.click(); return; } }
+  if (state === 'quests' || state === 'events'){
+    if (k === 'escape'){ returnFromActivityPage(state === 'events' ? 'hubEvents' : 'mEnc'); return; }
+  }
   if (state === 'savecode'){ if (k === 'escape') showSettings(); return; }
   if (state === 'logros'){ if (k === 'escape') document.getElementById('achBack').click(); return; }
   if (state === 'cloud' || state === 'ranking'){ if (k === 'escape'){ const b = document.getElementById(state === 'cloud' ? 'cdBack' : 'rkBack'); if (b) b.click(); } return; }
@@ -5363,7 +5404,7 @@ addEventListener('keydown', e => {
   else if (state === 'reto'){
     if (k === 'enter') startGame(selectedKey);
     else if (k === 'c') showPicker('personaje');
-    else if (k === 'escape') returnToModes();
+    else if (k === 'escape') returnFromWeekly();
   }
   else if (state === 'mapsel'){
     const i = MAP_ORDER.indexOf(runMap);
@@ -5858,7 +5899,7 @@ function masteryHtml(k){
 }
 // ---------- Navegación con flechas y Enter en los menús ----------
 // Las flechas mueven el foco al botón más cercano en esa dirección; Enter pulsa el botón enfocado
-const MENU_NAV = ['select', 'gacha', 'lab', 'settings', 'player', 'collection', 'paused', 'end', 'levelup', 'savecode', 'cloud', 'ranking', 'credits'];
+const MENU_NAV = ['select', 'quests', 'events', 'gacha', 'lab', 'settings', 'player', 'collection', 'paused', 'end', 'levelup', 'savecode', 'cloud', 'ranking', 'credits'];
 function menuNavRoot(){
   const pz = document.getElementById('pause');
   if (pz && !pz.classList.contains('hidden') && pz.firstElementChild) return pz;
@@ -6205,8 +6246,8 @@ function showSelect(){
   const hmSoon=(msg)=>{const m=document.getElementById('hmMsg'); if(!m) return; m.textContent=msg||'Próximamente'; clearTimeout(m._t); m._t=setTimeout(()=>{m.textContent='';},1800);};
   ['mEvent','mRank','mBuild'].forEach(id=>{const el=document.getElementById(id); if(el) el.onclick=()=>hmSoon('Próximamente');});
   document.getElementById('mSurv').onclick=()=>{ runMode='surv'; runWeekly=false; restoreRunPrefs(); showPicker('personaje'); };
-  document.getElementById('mEnc').onclick = event => showEncargos(event.currentTarget);
-  document.getElementById('hubEvents').onclick = event => showEvents(event.currentTarget, featured.tab);
+  document.getElementById('mEnc').onclick = showEncargos;
+  document.getElementById('hubEvents').onclick = () => showEvents(featured.tab);
   document.getElementById('mModes').onclick = event => showModes(event.currentTarget);
   document.getElementById('mLog').onclick=showLogros;
   document.getElementById('hbRankOnline').onclick = () => showRanking('select');
@@ -7377,7 +7418,13 @@ function showMapSelect(){
 /* ---------- Reto semanal: pantalla propia del modo ----------
    Sustituye a «Elige mapa»: el mapa, la dificultad, la regla y la semilla son los de la semana y no se cambian.
    Solo se elige el Digimon. Tiene su propia marca semanal (puntos) y sus hitos. */
-function returnToModes(){
+let weeklyEntry = 'modes';
+function beginWeeklyFrom(entry){
+  weeklyEntry = entry;
+  showReto();
+}
+function returnFromWeekly(){
+  if (weeklyEntry === 'events'){ showEvents('season'); return; }
   showSelect();
   showModes(document.getElementById('mModes'));
 }
@@ -7394,7 +7441,7 @@ function showReto(){
   showOverlay(`
     <div class="rt-screen rt">
       <header class="rt-top">
-        <button class="g-back" id="rtBack"><kbd>Esc</kbd> Modos</button>
+        <button class="g-back" id="rtBack"><kbd>Esc</kbd> Volver</button>
         <h2 class="rt-title"><small>Modo</small>Reto semanal</h2>
         <span class="rt-week"><b>Semana ${weekNum() % 1000}</b><small>Termina en ${retoLeft()}</small></span>
       </header>
@@ -7423,7 +7470,7 @@ function showReto(){
       </div>
       <footer class="rt-foot"><span class="rt-sum">${CHARS[k].name} · ${m.name} · ${d.name} · ${mod.name}</span><button type="button" class="rt-go" id="rtStart">¡Empezar reto! <kbd>Enter</kbd></button></footer>
     </div>`);
-  document.getElementById('rtBack').onclick = returnToModes;
+  document.getElementById('rtBack').onclick = returnFromWeekly;
   document.getElementById('rtPick').onclick = () => showPicker('personaje');
   { const el = document.getElementById('rtStar'); if (el) el.onclick = () => { selectedKey = star; showReto(); }; }
   document.getElementById('rtStart').onclick = () => startGame(selectedKey);
@@ -12461,14 +12508,14 @@ function questPanels(eventOnly = false){
   const fmt = n => Number(n).toLocaleString('es-ES');
   const rw = (b, t) => GACHA_SOON ? (b ? '+' + fmt(b) + ' Bits' : '') : `${b ? '+' + fmt(b) + ' Bits · ' : ''}+${t} ${t === 1 ? 'ticket' : 'tickets'}`;
   const row = (done, txt, prog, goal, reward) => `<div class="eq-row${done ? ' done' : ''}"><b aria-hidden="true">${done ? '✓' : ''}</b><span><span class="eq-t">${txt}</span>${goal > 1 ? `<span class="eq-bar"><i style="width:${Math.round(Math.min(prog, goal) / goal * 100)}%"></i></span><small>${fmt(Math.min(prog, goal))}/${fmt(goal)}</small>` : ''}</span><em>${reward}</em></div>`;
-  const panel = (cls, icon, title, sub, rows, done, all) => `<section class="eq-panel ${cls}"><header><img src="ui/hub/${icon}.webp" alt=""><span><b>${title}</b><small>${sub}</small></span><em>${done}/${all}</em></header><div class="eq-rows">${rows.join('')}</div></section>`;
+  const panel = (cls, icon, title, sub, rows, done, all) => `<section class="eq-panel ${cls}"><header><img src="ui/hub/${icon}.webp" alt=""><span><b>${title}</b><small>${sub}</small></span><em>${done}/${all}</em><progress max="${all}" value="${done}" aria-label="${title}"></progress></header><div class="eq-rows">${rows.join('')}</div></section>`;
   const dayDone = d.claimed || d.runs >= DAILY.runsGoal;
   const dayRows = [row(dayDone, `Juega ${DAILY.runsGoal} partidas`, d.runs, DAILY.runsGoal, rw(DAILY.reward, DAILY.rewardTix)), ...enc.list.map(e => row(e.done, encText(e), e.done ? 1 : 0, 1, rw(ENC_REWARD.bits, ENC_REWARD.tix)))];
   const weekRows = [...(!GACHA_SOON ? [row(wk.claimed, `Haz ${WEEK_PULLS} tiradas en la Incubadora`, wk.pulls, WEEK_PULLS, rw(0, 1))] : []), ...WEEK_QUESTS.map(q => row(wq.done.includes(q.id), q.t, questProg(wq, q), q.goal, rw(q.bits, q.tix) + (q.obj && !wq.done.includes(q.id) && weekItem() ? '<br><span class="eq-prize">+ Objeto: ' + ITEMS[weekItem()].name + '</span>' : '')))];
   const days = Math.max(0, Math.ceil((EVENT.end - Date.now()) / 86400000));
   const parts = [
-    panel('eq-day', 'ic_mision', 'Diarios', 'Se renuevan cada día', dayRows, dayRows.filter(r => r.includes(' done"')).length, dayRows.length),
-    panel('eq-week', 'ic_encargos', 'Semanales', `Se renuevan cada lunes · ${weeklyMod().name}`, weekRows, weekRows.filter(r => r.includes(' done"')).length, weekRows.length)
+    panel('eq-day', 'ic_mision', 'Hoy', `Nuevos encargos en ${dailyQuestsLeft()}`, dayRows, dayRows.filter(r => r.includes(' done"')).length, dayRows.length),
+    panel('eq-week', 'ic_encargos', 'Esta semana', `Nuevos encargos en ${retoLeft()}`, weekRows, weekRows.filter(r => r.includes(' done"')).length, weekRows.length)
   ];
   if (eventOnly && ev){
     const evRows = EVENT_QUESTS.map(q => row(ev.done.includes(q.id), q.t, questProg(ev, q), q.goal, rw(q.bits, q.tix) + (q.vale || q.extra ? '<br><span class="eq-prize">+ ' + eventPrizeText(q) + '</span>' : '')));
@@ -12477,9 +12524,30 @@ function questPanels(eventOnly = false){
   }
   return `<div class="eq-grid eq-two">${parts.join('')}</div>`;
 }
-function showEncargos(trigger = document.getElementById('mEnc')){
-  menuModal('Encargos', questPanels(), () => trigger?.focus({preventScroll:true}));
-  document.querySelector('#realModalHost .approved-info-dialog')?.classList.add('eq-dialog');
+function dailyQuestsLeft(now = Date.now()){
+  const tomorrow = new Date(now);
+  tomorrow.setHours(24, 0, 0, 0);
+  const minutes = Math.ceil((tomorrow.getTime() - now) / 60000);
+  return `${Math.floor(minutes / 60)} h ${minutes % 60} min`;
+}
+function returnFromActivityPage(buttonId){
+  showSelect();
+  document.getElementById(buttonId)?.focus({preventScroll:true});
+}
+function showActivityPage(page, title, content, balance = ''){
+  state = page;
+  setHud(false);
+  showOverlay(`<main class="activity-page" aria-labelledby="activityPageTitle">
+    <header class="activity-page-head"><button type="button" class="g-back" id="activityBack">Volver</button>
+      <h1 id="activityPageTitle">${title}</h1>${balance}</header>
+    ${content}</main>`);
+  const back = document.getElementById('activityBack');
+  back.onclick = () => returnFromActivityPage(page === 'events' ? 'hubEvents' : 'mEnc');
+  back.focus({preventScroll:true});
+}
+function showEncargos(){
+  showActivityPage('quests','Encargos',questPanels(),
+    `<span class="activity-balance"><img src="ui/hud/ic_bits.webp" alt="Bits">${SAVE.bits.toLocaleString(LANG)}</span>`);
 }
 function showModes(trigger){
   const {map, diff} = retoSetup(), mod = weeklyMod();
@@ -12494,14 +12562,17 @@ function showModes(trigger){
   menuModal('Modos', `<div class="mode-options">${options}</div>`, () => trigger?.focus({preventScroll:true}));
   document.getElementById('modeClassic').onclick = () => document.getElementById('playBtn').click();
   document.getElementById('modeSurvival').onclick = () => document.getElementById('mSurv').click();
-  document.getElementById('modeWeekly').onclick = showReto;
+  document.getElementById('modeWeekly').onclick = () => beginWeeklyFrom('modes');
 }
 function christmasPanel(){
   const banner = !GACHA_SOON && (bannerOpen('navidadP') ? 'navidadP' : bannerOpen('navidadR') ? 'navidadR' : '');
   const quests = eventActive() ? questPanels(true) : '';
-  return `${quests}${banner ? '<button class="mini-btn activity-action" type="button" id="activityChristmasBanner">Abrir Incubadora</button>' : ''}`;
+  const countdown = eventActive() ? `Cierre: ${seasonDate(EVENT.end)}` : '';
+  return `<header class="event-hero event-christmas"><div><h2>${EVENT.name}</h2><p>${countdown}</p></div>
+    <img src="${charIcon('agumon','festival')}" alt=""></header>
+    ${quests}${banner ? '<button class="mini-btn activity-action" type="button" id="activityChristmasBanner">Abrir Incubadora</button>' : ''}`;
 }
-function showEvents(trigger, selected = 'season'){
+function showEvents(selected = 'season'){
   const tabs = [{id:'season', label:'Temporada', icon:'file-island', content:seasonPanel}];
   if (eventActive() || (!GACHA_SOON && (bannerOpen('navidadP') || bannerOpen('navidadR')))){
     tabs.push({id:'christmas', label:'Navidad', icon:'evento', content:christmasPanel});
@@ -12512,11 +12583,8 @@ function showEvents(trigger, selected = 'season'){
     <img src="ui/hub/digivice/${icon}.png" alt="">${label}</button>`).join('');
   const panels = tabs.map(({id,content}, i) => `<div class="activity-panel" id="activity-panel-${id}" role="tabpanel"
     aria-labelledby="activity-tab-${id}" tabindex="0"${i === initial ? '' : ' hidden'}>${content()}</div>`).join('');
-  menuModal('Eventos', `<div class="activity-tabs" role="tablist" aria-label="Eventos">${markup}</div>${panels}`,
-    () => trigger?.focus({preventScroll:true}));
-  const dialog = document.querySelector('#realModalHost .approved-info-dialog');
-  if (!dialog) return;
-  dialog.classList.add('eq-dialog');
+  showActivityPage('events','Eventos',`<div class="activity-tabs" role="tablist" aria-label="Eventos">${markup}</div>${panels}`);
+  const dialog = overlay.querySelector('.activity-page');
   const buttons = [...dialog.querySelectorAll('[role="tab"]')];
   const views = [...dialog.querySelectorAll('[role="tabpanel"]')];
   const select = index => {
@@ -12543,8 +12611,8 @@ function showEvents(trigger, selected = 'season'){
     const button = dialog.querySelector('#' + id);
     if (button) button.onclick = action;
   };
-  bind('seasonReto', showReto);
-  bind('seasonSurv', () => document.getElementById('mSurv').click());
+  bind('seasonReto', () => beginWeeklyFrom('events'));
+  bind('seasonSurv', () => { showSelect(); document.getElementById('mSurv').click(); });
   bind('activityChristmasBanner', () => {
     gxBanner = bannerOpen('navidadP') ? 'navidadP' : 'navidadR';
     showGacha();
@@ -14042,9 +14110,12 @@ function seasonPanel(){
   }).join('');
   const rewards = prizes.map(({at, label, owns}) => `<li><span>${label}</span><strong>${owns() ? 'En tu colección' : `${at}/${weeks.length}`}</strong></li>`).join('');
   return `<div class="season-dialog">
-    <article class="season-summary">
+    <header class="event-hero">
+      <div><h2>Señal de File Island</h2><p>${seasonStatus(data)}</p></div>
       <img src="ui/hub/digivice/file-island.png" alt="">
-      <div><b>Señal de File Island</b><small>${seasonStatus(data)}</small><small>${data.done}/${weeks.length} encargos</small><progress max="${weeks.length}" value="${data.done}" aria-label="Progreso de temporada"></progress></div>
+    </header>
+    <article class="season-summary">
+      <div><strong>${data.done}/${weeks.length} encargos</strong><progress max="${weeks.length}" value="${data.done}" aria-label="Progreso de temporada"></progress></div>
     </article>
     <p>Cierre: ${seasonDate(data.end)} · 00:00 UTC</p>
     <p>Se abre un encargo cada lunes. Puedes completar los anteriores hasta el cierre.</p>
