@@ -5599,6 +5599,7 @@ function sheetOf(url){
   if (!ANIM_IDS.has(id)) return null;
   const version = id.endsWith('_reno') ? '?arte=reno-animado' :
     id.endsWith('_lcd') ? '?arte=lcd-animado' :
+    /^(?:agumon|patamon)_[1-3]_galactico$/.test(id) ? '?arte=ajustes-galacticos' :
     id.endsWith('_galactico') ? '?arte=' + (id.endsWith('_0_galactico') ? 'trajes' : 'evoluciones') : id.endsWith('_variocolor') ? '?arte=variocolor-v2' : '';
   return `sprites/anim/${id}.webp${version}`;
 }
@@ -5635,7 +5636,7 @@ function twinMat(m){
   if (m.twin) return m.twin;
   const w = m.clone();
   w.map = twinTex(m.map); w.fr = !m.fr;
-  setGalacticMaterial(w, m.onBeforeCompile === compileGalacticSprite);
+  setGalacticMaterial(w, m.onBeforeCompile);
   sharedMats.add(w); m.twin = w; w.twin = m;
   return w;
 }
@@ -5660,7 +5661,7 @@ function poseMat(m, f){
   m.pose = m.pose || {};
   if (m.pose[f]) return m.pose[f];
   const w = m.clone();
-  setGalacticMaterial(w, m.onBeforeCompile === compileGalacticSprite);
+  setGalacticMaterial(w, m.onBeforeCompile);
   w.map = poseTex(m.map, f);   // textura parada (comparte la imagen)
   w.fr = m.fr; w.root = m;
   return (m.pose[f] = w);
@@ -5810,29 +5811,37 @@ function compileGalacticSprite(shader){
   ` + shader.fragmentShader.replace('#include <alphatest_fragment>', `
     if (diffuseColor.a >= 0.1){
       diffuseColor.rgb += galacticLight(vGalacticUv, sampledDiffuseColor.rgb) * min(diffuse, vec3(1.0));
-    } else {
-      vec4 orbit = galacticOrbit(vGalacticUv);
-      diffuseColor = vec4(orbit.rgb * diffuse, orbit.a * opacity);
     }
+    #ifndef GALACTIC_NO_ORBIT
+      else {
+        vec4 orbit = galacticOrbit(vGalacticUv);
+        diffuseColor = vec4(orbit.rgb * diffuse, orbit.a * opacity);
+      }
+    #endif
     #include <alphatest_fragment>
   `);
 }
 
-function setGalacticMaterial(material, galactic){
-  const compile = galactic ? compileGalacticSprite : THREE.Material.prototype.onBeforeCompile;
+function compileGalacticSpriteWithoutOrbit(shader){
+  compileGalacticSprite(shader);
+  shader.fragmentShader = '#define GALACTIC_NO_ORBIT\n' + shader.fragmentShader;
+}
+
+function setGalacticMaterial(material, compile){
   if (material.onBeforeCompile === compile) return;
   material.onBeforeCompile = compile;
   material.needsUpdate = true;
 }
 
-function galacticSpriteUrl(url){
-  return /_galactico\.webp(?:\?|$)/.test(url);
+function galacticSpriteCompile(url){
+  if (/\/gabumon_3_galactico\.webp(?:\?|$)/.test(url)) return compileGalacticSpriteWithoutOrbit;
+  return /_galactico\.webp(?:\?|$)/.test(url) ? compileGalacticSprite : THREE.Material.prototype.onBeforeCompile;
 }
 
 function setBillboardArt(mesh, url){
   const material = mesh.material;
   material.map = animTex(url, true);
-  setGalacticMaterial(material, galacticSpriteUrl(url));
+  setGalacticMaterial(material, galacticSpriteCompile(url));
   material.needsUpdate = true;
 }
 
@@ -5842,7 +5851,7 @@ function billboard(url, scale, shared = true){
   let mat = shared ? spriteMats[url] : null;
   if (!mat){
     mat = new THREE.SpriteMaterial({map: animTex(url, !shared), transparent: true, alphaTest: 0.1});
-    setGalacticMaterial(mat, galacticSpriteUrl(url));
+    setGalacticMaterial(mat, galacticSpriteCompile(url));
     if (shared){ spriteMats[url] = mat; sharedMats.add(mat); }
   }
   const s = new THREE.Sprite(mat);
