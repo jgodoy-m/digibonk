@@ -5601,7 +5601,8 @@ function sheetOf(url){
   const m = /([^/]+)\.(?:png|webp)(?:\?[^#]*)?$/.exec(url || '');
   const id = m && (m[1] === 'ogremon' ? 'tank' : m[1]);
   if (!ANIM_IDS.has(id)) return null;
-  const version = id.endsWith('_reno') ? '?arte=reno-integrado' :
+  const version = /^(?:gatomon|hagurumon)_0_reno$/.test(id) ? '?arte=reno-retrato' :
+    id.endsWith('_reno') ? '?arte=reno-integrado' :
     id.endsWith('_festival') ? '?arte=trajes-navidad-v2' :
     id.endsWith('_lcd') ? '?arte=lcd-animado' :
     /^(?:gatomon_1|palmon_2|hagurumon_0|frigimon_0)_galactico$/.test(id) ? '?arte=galacticos-v2' :
