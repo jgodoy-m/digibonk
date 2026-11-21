@@ -6506,7 +6506,7 @@ function showCollection(){
       let own = 0, all = 0;
       for (const sk of lineSkins(k)){ all++; if (ownsAt(k, 0, sk.id)) own++; }
       return `<button class="cl4-item${k === colKey ? ' sel' : ''}${open ? '' : ' lock'}" data-k="${k}" ${open ? '' : 'disabled'}>
-        <span class="ps-ic cl4-ic"><img src="${open ? charIcon(k) : 'ui/jugador/' + k + '.webp'}" alt=""></span>
+        <span class="ps-ic cl4-ic"><img src="${open ? charIcon(k) : playerIconSrc(k)}" alt=""></span>
         <span><b>${open ? CHARS[k].name : '???'}</b><small>${open ? own + ' skins · Maestría ' + masteryLv(k) : unlockHowProg(k)}</small></span></button>`;
     }).join('');
     const k = colKey, open = isUnlocked(k);
@@ -7871,7 +7871,7 @@ function renderRoster(){
     const open = isUnlocked(id), fav = open && favs.includes(id);
     return `<button type="button" class="ps-tile${id === k ? ' sel' : ''}${open ? '' : ' lock'}${fav ? ' fav' : ''}" ${open ? `data-pick="${id}"` : 'disabled'} data-name="${open ? CHARS[id].name.toLowerCase() : '???'}" title="${open ? CHARS[id].name : unlockHowProg(id)}">
       <span class="ps-key">${i + 1}</span>${open ? `<span class="ps-fav${fav ? ' on' : ''}" data-fav="${id}" role="button" aria-pressed="${fav}" title="${fav ? 'Quitar de favoritos' : 'Marcar como favorito'}">${fav ? '★' : '☆'}</span>` : ''}${open && pickIsEvolved(id) ? '<span class="ps-evo-dot" title="Ya ha evolucionado"></span>' : ''}
-      <span class="ps-ic"><img src="${open ? charIcon(id) : 'ui/jugador/' + id + '.webp'}" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
+      <span class="ps-ic"><img src="${open ? charIcon(id) : playerIconSrc(id)}" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
     </button>`;
   }).join('');
   const soon = COMING_SOON.map(c => `<span class="ps-tile soon" data-name="${c.name.toLowerCase()}" title="${c.name} · Próximamente"><span class="ps-lock">🔒</span><span class="ps-ic"><img src="${AD(c.id)}" alt="" loading="lazy"></span><b>${c.name}</b></span>`).join('');
@@ -10618,7 +10618,7 @@ const OWN_ITEMS = {
   frigimon:  ['Copo de Frigimon', 'Recibes un 6% menos de daño por nivel.', () => { g.p.armor = (g.p.armor || 1) * 0.94; }],
   wizardmon: ['Báculo de Wizardmon', '+6% daño y +6% área por nivel.', () => { g.p.dmg *= 1.06; g.p.area *= 1.06; }]
 };
-for (const [k, [name, d, on]] of Object.entries(OWN_ITEMS)) ITEMS['own_' + k] = {name, d, on, owner: k, img: 'ui/jugador/' + k + '.webp'};
+for (const [k, [name, d, on]] of Object.entries(OWN_ITEMS)) ITEMS['own_' + k] = {name, d, on, owner: k, img: playerIconSrc(k)};
 // Cómo se desbloquea cada objeto. Los de base salen desde el principio; el resto por hitos, maestría o el encargo semanal
 const ITEM_BASE = ['gafas', 'silbato', 'carne', 'moneda'];
 const ITEM_HITOS = {
@@ -14299,9 +14299,10 @@ function skinHasArt(key, st, id){ return id === 'clasico' || ANIM_IDS.has(`${key
 // Skins de una línea entera: las que tienen hoja en alguna etapa
 function skinLineArt(key, id){ for (let st = 0; st < stageCount(key); st++) if (skinHasArt(key, st, id)) return st; return -1; }
 function lineSkins(key){ return SKINS.filter(sk => skinLineArt(key, sk.id) >= 0 && (!sk.hidden || ownsAt(key, 0, sk.id))); }
+function playerIconSrc(key){ return 'ui/jugador/' + key + '.webp?arte=clasicos'; }
 // Icono redondo de un Digimon con su skin (si la skin no tiene icono, el del Digimon)
-function charIcon(key, skin = equippedAt(key, 0)){ const ic = skinIconFor(key, skin); return ic ? ic.src : 'ui/jugador/' + key + '.webp'; }
-function skinThumb(key, sk){ const ic = skinIconFor(key, sk.id); if (ic || sk.id === 'clasico') return `<span class="ps-ic"><img src="${ic ? ic.src : 'ui/jugador/' + key + '.webp'}" alt=""></span>`; const st = Math.max(0, skinLineArt(key, sk.id)); return `<span class="ps-ic ps-ic-spr">${animEl(spriteWith(key, st, sk.id), 'ps-face')}</span>`; }
+function charIcon(key, skin = equippedAt(key, 0)){ const ic = skinIconFor(key, skin); return ic ? ic.src : playerIconSrc(key); }
+function skinThumb(key, sk){ const ic = skinIconFor(key, sk.id); if (ic || sk.id === 'clasico') return `<span class="ps-ic"><img src="${ic ? ic.src : playerIconSrc(key)}" alt=""></span>`; const st = Math.max(0, skinLineArt(key, sk.id)); return `<span class="ps-ic ps-ic-spr">${animEl(spriteWith(key, st, sk.id), 'ps-face')}</span>`; }
 // Se llama al terminar cada partida: actualiza el progreso y devuelve las skins nuevas
 function statsOf(key){ return loadJSON('digibonk3d-stats', {})[key] || {plays:0, kills:0}; }
 function meetsReq(sk, st){
@@ -14555,7 +14556,7 @@ const PLAYER_ICONS = [
   {id:'agumon', name:'Agumon'}, {id:'gabumon', name:'Gabumon'}, {id:'biyomon', name:'Biyomon'}, {id:'tentomon', name:'Tentomon'},
   {id:'palmon', name:'Palmon'}, {id:'gomamon', name:'Gomamon'}, {id:'patamon', name:'Patamon'}, {id:'gatomon', name:'Gatomon'},
   {id:'leomon', name:'Leomon'}, {id:'hagurumon', name:'Hagurumon'}, {id:'frigimon', name:'Frigimon'}, {id:'wizardmon', name:'Wizardmon'}
-].map(x => ({...x, src: 'ui/jugador/' + x.id + '.webp'}));
+].map(x => ({...x, src: playerIconSrc(x.id)}));
 // Iconos de skin: se desbloquean al tener la skin en alguna etapa (los de skins ocultas solo se ven al tenerlas)
 const SKIN_ICONS = [
   {key:'agumon', skin:'galactico'}, {key:'agumon', skin:'holografica'}, {key:'agumon', skin:'lcd'}, {key:'agumon', skin:'festival'}, {key:'agumon', skin:'reno'}, {key:'agumon', skin:'variocolor'},
