@@ -3527,16 +3527,19 @@ html[lang] .trainer-screen .trainer-header .g-back,
 @media(min-width:1100px){.trainer-stats{grid-template-columns:repeat(6,minmax(0,1fr))}}
 .trainer-stat{display:flex;align-items:center;gap:10px;min-width:0;min-height:68px;padding:8px 12px;border-radius:15px;
   background:var(--trainer-surface);border:1px solid var(--trainer-border);overflow-wrap:anywhere}
-.trainer-stat img{width:28px;height:28px;flex:none;object-fit:contain}
+.trainer-stat-icon{display:grid;place-items:center;width:40px;height:40px;flex:none;border-radius:11px;
+  background:var(--trainer-inset);border:1px solid var(--trainer-border)}
+.trainer-stat-icon img{width:27px;height:27px;object-fit:contain}
 .trainer-stat b{display:block;color:var(--trainer-accent);font-size:clamp(21px,2.8vw,32px);line-height:1.15;font-variant-numeric:tabular-nums}
 .trainer-stat small{font-size:13px;line-height:1.2}
-.trainer-device{min-width:0}
-.trainer-device{display:grid;align-content:center}
-.trainer-device-label{position:absolute;inset:8% 25% auto;margin:0;text-align:center;color:#3b4e6f;
-  font:900 clamp(11px,1.4vw,17px)/1 'Nunito',system-ui}
+.trainer-device{min-width:0;display:grid;align-content:center;container-type:inline-size}
+.trainer-device-label{position:absolute;z-index:1;top:8.2%;left:50%;transform:translate(-50%,-50%);margin:0;
+  width:max-content;max-width:66%;padding:2px 9px;border:1px solid #b5aa98;border-radius:8px;
+  background:#fff6e7;color:#24354d;text-align:center;overflow-wrap:anywhere;
+  font:900 clamp(14px,4.4cqi,21px)/1.05 'Nunito',system-ui}
 .trainer-device-shell{position:relative;aspect-ratio:1752 / 897;width:100%;min-height:176px;margin-inline:auto;isolation:isolate}
 .trainer-device-shell>img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;filter:drop-shadow(0 6px 7px #18353640)}
-.trainer-device-screen{position:absolute;inset:19.7% 14.3% 28.8%;display:grid;align-items:center;box-sizing:border-box;
+.trainer-device-screen{position:absolute;inset:19.7% 14.3% 28.8%;display:grid;align-items:safe center;box-sizing:border-box;overflow:auto;
   padding:4px clamp(7px,1vw,14px);border-radius:clamp(6px,1.4vw,17px);background:var(--trainer-lcd);color:var(--trainer-lcd-ink)}
 .trainer-device-view{min-width:0;margin:0;line-height:1.12}
 .trainer-device-view[hidden]{display:none}
@@ -3550,8 +3553,21 @@ html[lang] .trainer-screen .trainer-header .g-back,
 .trainer-device-row dd{margin:0;font-weight:900;text-align:right;font-variant-numeric:tabular-nums}
 .trainer-device-row .trainer-device-pending{font-weight:750;opacity:.83}
 .trainer-device-controls{position:absolute;inset:76% 10% 8%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;gap:5px}
-.trainer-device-controls button{min-height:36px;padding:4px 2px;border:1px solid #a69d8c;border-radius:9px;background:#fff7e9;
-  color:#273954;box-shadow:0 2px 0 #a69d8c;font:850 clamp(10px,1.2vw,14px)/1.1 'Nunito',system-ui;cursor:pointer;overflow-wrap:anywhere}
+.trainer-device-controls button{display:flex;align-items:center;justify-content:center;gap:5px;min-width:0;min-height:38px;padding:3px 2px;
+  border:1px solid #a69d8c;border-radius:9px;background:#fff7e9;color:#273954;box-shadow:0 2px 0 #a69d8c;
+  font:850 clamp(10px,2.6cqi,14px)/1.1 'Nunito',system-ui;cursor:pointer;overflow-wrap:anywhere}
+.trainer-device-controls button>span:last-child{min-width:0}
+.trainer-device-icon{width:20px;height:20px;flex:none;object-fit:contain}
+.trainer-device-timer{position:relative;display:grid;place-items:center}
+.trainer-device-timer::before{content:'';position:absolute;top:1px;width:7px;height:2px;border-radius:2px;background:currentColor}
+.trainer-device-timer::after{content:'';width:11px;height:11px;margin-top:3px;border:2px solid currentColor;border-radius:50%;
+  background:linear-gradient(currentColor,currentColor) 50% 2px/2px 5px no-repeat,
+             linear-gradient(currentColor,currentColor) 50% 6px/4px 2px no-repeat}
+@container(max-width:400px){
+  .trainer-device-controls button{flex-direction:column;gap:1px;min-height:37px}
+  .trainer-device-icon{width:16px;height:16px}
+  .trainer-device-timer::after{width:9px;height:9px;background-size:2px 4px,4px 2px;background-position:50% 1px,50% 4px}
+}
 .trainer-device-controls button[aria-pressed="true"]{border-color:#365d9d;background:#365d9d;color:#fff;box-shadow:0 2px 0 #213f77}
 .trainer-device-controls button[aria-pressed="false"]:hover{background:#fff}
 .trainer-device-controls button:focus-visible{outline:3px solid #365d9d;outline-offset:2px}
@@ -3670,10 +3686,17 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
 .trainer-panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .trainer-panel-head h3{margin:0}
 .trainer-panel-action{padding:7px 12px;border:1px solid var(--m-line2);border-radius:9px;background:var(--m-sunk);color:var(--m-text);font:800 13px 'Nunito',system-ui;cursor:pointer}
-.trainer-season-grid{display:grid;gap:10px;margin:0;padding:0;list-style:none}
-.trainer-season-reward{display:flex;gap:12px;align-items:center;padding:9px 12px;border-radius:12px;background:var(--trainer-inset)}
-.trainer-season-reward img{width:38px;height:38px;object-fit:contain;flex:none}
+.trainer-showcase .trainer-panel-head{justify-content:flex-start}
+.trainer-showcase .trainer-panel-head img{width:30px;height:30px;object-fit:contain;flex:none}
+.trainer-showcase p{margin:0 0 12px;color:var(--trainer-subtle);font-size:13px;line-height:1.4}
+.trainer-season-grid{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.trainer-season-reward{display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--trainer-border);
+  border-radius:12px;background:var(--trainer-inset)}
+.trainer-season-reward img{width:34px;height:34px;object-fit:contain;flex:none}
+.trainer-season-reward.is-locked img{filter:saturate(.45)}
 .trainer-season-reward :is(b,small){display:block;overflow-wrap:anywhere}
+.trainer-season-status{color:var(--trainer-accent);font-weight:850}
+.trainer-season-reward.is-locked .trainer-season-status{color:var(--trainer-subtle)}
 .trainer-owner-actions{display:flex;gap:6px 10px;flex-wrap:wrap;justify-content:flex-end}
 .trainer-run-list{display:grid;margin:0;padding:0;list-style:none}
 .trainer-run-list li{min-width:0;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px 16px;padding:10px 0}
@@ -3753,6 +3776,8 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
   .trainer-hero{gap:12px;padding:14px}
   .trainer-screen :is(#plShare,#plChange){line-height:1.2;font-size:13px!important}
   .trainer-stat{gap:6px}
+  .trainer-stat-icon{width:32px;height:32px}
+  .trainer-stat-icon img{width:23px;height:23px}
   .trainer-custom .cz-grid{grid-template-columns:minmax(0,1fr)}
   .trainer-custom .cz-backgrounds{grid-template-columns:repeat(2,minmax(0,1fr))}
   .trainer-custom .cz-filters input{font-size:16px}
@@ -14173,15 +14198,23 @@ function showTrainerProfile(profile, shared = false){
     ['Mapas superados', profile.mapsWon, 'hub/ic_mapas'], ['Evoluciones', profile.evolutions, 'hud/ic_emblema'],
     ['Variocolores', profile.variants, 'hub/ic_evento'], ['Fusiones', profile.fusions, 'hub/ic_laboratorio'],
     ['Apoyos reclutados', profile.supports, 'hub/ic_jugador'], ['Jefes menores distintos', profile.minibosses, 'hub/ic_ranking']
-  ].filter(([,value]) => value !== null).map(([label,value,icon]) => `<div class="trainer-stat"><img src="ui/${icon}.webp" alt="">
+  ].filter(([,value]) => value !== null).map(([label,value,icon]) => `<div class="trainer-stat"><span class="trainer-stat-icon"><img src="ui/${icon}.webp" alt=""></span>
     <span><b>${typeof value === 'number' ? number(value) : escHtml(value)}</b><small>${label}</small></span></div>`).join('');
-  const awards = FILE_PASS.prizes.filter(prize => seasonAwards.includes(prize.id)).map(prize => `<li class="trainer-season-reward">
-    <img src="${prize.icon}" alt=""><span><b>${prize.label}</b><small>Señal de File Island</small></span></li>`).join('');
+  const awards = FILE_PASS.prizes
+    .filter(prize => !shared || seasonAwards.includes(prize.id))
+    .map(prize => {
+      const unlocked = seasonAwards.includes(prize.id);
+      const level = I18N.tr('Nivel {0}').replace('{0}', number(prize.at));
+      return `<li class="trainer-season-reward${unlocked ? '' : ' is-locked'}">
+        <img src="${prize.icon}" alt=""><span><b>${prize.label}</b>
+        <small><span data-no-i18n>${escHtml(level)}</span>${shared ? '' : ` · <span class="trainer-season-status">${unlocked ? 'Visible en el enlace' : 'Por desbloquear'}</span>`}</small>
+        </span></li>`;
+    }).join('');
   const trial = timeTrialSummary(profile.trial);
   const time = seconds => seconds > 0 ? fmtTime(Math.floor(seconds)) : '—';
   const mark = value => value > 0 ? number(+value) : '—';
   const recordModes = [
-    {id:'kills', name:'Bajas', label:'Récord de bajas', value:mark(killRecord.value), rows:[
+    {id:'kills', name:'Bajas', icon:'ui/hud/ic_bajas.webp', label:'Récord de bajas', value:mark(killRecord.value), rows:[
       ['Bajas totales', number(profile.kills)],
       ...(killRecord.name ? [['Digimon', killRecord.name]] : []),
       ...(MAPS[killRecord.map] ? [['Mapa', MAPS[killRecord.map].name]] : [])
@@ -14189,7 +14222,7 @@ function showTrainerProfile(profile, shared = false){
     {id:'trial', name:'Contrarreloj', label:trial.completed === trial.maps.length ? 'Tiempo total' : 'Tiempo parcial', value:time(trial.total), rows:
       trial.maps.map(([map, seconds]) => [MAPS[map].name, seconds ? time(seconds) : 'Pendiente', !seconds])
     },
-    {id:'survival', name:'Supervivencia', label:'Mejor tiempo', value:time(survivalTime), rows:[
+    {id:'survival', name:'Supervivencia', icon:'ui/hub/digivice/supervivencia.png', label:'Mejor tiempo', value:time(survivalTime), rows:[
       ...(survivor ? [['Digimon', CHARS[survivor].name]] : []),
       ['Mejor oleada', mark(wave)],
       ...(waveName ? [['Digimon de la oleada', waveName]] : [])
@@ -14233,12 +14266,15 @@ function showTrainerProfile(profile, shared = false){
               <h3 class="trainer-device-label" id="trainerDeviceHeading">Récords</h3>
               <div class="trainer-device-screen" id="trainerDeviceScreen" aria-live="polite" aria-atomic="true">${recordsScreen}</div>
               <div class="trainer-device-controls" id="trainerDeviceControls" role="group" aria-label="Categorías de récords">
-                ${recordModes.map(({id,name}, index) => `<button type="button" data-record-mode="${id}" aria-pressed="${index === 0}" aria-controls="trainerDeviceScreen">${name}</button>`).join('')}
+                ${recordModes.map(({id,name,icon}, index) => `<button type="button" data-record-mode="${id}" aria-pressed="${index === 0}" aria-controls="trainerDeviceScreen">
+                  ${icon ? `<img class="trainer-device-icon" src="${icon}" alt="">` : '<span class="trainer-device-icon trainer-device-timer" aria-hidden="true"></span>'}
+                  <span>${name}</span></button>`).join('')}
               </div>
             </div>
           </section>
           <section class="trainer-panel trainer-showcase" aria-labelledby="trainerSeasonHeading">
-            <div class="trainer-panel-head"><h3 id="trainerSeasonHeading">Vitrina de temporada</h3></div>
+            <div class="trainer-panel-head"><img src="ui/hub/digivice/file-island.png" alt=""><h3 id="trainerSeasonHeading">Vitrina de temporada</h3></div>
+            <p>${shared ? 'Recompensas desbloqueadas en el pase Señal de File Island.' : 'El enlace incluye las recompensas de Señal de File Island que tengas desbloqueadas al copiarlo.'}</p>
             ${awards ? `<ul class="trainer-season-grid">${awards}</ul>` : '<p class="trainer-empty">Todavía no hay recompensas de temporada.</p>'}
           </section>
         </div>
