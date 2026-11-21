@@ -5763,18 +5763,22 @@ const galacticClock = {value: 0};
 const nebulaTravel = {value: 1};
 
 function compileWizardNebulaSprite(shader){
-  compileNebulaSprite(shader, false);
+  compileNebulaSprite(shader, 'wizardCloth');
 }
 
 function compileHagurumonNebulaSprite(shader){
-  compileNebulaSprite(shader, true);
+  compileNebulaSprite(shader, 'hagurumonCore', 'vec2(11.0, 7.0)');
 }
 
-function compileNebulaSprite(shader, face){
+function compileFrigimonNebulaSprite(shader){
+  compileNebulaSprite(shader, 'frigimonIce', 'vec2(6.0, 13.0)');
+}
+
+function compileNebulaSprite(shader, surface, skyOffset = 'vec2(0.0)'){
   compileGalacticSprite(shader, `
-    float mask = ${face ? 'hagurumonCore(vGalacticUv, vMapUv.x, sampledDiffuseColor.rgb)' : 'wizardCloth(sampledDiffuseColor.rgb)'};
+    float mask = ${surface}(vGalacticUv, vMapUv.x, sampledDiffuseColor.rgb);
     if (mask > 0.01){
-      vec3 sky = wizardSky(vNebulaUv ${face ? '+ vec2(11.0, 7.0)' : ''});
+      vec3 sky = wizardSky(vNebulaUv + ${skyOffset});
       diffuseColor.rgb = mix(diffuseColor.rgb, sky * diffuse, mask * 0.88);
     }
   `);
@@ -5845,7 +5849,7 @@ function compileNebulaSprite(shader, face){
       return min(sky, 1.0);
     }
 
-    float wizardCloth(vec3 color){
+    float wizardCloth(vec2 uv, float atlasX, vec3 color){
       float blueInk = smoothstep(0.035, 0.20, color.b - color.g);
       float purpleInk = smoothstep(-0.12, 0.08, color.b - color.r);
       float outline = smoothstep(0.08, 0.21, max(color.b, color.r));
@@ -5865,6 +5869,27 @@ function compileNebulaSprite(shader, face){
       float silver = smoothstep(0.18, 0.36, luminance) * (1.0 - smoothstep(0.69, 0.88, luminance));
       float warm = smoothstep(0.06, 0.15, color.r - color.b);
       return glass * silver * (1.0 - warm);
+    }
+
+    float frigimonIce(vec2 uv, float atlasX, vec3 color){
+      // Las posiciones de la cara y los botones se desplazan entre las cinco poses.
+      float frame = floor(atlasX * 5.0);
+      vec2 face = frame < 0.5 ? vec2(153.0, 123.0) :
+        frame < 1.5 ? vec2(145.0, 125.0) :
+        frame < 2.5 ? vec2(133.0, 124.0) :
+        frame < 3.5 ? vec2(114.0, 126.0) : vec2(108.0, 132.0);
+      vec2 buttons = frame < 0.5 ? vec2(147.0, 170.0) :
+        frame < 1.5 ? vec2(140.0, 171.0) :
+        frame < 2.5 ? vec2(125.0, 171.0) :
+        frame < 3.5 ? vec2(112.0, 172.0) : vec2(112.0, 178.0);
+      vec2 pixel = vec2(uv.x, 1.0 - uv.y) * 256.0;
+      float outsideFace = smoothstep(1.0, 1.12, length((pixel - face) / vec2(33.0, 30.0)));
+      float buttonDistance = min(length(pixel - buttons), length(pixel - buttons - vec2(0.0, 25.0)));
+      float outsideButtons = smoothstep(10.5, 13.0, buttonDistance);
+      float ice = smoothstep(0.065, 0.27, color.b - min(color.r, color.g));
+      float outline = smoothstep(0.12, 0.30, color.b);
+      float glare = 1.0 - 0.72 * smoothstep(0.55, 0.88, min(color.r, color.g));
+      return outsideFace * outsideButtons * ice * outline * glare;
     }
   ` + shader.fragmentShader.replace('uniform float galacticTime;', '');
 }
@@ -5953,6 +5978,7 @@ function setGalacticMaterial(material, compile){
 function galacticSpriteCompile(url){
   if (/\/wizardmon_0_galactico\.webp(?:\?|$)/.test(url)) return compileWizardNebulaSprite;
   if (/\/hagurumon_0_galactico\.webp(?:\?|$)/.test(url)) return compileHagurumonNebulaSprite;
+  if (/\/frigimon_0_galactico\.webp(?:\?|$)/.test(url)) return compileFrigimonNebulaSprite;
   if (/\/gabumon_3_galactico\.webp(?:\?|$)/.test(url)) return compileGalacticSpriteWithoutOrbit;
   return /_galactico\.webp(?:\?|$)/.test(url) ? compileGalacticSprite : THREE.Material.prototype.onBeforeCompile;
 }
