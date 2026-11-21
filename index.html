@@ -1959,10 +1959,10 @@ html[data-theme=oscuro]{
 #overlay .ps-banner h2{margin:0;font:900 26px 'Orbitron',system-ui,sans-serif;letter-spacing:1px;color:var(--m-banner-txt)!important;text-shadow:0 2px 0 rgba(0,0,0,.2)!important}
 .ps-banner small{font:800 13px 'Nunito',system-ui,sans-serif;color:var(--m-banner-txt);opacity:.85}
 /* Cuerpo: tarjeta grande + plantel */
-.ps-body{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:16px}
+.ps-body{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 452px;gap:16px}
 .ps-card{background:var(--ps-card);border:1px solid var(--ps-cardline);border-radius:16px;min-width:0;box-shadow:0 10px 30px rgba(0,0,0,.25)}
 .ps-main{display:flex;flex-direction:column;min-height:0;overflow:hidden}
-.ps-sum{display:grid;grid-template-columns:170px minmax(300px,1fr) 200px 210px;gap:20px;padding:16px 18px;border-bottom:1px solid var(--ps-line)}
+.ps-sum{display:grid;grid-template-columns:170px minmax(0,1fr) 200px 210px;gap:20px;padding:16px 18px;border-bottom:1px solid var(--ps-line)}
 .ps-hero{position:relative;display:grid;place-items:center;border-radius:14px;background:var(--ps-hero);border:3px solid #a9e6ef;min-height:180px;align-self:start}
 .anim.ps-hero-img{width:150px;height:150px;background-size:500% 100%;background-position:0 50%;margin-top:-14px}
 .ps-hero-tag{position:absolute;bottom:9px;left:50%;transform:translateX(-50%);white-space:nowrap;font:800 12px 'Nunito',system-ui,sans-serif;padding:2px 12px;border-radius:99px;background:#fff;color:#1d2433}
@@ -2098,8 +2098,8 @@ html[data-theme=oscuro] .ps-atk.k-utilidad{background:rgba(79,214,142,.08);borde
   #overlay:not(.menu-mode) .ps-go{padding:11px 22px;font-size:19px}
 }
 @media (max-width:1300px) and (min-width:761px){
-  .ps-body{grid-template-columns:minmax(0,1fr) 300px}
-  .ps-sum{grid-template-columns:150px minmax(0,1fr) 210px}
+  .ps-body{grid-template-columns:minmax(0,1fr) clamp(324px,36vw,420px)}
+  .ps-sum{grid-template-columns:minmax(100px,1fr) minmax(0,2fr) minmax(120px,1fr)}
   .ps-ingame{display:none}
   .ps-evo{flex-wrap:wrap}
 }
@@ -2508,6 +2508,16 @@ html[lang] body #topbar .tb-id .hud-portrait{width:26px;height:26px}}
 .ps-tile:has(.ps-ic) .ps-key{position:absolute;top:4px;left:4px;z-index:2;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:999px;background:var(--m-btn);color:var(--m-text);font:900 10px/18px 'Nunito',system-ui,sans-serif;text-align:center;box-shadow:var(--m-pillsh)}
 .ps-tile:has(.ps-ic) .ps-evo-dot{position:absolute;top:6px;right:8px;z-index:2}
 @media(max-width:760px){.ps-grid:has(.ps-ic){grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.ps-ic{max-width:64px}}
+/* El plantel cede una columna para dar más espacio a cada retrato. */
+.ps-roster .ps-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:4px 8px 8px}
+.ps-roster .ps-grid .ps-ic{max-width:144px}
+.ps-roster .ps-grid .ps-tile{padding:10px 3px;gap:9px}
+.ps-roster .ps-grid .ps-tile b{font-size:14px}
+@media (max-width:960px){.ps-roster .ps-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){
+  .ps-roster .ps-roster-in{max-height:min(54dvh,440px);overflow-y:auto}
+  .ps-roster .ps-grid .ps-ic{max-width:148px}
+}
 /* Arreglos de iconos */
 .approved-info-dialog .enc-row.ach-row>b{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--m-line);font-size:17px}
 .approved-info-dialog .enc-row.ach-row.got>b{background:color-mix(in srgb,var(--m-gold) 22%,transparent)}
@@ -2528,7 +2538,7 @@ html[lang] body #topbar .tb-id .hud-portrait{width:26px;height:26px}}
 .ps-ic-spr{background:var(--m-tilesel)}
 .ps-ic-spr .anim{width:88%!important;height:88%!important}
 .cl4-skin .ps-ic{width:84px;max-width:84px;margin:0 auto 6px}
-.cl4-item .cl4-ic{width:44px;max-width:44px;flex:none;box-shadow:0 0 0 2px var(--m-cardline)}
+.cl4-item .cl4-ic{width:clamp(62px,6vw,76px);max-width:none;flex:none;box-shadow:0 0 0 2px var(--m-cardline)}
 /* ---------- Registro y pausa con el estilo de los menús ---------- */
 #overlay:has(.rg){background:radial-gradient(ellipse 60% 70% at 30% 50%,rgba(78,99,232,.35),transparent 70%),radial-gradient(ellipse 40% 50% at 80% 45%,rgba(255,138,30,.2),transparent 70%),#0e1222!important}
 html[data-theme=oscuro] #overlay:has(.rg){background:radial-gradient(ellipse 60% 70% at 30% 50%,rgba(78,99,232,.18),transparent 70%),#121316!important}
@@ -4648,10 +4658,11 @@ body.is-touch #overlay :is(button,.g-back) kbd{display:none!important}
   .ps-top{flex-wrap:nowrap!important;gap:8px!important}
   .ps-banner{order:0!important;flex-basis:auto!important;padding:4px 14px!important}
   #overlay .ps-banner h2{font-size:15px!important}
-  .ps-body{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(190px,36%)!important;gap:8px!important;flex:1 1 0!important;min-height:0!important}
+  .ps-body{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(200px,43%)!important;gap:8px!important;flex:1 1 0!important;min-height:0!important}
   .ps-roster{order:0!important;overflow:hidden!important;padding:8px!important;gap:6px!important}
   .ps-roster-in{overflow:auto!important}
-  .ps-grid,.ps-grid:has(.ps-ic){grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .ps-roster .ps-roster-in{max-height:none}
+  .ps-roster .ps-grid{gap:8px}
   .ps-main{overflow-y:auto!important;min-height:0!important}
   .ps-sum{grid-template-columns:84px minmax(0,1fr)!important;gap:8px!important;padding:8px!important}
   .ps-hero{min-height:84px!important}
