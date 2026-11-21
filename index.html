@@ -2515,6 +2515,78 @@ html[lang] body #topbar .tb-id .hud-portrait{width:26px;height:26px}}
   .ps-roster .ps-roster-in{max-height:min(54dvh,440px);overflow-y:auto}
   .ps-roster .ps-grid .ps-ic{max-width:148px}
 }
+/* Acabado común de las familias de skins sobre el icono original. */
+:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src^="ui/jugador/"][src*="_"]){
+  position:relative;isolation:isolate;overflow:hidden;border-radius:50%;
+}
+.tr12-grand-portrait:has(>img[src^="ui/jugador/"][src*="_"]){position:absolute}
+:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src^="ui/jugador/"][src*="_"])::before,
+:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src^="ui/jugador/"][src*="_"])::after{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+}
+:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src^="ui/jugador/"][src*="_"])::before{
+  z-index:2;
+  box-shadow:inset 0 0 0 2px var(--skin-icon-rim,transparent),inset 0 0 7px var(--skin-icon-halo,transparent);
+}
+:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src^="ui/jugador/"][src*="_"])::after{
+  z-index:1;background:var(--skin-icon-effect,none);opacity:var(--skin-icon-opacity,.38);
+}
+:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src$="_galactico.webp"]){
+  --skin-icon-rim:#ad96ff;--skin-icon-halo:#7951ff99;
+  --skin-icon-effect:radial-gradient(circle at 22% 22%,#fff 0 1.4%,#b8a4ffb0 2.4%,transparent 5%),
+    radial-gradient(circle at 82% 31%,#eee5ff 0 1.2%,transparent 3.4%),
+    radial-gradient(circle at 76% 78%,#e5d6ff 0 1.4%,#a389ff96 2.7%,transparent 5%);
+  --skin-icon-duration:3.8s;--skin-icon-animation:skinIconSpark;
+}
+:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src$="_holografica.webp"]){
+  --skin-icon-rim:#8de7ed;--skin-icon-halo:#eda7ffb0;
+  --skin-icon-effect:linear-gradient(122deg,transparent 26%,#a8eff2a0 43%,#f8bdfac0 50%,#fff2bdaa 55%,transparent 69%);
+  --skin-icon-opacity:.23;--skin-icon-duration:4.8s;--skin-icon-animation:skinIconSheen;
+}
+:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src$="_lcd.webp"]){
+  --skin-icon-rim:#bad688;--skin-icon-halo:#8aaa5099;
+  --skin-icon-effect:linear-gradient(transparent 44%,#e7ffbb70 49%,#e9ffc7e0 51%,transparent 63%);
+  --skin-icon-opacity:.18;--skin-icon-duration:3.3s;--skin-icon-animation:skinIconScan;
+}
+:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img:is([src$="_festival.webp"],[src$="_reno.webp"])){
+  --skin-icon-rim:#f4cb80;--skin-icon-halo:#67a98d8c;
+  --skin-icon-effect:radial-gradient(circle at 17% 29%,#effdff 0 1.1%,transparent 2.5%),
+    radial-gradient(circle at 81% 24%,#fff 0 1.4%,transparent 2.9%),
+    radial-gradient(circle at 23% 65%,#e6f8ff 0 1.2%,transparent 2.6%),
+    radial-gradient(circle at 78% 71%,#fff 0 1.1%,transparent 2.4%);
+  --skin-icon-duration:4.5s;--skin-icon-animation:skinIconSnow;
+}
+:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src$="_variocolor.webp"]){
+  --skin-icon-rim:#ffde94;--skin-icon-halo:#ffca7199;
+  --skin-icon-effect:radial-gradient(circle at 80% 27%,#fff9d8 0 1.8%,#ffc85f80 3.2%,transparent 6%),
+    radial-gradient(circle at 23% 72%,#fff3b8 0 1.4%,transparent 4%);
+  --skin-icon-duration:5s;--skin-icon-animation:skinIconSpark;
+}
+@media(prefers-reduced-motion:no-preference){
+  html:not(.reduce-motion) :is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src^="ui/jugador/"][src*="_"])::after{
+    animation:var(--skin-icon-animation,none) var(--skin-icon-duration,0s) ease-in-out infinite;
+  }
+}
+@keyframes skinIconSpark{
+  0%,100%{opacity:.3;transform:scale(.93)}
+  42%{opacity:.88;transform:scale(1.04)}
+  62%{opacity:.46;transform:scale(.99)}
+}
+@keyframes skinIconSheen{
+  0%,16%{opacity:0;transform:translateX(-76%)}
+  40%{opacity:.62}
+  64%,100%{opacity:0;transform:translateX(76%)}
+}
+@keyframes skinIconScan{
+  0%{opacity:0;transform:translateY(-55%)}
+  25%,74%{opacity:.42}
+  100%{opacity:0;transform:translateY(55%)}
+}
+@keyframes skinIconSnow{
+  0%{opacity:0;transform:translate(-4%,-13%)}
+  34%,66%{opacity:.63}
+  100%{opacity:0;transform:translate(4%,16%)}
+}
 /* Arreglos de iconos */
 .approved-info-dialog .enc-row.ach-row>b{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--m-line);font-size:17px}
 .approved-info-dialog .enc-row.ach-row.got>b{background:color-mix(in srgb,var(--m-gold) 22%,transparent)}
