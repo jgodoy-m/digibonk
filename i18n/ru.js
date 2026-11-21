@@ -1546,3 +1546,7 @@ I18N.add('ru', {"×{0} daño": "×{0} урона", "×{0} recibido": "×{0} по
   "dificultad": "сложность",
   "empezar": "начать"
 });
+
+// Ranking del Digivice (récords del menú y ranking online)
+I18N.add('ru', {"Mi historial": "Моя история", "Tus marcas en todos los mapas": "Твои рекорды на всех картах", "Solo las partidas de este mapa": "Только забеги на этой карте", "Ver clasificación online": "Открыть онлайн-рейтинг", "Global": "Весь мир", "bajas": "убийств", "tiempo": "время", "Ol. {0}": "Волна {0}", "{0} bajas": "{0} убийств", "Todas las regiones": "Все регионы", "Solo jugadores de esta región": "Только игроки этого региона", "Tu puesto": "Твоё место"});
+I18N.add('ru', {"Ver clasificación completa": "Весь рейтинг"});
