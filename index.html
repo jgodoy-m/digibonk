@@ -3443,30 +3443,45 @@ html.reduce-motion .living-actor.swim::after{animation:none!important}
   --m-line2:#a38267;--m-acc:#855019;--m-good:#326137;
   --shop-shell:#fbf3e7;--shop-header:#f1e1cb;--shop-shelf:#e9d4bd;--shop-selected:#f4d7ad;
   --shop-selected-line:#92521d;--shop-shadow:#452e2233;
+  --shop-rim:#a5744c;--shop-rim-light:#ecd4ac;--shop-heading-glow:#fff6e7;
 }
 html[data-theme=oscuro] :is(.shop-dialog,.shop-combat-preview){
   --m-text:#ffedd0;--m-soft:#ddcab1;--m-mute:#cbb490;--m-sunk:#18212c;--m-card:#253141;
   --m-line2:#927455;--m-acc:#ffd48c;--m-good:#baedaa;
   --shop-shell:#17212c;--shop-header:#162131;--shop-shelf:#2d2324;--shop-selected:#523a2b;
   --shop-selected-line:#ffd08a;--shop-shadow:#10162085;
+  --shop-rim:#a37b53;--shop-rim-light:#503b2b;--shop-heading-glow:#443023;
 }
 #overlay .approved-info-scrim:has(>.shop-dialog){padding:8px}
 #overlay .approved-info-dialog.shop-dialog{
   width:min(1060px,100%)!important;max-width:100%!important;max-height:calc(100dvh - 16px);
   padding:0 0 12px;text-align:start;overscroll-behavior:contain;
-  border:1px solid var(--m-line2)!important;background:var(--shop-shell)!important;color:var(--m-text)!important;
+  border:1px solid var(--shop-rim)!important;border-radius:19px!important;
+  background:var(--shop-shell)!important;color:var(--m-text)!important;
+  box-shadow:0 0 0 2px var(--shop-rim-light),0 0 0 3px var(--shop-rim),0 16px 46px #100d17a6!important;
+  scrollbar-color:var(--shop-rim) var(--shop-shell);
 }
 #overlay .shop-dialog>header{
-  display:flex;align-items:center;gap:8px;margin:0;padding:8px 14px;background:var(--shop-header);
-  border-bottom:1px solid var(--m-line2)!important;
+  display:flex;align-items:center;gap:12px;margin:0;padding:10px 14px;
+  background:radial-gradient(ellipse at 8% -85%,var(--shop-heading-glow) 28%,transparent 78%),var(--shop-header);
+  border-bottom:1px solid var(--shop-rim)!important;
+  box-shadow:inset 0 1px var(--shop-rim-light),inset 0 -2px var(--shop-rim-light);
 }
+#overlay .shop-dialog>header::before{
+  content:"";flex:0 0 44px;aspect-ratio:1;box-sizing:border-box;
+  border:1px solid var(--shop-rim);border-radius:11px;
+  background:var(--m-sunk) url(ui/hub/digivice/tienda.png) center/78% auto no-repeat;
+  box-shadow:inset 0 0 0 2px var(--shop-rim-light),0 2px 3px var(--shop-shadow);
+}
+.shop-heading{flex:1;min-width:0}
 #overlay .shop-dialog>header h2{
-  flex:1;min-width:0;padding:0;margin:0!important;background:none;color:var(--m-text)!important;
-  font:700 clamp(20px,3.6vw,31px)/1.12 Georgia,serif!important;box-shadow:none;text-shadow:none;transform:none;
+  display:block;padding:0;margin:0!important;background:none;color:var(--m-text)!important;
+  font:700 clamp(20px,3.6vw,31px)/1.05 Georgia,serif!important;box-shadow:none;text-shadow:none;transform:none;
 }
-#overlay .shop-dialog>header #realClose{flex:0 0 36px;height:36px;margin:0}
+#overlay .shop-dialog>header #realClose{flex:0 0 40px;height:40px;margin:0;border-radius:10px!important}
 #overlay .shop-dialog #realDone{display:none}
-.shop-meta{margin:6px 14px;color:var(--m-soft);font-size:12px}
+.shop-dialog .shop-meta{margin:3px 0 0;color:var(--m-soft)!important;font-size:12px}
+.shop-meta .shop-rotation-day{color:inherit!important}
 .shop-wallet,.shop-price{display:inline-flex;align-items:center;gap:5px;color:var(--m-text);font-weight:900;font-variant-numeric:tabular-nums}
 .shop-wallet{flex:none;white-space:nowrap;background:var(--m-sunk);border:1px solid var(--m-line2);border-radius:7px;padding:4px 7px;font-size:13px}
 .shop-wallet img,.shop-price img{width:19px;height:19px;object-fit:contain;flex:none}
@@ -3594,8 +3609,11 @@ html[data-theme=oscuro] :is(.shop-dialog,.shop-combat-preview){
   .shop-counter{z-index:2;margin-bottom:clamp(69px,7cqw,83px)}
 }
 @media(max-width:660px){
-  #overlay .shop-dialog>header{padding:6px 8px}
-  .shop-meta{margin:4px 8px}
+  #overlay .shop-dialog>header{gap:7px;padding:8px}
+  #overlay .shop-dialog>header::before{flex-basis:34px;border-radius:8px}
+  #overlay .shop-dialog>header h2{font-size:clamp(17px,5.3vw,22px)!important}
+  #overlay .shop-dialog>header #realClose{flex-basis:36px;height:36px}
+  .shop-dialog .shop-meta{font-size:11px}
   .shop-wallet{font-size:11px}
   .shop-wallet img{width:15px;height:15px}
   .shop-stall{display:contents}
@@ -3612,8 +3630,13 @@ html[data-theme=oscuro] :is(.shop-dialog,.shop-combat-preview){
   }
   #overlay .shop-dialog .shop-actions button{min-height:44px}
 }
-@media(max-width:380px){
-  .shop-wallet-unit{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(max-width:460px){
+  .shop-wallet-unit,.shop-rotation-day{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+}
+@media(max-width:360px){
+  #overlay .shop-dialog>header{gap:5px}
+  #overlay .shop-dialog>header::before{flex-basis:29px}
+  .shop-wallet{padding-inline:5px}
 }
 @media(prefers-reduced-motion:reduce){.shop-stage .anim{animation:none}}
 
@@ -13485,7 +13508,8 @@ function showShop(msg = '', selected = ''){
   const quest = featured.owned ? '' : `<div class="shop-quest"><div><b>${discounted ? 'Descuento conseguido' : 'Encargo de la tienda'}</b>
     <small>${discounted ? `Tu skin destacada tiene un ${SHOP_DISCOUNT_PCT}% de descuento hasta el lunes.` : `Derrota a un jefe de zona con ${CHARS[featured.k].name} y consigue un ${SHOP_DISCOUNT_PCT}% de descuento en su skin.`}</small></div>
     ${discounted ? '' : `<button type="button" id="shopQuest">${featured.locked ? 'Ver en Digidex' : 'Elegir mapa'}</button>`}</div>`;
-  menuModal('Tienda semanal', `<div class="shop-meta"><span>Rotación del lunes · ${rotation}</span><strong class="shop-wallet"><img src="ui/hud/ic_bits.webp" alt="">${fmt(bits)} <span class="shop-wallet-unit">Digicoins</span></strong></div>
+  menuModal('Tienda semanal', `<p class="shop-meta"><span class="shop-rotation-day">Rotación del lunes · </span>${rotation}</p>
+    <strong class="shop-wallet"><img src="ui/hud/ic_bits.webp" alt="">${fmt(bits)} <span class="shop-wallet-unit">Digicoins</span></strong>
     <div class="shop-stall">
       <div class="shop-display" id="shopDisplay"></div>
       <div class="shop-grid" role="group" aria-label="Ofertas semanales">${cards}</div>
@@ -13501,6 +13525,11 @@ function showShop(msg = '', selected = ''){
   const dlg = document.querySelector('#realModalHost .approved-info-dialog');
   if (!dlg) return;
   dlg.classList.add('shop-dialog');
+  const heading = dlg.querySelector('header h2');
+  const headingBlock = document.createElement('div');
+  headingBlock.className = 'shop-heading';
+  heading.before(headingBlock);
+  headingBlock.append(heading, dlg.querySelector('.shop-meta'));
   const close = dlg.querySelector('#realClose');
   close.setAttribute('aria-label', 'Cerrar tienda');
   close.before(dlg.querySelector('.shop-wallet'));
