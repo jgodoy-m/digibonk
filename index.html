@@ -2531,24 +2531,24 @@ html[lang] body #topbar .tb-id .hud-portrait{width:26px;height:26px}}
 :is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src^="ui/jugador/"][src*="_"])::after{
   z-index:1;background:var(--skin-icon-effect,none);opacity:var(--skin-icon-opacity,.38);
 }
-:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src$="_galactico.webp"]){
+:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src*="_galactico.webp"]){
   --skin-icon-rim:#ad96ff;--skin-icon-halo:#7951ff99;
   --skin-icon-effect:radial-gradient(circle at 22% 22%,#fff 0 1.4%,#b8a4ffb0 2.4%,transparent 5%),
     radial-gradient(circle at 82% 31%,#eee5ff 0 1.2%,transparent 3.4%),
     radial-gradient(circle at 76% 78%,#e5d6ff 0 1.4%,#a389ff96 2.7%,transparent 5%);
   --skin-icon-duration:3.8s;--skin-icon-animation:skinIconSpark;
 }
-:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src$="_holografica.webp"]){
+:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src*="_holografica.webp"]){
   --skin-icon-rim:#8de7ed;--skin-icon-halo:#eda7ffb0;
   --skin-icon-effect:linear-gradient(122deg,transparent 26%,#a8eff2a0 43%,#f8bdfac0 50%,#fff2bdaa 55%,transparent 69%);
   --skin-icon-opacity:.23;--skin-icon-duration:4.8s;--skin-icon-animation:skinIconSheen;
 }
-:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src$="_lcd.webp"]){
+:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src*="_lcd.webp"]){
   --skin-icon-rim:#bad688;--skin-icon-halo:#8aaa5099;
   --skin-icon-effect:linear-gradient(transparent 44%,#e7ffbb70 49%,#e9ffc7e0 51%,transparent 63%);
   --skin-icon-opacity:.18;--skin-icon-duration:3.3s;--skin-icon-animation:skinIconScan;
 }
-:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img:is([src$="_festival.webp"],[src$="_reno.webp"])){
+:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img:is([src*="_festival.webp"],[src*="_reno.webp"])){
   --skin-icon-rim:#f4cb80;--skin-icon-halo:#67a98d8c;
   --skin-icon-effect:radial-gradient(circle at 17% 29%,#effdff 0 1.1%,transparent 2.5%),
     radial-gradient(circle at 81% 24%,#fff 0 1.4%,transparent 2.9%),
@@ -2556,7 +2556,7 @@ html[lang] body #topbar .tb-id .hud-portrait{width:26px;height:26px}}
     radial-gradient(circle at 78% 71%,#fff 0 1.1%,transparent 2.4%);
   --skin-icon-duration:4.5s;--skin-icon-animation:skinIconSnow;
 }
-:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src$="_variocolor.webp"]){
+:is(.ps-ic,.shop-art,.cz-av,.tr12-grand-portrait):has(>img[src*="_variocolor.webp"]){
   --skin-icon-rim:#ffde94;--skin-icon-halo:#ffca7199;
   --skin-icon-effect:radial-gradient(circle at 80% 27%,#fff9d8 0 1.8%,#ffc85f80 3.2%,transparent 6%),
     radial-gradient(circle at 23% 72%,#fff3b8 0 1.4%,transparent 4%);
@@ -14357,7 +14357,7 @@ const SKIN_ICONS = [
   {key:'gatomon', skin:'variocolor'},
   {key:'gatomon', skin:'festival'},
   {key:'gatomon', skin:'reno'}
-].map(x => ({...x, id: x.key + '_' + x.skin, src: 'ui/jugador/' + x.key + '_' + x.skin + '.webp'}));
+].map(x => ({...x, id: x.key + '_' + x.skin, src: 'ui/jugador/' + x.key + '_' + x.skin + '.webp' + '?arte=ilustrado'}));
 function skinIconName(ic){ const sk = SKINS.find(s => s.id === ic.skin); return CHARS[ic.key].name + ' ' + (sk ? sk.name : ic.skin); }
 function ownsSkinIcon(ic){ return ownsAnyStage(ic.key, ic.skin); }
 function skinIconFor(key, skin){ return SKIN_ICONS.find(x => x.key === key && x.skin === skin) || null; }
