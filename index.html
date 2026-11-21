@@ -4433,6 +4433,78 @@ body.is-touch #overlay :is(button,.g-back) kbd{display:none!important}
   .rg .rg-go{padding-top:10px!important;padding-bottom:10px!important;font-size:18px!important}
   .rg .rg-guest{padding-top:6px!important;padding-bottom:6px!important}
 }
+/* ===== Revisión móvil y tablet (2026-11-21) ===== */
+/* Inicio en móvil horizontal: dos columnas que llenan la pantalla, sin huecos entre filas de iconos */
+@media (orientation:landscape) and (max-height:500px){
+  #overlay .realhub.hb .hb-record-device{display:none!important}
+  #overlay .realhub.hb{height:100dvh!important;min-height:0!important;box-sizing:border-box}
+  #overlay .realhub.hb .hb-main{display:flex!important;flex-direction:column;flex:1 1 0!important;min-height:0!important;box-sizing:border-box;overflow:hidden}
+  #overlay .realhub.hb .hb-legal{display:none!important}
+  #overlay .realhub.hb .hb-left{flex:1 1 0;min-height:0!important;box-sizing:border-box;grid-template-rows:auto minmax(0,1fr) auto!important;align-content:stretch!important}
+  #overlay .realhub.hb .hb-modes{grid-column:1!important;grid-row:1 / 3!important;align-self:stretch!important;min-height:0}
+  #overlay .realhub.hb .hb-left:has(>.hb-continue) .hb-modes{grid-row:2!important}
+  #overlay .realhub.hb .hb-continue{grid-column:1!important;grid-row:1!important}
+  #overlay .realhub.hb .hb-continue .hbc-info{min-width:0}
+  #overlay .realhub.hb .hb-activities{grid-column:2!important;grid-row:1!important}
+  #overlay .realhub.hb .hb-tiles{grid-column:2!important;grid-row:2 / 4!important;grid-template-rows:repeat(2,auto)!important;align-content:center!important;align-self:stretch!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile{height:auto!important;min-height:44px!important;align-self:stretch;flex-direction:column!important;justify-content:center!important;gap:2px!important;padding:4px!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile i,#overlay .realhub.hb .nm-tiles .hb-tile i .nm-ic{width:clamp(28px,10vh,44px)!important;height:clamp(28px,10vh,44px)!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile{padding:8px 4px!important}
+  #overlay .realhub.hb .nm-tiles .hb-tile b{font-size:12.5px!important;max-width:100%}
+  #overlay .realhub.hb .nm-tiles .hb-tile small{display:block!important;font-size:10px!important;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #overlay .realhub.hb .hb-modes{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:minmax(0,1.25fr) minmax(0,1fr)!important}
+  #overlay .realhub.hb .hb-play{grid-column:1 / -1!important;grid-row:1!important;height:auto!important;min-height:0!important}
+  #overlay .realhub.hb .hb-mode{min-height:0!important;height:auto!important}
+  #overlay .realhub.hb .hb-bar{grid-column:1!important;grid-row:3!important;justify-content:flex-start!important;gap:6px!important}
+  #overlay .realhub.hb .hb-bar .hb-btn:not(.hb-sq){width:auto!important;padding:0 12px 0 6px!important;gap:6px}
+  #overlay .realhub.hb .hb-bar .hb-btn:not(.hb-sq) .nm-lbl{display:inline!important;font-size:13px}
+}
+
+@media (orientation:landscape) and (max-height:500px) and (max-width:760px){#overlay .realhub.hb .hb-continue .hbc-info{display:none!important}}
+/* Elige tu Digimon en móviles pequeños en horizontal (≤760 px): ficha a la izquierda y plantel a la derecha,
+   con «¡Elegir mapa!» siempre a la vista (antes había que bajar más de 2000 px de Digimon para encontrarlo) */
+@media (orientation:landscape) and (max-height:500px) and (max-width:760px){
+  #overlay:not(.menu-mode)>.picker-screen.ps{width:calc(100vw - 12px)!important;height:calc(100dvh - 10px)!important;margin:4px auto 0!important;overflow:hidden!important;gap:6px!important;display:flex!important;flex-direction:column!important}
+  #overlay:not(.menu-mode):has(>.picker-screen.ps){padding-top:0!important;justify-content:flex-start!important;overflow:hidden!important}
+  .ps-top{flex-wrap:nowrap!important;gap:8px!important}
+  .ps-banner{order:0!important;flex-basis:auto!important;padding:4px 14px!important}
+  #overlay .ps-banner h2{font-size:15px!important}
+  .ps-body{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(190px,36%)!important;gap:8px!important;flex:1 1 0!important;min-height:0!important}
+  .ps-roster{order:0!important;overflow:hidden!important;padding:8px!important;gap:6px!important}
+  .ps-roster-in{overflow:auto!important}
+  .ps-grid,.ps-grid:has(.ps-ic){grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .ps-main{overflow-y:auto!important;min-height:0!important}
+  .ps-sum{grid-template-columns:84px minmax(0,1fr)!important;gap:8px!important;padding:8px!important}
+  .ps-hero{min-height:84px!important}
+  .anim.ps-hero-img{width:70px!important;height:70px!important}
+  #overlay .ps-id h3{font-size:20px!important}
+  .ps-foot{position:sticky!important;bottom:0;z-index:5;padding:6px 8px!important;gap:6px!important}
+  #overlay:not(.menu-mode) .ps-go{padding:9px 14px!important;font-size:17px!important}
+}
+
+/* Cartas en fila (subida de nivel, tienda de Digitamamon, fusiones): si no caben se desliza la fila en vez de cortar
+   las de los lados. La tienda tiene 6 cartas y «Salir» quedaba fuera de la pantalla en móvil y tablet. */
+#overlay .lv3{max-width:100%}
+#overlay .lv3-head h2+p{margin-top:8px!important}
+#overlay .lv3-row{max-width:calc(100vw - 16px);overflow-x:auto;overflow-y:visible;justify-content:safe center;scroll-snap-type:x proximity;scrollbar-width:thin;overscroll-behavior-x:contain;padding:14px 4px 6px;margin-top:-14px;box-sizing:border-box}
+#overlay .lv3-card{flex:0 0 auto;scroll-snap-align:center}
+#overlay .lv3-card.leave{position:sticky;right:0;z-index:2;box-shadow:-10px 0 18px rgba(0,0,0,.45)}
+body.is-touch:has(#overlay:not(.hidden)>.lv3) :is(#skillBar,#bonkBar,#tDash,#tJump,#tEvo,#tZone){visibility:hidden!important}
+#overlay .lv3-card p,#overlay .lv3-card b{hyphens:auto;overflow-wrap:break-word}
+@media (min-width:761px) and (min-height:621px){#overlay .lv3-row:has(>.lv3-card:nth-child(5)) .lv3-card{width:min(250px,calc((100vw - 120px)/4.3))}}
+@media (min-width:1100px) and (min-height:621px){#overlay .lv3-row:has(>.lv3-card:nth-child(5)) .lv3-card{width:min(250px,calc((100vw - 150px)/6));padding-left:12px;padding-right:12px}}
+@media (orientation:landscape) and (max-height:500px){
+  #overlay .lv3-row:has(>.lv3-card:nth-child(4)) .lv3-card{width:min(25vw,210px)!important}
+  #overlay .wheel3 .lv3-head p{display:block!important;font-size:11px!important;margin-top:2px!important}
+  #overlay .wheel3 .wh-wrap{margin:14px auto 4px}
+  #overlay .wheel3{gap:4px!important}
+}
+
+/* Tablet y portátil táctil: la pausa va junto al minimapa (antes caía encima del reloj, que en tablet es más ancho)
+   y la vida se acorta en pantallas de 761-1100 px para no tocar el cuadro del reloj */
+@media (min-width:761px) and (min-height:501px){#tPause{left:auto!important;right:206px!important;top:18px!important}}
+@media (min-width:761px) and (max-width:1100px) and (min-height:501px){.hud-hp{width:170px!important}.hud-main{min-width:170px!important}}
+
 </style>
 </head>
 <body>
@@ -10735,7 +10807,7 @@ function openUpgrades(){
       <div class="lv3-row">${g.choices.map((c, i) => {
         const fusion = c.skill ? fusionCardHint(c.skill) : '';
         return `
-        <button class="lv3-card ${c.k || 'utilidad'}${c.rare ? ' rare' : ''}${c.fusion || c.fusLv ? ' fusion' : ''}${c.item ? ' item' + (ITEMS[c.item].cursed ? ' cursed' : '') : ''}${c.relic ? ' relic' : ''}${c.route ? ' route' : ''}${banMode ? ' ban' : ''}${c.disabled ? ' off' : ''}" data-up="${i}" ${c.disabled ? 'disabled' : ''} style="animation-delay:${i*0.09}s">
+        <button class="lv3-card ${c.k || 'utilidad'}${c.leave ? ' leave' : ''}${c.rare ? ' rare' : ''}${c.fusion || c.fusLv ? ' fusion' : ''}${c.item ? ' item' + (ITEMS[c.item].cursed ? ' cursed' : '') : ''}${c.relic ? ' relic' : ''}${c.route ? ' route' : ''}${banMode ? ' ban' : ''}${c.disabled ? ' off' : ''}" data-up="${i}" ${c.disabled ? 'disabled' : ''} style="animation-delay:${i*0.09}s">
           <span class="lv3-key">${i + 1}</span>
           ${c.skill && !c.lv ? '<span class="lv3-new">NUEVO</span>' : ''}
           <span class="lv3-tag">${c.leave ? 'Volver a la partida' : c.info ? 'Centarumon' : c.relic ? '♛ Reliquia' : c.route ? '➜ Ruta' : c.cons ? 'Consumible · ' + c.price + ' monedas' : c.shop && c.item ? 'Objeto · ' + c.price + ' monedas' : c.item ? (ITEMS[c.item].cursed ? '☠ Objeto maldito' : '◇ Objeto') : c.shop ? 'Tienda · ' + c.price + ' monedas' : c.digi ? '◆ Datos Digimon' : c.fusion ? '✦ Fusión' : c.fusLv ? (c.lv ? '✦ Fusión · mejora' : '✦ Fusión') : c.evo ? '★ Evolución' : c.skill ? (c.typeSk ? 'De tipo ' + ATTR_NAME[ATTR_OF[g.ch.id]] : c.lv ? 'Mejora' : 'Característico') : (c.rare ? '◆ Rara · ' : '') + (cat[c.k] || 'Mejora')}</span>
