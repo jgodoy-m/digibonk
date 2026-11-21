@@ -2964,35 +2964,58 @@ html[data-theme=oscuro] .dvr{
   --gold:#3b3124;--gold-edge:#af8542;--silver:#253848;--silver-edge:#6d8ca7;--bronze:#3e2e2c;--bronze-edge:#a46e51;
   color-scheme:dark;
 }
+.dvr-compact{padding-bottom:14px}
 .dvr [hidden]{display:none!important}
 .dvr-head{display:flex;align-items:center;gap:8px;flex:none;padding-bottom:8px;border-bottom:1px solid var(--dvr-line)}
 .dvr-head img{width:30px;height:30px;flex:none;object-fit:contain}
 .dvr-head>span{flex:1;min-width:0}
 .dvr-head b{display:block;font-size:18px;line-height:1.15;overflow-wrap:anywhere}
 .dvr-head small{display:block;margin-top:3px;color:var(--dvr-mute);font-size:12px;line-height:1.2;overflow-wrap:anywhere}
-.dvr-tabs{display:grid;grid-template-columns:minmax(0,.76fr) minmax(0,1.24fr) minmax(0,1.1fr);flex:none;gap:3px;padding:3px;border-radius:8px;background:var(--dvr-well)}
+.dvr-tabs{
+  display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.2fr) minmax(0,1.15fr);flex:none;gap:4px;padding:4px;
+  border:1px solid var(--dvr-line);border-radius:10px;
+  background:linear-gradient(180deg,var(--dvr-well),color-mix(in srgb,var(--dvr-well) 65%,var(--dvr-bg)));
+}
 .dvr-tabs button,.dvr-action{
   min-width:0;min-height:32px;padding:5px 3px;border:1px solid transparent;border-radius:6px;
   background:transparent;color:var(--dvr-mute);cursor:pointer;white-space:normal;overflow-wrap:anywhere;
   font:900 12px/1.2 'Nunito',system-ui,sans-serif;
 }
+.dvr-tabs button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding-block:4px;text-align:center}
+.dvr-tabs img{width:18px;height:18px;flex:none;object-fit:contain}
 .dvr-tabs [aria-pressed=true],.dvr-action{background:var(--dvr-card);border-color:var(--dvr-line);color:var(--dvr-accent)}
+.dvr-tabs [aria-pressed=true]{box-shadow:inset 0 -2px var(--dvr-accent)}
+@media (hover:hover){.dvr-tabs button:hover,.dvr-filters summary:hover{background:var(--dvr-selected);color:var(--dvr-ink)}}
 .dvr-action{padding:6px 9px}
 .dvr-cta{flex:none;min-height:36px;width:100%;font-size:13px}
 .dvr-filters{position:relative;flex:none}
 .dvr-filters summary{
-  display:flex;align-items:center;justify-content:space-between;gap:6px;list-style:none;padding:7px 5px;
-  border-block:1px solid var(--dvr-line);background:color-mix(in srgb,var(--dvr-well) 62%,transparent);
+  display:flex;align-items:center;gap:7px;list-style:none;padding:5px 8px;
+  border:1px solid var(--dvr-line);border-radius:8px;background:var(--dvr-card);
   color:var(--dvr-ink);font-size:12px;cursor:pointer;
 }
 .dvr-filters summary::-webkit-details-marker{display:none}
+.dvr-filters summary>img,.dvr-filter-label img{width:18px;height:18px;flex:none;object-fit:contain}
+.dvr-filters summary>span{flex:1;min-width:0;overflow-wrap:anywhere}
 .dvr-filters summary b{color:var(--dvr-accent)}
+.dvr-filters summary small{display:block;margin-top:1px;color:var(--dvr-mute);font-size:11px;line-height:1.15}
+.dvr-filters summary::after{
+  content:'';width:6px;height:6px;flex:none;margin:0 2px 3px 0;
+  border:solid var(--dvr-accent);border-width:0 2px 2px 0;transform:rotate(45deg);
+}
+.dvr-filters[open] summary{background:var(--dvr-selected);border-radius:8px 8px 0 0}
+.dvr-filters[open] summary::after{margin:3px 2px 0 0;transform:rotate(225deg)}
 .dvr-scopes{
   position:absolute;z-index:2;top:100%;left:0;right:0;display:grid;gap:6px;padding:8px;
-  background:var(--dvr-card);border:1px solid var(--dvr-line);border-radius:8px;box-shadow:0 5px 12px #06152d40;
+  background:var(--dvr-card);border:1px solid var(--dvr-line);border-top:0;border-radius:0 0 8px 8px;box-shadow:0 5px 12px #06152d40;
 }
-.dvr-scopes label{display:grid;grid-template-columns:minmax(62px,auto) minmax(0,1fr);align-items:center;gap:5px;font-size:12px;overflow-wrap:anywhere}
-.dvr-scopes select{width:100%;min-width:0;padding:5px 3px;border:1px solid var(--dvr-line);border-radius:5px;background:var(--dvr-bg);color:var(--dvr-ink);font:inherit}
+.dvr-scopes label{display:grid;grid-template-columns:minmax(88px,auto) minmax(0,1fr);align-items:center;gap:5px;font-size:12px;overflow-wrap:anywhere}
+.dvr-filter-label{display:flex;align-items:center;gap:4px;min-width:0}
+.dvr-scopes select{
+  width:100%;min-width:0;min-height:30px;padding:3px 5px;border:1px solid var(--dvr-line);border-radius:6px;
+  background:var(--dvr-bg);color:var(--dvr-ink);font:inherit;
+}
+@media (max-height:560px){.rk-device .dvr-tabs button{flex-direction:row;gap:5px}}
 .dvr-list{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:none}
 .dvr-list::-webkit-scrollbar{display:none}
 .dvr-list:focus-visible{outline:2px solid var(--dvr-accent);outline-offset:-2px;border-radius:7px}
@@ -7372,7 +7395,9 @@ function showCloud(fromHub = cdFromHub){
 }
 // El inicio y la clasificación completa comparten filtros y registros.
 const RANK_CATEGORIES = {
-  kills: 'Bajas', surv: 'Supervivencia', trial: 'Contrarreloj'
+  kills: {name: 'Bajas', icon: 'ui/hud/ic_bajas.webp'},
+  surv: {name: 'Supervivencia', icon: 'ui/hub/digivice/supervivencia.png'},
+  trial: {name: 'Contrarreloj', icon: 'ui/hub/digivice/reto.png'}
 };
 const Rk = {mode: 'kills', map: '', diff: 'normal', region: ''};
 async function showRanking(from){
@@ -7419,9 +7444,10 @@ async function rankPanel(root, hub, keepFilters = false){
   const id = hub ? 'hbRanking' : 'rkTitle';
   const scope = [REGIONS[filters.region] || 'Mundial', MAPS[filters.map]?.name || 'Todos los mapas'];
   if (!surv) scope.push(DIFFS[filters.diff].name);
-  const field = (key, label, options) => `<label><span>${label}</span><select data-rk="${key}" aria-label="${escHtml(label)}">${options.map(([value, text]) =>
+  const field = (key, label, icon, options) => `<label><span class="dvr-filter-label"><img src="ui/hub/digivice/${icon}.png" alt=""><span>${label}</span></span><select data-rk="${key}" aria-label="${escHtml(label)}">${options.map(([value, text]) =>
     `<option value="${escHtml(value)}"${filters[key] === value ? ' selected' : ''}>${escHtml(text)}</option>`).join('')}</select></label>`;
-  const mode = (key, name) => `<button type="button" data-mode="${key}" aria-pressed="${key === filters.mode}">${name}</button>`;
+  const mode = (key, {name, icon}) => `<button type="button" data-mode="${key}" aria-pressed="${key === filters.mode}">
+    <img src="${icon}" alt=""><span>${name}</span></button>`;
   root.classList.toggle('dvr-compact', hub);
   root.setAttribute('aria-labelledby', id);
   const request = (Number(root.dataset.request) || 0) + 1;
@@ -7432,13 +7458,14 @@ async function rankPanel(root, hub, keepFilters = false){
       <span><b id="${id}">Ranking online</b><small>${scope.map(escHtml).join(' · ')}</small></span>
       ${hub ? '' : '<button type="button" class="dvr-action" data-rk-back>← Volver</button>'}
     </header>
-    <div class="dvr-tabs" role="group" aria-label="Modo">${Object.entries(RANK_CATEGORIES).map(([key, name]) => mode(key, name)).join('')}</div>
+    <div class="dvr-tabs" role="group" aria-label="Modo">${Object.entries(RANK_CATEGORIES).map(([key, category]) => mode(key, category)).join('')}</div>
     <details class="dvr-filters"${keepFilters ? ' open' : ''}>
-      <summary><span>${surv ? 'Región · Mapa' : 'Región · Mapa · Dificultad'}</span><b>Filtros <span aria-hidden="true">▾</span></b></summary>
+      <summary><img src="ui/hub/digivice/ajustes.png" alt="">
+        <span><b>Filtros</b><small>${surv ? 'Región · Mapa' : 'Región · Mapa · Dificultad'}</small></span></summary>
       <div class="dvr-scopes">
-        ${field('region', 'Región', [['', 'Mundial'], ...Object.entries(REGIONS)])}
-        ${field('map', 'Mapa', [['', 'Todos los mapas'], ...MAP_ORDER.map(key => [key, MAPS[key].name])])}
-        ${surv ? '' : field('diff', 'Dificultad', DIFF_ORDER.map(key => [key, DIFFS[key].name]))}
+        ${field('region', 'Región', 'idioma', [['', 'Mundial'], ...Object.entries(REGIONS)])}
+        ${field('map', 'Mapa', 'mapas', [['', 'Todos los mapas'], ...MAP_ORDER.map(key => [key, MAPS[key].name])])}
+        ${surv ? '' : field('diff', 'Dificultad', 'reto', DIFF_ORDER.map(key => [key, DIFFS[key].name]))}
       </div>
     </details>
     <div class="dvr-list${hub ? '' : ' dvr-scroll'}" data-rk-content role="group" aria-label="Resultados" aria-live="polite"><p class="dvr-status">${CLOUD_ON ? 'Cargando…' : 'El ranking online aún no está activado en esta versión.'}</p></div>
