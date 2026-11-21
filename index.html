@@ -2990,8 +2990,10 @@ html[data-theme=oscuro] .dvr{
 }
 .dvr-scopes label{display:grid;grid-template-columns:minmax(62px,auto) minmax(0,1fr);align-items:center;gap:5px;font-size:12px;overflow-wrap:anywhere}
 .dvr-scopes select{width:100%;min-width:0;padding:5px 3px;border:1px solid var(--dvr-line);border-radius:5px;background:var(--dvr-bg);color:var(--dvr-ink);font:inherit}
-.dvr-list{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
-.dvr-status{display:grid;justify-items:center;align-content:center;gap:6px;min-height:100%;margin:0;padding:8px;text-align:center;color:var(--dvr-mute)}
+.dvr-list{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:none}
+.dvr-list::-webkit-scrollbar{display:none}
+.dvr-list:focus-visible{outline:2px solid var(--dvr-accent);outline-offset:-2px;border-radius:7px}
+.dvr-status{box-sizing:border-box;display:grid;justify-items:center;align-content:center;gap:6px;min-height:100%;margin:0;padding:8px;text-align:center;color:var(--dvr-mute)}
 .dvr-status p,.dvr-metric{margin:0}
 .dvr-metric{text-align:center;color:var(--dvr-mute);font-size:12px;padding:2px 0 6px}
 .dvr-podium,.dvr-rank{margin:0;padding:0;list-style:none}
@@ -7427,7 +7429,7 @@ async function rankPanel(root, hub, keepFilters = false){
         ${surv ? '' : field('diff', 'Dificultad', DIFF_ORDER.map(key => [key, DIFFS[key].name]))}
       </div>
     </details>
-    <div class="dvr-list${hub ? '' : ' dvr-scroll'}" data-rk-content aria-live="polite"><p class="dvr-status">${CLOUD_ON ? 'Cargando…' : 'El ranking online aún no está activado en esta versión.'}</p></div>
+    <div class="dvr-list${hub ? '' : ' dvr-scroll'}" data-rk-content role="group" aria-label="Resultados" aria-live="polite"><p class="dvr-status">${CLOUD_ON ? 'Cargando…' : 'El ranking online aún no está activado en esta versión.'}</p></div>
     <p class="dvr-foot" data-rk-foot hidden></p>
     ${hub ? '<button type="button" class="dvr-action dvr-cta" data-rk-full>Ver clasificación completa <span aria-hidden="true">→</span></button>' : ''}`;
   root.querySelector('[data-rk-back]')?.addEventListener('click', () => Rk.from === 'cloud' ? showCloud() : showSelect());
@@ -7472,6 +7474,7 @@ async function rankPanel(root, hub, keepFilters = false){
     `<li><b>${Number(row.pos)}.º</b><img src="${escHtml(rankAvatar(row))}" alt=""><span class="dvr-name" title="${rowName(row)}">${rowName(row)}</span><strong>${escHtml(value(row))}</strong></li>`).join('');
   content.innerHTML = `<p class="dvr-metric">${filters.mode === 'kills' ? 'Mejor marca de bajas' : surv ? 'Más oleadas superadas' : filters.map ? 'Victoria más rápida' : 'Menor tiempo total de los tres mapas'}</p>
     <ol class="dvr-podium">${podium}</ol>${list ? `<ol class="dvr-rank">${list}</ol>` : ''}`;
+  content.tabIndex = 0;
   const mine = rows.find(row => row.me);
   if (mine){
     const foot = root.querySelector('[data-rk-foot]');
