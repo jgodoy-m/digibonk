@@ -3820,14 +3820,18 @@ html[lang] .trainer-screen .trainer-header .g-back,
 #overlay:not(.menu-mode)>.lab-console{
   --lab-bg:#edf3fa;--lab-panel:#fff;--lab-well:#e5edf7;--lab-line:#b4c5db;
   --lab-ink:#162943;--lab-muted:#425b79;--lab-accent:#3d568f;--lab-signal:#73dbef;
+  --lab-metal:#c3d3e2;--lab-shadow:#263e5938;
   width:min(1150px,96vw)!important;height:auto!important;max-height:calc((100dvh - var(--ui-top) - var(--ui-bot))/var(--ui-scale,1))!important;
   padding:clamp(8px,1.5vw,18px)!important;overscroll-behavior:contain;
   background:linear-gradient(135deg,var(--lab-bg),var(--lab-well))!important;
   color:var(--lab-ink)!important;font:700 14px/1.35 'Nunito',system-ui,sans-serif;
+  border:1px solid var(--lab-line)!important;border-radius:16px!important;
+  box-shadow:inset 0 0 0 3px var(--lab-metal),0 16px 40px var(--lab-shadow)!important;
 }
 html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
   --lab-bg:#121f31;--lab-panel:#182a40;--lab-well:#102033;--lab-line:#416080;
   --lab-ink:#eef6ff;--lab-muted:#a9c1d9;--lab-accent:#9cdaef;
+  --lab-metal:#233b54;--lab-shadow:#020c19b0;
 }
 .lab-console .lab-head{
   display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:clamp(6px,1.8vw,16px);
@@ -3848,9 +3852,15 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
   color:var(--lab-ink);background:var(--lab-well);font-variant-numeric:tabular-nums;text-align:right;
 }
 .lab-console .lab-wallet img{width:23px;height:23px;object-fit:contain}
-.lab-console .lab-layout{display:grid;grid-template-columns:minmax(210px,.72fr) minmax(0,1.4fr);gap:12px;margin-top:12px}
+.lab-console .lab-layout{
+  display:grid;grid-template-columns:minmax(220px,.88fr) minmax(0,1.3fr);
+  grid-template-areas:"camera camera" "bench instrument";gap:9px;margin-top:9px;
+}
 .lab-console .lab-bench,.lab-console .lab-instrument{min-width:0;border:1px solid var(--lab-line);border-radius:10px;background:var(--lab-panel)}
-.lab-console .lab-bench{padding:10px;align-self:start}
+.lab-console .lab-bench{
+  grid-area:bench;padding:10px 12px;
+  background:linear-gradient(165deg,var(--lab-panel) 45%,var(--lab-well));box-shadow:inset 0 -2px var(--lab-metal);
+}
 .lab-console .lab-bench h3{margin:0 0 9px;font-size:17px}
 .lab-console .lab-stations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
 .lab-console :is(.lab-station,.lab-project,.lab-reset,.lab-apply){
@@ -3858,7 +3868,10 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
   font:850 13px/1.15 'Nunito',system-ui,sans-serif;cursor:pointer;
 }
 .lab-console .lab-station{padding:5px 2px;overflow-wrap:anywhere}
-.lab-console .lab-station[aria-pressed=true]{background:#325489;color:#fff;border-color:#567cb9}
+.lab-console .lab-station[aria-pressed=true]{
+  background:color-mix(in srgb,var(--lab-signal) 26%,var(--lab-well));color:var(--lab-ink);
+  border-color:var(--lab-accent);box-shadow:inset 0 -3px var(--lab-accent);
+}
 .lab-console .lab-projects{display:grid;gap:6px;margin-top:9px}
 .lab-console .lab-project{
   display:grid;grid-template-columns:26px minmax(0,1fr) auto;align-items:center;gap:5px;padding:7px 5px;text-align:left;
@@ -3867,21 +3880,21 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
 .lab-console .lab-project span:first-child{color:var(--lab-accent);font-size:17px;text-align:center}
 .lab-console .lab-project span:last-child{font-size:11px;color:var(--lab-muted);white-space:nowrap}
 .lab-console .lab-reset{padding:5px 10px;background:var(--lab-panel)}
-.lab-console .lab-instrument{overflow:hidden}
+.lab-console .lab-instrument{grid-area:instrument;overflow:hidden;box-shadow:inset 0 -2px var(--lab-metal)}
 .lab-console[data-lab-station="1"]{--lab-signal:#ffc081}
 .lab-console[data-lab-station="2"]{--lab-signal:#a5eeae}
 .lab-console .lab-chamber{
-  position:relative;isolation:isolate;display:grid;place-items:center;min-height:clamp(120px,20vw,207px);
-  background:linear-gradient(0deg,#10305245,#0b173a00),url('ui/hub/laboratorio-camara.webp') center 53%/cover no-repeat,#102640;
-  border-bottom:2px solid var(--lab-signal);
+  grid-area:camera;position:relative;isolation:isolate;display:grid;place-items:center;min-height:clamp(185px,23vw,260px);
+  background:linear-gradient(0deg,#101d34a3,transparent 28%),url('ui/hub/laboratorio-camara-hagurumon.webp') center 51%/cover no-repeat,#102640;
+  border:3px solid var(--lab-metal);border-bottom-color:var(--lab-signal);border-radius:12px;
+  box-shadow:inset 0 0 0 1px #102539,inset 0 0 25px #08172866,0 3px 10px var(--lab-shadow);
 }
 .lab-console .lab-chamber::before{
   content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
   background:radial-gradient(ellipse 34% 78% at center,color-mix(in srgb,var(--lab-signal) 30%,transparent),transparent 72%);
 }
-.lab-console .lab-chamber::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 3px,#06152924 3px 4px);pointer-events:none}
 .lab-console .lab-chamber .lab-specimen{
-  width:clamp(110px,16vw,155px);height:clamp(110px,16vw,155px);
+  width:clamp(125px,17vw,182px);height:clamp(125px,17vw,182px);
   object-fit:contain;filter:drop-shadow(0 0 9px var(--lab-signal));
 }
 .lab-console .lab-diagnostic{padding:12px}
@@ -3891,6 +3904,7 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
 .lab-console .lab-diagnostic progress{display:block;width:100%;height:7px;accent-color:var(--lab-accent)}
 .lab-console .lab-reading{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:10px 0}
 .lab-console .lab-reading div{padding:6px 8px;border:1px solid var(--lab-line);border-radius:6px;background:var(--lab-well)}
+.lab-console .lab-reading div:last-child{border-color:var(--lab-accent);box-shadow:inset 0 2px var(--lab-accent)}
 .lab-console .lab-reading dt{font-size:11px;color:var(--lab-muted)}
 .lab-console .lab-reading dd{margin:2px 0 0;font:850 clamp(15px,2vw,23px)/1.15 'Nunito',sans-serif;color:var(--lab-accent)}
 .lab-console .lab-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -3901,7 +3915,9 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
 .lab-console .lab-footer{display:flex;justify-content:flex-start;margin-top:10px}
 .lab-console :is(button,h3):focus-visible{outline:2px solid var(--lab-accent);outline-offset:-2px}
 @media(max-width:680px){
-  .lab-console .lab-layout{grid-template-columns:minmax(0,1fr);gap:7px;margin-top:7px}
+  .lab-console .lab-layout{
+    grid-template-columns:minmax(0,1fr);grid-template-areas:"camera" "bench" "instrument";gap:7px;margin-top:7px;
+  }
   .lab-console .lab-head{padding:5px 6px}
   .lab-console .lab-head #labBack{width:44px;min-height:44px;padding:0}
   .lab-console .lab-back-icon{display:inline}
@@ -3921,10 +3937,9 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
   .lab-console .lab-projects{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;margin-top:5px}
   .lab-console .lab-project{grid-template-columns:18px minmax(0,1fr);gap:2px 4px;padding:4px;font-size:12px}
   .lab-console .lab-project span:last-child{grid-column:2}
-  .lab-console .lab-instrument{display:contents}
-  .lab-console .lab-chamber{grid-row:1;min-height:72px;border-radius:8px}
+  .lab-console .lab-chamber{box-sizing:border-box;min-height:74px;border-width:2px;border-radius:8px}
   .lab-console .lab-chamber .lab-specimen{width:65px;height:65px}
-  .lab-console .lab-diagnostic{padding:8px;border:1px solid var(--lab-line);border-radius:8px;background:var(--lab-panel)}
+  .lab-console .lab-diagnostic{padding:8px}
   .lab-console .lab-diagnostic p{margin:3px 0 6px}
   .lab-console .lab-reading{margin:6px 0}
   .lab-console .lab-apply{min-height:44px}
@@ -14023,6 +14038,7 @@ function showLab(message = '', focusId = ''){
         <div class="lab-wallet"><img src="ui/hud/ic_bits.webp" alt=""><span>${number(bits)} <span class="lab-wallet-unit">Digicoins</span></span></div>
       </header>
       <div class="lab-layout">
+        <div class="lab-chamber" aria-hidden="true">${animEl(spriteOf('hagurumon', false), 'lab-specimen')}</div>
         <section class="lab-bench" aria-labelledby="labBenchTitle">
           <h3 id="labBenchTitle">Banco de investigación</h3>
           <div class="lab-stations" role="group" aria-label="Estaciones de investigación">
@@ -14031,7 +14047,6 @@ function showLab(message = '', focusId = ''){
           <div class="lab-projects" id="labProjects" role="group" aria-label="Proyectos"></div>
         </section>
         <section class="lab-instrument" aria-labelledby="labProjectTitle">
-          <div class="lab-chamber" aria-hidden="true">${animEl(spriteOf('hagurumon', false), 'lab-specimen')}</div>
           <div class="lab-diagnostic">
             <div id="labDiagnostic"></div>
             <p class="lab-status" id="labStatus" role="status">${escHtml(typeof message === 'string' ? message : '')}</p>
