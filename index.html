@@ -3888,6 +3888,7 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
   background:linear-gradient(0deg,#101d34a3,transparent 28%),url('ui/hub/laboratorio-camara-hagurumon.webp') center 51%/cover no-repeat,#102640;
   border:3px solid var(--lab-metal);border-bottom-color:var(--lab-signal);border-radius:12px;
   box-shadow:inset 0 0 0 1px #102539,inset 0 0 25px #08172866,0 3px 10px var(--lab-shadow);
+  overflow:hidden;
 }
 .lab-console .lab-chamber::before{
   content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
@@ -3896,6 +3897,18 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
 .lab-console .lab-chamber .lab-specimen{
   width:clamp(125px,17vw,182px);height:clamp(125px,17vw,182px);
   object-fit:contain;filter:drop-shadow(0 0 9px var(--lab-signal));
+}
+.lab-chamber :is(.lab-scan-beam,.lab-scan-pulse){
+  position:absolute;left:50%;opacity:0;pointer-events:none;
+}
+.lab-chamber .lab-scan-beam{
+  top:0;width:32%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--lab-signal) 21%,#fff 50%,var(--lab-signal) 79%,transparent);
+  box-shadow:0 0 13px 2px var(--lab-signal);
+}
+.lab-chamber .lab-scan-pulse{
+  top:50%;width:min(31%,230px);aspect-ratio:1.8;border:2px solid var(--lab-signal);border-radius:20%;
+  box-shadow:inset 0 0 14px var(--lab-signal),0 0 16px var(--lab-signal);
 }
 .lab-console .lab-diagnostic{padding:12px}
 .lab-console .lab-diagnostic h3{margin:0;font-size:clamp(21px,3vw,31px)}
@@ -14020,7 +14033,7 @@ const LAB_STATIONS = [
   {name:'Captación', projects:['pickup','xp','rer','bits']}
 ];
 let labSelected = 'hp';
-function showLab(message = '', focusId = ''){
+function showLab(message = '', focusId = '', upgraded = false){
   state = 'lab';
   setHud(false);
   if (Object.hasOwn(LAB_BY_ID, focusId)) labSelected = focusId;
@@ -14038,7 +14051,10 @@ function showLab(message = '', focusId = ''){
         <div class="lab-wallet"><img src="ui/hud/ic_bits.webp" alt=""><span>${number(bits)} <span class="lab-wallet-unit">Digicoins</span></span></div>
       </header>
       <div class="lab-layout">
-        <div class="lab-chamber" aria-hidden="true">${animEl(spriteOf('hagurumon', false), 'lab-specimen')}</div>
+        <div class="lab-chamber" aria-hidden="true">
+          ${animEl(spriteOf('hagurumon', false), 'lab-specimen')}
+          <span class="lab-scan-beam"></span><span class="lab-scan-pulse"></span>
+        </div>
         <section class="lab-bench" aria-labelledby="labBenchTitle">
           <h3 id="labBenchTitle">Banco de investigación</h3>
           <div class="lab-stations" role="group" aria-label="Estaciones de investigación">
@@ -14062,7 +14078,27 @@ function showLab(message = '', focusId = ''){
   const status = document.getElementById('labStatus');
   const stations = [...overlay.querySelectorAll('[data-station]')];
   const lab = projects.closest('.lab-console');
-  const draw = () => {
+  const chamber = lab.querySelector('.lab-chamber');
+  const beam = chamber.querySelector('.lab-scan-beam'), pulse = chamber.querySelector('.lab-scan-pulse');
+  const stopScan = () => [beam, pulse].forEach(effect => effect.getAnimations?.().forEach(animation => animation.cancel()));
+  const scan = success => {
+    stopScan();
+    if (!beam.animate || document.hidden || reduceMotion() || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const height = chamber.clientHeight;
+    const start = Math.round(height * (success ? .88 : .12)), end = height - start;
+    beam.animate([
+      {transform:`translate(-50%, ${start}px)`,opacity:0},
+      {opacity:.9,offset:.15},
+      {opacity:.85,offset:.82},
+      {transform:`translate(-50%, ${end}px)`,opacity:0}
+    ], {duration:720,easing:'ease-in-out'});
+    if (success) pulse.animate([
+      {transform:'translate(-50%,-50%) scale(.5)',opacity:0},
+      {transform:'translate(-50%,-50%) scale(.76)',opacity:.7,offset:.28},
+      {transform:'translate(-50%,-50%) scale(1.12)',opacity:0}
+    ], {duration:840,easing:'ease-out'});
+  };
+  const draw = (success = false) => {
     const station = LAB_STATIONS.findIndex(group => group.projects.includes(labSelected));
     lab.dataset.labStation = station;
     stations.forEach((button, i) => button.setAttribute('aria-pressed', String(i === station)));
@@ -14092,8 +14128,11 @@ function showLab(message = '', focusId = ''){
       </div>`}`;
     const apply = document.getElementById('labApply');
     if (apply) apply.onclick = () => {
-      showLab(labBuy(u.id) ? `Mejora aplicada: ${u.name}` : 'No se pudo guardar el cambio.', u.id);
+      const bought = labBuy(u.id);
+      stopScan();
+      showLab(bought ? `Mejora aplicada: ${u.name}` : 'No se pudo guardar el cambio.', u.id, bought);
     };
+    scan(success);
   };
   stations.forEach((button, i) => {
     button.onclick = () => {
@@ -14103,13 +14142,14 @@ function showLab(message = '', focusId = ''){
       draw();
     };
   });
-  document.getElementById('labBack').onclick = showSelect;
+  document.getElementById('labBack').onclick = () => { stopScan(); showSelect(); };
   document.getElementById('labRefund').onclick = () => {
     const returned = labRefund();
+    stopScan();
     showLab(returned ? `Digicoins devueltos: ${number(returned)}` : 'No se pudo guardar el cambio.');
     document.getElementById('labBack').focus({preventScroll:true});
   };
-  draw();
+  draw(upgraded);
   if (focusId) (detail.querySelector('button:not(:disabled)') || document.getElementById('labProjectTitle'))?.focus({preventScroll:true});
 }
 function digicoinAmount(value){
