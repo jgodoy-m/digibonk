@@ -1547,3 +1547,7 @@ I18N.add('ko', {"×{0} daño": "피해 ×{0}", "×{0} recibido": "받는 피해 
   "dificultad": "난이도",
   "empezar": "시작"
 });
+
+// Ranking del Digivice (récords del menú y ranking online)
+I18N.add('ko', {"Mi historial": "내 기록 보기", "Tus marcas en todos los mapas": "모든 맵의 내 기록", "Solo las partidas de este mapa": "이 맵의 게임만", "Ver clasificación online": "온라인 순위 보기", "Global": "전체", "bajas": "처치", "tiempo": "시간", "Ol. {0}": "웨이브 {0}", "{0} bajas": "{0} 처치", "Todas las regiones": "모든 지역", "Solo jugadores de esta región": "이 지역 플레이어만", "Tu puesto": "내 순위"});
+I18N.add('ko', {"Ver clasificación completa": "전체 순위 보기"});

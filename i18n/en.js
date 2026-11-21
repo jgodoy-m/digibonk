@@ -1912,3 +1912,7 @@ I18N.add('en', {
   "Ver ataque y ulti": "Preview attack and ultimate",
   "Combinar marco y título": "Combine frame and title"
 });
+
+// Ranking del Digivice (récords del menú y ranking online)
+I18N.add('en', {"Mi historial": "My history", "Tus marcas en todos los mapas": "Your marks on every map", "Solo las partidas de este mapa": "Only runs on this map", "Ver clasificación online": "See online leaderboard", "Global": "Global", "bajas": "kills", "tiempo": "time", "Ol. {0}": "W. {0}", "{0} bajas": "{0} kills", "Todas las regiones": "All regions", "Solo jugadores de esta región": "Only players from this region", "Tu puesto": "Your rank"});
+I18N.add('en', {"Ver clasificación completa": "See full leaderboard"});

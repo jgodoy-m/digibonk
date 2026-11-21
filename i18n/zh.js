@@ -1548,3 +1548,7 @@ I18N.add('zh', {"×{0} daño": "伤害 ×{0}", "×{0} recibido": "受到伤害 �
   "dificultad": "难度",
   "empezar": "开始"
 });
+
+// Ranking del Digivice (récords del menú y ranking online)
+I18N.add('zh', {"Mi historial": "我的历史", "Tus marcas en todos los mapas": "你在所有地图的纪录", "Solo las partidas de este mapa": "仅此地图的对局", "Ver clasificación online": "查看在线排行榜", "Global": "全球", "bajas": "击败", "tiempo": "时间", "Ol. {0}": "第{0}波", "{0} bajas": "击败 {0}", "Todas las regiones": "所有地区", "Solo jugadores de esta región": "仅限本地区玩家", "Tu puesto": "你的名次"});
+I18N.add('zh', {"Ver clasificación completa": "查看完整排行榜"});

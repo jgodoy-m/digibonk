@@ -1541,3 +1541,7 @@ I18N.add('tr', {"×{0} daño": "×{0} hasar", "×{0} recibido": "×{0} alınan",
   "dificultad": "zorluk",
   "empezar": "başla"
 });
+
+// Ranking del Digivice (récords del menú y ranking online)
+I18N.add('tr', {"Mi historial": "Geçmişim", "Tus marcas en todos los mapas": "Tüm haritalardaki rekorların", "Solo las partidas de este mapa": "Sadece bu haritadaki oyunlar", "Ver clasificación online": "Çevrimiçi sıralamayı gör", "Global": "Küresel", "bajas": "yenilen", "tiempo": "süre", "Ol. {0}": "D. {0}", "{0} bajas": "{0} yenilen", "Todas las regiones": "Tüm bölgeler", "Solo jugadores de esta región": "Sadece bu bölgedeki oyuncular", "Tu puesto": "Sıran"});
+I18N.add('tr', {"Ver clasificación completa": "Tüm sıralamayı gör"});
