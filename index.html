@@ -14610,7 +14610,7 @@ const SKIN_ICONS = [
   {key:'gatomon', skin:'variocolor'},
   {key:'gatomon', skin:'festival'},
   {key:'gatomon', skin:'reno'}
-].map(x => ({...x, id: x.key + '_' + x.skin, src: 'ui/jugador/' + x.key + '_' + x.skin + '.webp' + '?arte=ilustrado'}));
+].map(x => ({...x, id: x.key + '_' + x.skin, src: 'ui/jugador/' + x.key + '_' + x.skin + '.webp?arte=' + (x.skin === 'galactico' ? 'galaxia' : 'ilustrado')}));
 function skinIconName(ic){ const sk = SKINS.find(s => s.id === ic.skin); return CHARS[ic.key].name + ' ' + (sk ? sk.name : ic.skin); }
 function ownsSkinIcon(ic){ return ownsAnyStage(ic.key, ic.skin); }
 function skinIconFor(key, skin){ return SKIN_ICONS.find(x => x.key === key && x.skin === skin) || null; }
