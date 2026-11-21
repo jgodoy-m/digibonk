@@ -1999,6 +1999,9 @@ html[data-theme=oscuro]{
 .ps-ph{display:flex;align-items:center;gap:10px;margin:0;padding:9px 14px;background:var(--ps-head);color:#fff;font:900 15px 'Nunito',system-ui,sans-serif;letter-spacing:.3px;text-shadow:0 1px 0 rgba(0,0,0,.25)}
 .ps-ph i{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#fff;color:#3b56d8;font:900 13px 'Nunito',system-ui,sans-serif;text-shadow:none}
 .ps-pb{flex:1;min-height:0;overflow:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin}
+.ps-basic-attack{display:grid;grid-template-columns:clamp(48px,9vw,76px) minmax(0,1fr);align-items:center;gap:10px}
+.ps-basic-attack>img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 2px 2px #0004)}
+.ps-basic-attack .ps-txt{margin:3px 0 6px}
 .ps-big{margin:0;font:900 17px 'Nunito',system-ui,sans-serif;color:var(--ps-text)}
 .ps-txt{margin:0;font:600 13px/1.45 'Nunito',system-ui,sans-serif;color:var(--ps-soft)}
 .ps-hr{border:0;border-top:1px dashed var(--ps-line2);margin:6px 0;width:100%}
@@ -7961,12 +7964,17 @@ function renderPickPanels(){
   if (!kit || !evo) return;
   kit.innerHTML = `
     <div class="ps-lbl">Ataque básico</div>
-    <h5 class="ps-big">${ATTACK_NAME[c.kind] || 'Ataque'} de ${c.name}</h5>
-    <p class="ps-txt">${BALANCE[k].why}.</p>
-    ${chipsHtml(baseFacts(c))}
+    <div class="ps-basic-attack">
+      <img src="${basicAttackPath(k)}" width="128" height="128" alt="">
+      <div><h5 class="ps-big">${ATTACK_NAME[c.kind] || 'Ataque'} de ${c.name}</h5>
+        <p class="ps-txt">${BALANCE[k].why}.</p>${chipsHtml(baseFacts(c))}
+        <button type="button" class="attack-preview-open">Vista previa de combate</button>
+      </div>
+    </div>
     <hr class="ps-hr">
     <div class="ps-lbl">Kit de ataques <small>· cifras a nivel 1, sube hasta nivel ${SKILL_MAX}</small></div>
     <div class="ps-kit">${[...learnable(k).mine, ...learnable(k).type.slice(0, 1)].map(id => { const sk = SKILLS[id], ty = !(CHAR_SKILLS[k] || []).includes(id); return `<div class="ps-atk k-${sk.k}"><i class="ps-ico">${SKILL_ICON[id] || '✦'}</i><div><div class="ps-atk-h"><b>${skillName(id, k)}</b>${ty ? ` <small>· de tipo ${ATTR_NAME[ATTR_OF[k]]}</small>` : ''}</div><small class="ps-kind">${sk.k[0].toUpperCase() + sk.k.slice(1)}</small><p>${sk.d}</p>${chipsHtml(skillFacts(id))}</div></div>`; }).join('')}</div>`;
+  kit.querySelector('.attack-preview-open').onclick = e => showAttackPreview(k, pickStage, equippedAt(k, pickStage), e.currentTarget);
   const at = ATTR_OF[k], beats = BEATS[at], loses = Object.keys(BEATS).find(a => BEATS[a] === at);
   const foes = a => Object.keys(FOE_ATTR).filter(n => FOE_ATTR[n] === a && n !== 'tank');
   const icons = a => { const l = foes(a); return `${l.slice(0, 7).map(n => `<img src="sprites/adventure/${n}.png" alt="" title="${(COMING_SOON.find(c => c.id === n) || {name: n[0].toUpperCase() + n.slice(1)}).name}" onerror="this.remove()">`).join('')}${l.length > 7 ? `<small>+${l.length - 7}</small>` : ''}`; };
@@ -9047,15 +9055,19 @@ function showAttackPreview(key, stage, skin, trigger){
     }
     return textures.get(id);
   };
-  const play = ultimate => {
+  let playback = 0;
+  const play = async ultimate => {
+    const token = ++playback;
     cancelAnimationFrame(frame);
+    const art = ultimate ? null : await loadBasicAttack(key);
+    if (!dialog.open || token !== playback) return;
     const origin = {x: 0, z: 0}, effects = [];
     const emit = (kind, p, color, options = {}) => {
       effects.push({image:previewTexture(kind, color), at:attackEffectMotion(p, options), life:options.life ?? 0.7,
         opacity:options.opacity ?? 1, additive:options.additive ?? true});
     };
     if (ultimate) ulti.animate(origin, emit, {x:1, z:0});
-    else emit(ch.fx || 'air', origin, 0xffffff, {radius:2, travel:ch.kind === 'shot' ? 14 : 4, size:4.5, life:0.48});
+    else emit(art || ch.fx || 'air', origin, 0xffffff, {radius:2, travel:ch.kind === 'shot' ? 14 : 4, size:4.5, life:0.48, additive:!art});
     if (theme) emitSkinAttackFx(theme, origin, ultimate, 0, emit);
     status.textContent = ultimate ? `${ulti.title} · ${ulti.tip}` : ch.desc;
     const started = performance.now(), staticFrame = reduceMotion();
@@ -10719,16 +10731,26 @@ const matCache = {};
    Cada ataque tiene su forma: fuego, burbuja, rayo, viento, hoja, engranaje, estrella, círculo mágico...
    Se dibujan una vez en un canvas y se usan en planos horizontales con mezcla aditiva (brillan sobre el suelo). */
 const FX_TEX = {};
-const FX_BASIC_REQUESTS = new Set();
+const FX_BASIC_REQUESTS = new Map();
+const basicAttackPath = key => 'ui/ataques/' + key + '.png?v=2';
+function loadBasicAttack(key){
+  if (!FX_BASIC_REQUESTS.has(key)){
+    FX_BASIC_REQUESTS.set(key, new Promise(resolve => {
+      const kind = 'basic-' + key;
+      const texture = loader.load(basicAttackPath(key), loaded => {
+        FX_TEX[kind] = loaded;
+        resolve(kind);
+      }, undefined, () => resolve(null));
+      texture.colorSpace = THREE.SRGBColorSpace;
+    }));
+  }
+  return FX_BASIC_REQUESTS.get(key);
+}
 function basicAttackArt(key){
   if (!SEASONS.adventure.chars.includes(key)) return null;
   const kind = 'basic-' + key;
   if (FX_TEX[kind]) return kind;
-  if (!FX_BASIC_REQUESTS.has(key)){
-    FX_BASIC_REQUESTS.add(key);
-    const texture = loader.load('ui/ataques/' + key + '.png?v=2', loaded => { FX_TEX[kind] = loaded; });
-    texture.colorSpace = THREE.SRGBColorSpace;
-  }
+  loadBasicAttack(key);
   return null;
 }
 function fxTex(kind){
