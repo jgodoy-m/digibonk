@@ -153,6 +153,7 @@ I18N.add('ru', {
   "Evento Digimon: Papá Noel y Reno, quedan {0} {1}": "Событие Digimon: Дед Мороз и Олень, осталось {0} {1}",
   "Papá Noel y Reno": "Дед Мороз и Олень",
   "Cooperativo": "Кооператив",
+  "Amigos": "Друзья",
   "Próximamente": "Скоро",
   "mejoras disponibles": "доступно улучшений",
   "Mejoras": "Улучшения",

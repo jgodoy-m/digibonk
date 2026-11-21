@@ -153,6 +153,7 @@ I18N.add('zh', {
   "Evento Digimon: Papá Noel y Reno, quedan {0} {1}": "数码宝贝活动：圣诞老人和驯鹿，剩余 {0} {1}",
   "Papá Noel y Reno": "圣诞老人和驯鹿",
   "Cooperativo": "合作模式",
+  "Amigos": "好友",
   "Próximamente": "即将推出",
   "mejoras disponibles": "项强化可用",
   "Mejoras": "强化",
