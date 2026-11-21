@@ -153,6 +153,7 @@ I18N.add('ja', {
   "días": "日",
   "Evento Digimon: Papá Noel y Reno, quedan {0} {1}": "デジモンイベント：サンタとトナカイ、残り{0}{1}",
   "Papá Noel y Reno": "サンタとトナカイ",
+  "Cooperativo": "協力プレイ",
   "Próximamente": "近日公開",
   "mejoras disponibles": "強化可能",
   "Mejoras": "強化",
