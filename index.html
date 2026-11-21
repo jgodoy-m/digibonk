@@ -5591,6 +5591,7 @@ function sheetOf(url){
   if (!ANIM_IDS.has(id)) return null;
   const version = id.endsWith('_festival') ? '?arte=trajes-navidad' :
     id.endsWith('_lcd') ? '?arte=lcd-animado' :
+    /^(?:gatomon_1|palmon_2|hagurumon_0|frigimon_0)_galactico$/.test(id) ? '?arte=galacticos-v2' :
     /^(?:agumon|patamon)_[1-3]_galactico$/.test(id) ? '?arte=ajustes-galacticos' :
     id.endsWith('_galactico') ? '?arte=' + (id.endsWith('_0_galactico') ? 'trajes' : 'evoluciones') : id.endsWith('_variocolor') ? '?arte=variocolor-v2' : '';
   return `sprites/anim/${id}.webp${version}`;
@@ -5746,7 +5747,118 @@ function animEl(url, cls = '', style = ''){
 }
 const galacticClock = {value: 0};
 
-function compileGalacticSprite(shader){
+const nebulaTravel = {value: 1};
+
+function compileWizardNebulaSprite(shader){
+  compileNebulaSprite(shader, false);
+}
+
+function compileHagurumonNebulaSprite(shader){
+  compileNebulaSprite(shader, true);
+}
+
+function compileNebulaSprite(shader, face){
+  compileGalacticSprite(shader, `
+    float mask = ${face ? 'hagurumonCore(vGalacticUv, vMapUv.x, sampledDiffuseColor.rgb)' : 'wizardCloth(sampledDiffuseColor.rgb)'};
+    if (mask > 0.01){
+      vec3 sky = wizardSky(vNebulaUv ${face ? '+ vec2(11.0, 7.0)' : ''});
+      diffuseColor.rgb = mix(diffuseColor.rgb, sky * diffuse, mask * 0.88);
+    }
+  `);
+  shader.uniforms.nebulaTravel = nebulaTravel;
+  shader.vertexShader = `
+    uniform float nebulaTravel;
+    varying vec2 vNebulaUv;
+  ` + shader.vertexShader.replace('#include <uv_vertex>', `
+    #include <uv_vertex>
+    // El cielo ocupa un espacio continuo y la silueta del traje se mueve sobre él.
+    vec2 travel = mat2(0.86, 0.5, -0.5, 0.86) * modelMatrix[3].xz;
+    vNebulaUv = uv * vec2(3.0, 2.65) + travel * (0.19 * nebulaTravel);
+  `);
+  shader.fragmentShader = `
+    uniform float galacticTime;
+    varying vec2 vNebulaUv;
+
+    float wizardStarHash(vec2 p){
+      vec3 h = fract(vec3(p.xyx) * 0.1031);
+      h += dot(h, h.yzx + 33.33);
+      return fract((h.x + h.y) * h.z);
+    }
+
+    float wizardCloudNoise(vec2 p){
+      vec2 cell = floor(p);
+      vec2 blend = fract(p);
+      blend = blend * blend * (3.0 - 2.0 * blend);
+      return mix(
+        mix(wizardStarHash(cell), wizardStarHash(cell + vec2(1.0, 0.0)), blend.x),
+        mix(wizardStarHash(cell + vec2(0.0, 1.0)), wizardStarHash(cell + vec2(1.0)), blend.x),
+        blend.y
+      );
+    }
+
+    float wizardClouds(vec2 p){
+      return wizardCloudNoise(p) * 0.57
+        + wizardCloudNoise(p * 2.13 + vec2(5.4, 9.1)) * 0.29
+        + wizardCloudNoise(p * 4.27 - vec2(2.8, 3.5)) * 0.14;
+    }
+
+    float wizardStars(vec2 p){
+      vec2 cell = floor(p);
+      float seed = wizardStarHash(cell);
+      vec2 star = 0.22 + 0.56 * vec2(seed, wizardStarHash(cell + 17.3));
+      vec2 d = abs(fract(p) - star);
+      float crossLight = (1.0 - smoothstep(0.012, 0.047, min(d.x, d.y)))
+        * (1.0 - smoothstep(0.04, 0.19, max(d.x, d.y)));
+      float core = 1.0 - smoothstep(0.025, 0.10, length(d));
+      float blink = 0.76 + 0.24 * sin(galacticTime * 1.25 + seed * 24.0);
+      return step(0.61, seed) * max(core, crossLight * 0.46) * blink;
+    }
+
+    vec3 wizardSky(vec2 position){
+      vec2 p = position + vec2(3.7, 9.2);
+      vec2 drift = vec2(0.11, -0.065) * galacticTime;
+      float tint = wizardClouds(p * 0.69 + vec2(4.2, 1.8) - drift);
+      float fog = wizardClouds(p + drift);
+      float strand = 1.0 - abs(2.0 * wizardClouds(p * 1.55 + vec2(tint * 1.8, fog)) - 1.0);
+      float fine = wizardCloudNoise(p * 5.7 + vec2(fog * 4.3, strand * 3.3));
+      float dust = smoothstep(0.35, 0.84, fog * 0.48 + strand * 0.41 + fine * 0.11);
+      float ridge = smoothstep(0.63, 0.92, strand * 0.66 + fine * 0.34);
+      vec3 deep = vec3(0.015, 0.013, 0.10);
+      vec3 violet = vec3(0.72, 0.07, 0.87);
+      vec3 teal = vec3(0.035, 0.61, 0.96);
+      vec3 sky = mix(deep, mix(violet, teal, smoothstep(0.34, 0.66, tint)), dust);
+      sky += mix(vec3(0.48, 0.25, 0.52), vec3(0.18, 0.43, 0.54), tint) * ridge * dust;
+      sky += vec3(0.70, 0.84, 0.98) * wizardStars(p * 8.2) * 0.83;
+      return min(sky, 1.0);
+    }
+
+    float wizardCloth(vec3 color){
+      float blueInk = smoothstep(0.035, 0.20, color.b - color.g);
+      float purpleInk = smoothstep(-0.12, 0.08, color.b - color.r);
+      float outline = smoothstep(0.08, 0.21, max(color.b, color.r));
+      float fabric = 1.0 - smoothstep(0.68, 0.88, max(color.r, color.b));
+      return blueInk * purpleInk * outline * fabric;
+    }
+    float hagurumonCore(vec2 uv, float atlasX, vec3 color){
+      // Centro de la cara en los fotogramas de reposo, ataque y daño.
+      float frame = floor(atlasX * 5.0);
+      vec2 center = frame < 0.5 ? vec2(143.0, 174.0) :
+        frame < 1.5 ? vec2(147.0, 174.0) :
+        frame < 2.5 ? vec2(146.0, 170.0) :
+        frame < 3.5 ? vec2(135.0, 182.0) : vec2(152.0, 178.0);
+      vec2 pixel = vec2(uv.x, 1.0 - uv.y) * 256.0;
+      float glass = 1.0 - smoothstep(0.78, 1.0, length((pixel - center) / vec2(25.0, 25.0)));
+      float luminance = dot(color, vec3(0.299, 0.587, 0.114));
+      float silver = smoothstep(0.18, 0.36, luminance) * (1.0 - smoothstep(0.69, 0.88, luminance));
+      float warm = smoothstep(0.06, 0.15, color.r - color.b);
+      return glass * silver * (1.0 - warm);
+    }
+  ` + shader.fragmentShader.replace('uniform float galacticTime;', '');
+}
+
+function compileGalacticSprite(shader, interior){
+  const shade = typeof interior === 'string' ? interior :
+    'diffuseColor.rgb += galacticLight(vGalacticUv, sampledDiffuseColor.rgb) * min(diffuse, vec3(1.0));';
   shader.uniforms.galacticTime = galacticClock;
   shader.vertexShader = 'varying vec2 vGalacticUv;\n' + shader.vertexShader.replace('#include <uv_vertex>', `
     #include <uv_vertex>
@@ -5802,7 +5914,7 @@ function compileGalacticSprite(shader){
     }
   ` + shader.fragmentShader.replace('#include <alphatest_fragment>', `
     if (diffuseColor.a >= 0.1){
-      diffuseColor.rgb += galacticLight(vGalacticUv, sampledDiffuseColor.rgb) * min(diffuse, vec3(1.0));
+      ${shade}
     }
     #ifndef GALACTIC_NO_ORBIT
       else {
@@ -5826,6 +5938,8 @@ function setGalacticMaterial(material, compile){
 }
 
 function galacticSpriteCompile(url){
+  if (/\/wizardmon_0_galactico\.webp(?:\?|$)/.test(url)) return compileWizardNebulaSprite;
+  if (/\/hagurumon_0_galactico\.webp(?:\?|$)/.test(url)) return compileHagurumonNebulaSprite;
   if (/\/gabumon_3_galactico\.webp(?:\?|$)/.test(url)) return compileGalacticSpriteWithoutOrbit;
   return /_galactico\.webp(?:\?|$)/.test(url) ? compileGalacticSprite : THREE.Material.prototype.onBeforeCompile;
 }
@@ -16406,7 +16520,11 @@ function frame(now){
   hurtT = Math.max(0, hurtT - dt);
   document.getElementById('hurt').style.opacity = (hurtT / 0.45) * 0.85;
   // Animación: los enemigos alternan sus dos fotogramas de reposo; el jugador además ataca y recibe daño
-  if (state === 'play' && g && !mapLoad.on && !document.hidden && !reduceMotion()) galacticClock.value += dt;
+  if (state === 'play' && g && !mapLoad.on && !document.hidden){
+    const reduced = reduceMotion();
+    nebulaTravel.value = reduced ? 0 : 1;
+    if (!reduced) galacticClock.value += dt;
+  }
   if (state !== 'map') animMs += dt*1000;   // reloj de animación: se congela con el mapa abierto
   const idleF = Math.floor(animMs/380) % 2;
   for (const tx of animTexs) tx.offset.x = (idleF + (tx.fr ? 1 : 0))/ANIM_N;
