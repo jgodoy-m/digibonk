@@ -14629,6 +14629,7 @@ const PLAYER_ICONS = [
   {id:'leomon', name:'Leomon'}, {id:'hagurumon', name:'Hagurumon'}, {id:'frigimon', name:'Frigimon'}, {id:'wizardmon', name:'Wizardmon'}
 ].map(x => ({...x, src: playerIconSrc(x.id)}));
 // Iconos de skin: se desbloquean al tener la skin en alguna etapa (los de skins ocultas solo se ven al tenerlas)
+const SKIN_ICON_ART = {galactico:'galaxia', lcd:'lcd-v2'};
 const SKIN_ICONS = [
   {key:'agumon', skin:'galactico'}, {key:'agumon', skin:'holografica'}, {key:'agumon', skin:'lcd'}, {key:'agumon', skin:'festival'}, {key:'agumon', skin:'reno'}, {key:'agumon', skin:'variocolor'},
   {key:'patamon', skin:'galactico'}, {key:'patamon', skin:'holografica'}, {key:'patamon', skin:'lcd'}, {key:'patamon', skin:'festival'}, {key:'patamon', skin:'reno'}, {key:'patamon', skin:'variocolor'},
@@ -14645,7 +14646,7 @@ const SKIN_ICONS = [
   {key:'gatomon', skin:'variocolor'},
   {key:'gatomon', skin:'festival'},
   {key:'gatomon', skin:'reno'}
-].map(x => ({...x, id: x.key + '_' + x.skin, src: 'ui/jugador/' + x.key + '_' + x.skin + '.webp?arte=' + (x.skin === 'galactico' ? 'galaxia' : 'ilustrado')}));
+].map(x => ({...x, id: x.key + '_' + x.skin, src: 'ui/jugador/' + x.key + '_' + x.skin + '.webp?arte=' + (SKIN_ICON_ART[x.skin] || 'ilustrado')}));
 function skinIconName(ic){ const sk = SKINS.find(s => s.id === ic.skin); return CHARS[ic.key].name + ' ' + (sk ? sk.name : ic.skin); }
 function ownsSkinIcon(ic){ return ownsAnyStage(ic.key, ic.skin); }
 function skinIconFor(key, skin){ return SKIN_ICONS.find(x => x.key === key && x.skin === skin) || null; }
