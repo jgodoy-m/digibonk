@@ -5555,7 +5555,7 @@ function sheetOf(url){
   const m = /([^/]+)\.(?:png|webp)(?:\?[^#]*)?$/.exec(url || '');
   const id = m && (m[1] === 'ogremon' ? 'tank' : m[1]);
   if (!ANIM_IDS.has(id)) return null;
-  const version = id.endsWith('_galactico') ? '?arte=retratos' : '';
+  const version = id === 'agumon_0_galactico' ? '?arte=armadura' : id.endsWith('_galactico') ? '?arte=retratos' : '';
   return `sprites/anim/${id}.webp${version}`;
 }
 const animTexs = [];   // texturas compartidas (enemigos del mismo tipo marcan el paso a la vez)
@@ -5591,6 +5591,7 @@ function twinMat(m){
   if (m.twin) return m.twin;
   const w = m.clone();
   w.map = twinTex(m.map); w.fr = !m.fr;
+  setGalacticMaterial(w, m.onBeforeCompile === compileGalacticSprite);
   sharedMats.add(w); m.twin = w; w.twin = m;
   return w;
 }
@@ -5615,6 +5616,7 @@ function poseMat(m, f){
   m.pose = m.pose || {};
   if (m.pose[f]) return m.pose[f];
   const w = m.clone();
+  setGalacticMaterial(w, m.onBeforeCompile === compileGalacticSprite);
   w.map = poseTex(m.map, f);   // textura parada (comparte la imagen)
   w.fr = m.fr; w.root = m;
   return (m.pose[f] = w);
@@ -5705,11 +5707,100 @@ function animEl(url, cls = '', style = ''){
   const sh = sheetOf(url);
   return sh ? `<i class="anim ${cls}" style="background-image:url('${sh}');${style}"></i>` : `<img class="${cls}" src="${url}" alt="" style="${style}">`;
 }
+const galacticClock = {value: 0};
+
+function compileGalacticSprite(shader){
+  shader.uniforms.galacticTime = galacticClock;
+  shader.vertexShader = 'varying vec2 vGalacticUv;\n' + shader.vertexShader.replace('#include <uv_vertex>', `
+    #include <uv_vertex>
+    // UV de un fotograma, independiente del desplazamiento de la hoja.
+    vGalacticUv = vec2(mapTransform[0].x < 0.0 ? 1.0 - uv.x : uv.x, uv.y);
+  `);
+  shader.fragmentShader = `
+    varying vec2 vGalacticUv;
+    uniform float galacticTime;
+    vec3 galacticLight(vec2 uv, vec3 base){
+      vec2 p = (uv - vec2(0.5, 0.37)) * vec2(1.0, 1.12);
+      float radius = length(p);
+      float angle = atan(p.y, p.x + 0.0001);
+      float turn = angle * 2.0 + radius * 19.0 - galacticTime * 1.65;
+      float arm = 0.5 + 0.5 * cos(turn);
+      float envelope = 1.0 - smoothstep(0.08, 0.41, radius);
+      float clouds = 0.7 + 0.3 * sin(angle * 5.0 - radius * 35.0 + galacticTime * 0.8);
+      float nebula = arm * arm * (0.25 + 0.75 * arm) * envelope * clouds;
+      float hue = 0.5 + 0.5 * sin(angle - radius * 9.0 + galacticTime * 0.9);
+      vec3 light = mix(vec3(0.62, 0.11, 1.0), vec3(0.04, 0.83, 1.0), hue);
+
+      // Una trama de estrellas gira con los brazos y conserva visible el dibujo del sprite.
+      vec2 grid = vec2(radius * 31.0 - galacticTime * 0.16,
+                       (angle - galacticTime * 0.55) * 4.4563384);
+      vec2 cell = floor(grid);
+      vec2 point = fract(grid) - 0.5;
+      float seed = fract(sin(dot(vec2(cell.x, mod(cell.y, 28.0)), vec2(12.9898, 78.233))) * 43758.5453);
+      float star = step(0.48, seed) * (1.0 - smoothstep(0.075, 0.24, length(point)));
+      star *= smoothstep(0.025, 0.07, radius) * envelope;
+      star *= 0.55 + 0.45 * sin(galacticTime * 1.6 + seed * 6.283);
+
+      float ink = max(max(base.r, base.g), base.b);
+      float body = smoothstep(0.045, 0.21, ink);
+      float height = 1.0 - 0.65 * smoothstep(0.53, 0.73, uv.y);
+      float inkStrength = mix(1.0, 0.55, smoothstep(0.35, 0.93, ink));
+      return (light * nebula * 0.66 + vec3(0.45, 0.64, 0.92) * star * 0.78)
+             * body * height * inkStrength;
+    }
+
+    vec4 galacticOrbit(vec2 uv){
+      vec2 p = uv - vec2(0.5, 0.34);
+      p = mat2(0.95, -0.312, 0.312, 0.95) * p;
+      vec2 ellipse = p / vec2(0.415, 0.134);
+      float dist = abs(length(ellipse) - 1.0);
+      float phase = atan(ellipse.y, ellipse.x + 0.0001) - galacticTime * 1.6;
+      float comet = 0.5 + 0.5 * cos(phase);
+      float tail = comet * comet * comet * comet;
+      float line = 1.0 - smoothstep(0.009, 0.062, dist);
+      float glow = 1.0 - smoothstep(0.035, 0.11, dist);
+      float opacity = line * (0.12 + 0.7 * tail) + glow * 0.13 * tail;
+      vec3 color = mix(vec3(0.54, 0.23, 0.92), vec3(0.23, 0.76, 1.0), tail);
+      return vec4(color, opacity);
+    }
+  ` + shader.fragmentShader.replace('#include <alphatest_fragment>', `
+    if (diffuseColor.a >= 0.1){
+      diffuseColor.rgb += galacticLight(vGalacticUv, sampledDiffuseColor.rgb) * min(diffuse, vec3(1.0));
+    } else {
+      vec4 orbit = galacticOrbit(vGalacticUv);
+      diffuseColor = vec4(orbit.rgb * diffuse, orbit.a * opacity);
+    }
+    #include <alphatest_fragment>
+  `);
+}
+
+function setGalacticMaterial(material, galactic){
+  const compile = galactic ? compileGalacticSprite : THREE.Material.prototype.onBeforeCompile;
+  if (material.onBeforeCompile === compile) return;
+  material.onBeforeCompile = compile;
+  material.needsUpdate = true;
+}
+
+function galacticSpriteUrl(url){
+  return /_galactico\.webp(?:\?|$)/.test(url);
+}
+
+function setBillboardArt(mesh, url){
+  const material = mesh.material;
+  material.map = animTex(url, true);
+  setGalacticMaterial(material, galacticSpriteUrl(url));
+  material.needsUpdate = true;
+}
+
 const spriteMats = {};
 // alphaTest: lo transparente del sprite no escribe profundidad, así no tapa el agua (antes salía un cuadrado al entrar en un lago)
 function billboard(url, scale, shared = true){
   let mat = shared ? spriteMats[url] : null;
-  if (!mat){ mat = new THREE.SpriteMaterial({map: animTex(url, !shared), transparent: true, alphaTest: 0.1}); if (shared){ spriteMats[url] = mat; sharedMats.add(mat); } }
+  if (!mat){
+    mat = new THREE.SpriteMaterial({map: animTex(url, !shared), transparent: true, alphaTest: 0.1});
+    setGalacticMaterial(mat, galacticSpriteUrl(url));
+    if (shared){ spriteMats[url] = mat; sharedMats.add(mat); }
+  }
   const s = new THREE.Sprite(mat);
   s.scale.set(scale, scale, 1);
   return s;
@@ -8381,8 +8472,7 @@ function runApply(s){
   const line = EVO_LINE[s.key] || [];
   g.ch.evolved = Math.max(0, Math.min(line.length, s.evolved | 0));
   if (g.ch.evolved){
-    g.playerMesh.material.map = animTex(spriteOf(s.key, g.ch.evolved), true);
-    g.playerMesh.material.needsUpdate = true;
+    setBillboardArt(g.playerMesh, spriteOf(s.key, g.ch.evolved));
   }
   resolveSolids(g.p, 0.5);
   g.sk = newSkillState(); g.sk.lastMine = {x: g.p.x, z: g.p.z};
@@ -8978,8 +9068,7 @@ function animateEvo(dt){
     m.position.z = p.z + (Math.random()-0.5)*0.25;
   } else if (!a.swapped){
     a.swapped = true;
-    m.material.map = animTex(a.sprite, true);
-    m.material.needsUpdate = true;
+    setBillboardArt(m, a.sprite);
     spawnRing(p.x, p.z);
     popText(p.x, p.z, `¡${a.name}!`, '#ffd54f', 2.2);
     screenFlash = 1;
@@ -13183,7 +13272,7 @@ function supEvolve(s){
   const want = Math.min(line.length, Math.floor((g.p.lvl - s.joinLvl)/SUP_EVO_LVLS));
   if (want <= s.st) return;
   s.st = want;
-  s.mesh.material.map = animTex(spriteOf(s.key, s.st), true); s.mesh.material.needsUpdate = true;
+  setBillboardArt(s.mesh, spriteOf(s.key, s.st));
   const sc = 1.7*(1 + 0.18*s.st); s.mesh.scale.set(sc, sc, 1);
   spawnRing(s.x, s.z, 0xffd54f); burst(s.x, s.z, '#ffd54f');
   sfx('evolve');
@@ -13289,8 +13378,7 @@ function endEmergency(){
   g.p.maxHp -= bonus.life;
   if (g.p.hp > 0) g.p.hp = Math.min(g.p.maxHp, Math.max(1, g.p.hp - bonus.life));
   g.p.count -= bonus.projectiles;
-  g.playerMesh.material.map = animTex(spriteOf(id, prev), true);
-  g.playerMesh.material.needsUpdate = true;
+  setBillboardArt(g.playerMesh, spriteOf(id, prev));
   spawnRing(g.p.x, g.p.z, 0xff7043);
   announce('Fin de la evolución de emergencia', stageName(id, prev) + ' vuelve a su forma', '#ff7043');
 }
@@ -16198,6 +16286,7 @@ function frame(now){
   hurtT = Math.max(0, hurtT - dt);
   document.getElementById('hurt').style.opacity = (hurtT / 0.45) * 0.85;
   // Animación: los enemigos alternan sus dos fotogramas de reposo; el jugador además ataca y recibe daño
+  if (state === 'play' && g && !mapLoad.on && !document.hidden && !reduceMotion()) galacticClock.value += dt;
   if (state !== 'map') animMs += dt*1000;   // reloj de animación: se congela con el mapa abierto
   const idleF = Math.floor(animMs/380) % 2;
   for (const tx of animTexs) tx.offset.x = (idleF + (tx.fr ? 1 : 0))/ANIM_N;
