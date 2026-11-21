@@ -2950,6 +2950,18 @@ html[data-theme=oscuro] :is(.hb-record-device,.rk-device){--dvr-bg:#111318;--dvr
   mask:url('ui/hub/records-visor-mask.png') center/100% 100% no-repeat;
 }
 .rk-device{width:min(94vw,540px,calc(94dvh * .72));aspect-ratio:.72;margin:auto}
+@media (min-width:1101px) and (min-height:690px) and (hover:hover) and (pointer:fine){
+  #overlay .realhub.hb .hb-main{
+    --hb-digivice-width:clamp(400px,30vw,420px);
+    grid-template-columns:minmax(580px,36%) minmax(0,1fr) minmax(300px,var(--hb-digivice-width))!important;
+  }
+  #overlay .realhub.hb .hb-record-device{
+    width:min(100%,var(--hb-digivice-width,420px));min-height:clamp(600px,calc(100dvh - 152px),640px);
+  }
+}
+@media (min-width:1101px) and (min-height:850px) and (hover:hover) and (pointer:fine){
+  .rk-device{width:min(94vw,580px,calc((100dvh - var(--ui-top) - var(--ui-bot)) * .72))}
+}
 :is(.hb-record-device,.rk-device)>.dvr{position:absolute;inset:14.8% 7.65% 17%}
 .dvr{
   --dvr-ink:#10283e;--dvr-mute:#405c70;--dvr-card:#f7fcff;--dvr-well:#e5eef4;--dvr-line:#a8c5d8;
