@@ -4915,6 +4915,57 @@ body.is-touch:has(#overlay:not(.hidden)>.lv3) :is(#skillBar,#bonkBar,#tDash,#tJu
 @media (min-width:761px) and (min-height:501px){#tPause{left:auto!important;right:206px!important;top:18px!important}}
 @media (min-width:761px) and (max-width:1100px) and (min-height:501px){.hud-hp{width:170px!important}.hud-main{min-width:170px!important}}
 
+/* Accesos del inicio */
+#overlay .realhub.hb .hub-shortcuts{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;box-sizing:border-box;
+  padding:7px;border:1px solid var(--m-cardline);border-radius:15px;
+  background:color-mix(in srgb,var(--m-sunk) 94%,transparent);
+  box-shadow:inset 0 1px color-mix(in srgb,var(--m-card) 76%,transparent),0 5px 13px #04112736;
+}
+#overlay .realhub.hb .hub-shortcuts .hb-tile{
+  display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto 1fr;
+  place-items:center;align-content:start;gap:3px!important;min-height:0!important;height:auto!important;
+  padding:6px 3px!important;border:1px solid color-mix(in srgb,var(--tc) 33%,var(--m-cardline))!important;
+  border-radius:10px!important;
+  background:linear-gradient(155deg,color-mix(in srgb,var(--m-card) 84%,var(--tc)),var(--m-card) 62%)!important;
+  color:var(--m-text)!important;box-shadow:0 2px 3px #0a14201a!important;transform:none;
+  text-align:center;line-height:1.15;
+}
+#overlay .realhub.hb .hub-shortcuts .hb-tile>i{
+  width:40px!important;height:40px!important;margin:0!important;border-radius:50%!important;
+  background:radial-gradient(circle,color-mix(in srgb,var(--tc) 27%,var(--m-well,var(--m-sunk))),transparent 72%)!important;
+}
+#overlay .realhub.hb .hub-shortcuts .hb-tile>i .nm-ic{width:38px!important;height:38px!important}
+#overlay .realhub.hb .hub-shortcuts .hb-tile>b{
+  font-size:clamp(11px,1.2vw,15px)!important;line-height:1.15;max-width:100%;
+  white-space:normal;text-overflow:clip;overflow-wrap:anywhere;
+}
+#overlay .realhub.hb .hub-shortcuts .hb-tile>small{
+  display:block!important;font-size:10.5px!important;line-height:1.15;max-width:100%;
+  color:var(--m-soft)!important;white-space:normal;overflow-wrap:anywhere;
+}
+#overlay .realhub.hb .hub-shortcuts .hb-tile>.nm-dot{top:6px;right:6px}
+#overlay .realhub.hb .hub-shortcuts .hb-tile:focus-visible{
+  outline:2px solid var(--m-acc);outline-offset:-2px;
+}
+@media (min-width:1050px) and (min-height:600px){
+  #overlay .realhub.hb .hub-shortcuts .hb-tile{
+    grid-template-columns:42px minmax(0,1fr);grid-template-rows:1fr 1fr;gap:2px 6px!important;
+    justify-items:start;align-items:end;padding:7px!important;text-align:start;
+  }
+  #overlay .realhub.hb .hub-shortcuts .hb-tile>i{grid-row:1 / span 2;align-self:center}
+  #overlay .realhub.hb .hub-shortcuts .hb-tile>small{align-self:start}
+}
+@media (orientation:landscape) and (max-height:500px){
+  #overlay .realhub.hb .hub-shortcuts{padding:4px;gap:4px!important}
+  #overlay .realhub.hb .hub-shortcuts .hb-tile{padding:4px 3px!important}
+  #overlay .realhub.hb .hub-shortcuts .hb-tile>i{width:34px!important;height:34px!important}
+  #overlay .realhub.hb .hub-shortcuts .hb-tile>i .nm-ic{width:33px!important;height:33px!important}
+}
+@media (prefers-reduced-motion:reduce){
+  #overlay .realhub.hb .hub-shortcuts .hb-tile{transition:none!important}
+}
+
 </style>
 </head>
 <body>
@@ -6856,7 +6907,7 @@ function showSelect(){
               <span class="nm-eh"><b>Encargos</b><small>Hoy · ${daily.done}/${daily.all}</small></span>
             </button>
           </div>
-          <div class="hb-tiles nm-tiles">
+          <div class="hb-tiles nm-tiles hub-shortcuts" role="group" aria-label="Accesos del menú principal">
             <button type="button" class="hb-tile t1" id="btnColl" aria-label="Digidex: ${dex.done} de ${dex.total} Digimon"><i><img class="nm-ic" src="ui/hub/digivice/digidex.png" alt=""></i><b>Digidex</b><small>${dex.done}/${dex.total} Digimon</small></button>
             <button type="button" class="hb-tile t2" id="btnGacha" aria-label="Laboratorio${labReady ? ': ' + labReady + ' mejoras disponibles' : ''}"><i><img class="nm-ic" src="ui/hub/digivice/laboratorio.png" alt=""></i><b>Laboratorio</b><small>${labReady ? labReady + (labReady === 1 ? ' mejora' : ' mejoras') : 'Mejoras'}</small>${labReady ? '<em class="nm-dot" aria-hidden="true"></em>' : ''}</button>
             <button type="button" class="hb-tile t3" id="mMaps" aria-label="Mapas: ${safeText(MAPS[runMap].name)}"><i><img class="nm-ic" src="ui/hub/digivice/mapas.png" alt=""></i><b>Mapas</b><small>${safeText(MAPS[runMap].name)}</small></button>
