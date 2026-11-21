@@ -5555,7 +5555,7 @@ function sheetOf(url){
   const m = /([^/]+)\.(?:png|webp)(?:\?[^#]*)?$/.exec(url || '');
   const id = m && (m[1] === 'ogremon' ? 'tank' : m[1]);
   if (!ANIM_IDS.has(id)) return null;
-  const version = id === 'agumon_0_galactico' ? '?arte=armadura' : id.endsWith('_galactico') ? '?arte=retratos' : '';
+  const version = id.endsWith('_galactico') ? '?arte=' + (id.endsWith('_0_galactico') ? 'trajes' : 'retratos') : '';
   return `sprites/anim/${id}.webp${version}`;
 }
 const animTexs = [];   // texturas compartidas (enemigos del mismo tipo marcan el paso a la vez)
