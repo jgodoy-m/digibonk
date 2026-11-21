@@ -8331,6 +8331,7 @@ function startGame(key, resume){
   }, 0));
 }
 function buildRun(key, resume, week = isRetoRun() ? (resume?.g.weeklyWeek ?? weekNum(resume?.at)) : null){
+  basicAttackArt(key);
   annClear();
   // El botón Jugar muestra el último Digimon con el que se jugó
   if (CHARS[key]) { selectedKey = key; try { localStorage.setItem('digibonk3d-last-choice', key); } catch(e){} }
@@ -9010,14 +9011,16 @@ function clawLine(x0, z0, x1, z1){
   m.scale.set(len, 1, 0.5);
   world.add(m);
   g.sk.beams.push({m, t: 0.04});
-  const c = fxMesh('claw', 2.2, 0xffffff);
+  const art = basicAttackArt('gatomon');
+  const c = fxMesh(art || 'claw', 2.2, 0xffffff, !art);
   c.position.set(x1, 1.1 + terrainH(x1, z1), z1);
   c.rotation.y = Math.random()*Math.PI;
   world.add(c);
   g.sk.beams.push({m: c, t: 0});
 }
-function castZone(x, z, delay, r, dmg){
-  const mesh = new THREE.Mesh(FX_PLANE, fxMatOwn('rune', 0xb388ff, 0.6));   // círculo mágico que gira y estalla
+function castZone(x, z, delay, r, dmg, basic = false){
+  const art = basic ? basicAttackArt('wizardmon') : null;
+  const mesh = new THREE.Mesh(FX_PLANE, fxMatOwn(art || 'rune', art ? 0xffffff : 0xb388ff, 0.6, !art));   // círculo mágico que gira y estalla
   mesh.scale.set(2*r, 1, 2*r);
   mesh.position.set(x, terrainH(x, z) + 0.07, z);
   world.add(mesh);
@@ -9047,7 +9050,7 @@ function updateKindAttacks(dt){
     const far = nearestIn(p.x, p.z, 14*p.area);
     if (far){
       const fd = dist2(far.x, far.z, p.x, p.z) || 1;
-      fireProjectile(p.x, p.z, (far.x - p.x)/fd*22, (far.z - p.z)/fd*22, ch.dmg*p.dmg*0.6, 0.7*p.area, 0xffb74d, {pierce: 1 + p.count, fx: 'fire', big: 1.6});
+      fireProjectile(p.x, p.z, (far.x - p.x)/fd*22, (far.z - p.z)/fd*22, ch.dmg*p.dmg*0.6, 0.7*p.area, 0xffb74d, {pierce: 1 + p.count, fx: 'fire', big: 1.6, art: ch.id});
     }
     if (hit || far){ g.wCd = ch.cd * p.cdMul; playBasicAttackFx(); if (hit) spawnRing(p.x + dx*R*0.55, p.z + dz*R*0.55, 0xffb74d, R*0.6, 0.25); }
     else g.wCd = 0.1;
@@ -9081,11 +9084,13 @@ function updateKindAttacks(dt){
       if (e.hp > 0 && dist2(e.x, e.z, p.x, p.z) < R + e.r){ hurt(e, ch.dmg*p.dmg); e.slowT = 2 + 0.3*(p.count - 1); }
     }
     spawnRing(p.x, p.z, 0x81d4fa, R, 0.5);
+    const art = basicAttackArt('frigimon');
+    if (art) spawnAttackEffect(art, p, 0xffffff, {size: R*1.1, turn: Math.PI/3, life: 0.5, additive: false});
   }
   if (ch.kind === 'zone' && g.wCd <= 0 && g.enemies.length){
     g.wCd = ch.cd * p.cdMul; playBasicAttackFx();
     const near = g.enemies.filter(e => e.hp > 0 && dist2(e.x, e.z, p.x, p.z) < 16).sort(() => Math.random() - 0.5);
-    for (let i = 0; i < Math.min(p.count, near.length); i++) castZone(near[i].x, near[i].z, 0.5, 3*p.area, ch.dmg*p.dmg);
+    for (let i = 0; i < Math.min(p.count, near.length); i++) castZone(near[i].x, near[i].z, 0.5, 3*p.area, ch.dmg*p.dmg, true);
   }
   // Torretas: disparan al enemigo más cercano y desaparecen a los 8 s
   for (const t of g.turrets){
@@ -9097,7 +9102,7 @@ function updateKindAttacks(dt){
     if (!best) continue;
     t.cd = 0.5 * p.cdMul;
     const d = bd || 1;
-    fireProjectile(t.x, t.z, (best.x - t.x)/d*15, (best.z - t.z)/d*15, ch.dmg*p.dmg, 1, 0xffd54f, {pierce: 1, fx: 'gear'});
+    fireProjectile(t.x, t.z, (best.x - t.x)/d*15, (best.z - t.z)/d*15, ch.dmg*p.dmg, 1, 0xffd54f, {pierce: 1, fx: 'gear', art: t.extra ? null : ch.id});
   }
   g.turrets = g.turrets.filter(t => { if (t.t > 0) return true; world.remove(t.mesh); return false; });
   // Círculos mágicos: estallan al acabar su cuenta atrás
@@ -9772,7 +9777,7 @@ function spawnMagnetDrop(x, z){
   g.drops.push({x, z, mesh, taken: false});
 }
 function fireProjectile(x, z, vx, vz, dmg, life, color, o = null){
-  const mesh = projMesh(color, o && o.fx);
+  const mesh = projMesh(color, o && o.fx, o && o.art);
   mesh.position.set(x, 0.9 + terrainH(x, z), z);
   aimMesh(mesh, vx, vz);
   if (o && o.big) mesh.scale.multiplyScalar(o.big);
@@ -9981,7 +9986,7 @@ function update(dt, elapsed = dt){
     for (let i = 0; i < Math.min(p.count, sorted.length); i++){
       const e = sorted[i], d = dist2(e.x, e.z, p.x, p.z) || 1;
       fireProjectile(p.x, p.z, (e.x-p.x)/d*14, (e.z-p.z)/d*14, ch.dmg*p.dmg, 1.6, ch.splash ? 0xff7043 : ch.pierce > 2 ? 0xb2ebf2 : ch.slow ? 0x4fc3f7 : 0xffb74d,
-        {pierce: ch.pierce || 0, splash: ch.splash ? ch.splash*p.area : 0, slow: ch.slow || 0, big: ch.pierce > 2 ? 1.6 : ch.splash ? 1.25 : 1, fx: ch.fx});
+        {pierce: ch.pierce || 0, splash: ch.splash ? ch.splash*p.area : 0, slow: ch.slow || 0, big: ch.pierce > 2 ? 1.6 : ch.splash ? 1.25 : 1, fx: ch.fx, art: ch.id});
     }
   }
   if (ch.kind === 'ring' && g.wCd <= 0){
@@ -9989,7 +9994,7 @@ function update(dt, elapsed = dt){
     const n = 6*p.count, off = Math.random()*Math.PI*2;
     for (let i = 0; i < n; i++){
       const an = off + i/n*Math.PI*2;
-      fireProjectile(p.x, p.z, Math.cos(an)*9, Math.sin(an)*9, ch.dmg*p.dmg, 1.1, 0x4fc3f7, {pierce: ch.pierce || 0, fx: ch.fx});   // alcance 10 m
+      fireProjectile(p.x, p.z, Math.cos(an)*9, Math.sin(an)*9, ch.dmg*p.dmg, 1.1, 0x4fc3f7, {pierce: ch.pierce || 0, fx: ch.fx, art: ch.id});   // alcance 10 m
     }
   }
 
@@ -10022,11 +10027,13 @@ function update(dt, elapsed = dt){
     g.orbitA += dt*3.6;
     const n = p.count + 1, R = 3.2*p.area;
     while (g.blades.length < n){
-      const m = fxMesh('leaf', 1.7, 0xffffff, false);
+      const m = fxMesh(basicAttackArt(ch.id) || 'leaf', 1.7, 0xffffff, false);
       world.add(m); g.blades.push(m);
     }
     while (g.blades.length > n){ world.remove(g.blades.pop()); }
+    const bladeArt = basicAttackArt(ch.id);
     for (let i = 0; i < n; i++){
+      if (bladeArt) g.blades[i].material = fxMat(bladeArt, 0xffffff, false);
       const an = g.orbitA + i*Math.PI*2/n;
       const bx = p.x + Math.cos(an)*R, bz = p.z + Math.sin(an)*R;
       g.blades[i].position.set(bx, 0.9 + terrainH(bx, bz), bz);
@@ -10559,6 +10566,18 @@ const matCache = {};
    Cada ataque tiene su forma: fuego, burbuja, rayo, viento, hoja, engranaje, estrella, círculo mágico...
    Se dibujan una vez en un canvas y se usan en planos horizontales con mezcla aditiva (brillan sobre el suelo). */
 const FX_TEX = {};
+const FX_BASIC_REQUESTS = new Set();
+function basicAttackArt(key){
+  if (!SEASONS.adventure.chars.includes(key)) return null;
+  const kind = 'basic-' + key;
+  if (FX_TEX[kind]) return kind;
+  if (!FX_BASIC_REQUESTS.has(key)){
+    FX_BASIC_REQUESTS.add(key);
+    const texture = loader.load('ui/ataques/' + key + '.png', loaded => { FX_TEX[kind] = loaded; });
+    texture.colorSpace = THREE.SRGBColorSpace;
+  }
+  return null;
+}
 function fxTex(kind){
   if (FX_TEX[kind]) return FX_TEX[kind];
   const S = 128, c = document.createElement('canvas'); c.width = c.height = S;
@@ -10704,7 +10723,7 @@ const FX_PLANE = new THREE.PlaneGeometry(1, 1);
 FX_PLANE.rotateX(-Math.PI/2);   // plano horizontal: se ve bien con la cámara desde arriba
 const FX_MATS = {};
 // Marcas en el suelo: se dibujan sin prueba de profundidad para que las laderas no las corten
-const FX_GROUND = new Set(['rune', 'target', 'mine', 'wave', 'dmark', 'lane']);
+const FX_GROUND = new Set(['rune', 'basic-wizardmon', 'target', 'mine', 'wave', 'dmark', 'lane']);
 // Material compartido por forma y color (para proyectiles: muchos a la vez)
 function fxMat(kind, color = 0xffffff, add = true){
   const k = kind + ':' + color + ':' + add;
@@ -10721,10 +10740,11 @@ function fxMesh(kind, size, color, add){
 }
 // Forma de proyectil según su color de siempre (así no hay que tocar cada llamada)
 const FX_OF_COLOR = {0xff7043: 'fire', 0xffb74d: 'fire', 0x4fc3f7: 'bluefire', 0xb2ebf2: 'wind', 0xffd54f: 'gear', 0xffe082: 'star', 0xce93d8: 'blade', 0x80deea: 'air', 0xff1744: 'dark', 0xff6e40: 'dark', 0x7b1fa2: 'dark'};
-function projMesh(color, kind){
+function projMesh(color, kind, fighter){
   const k = kind || FX_OF_COLOR[color] || 'glow';
   const size = {fire: 1.3, bluefire: 1.3, greenfire: 1.3, wind: 1.6, gear: 0.9, star: 1.3, blade: 1.4, air: 1.1, bubble: 1.0, spark: 1.4, leaf: 1.2, dark: 1.2}[k] || 1;
-  const m = fxMesh(k, size, 0xffffff, k !== 'leaf' && k !== 'gear');
+  const art = basicAttackArt(fighter);
+  const m = fxMesh(art || k, size, 0xffffff, !art && k !== 'leaf' && k !== 'gear');
   m.userData.fx = k;
   return m;
 }
