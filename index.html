@@ -3444,6 +3444,7 @@ html.reduce-motion .living-actor.swim::after{animation:none!important}
   --shop-shell:#fbf3e7;--shop-header:#f1e1cb;--shop-shelf:#e9d4bd;--shop-selected:#f4d7ad;
   --shop-selected-line:#92521d;--shop-shadow:#452e2233;
   --shop-rim:#a5744c;--shop-rim-light:#ecd4ac;--shop-heading-glow:#fff6e7;
+  --shop-frame-metal:linear-gradient(135deg,#e1b382 1%,#ad784d 29%,#eed4ad 49%,#c58d5d 70%,#8a5938);
 }
 html[data-theme=oscuro] :is(.shop-dialog,.shop-combat-preview){
   --m-text:#ffedd0;--m-soft:#ddcab1;--m-mute:#cbb490;--m-sunk:#18212c;--m-card:#253141;
@@ -3451,14 +3452,17 @@ html[data-theme=oscuro] :is(.shop-dialog,.shop-combat-preview){
   --shop-shell:#17212c;--shop-header:#162131;--shop-shelf:#2d2324;--shop-selected:#523a2b;
   --shop-selected-line:#ffd08a;--shop-shadow:#10162085;
   --shop-rim:#a37b53;--shop-rim-light:#503b2b;--shop-heading-glow:#443023;
+  --shop-frame-metal:linear-gradient(135deg,#d7ad79 1%,#8d6944 29%,#b79266 49%,#835c3d 70%,#be9263);
 }
 #overlay .approved-info-scrim:has(>.shop-dialog){padding:8px}
 #overlay .approved-info-dialog.shop-dialog{
   width:min(1060px,100%)!important;max-width:100%!important;max-height:calc(100dvh - 16px);
   padding:0 0 12px;text-align:start;overscroll-behavior:contain;
-  border:1px solid var(--shop-rim)!important;border-radius:19px!important;
-  background:var(--shop-shell)!important;color:var(--m-text)!important;
-  box-shadow:0 0 0 2px var(--shop-rim-light),0 0 0 3px var(--shop-rim),0 16px 46px #100d17a6!important;
+  border:6px solid transparent!important;border-radius:22px!important;
+  background-color:var(--shop-shell)!important;color:var(--m-text)!important;
+  background-image:linear-gradient(var(--shop-shell),var(--shop-shell)),var(--shop-frame-metal)!important;
+  background-origin:padding-box,border-box!important;background-clip:padding-box,border-box!important;
+  box-shadow:0 0 0 1px #20160f,0 12px 32px #100d1799!important;
   scrollbar-color:var(--shop-rim) var(--shop-shell);
 }
 #overlay .shop-dialog>header{
@@ -3609,6 +3613,7 @@ html[data-theme=oscuro] :is(.shop-dialog,.shop-combat-preview){
   .shop-counter{z-index:2;margin-bottom:clamp(69px,7cqw,83px)}
 }
 @media(max-width:660px){
+  #overlay .approved-info-dialog.shop-dialog{border-width:4px!important;border-radius:17px!important}
   #overlay .shop-dialog>header{gap:7px;padding:8px}
   #overlay .shop-dialog>header::before{flex-basis:34px;border-radius:8px}
   #overlay .shop-dialog>header h2{font-size:clamp(17px,5.3vw,22px)!important}
@@ -3634,9 +3639,9 @@ html[data-theme=oscuro] :is(.shop-dialog,.shop-combat-preview){
   .shop-wallet-unit,.shop-rotation-day{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 }
 @media(max-width:360px){
-  #overlay .shop-dialog>header{gap:5px}
-  #overlay .shop-dialog>header::before{flex-basis:29px}
-  .shop-wallet{padding-inline:5px}
+  #overlay .shop-dialog>header{gap:5px;padding-inline:6px}
+  #overlay .shop-dialog>header::before{flex-basis:26px}
+  .shop-wallet{padding-inline:4px}
 }
 @media(prefers-reduced-motion:reduce){.shop-stage .anim{animation:none}}
 
