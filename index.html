@@ -2977,6 +2977,15 @@ html[data-theme=oscuro] .dvr{
   background:url('ui/hub/records-digivice.png') center/100% 100% no-repeat;
 }
 .rk-device .dvr{position:absolute;inset:14.6% 7.6% 16.6%}
+/* Versión del menú de inicio: los tres filtros en una fila, sin subtítulos, para dejar sitio a la lista */
+.dvr-compact .dvr-scopes{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.dvr-compact .dvr-scopes.rk-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.dvr-compact .dvr-scope{min-height:32px;padding:3px 18px 3px 5px;gap:4px}
+.dvr-compact .dvr-scope>img{width:18px;height:18px}
+.dvr-compact .dvr-scope b{font-size:11px}
+.dvr-compact .dvr-scope small{display:none}
+.dvr-compact .dvr-scope::after{right:7px;width:5px;height:5px;margin-top:-4px}
+.dvr-compact .dvr-foot[hidden]{display:none}
 .rk-device .rk-region{grid-column:1/-1}
 .rk-device .rk-two .dvr-scope:last-child{grid-column:1/-1}
 @media (max-height:560px){
@@ -6286,11 +6295,6 @@ function showSelect(){
   if (g){ scene.remove(world); world = new THREE.Group(); scene.add(world); g = null; }
   hidePause();
   const recs = getRecords();
-  const st = loadJSON('digibonk3d-stats', {});
-  const kills = Object.values(st).reduce((a, x) => a + (x.kills || 0), 0);
-  const savedRecords = loadJSON(TRAINER_RECORDS_KEY, {});
-  const recentRecords = Array.isArray(savedRecords.recent) ? savedRecords.recent : [];
-  const trialTimes = timeTrialMarks(savedRecords.timeTrial, [...recs, ...recentRecords]);
   const d = loadDaily();
   const currentRuns = Math.min(DAILY.runsGoal, d.runs || 0);
   const safeText = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -6385,32 +6389,8 @@ function showSelect(){
           <img class="rw-character rw-agumon" src="ui/personaje_aprobado_agumon.png" alt="">
           <img class="rw-character rw-gabumon" src="ui/personaje_aprobado_gabumon.png" alt="">
         </div>
-        <aside class="hb-record-device" aria-labelledby="hbRecordsTitle">
-          <div class="hb-record-screen dvr">
-            <div class="dvr-head">
-              <img src="ui/hub/digivice/ranking.png" alt="">
-              <span><b id="hbRecordsTitle">Tus récords</b><small id="hbRecordsSub">Récords personales</small></span>
-              <button type="button" class="dvr-pill" id="rhRecords">Mi historial</button>
-            </div>
-            <div class="dvr-tabs" role="tablist" aria-label="Ordenar récords">
-              <button type="button" role="tab" id="hbRecordsKills" aria-selected="true" aria-controls="hbRecordsPanel" data-k="kills" title="Bajas"><img src="ui/hud/ic_bajas.webp" alt=""><span>Bajas</span></button>
-              <button type="button" role="tab" id="hbRecordsTrial" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="trial" title="Contrarreloj"><img src="ui/hub/digivice/reto.png" alt=""><span>Contrarreloj</span></button>
-              <button type="button" role="tab" id="hbRecordsSurvival" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="survival" title="Supervivencia"><img src="ui/hub/digivice/supervivencia.png" alt=""><span>Supervivencia</span></button>
-            </div>
-            <label class="dvr-scope">
-              <img src="ui/hub/digivice/mapas.png" alt="">
-              <span><b id="hbScopeName">Global</b><small id="hbScopeSub">Tus marcas en todos los mapas</small></span>
-              <select id="hbRecordsMap" aria-label="Mapa">
-                <option value="">Global</option>
-                ${MAP_ORDER.map(map => `<option value="${map}">${safeText(MAPS[map].name)}</option>`).join('')}
-              </select>
-            </label>
-            <div class="dvr-list" id="hbRecordsPanel" role="tabpanel" aria-labelledby="hbRecordsKills" tabindex="0">
-              <ol class="dvr-rank" id="hbRank"></ol>
-            </div>
-            <div class="dvr-foot" id="hbRecordsSummary" aria-live="polite"></div>
-            <button type="button" class="dvr-cta" id="hbRecordsOnline">Ver clasificación online</button>
-          </div>
+        <aside class="hb-record-device" aria-labelledby="hbRanking">
+          <section class="hb-record-screen dvr" id="hbRankPanel"></section>
         </aside>
         <footer class="hb-legal">${t('legal')} <button type="button" class="hb-credits" id="hmCredits">Créditos</button></footer>
       </section>
@@ -6493,100 +6473,7 @@ function showSelect(){
     host.querySelector('.approved-info-scrim').onclick=e=>{if(e.target===e.currentTarget)close()};
     host.querySelector('#realClose').focus();
   };
-  document.getElementById('rhRecords').onclick=event=>openInfo('records',event.currentTarget);
-  { const ol = document.getElementById('hbRank'), panel = document.getElementById('hbRecordsPanel');
-    const tabs = [...document.querySelectorAll('.hb-record-screen .dvr-tabs button')];
-    const summary = document.getElementById('hbRecordsSummary');
-    const mapFilter = document.getElementById('hbRecordsMap');
-    const scopeName = document.getElementById('hbScopeName'), scopeSub = document.getElementById('hbScopeSub');
-    let mode = 'kills';
-    const recKey = r => r.key || Object.keys(CHARS).find(k => CHARS[k].name === r.name || (EVO_LINE[k] || []).some(e => e.name === r.name)) || 'agumon';
-    const stat = (label, value) => `<span><b>${safeText(value)}</b><small>${safeText(label)}</small></span>`;
-    const empty = '<li class="dvr-empty">Todavía no hay partidas. ¡Empieza una!</li>';
-    const number = value => Number(value || 0).toLocaleString(LANG);
-    const time = seconds => seconds > 0 ? fmtTime(seconds) : '—';
-    const mapName = map => MAPS[map]?.name || '';
-    const draw = () => {
-      const map = mapFilter.value;
-      scopeName.textContent = map ? mapName(map) : 'Global';
-      scopeSub.textContent = map ? 'Solo las partidas de este mapa' : 'Tus marcas en todos los mapas';
-      if (mode === 'trial'){
-        if (map){
-          const seconds = trialTimes[map];
-          summary.innerHTML = stat('Mejor victoria', time(seconds)) + stat('Estado', seconds ? 'Completado' : 'Pendiente');
-          ol.innerHTML = dvrRow({pos: MAP_ORDER.indexOf(map) + 1, name: mapName(map), note: seconds ? 'Completado' : 'Pendiente', value: time(seconds), top: false});
-          return;
-        }
-        const {maps, completed, total} = timeTrialSummary(trialTimes);
-        summary.innerHTML = stat(completed === maps.length ? 'Tiempo total' : 'Tiempo parcial', time(total))
-          + stat('Mapas completados', `${completed}/${maps.length}`);
-        ol.innerHTML = maps.map(([m, seconds], i) => dvrRow({pos: i + 1, name: mapName(m), note: seconds ? 'Completado' : 'Pendiente', value: time(seconds), top: false})).join('');
-        return;
-      }
-      if (mode === 'survival'){
-        if (map){
-          const wave = Number(localStorage.getItem('digibonk3d-surv-wave-' + map)) || 0;
-          const runs = [...recs, ...recentRecords].filter(r => r?.map === map && r.wave && !r.weekly);
-          const marks = new Map();
-          for (const run of runs){
-            const key = recKey(run);
-            const old = marks.get(key);
-            if (!old || run.t > old.t) marks.set(key, run);
-          }
-          const list = [...marks.values()].sort((a, b) => b.t - a.t);
-          summary.innerHTML = stat('Mejor tiempo registrado', time(list[0]?.t)) + stat('Mejor oleada', wave || '—');
-          ol.innerHTML = list.slice(0, 10).map((run, i) => dvrRow({pos: i + 1, name: run.name, key: recKey(run), chip: 'Ol. ' + run.wave, note: mapName(run.map), value: time(run.t), unit: 'tiempo'})).join('') || empty;
-          return;
-        }
-        const list = Object.keys(CHARS).map(key => [key, Number(survBest(key))])
-          .filter(([, seconds]) => Number.isFinite(seconds) && seconds > 0)
-          .sort((a, b) => b[1] - a[1]);
-        const bestWave = trainerBestWave(savedRecords.wave);
-        summary.innerHTML = stat('Mejor tiempo', time(list[0]?.[1])) + stat('Mejor oleada', bestWave || '—');
-        ol.innerHTML = list.slice(0, 10).map(([key, seconds], i) => dvrRow({pos: i + 1, name: CHARS[key].name, key, note: 'Supervivencia', value: time(seconds), unit: 'tiempo'})).join('') || empty;
-        return;
-      }
-      const best = savedRecords.kills;
-      const runs = best && !recs.some(run => run.key === best.key && run.map === best.map && run.t === best.t && run.kills === best.kills)
-        ? [...recs, best] : recs;
-      const list = runs.filter(run => !map || run.map === map).sort((a, b) => b.kills - a.kills || b.t - a.t);
-      summary.innerHTML = (map ? stat('Partidas registradas', list.length) : stat('Bajas totales', number(kills)))
-        + stat('Más bajas en una partida', list.length ? number(list[0].kills) : '—');
-      ol.innerHTML = list.slice(0, 10).map((run, i) => dvrRow({pos: i + 1, name: run.name, key: recKey(run), chip: run.lvl ? 'Nv ' + run.lvl : '', note: mapName(run.map), value: number(run.kills), unit: 'bajas', icon: 'ui/hud/ic_bajas.webp'})).join('') || empty;
-    };
-    const selectTab = tab => {
-      tabs.forEach(button => {
-        const active = button === tab;
-        button.setAttribute('aria-selected', String(active));
-        button.tabIndex = active ? 0 : -1;
-      });
-      panel.setAttribute('aria-labelledby', tab.id);
-      mode = tab.dataset.k;
-      draw();
-      panel.scrollTop = 0;
-    };
-    tabs.forEach((tab, index) => {
-      tab.onclick = () => selectTab(tab);
-      tab.onkeydown = event => {
-        const target = {
-          ArrowLeft: (index + tabs.length - 1) % tabs.length,
-          ArrowRight: (index + 1) % tabs.length,
-          Home: 0,
-          End: tabs.length - 1
-        }[event.key];
-        if (typeof target !== 'number') return;
-        event.preventDefault();
-        selectTab(tabs[target]);
-        tabs[target].focus();
-      };
-    });
-    mapFilter.onchange = () => { draw(); panel.scrollTop = 0; };
-    document.getElementById('hbRecordsOnline').onclick = () => {
-      Rk.mode = mode === 'survival' ? 'surv' : 'normal';
-      Rk.map = mapFilter.value || runMap;
-      showRanking('select');
-    };
-    draw(); }
+  rankPanel(document.getElementById('hbRankPanel'), true);
   clearInterval(newsTimer);
 }
 // Guía «Cómo jugar». Cada pestaña reúne lo esencial y muestra una escena del propio juego.
@@ -7030,56 +6917,65 @@ async function showRanking(from){
   if (from) Rk.from = from;
   state = 'ranking';
   setHud(false);
-  if (!Rk.map) Rk.map = runMap;
-  const safe = v => String(v).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+  showOverlay('<div class="rk-device"><section class="dvr" id="rkFull"></section></div>');
+  rankPanel(document.getElementById('rkFull'), false);
+}
+// Ranking online pintado en una pantalla del Digivice: el del menú de inicio (compacto) o el de pantalla completa.
+// Cada cambio de pestaña o filtro vuelve a pintar solo esa pantalla y pide de nuevo la clasificación.
+async function rankPanel(root, hub){
+  if (!root) return;
+  if (!Rk.map || !MAPS[Rk.map]) Rk.map = runMap;
+  const safe = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
   const opt = (k, v, label) => `<option value="${v}"${Rk[k] === v ? ' selected' : ''}>${safe(label)}</option>`;
   const tab = (v, icon, label) => `<button type="button" role="tab" data-mode="${v}" aria-selected="${Rk.mode === v}" title="${label}"><img src="${icon}" alt=""><span>${label}</span></button>`;
   const surv = Rk.mode === 'surv';
-  showOverlay(`
-    <div class="rk-device">
-      <section class="dvr" aria-labelledby="rkTitle">
-        <div class="dvr-head">
-          <img src="ui/hub/digivice/ranking.png" alt="">
-          <span><b id="rkTitle">Ranking online</b><small>${safe(MAPS[Rk.map]?.name || '')}${surv ? ' · Supervivencia' : ' · ' + safe(DIFFS[Rk.diff]?.name || '')}</small></span>
-          <button type="button" class="dvr-pill" id="rkBack">← Volver</button>
-        </div>
-        <div class="dvr-tabs" role="tablist" aria-label="Modo">${tab('normal', 'ui/hud/ic_bajas.webp', 'Clásico')}${tab('surv', 'ui/hub/digivice/supervivencia.png', 'Supervivencia')}</div>
-        <div class="dvr-scopes${surv ? ' rk-two' : ''}">
-        <label class="dvr-scope rk-region">
-          <img src="ui/hub/digivice/idioma.png" alt="">
-          <span><b>${Rk.region ? safe(REGIONS[Rk.region]) : 'Mundial'}</b><small>${Rk.region ? 'Solo jugadores de esta región' : 'Todas las regiones'}</small></span>
-          <select data-rk="region" aria-label="Región">${opt('region', '', 'Mundial')}${Object.entries(REGIONS).map(([k, n]) => opt('region', k, n)).join('')}</select>
-        </label>
-          <label class="dvr-scope"><img src="ui/hub/digivice/mapas.png" alt=""><span><b>${safe(MAPS[Rk.map]?.name || '')}</b><small>Mapa</small></span>
-            <select data-rk="map" aria-label="Mapa">${Object.keys(MAPS).map(k => opt('map', k, MAPS[k].name)).join('')}</select></label>
-          ${surv ? '' : `<label class="dvr-scope"><img src="ui/hub/digivice/reto.png" alt=""><span><b>${safe(DIFFS[Rk.diff]?.name || '')}</b><small>Dificultad</small></span>
-            <select data-rk="diff" aria-label="Dificultad">${DIFF_ORDER.map(k => opt('diff', k, DIFFS[k].name)).join('')}</select></label>`}
-        </div>
-        <div class="dvr-list"><ol class="dvr-rank" id="rkList"><li class="dvr-empty">${CLOUD_ON ? 'Cargando…' : 'El ranking online aún no está activado en esta versión.'}</li></ol></div>
-        <p class="dvr-foot dvr-note" id="rkFoot">${surv ? 'Más oleadas primero; a igualdad, más tiempo.' : 'Primero las victorias, de la más rápida a la más lenta; después, quien más aguantó.'}</p>
-      </section>
-    </div>`);
-  document.getElementById('rkBack').onclick = () => Rk.from === 'cloud' ? showCloud() : showSelect();
-  overlay.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => { if (Rk.mode !== b.dataset.mode){ Rk.mode = b.dataset.mode; showRanking(); } });
-  overlay.querySelectorAll('select[data-rk]').forEach(sel => sel.onchange = () => { Rk[sel.dataset.rk] = sel.value; showRanking(); });
+  const rule = surv ? 'Más oleadas primero; a igualdad, más tiempo.' : 'Primero las victorias, de la más rápida a la más lenta; después, quien más aguantó.';
+  const id = hub ? 'hbRanking' : 'rkTitle';
+  root.classList.toggle('dvr-compact', !!hub);
+  root.setAttribute('aria-labelledby', id);
+  root.innerHTML = `
+    <div class="dvr-head">
+      <img src="ui/hub/digivice/ranking.png" alt="">
+      <span><b id="${id}">Ranking online</b><small>${safe(MAPS[Rk.map]?.name)}${surv ? ' · Supervivencia' : ' · ' + safe(DIFFS[Rk.diff]?.name)}</small></span>
+      ${hub ? '' : '<button type="button" class="dvr-pill" data-rk-back>← Volver</button>'}
+    </div>
+    <div class="dvr-tabs" role="tablist" aria-label="Modo">${tab('normal', 'ui/hud/ic_bajas.webp', 'Clásico')}${tab('surv', 'ui/hub/digivice/supervivencia.png', 'Supervivencia')}</div>
+    <div class="dvr-scopes${surv ? ' rk-two' : ''}">
+      <label class="dvr-scope rk-region"><img src="ui/hub/digivice/idioma.png" alt="">
+        <span><b>${Rk.region ? safe(REGIONS[Rk.region]) : 'Mundial'}</b><small>${Rk.region ? 'Solo jugadores de esta región' : 'Todas las regiones'}</small></span>
+        <select data-rk="region" aria-label="Región">${opt('region', '', 'Mundial')}${Object.entries(REGIONS).map(([k, n]) => opt('region', k, n)).join('')}</select></label>
+      <label class="dvr-scope"><img src="ui/hub/digivice/mapas.png" alt=""><span><b>${safe(MAPS[Rk.map]?.name)}</b><small>Mapa</small></span>
+        <select data-rk="map" aria-label="Mapa">${Object.keys(MAPS).map(k => opt('map', k, MAPS[k].name)).join('')}</select></label>
+      ${surv ? '' : `<label class="dvr-scope"><img src="ui/hub/digivice/reto.png" alt=""><span><b>${safe(DIFFS[Rk.diff]?.name)}</b><small>Dificultad</small></span>
+        <select data-rk="diff" aria-label="Dificultad">${DIFF_ORDER.map(k => opt('diff', k, DIFFS[k].name)).join('')}</select></label>`}
+    </div>
+    <div class="dvr-list" tabindex="0"><ol class="dvr-rank" data-rk-list><li class="dvr-empty">${CLOUD_ON ? 'Cargando…' : 'El ranking online aún no está activado en esta versión.'}</li></ol></div>
+    <p class="dvr-foot dvr-note" data-rk-foot${hub ? ' hidden' : ''}>${rule}</p>
+    ${hub ? '<button type="button" class="dvr-cta" data-rk-full>Ver clasificación completa</button>' : ''}`;
+  const redraw = () => rankPanel(root, hub);
+  root.querySelector('[data-rk-back]')?.addEventListener('click', () => Rk.from === 'cloud' ? showCloud() : showSelect());
+  root.querySelector('[data-rk-full]')?.addEventListener('click', () => showRanking('select'));
+  root.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => { if (Rk.mode !== b.dataset.mode){ Rk.mode = b.dataset.mode; redraw(); root.querySelector(`[data-mode="${Rk.mode}"]`)?.focus(); } });
+  root.querySelectorAll('select[data-rk]').forEach(sel => sel.onchange = () => { Rk[sel.dataset.rk] = sel.value; redraw(); root.querySelector(`select[data-rk="${sel.dataset.rk}"]`)?.focus(); });
   if (!CLOUD_ON) return;
-  const want = JSON.stringify(Rk);
+  const want = JSON.stringify([Rk.mode, Rk.map, Rk.diff, Rk.region]);
+  root.dataset.want = want;
   let rows;
   try {
     const args = {p_mode: Rk.mode, p_map: Rk.map, p_diff: Rk.diff, p_region: Rk.region || null, p_limit: 50};
     rows = Cloud.st.at || (cloudEnabled() && !Cloud.st.expired) ? await cloudRpc('get_leaderboard', args)
       : await fetch(CLOUD_CFG.url.replace(/\/$/, '') + '/rest/v1/rpc/get_leaderboard', {method: 'POST', headers: {apikey: CLOUD_CFG.key, 'Content-Type': 'application/json'}, body: JSON.stringify(args)}).then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)));
   } catch(e){ rows = null; }
-  const ol = document.getElementById('rkList');
-  if (!ol || state !== 'ranking' || want !== JSON.stringify(Rk)) return;
-  if (!rows){ ol.innerHTML = '<li class="dvr-empty">No se pudo cargar el ranking. Comprueba la conexión.</li>'; return; }
+  const ol = root.querySelector('[data-rk-list]');
+  if (!ol || !root.isConnected || root.dataset.want !== want) return;
+  if (!Array.isArray(rows)){ ol.innerHTML = '<li class="dvr-empty">No se pudo cargar el ranking. Comprueba la conexión.</li>'; return; }
   const value = r => surv ? 'Oleada ' + r.wave : fmtTime(r.t);
   const unit = r => surv ? fmtTime(r.t) : r.win ? 'Victoria' : 'Sin victoria';
   ol.innerHTML = rows.map(r => dvrRow({pos: r.pos, name: r.name + (r.me ? ' (tú)' : ''), key: CHARS[r.digimon] ? r.digimon : '', chip: r.region || '',
     note: `${Number(r.kills || 0).toLocaleString(LANG)} bajas · Nv ${r.lvl}`, value: value(r), unit: unit(r), rowUnit: true, me: r.me})).join('')
     || '<li class="dvr-empty">Nadie ha entrado aún en este ranking. ¡Sé el primero!</li>';
-  const mine = rows.find(r => r.me), foot = document.getElementById('rkFoot');
-  if (mine && foot) foot.textContent = `Tu puesto: ${mine.pos} · ${value(mine)}`;
+  const mine = rows.find(r => r.me), foot = root.querySelector('[data-rk-foot]');
+  if (mine && foot){ foot.textContent = `Tu puesto: ${mine.pos} · ${value(mine)}`; foot.hidden = false; }
 }
 // Créditos y licencias: lo que consta en sprites/CREDITS.txt, textures/CREDITOS.txt y fonts/LICENCIAS.txt.
 // Los recuadros naranjas marcan lo que falta verificar antes de publicar (permisos de sprites y autoría)
