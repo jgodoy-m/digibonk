@@ -5602,7 +5602,7 @@ function sheetOf(url){
   const id = m && (m[1] === 'ogremon' ? 'tank' : m[1]);
   if (!ANIM_IDS.has(id)) return null;
   const version = id.endsWith('_reno') ? '?arte=reno-animado' :
-    id.endsWith('_festival') ? '?arte=trajes-navidad' :
+    id.endsWith('_festival') ? '?arte=trajes-navidad-v2' :
     id.endsWith('_lcd') ? '?arte=lcd-animado' :
     /^(?:agumon|patamon)_[1-3]_galactico$/.test(id) ? '?arte=ajustes-galacticos' :
     id.endsWith('_galactico') ? '?arte=' + (id.endsWith('_0_galactico') ? 'trajes' : 'evoluciones') : id.endsWith('_variocolor') ? '?arte=variocolor-v2' : '';
