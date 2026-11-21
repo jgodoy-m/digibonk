@@ -5560,6 +5560,10 @@ function tex(url){
 // Hojas de animación (sprites/anim/<id>.webp, WebP sin pérdida): 5 fotogramas en fila -> reposo 1, reposo 2, ataque 1, ataque 2, daño
 const ANIM_N = 5;
 const ANIM_IDS = new Set([
+  "biyomon_0_festival", "biyomon_1_festival", "biyomon_2_festival",
+  "gomamon_0_festival", "gomamon_1_festival", "gomamon_2_festival",
+  "palmon_0_festival", "palmon_1_festival", "palmon_2_festival",
+  "tentomon_0_festival", "tentomon_1_festival", "tentomon_2_festival",
   "biyomon_0_variocolor", "biyomon_1_variocolor", "biyomon_2_variocolor",
   "gomamon_0_variocolor", "gomamon_1_variocolor", "gomamon_2_variocolor",
   "palmon_0_variocolor", "palmon_1_variocolor", "palmon_2_variocolor",
@@ -5585,7 +5589,8 @@ function sheetOf(url){
   const m = /([^/]+)\.(?:png|webp)(?:\?[^#]*)?$/.exec(url || '');
   const id = m && (m[1] === 'ogremon' ? 'tank' : m[1]);
   if (!ANIM_IDS.has(id)) return null;
-  const version = id.endsWith('_lcd') ? '?arte=lcd-animado' :
+  const version = id.endsWith('_festival') ? '?arte=trajes-navidad' :
+    id.endsWith('_lcd') ? '?arte=lcd-animado' :
     /^(?:agumon|patamon)_[1-3]_galactico$/.test(id) ? '?arte=ajustes-galacticos' :
     id.endsWith('_galactico') ? '?arte=' + (id.endsWith('_0_galactico') ? 'trajes' : 'evoluciones') : id.endsWith('_variocolor') ? '?arte=variocolor-v2' : '';
   return `sprites/anim/${id}.webp${version}`;
@@ -14897,6 +14902,10 @@ const PLAYER_ICONS = [
 // Iconos de skin: se desbloquean al tener la skin en alguna etapa (los de skins ocultas solo se ven al tenerlas)
 const SKIN_ICON_ART = {galactico:'galaxia', lcd:'lcd-v2', variocolor:'variocolor-v2', reno:'astas-integradas', festival:'navidad-gabumon'};
 const SKIN_ICONS = [
+  {key:'biyomon', skin:'festival'},
+  {key:'gomamon', skin:'festival'},
+  {key:'palmon', skin:'festival'},
+  {key:'tentomon', skin:'festival'},
   {key:'biyomon', skin:'variocolor'},
   {key:'gomamon', skin:'variocolor'},
   {key:'palmon', skin:'variocolor'},
