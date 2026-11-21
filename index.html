@@ -4000,6 +4000,13 @@ html[data-theme=oscuro] #overlay .realhub.hb .hb-user-card{
 }
 #overlay .realhub.hb .hb-account-actions .hb-guide{width:40px;padding:0;background:var(--hb-chip-bg)}
 #overlay .realhub.hb .hb-guide img{width:27px;height:27px;object-fit:contain}
+#overlay .realhub.hb .hb-account-actions .hb-friends{padding-inline:7px 11px}
+#overlay .realhub.hb .hb-friends img{width:32px;height:32px;object-fit:contain;flex:none}
+@media(max-width:760px),(orientation:landscape) and (max-height:500px){
+  #overlay .realhub.hb .hb-account-actions .hb-friends{padding-inline:5px}
+  #overlay .realhub.hb .hb-friends span{display:none}
+  #overlay .realhub.hb .hb-friends img{width:26px;height:26px}
+}
 #overlay .realhub.hb .hb-account-actions .hb-account{
   border-color:#3878da;background:linear-gradient(180deg,#2e75db,#1e51ad);color:#fff;
   box-shadow:0 3px 0 #173976,inset 0 1px #ffffff45
@@ -6598,6 +6605,7 @@ function showSelect(){
             <button type="button" class="hb-chip" id="rhDex" aria-label="Digidex: ${dex.done} de ${dex.total} Digimon" title="Digidex"><img src="ui/hub/digivice/digidex.png" alt=""><span>${dex.done}/${dex.total}</span></button>
           </div>
           <div class="hb-account-actions">
+            <button type="button" class="hb-friends" id="rhFriends" aria-label="Amigos" title="Amigos" aria-haspopup="dialog"><img src="ui/hub/digivice/amigos.png" alt=""><span>Amigos</span></button>
             <button type="button" class="hb-guide" id="btnHelp" aria-label="Guía" title="Guía"><img src="ui/hub/digivice/guia.png" alt=""></button>
             ${showAccount ? `<button type="button" class="hb-account" id="rhAccount">${Cloud.st.email ? 'Nube y ranking' : 'Vincular email'}</button>` : ''}
             <button type="button" class="hb-out" id="hmLogout" aria-label="Cerrar sesión" title="Cerrar sesión"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h5m-1-8h11m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Cerrar sesión</span></button>
@@ -6686,6 +6694,9 @@ function showSelect(){
   ['hbGacha2','hbGacha3'].forEach(id => { const el = document.getElementById(id); if (el) el.onclick = () => { if (GACHA_SOON) { hmSoon('Incubadora: Próximamente'); return; } gxBanner = 'std'; showGacha(); }; });
   { const el = document.getElementById('hbLab2'); if (el) el.onclick = showLab; }
   document.getElementById('btnHelp').onclick=showHelp;
+  document.getElementById('rhFriends').onclick = ({currentTarget}) => {
+    menuModal('Amigos', '<p>Próximamente</p>', () => currentTarget.focus({preventScroll:true}));
+  };
   document.getElementById('btnAjustes').onclick=showSettings;
   // Botones del menú principal aún sin contenido: muestran un aviso breve en lugar de abrir nada
   const hmSoon=(msg)=>{const m=document.getElementById('hmMsg'); if(!m) return; m.textContent=msg||'Próximamente'; clearTimeout(m._t); m._t=setTimeout(()=>{m.textContent='';},1800);};
