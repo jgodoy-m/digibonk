@@ -3345,99 +3345,129 @@ html.reduce-motion .living-actor.swim::after{animation:none!important}
 #overlay .realhub.hb .nm-dot{animation:lv-dot 1.8s ease-in-out infinite}
 @keyframes lv-dot{0%,100%{scale:1}50%{scale:1.25}}
 @media(prefers-reduced-motion:reduce){#overlay .realhub.hb :is(.nm-play,.nm-event,.nm-stack,.nm-tiles) *,#overlay .realhub.hb :is(.nm-play,.lv-sheen)::before,#overlay .realhub.hb .lv-sheen::after{animation:none!important}#overlay .realhub.hb .lv-fx{display:none}}
-/* Escaparate semanal */
+/* Tienda semanal: puesto de Tokomon */
 #overlay .approved-info-dialog.shop-dialog{
-  width:min(1030px,calc(100vw - 30px))!important;max-width:none!important;max-height:calc(100dvh - 24px);
-  padding:clamp(12px,2.4vw,25px);text-align:start;overscroll-behavior:contain
+  --m-text:#ffedd0;--m-soft:#ddcab1;--m-mute:#cbb490;--m-sunk:#18212c;--m-card:#202b39;
+  --m-line2:#927455;--m-acc:#ffd48c;--m-good:#baedaa;
+  width:min(1060px,calc(100vw - 20px))!important;max-width:none!important;max-height:calc(100dvh - 16px);
+  padding:0 0 12px;text-align:start;overscroll-behavior:contain;
+  border:1px solid #917052!important;background:#17212c!important;color:var(--m-text)!important;
 }
 #overlay .shop-dialog>header{
-  display:flex;align-items:center;gap:12px;min-height:65px;margin:0 0 8px;padding:9px 12px 9px 10px;
-  border-radius:12px;background:#15284b;
-  background-image:linear-gradient(90deg,#13294bf7 10%,#182748b8 62%,#2034516b),url(ui/hub/tienda-escaparate.webp);
-  background-position:center 38%;background-size:cover;
-  box-shadow:inset 0 0 0 1px #748eba80
-}
-#overlay .shop-dialog>header::before{
-  content:"";flex:0 0 clamp(38px,6vw,56px);height:clamp(38px,6vw,56px);border:1px solid #fdcf765e;border-radius:10px;
-  background:#112748 url(ui/hub/digivice/tienda.png) center / 79% no-repeat
+  display:flex;align-items:center;gap:8px;margin:0;padding:8px 14px;background:#162131;
+  border-bottom:1px solid #917052!important;
 }
 #overlay .shop-dialog>header h2{
-  flex:1;min-width:0;padding:0;margin:0;background:none;color:#fff3d5!important;
-  text-shadow:0 2px #0d172c;font:900 clamp(22px,4.5vw,34px)/1.05 Nunito,system-ui,sans-serif;letter-spacing:-.02em;
-  text-align:start;overflow-wrap:anywhere
+  flex:1;min-width:0;padding:0;margin:0!important;background:none;color:var(--m-text)!important;
+  font:700 clamp(20px,3.6vw,31px)/1.12 Georgia,serif!important;box-shadow:none;transform:none;
 }
-#overlay .shop-dialog>header #realClose{
-  flex:none;background:#13233f!important;color:#fff3d5!important;border-color:#6583b3!important
-}
+#overlay .shop-dialog>header #realClose{flex:0 0 36px;height:36px;margin:0}
 #overlay .shop-dialog #realDone{display:none}
-.shop-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:13px;
-  padding:3px 4px;color:var(--m-soft);font-size:13px;font-weight:800}
+.shop-meta{margin:6px 14px;color:var(--m-soft);font-size:12px}
 .shop-wallet,.shop-price{display:inline-flex;align-items:center;gap:5px;color:var(--m-text);font-weight:900;font-variant-numeric:tabular-nums}
-.shop-wallet{background:var(--m-sunk);border:1px solid var(--m-line2);border-radius:9px;padding:5px 9px}
+.shop-wallet{flex:none;white-space:nowrap;background:var(--m-sunk);border:1px solid var(--m-line2);border-radius:7px;padding:4px 7px;font-size:13px}
 .shop-wallet img,.shop-price img{width:19px;height:19px;object-fit:contain;flex:none}
-.shop-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px}
-.shop-option{
-  display:grid;grid-template-rows:64px auto auto;justify-items:center;gap:3px;min-width:0;
-  border:1px solid var(--m-line2);border-radius:11px;padding:7px;background:var(--m-sunk);color:var(--m-text);
-  font:800 12px/1.15 Nunito,system-ui,sans-serif;text-align:center;cursor:pointer;overflow-wrap:anywhere
-}
-.shop-option[aria-pressed=true]{border-color:#bf872a;background:color-mix(in srgb,var(--m-card) 92%,#efac41);box-shadow:inset 0 -3px #c78c31}
-.shop-option>[class*=shop-art]{width:63px;height:63px}
-.shop-option small{color:var(--m-soft);font-size:11px}
-.shop-display{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);border:1px solid var(--m-line2);border-radius:15px;overflow:hidden;background:var(--m-sunk)}
+.shop-stall{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr);container-type:inline-size}
+.shop-display,.shop-counter{grid-area:1/1}
 .shop-stage{
-  --shop-plinth-y:69%;
-  display:grid;place-items:center;position:relative;box-sizing:border-box;min-height:244px;padding:23px 16px;
-  background:#172c49 linear-gradient(0deg,#07132891,#0a19302b 58%,#09173238);
-  background-image:linear-gradient(0deg,#07132891,#0a19302b 58%,#09173238),url(ui/hub/tienda-escaparate.webp);
-  background-position:center var(--shop-plinth-y);background-size:cover;
-  box-shadow:inset 0 0 0 1px #8bafde35
+  --shop-plinth-y:58%;
+  position:relative;aspect-ratio:16/9;
+  background:#263e47 url(ui/hub/puesto-tokomon.webp) center/100% 100% no-repeat;
 }
 .shop-stage>.shop-art{
-  position:absolute;left:50%;top:var(--shop-plinth-y);width:auto;height:min(69%,205px);aspect-ratio:1;
+  position:absolute;left:50%;top:var(--shop-plinth-y);width:auto;height:43%;aspect-ratio:1;
   transform:translate(calc(0% - var(--shop-anchor-x,50%)),calc(0% - var(--shop-anchor-y,85%)));
-  filter:drop-shadow(0 9px 8px #04091898)
+  filter:drop-shadow(0 5px 3px #19101885);
 }
 .shop-stage .cz-prev{
-  --trainer-title:#c9deff;display:flex;align-items:center;gap:16px;width:min(100%,360px);min-height:110px;box-sizing:border-box;
-  padding:15px;border:1px solid #9fbfff7d;border-radius:13px;background-color:#14263c;color:#f1f7ff;text-align:start
+  --trainer-title:#ffdb9a;position:absolute;left:50%;bottom:calc(100% - var(--shop-plinth-y));transform:translateX(-50%);
+  display:flex;align-items:center;gap:10px;width:min(55%,300px);min-height:76px;box-sizing:border-box;
+  padding:9px 12px;border:1px solid #a88d70;border-radius:10px;background:#162637;color:#ffedcf;text-align:start;
+  box-shadow:0 6px 14px #0b142d88;
 }
-.shop-stage .cz-prev .trainer-portrait{width:66px!important;height:66px!important;flex:none;margin:0}
+.shop-stage .cz-prev .trainer-portrait{width:58px!important;height:58px!important;flex:none;margin:0}
 .shop-stage .cz-prev-copy{display:grid;min-width:0;overflow-wrap:anywhere;font-weight:900}
-.shop-stage .cz-preview-title{color:#c9deff;font-size:12px}
-.shop-display-copy{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;padding:clamp(12px,2.3vw,22px);min-width:0}
-#overlay .shop-display-copy h3{padding:0;margin:0;font:900 clamp(22px,3vw,34px)/1.05 Nunito,system-ui,sans-serif;color:var(--m-text);letter-spacing:-.025em;text-align:start}
-.shop-display-copy small,.shop-quest small{display:block;color:var(--m-soft)}
-.shop-display-copy .shop-tag{border-radius:5px;background:color-mix(in srgb,var(--m-card) 83%,#ffc05b);padding:3px 7px;font-weight:900;color:var(--m-text)}
-.shop-price{font-size:15px}.shop-price del{color:var(--m-mute);font-size:12px}
+.shop-stage .cz-preview-title{color:#ffd48c;font-size:12px}
+.shop-grid{
+  grid-area:2/1;display:flex;align-items:stretch;justify-content:center;gap:7px;padding:8px 10px;
+  border-block:1px solid #785741;background:#2d2324;
+}
+.shop-offer{display:grid;justify-items:stretch;min-width:0;flex:0 1 100px}
+.shop-shelf-label{display:none}
+#overlay .shop-dialog .shop-option{
+  display:grid;align-content:center;justify-items:center;gap:2px;width:100%;min-height:54px;margin:0;
+  padding:4px 6px;border:1px solid var(--m-line2);border-radius:7px;background:#1d2934;color:var(--m-text);
+  font:800 12px/1.15 Nunito,system-ui,sans-serif;text-align:center;cursor:pointer;overflow-wrap:anywhere;
+}
+#overlay .shop-dialog .shop-option[aria-pressed=true]{border-color:#ffd08a;background:#523a2b;box-shadow:inset 0 -2px #d2904e}
+.shop-option>.shop-art{width:42px;height:42px}
 .shop-art{display:grid;place-items:center;min-width:0}
 .shop-sprite{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated}
 .shop-art .rw-frame{display:grid;place-items:center;width:100%;height:100%}
 .shop-art .rw-frame img{width:66%;height:66%;border-radius:50%;object-fit:cover}
-.shop-art .title-badge-art{width:100%;height:100%}
-.shop-actions{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:3px}
-#overlay .shop-dialog :is(.shop-aux,.shop-buy,.shop-unlock,.shop-quest button,#shopRedeem){
-  min-height:36px;margin:0;padding:5px 9px;border:1px solid var(--m-line2);border-radius:8px;background:var(--m-card);color:var(--m-text);
-  font:800 13px/1.2 Nunito,system-ui,sans-serif;cursor:pointer
+.shop-art .title-badge-art{display:block;width:100%;height:100%;max-height:100%;object-fit:contain}
+.shop-counter{
+  position:relative;box-sizing:border-box;align-self:end;justify-self:center;max-width:calc(100% - 18px);margin:0 0 6%;
+  padding:7px 12px;border:1px solid #aa865f;border-radius:8px;background:#18212cf5;
+  box-shadow:0 3px 12px #10162085;
 }
-#overlay .shop-dialog .shop-buy:not(:disabled){background:#f4bb50;color:#251808;border-color:#f4bb50}
-#overlay .shop-dialog .shop-buy:disabled{opacity:.65;cursor:default}
-#overlay .shop-dialog :is(.shop-option,.shop-aux,.shop-buy,.shop-unlock):focus-visible{outline:2px solid var(--m-acc);outline-offset:-2px}
+.shop-display-copy,.shop-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 9px}
+#overlay .shop-display-copy h3{
+  margin:0;padding:0;color:var(--m-text);font:700 clamp(17px,2.4vw,25px)/1.12 Georgia,serif;
+  overflow-wrap:anywhere;text-align:center;
+}
+.shop-display-copy small,.shop-quest small{color:var(--m-soft)}
+.shop-price{font-size:14px}.shop-price del{color:var(--m-mute);font-size:12px}
+#overlay .shop-dialog :is(.shop-aux,.shop-buy,.shop-unlock,.shop-quest button,#shopRedeem){
+  min-height:36px;margin:0;padding:5px 9px;border:1px solid var(--m-line2);border-radius:7px;background:var(--m-card);color:var(--m-text);
+  font:800 13px/1.2 Nunito,system-ui,sans-serif;cursor:pointer;
+}
+#overlay .shop-dialog .shop-buy:not(:disabled){background:#f4bc63!important;color:#251808!important;border-color:#ffe2a8!important}
+#overlay .shop-dialog .shop-buy:disabled{opacity:.72;cursor:default}
+#overlay .shop-dialog button:focus-visible{outline:2px solid var(--m-acc);outline-offset:2px}
 .shop-aux[aria-pressed=true]{box-shadow:inset 0 -2px var(--m-acc)}
 .shop-owned{color:var(--m-good);font-weight:900;font-size:13px}
-.shop-quest{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-top:12px;padding:9px 11px;border:1px solid var(--m-line2);border-radius:10px;background:var(--m-sunk);font-size:13px}
-.shop-quest>div{flex:1}
+.shop-quest{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin:9px 12px 0;
+  padding:8px 10px;border:1px solid var(--m-line2);border-radius:8px;background:var(--m-sunk);font-size:13px;
+}
+.shop-quest>div{flex:1}.shop-quest small{display:block}
 .shop-code{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
 .shop-code input{flex:1;min-width:130px;padding:8px;border:1px solid var(--m-line2);border-radius:8px;background:var(--m-sunk);color:var(--m-text)}
-.shop-code-wrap{margin-top:10px;font-size:13px}.shop-code-wrap summary{cursor:pointer;width:fit-content}
-.shop-msg{margin:7px 0 0;font-size:13px}.shop-msg:empty{display:none}
+.shop-code-wrap,.shop-msg{margin:8px 12px 0;font-size:13px}
+.shop-code-wrap summary{cursor:pointer;width:fit-content}.shop-msg:empty{display:none}
+@media(min-width:661px){
+  .shop-offer:is(.shop-offer-frame,.shop-offer-title){
+    position:absolute;z-index:1;top:12cqw;width:16%;transform:translateX(-50%);justify-items:center;gap:8px;
+  }
+  .shop-offer-frame{left:20%}.shop-offer-title{left:80%}
+  .shop-shelf-label{
+    display:block;padding:4px 11px;border:1px solid #fac88a;border-radius:4px;background:#c98d52;
+    color:#261a17!important;font:700 clamp(16px,2vw,23px)/1.15 Georgia,serif;box-shadow:0 3px 0 #381e15;
+  }
+  #overlay .shop-dialog .shop-offer:not(.shop-offer-skin) button{width:80%;background:#172430e8}
+  #overlay .shop-dialog .shop-offer:not(.shop-offer-skin) button[aria-pressed=true]{background:#523a2b}
+  .shop-offer:not(.shop-offer-skin) .shop-art{width:min(100%,92px);height:clamp(48px,7vw,72px)}
+  .shop-offer:not(.shop-offer-skin) button>b{display:none}
+}
 @media(max-width:660px){
-  .shop-grid{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(92px,26%);overflow:auto;scroll-snap-type:x proximity;padding:2px 2px 5px}
-  .shop-option{scroll-snap-align:start}
-  .shop-display{grid-template-columns:minmax(0,1fr)}
-  .shop-stage{min-height:136px;padding:10px}
+  #overlay .approved-info-dialog.shop-dialog{width:calc(100vw - 12px)!important}
+  #overlay .shop-dialog>header{padding:6px 8px}
+  .shop-meta{margin:4px 8px}
+  .shop-wallet{font-size:11px}
+  .shop-wallet img{width:15px;height:15px}
+  .shop-stage{--shop-plinth-y:64.3%;aspect-ratio:5/4;background-image:url(ui/hub/puesto-tokomon-movil.webp)}
+  .shop-stage>.shop-art{height:44%}
+  .shop-grid{justify-content:start;gap:5px;padding:6px;overflow-x:auto;scroll-snap-type:x proximity}
+  .shop-offer{flex:1 0 55px;scroll-snap-align:start}
+  #overlay .shop-dialog .shop-option{padding:3px 2px;font-size:11px;min-height:58px}
+  .shop-option>b{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .shop-option>.shop-art{width:34px;height:34px}
+  .shop-counter{grid-area:3/1;width:100%;max-width:none;margin:0;border-width:0 0 1px;border-radius:0;padding:7px}
+  #overlay .shop-dialog .shop-actions button{min-height:44px}
 }
 @media(prefers-reduced-motion:reduce){.shop-stage .anim{animation:none}}
+
 .attack-preview.shop-combat-preview{width:min(700px,calc(100vw - 24px));padding:clamp(12px,2vw,20px)}
 .shop-combat-preview .attack-preview-stage{
   max-height:none;background:linear-gradient(0deg,#0a133ca2,#0a133962),url(ui/fondo_inicio.webp) center 65%/cover
@@ -13104,16 +13134,27 @@ function showShop(msg = '', selected = ''){
   const rotation = hours <= 24 ? `Quedan ${hours} h` : `Quedan ${Math.ceil(hours / 24)} días`;
   const savedFavorites = loadJSON(SHOP_FAVORITES, []);
   const favorites = new Set(Array.isArray(savedFavorites) ? savedFavorites : []);
-  const tag = {featured:'Destacada', secondary:'Otra línea', returning:'De vuelta', frame:'Marco', title:'Título'};
-  const cards = items.map(it => `<button type="button" class="shop-option" data-shop-item="${it.key}" aria-pressed="false" aria-controls="shopDisplay">
-    ${shopItemArt(it)}<b>${escHtml(it.name)}</b><small>${it.owned ? 'En tu colección' : `${fmt(it.price)} Digicoins`}</small>
-  </button>`).join('');
+  const cards = items.map(it => {
+    const skin = it.type === 'skin';
+    const name = skin ? `${stageName(it.k,it.stage)} · ${it.name}` : it.name;
+    return `<div class="shop-offer shop-offer-${it.type}">
+      ${skin ? '' : `<span class="shop-shelf-label">${it.type === 'frame' ? 'Marcos' : 'Títulos'}</span>`}
+      <button type="button" class="shop-option" data-shop-item="${it.key}" aria-pressed="false" aria-controls="shopDisplay"
+        aria-label="${escHtml(name)}">
+        ${shopItemArt(it)}<b>${escHtml(skin ? CHARS[it.k].name : it.type === 'frame' ? 'Marco' : 'Título')}</b>
+      </button>
+    </div>`;
+  }).join('');
   const discounted = featured.price < featured.basePrice;
   const quest = featured.owned ? '' : `<div class="shop-quest"><div><b>${discounted ? 'Descuento conseguido' : 'Encargo de la tienda'}</b>
     <small>${discounted ? `Tu skin destacada tiene un ${SHOP_DISCOUNT_PCT}% de descuento hasta el lunes.` : `Derrota a un jefe de zona con ${CHARS[featured.k].name} y consigue un ${SHOP_DISCOUNT_PCT}% de descuento en su skin.`}</small></div>
     ${discounted ? '' : `<button type="button" id="shopQuest">${featured.locked ? 'Ver en Digidex' : 'Elegir mapa'}</button>`}</div>`;
   menuModal('Tienda semanal', `<div class="shop-meta"><span>Rotación del lunes · ${rotation}</span><strong class="shop-wallet"><img src="ui/hud/ic_bits.webp" alt="">${fmt(bits)} Digicoins</strong></div>
-    <div class="shop-grid" role="group" aria-label="Ofertas semanales">${cards}</div><section class="shop-display" id="shopDisplay" aria-labelledby="shopItemTitle"></section>${quest}
+    <div class="shop-stall">
+      <div class="shop-display" id="shopDisplay"></div>
+      <div class="shop-grid" role="group" aria-label="Ofertas semanales">${cards}</div>
+      <section class="shop-counter" aria-labelledby="shopItemTitle"></section>
+    </div>${quest}
     <details class="shop-code-wrap"><summary>Código de recompensa</summary><div class="shop-code">
       <input id="shopCode" maxlength="24" aria-label="Código de recompensa" placeholder="Introduce tu código" autocomplete="off">
       <button type="button" id="shopRedeem">Canjear</button>
@@ -13122,8 +13163,12 @@ function showShop(msg = '', selected = ''){
   const dlg = document.querySelector('#realModalHost .approved-info-dialog');
   if (!dlg) return;
   dlg.classList.add('shop-dialog');
+  const close = dlg.querySelector('#realClose');
+  close.setAttribute('aria-label', 'Cerrar tienda');
+  close.before(dlg.querySelector('.shop-wallet'));
   dlg.querySelector('#shopStatus').textContent = msg;
-  const options = [...dlg.querySelectorAll('[data-shop-item]')], display = dlg.querySelector('#shopDisplay');
+  const options = [...dlg.querySelectorAll('[data-shop-item]')];
+  const display = dlg.querySelector('#shopDisplay'), counter = dlg.querySelector('.shop-counter');
   const frame = items.find(it => it.type === 'frame'), title = items.find(it => it.type === 'title');
   let current = items.find(it => it.key === selected) || featured, combined = false;
   const reopen = msg => { showSelect(); showShop(msg, current.key); };
@@ -13139,9 +13184,11 @@ function showShop(msg = '', selected = ''){
       it.locked ? '<button type="button" class="shop-unlock" data-shop-dex>Cómo desbloquear</button>' :
       `<button type="button" class="shop-buy" data-shop-buy ${bits < it.price ? 'disabled' : ''}>
         ${bits < it.price ? `Faltan ${fmt(it.price - bits)} Digicoins` : 'Comprar'}</button>`;
-    display.innerHTML = `<div class="shop-stage">${art}</div><div class="shop-display-copy">
-      <small class="shop-tag">${it.slot === 'returning' && wish && !it.owned ? 'Vuelve tu favorita' : tag[it.slot || it.type]}</small>
-      <h3 id="shopItemTitle">${escHtml(it.name)}</h3><small>${skin ? `${escHtml(stageName(it.k,it.stage))}${it.locked ? ' · Bloqueado' : ''}` : 'Vista previa en tu ficha'}</small>
+    const name = skin ? `${stageName(it.k,it.stage)} · ${it.name}` : it.name;
+    display.innerHTML = `<div class="shop-stage">${art}</div>`;
+    counter.innerHTML = `<div class="shop-display-copy">
+      <h3 id="shopItemTitle">${escHtml(name)}</h3>
+      ${it.slot === 'returning' && wish && !it.owned ? '<small>Vuelve tu favorita</small>' : ''}
       ${it.owned ? '' : `<div class="shop-price"><img src="ui/hud/ic_bits.webp" alt="">${fmt(it.price)} Digicoins
         ${it.price < it.basePrice ? `<del>${fmt(it.basePrice)}</del>` : ''}</div>`}
       <div class="shop-actions">${action}
@@ -13154,9 +13201,8 @@ function showShop(msg = '', selected = ''){
   };
   options.forEach((button, i) => button.onclick = () => draw(items[i]));
   draw(current);
-  const selectedButton = options.find(b => b.dataset.shopItem === current.key);
-  if (selected) selectedButton?.focus();
-  display.onclick = event => {
+  if (selected) options.find(b => b.dataset.shopItem === current.key)?.focus({preventScroll:true});
+  counter.onclick = event => {
     const button = event.target.closest('button');
     if (!button || button.disabled) return;
     const it = current;
@@ -13165,14 +13211,14 @@ function showShop(msg = '', selected = ''){
     if (button.hasAttribute('data-shop-combine')){
       combined = !combined;
       draw(it);
-      display.querySelector('[data-shop-combine]').focus({preventScroll:true});
+      counter.querySelector('[data-shop-combine]').focus({preventScroll:true});
     }
     if (button.hasAttribute('data-shop-fav')){
       const on = !favorites.has(it.key);
       if (on) favorites.add(it.key); else favorites.delete(it.key);
       localStorage.setItem(SHOP_FAVORITES, JSON.stringify([...favorites]));
       draw(it);
-      display.querySelector('[data-shop-fav]').focus({preventScroll:true});
+      counter.querySelector('[data-shop-fav]').focus({preventScroll:true});
     }
     if (button.hasAttribute('data-shop-buy')){
       if (!shopBuy(it.key,it.price,week)) return reopen('La oferta ha cambiado. Revisa el escaparate.');
