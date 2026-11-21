@@ -1539,3 +1539,6 @@ I18N.add('pl', {"×{0} daño": "×{0} obrażeń", "×{0} recibido": "×{0} otrzy
   "dificultad": "trudność",
   "empezar": "start"
 });
+
+// Ranking del Digivice (récords del menú y ranking online)
+I18N.add('pl', {"Mi historial": "Moja historia", "Tus marcas en todos los mapas": "Twoje wyniki na wszystkich mapach", "Solo las partidas de este mapa": "Tylko gry na tej mapie", "Ver clasificación online": "Zobacz ranking online", "Global": "Globalnie", "bajas": "pokonani", "tiempo": "czas", "Ol. {0}": "Fala {0}", "{0} bajas": "{0} pokonanych", "Todas las regiones": "Wszystkie regiony", "Solo jugadores de esta región": "Tylko gracze z tego regionu", "Tu puesto": "Twoje miejsce"});
