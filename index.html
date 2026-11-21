@@ -3764,7 +3764,7 @@ html[lang] .trainer-screen .trainer-header .g-back,
   --lab-bg:#e7eef5;--lab-panel:#f4f8fb;--lab-well:#e1eaf2;--lab-line:#a5b8c8;
   --lab-ink:#162943;--lab-muted:#425b79;--lab-accent:#3d568f;--lab-signal:#73dbef;
   --lab-metal:#bacbda;--lab-shadow:#263e5938;--lab-holo:#75e8ff;
-  width:min(1150px,96vw)!important;height:auto!important;max-height:calc((100dvh - var(--ui-top) - var(--ui-bot))/var(--ui-scale,1))!important;
+  width:min(1150px,96vw)!important;height:700px!important;max-height:calc((100dvh - var(--ui-top) - var(--ui-bot))/var(--ui-scale,1))!important;
   padding:clamp(8px,1.5vw,18px)!important;overscroll-behavior:contain;
   background:linear-gradient(135deg,var(--lab-bg),var(--lab-well))!important;
   color:var(--lab-ink)!important;font:700 14px/1.35 'Nunito',system-ui,sans-serif;
@@ -3797,10 +3797,13 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
 .lab-console .lab-wallet img{width:23px;height:23px;object-fit:contain}
 .lab-console .lab-layout{
   display:grid;grid-template-columns:minmax(0,1.36fr) minmax(285px,1fr);
-  grid-template-areas:"camera bench" "camera instrument";column-gap:5px;margin-top:8px;padding:5px;
+  grid-template-areas:"camera bench" "camera instrument";grid-template-rows:280px 250px;
+  column-gap:5px;margin-top:8px;padding:5px;
   border:1px solid var(--lab-line);border-radius:12px;background:var(--lab-metal);
 }
-.lab-console .lab-bench,.lab-console .lab-instrument{min-width:0;border:1px solid var(--lab-line);background:var(--lab-panel)}
+.lab-console .lab-bench,.lab-console .lab-instrument{
+  min-width:0;min-height:0;overflow:auto;border:1px solid var(--lab-line);background:var(--lab-panel);
+}
 .lab-console .lab-bench{
   grid-area:bench;padding:10px 12px;border-radius:8px 8px 0 0;border-bottom:0;
   background:linear-gradient(165deg,var(--lab-panel) 45%,var(--lab-well));
@@ -3827,11 +3830,14 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
 .lab-console .lab-project span:first-child{color:var(--lab-accent);font-size:17px;text-align:center}
 .lab-console .lab-project span:last-child{font-size:11px;color:var(--lab-muted);white-space:nowrap}
 .lab-console .lab-reset{padding:5px 10px;background:var(--lab-panel)}
-.lab-console .lab-instrument{grid-area:instrument;overflow:hidden;border-radius:0 0 8px 8px}
+.lab-console .lab-instrument{grid-area:instrument;border-radius:0 0 8px 8px}
 .lab-console[data-lab-station="1"]{--lab-signal:#ffc081}
 .lab-console[data-lab-station="2"]{--lab-signal:#a5eeae}
+.lab-console .lab-camera{
+  grid-area:camera;display:grid;grid-template-rows:minmax(0,1fr) 57px;gap:4px;min-width:0;min-height:0;
+}
 .lab-console .lab-chamber{
-  grid-area:camera;position:relative;isolation:isolate;min-height:310px;
+  position:relative;isolation:isolate;min-height:0;
   background:linear-gradient(0deg,#08152969,transparent 42%),url('ui/hub/laboratorio-camara-hagurumon.webp') center 50%/cover no-repeat,#102640;
   border:1px solid #406784;border-bottom-color:var(--lab-signal);border-radius:8px;
   box-shadow:inset 0 0 0 1px #102539,inset 0 0 25px #08172866,0 3px 10px var(--lab-shadow);
@@ -3865,13 +3871,15 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
 .lab-chamber.lab-reacting .lab-specimen.anim{
   animation:none!important;background-position:var(--lab-expression) center!important;
 }
-.lab-chamber .lab-comment{
-  position:absolute;z-index:1;left:50%;bottom:10px;transform:translateX(-50%);
-  width:max-content;max-width:calc(100% - 20px);box-sizing:border-box;margin:0;
-  padding:7px 10px;border:1px solid #75cce3;border-radius:8px;background:#091d32f5;color:#e9faff;
-  font:800 13px/1.25 'Nunito',system-ui,sans-serif;text-align:center;pointer-events:none;
+.lab-console .lab-monitor{
+  display:flex;align-items:center;gap:10px;min-width:0;min-height:0;box-sizing:border-box;
+  padding:7px 10px;border:1px solid #4c88a1;border-radius:7px;
+  background:linear-gradient(180deg,#132a3d,#091827);color:#e9faff;
+  box-shadow:inset 0 0 0 2px #051120,inset 0 1px 9px #56d4f02b;
+  font:750 13px/1.2 'Nunito',system-ui,sans-serif;
 }
-.lab-chamber .lab-comment b{color:#9cefff;margin-inline-end:6px}
+.lab-monitor .lab-speaker{flex:none;color:#9cefff;font-weight:900}
+.lab-monitor [role=status]{min-width:0;max-height:100%;overflow:auto;overflow-wrap:anywhere}
 .lab-chamber :is(.lab-scan-beam,.lab-scan-pulse){
   position:absolute;left:50%;opacity:0;pointer-events:none;
 }
@@ -3901,12 +3909,16 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
 .lab-console .lab-apply{background:linear-gradient(125deg,#375fc0,#26376c);color:#fff;padding:5px 14px;border-color:#557fc4}
 .lab-console :is(.lab-apply,.lab-reset):disabled{opacity:.65;cursor:default}
 .lab-console .lab-status{margin:7px 0 0;color:var(--lab-muted)}
+.lab-console .lab-status-accessible{
+  position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;
+}
 .lab-console .lab-status:empty{margin:0}
 .lab-console .lab-footer{display:flex;justify-content:flex-start;margin-top:10px}
 .lab-console :is(button,h3):focus-visible{outline:2px solid var(--lab-accent);outline-offset:-2px}
 @media(max-width:680px){
+  #overlay:not(.menu-mode)>.lab-console{height:620px!important}
   .lab-console .lab-layout{
-    grid-template-columns:minmax(0,1fr);grid-template-areas:"camera" "bench" "instrument";
+    grid-template-columns:minmax(0,1fr);grid-template-areas:"camera" "bench" "instrument";grid-template-rows:auto auto auto;
     gap:0;margin-top:6px;padding:3px;
   }
   .lab-console .lab-head{padding:5px 6px}
@@ -3925,16 +3937,13 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
   .lab-console .lab-wallet{font-size:11px;white-space:nowrap}
   .lab-console .lab-wallet img{width:16px;height:16px}
   .lab-console .lab-bench{padding:6px;margin-top:4px}
-  .lab-console .lab-projects{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;margin-top:5px}
+  .lab-console .lab-projects{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,50px);gap:4px;margin-top:5px}
   .lab-console .lab-project{grid-template-columns:18px minmax(0,1fr);gap:2px 4px;padding:4px;font-size:12px}
   .lab-console .lab-project span:last-child{grid-column:2}
-  .lab-console .lab-chamber{box-sizing:border-box;min-height:78px}
+  .lab-console .lab-camera{grid-template-columns:minmax(0,1fr) minmax(104px,.65fr);grid-template-rows:78px;gap:3px}
+  .lab-console .lab-chamber{box-sizing:border-box}
   .lab-console .lab-chamber .lab-specimen{width:70px;height:70px}
-  .lab-chamber .lab-comment{
-    left:auto;right:4px;bottom:4px;transform:none;max-width:38%;padding:4px 5px;
-    font-size:11px;line-height:1.12;text-align:start;
-  }
-  .lab-chamber .lab-comment b{display:block;margin:0 0 2px}
+  .lab-console .lab-monitor{display:grid;align-content:center;gap:3px;padding:5px 6px;font-size:11px;line-height:1.15}
   .lab-console .lab-diagnostic{padding:8px}
   .lab-console .lab-diagnostic p{margin:3px 0 6px}
   .lab-console .lab-reading{margin:6px 0}
@@ -14093,11 +14102,13 @@ function showLab(message = '', focusId = '', upgraded = false){
         <div class="lab-wallet"><img src="ui/hud/ic_bits.webp" alt=""><span>${number(bits)} <span class="lab-wallet-unit">Digicoins</span></span></div>
       </header>
       <div class="lab-layout">
-        <div class="lab-chamber">
-          <span class="lab-projection" aria-hidden="true"></span>
-          <span class="lab-hologram" aria-hidden="true">${animEl(spriteOf('hagurumon', false), 'lab-specimen')}</span>
-          <span class="lab-scan-beam" aria-hidden="true"></span><span class="lab-scan-pulse" aria-hidden="true"></span>
-          <div class="lab-comment" hidden><b>Hagurumon</b><span></span></div>
+        <div class="lab-camera">
+          <div class="lab-chamber" aria-hidden="true">
+            <span class="lab-projection"></span>
+            <span class="lab-hologram">${animEl(spriteOf('hagurumon', false), 'lab-specimen')}</span>
+            <span class="lab-scan-beam"></span><span class="lab-scan-pulse"></span>
+          </div>
+          <div class="lab-monitor"><span class="lab-speaker">Hagurumon</span><span id="labDialogue" role="status"></span></div>
         </div>
         <section class="lab-bench" aria-labelledby="labBenchTitle">
           <h3 id="labBenchTitle">Banco de investigación</h3>
@@ -14109,7 +14120,7 @@ function showLab(message = '', focusId = '', upgraded = false){
         <section class="lab-instrument" aria-labelledby="labProjectTitle">
           <div class="lab-diagnostic">
             <div id="labDiagnostic"></div>
-            <p class="lab-status" id="labStatus" role="status">${escHtml(typeof message === 'string' ? message : '')}</p>
+            <p class="lab-status${upgraded ? ' lab-status-accessible' : ''}" id="labStatus" role="status">${escHtml(typeof message === 'string' ? message : '')}</p>
           </div>
         </section>
       </div>
@@ -14125,7 +14136,7 @@ function showLab(message = '', focusId = '', upgraded = false){
   const chamber = lab.querySelector('.lab-chamber');
   const beam = chamber.querySelector('.lab-scan-beam'), pulse = chamber.querySelector('.lab-scan-pulse');
   const hologram = chamber.querySelector('.lab-hologram');
-  const comment = chamber.querySelector('.lab-comment'), dialogue = comment.querySelector('span');
+  const dialogue = document.getElementById('labDialogue');
   const canAnimate = () => hologram.animate && !document.hidden && !reduceMotion() && !matchMedia('(prefers-reduced-motion: reduce)').matches;
   const stopScan = () => [beam, pulse, hologram].forEach(effect => effect.getAnimations?.().forEach(animation => animation.cancel()));
   const scan = success => {
@@ -14152,8 +14163,7 @@ function showLab(message = '', focusId = '', upgraded = false){
   };
   const react = (success, project, expression) => {
     chamber.classList.toggle('lab-reacting', success);
-    comment.hidden = !success;
-    dialogue.textContent = success ? LAB_REACTIONS[project] : '';
+    dialogue.textContent = success ? LAB_REACTIONS[project] : 'En espera de una mejora.';
     if (!success) return;
     chamber.style.setProperty('--lab-expression', `${expression}%`);
     if (!canAnimate()) return;
