@@ -2855,123 +2855,138 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
   justify-self:center; align-self:center; margin-inline:auto;
   background:url('ui/hub/records-digivice.png') center/100% 100% no-repeat;
 }
-#overlay .realhub.hb .hb-record-screen{
-  --records-surface:#0d1c30; --records-ink:#e9f9ff; --records-muted:#abc8db;
-  --records-well:#162e46; --records-line:#36566f; --records-active:#9de8fa;
-  position:absolute; inset:14.8% 7.8% 17%; display:flex; flex-direction:column; gap:5px;
-  padding:7px; border:1px solid var(--records-line); border-radius:8px; min-width:0;
-  background:var(--records-surface); color:var(--records-ink); text-align:left;
-  box-shadow:inset 0 0 16px #1e58752f; color-scheme:dark;
+/* Pantalla del Digivice de récords y del ranking online (.dvr): cabecera naranja, pestañas con icono,
+   selector de ámbito, tarjetas para los tres primeros, lista numerada y pie con tus cifras. */
+#overlay .realhub.hb .hb-main{grid-template-columns:minmax(580px,36%) minmax(0,1fr) minmax(300px,380px)!important}
+#overlay .realhub.hb .hb-record-device{width:min(100%,380px);min-height:600px}
+#overlay .realhub.hb .hb-record-screen{position:absolute;inset:14.6% 7.6% 16.6%}
+.dvr{
+  --dvr-bg:#f6f4ff; --dvr-card:#ffffff; --dvr-well:#ebe8fb; --dvr-line:#d9d4f2; --dvr-ink:#1f2140; --dvr-mute:#6a6a8e;
+  --dvr-chip:#2b2d55; --dvr-gold:#fff1c9; --dvr-gold-l:#f1c860; --dvr-silver:#eef1f7; --dvr-silver-l:#b9c3d6;
+  --dvr-bronze:#fbe5d6; --dvr-bronze-l:#e2a57c; --dvr-blue:#3d7be6; --dvr-blue-d:#2556b8;
+  display:flex; flex-direction:column; gap:6px; min-width:0; min-height:0; padding:6px;
+  border-radius:12px; background:var(--dvr-bg); color:var(--dvr-ink); text-align:left;
+  font-family:'Nunito',system-ui,sans-serif; color-scheme:light; box-shadow:inset 0 0 0 1px var(--dvr-line);
 }
-html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
-  --records-surface:#e8f9fc; --records-ink:#132d43; --records-muted:#395b72;
-  --records-well:#d5edf4; --records-line:#99bacb; --records-active:#173f64;
-  color-scheme:light;
+html[data-theme=oscuro] .dvr{
+  --dvr-bg:#17191d; --dvr-card:#22252b; --dvr-well:#2a2d34; --dvr-line:#3a3e47; --dvr-ink:#eef0f6; --dvr-mute:#a3a8b6;
+  --dvr-chip:#0d0e12; --dvr-gold:#3a321c; --dvr-gold-l:#c9a03e; --dvr-silver:#2c3039; --dvr-silver-l:#8d97ab;
+  --dvr-bronze:#3a2a20; --dvr-bronze-l:#b47a52; color-scheme:dark;
 }
-#overlay .realhub.hb .hb-record-head{
-  display:flex; align-items:center; gap:7px; flex:none; width:100%; min-width:0;
-  padding:6px; border:1px solid #e2a447; border-radius:6px; text-align:left;
-  background:repeating-linear-gradient(135deg,#fff3be28 0 8px,transparent 8px 16px),linear-gradient(110deg,#ffd574,#ed9e36);
-  color:#36230e;
+.dvr-head{
+  display:flex; align-items:center; gap:8px; flex:none; min-width:0; margin:-6px -6px 0; padding:7px 8px 8px;
+  border-radius:12px 12px 4px 4px; color:#fff;
+  background:repeating-linear-gradient(135deg,#ffffff1c 0 9px,transparent 9px 18px),linear-gradient(100deg,#ffb23a,#f08a1c);
+  box-shadow:inset 0 -2px #0000001f;
 }
-#overlay .realhub.hb .hb-record-head img{width:33px;height:33px;flex:none;object-fit:contain}
-#overlay .realhub.hb .hb-record-head span{min-width:0}
-#overlay .realhub.hb .hb-record-head b{
-  display:block; font:900 clamp(12px,1.1vw,16px)/1.08 'Nunito',sans-serif;
+.dvr-head>img{width:30px;height:30px;flex:none;object-fit:contain;filter:drop-shadow(0 1px 1px #0005)}
+.dvr-head>span{flex:1;min-width:0}
+.dvr-head b{display:block;font:900 16px/1.05 'Nunito',sans-serif;text-shadow:0 1px 0 #0003;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dvr-head small{display:block;margin-top:2px;font:800 10.5px/1.15 'Nunito',sans-serif;opacity:.95;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dvr-head .dvr-pill{
+  flex:none; min-height:26px; padding:3px 9px; border:0; border-radius:999px; cursor:pointer;
+  background:#ffffffeb; color:#8a4a06; font:900 10.5px/1 'Nunito',sans-serif; box-shadow:0 1px 0 #0002;
 }
-#overlay .realhub.hb .hb-record-head small{display:block;margin-top:2px;font-size:10px;font-weight:800;line-height:1.15}
-#overlay .realhub.hb .hb-record-map{
-  display:flex; align-items:center; flex:none; gap:6px; min-width:0; min-height:34px; padding:2px 6px;
-  border:1px solid var(--records-line); border-radius:6px; background:var(--records-well); color:var(--records-ink);
+.dvr-tabs{display:flex;gap:3px;flex:none;padding:3px;border-radius:999px;background:var(--dvr-well)}
+.dvr-tabs button{
+  flex:0 0 auto; display:flex; align-items:center; justify-content:center; gap:5px; min-width:38px; min-height:30px;
+  padding:3px 8px; border:0; border-radius:999px; background:none; color:var(--dvr-mute); cursor:pointer;
+  font:900 12px/1 'Nunito',sans-serif;
 }
-#overlay .realhub.hb .hb-record-map img{width:23px;height:23px;flex:none;object-fit:contain}
-#overlay .realhub.hb .hb-record-map span{font:850 10px/1 'Nunito',sans-serif;color:var(--records-muted)}
-#overlay .realhub.hb .hb-record-map select{
-  flex:1; min-width:0; width:100%; min-height:29px; margin:0; padding:3px; border:0;
-  background:var(--records-well); color:var(--records-ink); font:900 12px/1.2 'Nunito',sans-serif; cursor:pointer;
+.dvr-tabs button img{width:20px;height:20px;object-fit:contain;flex:none}
+.dvr-tabs button span{display:none}
+.dvr-tabs button[aria-selected=true]{flex:1 1 auto;background:var(--dvr-card);color:var(--dvr-ink);box-shadow:0 1px 3px #2b2d5530}
+.dvr-tabs button[aria-selected=true] span{display:inline}
+/* Con solo dos pestañas caben los dos nombres */
+.dvr-tabs:not(:has(>:nth-child(3))) button{flex:1 1 0}
+.dvr-tabs:not(:has(>:nth-child(3))) button span{display:inline}
+.dvr-scope{
+  position:relative; display:flex; align-items:center; gap:7px; flex:none; min-width:0; min-height:38px; padding:4px 26px 4px 7px;
+  border:1px solid var(--dvr-line); border-radius:10px; background:var(--dvr-card); cursor:pointer;
 }
-#overlay .realhub.hb .hb-record-screen .hb-tabs{
-  display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:3px;
-  padding:2px; border:1px solid var(--records-line); border-radius:6px; background:var(--records-well);
+.dvr-scope>img{width:24px;height:24px;flex:none;object-fit:contain}
+.dvr-scope>span{flex:1;min-width:0}
+.dvr-scope b{display:block;font:900 13px/1.1 'Nunito',sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dvr-scope small{display:block;color:var(--dvr-mute);font:800 10px/1.15 'Nunito',sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dvr-scope::after{
+  content:''; position:absolute; right:10px; top:50%; width:7px; height:7px; margin-top:-5px;
+  border:solid var(--dvr-ink); border-width:0 2px 2px 0; transform:rotate(45deg); pointer-events:none;
 }
-#overlay .realhub.hb .hb-record-screen .hb-tabs button{
-  min-height:32px; min-width:0; border:1px solid transparent; border-radius:4px;
-  padding:3px 1px; background:none; color:var(--records-muted);
-  font:900 11px/1.1 'Nunito',sans-serif; overflow-wrap:anywhere; cursor:pointer;
+.dvr-scope select{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;font-size:16px}
+.dvr-scope:focus-within{outline:2px solid var(--dvr-blue);outline-offset:1px}
+.dvr-scopes{display:grid;grid-template-columns:1fr 1fr;gap:5px;flex:none}
+.dvr-list{flex:1;min-height:60px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-right:1px}
+.dvr-rank{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.dvr-rank li{
+  display:flex; align-items:center; gap:6px; min-width:0; padding:4px 6px 4px 4px;
+  border-radius:9px; background:var(--dvr-card); box-shadow:inset 0 0 0 1px var(--dvr-line);
 }
-#overlay .realhub.hb .hb-record-screen .hb-tabs button[aria-selected=true]{
-  background:var(--records-active); color:var(--records-surface);
+.dvr-rank em{
+  flex:none; width:20px; height:20px; display:grid; place-items:center; border-radius:50%;
+  background:var(--dvr-chip); color:#fff; font:900 10.5px/1 'Nunito',sans-serif; font-style:normal;
 }
-#overlay .realhub.hb .hb-record-screen .hb-lbrow{
-  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:3px;
+.dvr-ava{position:relative;flex:none;width:28px;height:28px;border-radius:50%;background:var(--dvr-well);display:grid;place-items:center}
+.dvr-ava img{width:88%;height:88%;object-fit:contain}
+.dvr-who{flex:1;min-width:0}
+.dvr-who b{display:block;font:900 12.5px/1.15 'Nunito',sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dvr-who small{display:flex;align-items:center;gap:4px;min-width:0;color:var(--dvr-mute);font:800 10px/1.2 'Nunito',sans-serif;white-space:nowrap;overflow:hidden}
+.dvr-who small span{overflow:hidden;text-overflow:ellipsis}
+.dvr-chip{
+  flex:none; padding:1px 5px; border-radius:5px; background:var(--dvr-chip); color:#fff;
+  font:900 9px/1.35 'Nunito',sans-serif; letter-spacing:.03em; text-transform:uppercase;
 }
-#overlay .realhub.hb .hb-record-screen .hb-lbrow span{
-  min-width:0; padding:4px 2px; border-radius:4px; background:var(--records-well); text-align:center;
+.dvr-val{flex:none;display:flex;align-items:center;gap:4px;text-align:right;font:900 12.5px/1.05 'Nunito',sans-serif;font-variant-numeric:tabular-nums}
+.dvr-val img{width:15px;height:15px;object-fit:contain}
+.dvr-val small{display:block;color:var(--dvr-mute);font:800 9.5px/1.1 'Nunito',sans-serif}
+/* Los tres primeros: tarjeta con color de puesto, retrato grande y la cifra en grande */
+.dvr-rank li.top{min-height:46px;padding:4px 8px 4px 5px;gap:8px;background:var(--pod-bg);box-shadow:inset 0 0 0 1.5px var(--pod-l)}
+.dvr-rank li.p1{--pod-bg:var(--dvr-gold);--pod-l:var(--dvr-gold-l)}
+.dvr-rank li.p2{--pod-bg:var(--dvr-silver);--pod-l:var(--dvr-silver-l)}
+.dvr-rank li.p3{--pod-bg:var(--dvr-bronze);--pod-l:var(--dvr-bronze-l)}
+.dvr-rank li.top em{display:none}
+.dvr-rank li.top .dvr-ava{width:36px;height:36px;background:var(--dvr-card);box-shadow:0 0 0 2px var(--pod-l)}
+.dvr-rank li.top .dvr-ava::after{
+  content:attr(data-pos); position:absolute; right:-4px; bottom:-3px; width:17px; height:17px; display:grid; place-items:center;
+  border-radius:50%; background:var(--pod-l); color:#2b1c00; font:900 9.5px/1 'Nunito',sans-serif; box-shadow:0 0 0 1.5px var(--dvr-card);
 }
-#overlay .realhub.hb .hb-record-screen .hb-lbrow b{
-  display:block; font-size:clamp(12px,1.12vw,16px); font-weight:900; line-height:1.05;
-  font-variant-numeric:tabular-nums; overflow-wrap:anywhere;
+.dvr-rank li.top .dvr-who b{font-size:13.5px}
+.dvr-rank li.top .dvr-val{display:block;font-size:16px}
+.dvr-rank li.me{box-shadow:inset 0 0 0 2px var(--dvr-blue)}
+.dvr-rank li.dvr-empty{display:block;padding:14px 8px;text-align:center;color:var(--dvr-mute);font:800 11.5px/1.35 'Nunito',sans-serif}
+.dvr-foot{
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px; flex:none; padding:5px 6px;
+  border-radius:10px; background:var(--dvr-well); text-align:center;
 }
-#overlay .realhub.hb .hb-record-screen .hb-lbrow small{
-  display:block; margin-top:3px; color:var(--records-muted); font-size:10px; line-height:1.15; overflow-wrap:anywhere;
+.dvr-foot>span{min-width:0}
+.dvr-foot b{display:block;font:900 13px/1.1 'Nunito',sans-serif;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.dvr-foot small{display:block;margin-top:1px;color:var(--dvr-mute);font:800 9.5px/1.15 'Nunito',sans-serif}
+.dvr-foot.dvr-note{display:block;font:800 10.5px/1.3 'Nunito',sans-serif;color:var(--dvr-mute)}
+.dvr-cta{
+  flex:none; min-height:34px; margin:0; padding:5px 10px; border:0; border-radius:999px; cursor:pointer;
+  background:linear-gradient(#5b97f4,var(--dvr-blue)); color:#fff; font:900 12.5px/1.1 'Nunito',sans-serif;
+  box-shadow:inset 0 -3px var(--dvr-blue-d),0 1px 2px #0003;
 }
-#overlay .realhub.hb .hb-record-list{
-  flex:1; min-height:32px; overflow:auto; overscroll-behavior:contain;
-}
-#overlay .realhub.hb .hb-record-screen .hb-rank{
-  list-style:none; margin:0; padding:0; display:grid; gap:3px;
-}
-#overlay .realhub.hb .hb-record-screen .hb-rank li{
-  display:flex; align-items:center; gap:5px; min-width:0; padding:4px;
-  border:1px solid transparent; border-radius:7px; background:var(--records-well);
-}
-#overlay .realhub.hb .hb-record-screen .hb-rank em{
-  flex:none; width:19px; height:19px; border-radius:50%; display:grid; place-items:center;
-  color:var(--records-surface); background:var(--records-active); font:900 10px/1 'Nunito',sans-serif;
-}
-#overlay .realhub.hb .hb-record-screen .hb-rank li.podium{
-  min-height:43px; border-color:var(--podium-line);
-  background:linear-gradient(90deg,color-mix(in srgb,var(--podium-line) 22%,var(--records-well)),var(--records-well));
-}
-#overlay .realhub.hb .hb-record-screen .hb-rank li.p1{--podium-line:#d5a542}
-#overlay .realhub.hb .hb-record-screen .hb-rank li.p2{--podium-line:#a5b4cf}
-#overlay .realhub.hb .hb-record-screen .hb-rank li.p3{--podium-line:#bc8158}
-#overlay .realhub.hb .hb-record-screen .hb-rank li.podium img{width:31px;height:31px}
-#overlay .realhub.hb .hb-record-screen .hb-rank li.podium strong{font-size:14px}
-#overlay .realhub.hb .hb-record-screen .hb-rank li.p1 em{background:#ffd37a;color:#513300}
-#overlay .realhub.hb .hb-record-screen .hb-rank li.p2 em{background:#d8e4ec;color:#1d3549}
-#overlay .realhub.hb .hb-record-screen .hb-rank li.p3 em{background:#ffc39a;color:#582800}
-#overlay .realhub.hb .hb-record-screen .hb-rank img{flex:none;width:24px;height:24px;object-fit:contain}
-#overlay .realhub.hb .hb-record-screen .hb-rank span{flex:1;min-width:0}
-#overlay .realhub.hb .hb-record-screen .hb-rank b{display:block;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#overlay .realhub.hb .hb-record-screen .hb-rank span small{
-  display:block; color:var(--records-muted); font-size:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-#overlay .realhub.hb .hb-record-screen .hb-rank strong{
-  text-align:right; font:900 12px/1.1 'Nunito',sans-serif; font-variant-numeric:tabular-nums;
-}
-#overlay .realhub.hb .hb-record-screen .hb-rank strong small{display:block;color:var(--records-muted);font-size:10px}
-#overlay .realhub.hb .hb-record-screen .hb-rank .hb-empty{
-  justify-content:center; text-align:center; color:var(--records-muted); padding:7px; font-size:11px;
-}
-#overlay .realhub.hb .hb-record-actions{display:grid;grid-template-columns:2fr 1fr;gap:4px;flex:none}
-#overlay .realhub.hb .hb-record-screen .hb-all{
-  min-width:0; min-height:33px; margin:0; padding:4px 5px; border:1px solid var(--records-line);
-  border-radius:6px; background:var(--records-well); color:var(--records-ink);
-  font:900 10.5px/1.15 'Nunito',sans-serif; cursor:pointer;
-}
-#overlay .realhub.hb .hb-record-screen .hb-record-online{
-  background:repeating-linear-gradient(135deg,#c1e5ff20 0 8px,transparent 8px 16px),linear-gradient(#427cce,#2354a0);
-  color:#fff; border-color:#659ce0;
-}
-#overlay .realhub.hb .hb-record-screen :is(button,select,.hb-record-list):focus-visible{
-  outline:2px solid var(--records-ink); outline-offset:-2px;
-}
-@media (pointer:coarse){
-  #overlay .realhub.hb .hb-record-screen :is(.hb-tabs button,.hb-all,select){min-height:44px}
-}
+.dvr :is(button,select,.dvr-list):focus-visible{outline:2px solid var(--dvr-blue);outline-offset:1px}
+@media (pointer:coarse){.dvr :is(.dvr-tabs button,.dvr-cta,.dvr-head .dvr-pill){min-height:40px}.dvr-scope{min-height:44px}}
 @media (orientation:landscape) and (max-height:500px){
   #overlay .realhub.hb .hb-record-device{margin-block:12px}
+}
+/* Ranking online dentro de la misma carcasa del Digivice, a tamaño grande */
+.rk-device{
+  position:relative; width:min(94vw,540px,calc(94dvh * .72)); aspect-ratio:.72; margin:auto;
+  background:url('ui/hub/records-digivice.png') center/100% 100% no-repeat;
+}
+.rk-device .dvr{position:absolute;inset:14.6% 7.6% 16.6%}
+.rk-device .rk-region{grid-column:1/-1}
+.rk-device .rk-two .dvr-scope:last-child{grid-column:1/-1}
+@media (max-height:560px){
+  .rk-device{background:none;aspect-ratio:auto;width:min(96vw,560px);height:94dvh}
+  .rk-device .dvr{inset:0}
+  .rk-device .dvr-scopes{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .rk-device .dvr-scopes.rk-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .rk-device :is(.rk-region,.rk-two .dvr-scope:last-child){grid-column:auto}
+  .rk-device .dvr-scope{min-height:34px}
+  .rk-device .dvr-scope small{display:none}
 }
 @media(max-width:1100px){#overlay .realhub.hb .hb-main{grid-template-columns:minmax(0,1.3fr) minmax(260px,1fr)!important}}
 @media(max-width:760px){
@@ -3128,20 +3143,6 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 .cd-box .cd-status{min-height:1.2em;font-weight:700}
 .cd-in{padding:9px 12px;border-radius:10px;border:1px solid var(--m-line2,#3a6fc4);background:var(--m-sunk,#0a1428);color:var(--m-text,#e6f4ff);font:600 14px 'Nunito',system-ui,sans-serif;min-width:0;max-width:220px}
 .cd-form .set-seg-wrap{flex-wrap:wrap;justify-content:flex-end}
-.rk-box{width:min(760px,94vw)!important;max-height:92dvh;display:flex;flex-direction:column}
-.rk-filters{display:flex;flex-direction:column;gap:8px;margin:6px 0}
-.rk-filters .set-seg-wrap{flex-wrap:wrap}
-.rk-filters .set-seg{padding:6px 12px;font-size:13px}
-.rk-list{list-style:none;margin:6px 0 0;padding:0;overflow:auto;min-height:120px;flex:1}
-.rk-list li{display:grid;grid-template-columns:34px 36px 1fr auto;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid var(--m-line,#1e2a44)}
-.rk-list li em{font:900 16px 'Nunito',system-ui,sans-serif;font-style:normal;text-align:center;color:var(--m-mute,#9fd4ff)}
-.rk-list li.p1 em{color:#e0a800}.rk-list li.p2 em{color:#8f9bb0}.rk-list li.p3 em{color:#c07a3c}
-.rk-list li img{width:36px;height:36px;object-fit:contain;image-rendering:pixelated}
-.rk-list li span{min-width:0}.rk-list li span b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.rk-list li small{display:block;font-size:12px;color:var(--m-mute,#9fd4ff)}
-.rk-list li strong{text-align:right;font:900 16px 'Nunito',system-ui,sans-serif}
-.rk-list li.me{background:color-mix(in srgb,var(--m-acc,#4e63e8) 14%,transparent);border-radius:10px}
-.rk-list li.rk-empty{display:block;text-align:center;color:var(--m-mute,#9fd4ff);padding:24px 8px}
 .approved-info-dialog #realRank{margin-right:8px}
 /* Créditos y licencias */
 .cr-box{max-height:92dvh;display:flex;flex-direction:column}
@@ -3153,7 +3154,7 @@ html[data-theme=claro] #overlay .realhub.hb .hb-record-screen{
 .cr-sec a{color:var(--m-acc,#4e63e8);word-break:break-all}
 .cr-sec.cr-warn{background:color-mix(in srgb,#f5a623 14%,transparent);border:1px dashed #f5a623;border-radius:12px;padding:10px 12px;margin:8px 0}
 .cr-sec.cr-warn h3::before{content:'⚠ '}
-@media (max-width:760px){.cd-in{max-width:none;flex:1 1 100%}.rk-list li{grid-template-columns:26px 30px 1fr auto;gap:6px}.rk-list li img{width:30px;height:30px}}
+@media (max-width:760px){.cd-in{max-width:none;flex:1 1 100%}}
 /* Guía «Cómo jugar» */
 #overlay:not(.menu-mode)>.help-box.gd{
   width:min(1200px,calc((100vw - 36px)/var(--ui-scale,1)))!important;
@@ -6385,31 +6386,30 @@ function showSelect(){
           <img class="rw-character rw-gabumon" src="ui/personaje_aprobado_gabumon.png" alt="">
         </div>
         <aside class="hb-record-device" aria-labelledby="hbRecordsTitle">
-          <div class="hb-record-screen">
-            <div class="hb-record-head">
+          <div class="hb-record-screen dvr">
+            <div class="dvr-head">
               <img src="ui/hub/digivice/ranking.png" alt="">
-              <span><b id="hbRecordsTitle">Tus récords</b><small>Récords personales</small></span>
+              <span><b id="hbRecordsTitle">Tus récords</b><small id="hbRecordsSub">Récords personales</small></span>
+              <button type="button" class="dvr-pill" id="rhRecords">Mi historial</button>
             </div>
-            <div class="hb-tabs" role="tablist" aria-label="Ordenar récords">
-              <button type="button" role="tab" id="hbRecordsKills" aria-selected="true" aria-controls="hbRecordsPanel" data-k="kills">Bajas</button>
-              <button type="button" role="tab" id="hbRecordsTrial" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="trial">Contrarreloj</button>
-              <button type="button" role="tab" id="hbRecordsSurvival" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="survival">Supervivencia</button>
+            <div class="dvr-tabs" role="tablist" aria-label="Ordenar récords">
+              <button type="button" role="tab" id="hbRecordsKills" aria-selected="true" aria-controls="hbRecordsPanel" data-k="kills" title="Bajas"><img src="ui/hud/ic_bajas.webp" alt=""><span>Bajas</span></button>
+              <button type="button" role="tab" id="hbRecordsTrial" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="trial" title="Contrarreloj"><img src="ui/hub/digivice/reto.png" alt=""><span>Contrarreloj</span></button>
+              <button type="button" role="tab" id="hbRecordsSurvival" aria-selected="false" aria-controls="hbRecordsPanel" tabindex="-1" data-k="survival" title="Supervivencia"><img src="ui/hub/digivice/supervivencia.png" alt=""><span>Supervivencia</span></button>
             </div>
-            <label class="hb-record-map">
-              <img src="ui/hub/digivice/mapas.png" alt=""><span>Mapa</span>
-              <select id="hbRecordsMap">
-                <option value="">Global · Mis marcas</option>
+            <label class="dvr-scope">
+              <img src="ui/hub/digivice/mapas.png" alt="">
+              <span><b id="hbScopeName">Global</b><small id="hbScopeSub">Tus marcas en todos los mapas</small></span>
+              <select id="hbRecordsMap" aria-label="Mapa">
+                <option value="">Global</option>
                 ${MAP_ORDER.map(map => `<option value="${map}">${safeText(MAPS[map].name)}</option>`).join('')}
               </select>
             </label>
-            <div class="hb-lbrow" id="hbRecordsSummary" aria-live="polite"></div>
-            <div class="hb-record-list" id="hbRecordsPanel" role="tabpanel" aria-labelledby="hbRecordsKills" tabindex="0">
-              <ol class="hb-rank" id="hbRank"></ol>
+            <div class="dvr-list" id="hbRecordsPanel" role="tabpanel" aria-labelledby="hbRecordsKills" tabindex="0">
+              <ol class="dvr-rank" id="hbRank"></ol>
             </div>
-            <div class="hb-record-actions">
-              <button type="button" class="hb-all hb-record-online" id="hbRecordsOnline">Clasificación online</button>
-              <button type="button" class="hb-all" id="rhRecords">Mi historial</button>
-            </div>
+            <div class="dvr-foot" id="hbRecordsSummary" aria-live="polite"></div>
+            <button type="button" class="dvr-cta" id="hbRecordsOnline">Ver clasificación online</button>
           </div>
         </aside>
         <footer class="hb-legal">${t('legal')} <button type="button" class="hb-credits" id="hmCredits">Créditos</button></footer>
@@ -6495,33 +6495,32 @@ function showSelect(){
   };
   document.getElementById('rhRecords').onclick=event=>openInfo('records',event.currentTarget);
   { const ol = document.getElementById('hbRank'), panel = document.getElementById('hbRecordsPanel');
-    const tabs = [...document.querySelectorAll('.hb-record-screen .hb-tabs button')];
+    const tabs = [...document.querySelectorAll('.hb-record-screen .dvr-tabs button')];
     const summary = document.getElementById('hbRecordsSummary');
     const mapFilter = document.getElementById('hbRecordsMap');
+    const scopeName = document.getElementById('hbScopeName'), scopeSub = document.getElementById('hbScopeSub');
     let mode = 'kills';
     const recKey = r => r.key || Object.keys(CHARS).find(k => CHARS[k].name === r.name || (EVO_LINE[k] || []).some(e => e.name === r.name)) || 'agumon';
     const stat = (label, value) => `<span><b>${safeText(value)}</b><small>${safeText(label)}</small></span>`;
-    const empty = '<li class="hb-empty">Todavía no hay partidas. ¡Empieza una!</li>';
+    const empty = '<li class="dvr-empty">Todavía no hay partidas. ¡Empieza una!</li>';
     const number = value => Number(value || 0).toLocaleString(LANG);
     const time = seconds => seconds > 0 ? fmtTime(seconds) : '—';
-    const row = (rank, name, value, key, note, podium = true) => `<li class="${podium && rank <= 3 ? 'podium p' + rank : ''}">
-      <em>${rank}</em>${key ? `<img src="${charIcon(key)}" alt="" onerror="this.style.visibility='hidden'">` : ''}
-      <span><b>${safeText(name)}</b>${note ? `<small>${safeText(note)}</small>` : ''}</span>
-      <strong>${safeText(value)}</strong>
-    </li>`;
+    const mapName = map => MAPS[map]?.name || '';
     const draw = () => {
       const map = mapFilter.value;
+      scopeName.textContent = map ? mapName(map) : 'Global';
+      scopeSub.textContent = map ? 'Solo las partidas de este mapa' : 'Tus marcas en todos los mapas';
       if (mode === 'trial'){
         if (map){
           const seconds = trialTimes[map];
           summary.innerHTML = stat('Mejor victoria', time(seconds)) + stat('Estado', seconds ? 'Completado' : 'Pendiente');
-          ol.innerHTML = row(MAP_ORDER.indexOf(map) + 1, MAPS[map].name, time(seconds), '', '', false);
+          ol.innerHTML = dvrRow({pos: MAP_ORDER.indexOf(map) + 1, name: mapName(map), note: seconds ? 'Completado' : 'Pendiente', value: time(seconds), top: false});
           return;
         }
         const {maps, completed, total} = timeTrialSummary(trialTimes);
         summary.innerHTML = stat(completed === maps.length ? 'Tiempo total' : 'Tiempo parcial', time(total))
           + stat('Mapas completados', `${completed}/${maps.length}`);
-        ol.innerHTML = maps.map(([map, seconds], i) => row(i + 1, MAPS[map].name, time(seconds), '', seconds ? 'Completado' : 'Pendiente', false)).join('');
+        ol.innerHTML = maps.map(([m, seconds], i) => dvrRow({pos: i + 1, name: mapName(m), note: seconds ? 'Completado' : 'Pendiente', value: time(seconds), top: false})).join('');
         return;
       }
       if (mode === 'survival'){
@@ -6536,7 +6535,7 @@ function showSelect(){
           }
           const list = [...marks.values()].sort((a, b) => b.t - a.t);
           summary.innerHTML = stat('Mejor tiempo registrado', time(list[0]?.t)) + stat('Mejor oleada', wave || '—');
-          ol.innerHTML = list.slice(0, 7).map((run, i) => row(i + 1, run.name, time(run.t), recKey(run), `Oleada ${run.wave}`)).join('') || empty;
+          ol.innerHTML = list.slice(0, 10).map((run, i) => dvrRow({pos: i + 1, name: run.name, key: recKey(run), chip: 'Ol. ' + run.wave, note: mapName(run.map), value: time(run.t), unit: 'tiempo'})).join('') || empty;
           return;
         }
         const list = Object.keys(CHARS).map(key => [key, Number(survBest(key))])
@@ -6544,7 +6543,7 @@ function showSelect(){
           .sort((a, b) => b[1] - a[1]);
         const bestWave = trainerBestWave(savedRecords.wave);
         summary.innerHTML = stat('Mejor tiempo', time(list[0]?.[1])) + stat('Mejor oleada', bestWave || '—');
-        ol.innerHTML = list.slice(0, 7).map(([key, seconds], i) => row(i + 1, CHARS[key].name, time(seconds), key)).join('') || empty;
+        ol.innerHTML = list.slice(0, 10).map(([key, seconds], i) => dvrRow({pos: i + 1, name: CHARS[key].name, key, note: 'Supervivencia', value: time(seconds), unit: 'tiempo'})).join('') || empty;
         return;
       }
       const best = savedRecords.kills;
@@ -6553,7 +6552,7 @@ function showSelect(){
       const list = runs.filter(run => !map || run.map === map).sort((a, b) => b.kills - a.kills || b.t - a.t);
       summary.innerHTML = (map ? stat('Partidas registradas', list.length) : stat('Bajas totales', number(kills)))
         + stat('Más bajas en una partida', list.length ? number(list[0].kills) : '—');
-      ol.innerHTML = list.slice(0, 7).map((run, i) => row(i + 1, run.name, number(run.kills), recKey(run), MAPS[run.map]?.name)).join('') || empty;
+      ol.innerHTML = list.slice(0, 10).map((run, i) => dvrRow({pos: i + 1, name: run.name, key: recKey(run), chip: run.lvl ? 'Nv ' + run.lvl : '', note: mapName(run.map), value: number(run.kills), unit: 'bajas', icon: 'ui/hud/ic_bajas.webp'})).join('') || empty;
     };
     const selectTab = tab => {
       tabs.forEach(button => {
@@ -7016,6 +7015,16 @@ function showCloud(fromHub = cdFromHub){
   };
 }
 // Ranking por regiones: mejor marca de cada jugador por modo, mapa y dificultad
+// Fila del ranking del Digivice (récords del menú y ranking online). Los tres primeros salen como tarjeta.
+function dvrRow({pos, name, key, chip, note, value, unit, icon, top = true, me = false, rowUnit = false}){
+  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const big = top && pos <= 3;
+  const ava = key ? `<i class="dvr-ava" data-pos="${pos}"><img src="${esc(charIcon(key))}" alt="" onerror="this.style.visibility='hidden'"></i>` : '';
+  const sub = chip || note ? `<small>${chip ? `<i class="dvr-chip">${esc(chip)}</i>` : ''}${note ? `<span>${esc(note)}</span>` : ''}</small>` : '';
+  const val = big ? `<strong class="dvr-val">${esc(value)}${unit ? `<small>${esc(unit)}</small>` : ''}</strong>`
+    : `<strong class="dvr-val">${icon ? `<img src="${esc(icon)}" alt="">` : ''}${rowUnit && unit ? `<span>${esc(value)}<small>${esc(unit)}</small></span>` : esc(value)}</strong>`;
+  return `<li class="${big ? 'top p' + pos : ''}${me ? ' me' : ''}"><em>${pos}</em>${ava}<span class="dvr-who"><b>${esc(name)}</b>${sub}</span>${val}</li>`;
+}
 const Rk = {mode: 'normal', map: null, diff: 'normal', region: ''};
 async function showRanking(from){
   if (from) Rk.from = from;
@@ -7023,21 +7032,36 @@ async function showRanking(from){
   setHud(false);
   if (!Rk.map) Rk.map = runMap;
   const safe = v => String(v).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
-  const seg = (k, v, label) => `<button class="set-seg${Rk[k] === v ? ' on' : ''}" data-rk="${k}" data-v="${v}">${label}</button>`;
+  const opt = (k, v, label) => `<option value="${v}"${Rk[k] === v ? ' selected' : ''}>${safe(label)}</option>`;
+  const tab = (v, icon, label) => `<button type="button" role="tab" data-mode="${v}" aria-selected="${Rk.mode === v}" title="${label}"><img src="${icon}" alt=""><span>${label}</span></button>`;
+  const surv = Rk.mode === 'surv';
   showOverlay(`
-    <div class="settings sc-box rk-box">
-      <header class="set-head"><button class="g-back" id="rkBack">← Volver</button><h2>Ranking</h2></header>
-      <div class="rk-filters">
-        <div class="set-seg-wrap">${seg('mode', 'normal', 'Clásico')}${seg('mode', 'surv', 'Supervivencia')}</div>
-        <div class="set-seg-wrap">${Object.keys(MAPS).map(k => seg('map', k, safe(MAPS[k].name))).join('')}</div>
-        ${Rk.mode === 'normal' ? `<div class="set-seg-wrap">${DIFF_ORDER.map(k => seg('diff', k, DIFFS[k].name)).join('')}</div>` : ''}
-        <div class="set-seg-wrap">${seg('region', '', 'Mundial')}${Object.entries(REGIONS).map(([k, n]) => seg('region', k, n)).join('')}</div>
-      </div>
-      <p class="sc-p">${Rk.mode === 'normal' ? 'Primero las victorias, de la más rápida a la más lenta; después, quien más aguantó.' : 'Más oleadas primero; a igualdad, más tiempo.'}</p>
-      <ol class="rk-list" id="rkList"><li class="rk-empty">${CLOUD_ON ? 'Cargando…' : 'El ranking online aún no está activado en esta versión.'}</li></ol>
+    <div class="rk-device">
+      <section class="dvr" aria-labelledby="rkTitle">
+        <div class="dvr-head">
+          <img src="ui/hub/digivice/ranking.png" alt="">
+          <span><b id="rkTitle">Ranking online</b><small>${safe(MAPS[Rk.map]?.name || '')}${surv ? ' · Supervivencia' : ' · ' + safe(DIFFS[Rk.diff]?.name || '')}</small></span>
+          <button type="button" class="dvr-pill" id="rkBack">← Volver</button>
+        </div>
+        <div class="dvr-tabs" role="tablist" aria-label="Modo">${tab('normal', 'ui/hud/ic_bajas.webp', 'Clásico')}${tab('surv', 'ui/hub/digivice/supervivencia.png', 'Supervivencia')}</div>
+        <div class="dvr-scopes${surv ? ' rk-two' : ''}">
+        <label class="dvr-scope rk-region">
+          <img src="ui/hub/digivice/idioma.png" alt="">
+          <span><b>${Rk.region ? safe(REGIONS[Rk.region]) : 'Mundial'}</b><small>${Rk.region ? 'Solo jugadores de esta región' : 'Todas las regiones'}</small></span>
+          <select data-rk="region" aria-label="Región">${opt('region', '', 'Mundial')}${Object.entries(REGIONS).map(([k, n]) => opt('region', k, n)).join('')}</select>
+        </label>
+          <label class="dvr-scope"><img src="ui/hub/digivice/mapas.png" alt=""><span><b>${safe(MAPS[Rk.map]?.name || '')}</b><small>Mapa</small></span>
+            <select data-rk="map" aria-label="Mapa">${Object.keys(MAPS).map(k => opt('map', k, MAPS[k].name)).join('')}</select></label>
+          ${surv ? '' : `<label class="dvr-scope"><img src="ui/hub/digivice/reto.png" alt=""><span><b>${safe(DIFFS[Rk.diff]?.name || '')}</b><small>Dificultad</small></span>
+            <select data-rk="diff" aria-label="Dificultad">${DIFF_ORDER.map(k => opt('diff', k, DIFFS[k].name)).join('')}</select></label>`}
+        </div>
+        <div class="dvr-list"><ol class="dvr-rank" id="rkList"><li class="dvr-empty">${CLOUD_ON ? 'Cargando…' : 'El ranking online aún no está activado en esta versión.'}</li></ol></div>
+        <p class="dvr-foot dvr-note" id="rkFoot">${surv ? 'Más oleadas primero; a igualdad, más tiempo.' : 'Primero las victorias, de la más rápida a la más lenta; después, quien más aguantó.'}</p>
+      </section>
     </div>`);
   document.getElementById('rkBack').onclick = () => Rk.from === 'cloud' ? showCloud() : showSelect();
-  overlay.querySelectorAll('[data-rk]').forEach(b => b.onclick = () => { Rk[b.dataset.rk] = b.dataset.v; showRanking(); });
+  overlay.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => { if (Rk.mode !== b.dataset.mode){ Rk.mode = b.dataset.mode; showRanking(); } });
+  overlay.querySelectorAll('select[data-rk]').forEach(sel => sel.onchange = () => { Rk[sel.dataset.rk] = sel.value; showRanking(); });
   if (!CLOUD_ON) return;
   const want = JSON.stringify(Rk);
   let rows;
@@ -7048,10 +7072,14 @@ async function showRanking(from){
   } catch(e){ rows = null; }
   const ol = document.getElementById('rkList');
   if (!ol || state !== 'ranking' || want !== JSON.stringify(Rk)) return;
-  if (!rows){ ol.innerHTML = '<li class="rk-empty">No se pudo cargar el ranking. Comprueba la conexión.</li>'; return; }
-  const res = r => Rk.mode === 'surv' ? `Oleada ${r.wave}<small>${fmtTime(r.t)}</small>` : r.win ? `${fmtTime(r.t)}<small>Victoria</small>` : `${fmtTime(r.t)}<small>Sin victoria</small>`;
-  ol.innerHTML = rows.map(r => `<li class="${r.me ? 'me ' : ''}${r.pos <= 3 ? 'top p' + r.pos : ''}"><em>${r.pos}</em><img src="${CHARS[r.digimon] ? charIcon(r.digimon) : ''}" alt="" onerror="this.style.visibility='hidden'"><span><b>${safe(r.name)}${r.me ? ' (tú)' : ''}</b><small>${REGIONS[r.region] || ''} · ${r.kills.toLocaleString('es-ES')} bajas · Nv ${r.lvl}</small></span><strong>${res(r)}</strong></li>`).join('')
-    || '<li class="rk-empty">Nadie ha entrado aún en este ranking. ¡Sé el primero!</li>';
+  if (!rows){ ol.innerHTML = '<li class="dvr-empty">No se pudo cargar el ranking. Comprueba la conexión.</li>'; return; }
+  const value = r => surv ? 'Oleada ' + r.wave : fmtTime(r.t);
+  const unit = r => surv ? fmtTime(r.t) : r.win ? 'Victoria' : 'Sin victoria';
+  ol.innerHTML = rows.map(r => dvrRow({pos: r.pos, name: r.name + (r.me ? ' (tú)' : ''), key: CHARS[r.digimon] ? r.digimon : '', chip: r.region || '',
+    note: `${Number(r.kills || 0).toLocaleString(LANG)} bajas · Nv ${r.lvl}`, value: value(r), unit: unit(r), rowUnit: true, me: r.me})).join('')
+    || '<li class="dvr-empty">Nadie ha entrado aún en este ranking. ¡Sé el primero!</li>';
+  const mine = rows.find(r => r.me), foot = document.getElementById('rkFoot');
+  if (mine && foot) foot.textContent = `Tu puesto: ${mine.pos} · ${value(mine)}`;
 }
 // Créditos y licencias: lo que consta en sprites/CREDITS.txt, textures/CREDITOS.txt y fonts/LICENCIAS.txt.
 // Los recuadros naranjas marcan lo que falta verificar antes de publicar (permisos de sprites y autoría)

@@ -1547,3 +1547,6 @@ I18N.add('ja', {"×{0} daño": "ダメージ ×{0}", "×{0} recibido": "被ダ�
   "dificultad": "難易度",
   "empezar": "開始"
 });
+
+// Ranking del Digivice (récords del menú y ranking online)
+I18N.add('ja', {"Mi historial": "履歴", "Tus marcas en todos los mapas": "全マップの自己記録", "Solo las partidas de este mapa": "このマップのプレイのみ", "Ver clasificación online": "オンラインランキングを見る", "Global": "グローバル", "bajas": "撃破", "tiempo": "タイム", "Ol. {0}": "W{0}", "{0} bajas": "{0} 撃破", "Todas las regiones": "すべての地域", "Solo jugadores de esta región": "この地域のプレイヤーのみ", "Tu puesto": "あなたの順位"});
