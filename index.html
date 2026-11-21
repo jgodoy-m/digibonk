@@ -8019,6 +8019,7 @@ function runSave(){
     specialBoss: special ? {...runBossSnapshot(special), key: special.key, skin: special.skin} : null,
     minis: g.enemies.filter(e => e.kind === 'mini' && !e.special && e.hp > 0).map(e => ({name: e.name, k: e.hp / e.max})),
     foes,
+    chests: g.chests.filter(c => !c.open && !c.gone).map(({x, z, gold}) => ({x, z, gold: !!gold})),
     choices: (state === 'levelup' || g.pendingUp) && g.choices && g.choices.length && !g.npcPick ? g.choices.map(c => ({k: runCardKey(c), rare: !!c.rare})) : null,
     rewardPick: state === 'levelup' && g.npcPick ? runRewardPick(g.choices) : null,
     chestPick: g.chestPick ? {gold: !!g.chestPick.gold} : null,
@@ -8045,12 +8046,12 @@ function runSlot(){
   if (!s){ try { localStorage.removeItem(RUN_SLOT); } catch(e){} }
   return s;
 }
-// Botón del menú: carga la partida guardada (el hueco se borra al cargarlo)
+// El guardado sigue disponible hasta que se reconstruye la partida.
 function runContinue(){
+  if (mapLoad.on) return;
   const s = runSlot();
   if (!s){ showSelect(); return; }
   if (!ensureRenderer()) return;
-  try { localStorage.removeItem(RUN_SLOT); } catch(e){}
   runMode = s.mode === 'surv' ? 'surv' : 'normal'; runWeekly = !!s.weekly; runMap = s.map; runDiff = s.diff;
   startGame(s.key, s);
 }
@@ -8119,6 +8120,8 @@ function runApply(s){
     if (!ENEMY[kind]) continue;
     for (let i = 0; i < Math.min(n | 0, maxFoes()); i++) if (!spawnEnemy(kind)) break;
   }
+  for (const {x, z, gold} of s.chests || []) spawnChestAt(x, z, gold);
+  applyRoulettePrize();
   // Subida de nivel o cofre a medias: las mismas cartas que había (recargar no vuelve a tirar)
   if (s.choices && s.choices.length){
     const pool = [...UPGRADES, ...skillCards(), digiCard(), ...evoSkillCards(), ...fusionLvCards(), ...itemCards()];
@@ -8249,8 +8252,13 @@ function startGame(key, resume){
   // Dos vueltas: el navegador pinta la pantalla de carga antes de que la construcción del mapa ocupe el hilo
   requestAnimationFrame(() => setTimeout(() => {
     if (tok !== mapLoad.tok) return;   // otro destino o cancelada mientras tanto
+    if (resume && runSlot()?.id !== resume.id){ showSelect(); return; }
     try { buildRun(key, resume, week); }
-    catch(e){ mapLoadCancel(); throw e; }
+    catch(e){
+      mapLoadCancel();
+      if (resume) showSelect();
+      throw e;
+    }
     mapLoadArm(tok);
   }, 0));
 }
@@ -8306,9 +8314,6 @@ function buildRun(key, resume, week = isRetoRun() ? (resume?.g.weeklyWeek ?? wee
   initSupport();
   evHud(null);
   world.add(g.hiRing);
-  // Identificador de la partida viva (punto de guardado) y si cuenta para el ranking global
-  g.runId = runNewId(); runSetLive(g.runId);
-  if (runLiveId() !== g.runId) g.runId = null;   // sin almacenamiento local: no se guarda ni se comprueba
   g.ranked = !resume && !g.weekly && runRanked();
   if (resume) runApply(resume);
   else { const si = startItem(); if (si) addItem(si); }   // objeto inicial elegido en la vitrina del Digidex
@@ -8323,10 +8328,19 @@ function buildRun(key, resume, week = isRetoRun() ? (resume?.g.weeklyWeek ?? wee
     const reward = resume.rewardPick;
     const reopenedReward = Array.isArray(reward?.ids) &&
       (reward.kind === 'route' ? openRoutes(reward.ids) : reward.kind === 'relic' && openRelics(reward.ids));
-    if (!reopenedReward){
-      if (g.reopenUp){ g.reopenUp = false; openUpgrades(); }
-      else if (!g.pendingUp) pauseGame();   // empieza en pausa para que dé tiempo a situarse
+    if (!reopenedReward && g.reopenUp){ g.reopenUp = false; openUpgrades(); }
+    if (runLiveId() !== resume.id){ showSelect(); return; }
+  }
+  // Cambia la partida viva solo cuando se ha reconstruido el guardado.
+  g.runId = runNewId(); runSetLive(g.runId);
+  if (runLiveId() !== g.runId) g.runId = null;   // sin almacenamiento local: no se guarda ni se comprueba
+  if (resume){
+    if (!runSave()){
+      if (runIsLive()) runSetLive(resume.id);
+      showSelect();
+      return;
     }
+    if (state === 'play' && !g.pendingUp) pauseGame();   // empieza en pausa para que dé tiempo a situarse
   }
   else if (g.weekly){   // al quitarse la pantalla de carga, recuerda la regla de la semana
     const gg = g, show = () => { if (g !== gg) return; if (mapLoad.on || state !== 'play') return setTimeout(show, 300); announce('Reto semanal', weeklyRunMod().name, '#2bb673'); };
@@ -8457,7 +8471,7 @@ function spawnSpecial(){
   const pick = pool[Math.floor(Math.random()*pool.length)];
   const t = g.t, a = Math.random()*Math.PI*2;
   const [x, z] = clampArena(g.p.x + Math.cos(a)*24, g.p.z + Math.sin(a)*24, ARENA_R - 0.5);
-  const hp = 900*(1 + (t - BOSS_AT)/120)*evoHp()*diffMul('hp');
+  const hp = 900*Math.max(1, 1 + (t - BOSS_AT)/120)*evoHp()*diffMul('hp');
   const name = CHARS[pick.key].name;
   addSpecialBoss({...pick, x, z, hp, max: hp, spd: 3.0, dmg: 18*(1 + diffT(t)/300)*diffMul('dmg'), cd: 0});
   sfx('boss');
@@ -9052,10 +9066,13 @@ function openChest(c){
   if (!g || c.open) return;
   c.open = true; c.openT = 2;
   if (c.group.userData.m) playModel(c.group.userData.m); else { c.pivot.rotation.x = -1.5; c.group.userData.wantOpen = true; }
+  rewardChest(c.gold);
+}
+function rewardChest(gold){
   if (!(g.mod && g.mod.noHeal)) g.p.hp = Math.min(g.p.maxHp, g.p.hp + 15);
   g.chestsOpened = (g.chestsOpened || 0) + 1;
   sfx('chest');
-  g.chestPick = {gold: !!c.gold};
+  g.chestPick = {gold: !!gold};
   g.choices = chestChoices();
   openUpgrades();
 }
@@ -9638,6 +9655,13 @@ const WHEEL = [
   {t: 'Chip Digimon', col: '#80d8ff', f: () => digiCard().f(g.p)},
   {t: '¡Élites!', col: '#ef5350', f: () => { for (let i = 0; i < 2; i++) spawnEnemy('elite'); }}
 ];
+function applyRoulettePrize(){
+  const prize = WHEEL[g.roulettePrize];
+  if (!prize) return;
+  delete g.roulettePrize;
+  prize.f();
+  announce('Ruleta: ' + prize.t, '', prize.col);
+}
 function openRoulette(n){
   const cost = n.spins ? 40 : 0;
   state = 'levelup'; unlockMouse(); g.choices = [];
@@ -9651,11 +9675,17 @@ function openRoulette(n){
     if ((g.coins || 0) < cost) return;
     g.coins = (g.coins || 0) - cost; n.spins++;
     document.getElementById('whSpin').disabled = document.getElementById('whLeave').disabled = true;
-    const k = Math.floor(Math.random()*WHEEL.length), w = WHEEL[k];
+    const k = Math.floor(Math.random()*WHEEL.length), run = g;
+    g.roulettePrize = k;
     const el = document.getElementById('wh');
     el.style.transform = `rotate(${360*5 - (k*seg + seg/2)}deg)`;
     sfx('levelup');
-    setTimeout(() => { close(); w.f(); announce('Ruleta: ' + w.t, '', w.col); sfx(k === 5 ? 'boss' : 'chest'); }, 2300);
+    setTimeout(() => {
+      if (g !== run || state !== 'levelup' || (g.runId && !runIsLive())) return;
+      applyRoulettePrize();
+      close();
+      sfx(k === 5 ? 'boss' : 'chest');
+    }, 2300);
   };
 }
 function spawnChest(p){
@@ -9818,7 +9848,7 @@ function update(dt, elapsed = dt){
 
   // Minijefes en sus minutos
   while (g.mode !== 'surv' && mapDef().minis && g.miniI < MINIS.length && g.t >= MINIS[g.miniI].at) spawnMini(MINIS[g.miniI++]);
-  // Fase extra: un jefe especial cada 40 s
+  // El jefe especial aparece unos segundos después del jefe final.
   if (g.extraOn && !g.extraSpawned && g.t >= g.extraNext){ spawnSpecial(); g.extraSpawned = true; }
 
   // Élites: una cada 45 s (40 s desde el minuto 10) desde el minuto 1
@@ -9962,7 +9992,16 @@ function update(dt, elapsed = dt){
     if ((g.magnetT || 0) <= 0 && Math.random() < 0.02){ spawnMagnetDrop(e.x, e.z); g.magnetT = 45; }
     // Tickets de tirada: 25% de cada élite y 3 seguros del jefe
     if (e.kind === 'elite' && Math.random() < 0.25){ g.tix++; if (!GACHA_SOON) popText(e.x, e.z, '+1 ticket', '#3de0ff', 1); }
-    if (e.kind === 'mini'){ g.tix++; announce('¡' + e.name + ' derrotado!', GACHA_SOON ? 'Cofre dorado' : '+1 ticket de tirada · cofre dorado', '#3de0ff'); spawnChestAt(e.x, e.z, true); if (!e.special){ (g.minisKilled || (g.minisKilled = [])).push(e.name); grantEmblem(); } }
+    if (e.kind === 'mini'){
+      g.tix++;
+      announce('¡' + e.name + ' derrotado!', GACHA_SOON ? 'Cofre dorado' : '+1 ticket de tirada · cofre dorado', '#3de0ff');
+      if (e.special) g.specialChest = true;
+      else {
+        spawnChestAt(e.x, e.z, true);
+        (g.minisKilled || (g.minisKilled = [])).push(e.name);
+        grantEmblem();
+      }
+    }
     if (e.kind === 'elite' && Math.random() < 0.3) spawnChestAt(e.x, e.z, true);   // 30% de las élites dejan un cofre dorado
     if (e.boss){ g.tix += 3; shopBossDiscount(); }
     if (e.boss || (e.kind === 'mini' && !e.wild)) bossKO(e);
@@ -10104,20 +10143,17 @@ function update(dt, elapsed = dt){
     }
     // Mapa 3: el jefe único huye por el portal a mitad de vida en la primera pantalla
     if (g.boss.def && g.boss.def.retreatAt && g.boss.hp > 0 && g.boss.hp <= g.boss.max * g.boss.def.retreatAt) bossRetreat();
-  } else if (g.boss && isPortalMap() && !g.bossDown){
-    // Jefe de zona derrotado: en la primera pantalla abre el portal; en la última, victoria
+  } else if (g.boss && !g.bossDown){
     clearBossRing();
     const def = g.boss.def || {};
     g.boss = null;
-    if (def.final) g.bossDown = true;
-    else openPortal(def.name + ' derrotado');
-  } else if (g.boss && !g.bossDown){
-    g.bossDown = true;   // el jefe ha caído
-    clearBossRing();
-    // Jefe especial: 10% de que aparezca uno más, de entre tus Digimon desbloqueados
-    if (specialPool().length && Math.random() < SPECIAL_CHANCE){
-      g.extraOn = true; g.extraNext = g.t + 4; g.extraSpawned = false;
-      announce('¡Algo se mueve!', 'Un jefe especial aparece', '#ffd54f', 'top');
+    if (isPortalMap() && !def.final) openPortal(def.name + ' derrotado');
+    else {
+      g.bossDown = true;
+      if (specialPool().length && Math.random() < SPECIAL_CHANCE){
+        g.extraOn = true; g.extraNext = g.t + 4; g.extraSpawned = false;
+        announce('¡Algo se mueve!', 'Un jefe especial aparece', '#ffd54f', 'top');
+      }
     }
   }
   for (const s of g.eshots){
@@ -10174,6 +10210,12 @@ function update(dt, elapsed = dt){
     announce('¡Disco de memoria!', 'Vuelves con ' + Math.round((0.2 + 0.1*itemLv('disco'))*100) + '% de vida', '#80d8ff', 'top');
   }
   if (p.hp <= 0){ p.hp = 0; endGame(false); }
+  else if (g.specialChest){
+    if (state === 'play' && !g.evoAnim && !g.pendingUp){
+      g.specialChest = false;
+      rewardChest(true);
+    }
+  }
   else if (g.bossDown && (!g.extraOn || (g.extraSpawned && !g.enemies.some(e => e.special && e.hp > 0)))) endGame(true);
 }
 
