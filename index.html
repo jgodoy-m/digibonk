@@ -8050,6 +8050,7 @@ function renderPickPreview(){
 // Paneles inferiores: ataque básico y kit · evolución de emergencia, etapas y tipos
 function renderPickPanels(){
   const k = selectedKey, c = CHARS[k], line = EVO_LINE[k] || [];
+  const ulti = BONK_FX[k];
   const kit = document.getElementById('pkKit'), evo = document.getElementById('pkEvo');
   if (!kit || !evo) return;
   kit.innerHTML = `
@@ -8061,6 +8062,13 @@ function renderPickPanels(){
         <button type="button" class="attack-preview-open">Vista previa de combate</button>
       </div>
     </div>
+    ${ulti ? `<div class="ps-lbl">Ulti</div>
+    <div class="ps-basic-attack">
+      <img src="${ultimateAttackPath(k)}" width="128" height="128" alt="">
+      <div><h5 class="ps-big">${ulti.title}</h5>
+        <p class="ps-txt">${ulti.tip}</p>
+      </div>
+    </div>` : ''}
     <hr class="ps-hr">
     <div class="ps-lbl">Kit de ataques <small>· cifras a nivel 1, sube hasta nivel ${SKILL_MAX}</small></div>
     <div class="ps-kit">${[...learnable(k).mine, ...learnable(k).type.slice(0, 1)].map(id => { const sk = SKILLS[id], ty = !(CHAR_SKILLS[k] || []).includes(id); return `<div class="ps-atk k-${sk.k}"><i class="ps-ico">${SKILL_ICON[id] || '✦'}</i><div><div class="ps-atk-h"><b>${skillName(id, k)}</b>${ty ? ` <small>· de tipo ${ATTR_NAME[ATTR_OF[k]]}</small>` : ''}</div><small class="ps-kind">${sk.k[0].toUpperCase() + sk.k.slice(1)}</small><p>${sk.d}</p>${chipsHtml(skillFacts(id))}</div></div>`; }).join('')}</div>`;
@@ -8583,6 +8591,7 @@ function startGame(key, resume){
 }
 function buildRun(key, resume, week = isRetoRun() ? (resume?.g.weeklyWeek ?? weekNum(resume?.at)) : null){
   basicAttackArt(key);
+  if (BONK_FX[key]) loadUltimateAttack(key);
   annClear();
   // El botón Jugar muestra el último Digimon con el que se jugó
   if (CHARS[key]) { selectedKey = key; try { localStorage.setItem('digibonk3d-last-choice', key); } catch(e){} }
@@ -9042,7 +9051,7 @@ function bonkRelease(){
   if (!reduceMotion()){
     shake = Math.max(shake, 0.8);
     screenFlash = 0.35;
-    fx?.animate(p, spawnAttackEffect, g.dir);
+    animateUltimate(g.ch.id, p, spawnAttackEffect, g.dir);
     playSkinAttackFx(p, true);
     g.atkT = Math.max(g.atkT || 0, 0.28);
   }
@@ -9149,14 +9158,14 @@ function showAttackPreview(key, stage, skin, trigger){
   const play = async ultimate => {
     const token = ++playback;
     cancelAnimationFrame(frame);
-    const art = ultimate ? null : await loadBasicAttack(key);
+    const art = await (ultimate ? loadUltimateAttack(key) : loadBasicAttack(key));
     if (!dialog.open || token !== playback) return;
     const origin = {x: 0, z: 0}, effects = [];
     const emit = (kind, p, color, options = {}) => {
       effects.push({image:previewTexture(kind, color), at:attackEffectMotion(p, options), life:options.life ?? 0.7,
         opacity:options.opacity ?? 1, additive:options.additive ?? true});
     };
-    if (ultimate) ulti.animate(origin, emit, {x:1, z:0});
+    if (ultimate) animateUltimate(key, origin, emit, {x:1, z:0});
     else emit(art || ch.fx || 'air', origin, 0xffffff, {radius:2, travel:ch.kind === 'shot' ? 14 : 4, size:4.5, life:0.48, additive:!art});
     if (theme) emitSkinAttackFx(theme, origin, ultimate, 0, emit);
     status.textContent = ultimate ? `${ulti.title} · ${ulti.tip}` : ch.desc;
@@ -9190,6 +9199,15 @@ function showAttackPreview(key, stage, skin, trigger){
     trigger.focus();
   }, {once:true});
   dialog.showModal();
+}
+function animateUltimate(key, origin, emit, direction){
+  const fx = BONK_FX[key];
+  if (!fx) return;
+  const kind = 'ultimate-' + key;
+  const emitArt = FX_TEX[kind] ? (_, p, _color, options = {}) => {
+    emit(kind, p, 0xffffff, {...options, opacity:(options.opacity ?? 1)*0.78, additive:false});
+  } : emit;
+  fx.animate(origin, emitArt, direction);
 }
 // Efecto extra del Bonk según el compañero (además de la onda base)
 const BONK_FX = {
@@ -10821,20 +10839,22 @@ const matCache = {};
    Cada ataque tiene su forma: fuego, burbuja, rayo, viento, hoja, engranaje, estrella, círculo mágico...
    Se dibujan una vez en un canvas y se usan en planos horizontales con mezcla aditiva (brillan sobre el suelo). */
 const FX_TEX = {};
-const FX_BASIC_REQUESTS = new Map();
+const FX_ART_REQUESTS = new Map();
 const basicAttackPath = key => 'ui/ataques/' + key + '.png?v=2';
-function loadBasicAttack(key){
-  if (!FX_BASIC_REQUESTS.has(key)){
-    FX_BASIC_REQUESTS.set(key, new Promise(resolve => {
-      const kind = 'basic-' + key;
-      const texture = loader.load(basicAttackPath(key), loaded => {
+const ultimateAttackPath = key => 'ui/ultis/' + key + '.png';
+const loadBasicAttack = key => loadAttackArt('basic-' + key, basicAttackPath(key));
+const loadUltimateAttack = key => loadAttackArt('ultimate-' + key, ultimateAttackPath(key));
+function loadAttackArt(kind, path){
+  if (!FX_ART_REQUESTS.has(kind)){
+    FX_ART_REQUESTS.set(kind, new Promise(resolve => {
+      const texture = loader.load(path, loaded => {
         FX_TEX[kind] = loaded;
         resolve(kind);
       }, undefined, () => resolve(null));
       texture.colorSpace = THREE.SRGBColorSpace;
     }));
   }
-  return FX_BASIC_REQUESTS.get(key);
+  return FX_ART_REQUESTS.get(kind);
 }
 function basicAttackArt(key){
   if (!SEASONS.adventure.chars.includes(key)) return null;
@@ -10988,7 +11008,7 @@ const FX_PLANE = new THREE.PlaneGeometry(1, 1);
 FX_PLANE.rotateX(-Math.PI/2);   // plano horizontal: se ve bien con la cámara desde arriba
 const FX_MATS = {};
 // Marcas en el suelo: se dibujan sin prueba de profundidad para que las laderas no las corten
-const FX_GROUND = new Set(['rune', 'basic-wizardmon', 'target', 'mine', 'wave', 'dmark', 'lane']);
+const FX_GROUND = new Set(['rune', 'basic-wizardmon', 'ultimate-wizardmon', 'target', 'mine', 'wave', 'dmark', 'lane']);
 // Material compartido por forma y color (para proyectiles: muchos a la vez)
 function fxMat(kind, color = 0xffffff, add = true){
   const k = kind + ':' + color + ':' + add;
