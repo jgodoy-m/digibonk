@@ -3939,6 +3939,7 @@ html[data-theme=oscuro] #overlay .realhub.hb .hb-user-card{
 }
 
 /* Inicio: modos jugables arriba y actividades en la fila inferior. */
+#overlay .realhub.hb .hb-left{box-sizing:border-box;padding-inline-start:clamp(6px,1.1vw,18px)}
 #overlay .realhub.hb .nm-modes{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) minmax(0,.8fr)!important}
 #overlay .realhub.hb .nm-modes>.hb-mode{
   min-width:0;flex-direction:column;justify-content:center;gap:8px;text-align:center;padding:10px 4px!important
@@ -3973,7 +3974,61 @@ html[data-theme=oscuro] #overlay .realhub.hb .hb-user-card{
 @media(max-width:600px) and (orientation:landscape){
   #overlay .realhub.hb .hb-surv-stack .hb-mode{flex-direction:column;gap:3px;text-align:center}
 }
-#overlay .realhub.hb .nm-modes .m-modes{background:linear-gradient(140deg,#4468b5,#2e4278);box-shadow:0 3px 0 #1b2b57}
+#overlay .realhub.hb .nm-modes :is(.m-surv,.m-modes){
+  border:1px solid #ffffff50;color:#fff;
+  background:
+    radial-gradient(ellipse at 15% 0%,#ffffff36,transparent 66%),
+    repeating-radial-gradient(circle at 75% 92%,transparent 0 14px,#ffffff10 15px 16px,transparent 17px 28px),
+    linear-gradient(145deg,var(--mode-top),var(--mode-bottom));
+  box-shadow:inset 0 1px #ffffff30,0 4px 0 var(--mode-edge),0 7px 15px #07142745;
+  transition:transform .16s ease,filter .16s ease
+}
+#overlay .realhub.hb .nm-modes .m-surv{--mode-top:#6349c5;--mode-bottom:#382489;--mode-edge:#251758}
+#overlay .realhub.hb .nm-modes .m-modes{--mode-top:#346caf;--mode-bottom:#1d3f76;--mode-edge:#122a51}
+#overlay .realhub.hb .nm-modes :is(.m-surv,.m-modes)::after{background:#ffffff0e}
+#overlay .realhub.hb .nm-modes :is(.m-surv,.m-modes)>i{
+  border:1px solid #ffffff44;box-sizing:border-box;box-shadow:0 2px 7px #15164247
+}
+#overlay .realhub.hb .nm-modes :is(.m-surv,.m-modes) small{opacity:1}
+/* Los iconos del inicio se mueven por turnos, sin desplazar sus botones. */
+#overlay .realhub.hb .hb-fullscreen-icon{display:inline-block}
+#overlay .realhub.hb .hb-top{--hb-icon-delay:-1s}
+#overlay .realhub.hb .hb-activities{--hb-icon-delay:-2s}
+#overlay .realhub.hb .hb-bar{--hb-icon-delay:-3s}
+#overlay .realhub.hb .hb-record-head{--hb-icon-delay:-4s}
+#overlay .realhub.hb .hb-left :is(button, a):nth-child(even),
+#overlay .realhub.hb .hb-top :is(button, .hb-chip):nth-child(even){--hb-icon-delay:-5s}
+#overlay .realhub.hb .m-modes{--hb-icon-delay:-6s}
+#overlay .realhub.hb .m-coop .nm-ic:last-child{--hb-icon-delay:-3s}
+@keyframes hb-icon-lift{
+  0%,22%,100%{translate:0;scale:1}
+  7%{translate:0 -2px;scale:1.055}
+  14%{translate:0 0;scale:.985}
+}
+@media(prefers-reduced-motion:no-preference){
+  html:not(.reduce-motion) #overlay .realhub.hb :is(.hb-top img,.hb-top svg,.hb-fullscreen-icon,.hb-main .nm-ic,.hb-main .nm-logo,.hb-record-head img,.hb-continue img,.hbc-go,.nm-band img){
+    animation:hb-icon-lift 7.2s ease-in-out var(--hb-icon-delay,0s) infinite
+  }
+}
+#overlay .realhub.hb .nm-modes button:not(:disabled):hover{filter:brightness(1.1)}
+@media(prefers-reduced-motion:no-preference){
+  html:not(.reduce-motion) #overlay .realhub.hb .nm-modes button:not(:disabled):active{transform:translateY(2px)!important}
+}
+#overlay .realhub.hb .nm-modes .m-coop{
+  background:linear-gradient(135deg,color-mix(in srgb,var(--m-card) 88%,#8ba6eb),var(--m-sunk));
+}
+html.reduce-motion #overlay .realhub.hb .nm-modes *,
+html.reduce-motion #overlay .realhub.hb .nm-modes *::before,
+html.reduce-motion #overlay .realhub.hb .nm-modes *::after{animation:none!important;transition:none!important}
+html.reduce-motion #overlay .realhub.hb .nm-modes button:is(:hover,:active){transform:none!important}
+@media(prefers-reduced-motion:reduce){
+  #overlay .realhub.hb .nm-modes *,#overlay .realhub.hb .nm-modes *::before,#overlay .realhub.hb .nm-modes *::after{animation:none!important;transition:none!important}
+  #overlay .realhub.hb .nm-modes button:is(:hover,:active){transform:none!important}
+}
+@media(max-width:760px){
+  #overlay .realhub.hb .hb-left{padding-inline-start:5px}
+}
+
 #overlay .realhub.hb .hb-activities{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:10px}
 #overlay .realhub.hb .hb-activities button{min-width:0;height:100%;box-sizing:border-box;padding:8px 10px;flex-wrap:nowrap}
 #overlay .realhub.hb .hb-activities #hubEvents{
@@ -6369,7 +6424,7 @@ function showSelect(){
             <button class="hb-lang-auto" type="button" data-code="auto"><small aria-hidden="true">🌐</small>Auto · ${safeText((navigator.language || '').toUpperCase())}</button>
           </div>
           <button class="hb-pill hb-app" type="button" id="rhApp" aria-label="Instalar la app" title="Instalar la app"${appCanInstall() ? '' : ' hidden'}><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m-5-5 5 5 5-5M5 20h14"/></svg><span>App</span></button>
-          <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>
+          <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa"><span class="hb-fullscreen-icon" aria-hidden="true">⛶</span></button>
         </div>
         <div class="hb-user-card" role="group" aria-label="Jugador">
           <button type="button" class="hb-me" id="rhProfile">
