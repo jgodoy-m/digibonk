@@ -149,6 +149,7 @@ I18N.add('tr', {
   "días": "gün",
   "Evento Digimon: Papá Noel y Reno, quedan {0} {1}": "Digimon etkinliği: Noel Baba ve Ren Geyiği, {0} {1} kaldı",
   "Papá Noel y Reno": "Noel Baba ve Ren Geyiği",
+  "Cooperativo": "İş birliği",
   "Próximamente": "Yakında",
   "mejoras disponibles": "geliştirme mevcut",
   "Mejoras": "Geliştirmeler",
