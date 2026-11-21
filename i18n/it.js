@@ -1539,3 +1539,4 @@ I18N.add('it', {"×{0} daño": "×{0} danni", "×{0} recibido": "×{0} subiti",
 
 // Ranking del Digivice (récords del menú y ranking online)
 I18N.add('it', {"Mi historial": "La mia cronologia", "Tus marcas en todos los mapas": "I tuoi record su tutte le mappe", "Solo las partidas de este mapa": "Solo le partite su questa mappa", "Ver clasificación online": "Vedi classifica online", "Global": "Globale", "bajas": "uccisioni", "tiempo": "tempo", "Ol. {0}": "Ond. {0}", "{0} bajas": "{0} uccisioni", "Todas las regiones": "Tutte le regioni", "Solo jugadores de esta región": "Solo giocatori di questa regione", "Tu puesto": "La tua posizione"});
+I18N.add('it', {"Ver clasificación completa": "Vedi classifica completa"});
