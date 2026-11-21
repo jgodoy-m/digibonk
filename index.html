@@ -475,7 +475,7 @@ body.dbk-noplay #tutoTip{opacity:0!important}   /* el consejo no tapa las cartas
 .cl4-list{min-height:0;overflow:auto;display:flex;flex-direction:column;gap:6px;padding-right:4px}
 .cl4-item{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:12px;border:1px solid #2d5f78;background:#0b1a33;color:#e6f4ff;cursor:pointer;font:inherit;text-align:left}
 .cl4-item.sel{border-color:#ffd54f;box-shadow:0 0 12px rgba(255,213,79,.35)}
-.cl4-item.lock{opacity:.5;cursor:default}
+.cl4-item.lock{cursor:default}
 .cl4-item.lock .spr{filter:grayscale(1) brightness(.25)}
 .cl4-item small{display:block;font-size:10px;color:#9ad3e8;line-height:1.2}
 .cl4-detail{min-height:0;overflow:auto;padding:14px;border-radius:16px;border:1px solid #2d5f78;background:rgba(8,20,40,.85)}
@@ -2066,7 +2066,6 @@ html[data-theme=oscuro] .ps-atk.k-utilidad{background:rgba(79,214,142,.08);borde
 .ps-tile.lock .anim{filter:grayscale(1) brightness(.3)}
 .ps-tile.soon{border-color:#5c6a8f;opacity:.85}
 .ps-tile.soon img{width:62%;height:62%;object-fit:contain;image-rendering:pixelated;filter:grayscale(1) brightness(.35)}
-.ps-lock{position:absolute;top:4px;right:5px;font-size:11px}
 .ps-tile.miss{display:none}
 .ps-tile b{font:900 11.5px 'Nunito',system-ui,sans-serif;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 1px 0 rgba(0,0,0,.4)}
 .anim.ps-face{width:72%;height:auto;aspect-ratio:1;background-size:500% 100%;background-position:0 50%}
@@ -2498,12 +2497,16 @@ html[lang] body #topbar .tb-id .hud-portrait{width:26px;height:26px}}
 .ps-tile.sel:has(.ps-ic){background:transparent;box-shadow:none}
 .ps-tile.sel .ps-ic{box-shadow:0 0 0 4px var(--m-sel),0 0 0 8px var(--m-selbg),0 5px 0 var(--m-cta-sh)}
 .ps-tile.sel:has(.ps-ic) b{color:var(--m-sel)}
-.ps-tile.lock .ps-ic img,.ps-tile.soon .ps-ic img{filter:grayscale(1) brightness(.45)!important;width:100%!important;height:100%!important}
+.ps-ic.ps-ic-atlas{background-image:url('ui/jugador/retratos/proximamente.webp');background-size:1000% 700%;background-position:var(--portrait-x) var(--portrait-y)}
+.ps-ic.ps-ic-sealed img{filter:grayscale(.76) brightness(.82) saturate(.7)!important}
+.ps-ic-sealed::before,.ps-ic-sealed::after{content:"";position:absolute;z-index:1;box-sizing:border-box;pointer-events:none}
+.ps-ic-sealed::before{right:14%;bottom:26%;width:17%;height:16%;border:2px solid #e4efff;border-radius:70% 70% 0 0;background:#233752}
+.ps-ic-sealed::after{right:10%;bottom:14%;width:25%;height:19%;border:1px solid #d1e7ff;border-radius:4px;background:radial-gradient(circle at 50% 46%,#233752 18%,transparent 21%),linear-gradient(#e8f3ff,#9bbce5);box-shadow:0 2px 3px #0a172a99}
+.ps-tile:disabled:has(.ps-ic):hover .ps-ic,.ps-tile.soon:hover .ps-ic{transform:none}
 .ps-tile.soon:has(.ps-ic){opacity:1}
 .ps-tile.soon:has(.ps-ic) b,.ps-tile.lock:has(.ps-ic) b{color:var(--m-mute)}
 .ps-tile:has(.ps-ic) .ps-key{position:absolute;top:4px;left:4px;z-index:2;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:999px;background:var(--m-btn);color:var(--m-text);font:900 10px/18px 'Nunito',system-ui,sans-serif;text-align:center;box-shadow:var(--m-pillsh)}
 .ps-tile:has(.ps-ic) .ps-evo-dot{position:absolute;top:6px;right:8px;z-index:2}
-.ps-tile:has(.ps-ic) .ps-lock{position:absolute;top:28%;left:50%;transform:translate(-50%,-50%);z-index:2;font-size:20px}
 @media(max-width:760px){.ps-grid:has(.ps-ic){grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.ps-ic{max-width:64px}}
 /* Arreglos de iconos */
 .approved-info-dialog .enc-row.ach-row>b{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--m-line);font-size:17px}
@@ -2526,7 +2529,6 @@ html[lang] body #topbar .tb-id .hud-portrait{width:26px;height:26px}}
 .ps-ic-spr .anim{width:88%!important;height:88%!important}
 .cl4-skin .ps-ic{width:84px;max-width:84px;margin:0 auto 6px}
 .cl4-item .cl4-ic{width:44px;max-width:44px;flex:none;box-shadow:0 0 0 2px var(--m-cardline)}
-.cl4-item.lock .cl4-ic img{filter:grayscale(1) brightness(.45)}
 /* ---------- Registro y pausa con el estilo de los menús ---------- */
 #overlay:has(.rg){background:radial-gradient(ellipse 60% 70% at 30% 50%,rgba(78,99,232,.35),transparent 70%),radial-gradient(ellipse 40% 50% at 80% 45%,rgba(255,138,30,.2),transparent 70%),#0e1222!important}
 html[data-theme=oscuro] #overlay:has(.rg){background:radial-gradient(ellipse 60% 70% at 30% 50%,rgba(78,99,232,.18),transparent 70%),#121316!important}
@@ -4751,6 +4753,7 @@ const ZONE2_AT = ZONES[1].at;
    El mapa 3 tiene un único jefe final: en la primera pantalla huye por el portal a mitad de vida
    y en la segunda vuelve con la vida que le quedaba. */
 const AD = n => 'sprites/adventure/' + n + '.png';
+const classicPortrait = key => 'ui/jugador/retratos/' + key + '.webp';
 const MAPS = {
   bosque: {n: 1, name: 'Bosque File', kind: 'portal', zones: ZONES, minis: true, preview: ['textures/mapa_hierba.png', 'sprites/deco/bosque/arbol.png', AD('piedmon')],
     desc: 'Bosque y Pantano de Datos. Andromon abre el portal y Piedmon es el jefe final. Seis jefes menores por el camino.'},
@@ -6248,7 +6251,7 @@ function showCollection(){
       let own = 0, all = 0;
       for (const sk of lineSkins(k)){ all++; if (ownsAt(k, 0, sk.id)) own++; }
       return `<button class="cl4-item${k === colKey ? ' sel' : ''}${open ? '' : ' lock'}" data-k="${k}" ${open ? '' : 'disabled'}>
-        <span class="ps-ic cl4-ic"><img src="${open ? charIcon(k) : 'ui/jugador/' + k + '.webp'}" alt=""></span>
+        ${rosterPortrait(k, open, 'cl4-ic')}
         <span><b>${open ? CHARS[k].name : '???'}</b><small>${open ? own + ' skins · Maestría ' + masteryLv(k) : unlockHowProg(k)}</small></span></button>`;
     }).join('');
     const k = colKey, open = isUnlocked(k);
@@ -7435,23 +7438,24 @@ let pickStage = 0, pickStageFor = null;   // etapa de la línea que se previsual
 // Compañeros jugables en preparación: se ven en el selector como bloqueados hasta que estén terminados
 // Resto de Digimon de Adventure (sin bebés ni evoluciones de los jugables: SkullGreymon, Salamon, Guardromon y Andromon
 // van en la línea de Agumon, Gatomon y Hagurumon): se ven bloqueados con su nombre hasta que tengan hoja y jugabilidad
+// El tercer valor es la posición fija en el atlas de retratos.
 const COMING_SOON = [
-  ['devimon','Devimon'], ['etemon','Etemon'], ['metaletemon','MetalEtemon'],
-  ['myotismon','Myotismon'], ['venommyotismon','VenomMyotismon'], ['demidevimon','DemiDevimon'], ['metalseadramon','MetalSeadramon'],
-  ['puppetmon','Puppetmon'], ['machinedramon','Machinedramon'], ['piedmon','Piedmon'], ['apocalymon','Apocalymon'], ['ladydevimon','LadyDevimon'],
-  ['ogremon','Ogremon'], ['kuwagamon','Kuwagamon'], ['shellmon','Shellmon'], ['seadramon','Seadramon'], ['meramon','Meramon'],
-  ['monzaemon','Monzaemon'], ['numemon','Numemon'], ['unimon','Unimon'], ['centarumon','Centarumon'], ['mojyamon','Mojyamon'], ['bakemon','Bakemon'],
-  ['elecmon','Elecmon'], ['whamon','Whamon'], ['gazimon','Gazimon'], ['tyrannomon','Tyrannomon'], ['monochromon','Monochromon'],
-  ['drimogemon','Drimogemon'], ['sukamon','Sukamon'], ['chuumon','Chuumon'], ['piximon','Piximon'], ['gekomon','Gekomon'],
-  ['shogungekomon','ShogunGekomon'], ['otamamon','Otamamon'], ['vegiemon','Vegiemon'], ['digitamamon','Digitamamon'], ['tuskmon','Tuskmon'],
-  ['kokatorimon','Kokatorimon'], ['nanomon','Datamon'], ['gesomon','Gesomon'], ['raremon','Raremon'], ['mammothmon','Mammothmon'],
-  ['darktyrannomon','DarkTyrannomon'], ['phantomon','Phantomon'], ['gizamon','Gizamon'], ['megaseadramon','MegaSeadramon'],
-  ['scorpiomon','Scorpiomon'], ['divermon','Divermon'], ['kiwimon','Kiwimon'], ['cherrymon','Cherrymon'], ['garbagemon','Garbagemon'],
-  ['deramon','Deramon'], ['floramon','Floramon'], ['mushroomon','Mushroomon'], ['redvegiemon','RedVegiemon'], ['blossomon','Blossomon'],
-  ['mekanorimon','Mekanorimon'], ['tankmon','Tankmon'], ['megadramon','Megadramon'], ['gigadramon','Gigadramon'], ['warumonzaemon','WaruMonzaemon'],
-  ['pumpkinmon','Pumpkinmon'], ['gotsumon','Gotsumon'], ['dokugumon','Dokugumon'], ['flymon','Flymon'], ['snimon','Snimon'], ['tortomon','Tortomon'],
-  ['giromon','Giromon'], ['ebidramon','Ebidramon']
-].map(([id, name]) => ({id, name}));
+  ['devimon','Devimon',0], ['etemon','Etemon',1], ['metaletemon','MetalEtemon',2],
+  ['myotismon','Myotismon',3], ['venommyotismon','VenomMyotismon',4], ['demidevimon','DemiDevimon',5], ['metalseadramon','MetalSeadramon',6],
+  ['puppetmon','Puppetmon',7], ['machinedramon','Machinedramon',8], ['piedmon','Piedmon',9], ['apocalymon','Apocalymon',10], ['ladydevimon','LadyDevimon',11],
+  ['ogremon','Ogremon',12], ['kuwagamon','Kuwagamon',13], ['shellmon','Shellmon',14], ['seadramon','Seadramon',15], ['meramon','Meramon',16],
+  ['monzaemon','Monzaemon',17], ['numemon','Numemon',18], ['unimon','Unimon',19], ['centarumon','Centarumon',20], ['mojyamon','Mojyamon',21], ['bakemon','Bakemon',22],
+  ['elecmon','Elecmon',23], ['whamon','Whamon',24], ['gazimon','Gazimon',25], ['tyrannomon','Tyrannomon',26], ['monochromon','Monochromon',27],
+  ['drimogemon','Drimogemon',28], ['sukamon','Sukamon',29], ['chuumon','Chuumon',30], ['piximon','Piximon',31], ['gekomon','Gekomon',32],
+  ['shogungekomon','ShogunGekomon',33], ['otamamon','Otamamon',34], ['vegiemon','Vegiemon',35], ['digitamamon','Digitamamon',36], ['tuskmon','Tuskmon',37],
+  ['kokatorimon','Kokatorimon',38], ['nanomon','Datamon',39], ['gesomon','Gesomon',40], ['raremon','Raremon',41], ['mammothmon','Mammothmon',42],
+  ['darktyrannomon','DarkTyrannomon',43], ['phantomon','Phantomon',44], ['gizamon','Gizamon',45], ['megaseadramon','MegaSeadramon',46],
+  ['scorpiomon','Scorpiomon',47], ['divermon','Divermon',48], ['kiwimon','Kiwimon',49], ['cherrymon','Cherrymon',50], ['garbagemon','Garbagemon',51],
+  ['deramon','Deramon',52], ['floramon','Floramon',53], ['mushroomon','Mushroomon',54], ['redvegiemon','RedVegiemon',55], ['blossomon','Blossomon',56],
+  ['mekanorimon','Mekanorimon',57], ['tankmon','Tankmon',58], ['megadramon','Megadramon',59], ['gigadramon','Gigadramon',60], ['warumonzaemon','WaruMonzaemon',61],
+  ['pumpkinmon','Pumpkinmon',62], ['gotsumon','Gotsumon',63], ['dokugumon','Dokugumon',64], ['flymon','Flymon',65], ['snimon','Snimon',66], ['tortomon','Tortomon',67],
+  ['giromon','Giromon',68], ['ebidramon','Ebidramon',69]
+].map(([id, name, portrait]) => ({id, name, portrait}));
 // Favoritos del jugador (se guardan con el progreso) y orden del plantel; los favoritos van siempre primero
 const PICK_SORTS = [['num', 'Número'], ['name', 'Nombre'], ['plays', 'Más jugados']];
 const pickFavs = () => { const v = loadJSON('digibonk3d-favs', []); return Array.isArray(v) ? v : []; };
@@ -7609,10 +7613,10 @@ function renderRoster(){
     const open = isUnlocked(id), fav = open && favs.includes(id);
     return `<button type="button" class="ps-tile${id === k ? ' sel' : ''}${open ? '' : ' lock'}${fav ? ' fav' : ''}" ${open ? `data-pick="${id}"` : 'disabled'} data-name="${open ? CHARS[id].name.toLowerCase() : '???'}" title="${open ? CHARS[id].name : unlockHowProg(id)}">
       <span class="ps-key">${i + 1}</span>${open ? `<span class="ps-fav${fav ? ' on' : ''}" data-fav="${id}" role="button" aria-pressed="${fav}" title="${fav ? 'Quitar de favoritos' : 'Marcar como favorito'}">${fav ? '★' : '☆'}</span>` : ''}${open && pickIsEvolved(id) ? '<span class="ps-evo-dot" title="Ya ha evolucionado"></span>' : ''}
-      <span class="ps-ic"><img src="${open ? charIcon(id) : 'ui/jugador/' + id + '.webp'}" alt="" loading="lazy"></span><b>${open ? CHARS[id].name : '???'}</b>
+      ${rosterPortrait(id, open)}<b>${open ? CHARS[id].name : '???'}</b>
     </button>`;
   }).join('');
-  const soon = COMING_SOON.map(c => `<span class="ps-tile soon" data-name="${c.name.toLowerCase()}" title="${c.name} · Próximamente"><span class="ps-lock">🔒</span><span class="ps-ic"><img src="${AD(c.id)}" alt="" loading="lazy"></span><b>${c.name}</b></span>`).join('');
+  const soon = COMING_SOON.map(c => `<span class="ps-tile soon" data-name="${c.name.toLowerCase()}" title="${c.name} · Próximamente">${soonPortrait(c)}<b>${c.name}</b></span>`).join('');
   el.innerHTML = `<div class="ps-find"><input class="ps-search" id="pkSearch" placeholder="Buscar por nombre..." value="${pickQuery}" maxlength="20">
     <select class="ps-sort" id="pkSort" title="Ordenar" aria-label="Ordenar">${PICK_SORTS.map(([id, n]) => `<option value="${id}"${sort === id ? ' selected' : ''}>${n}</option>`).join('')}</select></div>
     <div class="ps-grid" id="pkGrid">${tiles}${soon}</div>
@@ -10300,7 +10304,7 @@ const OWN_ITEMS = {
   frigimon:  ['Copo de Frigimon', 'Recibes un 6% menos de daño por nivel.', () => { g.p.armor = (g.p.armor || 1) * 0.94; }],
   wizardmon: ['Báculo de Wizardmon', '+6% daño y +6% área por nivel.', () => { g.p.dmg *= 1.06; g.p.area *= 1.06; }]
 };
-for (const [k, [name, d, on]] of Object.entries(OWN_ITEMS)) ITEMS['own_' + k] = {name, d, on, owner: k, img: 'ui/jugador/' + k + '.webp'};
+for (const [k, [name, d, on]] of Object.entries(OWN_ITEMS)) ITEMS['own_' + k] = {name, d, on, owner: k, img: classicPortrait(k)};
 // Cómo se desbloquea cada objeto. Los de base salen desde el principio; el resto por hitos, maestría o el encargo semanal
 const ITEM_BASE = ['gafas', 'silbato', 'carne', 'moneda'];
 const ITEM_HITOS = {
@@ -13916,8 +13920,20 @@ function skinHasArt(key, st, id){ return id === 'clasico' || ANIM_IDS.has(`${key
 function skinLineArt(key, id){ for (let st = 0; st < stageCount(key); st++) if (skinHasArt(key, st, id)) return st; return -1; }
 function lineSkins(key){ return SKINS.filter(sk => skinLineArt(key, sk.id) >= 0 && (!sk.hidden || ownsAt(key, 0, sk.id))); }
 // Icono redondo de un Digimon con su skin (si la skin no tiene icono, el del Digimon)
-function charIcon(key, skin = equippedAt(key, 0)){ const ic = skinIconFor(key, skin); return ic ? ic.src : 'ui/jugador/' + key + '.webp'; }
-function skinThumb(key, sk){ const ic = skinIconFor(key, sk.id); if (ic || sk.id === 'clasico') return `<span class="ps-ic"><img src="${ic ? ic.src : 'ui/jugador/' + key + '.webp'}" alt=""></span>`; const st = Math.max(0, skinLineArt(key, sk.id)); return `<span class="ps-ic ps-ic-spr">${animEl(spriteWith(key, st, sk.id), 'ps-face')}</span>`; }
+function charIcon(key, skin = equippedAt(key, 0)){
+  return skinIconFor(key, skin)?.src || (CHARS[key] ? classicPortrait(key) : 'ui/jugador/' + key + '.webp');
+}
+function rosterPortrait(key, open, cls = ''){
+  const src = open ? charIcon(key) : classicPortrait(key);
+  return `<span class="ps-ic ${cls}${open ? '' : ' ps-ic-sealed'}"><img src="${src}" alt="" loading="lazy"></span>`;
+}
+function soonPortrait({id, portrait}){
+  if (portrait == null) return `<span class="ps-ic ps-ic-sealed"><img src="${AD(id)}" alt="" loading="lazy"></span>`;
+  const x = (portrait % 10) * 100 / 9;
+  const y = Math.floor(portrait / 10) * 100 / 6;
+  return `<span class="ps-ic ps-ic-sealed ps-ic-atlas" style="--portrait-x:${x}%;--portrait-y:${y}%"></span>`;
+}
+function skinThumb(key, sk){ const ic = skinIconFor(key, sk.id); if (ic || sk.id === 'clasico') return `<span class="ps-ic"><img src="${ic ? ic.src : classicPortrait(key)}" alt=""></span>`; const st = Math.max(0, skinLineArt(key, sk.id)); return `<span class="ps-ic ps-ic-spr">${animEl(spriteWith(key, st, sk.id), 'ps-face')}</span>`; }
 // Se llama al terminar cada partida: actualiza el progreso y devuelve las skins nuevas
 function statsOf(key){ return loadJSON('digibonk3d-stats', {})[key] || {plays:0, kills:0}; }
 function meetsReq(sk, st){
@@ -14171,7 +14187,7 @@ const PLAYER_ICONS = [
   {id:'agumon', name:'Agumon'}, {id:'gabumon', name:'Gabumon'}, {id:'biyomon', name:'Biyomon'}, {id:'tentomon', name:'Tentomon'},
   {id:'palmon', name:'Palmon'}, {id:'gomamon', name:'Gomamon'}, {id:'patamon', name:'Patamon'}, {id:'gatomon', name:'Gatomon'},
   {id:'leomon', name:'Leomon'}, {id:'hagurumon', name:'Hagurumon'}, {id:'frigimon', name:'Frigimon'}, {id:'wizardmon', name:'Wizardmon'}
-].map(x => ({...x, src: 'ui/jugador/' + x.id + '.webp'}));
+].map(x => ({...x, src: classicPortrait(x.id)}));
 // Iconos de skin: se desbloquean al tener la skin en alguna etapa (los de skins ocultas solo se ven al tenerlas)
 const SKIN_ICONS = [
   {key:'agumon', skin:'galactico'}, {key:'agumon', skin:'holografica'}, {key:'agumon', skin:'lcd'}, {key:'agumon', skin:'festival'}, {key:'agumon', skin:'reno'}, {key:'agumon', skin:'variocolor'},
