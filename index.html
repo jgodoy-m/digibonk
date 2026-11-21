@@ -3427,6 +3427,7 @@ html[data-theme=oscuro] :is(.shop-dialog,.shop-combat-preview){
   border-color:var(--shop-selected-line);background:var(--shop-selected);box-shadow:inset 0 -2px var(--shop-selected-line);
 }
 .shop-option>.shop-art{width:42px;height:42px}
+.shop-option .shop-thumb{display:block;width:100%;height:100%;object-fit:contain;border-radius:50%}
 .shop-art{display:grid;grid-template: minmax(0,1fr) / minmax(0,1fr);place-items:center;min-width:0}
 .shop-sprite{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated}
 .shop-art .rw-frame{display:grid;place-items:center;width:100%;height:100%}
@@ -3438,6 +3439,7 @@ html[data-theme=oscuro] :is(.shop-dialog,.shop-combat-preview){
   box-shadow:0 3px 12px var(--shop-shadow);
 }
 .shop-display-copy,.shop-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 9px}
+.shop-display-copy>.shop-price{margin-inline-end:3px}
 #overlay .shop-display-copy h3{
   margin:0;padding:0;color:var(--m-text);font:700 clamp(17px,2.4vw,25px)/1.12 Georgia,serif;
   overflow-wrap:anywhere;text-align:center;
@@ -3449,6 +3451,7 @@ html[data-theme=oscuro] :is(.shop-dialog,.shop-combat-preview){
   font:800 13px/1.2 Nunito,system-ui,sans-serif;cursor:pointer;
 }
 #overlay .shop-dialog .shop-buy:not(:disabled){background:#f4bc63!important;color:#251808!important;border-color:#ffe2a8!important}
+#overlay .shop-dialog .shop-buy:not(:disabled):hover{background:#ffd084!important}
 #overlay .shop-dialog .shop-buy:disabled{color:var(--m-soft);background:var(--m-sunk);opacity:1;cursor:default}
 #overlay .shop-dialog :is(button,input,summary):focus-visible,.shop-combat-preview button:focus-visible{
   outline:2px solid var(--m-acc);outline-offset:2px;
@@ -3463,18 +3466,28 @@ html[data-theme=oscuro] :is(.shop-dialog,.shop-combat-preview){
 .shop-code{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
 .shop-code input{flex:1;min-width:130px;padding:8px;border:1px solid var(--m-line2);border-radius:8px;background:var(--m-sunk);color:var(--m-text)}
 .shop-code input::placeholder{color:var(--m-mute);opacity:1}
-.shop-code-wrap,.shop-msg{margin:8px 12px 0;font-size:13px}
+.shop-code-wrap{margin:8px 12px 0;font-size:13px}
+.shop-msg{margin:5px 0 0;font-size:13px}
+.shop-counter .shop-msg{text-align:center}
 .shop-code-wrap summary{cursor:pointer;width:fit-content}.shop-msg:empty{display:none}
 @media(min-width:661px){
   .shop-offer:is(.shop-offer-frame,.shop-offer-title){
-    position:absolute;z-index:1;top:12cqw;width:16%;transform:translateX(-50%);justify-items:center;gap:8px;
+    position:absolute;z-index:1;top:17cqw;width:16%;transform:translateX(-50%);justify-items:center;
   }
   .shop-offer-frame{left:20%}.shop-offer-title{left:80%}
   .shop-shelf-label{
-    display:block;padding:4px 11px;border:1px solid #fac88a;border-radius:4px;background:#c98d52;
+    display:block;position:absolute;bottom:calc(100% + 17px);padding:4px 11px;border:1px solid #fac88a;border-radius:4px;background:#c98d52;
     color:#261a17!important;font:700 clamp(16px,2vw,23px)/1.15 Georgia,serif;box-shadow:0 3px 0 #381e15;
   }
-  #overlay .shop-dialog .shop-offer:not(.shop-offer-skin) button{width:80%}
+  #overlay .shop-dialog .shop-offer:not(.shop-offer-skin) button{
+    position:relative;width:74%;border-radius:5px 5px 14px 14px;
+    background:var(--shop-shelf);box-shadow:0 4px 8px #100e1090;
+  }
+  #overlay .shop-dialog .shop-offer:not(.shop-offer-skin) button[aria-pressed=true]{background:var(--shop-selected)}
+  .shop-offer:not(.shop-offer-skin) button::before{
+    content:"";position:absolute;bottom:100%;left:30%;right:30%;height:12px;pointer-events:none;
+    border-inline:3px solid #d2a365;
+  }
   .shop-offer:not(.shop-offer-skin) .shop-art{width:min(100%,92px);height:clamp(48px,7vw,72px)}
   .shop-offer:not(.shop-offer-skin) button>b{display:none}
 }
@@ -3483,6 +3496,7 @@ html[data-theme=oscuro] :is(.shop-dialog,.shop-combat-preview){
   .shop-meta{margin:4px 8px}
   .shop-wallet{font-size:11px}
   .shop-wallet img{width:15px;height:15px}
+  .shop-stall{display:contents}
   .shop-stage{--shop-plinth-y:64.3%;aspect-ratio:5/4;background-image:url(ui/hub/puesto-tokomon-movil.webp)}
   .shop-stage>.shop-art{height:44%}
   .shop-grid{justify-content:start;gap:5px;padding:6px;overflow-x:auto;scroll-snap-type:x proximity}
@@ -3490,8 +3504,14 @@ html[data-theme=oscuro] :is(.shop-dialog,.shop-combat-preview){
   #overlay .shop-dialog .shop-option{padding:3px 2px;font-size:11px;min-height:58px}
   .shop-option>b{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .shop-option>.shop-art{width:34px;height:34px}
-  .shop-counter{grid-area:3/1;width:100%;max-width:none;margin:0;border-width:0 0 1px;border-radius:0;padding:7px}
+  .shop-counter{
+    position:sticky;z-index:2;bottom:0;width:100%;max-width:none;
+    margin:0;border-width:1px 0;border-radius:0;padding:7px;
+  }
   #overlay .shop-dialog .shop-actions button{min-height:44px}
+}
+@media(max-width:380px){
+  .shop-wallet-unit{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 }
 @media(prefers-reduced-motion:reduce){.shop-stage .anim{animation:none}}
 
@@ -13249,6 +13269,8 @@ function alignShopSkin(art,it){
 }
 function shopItemArt(it, animate = false){
   if (it.type === 'skin'){
+    const portrait = !animate && skinIconFor(it.k,it.id);
+    if (portrait) return `<span class="shop-art"><img class="shop-thumb" src="${portrait.src}" alt=""></span>`;
     const url = spriteWith(it.k,it.stage,it.id);
     const sheet = sheetOf(url);
     const art = animate ? animEl(url,'shop-sprite') : sheet ?
@@ -13282,16 +13304,18 @@ function showShop(msg = '', selected = ''){
   const quest = featured.owned ? '' : `<div class="shop-quest"><div><b>${discounted ? 'Descuento conseguido' : 'Encargo de la tienda'}</b>
     <small>${discounted ? `Tu skin destacada tiene un ${SHOP_DISCOUNT_PCT}% de descuento hasta el lunes.` : `Derrota a un jefe de zona con ${CHARS[featured.k].name} y consigue un ${SHOP_DISCOUNT_PCT}% de descuento en su skin.`}</small></div>
     ${discounted ? '' : `<button type="button" id="shopQuest">${featured.locked ? 'Ver en Digidex' : 'Elegir mapa'}</button>`}</div>`;
-  menuModal('Tienda semanal', `<div class="shop-meta"><span>Rotación del lunes · ${rotation}</span><strong class="shop-wallet"><img src="ui/hud/ic_bits.webp" alt="">${fmt(bits)} Digicoins</strong></div>
+  menuModal('Tienda semanal', `<div class="shop-meta"><span>Rotación del lunes · ${rotation}</span><strong class="shop-wallet"><img src="ui/hud/ic_bits.webp" alt="">${fmt(bits)} <span class="shop-wallet-unit">Digicoins</span></strong></div>
     <div class="shop-stall">
       <div class="shop-display" id="shopDisplay"></div>
       <div class="shop-grid" role="group" aria-label="Ofertas semanales">${cards}</div>
-      <section class="shop-counter" aria-labelledby="shopItemTitle"></section>
+      <section class="shop-counter" aria-labelledby="shopItemTitle">
+        <div class="shop-counter-content"></div><p class="shop-msg" id="shopStatus" role="status"></p>
+      </section>
     </div>${quest}
     <details class="shop-code-wrap"><summary>Código de recompensa</summary><div class="shop-code">
       <input id="shopCode" maxlength="24" aria-label="Código de recompensa" placeholder="Introduce tu código" autocomplete="off">
       <button type="button" id="shopRedeem">Canjear</button>
-    </div></details><p class="shop-msg" id="shopStatus" aria-live="polite"></p>`,
+    </div><p class="shop-msg" id="shopCodeStatus" role="status"></p></details>`,
     () => document.getElementById('hbShop')?.focus({preventScroll:true}));
   const dlg = document.querySelector('#realModalHost .approved-info-dialog');
   if (!dlg) return;
@@ -13299,9 +13323,10 @@ function showShop(msg = '', selected = ''){
   const close = dlg.querySelector('#realClose');
   close.setAttribute('aria-label', 'Cerrar tienda');
   close.before(dlg.querySelector('.shop-wallet'));
-  dlg.querySelector('#shopStatus').textContent = msg;
+  const status = dlg.querySelector('#shopStatus');
+  status.textContent = msg;
   const options = [...dlg.querySelectorAll('[data-shop-item]')];
-  const display = dlg.querySelector('#shopDisplay'), counter = dlg.querySelector('.shop-counter');
+  const display = dlg.querySelector('#shopDisplay'), counter = dlg.querySelector('.shop-counter-content');
   const frame = items.find(it => it.type === 'frame'), title = items.find(it => it.type === 'title');
   let current = items.find(it => it.key === selected) || featured, combined = false;
   const reopen = msg => { showSelect(); showShop(msg, current.key); };
@@ -13332,7 +13357,10 @@ function showShop(msg = '', selected = ''){
     </div>`;
     if (skin) alignShopSkin(display.querySelector('.shop-stage > .shop-art'),it);
   };
-  options.forEach((button, i) => button.onclick = () => draw(items[i]));
+  options.forEach((button, i) => button.onclick = () => {
+    status.textContent = '';
+    draw(items[i]);
+  });
   draw(current);
   if (selected) options.find(b => b.dataset.shopItem === current.key)?.focus({preventScroll:true});
   counter.onclick = event => {
@@ -13364,17 +13392,14 @@ function showShop(msg = '', selected = ''){
     selectedKey = featured.k; runMode = 'normal'; runWeekly = false;
     restoreRunPrefs(); showMapSelect();
   };
-  const input = dlg.querySelector('#shopCode'), redeem = dlg.querySelector('#shopRedeem');
+  const input = dlg.querySelector('#shopCode'), redeem = dlg.querySelector('#shopRedeem'), codeStatus = dlg.querySelector('#shopCodeStatus');
   input.addEventListener('keydown', e => {
     e.stopPropagation();
     if (e.key === 'Enter') redeem.click();
   });
   redeem.onclick = () => {
     if (!input.value.trim()) return;
-    reopen(redeemCode(input.value));
-    const code = document.querySelector('#realModalHost .shop-code-wrap');
-    code.open = true;
-    code.querySelector('summary').focus({preventScroll:true});
+    codeStatus.textContent = redeemCode(input.value);
   };
 }
 function showLogros(){
