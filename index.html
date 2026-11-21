@@ -10595,7 +10595,7 @@ function basicAttackArt(key){
   if (FX_TEX[kind]) return kind;
   if (!FX_BASIC_REQUESTS.has(key)){
     FX_BASIC_REQUESTS.add(key);
-    const texture = loader.load('ui/ataques/' + key + '.png', loaded => { FX_TEX[kind] = loaded; });
+    const texture = loader.load('ui/ataques/' + key + '.png?v=2', loaded => { FX_TEX[kind] = loaded; });
     texture.colorSpace = THREE.SRGBColorSpace;
   }
   return null;
