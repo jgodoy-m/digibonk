@@ -3346,20 +3346,31 @@ html.reduce-motion .living-actor.swim::after{animation:none!important}
 @keyframes lv-dot{0%,100%{scale:1}50%{scale:1.25}}
 @media(prefers-reduced-motion:reduce){#overlay .realhub.hb :is(.nm-play,.nm-event,.nm-stack,.nm-tiles) *,#overlay .realhub.hb :is(.nm-play,.lv-sheen)::before,#overlay .realhub.hb .lv-sheen::after{animation:none!important}#overlay .realhub.hb .lv-fx{display:none}}
 /* Tienda semanal: puesto de Tokomon */
-#overlay .approved-info-dialog.shop-dialog{
-  --m-text:#ffedd0;--m-soft:#ddcab1;--m-mute:#cbb490;--m-sunk:#18212c;--m-card:#202b39;
+:is(.shop-dialog,.shop-combat-preview){
+  --m-text:#35251d;--m-soft:#654b3b;--m-mute:#6e5545;--m-sunk:#f5e9d9;--m-card:#fffbf4;
+  --m-line2:#a38267;--m-acc:#855019;--m-good:#326137;
+  --shop-shell:#fbf3e7;--shop-header:#f1e1cb;--shop-shelf:#e9d4bd;--shop-selected:#f4d7ad;
+  --shop-selected-line:#92521d;--shop-shadow:#452e2233;
+}
+html[data-theme=oscuro] :is(.shop-dialog,.shop-combat-preview){
+  --m-text:#ffedd0;--m-soft:#ddcab1;--m-mute:#cbb490;--m-sunk:#18212c;--m-card:#253141;
   --m-line2:#927455;--m-acc:#ffd48c;--m-good:#baedaa;
-  width:min(1060px,calc(100vw - 20px))!important;max-width:none!important;max-height:calc(100dvh - 16px);
+  --shop-shell:#17212c;--shop-header:#162131;--shop-shelf:#2d2324;--shop-selected:#523a2b;
+  --shop-selected-line:#ffd08a;--shop-shadow:#10162085;
+}
+#overlay .approved-info-scrim:has(>.shop-dialog){padding:8px}
+#overlay .approved-info-dialog.shop-dialog{
+  width:min(1060px,100%)!important;max-width:100%!important;max-height:calc(100dvh - 16px);
   padding:0 0 12px;text-align:start;overscroll-behavior:contain;
-  border:1px solid #917052!important;background:#17212c!important;color:var(--m-text)!important;
+  border:1px solid var(--m-line2)!important;background:var(--shop-shell)!important;color:var(--m-text)!important;
 }
 #overlay .shop-dialog>header{
-  display:flex;align-items:center;gap:8px;margin:0;padding:8px 14px;background:#162131;
-  border-bottom:1px solid #917052!important;
+  display:flex;align-items:center;gap:8px;margin:0;padding:8px 14px;background:var(--shop-header);
+  border-bottom:1px solid var(--m-line2)!important;
 }
 #overlay .shop-dialog>header h2{
   flex:1;min-width:0;padding:0;margin:0!important;background:none;color:var(--m-text)!important;
-  font:700 clamp(20px,3.6vw,31px)/1.12 Georgia,serif!important;box-shadow:none;transform:none;
+  font:700 clamp(20px,3.6vw,31px)/1.12 Georgia,serif!important;box-shadow:none;text-shadow:none;transform:none;
 }
 #overlay .shop-dialog>header #realClose{flex:0 0 36px;height:36px;margin:0}
 #overlay .shop-dialog #realDone{display:none}
@@ -3380,51 +3391,56 @@ html.reduce-motion .living-actor.swim::after{animation:none!important}
   filter:drop-shadow(0 5px 3px #19101885);
 }
 .shop-stage .cz-prev{
-  --trainer-title:#ffdb9a;position:absolute;left:50%;bottom:calc(100% - var(--shop-plinth-y));transform:translateX(-50%);
+  position:absolute;left:50%;bottom:calc(100% - var(--shop-plinth-y));transform:translateX(-50%);
   display:flex;align-items:center;gap:10px;width:min(55%,300px);min-height:76px;box-sizing:border-box;
-  padding:9px 12px;border:1px solid #a88d70;border-radius:10px;background:#162637;color:#ffedcf;text-align:start;
-  box-shadow:0 6px 14px #0b142d88;
+  padding:9px 12px;border:1px solid var(--m-line2);border-radius:10px;text-align:start;
+  box-shadow:0 6px 14px var(--shop-shadow);
 }
+.shop-stage .cz-prev.has-trainer-bg{--m-text:#fff}
 .shop-stage .cz-prev .trainer-portrait{width:58px!important;height:58px!important;flex:none;margin:0}
 .shop-stage .cz-prev-copy{display:grid;min-width:0;overflow-wrap:anywhere;font-weight:900}
-.shop-stage .cz-preview-title{color:#ffd48c;font-size:12px}
+.shop-stage .cz-preview-title{color:var(--trainer-title)!important;font-size:12px}
 .shop-grid{
   grid-area:2/1;display:flex;align-items:stretch;justify-content:center;gap:7px;padding:8px 10px;
-  border-block:1px solid #785741;background:#2d2324;
+  border-block:1px solid var(--m-line2);background:var(--shop-shelf);
 }
 .shop-offer{display:grid;justify-items:stretch;min-width:0;flex:0 1 100px}
 .shop-shelf-label{display:none}
 #overlay .shop-dialog .shop-option{
   display:grid;align-content:center;justify-items:center;gap:2px;width:100%;min-height:54px;margin:0;
-  padding:4px 6px;border:1px solid var(--m-line2);border-radius:7px;background:#1d2934;color:var(--m-text);
+  padding:4px 6px;border:1px solid var(--m-line2);border-radius:7px;background:var(--m-card);color:var(--m-text);
   font:800 12px/1.15 Nunito,system-ui,sans-serif;text-align:center;cursor:pointer;overflow-wrap:anywhere;
 }
-#overlay .shop-dialog .shop-option[aria-pressed=true]{border-color:#ffd08a;background:#523a2b;box-shadow:inset 0 -2px #d2904e}
+#overlay .shop-dialog .shop-option[aria-pressed=true]{
+  border-color:var(--shop-selected-line);background:var(--shop-selected);box-shadow:inset 0 -2px var(--shop-selected-line);
+}
 .shop-option>.shop-art{width:42px;height:42px}
-.shop-art{display:grid;place-items:center;min-width:0}
+.shop-art{display:grid;grid-template: minmax(0,1fr) / minmax(0,1fr);place-items:center;min-width:0}
 .shop-sprite{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated}
 .shop-art .rw-frame{display:grid;place-items:center;width:100%;height:100%}
 .shop-art .rw-frame img{width:66%;height:66%;border-radius:50%;object-fit:cover}
-.shop-art .title-badge-art{display:block;width:100%;height:100%;max-height:100%;object-fit:contain}
+.shop-art .title-badge-art{display:block;width:100%;height:100%;min-height:0;object-fit:contain}
 .shop-counter{
   position:relative;box-sizing:border-box;align-self:end;justify-self:center;max-width:calc(100% - 18px);margin:0 0 6%;
-  padding:7px 12px;border:1px solid #aa865f;border-radius:8px;background:#18212cf5;
-  box-shadow:0 3px 12px #10162085;
+  padding:7px 12px;border:1px solid var(--m-line2);border-radius:8px;background:var(--shop-shell);
+  box-shadow:0 3px 12px var(--shop-shadow);
 }
 .shop-display-copy,.shop-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 9px}
 #overlay .shop-display-copy h3{
   margin:0;padding:0;color:var(--m-text);font:700 clamp(17px,2.4vw,25px)/1.12 Georgia,serif;
   overflow-wrap:anywhere;text-align:center;
 }
-.shop-display-copy small,.shop-quest small{color:var(--m-soft)}
+.shop-display-copy small,.shop-quest small{color:var(--m-soft)!important}
 .shop-price{font-size:14px}.shop-price del{color:var(--m-mute);font-size:12px}
 #overlay .shop-dialog :is(.shop-aux,.shop-buy,.shop-unlock,.shop-quest button,#shopRedeem){
   min-height:36px;margin:0;padding:5px 9px;border:1px solid var(--m-line2);border-radius:7px;background:var(--m-card);color:var(--m-text);
   font:800 13px/1.2 Nunito,system-ui,sans-serif;cursor:pointer;
 }
 #overlay .shop-dialog .shop-buy:not(:disabled){background:#f4bc63!important;color:#251808!important;border-color:#ffe2a8!important}
-#overlay .shop-dialog .shop-buy:disabled{opacity:.72;cursor:default}
-#overlay .shop-dialog button:focus-visible{outline:2px solid var(--m-acc);outline-offset:2px}
+#overlay .shop-dialog .shop-buy:disabled{color:var(--m-soft);background:var(--m-sunk);opacity:1;cursor:default}
+#overlay .shop-dialog :is(button,input,summary):focus-visible,.shop-combat-preview button:focus-visible{
+  outline:2px solid var(--m-acc);outline-offset:2px;
+}
 .shop-aux[aria-pressed=true]{box-shadow:inset 0 -2px var(--m-acc)}
 .shop-owned{color:var(--m-good);font-weight:900;font-size:13px}
 .shop-quest{
@@ -3434,6 +3450,7 @@ html.reduce-motion .living-actor.swim::after{animation:none!important}
 .shop-quest>div{flex:1}.shop-quest small{display:block}
 .shop-code{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
 .shop-code input{flex:1;min-width:130px;padding:8px;border:1px solid var(--m-line2);border-radius:8px;background:var(--m-sunk);color:var(--m-text)}
+.shop-code input::placeholder{color:var(--m-mute);opacity:1}
 .shop-code-wrap,.shop-msg{margin:8px 12px 0;font-size:13px}
 .shop-code-wrap summary{cursor:pointer;width:fit-content}.shop-msg:empty{display:none}
 @media(min-width:661px){
@@ -3445,13 +3462,11 @@ html.reduce-motion .living-actor.swim::after{animation:none!important}
     display:block;padding:4px 11px;border:1px solid #fac88a;border-radius:4px;background:#c98d52;
     color:#261a17!important;font:700 clamp(16px,2vw,23px)/1.15 Georgia,serif;box-shadow:0 3px 0 #381e15;
   }
-  #overlay .shop-dialog .shop-offer:not(.shop-offer-skin) button{width:80%;background:#172430e8}
-  #overlay .shop-dialog .shop-offer:not(.shop-offer-skin) button[aria-pressed=true]{background:#523a2b}
+  #overlay .shop-dialog .shop-offer:not(.shop-offer-skin) button{width:80%}
   .shop-offer:not(.shop-offer-skin) .shop-art{width:min(100%,92px);height:clamp(48px,7vw,72px)}
   .shop-offer:not(.shop-offer-skin) button>b{display:none}
 }
 @media(max-width:660px){
-  #overlay .approved-info-dialog.shop-dialog{width:calc(100vw - 12px)!important}
   #overlay .shop-dialog>header{padding:6px 8px}
   .shop-meta{margin:4px 8px}
   .shop-wallet{font-size:11px}
@@ -3468,7 +3483,12 @@ html.reduce-motion .living-actor.swim::after{animation:none!important}
 }
 @media(prefers-reduced-motion:reduce){.shop-stage .anim{animation:none}}
 
-.attack-preview.shop-combat-preview{width:min(700px,calc(100vw - 24px));padding:clamp(12px,2vw,20px)}
+.attack-preview.shop-combat-preview{
+  width:min(700px,calc(100vw - 24px));padding:clamp(12px,2vw,20px);
+  background:var(--shop-shell);color:var(--m-text);border-color:var(--m-line2);
+}
+.shop-combat-preview header p,.shop-combat-preview .attack-preview-status{color:var(--m-soft)}
+.shop-combat-preview button{background:var(--m-card);color:var(--m-text);border-color:var(--m-line2)}
 .shop-combat-preview .attack-preview-stage{
   max-height:none;background:linear-gradient(0deg,#0a133ca2,#0a133962),url(ui/fondo_inicio.webp) center 65%/cover
 }
@@ -3557,16 +3577,19 @@ html[lang] .trainer-screen .trainer-header .g-back,
 @media(min-width:1100px){.trainer-stats{grid-template-columns:repeat(6,minmax(0,1fr))}}
 .trainer-stat{display:flex;align-items:center;gap:10px;min-width:0;min-height:68px;padding:8px 12px;border-radius:15px;
   background:var(--trainer-surface);border:1px solid var(--trainer-border);overflow-wrap:anywhere}
-.trainer-stat img{width:28px;height:28px;flex:none;object-fit:contain}
+.trainer-stat-icon{display:grid;place-items:center;width:40px;height:40px;flex:none;border-radius:11px;
+  background:var(--trainer-inset);border:1px solid var(--trainer-border)}
+.trainer-stat-icon img{width:34px;height:34px;object-fit:contain}
 .trainer-stat b{display:block;color:var(--trainer-accent);font-size:clamp(21px,2.8vw,32px);line-height:1.15;font-variant-numeric:tabular-nums}
 .trainer-stat small{font-size:13px;line-height:1.2}
-.trainer-device{min-width:0}
-.trainer-device{display:grid;align-content:center}
-.trainer-device-label{position:absolute;inset:8% 25% auto;margin:0;text-align:center;color:#3b4e6f;
-  font:900 clamp(11px,1.4vw,17px)/1 'Nunito',system-ui}
+.trainer-device{min-width:0;display:grid;align-content:center;container-type:inline-size}
+.trainer-device-label{position:absolute;z-index:1;top:8.2%;left:50%;transform:translate(-50%,-50%);margin:0;
+  width:max-content;max-width:66%;padding:2px 9px;border:1px solid #b5aa98;border-radius:8px;
+  background:#fff6e7;color:#24354d;text-align:center;overflow-wrap:anywhere;
+  font:900 clamp(14px,4.4cqi,21px)/1.05 'Nunito',system-ui}
 .trainer-device-shell{position:relative;aspect-ratio:1752 / 897;width:100%;min-height:176px;margin-inline:auto;isolation:isolate}
 .trainer-device-shell>img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;filter:drop-shadow(0 6px 7px #18353640)}
-.trainer-device-screen{position:absolute;inset:19.7% 14.3% 28.8%;display:grid;align-items:center;box-sizing:border-box;
+.trainer-device-screen{position:absolute;inset:19.7% 14.3% 28.8%;display:grid;align-items:safe center;box-sizing:border-box;overflow:auto;
   padding:4px clamp(7px,1vw,14px);border-radius:clamp(6px,1.4vw,17px);background:var(--trainer-lcd);color:var(--trainer-lcd-ink)}
 .trainer-device-view{min-width:0;margin:0;line-height:1.12}
 .trainer-device-view[hidden]{display:none}
@@ -3580,8 +3603,21 @@ html[lang] .trainer-screen .trainer-header .g-back,
 .trainer-device-row dd{margin:0;font-weight:900;text-align:right;font-variant-numeric:tabular-nums}
 .trainer-device-row .trainer-device-pending{font-weight:750;opacity:.83}
 .trainer-device-controls{position:absolute;inset:76% 10% 8%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;gap:5px}
-.trainer-device-controls button{min-height:36px;padding:4px 2px;border:1px solid #a69d8c;border-radius:9px;background:#fff7e9;
-  color:#273954;box-shadow:0 2px 0 #a69d8c;font:850 clamp(10px,1.2vw,14px)/1.1 'Nunito',system-ui;cursor:pointer;overflow-wrap:anywhere}
+.trainer-device-controls button{display:flex;align-items:center;justify-content:center;gap:5px;min-width:0;min-height:38px;padding:3px 2px;
+  border:1px solid #a69d8c;border-radius:9px;background:#fff7e9;color:#273954;box-shadow:0 2px 0 #a69d8c;
+  font:850 clamp(10px,2.6cqi,14px)/1.1 'Nunito',system-ui;cursor:pointer;overflow-wrap:anywhere}
+.trainer-device-controls button>span:last-child{min-width:0}
+.trainer-device-icon{width:20px;height:20px;flex:none;object-fit:contain}
+.trainer-device-timer{position:relative;display:grid;place-items:center}
+.trainer-device-timer::before{content:'';position:absolute;top:1px;width:7px;height:2px;border-radius:2px;background:currentColor}
+.trainer-device-timer::after{content:'';width:11px;height:11px;margin-top:3px;border:2px solid currentColor;border-radius:50%;
+  background:linear-gradient(currentColor,currentColor) 50% 2px/2px 5px no-repeat,
+             linear-gradient(currentColor,currentColor) 50% 6px/4px 2px no-repeat}
+@container(max-width:400px){
+  .trainer-device-controls button{flex-direction:column;gap:1px;min-height:37px}
+  .trainer-device-icon{width:16px;height:16px}
+  .trainer-device-timer::after{width:9px;height:9px;background-size:2px 4px,4px 2px;background-position:50% 1px,50% 4px}
+}
 .trainer-device-controls button[aria-pressed="true"]{border-color:#365d9d;background:#365d9d;color:#fff;box-shadow:0 2px 0 #213f77}
 .trainer-device-controls button[aria-pressed="false"]:hover{background:#fff}
 .trainer-device-controls button:focus-visible{outline:3px solid #365d9d;outline-offset:2px}
@@ -3700,10 +3736,17 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
 .trainer-panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .trainer-panel-head h3{margin:0}
 .trainer-panel-action{padding:7px 12px;border:1px solid var(--m-line2);border-radius:9px;background:var(--m-sunk);color:var(--m-text);font:800 13px 'Nunito',system-ui;cursor:pointer}
-.trainer-season-grid{display:grid;gap:10px;margin:0;padding:0;list-style:none}
-.trainer-season-reward{display:flex;gap:12px;align-items:center;padding:9px 12px;border-radius:12px;background:var(--trainer-inset)}
-.trainer-season-reward img{width:38px;height:38px;object-fit:contain;flex:none}
+.trainer-showcase .trainer-panel-head{justify-content:flex-start}
+.trainer-showcase .trainer-panel-head img{width:30px;height:30px;object-fit:contain;flex:none}
+.trainer-showcase p{margin:0 0 12px;color:var(--trainer-subtle);font-size:13px;line-height:1.4}
+.trainer-season-grid{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.trainer-season-reward{display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--trainer-border);
+  border-radius:12px;background:var(--trainer-inset)}
+.trainer-season-reward img{width:34px;height:34px;object-fit:contain;flex:none}
+.trainer-season-reward.is-locked img{filter:saturate(.45)}
 .trainer-season-reward :is(b,small){display:block;overflow-wrap:anywhere}
+.trainer-season-status{color:var(--trainer-accent);font-weight:850}
+.trainer-season-reward.is-locked .trainer-season-status{color:var(--trainer-subtle)}
 .trainer-owner-actions{display:flex;gap:6px 10px;flex-wrap:wrap;justify-content:flex-end}
 .trainer-run-list{display:grid;margin:0;padding:0;list-style:none}
 .trainer-run-list li{min-width:0;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px 16px;padding:10px 0}
@@ -3783,6 +3826,8 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
   .trainer-hero{gap:12px;padding:14px}
   .trainer-screen :is(#plShare,#plChange){line-height:1.2;font-size:13px!important}
   .trainer-stat{gap:6px}
+  .trainer-stat-icon{width:32px;height:32px}
+  .trainer-stat-icon img{width:28px;height:28px}
   .trainer-custom .cz-grid{grid-template-columns:minmax(0,1fr)}
   .trainer-custom .cz-backgrounds{grid-template-columns:repeat(2,minmax(0,1fr))}
   .trainer-custom .cz-filters input{font-size:16px}
@@ -3944,6 +3989,7 @@ html[data-theme=oscuro] #overlay .realhub.hb .hb-user-card{
 }
 
 /* Inicio: modos jugables arriba y actividades en la fila inferior. */
+#overlay .realhub.hb .hb-left{box-sizing:border-box;padding-inline-start:clamp(6px,1.1vw,18px)}
 #overlay .realhub.hb .nm-modes{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) minmax(0,.8fr)!important}
 #overlay .realhub.hb .nm-modes>.hb-mode{
   min-width:0;flex-direction:column;justify-content:center;gap:8px;text-align:center;padding:10px 4px!important
@@ -3978,7 +4024,61 @@ html[data-theme=oscuro] #overlay .realhub.hb .hb-user-card{
 @media(max-width:600px) and (orientation:landscape){
   #overlay .realhub.hb .hb-surv-stack .hb-mode{flex-direction:column;gap:3px;text-align:center}
 }
-#overlay .realhub.hb .nm-modes .m-modes{background:linear-gradient(140deg,#4468b5,#2e4278);box-shadow:0 3px 0 #1b2b57}
+#overlay .realhub.hb .nm-modes :is(.m-surv,.m-modes){
+  border:1px solid #ffffff50;color:#fff;
+  background:
+    radial-gradient(ellipse at 15% 0%,#ffffff36,transparent 66%),
+    repeating-radial-gradient(circle at 75% 92%,transparent 0 14px,#ffffff10 15px 16px,transparent 17px 28px),
+    linear-gradient(145deg,var(--mode-top),var(--mode-bottom));
+  box-shadow:inset 0 1px #ffffff30,0 4px 0 var(--mode-edge),0 7px 15px #07142745;
+  transition:transform .16s ease,filter .16s ease
+}
+#overlay .realhub.hb .nm-modes .m-surv{--mode-top:#6349c5;--mode-bottom:#382489;--mode-edge:#251758}
+#overlay .realhub.hb .nm-modes .m-modes{--mode-top:#346caf;--mode-bottom:#1d3f76;--mode-edge:#122a51}
+#overlay .realhub.hb .nm-modes :is(.m-surv,.m-modes)::after{background:#ffffff0e}
+#overlay .realhub.hb .nm-modes :is(.m-surv,.m-modes)>i{
+  border:1px solid #ffffff44;box-sizing:border-box;box-shadow:0 2px 7px #15164247
+}
+#overlay .realhub.hb .nm-modes :is(.m-surv,.m-modes) small{opacity:1}
+/* Los iconos del inicio se mueven por turnos, sin desplazar sus botones. */
+#overlay .realhub.hb .hb-fullscreen-icon{display:inline-block}
+#overlay .realhub.hb .hb-top{--hb-icon-delay:-1s}
+#overlay .realhub.hb .hb-activities{--hb-icon-delay:-2s}
+#overlay .realhub.hb .hb-bar{--hb-icon-delay:-3s}
+#overlay .realhub.hb .hb-record-head{--hb-icon-delay:-4s}
+#overlay .realhub.hb .hb-left :is(button, a):nth-child(even),
+#overlay .realhub.hb .hb-top :is(button, .hb-chip):nth-child(even){--hb-icon-delay:-5s}
+#overlay .realhub.hb .m-modes{--hb-icon-delay:-6s}
+#overlay .realhub.hb .m-coop .nm-ic:last-child{--hb-icon-delay:-3s}
+@keyframes hb-icon-lift{
+  0%,22%,100%{translate:0;scale:1}
+  7%{translate:0 -2px;scale:1.055}
+  14%{translate:0 0;scale:.985}
+}
+@media(prefers-reduced-motion:no-preference){
+  html:not(.reduce-motion) #overlay .realhub.hb :is(.hb-top img,.hb-top svg,.hb-fullscreen-icon,.hb-main .nm-ic,.hb-main .nm-logo,.hb-record-head img,.hb-continue img,.hbc-go,.nm-band img){
+    animation:hb-icon-lift 7.2s ease-in-out var(--hb-icon-delay,0s) infinite
+  }
+}
+#overlay .realhub.hb .nm-modes button:not(:disabled):hover{filter:brightness(1.1)}
+@media(prefers-reduced-motion:no-preference){
+  html:not(.reduce-motion) #overlay .realhub.hb .nm-modes button:not(:disabled):active{transform:translateY(2px)!important}
+}
+#overlay .realhub.hb .nm-modes .m-coop{
+  background:linear-gradient(135deg,color-mix(in srgb,var(--m-card) 88%,#8ba6eb),var(--m-sunk));
+}
+html.reduce-motion #overlay .realhub.hb .nm-modes *,
+html.reduce-motion #overlay .realhub.hb .nm-modes *::before,
+html.reduce-motion #overlay .realhub.hb .nm-modes *::after{animation:none!important;transition:none!important}
+html.reduce-motion #overlay .realhub.hb .nm-modes button:is(:hover,:active){transform:none!important}
+@media(prefers-reduced-motion:reduce){
+  #overlay .realhub.hb .nm-modes *,#overlay .realhub.hb .nm-modes *::before,#overlay .realhub.hb .nm-modes *::after{animation:none!important;transition:none!important}
+  #overlay .realhub.hb .nm-modes button:is(:hover,:active){transform:none!important}
+}
+@media(max-width:760px){
+  #overlay .realhub.hb .hb-left{padding-inline-start:5px}
+}
+
 #overlay .realhub.hb .hb-activities{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:10px}
 #overlay .realhub.hb .hb-activities button{min-width:0;height:100%;box-sizing:border-box;padding:8px 10px;flex-wrap:nowrap}
 #overlay .realhub.hb .hb-activities #hubEvents{
@@ -6374,7 +6474,7 @@ function showSelect(){
             <button class="hb-lang-auto" type="button" data-code="auto"><small aria-hidden="true">🌐</small>Auto · ${safeText((navigator.language || '').toUpperCase())}</button>
           </div>
           <button class="hb-pill hb-app" type="button" id="rhApp" aria-label="Instalar la app" title="Instalar la app"${appCanInstall() ? '' : ' hidden'}><svg class="nm-logo" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m-5-5 5 5 5-5M5 20h14"/></svg><span>App</span></button>
-          <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa">⛶</button>
+          <button class="hb-pill hb-sq" type="button" id="rhFullscreen" aria-label="Pantalla completa"><span class="hb-fullscreen-icon" aria-hidden="true">⛶</span></button>
         </div>
         <div class="hb-user-card" role="group" aria-label="Jugador">
           <button type="button" class="hb-me" id="rhProfile">
@@ -14246,21 +14346,29 @@ function showTrainerProfile(profile, shared = false){
   const played = profile.playedSeconds === null ? '—' : playedMinutes >= 60
     ? `${number(Math.floor(playedMinutes / 60))} h ${playedMinutes % 60} min` : `${playedMinutes} min`;
   const battleStats = [
-    ['Partidas', profile.plays, 'hub/ic_mision'], ['Victorias', profile.wins, 'hub/ic_logros'],
-    ['Bajas', profile.kills, 'hud/ic_bajas'], [profile.timePartial ? 'Tiempo registrado' : 'Tiempo jugado', played, 'hub/ic_supervivencia'],
-    ['Mejor nivel', profile.level || '—', 'hud/ic_dash'], ['Digimon', profile.collection, 'hub/ic_digidex'],
-    ['Mapas superados', profile.mapsWon, 'hub/ic_mapas'], ['Evoluciones', profile.evolutions, 'hud/ic_emblema'],
-    ['Variocolores', profile.variants, 'hub/ic_evento'], ['Fusiones', profile.fusions, 'hub/ic_laboratorio'],
-    ['Apoyos reclutados', profile.supports, 'hub/ic_jugador'], ['Jefes menores distintos', profile.minibosses, 'hub/ic_ranking']
-  ].filter(([,value]) => value !== null).map(([label,value,icon]) => `<div class="trainer-stat"><img src="ui/${icon}.webp" alt="">
+    ['Partidas', profile.plays, 'partidas'], ['Victorias', profile.wins, 'victorias'],
+    ['Bajas', profile.kills, 'bajas'], [profile.timePartial ? 'Tiempo registrado' : 'Tiempo jugado', played, 'tiempo'],
+    ['Mejor nivel', profile.level || '—', 'nivel'], ['Digimon', profile.collection, 'digimon'],
+    ['Mapas superados', profile.mapsWon, 'mapas'], ['Evoluciones', profile.evolutions, 'evoluciones'],
+    ['Variocolores', profile.variants, 'variocolores'], ['Fusiones', profile.fusions, 'fusiones'],
+    ['Apoyos reclutados', profile.supports, 'apoyos'], ['Jefes menores distintos', profile.minibosses, 'jefes-menores']
+  ].filter(([,value]) => value !== null).map(([label,value,icon]) => `<div class="trainer-stat"><span class="trainer-stat-icon"><img src="ui/trainer-stats/${icon}.png" width="34" height="34" alt=""></span>
     <span><b>${typeof value === 'number' ? number(value) : escHtml(value)}</b><small>${label}</small></span></div>`).join('');
-  const awards = FILE_PASS.prizes.filter(prize => seasonAwards.includes(prize.id)).map(prize => `<li class="trainer-season-reward">
-    <img src="${prize.icon}" alt=""><span><b>${prize.label}</b><small>Señal de File Island</small></span></li>`).join('');
+  const awards = FILE_PASS.prizes
+    .filter(prize => !shared || seasonAwards.includes(prize.id))
+    .map(prize => {
+      const unlocked = seasonAwards.includes(prize.id);
+      const level = I18N.tr('Nivel {0}').replace('{0}', number(prize.at));
+      return `<li class="trainer-season-reward${unlocked ? '' : ' is-locked'}">
+        <img src="${prize.icon}" alt=""><span><b>${prize.label}</b>
+        <small><span data-no-i18n>${escHtml(level)}</span>${shared ? '' : ` · <span class="trainer-season-status">${unlocked ? 'Visible en el enlace' : 'Por desbloquear'}</span>`}</small>
+        </span></li>`;
+    }).join('');
   const trial = timeTrialSummary(profile.trial);
   const time = seconds => seconds > 0 ? fmtTime(Math.floor(seconds)) : '—';
   const mark = value => value > 0 ? number(+value) : '—';
   const recordModes = [
-    {id:'kills', name:'Bajas', label:'Récord de bajas', value:mark(killRecord.value), rows:[
+    {id:'kills', name:'Bajas', icon:'ui/hud/ic_bajas.webp', label:'Récord de bajas', value:mark(killRecord.value), rows:[
       ['Bajas totales', number(profile.kills)],
       ...(killRecord.name ? [['Digimon', killRecord.name]] : []),
       ...(MAPS[killRecord.map] ? [['Mapa', MAPS[killRecord.map].name]] : [])
@@ -14268,7 +14376,7 @@ function showTrainerProfile(profile, shared = false){
     {id:'trial', name:'Contrarreloj', label:trial.completed === trial.maps.length ? 'Tiempo total' : 'Tiempo parcial', value:time(trial.total), rows:
       trial.maps.map(([map, seconds]) => [MAPS[map].name, seconds ? time(seconds) : 'Pendiente', !seconds])
     },
-    {id:'survival', name:'Supervivencia', label:'Mejor tiempo', value:time(survivalTime), rows:[
+    {id:'survival', name:'Supervivencia', icon:'ui/hub/digivice/supervivencia.png', label:'Mejor tiempo', value:time(survivalTime), rows:[
       ...(survivor ? [['Digimon', CHARS[survivor].name]] : []),
       ['Mejor oleada', mark(wave)],
       ...(waveName ? [['Digimon de la oleada', waveName]] : [])
@@ -14312,12 +14420,15 @@ function showTrainerProfile(profile, shared = false){
               <h3 class="trainer-device-label" id="trainerDeviceHeading">Récords</h3>
               <div class="trainer-device-screen" id="trainerDeviceScreen" aria-live="polite" aria-atomic="true">${recordsScreen}</div>
               <div class="trainer-device-controls" id="trainerDeviceControls" role="group" aria-label="Categorías de récords">
-                ${recordModes.map(({id,name}, index) => `<button type="button" data-record-mode="${id}" aria-pressed="${index === 0}" aria-controls="trainerDeviceScreen">${name}</button>`).join('')}
+                ${recordModes.map(({id,name,icon}, index) => `<button type="button" data-record-mode="${id}" aria-pressed="${index === 0}" aria-controls="trainerDeviceScreen">
+                  ${icon ? `<img class="trainer-device-icon" src="${icon}" alt="">` : '<span class="trainer-device-icon trainer-device-timer" aria-hidden="true"></span>'}
+                  <span>${name}</span></button>`).join('')}
               </div>
             </div>
           </section>
           <section class="trainer-panel trainer-showcase" aria-labelledby="trainerSeasonHeading">
-            <div class="trainer-panel-head"><h3 id="trainerSeasonHeading">Vitrina de temporada</h3></div>
+            <div class="trainer-panel-head"><img src="ui/hub/digivice/file-island.png" alt=""><h3 id="trainerSeasonHeading">Vitrina de temporada</h3></div>
+            <p>${shared ? 'Recompensas desbloqueadas en el pase Señal de File Island.' : 'El enlace incluye las recompensas de Señal de File Island que tengas desbloqueadas al copiarlo.'}</p>
             ${awards ? `<ul class="trainer-season-grid">${awards}</ul>` : '<p class="trainer-empty">Todavía no hay recompensas de temporada.</p>'}
           </section>
         </div>
