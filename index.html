@@ -7963,6 +7963,7 @@ function runSave(){
     if (c !== undefined) data[k] = c;
   }
   const alive = e => e && e.hp > 0 && g.enemies.includes(e);
+  const special = g.enemies.find(e => e.special && e.hp > 0);
   const foes = {};
   for (const e of g.enemies) if (e.hp > 0 && !e.boss && e.kind !== 'mini' && ENEMY[e.kind]) foes[e.kind] = (foes[e.kind] || 0) + 1;
   const s = {
@@ -7973,6 +7974,7 @@ function runSave(){
     shrines: (g.shrines || []).map(x => ({id: x.type.id, x: x.x, z: x.z, used: !!x.used})),
     npcs: g.npcs ? g.npcs.map(n => ({id: n.id, x: n.x, z: n.z, buys: n.buys | 0, spins: n.spins | 0})) : null,
     boss: alive(g.boss) ? runBossSnapshot(g.boss) : null,
+    specialBoss: special ? {...runBossSnapshot(special), key: special.key, skin: special.skin} : null,
     minis: g.enemies.filter(e => e.kind === 'mini' && !e.special && e.hp > 0).map(e => ({name: e.name, k: e.hp / e.max})),
     foes,
     choices: (state === 'levelup' || g.pendingUp) && g.choices && g.choices.length && !g.npcPick ? g.choices.map(c => ({k: runCardKey(c), rare: !!c.rare})) : null,
@@ -8062,6 +8064,7 @@ function runApply(s){
     g.sups.push({key: x.key, st: x.st | 0, joinLvl: x.joinLvl | 0, mesh, shadow, x: g.p.x + Math.cos(a)*2, z: g.p.z + Math.sin(a)*2, cd: 1});
   }
   if (s.boss) restoreBoss(s.boss);
+  if (s.specialBoss && CHARS[s.specialBoss.key]) addSpecialBoss(s.specialBoss);
   for (const m of s.minis || []){
     const def = MINIS.find(x => x.name === m.name);
     if (!def) continue;
@@ -8397,20 +8400,24 @@ function specialPool(){
   }
   return out;
 }
+function addSpecialBoss({key, skin, ...stats}){
+  const sprite = spriteWith(key, false, skin);
+  const mesh = billboard(sprite, 4.6);
+  world.add(mesh);
+  const shadow = makeShadow(4.4);
+  world.add(shadow);
+  g.enemies.push({...stats, kind: 'mini', special: true, key, skin, attr: ATTR_OF[key],
+    name: CHARS[key].name, sprite, mesh, shadow, r: 1.9, xp: 120});
+}
 function spawnSpecial(){
   const pool = specialPool();
   if (!pool.length) return;
   const pick = pool[Math.floor(Math.random()*pool.length)];
   const t = g.t, a = Math.random()*Math.PI*2;
-  const sprite = spriteWith(pick.key, false, pick.skin);
-  const mesh = billboard(sprite, 4.6);
-  world.add(mesh);
-  const shadow = makeShadow(4.4);
-  world.add(shadow);
-  const sp = clampArena(g.p.x + Math.cos(a)*24, g.p.z + Math.sin(a)*24, ARENA_R - 0.5);
-  const hp = 900*(1 + (t - BOSS_AT)/120)*evoHp();
+  const [x, z] = clampArena(g.p.x + Math.cos(a)*24, g.p.z + Math.sin(a)*24, ARENA_R - 0.5);
+  const hp = 900*(1 + (t - BOSS_AT)/120)*evoHp()*diffMul('hp');
   const name = CHARS[pick.key].name;
-  g.enemies.push({kind: 'mini', special: true, attr: ATTR_OF[pick.key], name, sprite, mesh, shadow, x: sp[0], z: sp[1], hp: hp*diffMul('hp'), max: hp*diffMul('hp'), spd: 3.0, r: 1.9, xp: 120, dmg: 18*(1 + diffT(t)/300)*diffMul('dmg'), cd: 0});
+  addSpecialBoss({...pick, x, z, hp, max: hp, spd: 3.0, dmg: 18*(1 + diffT(t)/300)*diffMul('dmg'), cd: 0});
   sfx('boss');
   announce('¡' + name.toUpperCase() + '!', 'Jefe especial', '#ffd54f', 'top');
 }
