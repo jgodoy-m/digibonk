@@ -15070,8 +15070,9 @@ const PLAYER_ICONS = [
   {id:'leomon', name:'Leomon'}, {id:'hagurumon', name:'Hagurumon'}, {id:'frigimon', name:'Frigimon'}, {id:'wizardmon', name:'Wizardmon'}
 ].map(x => ({...x, src: playerIconSrc(x.id)}));
 // Iconos de skin: se desbloquean al tener la skin en alguna etapa (los de skins ocultas solo se ven al tenerlas)
-const SKIN_ICON_ART = {galactico:'galaxia', lcd:'lcd-v2', variocolor:'variocolor-v2', reno:'astas-integradas', festival:'navidad-gabumon'};
+const SKIN_ICON_ART = {galactico:'galaxia', holografica:'prisma', lcd:'lcd-v2', variocolor:'variocolor-v2', reno:'astas-integradas', festival:'navidad-gabumon'};
 const SKIN_ICONS = [
+  ...SEASONS.adventure.chars.map(key => ({key, skin:'holografica'})),
   {key:'biyomon', skin:'festival'},
   {key:'gomamon', skin:'festival'},
   {key:'palmon', skin:'festival'},
@@ -15082,8 +15083,8 @@ const SKIN_ICONS = [
   {key:'tentomon', skin:'variocolor'},
   {key:'biyomon', skin:'galactico'}, {key:'biyomon', skin:'reno'}, {key:'biyomon', skin:'lcd'}, {key:'gomamon', skin:'galactico'}, {key:'gomamon', skin:'reno'}, {key:'gomamon', skin:'lcd'},
   {key:'palmon', skin:'galactico'}, {key:'palmon', skin:'reno'}, {key:'palmon', skin:'lcd'}, {key:'tentomon', skin:'galactico'}, {key:'tentomon', skin:'reno'}, {key:'tentomon', skin:'lcd'},
-  {key:'agumon', skin:'galactico'}, {key:'agumon', skin:'holografica'}, {key:'agumon', skin:'lcd'}, {key:'agumon', skin:'festival'}, {key:'agumon', skin:'reno'}, {key:'agumon', skin:'variocolor'},
-  {key:'patamon', skin:'galactico'}, {key:'patamon', skin:'holografica'}, {key:'patamon', skin:'lcd'}, {key:'patamon', skin:'festival'}, {key:'patamon', skin:'reno'}, {key:'patamon', skin:'variocolor'},
+  {key:'agumon', skin:'galactico'}, {key:'agumon', skin:'lcd'}, {key:'agumon', skin:'festival'}, {key:'agumon', skin:'reno'}, {key:'agumon', skin:'variocolor'},
+  {key:'patamon', skin:'galactico'}, {key:'patamon', skin:'lcd'}, {key:'patamon', skin:'festival'}, {key:'patamon', skin:'reno'}, {key:'patamon', skin:'variocolor'},
   {key:'leomon', skin:'galactico'}, {key:'leomon', skin:'lcd'}, {key:'leomon', skin:'variocolor'}, {key:'leomon', skin:'festival'}, {key:'leomon', skin:'reno'},
   {key:'gabumon', skin:'galactico'}, {key:'gabumon', skin:'lcd'}, {key:'gabumon', skin:'variocolor'}, {key:'gabumon', skin:'festival'}, {key:'gabumon', skin:'reno'}, {key:'wizardmon', skin:'lcd'}, {key:'wizardmon', skin:'variocolor'}, {key:'wizardmon', skin:'festival'}, {key:'wizardmon', skin:'reno'}, {key:'frigimon', skin:'galactico'}, {key:'frigimon', skin:'lcd'}, {key:'frigimon', skin:'variocolor'}, {key:'frigimon', skin:'festival'}, {key:'frigimon', skin:'reno'},
   {key:'wizardmon', skin:'galactico'},
@@ -15427,7 +15428,7 @@ function openCustomizer(initialTab = 'bg', trigger = document.getElementById('pl
       ...SKIN_ICONS.flatMap(ic => {
         const owned = ownsSkinIcon(ic), sk = SKIN_BY_ID[ic.skin];
         if (sk?.hidden && !owned) return [];
-        const hint = sk?.src === 'evento' ? sk.desc : sk ? howTo(ic.key, sk) : '';
+        const hint = skinLineArt(ic.key, ic.skin) < 0 ? 'Próximamente' : sk?.src === 'evento' ? sk.desc : sk ? howTo(ic.key, sk) : '';
         return [option(ic.id,skinIconName(ic),avatarArt(ic.src),pAv === ic.id,!owned,owned ? '' : hint || 'Bloqueado')];
       })
     ];
