@@ -149,6 +149,7 @@ I18N.add('pl', {
   "días": "dni",
   "Evento Digimon: Papá Noel y Reno, quedan {0} {1}": "Wydarzenie Digimon: Mikołaj i Renifer, zostało {0} {1}",
   "Papá Noel y Reno": "Mikołaj i Renifer",
+  "Cooperativo": "Tryb kooperacji",
   "Próximamente": "Wkrótce",
   "mejoras disponibles": "dostępne ulepszenia",
   "Mejoras": "Ulepszenia",

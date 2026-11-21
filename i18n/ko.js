@@ -152,6 +152,7 @@ I18N.add('ko', {
   "días": "일",
   "Evento Digimon: Papá Noel y Reno, quedan {0} {1}": "디지몬 이벤트: 산타와 순록, {0}{1} 남음",
   "Papá Noel y Reno": "산타와 순록",
+  "Cooperativo": "협동",
   "Próximamente": "곧 공개",
   "mejoras disponibles": "강화 가능",
   "Mejoras": "강화",

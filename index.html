@@ -3529,7 +3529,7 @@ html[lang] .trainer-screen .trainer-header .g-back,
   background:var(--trainer-surface);border:1px solid var(--trainer-border);overflow-wrap:anywhere}
 .trainer-stat-icon{display:grid;place-items:center;width:40px;height:40px;flex:none;border-radius:11px;
   background:var(--trainer-inset);border:1px solid var(--trainer-border)}
-.trainer-stat-icon img{width:27px;height:27px;object-fit:contain}
+.trainer-stat-icon img{width:34px;height:34px;object-fit:contain}
 .trainer-stat b{display:block;color:var(--trainer-accent);font-size:clamp(21px,2.8vw,32px);line-height:1.15;font-variant-numeric:tabular-nums}
 .trainer-stat small{font-size:13px;line-height:1.2}
 .trainer-device{min-width:0;display:grid;align-content:center;container-type:inline-size}
@@ -3777,7 +3777,7 @@ html[data-theme=oscuro] #overlay:not(.menu-mode)>.lab-console{
   .trainer-screen :is(#plShare,#plChange){line-height:1.2;font-size:13px!important}
   .trainer-stat{gap:6px}
   .trainer-stat-icon{width:32px;height:32px}
-  .trainer-stat-icon img{width:23px;height:23px}
+  .trainer-stat-icon img{width:28px;height:28px}
   .trainer-custom .cz-grid{grid-template-columns:minmax(0,1fr)}
   .trainer-custom .cz-backgrounds{grid-template-columns:repeat(2,minmax(0,1fr))}
   .trainer-custom .cz-filters input{font-size:16px}
@@ -3946,6 +3946,33 @@ html[data-theme=oscuro] #overlay .realhub.hb .hb-user-card{
 #overlay .realhub.hb .nm-modes>.hb-mode i{margin:0}
 #overlay .realhub.hb .nm-modes>.hb-mode b{font-size:clamp(12px,1.25vw,17px)!important;overflow-wrap:anywhere}
 #overlay .realhub.hb .nm-modes>.hb-mode small{display:block;line-height:1.1}
+#overlay .realhub.hb .hb-surv-stack{
+  display:grid;grid-template-rows:minmax(0,1fr) auto;gap:8px;min-width:0
+}
+#overlay .realhub.hb .hb-surv-stack .hb-mode{
+  min-width:0;justify-content:center;gap:7px;padding:7px 6px!important
+}
+#overlay .realhub.hb .hb-surv-stack .hb-mode>span{min-width:0;overflow-wrap:anywhere}
+#overlay .realhub.hb .hb-surv-stack .hb-mode b{font-size:clamp(12px,1.15vw,16px)!important}
+#overlay .realhub.hb .hb-surv-stack .hb-mode small{font-size:11px;line-height:1.1}
+#overlay .realhub.hb .hb-surv-stack .hb-mode>i{width:30px!important;height:30px!important}
+#overlay .realhub.hb .hb-surv-stack .m-coop{
+  min-height:48px;border:1px solid var(--m-cardline);background:var(--m-card);color:var(--m-text);
+  box-shadow:0 2px 0 var(--m-line2);cursor:default;opacity:1;transform:none!important
+}
+#overlay .realhub.hb .m-coop::after{display:none}
+#overlay .realhub.hb .m-coop small{color:var(--m-soft);opacity:1}
+#overlay .realhub.hb .m-coop>i{position:relative;background:var(--m-sunk)}
+#overlay .realhub.hb .m-coop>i img{position:absolute;width:18px;height:18px}
+#overlay .realhub.hb .m-coop>i img:first-child{top:1px;left:0}
+#overlay .realhub.hb .m-coop>i img:last-child{bottom:1px;right:0}
+@media(max-width:760px){
+  #overlay .realhub.hb .nm-modes{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)!important}
+  #overlay .realhub.hb .hb-surv-stack{gap:6px}
+}
+@media(max-width:600px) and (orientation:landscape){
+  #overlay .realhub.hb .hb-surv-stack .hb-mode{flex-direction:column;gap:3px;text-align:center}
+}
 #overlay .realhub.hb .nm-modes .m-modes{background:linear-gradient(140deg,#4468b5,#2e4278);box-shadow:0 3px 0 #1b2b57}
 #overlay .realhub.hb .hb-activities{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:10px}
 #overlay .realhub.hb .hb-activities button{min-width:0;height:100%;box-sizing:border-box;padding:8px 10px;flex-wrap:nowrap}
@@ -6372,7 +6399,13 @@ function showSelect(){
               <span class="hb-play-face">${animEl(spriteOf(selectedKey, false), 'hb-face')}</span>
               <span class="lv-sheen"></span><span class="nm-band"><span class="hb-dev"><img id="rhPlayPortrait" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Retrato de ${safeText(choice.name)}"></span><span>Modo clásico · <b>${safeText(choice.name)}</b></span></span>
             </button>
-            <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i><img class="nm-ic" src="ui/hub/digivice/supervivencia.png" alt=""></i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
+            <div class="hb-surv-stack">
+              <button type="button" class="hb-mode m-surv" id="mSurv" aria-label="Supervivencia: modo infinito"><i><img class="nm-ic" src="ui/hub/digivice/supervivencia.png" alt=""></i><span><b>Supervivencia</b><small>Modo infinito</small></span></button>
+              <button type="button" class="hb-mode m-coop" id="mCoop" disabled>
+                <i aria-hidden="true"><img class="nm-ic" src="${charIcon('agumon', 'clasico')}" alt=""><img class="nm-ic" src="${charIcon('gabumon', 'clasico')}" alt=""></i>
+                <span><b>Cooperativo</b><small>Próximamente</small></span>
+              </button>
+            </div>
             <button type="button" class="hb-mode m-modes" id="mModes" aria-haspopup="dialog">
               <i><img class="nm-ic" src="ui/hub/digivice/reto.png" alt=""></i><span><b>Modos</b><small>Reto semanal</small></span>
             </button>
@@ -14192,13 +14225,13 @@ function showTrainerProfile(profile, shared = false){
   const played = profile.playedSeconds === null ? '—' : playedMinutes >= 60
     ? `${number(Math.floor(playedMinutes / 60))} h ${playedMinutes % 60} min` : `${playedMinutes} min`;
   const battleStats = [
-    ['Partidas', profile.plays, 'hub/ic_mision'], ['Victorias', profile.wins, 'hub/ic_logros'],
-    ['Bajas', profile.kills, 'hud/ic_bajas'], [profile.timePartial ? 'Tiempo registrado' : 'Tiempo jugado', played, 'hub/ic_supervivencia'],
-    ['Mejor nivel', profile.level || '—', 'hud/ic_dash'], ['Digimon', profile.collection, 'hub/ic_digidex'],
-    ['Mapas superados', profile.mapsWon, 'hub/ic_mapas'], ['Evoluciones', profile.evolutions, 'hud/ic_emblema'],
-    ['Variocolores', profile.variants, 'hub/ic_evento'], ['Fusiones', profile.fusions, 'hub/ic_laboratorio'],
-    ['Apoyos reclutados', profile.supports, 'hub/ic_jugador'], ['Jefes menores distintos', profile.minibosses, 'hub/ic_ranking']
-  ].filter(([,value]) => value !== null).map(([label,value,icon]) => `<div class="trainer-stat"><span class="trainer-stat-icon"><img src="ui/${icon}.webp" alt=""></span>
+    ['Partidas', profile.plays, 'partidas'], ['Victorias', profile.wins, 'victorias'],
+    ['Bajas', profile.kills, 'bajas'], [profile.timePartial ? 'Tiempo registrado' : 'Tiempo jugado', played, 'tiempo'],
+    ['Mejor nivel', profile.level || '—', 'nivel'], ['Digimon', profile.collection, 'digimon'],
+    ['Mapas superados', profile.mapsWon, 'mapas'], ['Evoluciones', profile.evolutions, 'evoluciones'],
+    ['Variocolores', profile.variants, 'variocolores'], ['Fusiones', profile.fusions, 'fusiones'],
+    ['Apoyos reclutados', profile.supports, 'apoyos'], ['Jefes menores distintos', profile.minibosses, 'jefes-menores']
+  ].filter(([,value]) => value !== null).map(([label,value,icon]) => `<div class="trainer-stat"><span class="trainer-stat-icon"><img src="ui/trainer-stats/${icon}.png" width="34" height="34" alt=""></span>
     <span><b>${typeof value === 'number' ? number(value) : escHtml(value)}</b><small>${label}</small></span></div>`).join('');
   const awards = FILE_PASS.prizes
     .filter(prize => !shared || seasonAwards.includes(prize.id))

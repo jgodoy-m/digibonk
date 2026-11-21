@@ -231,6 +231,7 @@ I18N.add('en', {
   "días": "days",
   "Evento Digimon: Papá Noel y Reno, quedan {0} {1}": "Digimon event: Santa and Reindeer, {0} {1} left",
   "Papá Noel y Reno": "Santa and Reindeer",
+  "Cooperativo": "Co-op",
   "Próximamente": "Coming soon",
   "mejoras disponibles": "upgrades available",
   "Mejoras": "Upgrades",

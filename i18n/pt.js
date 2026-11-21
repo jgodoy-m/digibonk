@@ -149,6 +149,7 @@ I18N.add('pt', {
   "días": "dias",
   "Evento Digimon: Papá Noel y Reno, quedan {0} {1}": "Evento Digimon: Papai Noel e Rena, faltam {0} {1}",
   "Papá Noel y Reno": "Papai Noel e Rena",
+  "Cooperativo": "Cooperativo",
   "Próximamente": "Em breve",
   "mejoras disponibles": "melhorias disponíveis",
   "Mejoras": "Melhorias",

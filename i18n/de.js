@@ -149,6 +149,7 @@ I18N.add('de', {
   "días": "Tage",
   "Evento Digimon: Papá Noel y Reno, quedan {0} {1}": "Digimon-Event: Weihnachtsmann und Rentier, noch {0} {1}",
   "Papá Noel y Reno": "Weihnachtsmann und Rentier",
+  "Cooperativo": "Koop",
   "Próximamente": "Demnächst",
   "mejoras disponibles": "Upgrades verfügbar",
   "Mejoras": "Upgrades",
