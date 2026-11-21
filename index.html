@@ -2931,153 +2931,96 @@ body.is-touch #consBar{bottom:auto;top:96px;left:auto;right:76px;transform:none;
 #overlay .realhub.hb .hb-tiles .t5{--tc:#f0a020}
 #overlay .realhub.hb .hb-bar{flex-wrap:nowrap!important}
 #overlay .realhub.hb .hb-bar .hb-btn{flex:none}
-/* Digivice de récords: la carcasa PNG rodea la pantalla y sus controles reales. */
-#overlay .realhub.hb .hb-record-device{
-  position:relative; width:min(100%,400px); min-height:550px; aspect-ratio:0.72;
-  justify-self:center; align-self:center; margin-inline:auto;
-  background:url('ui/hub/records-digivice.png') center/100% 100% no-repeat;
-}
-/* Pantalla del Digivice de récords y del ranking online (.dvr): cabecera naranja, pestañas con icono,
-   selector de ámbito, tarjetas para los tres primeros, lista numerada y pie con tus cifras. */
+/* El Digivice del inicio y el ranking completo comparten la misma pantalla. */
 #overlay .realhub.hb .hb-main{grid-template-columns:minmax(580px,36%) minmax(0,1fr) minmax(300px,380px)!important}
-#overlay .realhub.hb .hb-record-device{width:min(100%,380px);min-height:600px}
-#overlay .realhub.hb .hb-record-screen{position:absolute;inset:14.6% 7.6% 16.6%}
+#overlay .realhub.hb .hb-record-device{
+  width:min(100%,380px);min-height:600px;aspect-ratio:.72;justify-self:center;align-self:center;margin-inline:auto;
+}
+:is(.hb-record-device,.rk-device){
+  --dvr-bg:#fff;--dvr-edge:#edf0f2;
+  position:relative;isolation:isolate;background:url('ui/hub/records-digivice.png') center/100% 100% no-repeat;
+}
+html[data-theme=oscuro] :is(.hb-record-device,.rk-device){--dvr-bg:#111318;--dvr-edge:#191c22}
+:is(.hb-record-device,.rk-device)::before{
+  content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,var(--dvr-edge) 7%,var(--dvr-bg) 31%,var(--dvr-bg) 69%,var(--dvr-edge) 93%);
+  mask:url('ui/hub/records-visor-mask.png') center/100% 100% no-repeat;
+}
+.rk-device{width:min(94vw,540px,calc(94dvh * .72));aspect-ratio:.72;margin:auto}
+:is(.hb-record-device,.rk-device)>.dvr{position:absolute;inset:14.8% 7.65% 17%}
 .dvr{
-  --dvr-bg:#f6f4ff; --dvr-card:#ffffff; --dvr-well:#ebe8fb; --dvr-line:#d9d4f2; --dvr-ink:#1f2140; --dvr-mute:#6a6a8e;
-  --dvr-chip:#2b2d55; --dvr-gold:#fff1c9; --dvr-gold-l:#f1c860; --dvr-silver:#eef1f7; --dvr-silver-l:#b9c3d6;
-  --dvr-bronze:#fbe5d6; --dvr-bronze-l:#e2a57c; --dvr-blue:#3d7be6; --dvr-blue-d:#2556b8;
-  display:flex; flex-direction:column; gap:6px; min-width:0; min-height:0; padding:6px;
-  border-radius:12px; background:var(--dvr-bg); color:var(--dvr-ink); text-align:left;
-  font-family:'Nunito',system-ui,sans-serif; color-scheme:light; box-shadow:inset 0 0 0 1px var(--dvr-line);
+  --dvr-ink:#10283e;--dvr-mute:#405c70;--dvr-card:#f7fcff;--dvr-well:#e5eef4;--dvr-line:#a8c5d8;
+  --dvr-accent:#076474;--dvr-selected:#d6edf2;
+  --gold:#fff0c9;--gold-edge:#c89438;--silver:#e7eef5;--silver-edge:#8ba6c2;--bronze:#f8e8dc;--bronze-edge:#bd8262;
+  display:flex;flex-direction:column;gap:7px;min-width:0;min-height:0;padding:12px 12px 22px;
+  color:var(--dvr-ink);color-scheme:light;text-align:left;font:800 13px/1.25 'Nunito',system-ui,sans-serif;
 }
 html[data-theme=oscuro] .dvr{
-  --dvr-bg:#17191d; --dvr-card:#22252b; --dvr-well:#2a2d34; --dvr-line:#3a3e47; --dvr-ink:#eef0f6; --dvr-mute:#a3a8b6;
-  --dvr-chip:#0d0e12; --dvr-gold:#3a321c; --dvr-gold-l:#c9a03e; --dvr-silver:#2c3039; --dvr-silver-l:#8d97ab;
-  --dvr-bronze:#3a2a20; --dvr-bronze-l:#b47a52; color-scheme:dark;
+  --dvr-ink:#f3fbff;--dvr-mute:#b2c8d8;--dvr-card:#172838;--dvr-well:#20374a;--dvr-line:#37546c;
+  --dvr-accent:#88ebe8;--dvr-selected:#1d3b47;
+  --gold:#3b3124;--gold-edge:#af8542;--silver:#253848;--silver-edge:#6d8ca7;--bronze:#3e2e2c;--bronze-edge:#a46e51;
+  color-scheme:dark;
 }
-.dvr-head{
-  display:flex; align-items:center; gap:8px; flex:none; min-width:0; margin:-6px -6px 0; padding:7px 8px 8px;
-  border-radius:12px 12px 4px 4px; color:#fff;
-  background:repeating-linear-gradient(135deg,#ffffff1c 0 9px,transparent 9px 18px),linear-gradient(100deg,#ffb23a,#f08a1c);
-  box-shadow:inset 0 -2px #0000001f;
-}
-.dvr-head>img{width:30px;height:30px;flex:none;object-fit:contain;filter:drop-shadow(0 1px 1px #0005)}
+.dvr [hidden]{display:none!important}
+.dvr-head{display:flex;align-items:center;gap:8px;flex:none;padding-bottom:8px;border-bottom:1px solid var(--dvr-line)}
+.dvr-head img{width:30px;height:30px;flex:none;object-fit:contain}
 .dvr-head>span{flex:1;min-width:0}
-.dvr-head b{display:block;font:900 16px/1.05 'Nunito',sans-serif;text-shadow:0 1px 0 #0003;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dvr-head small{display:block;margin-top:2px;font:800 10.5px/1.15 'Nunito',sans-serif;opacity:.95;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dvr-head .dvr-pill{
-  flex:none; min-height:26px; padding:3px 9px; border:0; border-radius:999px; cursor:pointer;
-  background:#ffffffeb; color:#8a4a06; font:900 10.5px/1 'Nunito',sans-serif; box-shadow:0 1px 0 #0002;
+.dvr-head b{display:block;font-size:18px;line-height:1.15;overflow-wrap:anywhere}
+.dvr-head small{display:block;margin-top:3px;color:var(--dvr-mute);font-size:12px;line-height:1.2;overflow-wrap:anywhere}
+.dvr-tabs{display:grid;grid-template-columns:minmax(0,.76fr) minmax(0,1.24fr) minmax(0,1.1fr);flex:none;gap:3px;padding:3px;border-radius:8px;background:var(--dvr-well)}
+.dvr-tabs button,.dvr-action{
+  min-width:0;min-height:32px;padding:5px 3px;border:1px solid transparent;border-radius:6px;
+  background:transparent;color:var(--dvr-mute);cursor:pointer;white-space:normal;overflow-wrap:anywhere;
+  font:900 12px/1.2 'Nunito',system-ui,sans-serif;
 }
-.dvr-tabs{display:flex;gap:3px;flex:none;padding:3px;border-radius:999px;background:var(--dvr-well)}
-.dvr-tabs button{
-  flex:0 0 auto; display:flex; align-items:center; justify-content:center; gap:5px; min-width:38px; min-height:30px;
-  padding:3px 8px; border:0; border-radius:999px; background:none; color:var(--dvr-mute); cursor:pointer;
-  font:900 12px/1 'Nunito',sans-serif;
+.dvr-tabs [aria-pressed=true],.dvr-action{background:var(--dvr-card);border-color:var(--dvr-line);color:var(--dvr-accent)}
+.dvr-action{padding:6px 9px}
+.dvr-cta{flex:none;min-height:36px;width:100%;font-size:13px}
+.dvr-filters{position:relative;flex:none}
+.dvr-filters summary{
+  display:flex;align-items:center;justify-content:space-between;gap:6px;list-style:none;padding:7px 5px;
+  border-block:1px solid var(--dvr-line);background:color-mix(in srgb,var(--dvr-well) 62%,transparent);
+  color:var(--dvr-ink);font-size:12px;cursor:pointer;
 }
-.dvr-tabs button img{width:20px;height:20px;object-fit:contain;flex:none}
-.dvr-tabs button span{display:none}
-.dvr-tabs button[aria-selected=true]{flex:1 1 auto;background:var(--dvr-card);color:var(--dvr-ink);box-shadow:0 1px 3px #2b2d5530}
-.dvr-tabs button[aria-selected=true] span{display:inline}
-/* Con solo dos pestañas caben los dos nombres */
-.dvr-tabs:not(:has(>:nth-child(3))) button{flex:1 1 0}
-.dvr-tabs:not(:has(>:nth-child(3))) button span{display:inline}
-.dvr-scope{
-  position:relative; display:flex; align-items:center; gap:7px; flex:none; min-width:0; min-height:38px; padding:4px 26px 4px 7px;
-  border:1px solid var(--dvr-line); border-radius:10px; background:var(--dvr-card); cursor:pointer;
+.dvr-filters summary::-webkit-details-marker{display:none}
+.dvr-filters summary b{color:var(--dvr-accent)}
+.dvr-scopes{
+  position:absolute;z-index:2;top:100%;left:0;right:0;display:grid;gap:6px;padding:8px;
+  background:var(--dvr-card);border:1px solid var(--dvr-line);border-radius:8px;box-shadow:0 5px 12px #06152d40;
 }
-.dvr-scope>img{width:24px;height:24px;flex:none;object-fit:contain}
-.dvr-scope>span{flex:1;min-width:0}
-.dvr-scope b{display:block;font:900 13px/1.1 'Nunito',sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dvr-scope small{display:block;color:var(--dvr-mute);font:800 10px/1.15 'Nunito',sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dvr-scope::after{
-  content:''; position:absolute; right:10px; top:50%; width:7px; height:7px; margin-top:-5px;
-  border:solid var(--dvr-ink); border-width:0 2px 2px 0; transform:rotate(45deg); pointer-events:none;
+.dvr-scopes label{display:grid;grid-template-columns:minmax(62px,auto) minmax(0,1fr);align-items:center;gap:5px;font-size:12px;overflow-wrap:anywhere}
+.dvr-scopes select{width:100%;min-width:0;padding:5px 3px;border:1px solid var(--dvr-line);border-radius:5px;background:var(--dvr-bg);color:var(--dvr-ink);font:inherit}
+.dvr-list{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.dvr-status{display:grid;justify-items:center;align-content:center;gap:6px;min-height:100%;margin:0;padding:8px;text-align:center;color:var(--dvr-mute)}
+.dvr-status p,.dvr-metric{margin:0}
+.dvr-metric{text-align:center;color:var(--dvr-mute);font-size:12px;padding:2px 0 6px}
+.dvr-podium,.dvr-rank{margin:0;padding:0;list-style:none}
+.dvr-podium{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr) minmax(0,1fr);align-items:end;gap:5px}
+.dvr-podium-place{
+  display:grid;justify-items:center;gap:2px;min-width:0;padding:6px 3px;border:1px solid var(--medal-edge);border-radius:8px;
+  box-shadow:inset 0 2px var(--medal-edge);background:var(--medal);font-size:11px;
 }
-.dvr-scope select{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;font-size:16px}
-.dvr-scope:focus-within{outline:2px solid var(--dvr-blue);outline-offset:1px}
-.dvr-scopes{display:grid;grid-template-columns:1fr 1fr;gap:5px;flex:none}
-.dvr-list{flex:1;min-height:60px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-right:1px}
-.dvr-rank{list-style:none;margin:0;padding:0;display:grid;gap:4px}
-.dvr-rank li{
-  display:flex; align-items:center; gap:6px; min-width:0; padding:4px 6px 4px 4px;
-  border-radius:9px; background:var(--dvr-card); box-shadow:inset 0 0 0 1px var(--dvr-line);
-}
-.dvr-rank em{
-  flex:none; width:20px; height:20px; display:grid; place-items:center; border-radius:50%;
-  background:var(--dvr-chip); color:#fff; font:900 10.5px/1 'Nunito',sans-serif; font-style:normal;
-}
-.dvr-ava{position:relative;flex:none;width:28px;height:28px;border-radius:50%;background:var(--dvr-well);display:grid;place-items:center}
-.dvr-ava img{width:88%;height:88%;object-fit:contain}
-.dvr-who{flex:1;min-width:0}
-.dvr-who b{display:block;font:900 12.5px/1.15 'Nunito',sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dvr-who small{display:flex;align-items:center;gap:4px;min-width:0;color:var(--dvr-mute);font:800 10px/1.2 'Nunito',sans-serif;white-space:nowrap;overflow:hidden}
-.dvr-who small span{overflow:hidden;text-overflow:ellipsis}
-.dvr-chip{
-  flex:none; padding:1px 5px; border-radius:5px; background:var(--dvr-chip); color:#fff;
-  font:900 9px/1.35 'Nunito',sans-serif; letter-spacing:.03em; text-transform:uppercase;
-}
-.dvr-val{flex:none;display:flex;align-items:center;gap:4px;text-align:right;font:900 12.5px/1.05 'Nunito',sans-serif;font-variant-numeric:tabular-nums}
-.dvr-val img{width:15px;height:15px;object-fit:contain}
-.dvr-val small{display:block;color:var(--dvr-mute);font:800 9.5px/1.1 'Nunito',sans-serif}
-/* Los tres primeros: tarjeta con color de puesto, retrato grande y la cifra en grande */
-.dvr-rank li.top{min-height:46px;padding:4px 8px 4px 5px;gap:8px;background:var(--pod-bg);box-shadow:inset 0 0 0 1.5px var(--pod-l)}
-.dvr-rank li.p1{--pod-bg:var(--dvr-gold);--pod-l:var(--dvr-gold-l)}
-.dvr-rank li.p2{--pod-bg:var(--dvr-silver);--pod-l:var(--dvr-silver-l)}
-.dvr-rank li.p3{--pod-bg:var(--dvr-bronze);--pod-l:var(--dvr-bronze-l)}
-.dvr-rank li.top em{display:none}
-.dvr-rank li.top .dvr-ava{width:36px;height:36px;background:var(--dvr-card);box-shadow:0 0 0 2px var(--pod-l)}
-.dvr-rank li.top .dvr-ava::after{
-  content:attr(data-pos); position:absolute; right:-4px; bottom:-3px; width:17px; height:17px; display:grid; place-items:center;
-  border-radius:50%; background:var(--pod-l); color:#2b1c00; font:900 9.5px/1 'Nunito',sans-serif; box-shadow:0 0 0 1.5px var(--dvr-card);
-}
-.dvr-rank li.top .dvr-who b{font-size:13.5px}
-.dvr-rank li.top .dvr-val{display:block;font-size:16px}
-.dvr-rank li.me{box-shadow:inset 0 0 0 2px var(--dvr-blue)}
-.dvr-rank li.dvr-empty{display:block;padding:14px 8px;text-align:center;color:var(--dvr-mute);font:800 11.5px/1.35 'Nunito',sans-serif}
+.dvr-podium-place.p1{grid-area:1/2;--medal:var(--gold);--medal-edge:var(--gold-edge)}
+.dvr-podium-place.p2{grid-area:1/1;--medal:var(--silver);--medal-edge:var(--silver-edge)}
+.dvr-podium-place.p3{grid-area:1/3;--medal:var(--bronze);--medal-edge:var(--bronze-edge)}
+.dvr-podium-place img,.dvr-rank img{width:34px;height:34px;border-radius:50%;object-fit:contain}
+.dvr-podium-place.p1 img{width:44px;height:44px}
+.dvr-name{min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dvr-podium-place strong,.dvr-rank strong{font-size:13px;font-variant-numeric:tabular-nums}
+.dvr-rank{display:grid;gap:4px;margin-top:6px}
+.dvr-rank li{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;gap:6px;align-items:center;padding:4px 6px;border:1px solid var(--dvr-line);border-radius:7px;background:var(--dvr-card)}
+.dvr-rank img{width:24px;height:24px}
 .dvr-foot{
-  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px; flex:none; padding:5px 6px;
-  border-radius:10px; background:var(--dvr-well); text-align:center;
+  display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:7px;flex:none;margin:0;padding:6px 8px;
+  border:1px solid var(--dvr-line);border-radius:7px;background:var(--dvr-selected);font-size:12px;
 }
-.dvr-foot>span{min-width:0}
-.dvr-foot b{display:block;font:900 13px/1.1 'Nunito',sans-serif;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-.dvr-foot small{display:block;margin-top:1px;color:var(--dvr-mute);font:800 9.5px/1.15 'Nunito',sans-serif}
-.dvr-foot.dvr-note{display:block;font:800 10.5px/1.3 'Nunito',sans-serif;color:var(--dvr-mute)}
-.dvr-cta{
-  flex:none; min-height:34px; margin:0; padding:5px 10px; border:0; border-radius:999px; cursor:pointer;
-  background:linear-gradient(#5b97f4,var(--dvr-blue)); color:#fff; font:900 12.5px/1.1 'Nunito',sans-serif;
-  box-shadow:inset 0 -3px var(--dvr-blue-d),0 1px 2px #0003;
-}
-.dvr :is(button,select,.dvr-list):focus-visible{outline:2px solid var(--dvr-blue);outline-offset:1px}
-@media (pointer:coarse){.dvr :is(.dvr-tabs button,.dvr-cta,.dvr-head .dvr-pill){min-height:40px}.dvr-scope{min-height:44px}}
-@media (orientation:landscape) and (max-height:500px){
-  #overlay .realhub.hb .hb-record-device{margin-block:12px}
-}
-/* Ranking online dentro de la misma carcasa del Digivice, a tamaño grande */
-.rk-device{
-  position:relative; width:min(94vw,540px,calc(94dvh * .72)); aspect-ratio:.72; margin:auto;
-  background:url('ui/hub/records-digivice.png') center/100% 100% no-repeat;
-}
-.rk-device .dvr{position:absolute;inset:14.6% 7.6% 16.6%}
-/* Versión del menú de inicio: los tres filtros en una fila, sin subtítulos, para dejar sitio a la lista */
-.dvr-compact .dvr-scopes{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
-.dvr-compact .dvr-scopes.rk-two{grid-template-columns:repeat(2,minmax(0,1fr))}
-.dvr-compact .dvr-scope{min-height:32px;padding:3px 18px 3px 5px;gap:4px}
-.dvr-compact .dvr-scope>img{width:18px;height:18px}
-.dvr-compact .dvr-scope b{font-size:11px}
-.dvr-compact .dvr-scope small{display:none}
-.dvr-compact .dvr-scope::after{right:7px;width:5px;height:5px;margin-top:-4px}
-.dvr-compact .dvr-foot[hidden]{display:none}
-.rk-device .rk-region{grid-column:1/-1}
-.rk-device .rk-two .dvr-scope:last-child{grid-column:1/-1}
+.dvr-foot strong{color:var(--dvr-accent);font-size:15px}
+.dvr :is(button,select,summary):focus-visible{outline:2px solid var(--dvr-accent);outline-offset:1px}
+@media (pointer:coarse){.dvr :is(.dvr-tabs button,.dvr-action,.dvr-scopes select){min-height:40px}.dvr-scopes select{font-size:16px}}
 @media (max-height:560px){
   .rk-device{background:none;aspect-ratio:auto;width:min(96vw,560px);height:94dvh}
-  .rk-device .dvr{inset:0}
-  .rk-device .dvr-scopes{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .rk-device .dvr-scopes.rk-two{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .rk-device :is(.rk-region,.rk-two .dvr-scope:last-child){grid-column:auto}
-  .rk-device .dvr-scope{min-height:34px}
-  .rk-device .dvr-scope small{display:none}
+  .rk-device::before{content:none}
+  .rk-device>.dvr{inset:0;background:var(--dvr-bg);border-radius:12px;padding:10px}
 }
 @media(max-width:1100px){#overlay .realhub.hb .hb-main{grid-template-columns:minmax(0,1.3fr) minmax(260px,1fr)!important}}
 @media(max-width:760px){
@@ -7373,18 +7316,11 @@ function showCloud(fromHub = cdFromHub){
     Cloud.st = {region: Cloud.st.region, noRank: Cloud.st.noRank}; Cloud.save(); Cloud.msg = 'Sesión cerrada'; showCloud();
   };
 }
-// Ranking por regiones: mejor marca de cada jugador por modo, mapa y dificultad
-// Fila del ranking del Digivice (récords del menú y ranking online). Los tres primeros salen como tarjeta.
-function dvrRow({pos, name, key, chip, note, value, unit, icon, top = true, me = false, rowUnit = false}){
-  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const big = top && pos <= 3;
-  const ava = key ? `<i class="dvr-ava" data-pos="${pos}"><img src="${esc(charIcon(key))}" alt="" onerror="this.style.visibility='hidden'"></i>` : '';
-  const sub = chip || note ? `<small>${chip ? `<i class="dvr-chip">${esc(chip)}</i>` : ''}${note ? `<span>${esc(note)}</span>` : ''}</small>` : '';
-  const val = big ? `<strong class="dvr-val">${esc(value)}${unit ? `<small>${esc(unit)}</small>` : ''}</strong>`
-    : `<strong class="dvr-val">${icon ? `<img src="${esc(icon)}" alt="">` : ''}${rowUnit && unit ? `<span>${esc(value)}<small>${esc(unit)}</small></span>` : esc(value)}</strong>`;
-  return `<li class="${big ? 'top p' + pos : ''}${me ? ' me' : ''}"><em>${pos}</em>${ava}<span class="dvr-who"><b>${esc(name)}</b>${sub}</span>${val}</li>`;
-}
-const Rk = {mode: 'normal', map: null, diff: 'normal', region: ''};
+// El inicio y la clasificación completa comparten filtros y registros.
+const RANK_CATEGORIES = {
+  kills: 'Bajas', surv: 'Supervivencia', trial: 'Contrarreloj'
+};
+const Rk = {mode: 'kills', map: '', diff: 'normal', region: ''};
 async function showRanking(from){
   if (from) Rk.from = from;
   state = 'ranking';
@@ -7392,62 +7328,116 @@ async function showRanking(from){
   showOverlay('<div class="rk-device"><section class="dvr" id="rkFull"></section></div>');
   rankPanel(document.getElementById('rkFull'), false);
 }
-// Ranking online pintado en una pantalla del Digivice: el del menú de inicio (compacto) o el de pantalla completa.
-// Cada cambio de pestaña o filtro vuelve a pintar solo esa pantalla y pide de nuevo la clasificación.
-async function rankPanel(root, hub){
+function rankAvatar(row){
+  const icon = [...AVATAR_KIDS, ...PLAYER_ICONS, ...SKIN_ICONS].find(item => item.id === row.avatar);
+  const fallback = Object.hasOwn(CHARS, row.digimon) ? row.digimon : 'agumon';
+  return icon?.src || charIcon(fallback, 'clasico');
+}
+async function rankRows(filters, hub){
+  const args = {p_category: filters.mode, p_map: filters.map || null, p_diff: filters.diff, p_region: filters.region || null, p_limit: hub ? 3 : 50};
+  const read = async (fn, body) => {
+    const request = auth => cloudFetch('/rest/v1/rpc/' + fn, {method: 'POST', body, auth});
+    if (!Cloud.st.at && (!cloudEnabled() || Cloud.st.expired)) return request(false);
+    try { return await request(true); }
+    catch(error){
+      // El ranking se puede consultar aunque falle el inicio de sesión.
+      if (error.status === 404) throw error;
+      return request(false);
+    }
+  };
+  try { return await read('get_digivice_leaderboard', args); }
+  catch(error){
+    if (error.status !== 404) throw error;
+    // Una instalación anterior aún puede servir Supervivencia y Contrarreloj por mapa.
+    if (!filters.map || filters.mode === 'kills') return null;
+    const surv = filters.mode === 'surv';
+    const rows = await read('get_leaderboard', {
+      p_mode: surv ? 'surv' : 'normal', p_map: filters.map, p_diff: surv ? '-' : filters.diff,
+      p_region: args.p_region, p_limit: args.p_limit
+    });
+    return rows.filter(row => surv || row.win).map(row => ({...row, mark: surv ? row.wave : row.t}));
+  }
+}
+async function rankPanel(root, hub, keepFilters = false){
   if (!root) return;
-  if (!Rk.map || !MAPS[Rk.map]) Rk.map = runMap;
-  const safe = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
-  const opt = (k, v, label) => `<option value="${v}"${Rk[k] === v ? ' selected' : ''}>${safe(label)}</option>`;
-  const tab = (v, icon, label) => `<button type="button" role="tab" data-mode="${v}" aria-selected="${Rk.mode === v}" title="${label}"><img src="${icon}" alt=""><span>${label}</span></button>`;
-  const surv = Rk.mode === 'surv';
-  const rule = surv ? 'Más oleadas primero; a igualdad, más tiempo.' : 'Primero las victorias, de la más rápida a la más lenta; después, quien más aguantó.';
+  const filters = {...Rk};
+  const surv = filters.mode === 'surv';
   const id = hub ? 'hbRanking' : 'rkTitle';
-  root.classList.toggle('dvr-compact', !!hub);
+  const scope = [REGIONS[filters.region] || 'Mundial', MAPS[filters.map]?.name || 'Todos los mapas'];
+  if (!surv) scope.push(DIFFS[filters.diff].name);
+  const field = (key, label, options) => `<label><span>${label}</span><select data-rk="${key}" aria-label="${escHtml(label)}">${options.map(([value, text]) =>
+    `<option value="${escHtml(value)}"${filters[key] === value ? ' selected' : ''}>${escHtml(text)}</option>`).join('')}</select></label>`;
+  const mode = (key, name) => `<button type="button" data-mode="${key}" aria-pressed="${key === filters.mode}">${name}</button>`;
+  root.classList.toggle('dvr-compact', hub);
   root.setAttribute('aria-labelledby', id);
+  const request = (Number(root.dataset.request) || 0) + 1;
+  root.dataset.request = request;
   root.innerHTML = `
-    <div class="dvr-head">
+    <header class="dvr-head">
       <img src="ui/hub/digivice/ranking.png" alt="">
-      <span><b id="${id}">Ranking online</b><small>${safe(MAPS[Rk.map]?.name)}${surv ? ' · Supervivencia' : ' · ' + safe(DIFFS[Rk.diff]?.name)}</small></span>
-      ${hub ? '' : '<button type="button" class="dvr-pill" data-rk-back>← Volver</button>'}
-    </div>
-    <div class="dvr-tabs" role="tablist" aria-label="Modo">${tab('normal', 'ui/hud/ic_bajas.webp', 'Clásico')}${tab('surv', 'ui/hub/digivice/supervivencia.png', 'Supervivencia')}</div>
-    <div class="dvr-scopes${surv ? ' rk-two' : ''}">
-      <label class="dvr-scope rk-region"><img src="ui/hub/digivice/idioma.png" alt="">
-        <span><b>${Rk.region ? safe(REGIONS[Rk.region]) : 'Mundial'}</b><small>${Rk.region ? 'Solo jugadores de esta región' : 'Todas las regiones'}</small></span>
-        <select data-rk="region" aria-label="Región">${opt('region', '', 'Mundial')}${Object.entries(REGIONS).map(([k, n]) => opt('region', k, n)).join('')}</select></label>
-      <label class="dvr-scope"><img src="ui/hub/digivice/mapas.png" alt=""><span><b>${safe(MAPS[Rk.map]?.name)}</b><small>Mapa</small></span>
-        <select data-rk="map" aria-label="Mapa">${Object.keys(MAPS).map(k => opt('map', k, MAPS[k].name)).join('')}</select></label>
-      ${surv ? '' : `<label class="dvr-scope"><img src="ui/hub/digivice/reto.png" alt=""><span><b>${safe(DIFFS[Rk.diff]?.name)}</b><small>Dificultad</small></span>
-        <select data-rk="diff" aria-label="Dificultad">${DIFF_ORDER.map(k => opt('diff', k, DIFFS[k].name)).join('')}</select></label>`}
-    </div>
-    <div class="dvr-list" tabindex="0"><ol class="dvr-rank" data-rk-list><li class="dvr-empty">${CLOUD_ON ? 'Cargando…' : 'El ranking online aún no está activado en esta versión.'}</li></ol></div>
-    <p class="dvr-foot dvr-note" data-rk-foot${hub ? ' hidden' : ''}>${rule}</p>
-    ${hub ? '<button type="button" class="dvr-cta" data-rk-full>Ver clasificación completa</button>' : ''}`;
-  const redraw = () => rankPanel(root, hub);
+      <span><b id="${id}">Ranking online</b><small>${scope.map(escHtml).join(' · ')}</small></span>
+      ${hub ? '' : '<button type="button" class="dvr-action" data-rk-back>← Volver</button>'}
+    </header>
+    <div class="dvr-tabs" role="group" aria-label="Modo">${Object.entries(RANK_CATEGORIES).map(([key, name]) => mode(key, name)).join('')}</div>
+    <details class="dvr-filters"${keepFilters ? ' open' : ''}>
+      <summary><span>${surv ? 'Región · Mapa' : 'Región · Mapa · Dificultad'}</span><b>Filtros <span aria-hidden="true">▾</span></b></summary>
+      <div class="dvr-scopes">
+        ${field('region', 'Región', [['', 'Mundial'], ...Object.entries(REGIONS)])}
+        ${field('map', 'Mapa', [['', 'Todos los mapas'], ...MAP_ORDER.map(key => [key, MAPS[key].name])])}
+        ${surv ? '' : field('diff', 'Dificultad', DIFF_ORDER.map(key => [key, DIFFS[key].name]))}
+      </div>
+    </details>
+    <div class="dvr-list${hub ? '' : ' dvr-scroll'}" data-rk-content aria-live="polite"><p class="dvr-status">${CLOUD_ON ? 'Cargando…' : 'El ranking online aún no está activado en esta versión.'}</p></div>
+    <p class="dvr-foot" data-rk-foot hidden></p>
+    ${hub ? '<button type="button" class="dvr-action dvr-cta" data-rk-full>Ver clasificación completa <span aria-hidden="true">→</span></button>' : ''}`;
   root.querySelector('[data-rk-back]')?.addEventListener('click', () => Rk.from === 'cloud' ? showCloud() : showSelect());
   root.querySelector('[data-rk-full]')?.addEventListener('click', () => showRanking('select'));
-  root.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => { if (Rk.mode !== b.dataset.mode){ Rk.mode = b.dataset.mode; redraw(); root.querySelector(`[data-mode="${Rk.mode}"]`)?.focus(); } });
-  root.querySelectorAll('select[data-rk]').forEach(sel => sel.onchange = () => { Rk[sel.dataset.rk] = sel.value; redraw(); root.querySelector(`select[data-rk="${sel.dataset.rk}"]`)?.focus(); });
+  root.querySelectorAll('[data-mode]').forEach(button => button.onclick = () => {
+    if (Rk.mode === button.dataset.mode) return;
+    Rk.mode = button.dataset.mode;
+    rankPanel(root, hub);
+    root.querySelector(`[data-mode="${Rk.mode}"]`)?.focus();
+  });
+  root.querySelectorAll('select[data-rk]').forEach(select => select.onchange = () => {
+    const key = select.dataset.rk;
+    Rk[key] = select.value;
+    rankPanel(root, hub, true);
+    root.querySelector(`select[data-rk="${key}"]`)?.focus();
+  });
   if (!CLOUD_ON) return;
-  const want = JSON.stringify([Rk.mode, Rk.map, Rk.diff, Rk.region]);
-  root.dataset.want = want;
   let rows;
-  try {
-    const args = {p_mode: Rk.mode, p_map: Rk.map, p_diff: Rk.diff, p_region: Rk.region || null, p_limit: 50};
-    rows = Cloud.st.at || (cloudEnabled() && !Cloud.st.expired) ? await cloudRpc('get_leaderboard', args)
-      : await fetch(CLOUD_CFG.url.replace(/\/$/, '') + '/rest/v1/rpc/get_leaderboard', {method: 'POST', headers: {apikey: CLOUD_CFG.key, 'Content-Type': 'application/json'}, body: JSON.stringify(args)}).then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)));
-  } catch(e){ rows = null; }
-  const ol = root.querySelector('[data-rk-list]');
-  if (!ol || !root.isConnected || root.dataset.want !== want) return;
-  if (!Array.isArray(rows)){ ol.innerHTML = '<li class="dvr-empty">No se pudo cargar el ranking. Comprueba la conexión.</li>'; return; }
-  const value = r => surv ? 'Oleada ' + r.wave : fmtTime(r.t);
-  const unit = r => surv ? fmtTime(r.t) : r.win ? 'Victoria' : 'Sin victoria';
-  ol.innerHTML = rows.map(r => dvrRow({pos: r.pos, name: r.name + (r.me ? ' (tú)' : ''), key: CHARS[r.digimon] ? r.digimon : '', chip: r.region || '',
-    note: `${Number(r.kills || 0).toLocaleString(LANG)} bajas · Nv ${r.lvl}`, value: value(r), unit: unit(r), rowUnit: true, me: r.me})).join('')
-    || '<li class="dvr-empty">Nadie ha entrado aún en este ranking. ¡Sé el primero!</li>';
-  const mine = rows.find(r => r.me), foot = root.querySelector('[data-rk-foot]');
-  if (mine && foot){ foot.textContent = `Tu puesto: ${mine.pos} · ${value(mine)}`; foot.hidden = false; }
+  let failed = false;
+  try { rows = await rankRows(filters, hub); }
+  catch(error){ failed = true; }
+  if (!root.isConnected || Number(root.dataset.request) !== request) return;
+  const content = root.querySelector('[data-rk-content]');
+  if (failed){
+    content.innerHTML = '<div class="dvr-status"><p>No se pudo cargar el ranking. Comprueba la conexión.</p><button class="dvr-action" type="button" data-rk-retry>Reintentar</button></div>';
+    content.querySelector('[data-rk-retry]').onclick = () => rankPanel(root, hub, root.querySelector('details').open);
+    return;
+  }
+  if (!rows?.length){
+    content.innerHTML = rows === null
+      ? '<p class="dvr-status">Esta clasificación aún no está activada.</p>'
+      : '<p class="dvr-status">Nadie ha entrado aún en este ranking. ¡Sé el primero!</p>';
+    return;
+  }
+  const value = row => filters.mode === 'trial' ? fmtTime(row.mark)
+    : Number(row.mark).toLocaleString(I18N.lang);
+  const rowName = row => escHtml(row.name + (row.me ? ' (tú)' : ''));
+  const podium = rows.filter(row => row.pos <= 3).map(row =>
+    `<li class="dvr-podium-place p${Number(row.pos)}"><b>${Number(row.pos)}.º</b><img src="${escHtml(rankAvatar(row))}" alt="">
+      <span class="dvr-name" title="${rowName(row)}">${rowName(row)}</span><strong>${escHtml(value(row))}</strong></li>`).join('');
+  const list = hub ? '' : rows.filter(row => row.pos > 3).map(row =>
+    `<li><b>${Number(row.pos)}.º</b><img src="${escHtml(rankAvatar(row))}" alt=""><span class="dvr-name" title="${rowName(row)}">${rowName(row)}</span><strong>${escHtml(value(row))}</strong></li>`).join('');
+  content.innerHTML = `<p class="dvr-metric">${filters.mode === 'kills' ? 'Mejor marca de bajas' : surv ? 'Más oleadas superadas' : filters.map ? 'Victoria más rápida' : 'Menor tiempo total de los tres mapas'}</p>
+    <ol class="dvr-podium">${podium}</ol>${list ? `<ol class="dvr-rank">${list}</ol>` : ''}`;
+  const mine = rows.find(row => row.me);
+  if (mine){
+    const foot = root.querySelector('[data-rk-foot]');
+    foot.innerHTML = `<strong>${Number(mine.pos)}.º</strong><span>Tu puesto</span><b>${escHtml(value(mine))}</b>`;
+    foot.hidden = false;
+  }
 }
 // Créditos y licencias: lo que consta en sprites/CREDITS.txt, textures/CREDITOS.txt y fonts/LICENCIAS.txt.
 // Los recuadros naranjas marcan lo que falta verificar antes de publicar (permisos de sprites y autoría)
