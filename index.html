@@ -452,7 +452,6 @@ body.dbk-noplay #tutoTip{opacity:0!important}   /* el consejo no tapa las cartas
 .pk2-hero{display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;align-items:center;padding:14px;border-radius:18px;border:2px solid #2a5a8f;background:radial-gradient(60% 70% at 25% 45%,rgba(79,195,247,.28),transparent 70%),linear-gradient(180deg,#10244a,#071024)}
 .pk2-stage{height:180px;display:grid;place-items:center;border-radius:14px;background:rgba(0,0,0,.2)}
 .anim.pk2-hero-img{width:150px;height:150px;background-size:500% 100%;background-position:0 50%;filter:drop-shadow(0 0 14px rgba(79,195,247,.7))}
-img.pk2-hero-img{display:block;width:100%;height:100%;max-width:180px;max-height:180px;min-height:0;object-fit:contain}
 .pk2-id small{font-size:11px;letter-spacing:1px;color:#9ad3e8;text-transform:uppercase}
 .pk2-id h2{margin:2px 0 8px;font-size:30px;color:#ffd54f}
 .pk2-id p{margin:0;font-size:13px;color:#bfe9ff;line-height:1.35}
@@ -1966,7 +1965,6 @@ html[data-theme=oscuro]{
 .ps-sum{display:grid;grid-template-columns:170px minmax(0,1fr) 200px 210px;gap:20px;padding:16px 18px;border-bottom:1px solid var(--ps-line)}
 .ps-hero{position:relative;display:grid;place-items:center;border-radius:14px;background:var(--ps-hero);border:3px solid #a9e6ef;min-height:180px;align-self:start}
 .anim.ps-hero-img{width:150px;height:150px;background-size:500% 100%;background-position:0 50%;margin-top:-14px}
-.ps-hero>img.ps-hero-img{position:absolute;inset:4px 4px 24px;width:calc(100% - 8px);height:calc(100% - 28px);object-fit:contain}
 .ps-hero-tag{position:absolute;bottom:9px;left:50%;transform:translateX(-50%);white-space:nowrap;font:800 12px 'Nunito',system-ui,sans-serif;padding:2px 12px;border-radius:99px;background:#fff;color:#1d2433}
 .ps-id{display:flex;flex-direction:column;gap:7px;min-width:0}
 .ps-idline{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -2719,8 +2717,7 @@ body:has(#overlay .end3) #hudSummon{display:none!important}
 @keyframes psPop{0%{transform:scale(1)}35%{transform:scale(1.16) translateY(-4px)}65%{transform:scale(.96)}100%{transform:scale(1)}}
 @keyframes psHeroIn{0%{transform:translateY(10px) scale(.9);opacity:.3}100%{transform:none;opacity:1}}
 .ps-ic.pop{animation:psPop .38s ease-out}
-@media(prefers-reduced-motion:no-preference){html:not(.reduce-motion) .ps-hero img.pop{animation:psHeroIn .3s ease-out}}
-.ps-hero .anim.pop{animation:psHeroIn .3s ease-out,animIdle .8s steps(1) infinite!important}
+.ps-hero .pop{animation:psHeroIn .3s ease-out,animIdle .8s steps(1) infinite!important}
 @keyframes msIn{0%{opacity:0;transform:translateX(60px)}100%{opacity:1;transform:none}}
 @keyframes psIn{0%{opacity:0;transform:translateX(-40px)}100%{opacity:1;transform:none}}
 #overlay:not(.redraw)>.picker-screen.ms{animation:msIn .32s cubic-bezier(.2,.8,.2,1)!important}
@@ -7559,7 +7556,6 @@ function checkUnlocks(rnd = true){
 const STARTER_PENDING = 'digibonk3d-starter-pending';
 // Solo cuenta si aún no hay lista de desbloqueados (si llega una de la nube o de un código de guardado, manda esa)
 function starterPending(){ return !!localStorage.getItem(STARTER_PENDING) && !localStorage.getItem('digibonk3d-unlocked'); }
-function digiPortrait(key, cls){ return `<img class="${cls}" src="ui/retratos/${key}.webp" alt="">`; }
 function showStarter(){
   try { localStorage.setItem(STARTER_PENDING, '1'); } catch(e){}
   state = 'starter';
@@ -7577,7 +7573,7 @@ function showStarter(){
         <div class="pk2-body">
           <section class="pk2-left">
             <div class="pk2-hero">
-              <div class="pk2-stage">${digiPortrait(pick, 'pk2-hero-img')}</div>
+              <div class="pk2-stage">${animEl(spriteOf(pick, false), 'pk2-hero-img')}</div>
               <div class="pk2-id"><small>Inicial</small><h2>${CHARS[pick].name}</h2><p>${BALANCE[pick].why}</p></div>
             </div>
           </section>
@@ -7818,7 +7814,7 @@ function renderPickPreview(){
   const row = (label, val) => `<div class="ps-row"><span>${label}</span><b>${val}</b></div>`;
   el.innerHTML = `
     <div class="ps-hero">
-      ${pickStage === 0 && equippedAt(k, 0) === 'clasico' ? digiPortrait(k, 'ps-hero-img') : animEl(spriteOf(k, pickStage), 'ps-hero-img')}
+      ${animEl(spriteOf(k, pickStage), 'ps-hero-img')}
       <span class="ps-hero-tag">${stageName(k, pickStage)}</span>
     </div>
     <div class="ps-id">
